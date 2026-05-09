@@ -1,0 +1,157 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 42px;
+
+  z-index: 5000;
+
+  backdrop-filter: blur(14px);
+
+  background:
+    rgba(20, 20, 22, 0.34);
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  box-sizing: border-box;
+}
+
+/* ------------------------------ */
+/* BRAND */
+/* ------------------------------ */
+
+.navbar-brand {
+  text-decoration: none;
+
+  display: flex;
+  flex-direction: column;
+
+  color: white;
+}
+
+.navbar-title {
+  font-size: 28px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  line-height: 1;
+}
+
+.navbar-subtitle {
+  margin-top: 6px;
+
+  font-size: 10px;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+
+  opacity: 0.58;
+
+  font-weight: 600;
+}
+
+/* ------------------------------ */
+/* LINKS */
+/* ------------------------------ */
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar-link {
+  position: relative;
+
+  text-decoration: none;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  transition:
+    color 0.24s ease,
+    opacity 0.24s ease;
+}
+
+/* hover */
+
+.navbar-link:hover {
+  color: white;
+}
+
+/* underline animation */
+
+.navbar-link::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -8px;
+
+  width: 100%;
+  height: 1px;
+
+  background: white;
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition:
+    transform 0.24s ease;
+}
+
+.navbar-link:hover::after,
+.navbar-link.active::after {
+  transform: scaleX(1);
+}
+
+/* ------------------------------ */
+/* RESPONSIVE */
+/* ------------------------------ */
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 22px;
+  }
+
+  .navbar-links {
+    gap: 18px;
+  }
+
+  .navbar-link {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 720px) {
+  .navbar-subtitle {
+    display: none;
+  }
+
+  .navbar-links {
+    gap: 14px;
+  }
+
+  .navbar-link {
+    font-size: 12px;
+  }
+}
