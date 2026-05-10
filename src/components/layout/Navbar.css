@@ -1,102 +1,174 @@
 .navbar {
   position: fixed;
-  top: 0;
-  left: 0;
 
-  width: 100%;
+  top: 22px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: calc(100% - 80px);
+  max-width: 1320px;
 
   height: 82px;
+
+  padding:
+    0
+    28px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 42px;
+  z-index: 1000;
 
-  z-index: 5000;
-
-  backdrop-filter: blur(14px);
+  border-radius: 28px;
 
   background:
-    rgba(20, 20, 22, 0.34);
+    linear-gradient(
+      180deg,
+      rgba(14,14,18,0.78),
+      rgba(10,10,14,0.58)
+    );
 
-  border-bottom:
+  backdrop-filter:
+    blur(22px)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(22px)
+    saturate(160%);
+
+  border:
     1px solid
-    rgba(255, 255, 255, 0.06);
+    rgba(255,255,255,0.06);
 
-  box-sizing: border-box;
+  box-shadow:
+    0 10px 40px
+    rgba(0,0,0,0.32),
+
+    inset 0 1px 0
+    rgba(255,255,255,0.04);
+
+  overflow: hidden;
 }
 
-/* ------------------------------ */
+.navbar::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(110,130,255,0.05),
+      transparent
+    );
+
+  opacity: 0.7;
+
+  pointer-events: none;
+}
+
+/* ================================= */
 /* BRAND */
-/* ------------------------------ */
+/* ================================= */
 
 .navbar-brand {
+  position: relative;
+
+  z-index: 2;
+
   text-decoration: none;
 
   display: flex;
   flex-direction: column;
-
-  color: white;
 }
 
 .navbar-title {
-  font-size: 28px;
+  font-size: 22px;
 
   font-weight: 800;
 
-  letter-spacing: 0.08em;
+  letter-spacing: -0.05em;
+
+  color: white;
 
   line-height: 1;
+
+  text-transform: uppercase;
 }
 
 .navbar-subtitle {
-  margin-top: 6px;
+  margin-top: 4px;
 
   font-size: 10px;
 
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
 
   text-transform: uppercase;
 
-  opacity: 0.58;
-
-  font-weight: 600;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.46
+    );
 }
 
-/* ------------------------------ */
+/* ================================= */
 /* LINKS */
-/* ------------------------------ */
+/* ================================= */
 
 .navbar-links {
+  position: relative;
+
+  z-index: 2;
+
   display: flex;
   align-items: center;
-  gap: 30px;
+
+  gap: 42px;
 }
 
 .navbar-link {
   position: relative;
 
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+
   text-decoration: none;
 
-  color: rgba(255, 255, 255, 0.82);
-
-  font-size: 14px;
-
-  font-weight: 500;
-
   transition:
-    color 0.24s ease,
-    opacity 0.24s ease;
+    color 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
-
-/* hover */
 
 .navbar-link:hover {
   color: white;
-}
 
-/* underline animation */
+  transform:
+    translateY(-1px);
+}
 
 .navbar-link::after {
   content: "";
@@ -106,52 +178,70 @@
   left: 0;
   bottom: -8px;
 
-  width: 100%;
+  width: 0%;
   height: 1px;
 
-  background: white;
-
-  transform: scaleX(0);
-
-  transform-origin: left;
+  background:
+    rgba(255,255,255,0.9);
 
   transition:
-    transform 0.24s ease;
+    width 0.25s ease;
 }
 
 .navbar-link:hover::after,
 .navbar-link.active::after {
-  transform: scaleX(1);
+  width: 100%;
 }
 
-/* ------------------------------ */
+/* ================================= */
 /* RESPONSIVE */
-/* ------------------------------ */
+/* ================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .navbar {
-    padding: 0 22px;
+    width: calc(100% - 32px);
+
+    padding:
+      0
+      20px;
   }
 
   .navbar-links {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+
+    padding:
+      18px
+      20px;
+
+    flex-direction: column;
+    align-items: flex-start;
+
     gap: 18px;
   }
 
-  .navbar-link {
-    font-size: 13px;
+  .navbar-links {
+    flex-wrap: wrap;
+
+    gap: 18px;
   }
 }
 
-@media (max-width: 720px) {
-  .navbar-subtitle {
-    display: none;
-  }
-
-  .navbar-links {
-    gap: 14px;
+@media (max-width: 640px) {
+  .navbar-title {
+    font-size: 18px;
   }
 
   .navbar-link {
-    font-size: 12px;
+    font-size: 11px;
+  }
+
+  .navbar-subtitle {
+    font-size: 9px;
   }
 }

@@ -1,4 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+} from "react-router-dom";
 
 import "./Navbar.css";
 
@@ -10,18 +13,22 @@ function Navbar() {
       label: "Atlas",
       path: "/atlas",
     },
+
     {
       label: "Methodology",
-      path: "/methodology",
+      path: "/#methodology",
     },
+
     {
       label: "Analytics",
       path: "/analytics",
     },
+
     {
       label: "Publications",
       path: "/publications",
     },
+
     {
       label: "About",
       path: "/about",
@@ -30,14 +37,14 @@ function Navbar() {
 
   return (
     <header className="navbar">
-      {/* LEFT */}
+      {/* BRAND */}
 
       <Link
         to="/"
         className="navbar-brand"
       >
         <div className="navbar-title">
-          ARCUS
+          ARCUS ATLAS
         </div>
 
         <div className="navbar-subtitle">
@@ -46,23 +53,36 @@ function Navbar() {
         </div>
       </Link>
 
-      {/* RIGHT */}
+      {/* NAVIGATION */}
 
       <nav className="navbar-links">
-        {links.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`navbar-link ${
-              location.pathname ===
-              link.path
-                ? "active"
-                : ""
-            }`}
-          >
-            {link.label}
-          </Link>
-        ))}
+        {links.map((link) => {
+          const isAnchor =
+            link.path.includes("#");
+
+          return isAnchor ? (
+            <a
+              key={link.path}
+              href={link.path}
+              className="navbar-link"
+            >
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`navbar-link ${
+                location.pathname ===
+                link.path
+                  ? "active"
+                  : ""
+              }`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
       </nav>
     </header>
   );
