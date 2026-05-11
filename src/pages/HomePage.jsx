@@ -45,9 +45,15 @@ function HomePage() {
             {/* MANIFESTO */}
 
             <div className="hero-manifesto">
-              Understanding past
-              failures is essential to
-              prevent future ones.
+              <span>
+                Infrastructure failures
+                leave patterns.
+              </span>
+
+              <span className="manifesto-accent">
+                ARCUS ATLAS
+                reveals them.
+              </span>
             </div>
 
             {/* DESCRIPTION */}
@@ -135,6 +141,83 @@ function HomePage() {
           </div>
         </section>
 
+        {/* SCIENTIFIC CREDIBILITY */}
+
+        <section className="credibility-section">
+          <div className="credibility-grid">
+
+            {/* LEFT */}
+
+            <div className="credibility-left">
+              <div className="section-label">
+                Research Infrastructure
+              </div>
+
+              <h2 className="credibility-title">
+                Validated collapse
+                intelligence.
+              </h2>
+            </div>
+
+            {/* RIGHT */}
+
+            <div className="credibility-right">
+
+              <div className="credibility-item">
+                <div className="credibility-meta">
+                  Observed period
+                </div>
+
+                <div className="credibility-value">
+                  2000 — 2025
+                </div>
+              </div>
+
+              <div className="credibility-item">
+                <div className="credibility-meta">
+                  Validated events
+                </div>
+
+                <div className="credibility-value">
+                  250+
+                </div>
+              </div>
+
+              <div className="credibility-item">
+                <div className="credibility-meta">
+                  Territorial focus
+                </div>
+
+                <div className="credibility-value">
+                  Italian infrastructure network
+                </div>
+              </div>
+
+              <div className="credibility-item">
+                <div className="credibility-meta">
+                  Source verification
+                </div>
+
+                <div className="credibility-value">
+                  Institutional + scientific
+                </div>
+              </div>
+
+              <div className="credibility-item">
+                <div className="credibility-meta">
+                  Classification framework
+                </div>
+
+                <div className="credibility-value">
+                  Multi-factor event taxonomy
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
         {/* WHY ARCUS */}
 
         <section className="why-section">
@@ -221,14 +304,10 @@ function HomePage() {
               {/* CLUSTERS */}
 
               <div className="cluster-node cluster-1" />
-              <div className="cluster-node cluster-1b" />
-              <div className="cluster-node cluster-1c" />
-              <div className="cluster-node cluster-1d" />
               <div className="cluster-node cluster-2" />
               <div className="cluster-node cluster-3" />
               <div className="cluster-node cluster-4" />
-              <div className="cluster-node cluster-5" />
-              <div className="cluster-node cluster-6" />
+              
 
               {/* MICRO LABELS */}
 
@@ -265,69 +344,75 @@ function HomePage() {
 
               <div className="sidebar-block">
                 <div className="sidebar-label">
-                  Primary Failure Driver
+                  Observed period
                 </div>
 
-              <div className="sidebar-status">
-                ACTIVE
-              </div>
-
                 <div className="sidebar-value">
-                  Hydraulic
+                  2000—2025
                 </div>
               </div>
 
               <div className="sidebar-block">
                 <div className="sidebar-label">
-                  Dominant Mechanism
+                  Validated events
                 </div>
-              
-              <div className="sidebar-status">
-                ACTIVE
-              </div>
 
                 <div className="sidebar-value">
-                  Scour Processes
+                  250+
                 </div>
               </div>
 
               <div className="sidebar-block">
                 <div className="sidebar-label">
-                  Territorial Pattern
+                  Dominant collapse mechanism
                 </div>
 
-              <div className="sidebar-status">
-                ACTIVE
-              </div>                
-
                 <div className="sidebar-value">
-                  Northern Italy Cluster
+                  Hydraulic phenomena
                 </div>
               </div>
 
               <div className="sidebar-block">
                 <div className="sidebar-label">
-                  Observed Period
+                  Triggered events
                 </div>
-              <div className="sidebar-status">
-                ACTIVE
-              </div>                
 
                 <div className="sidebar-value">
-                  2000 — 2025
+                  92%
+                </div>
+              </div>
+
+              <div className="sidebar-block">
+                <div className="sidebar-label">
+                  Total collapse share
+                </div>
+
+                <div className="sidebar-value">
+                  80%
+                </div>
+              </div>
+
+              <div className="sidebar-block">
+                <div className="sidebar-label">
+                  Primary territorial pattern
+                </div>
+
+                <div className="sidebar-value">
+                  Northern river corridors
                 </div>
               </div>
 
               <div className="sidebar-footer">
                 Spatial intelligence derived
-                from validated collapse events,
-                territorial recurrence patterns,
-                and geospatial infrastructure
-                analysis.
+                from georeferenced bridge
+                collapse events, triggering
+                mechanisms, and territorial
+                recurrence patterns.
               </div>
+
             </div>
-          </div>
-        </section>
+          </div>    
+          </section>
 
         {/* METHODOLOGY */}
 
