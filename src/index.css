@@ -1,4 +1,5 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700,800&display=swap');
+
 html {
   scroll-behavior: smooth;
 }
@@ -36,6 +37,8 @@ body {
 
 a {
   color: inherit;
+
+  text-decoration: none;
 }
 
 button,
@@ -46,7 +49,7 @@ select {
 }
 
 img {
-  max-width: 100%;
-
   display: block;
+
+  max-width: 100%;
 }

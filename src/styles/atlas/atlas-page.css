@@ -1,0 +1,227 @@
+.atlas-page {
+  position: relative;
+
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background: #09090c;
+}
+
+/* ================================= */
+/* LAYOUT */
+/* ================================= */
+
+.atlas-layout {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    320px
+    1fr;
+
+  transition:
+    grid-template-columns
+    0.35s ease;
+}
+
+.atlas-layout.sidebar-closed {
+  grid-template-columns:
+    0px
+    1fr;
+}
+
+/* ================================= */
+/* SIDEBAR */
+/* ================================= */
+
+.atlas-sidebar-wrapper {
+  position: relative;
+
+  width: 320px;
+  height: 100vh;
+
+  overflow: hidden;
+
+  border-right:
+    1px solid
+    rgba(255,255,255,0.06);
+
+  background:
+    rgba(244,241,236,0.96);
+
+  backdrop-filter:
+    blur(18px);
+
+  transition:
+    all 0.35s ease;
+}
+
+.sidebar-closed
+.atlas-sidebar-wrapper {
+  width: 0;
+
+  opacity: 0;
+}
+
+/* ================================= */
+/* MAP */
+/* ================================= */
+
+.atlas-map-wrapper {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+}
+
+/* ================================= */
+/* TOGGLE */
+/* ================================= */
+
+.atlas-toggle {
+  position: absolute;
+
+  top: 18px;
+  left: 338px;
+
+  z-index: 5000;
+
+  width: 46px;
+  height: 46px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background:
+    rgba(12,12,16,0.92);
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  backdrop-filter:
+    blur(18px);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.22);
+
+  transition:
+    all 0.35s ease;
+}
+
+.atlas-layout.sidebar-closed
+.atlas-toggle {
+  left: 18px;
+}
+
+/* ================================= */
+/* LEAFLET */
+/* ================================= */
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+
+  background: #d9dde2;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+
+  overflow: hidden;
+
+  border-radius: 18px !important;
+
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.18) !important;
+}
+
+.leaflet-control-zoom a {
+  width: 42px !important;
+  height: 42px !important;
+
+  line-height: 42px !important;
+
+  background:
+    rgba(14,14,18,0.92) !important;
+
+  color: white !important;
+
+  border: none !important;
+}
+
+/* ================================= */
+/* ARCUS MAP REFINEMENT */
+/* ================================= */
+
+.leaflet-tile {
+  filter:
+    brightness(0.98)
+    contrast(0.92)
+    saturate(0.38)
+    grayscale(0.22);
+
+  opacity: 0.94;
+}
+
+/* REMOVE DEFAULT POPUP */
+
+.leaflet-popup-content-wrapper {
+  background: transparent;
+  box-shadow: none;
+}
+
+.leaflet-popup-tip {
+  background: rgba(30, 36, 48, 0.94);
+}
+
+/* CONTROLS */
+
+.leaflet-control-zoom {
+  border: none !important;
+
+  overflow: hidden;
+
+  border-radius: 18px !important;
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.12);
+}
+
+.leaflet-control-zoom a {
+  background:
+    rgba(28,32,42,0.88) !important;
+
+  color:
+    rgba(255,255,255,0.88) !important;
+
+  border: none !important;
+}
+
+.leaflet-control-attribution {
+  background:
+    rgba(18,22,30,0.68) !important;
+
+  color:
+    rgba(255,255,255,0.42) !important;
+
+  backdrop-filter: blur(12px);
+
+  border-radius: 10px 0 0 0;
+
+  padding: 4px 8px;
+}

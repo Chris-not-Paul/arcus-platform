@@ -1,0 +1,581 @@
+/* ================================= */
+/* ATLAS PREVIEW SECTION */
+/* ================================= */
+
+.atlas-preview-section {
+  padding:
+    120px
+    60px
+    160px;
+}
+
+/* ================================= */
+/* HEADER */
+/* ================================= */
+
+.atlas-preview-header {
+  max-width: 1400px;
+
+  margin: 0 auto 90px;
+}
+
+.atlas-preview-title {
+  margin: 0;
+
+  max-width: 980px;
+
+  font-size:
+    clamp(
+      60px,
+      8vw,
+      110px
+    );
+
+  line-height: 0.94;
+
+  letter-spacing: -0.06em;
+
+  font-weight: 800;
+}
+
+/* ================================= */
+/* PANEL */
+/* ================================= */
+
+.atlas-intelligence-panel {
+  position: relative;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  min-height: 760px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.4fr
+    420px;
+
+  overflow: hidden;
+
+  border-radius: 42px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(70,90,255,0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #111117,
+      #09090c
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,0.06);
+}
+
+/* ================================= */
+/* FIELD */
+/* ================================= */
+
+.intelligence-field {
+  position: relative;
+
+  overflow: hidden;
+}
+
+/* GRID */
+
+.intelligence-grid {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    72px 72px;
+}
+
+/* ================================= */
+/* SIGNAL LINES */
+/* ================================= */
+
+.signal-line {
+  position: absolute;
+
+  height: 0.5px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(110,130,255,0.34),
+      transparent
+    );
+
+  transform-origin: left center;
+
+  opacity: 0.18;
+}
+
+.signal-1 {
+  width: 500px;
+
+  top: 190px;
+  left: 180px;
+
+  transform:
+    rotate(33deg);
+}
+
+.signal-2 {
+  width: 170px;
+
+  top: 430px;
+  left: 570px;
+
+  transform:
+    rotate(-30deg);
+}
+
+.signal-3 {
+  width: 340px;
+
+  top: 470px;
+  left: 260px;
+
+  transform:
+    rotate(-6deg);
+}
+
+.signal-4 {
+  width: 160px;
+
+  top: 440px;
+  left: 570px;
+
+  transform:
+    rotate(65deg);
+}
+
+/* ================================= */
+/* CLUSTER NODES */
+/* ================================= */
+
+.cluster-node {
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow:
+    0 0 18px
+    rgba(255,255,255,0.4);
+
+  animation:
+    nodePulse 5s ease-in-out infinite;
+}
+
+.cluster-node::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -14px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(110,130,255,0.12);
+}
+
+.cluster-1 {
+  width: 16px;
+  height: 16px;
+
+  top: 170px;
+  left: 160px;
+}
+
+.cluster-2 {
+  width: 18px;
+  height: 18px;
+
+  top: 460px;
+  left: 280px;
+}
+
+.cluster-3 {
+  width: 10px;
+  height: 10px;
+
+  top: 560px;
+  left: 620px;
+}
+
+.cluster-4 {
+  width: 14px;
+  height: 14px;
+
+  top: 340px;
+  left: 720px;
+}
+
+@keyframes nodePulse {
+
+  0% {
+    transform: scale(1);
+
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.5);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+
+    opacity: 0.6;
+  }
+}
+
+/* ================================= */
+/* MICRO LABELS */
+/* ================================= */
+
+.micro-label {
+  position: absolute;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+
+  color:
+    rgba(
+      170,
+      180,
+      255,
+      0.34
+    );
+}
+
+.label-1 {
+  top: 140px;
+  left: 120px;
+}
+
+.label-2 {
+  top: 310px;
+  left: 620px;
+}
+
+.label-3 {
+  top: 490px;
+  left: 180px;
+}
+
+.label-4 {
+  top: 580px;
+  left: 520px;
+}
+
+/* ================================= */
+/* CENTRAL CORE */
+/* ================================= */
+
+.intelligence-core {
+  position: absolute;
+
+  top: 52%;
+  left: 58%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 420px;
+  height: 420px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.core-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(110,130,255,0.14);
+
+  animation:
+    corePulse 8s ease-in-out infinite;
+}
+
+.ring-1 {
+  width: 160px;
+  height: 160px;
+}
+
+.ring-2 {
+  width: 260px;
+  height: 260px;
+
+  animation-delay: 1.5s;
+}
+
+.ring-3 {
+  width: 420px;
+  height: 420px;
+
+  animation-delay: 3s;
+}
+
+.core-center {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow:
+    0 0 24px
+    rgba(255,255,255,0.9);
+
+  animation:
+    coreBlink 4s ease-in-out infinite;
+}
+
+@keyframes coreBlink {
+
+  0% {
+    opacity: 0.7;
+
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.35);
+  }
+
+  100% {
+    opacity: 0.7;
+
+    transform: scale(1);
+  }
+}
+
+@keyframes corePulse {
+
+  0% {
+    transform: scale(1);
+
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: scale(1.03);
+
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+
+    opacity: 0.25;
+  }
+}
+
+/* ================================= */
+/* SIDEBAR */
+/* ================================= */
+
+.intelligence-sidebar {
+  position: relative;
+
+  padding:
+    58px
+    42px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 42px;
+
+  border-left:
+    1px solid
+    rgba(255,255,255,0.06);
+
+  background:
+    rgba(255,255,255,0.02);
+}
+
+.sidebar-block {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.sidebar-label {
+  font-size: 11px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.42
+    );
+}
+
+.sidebar-text {
+  font-size: 18px;
+
+  line-height: 1.8;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+}
+
+.sidebar-footer {
+  margin-top: 12px;
+
+  padding-top: 28px;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  font-size: 16px;
+
+  line-height: 1.9;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.56
+    );
+}
+
+/* ================================= */
+/* RESPONSIVE */
+/* ================================= */
+
+@media (max-width: 1200px) {
+
+  .atlas-intelligence-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .intelligence-sidebar {
+    border-left: none;
+
+    border-top:
+      1px solid
+      rgba(255,255,255,0.06);
+  }
+}
+
+@media (max-width: 980px) {
+
+  .atlas-preview-section {
+    padding:
+      100px
+      32px
+      140px;
+  }
+
+  .atlas-intelligence-panel {
+    min-height: auto;
+  }
+
+  .intelligence-field {
+    min-height: 620px;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .atlas-preview-section {
+    padding:
+      90px
+      24px
+      120px;
+  }
+
+  .intelligence-sidebar {
+    padding:
+      40px
+      28px;
+  }
+
+  .sidebar-text,
+  .sidebar-footer {
+    font-size: 16px;
+  }
+
+  .intelligence-field {
+    min-height: 520px;
+  }
+
+  .intelligence-core {
+    width: 260px;
+    height: 260px;
+  }
+
+  .ring-1 {
+    width: 100px;
+    height: 100px;
+  }
+
+  .ring-2 {
+    width: 170px;
+    height: 170px;
+  }
+
+  .ring-3 {
+    width: 260px;
+    height: 260px;
+  }
+}

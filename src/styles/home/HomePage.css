@@ -1,0 +1,31 @@
+.home-page {
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(55,70,180,0.08),
+      transparent 30%
+    ),
+    #09090c;
+
+  color: white;
+}
+
+/* ================================= */
+/* SHARED */
+/* ================================= */
+
+.section-label {
+  font-size: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.22em;
+
+  opacity: 0.52;
+
+  margin-bottom: 24px;
+}

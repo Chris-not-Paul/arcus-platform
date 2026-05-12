@@ -5,30 +5,40 @@ import {
 
 import EventPopup from "../popup/EventPopup";
 
-import { createModernMarker } from "../../utils/markerFactory";
+import {
+  createMarkerIcon,
+} from "../../utils/markerFactory";
 
 function EventMarker({
   event,
   relatedSources,
 }) {
+
   return (
+
     <Marker
       position={[
         event.latitude,
         event.longitude,
       ]}
-      icon={createModernMarker(
-        event.specific_cause
+
+      icon={createMarkerIcon(
+        event.specific_cause,
+        event.triggered
       )}
     >
-      <Popup maxWidth={320}>
+
+      <Popup maxWidth={340}>
+
         <EventPopup
           event={event}
           relatedSources={
-            relatedSources
+            relatedSources || []
           }
         />
+
       </Popup>
+
     </Marker>
   );
 }

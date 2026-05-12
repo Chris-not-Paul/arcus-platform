@@ -1,42 +1,152 @@
 import L from "leaflet";
-import { causeColors } from "./colors";
 
-export const createModernMarker = (
-  cause
-) => {
-  const color =
-    causeColors[cause] || "#3f6b78";
+import {
+  causeColors,
+} from "./colors";
 
-  return L.divIcon({
-    className: "",
-    html: `
+/* ================================= */
+/* ARCUS MARKER FACTORY v3 */
+/* ================================= */
+
+export function createMarkerIcon(
+  specificCause,
+  triggered
+) {
+
+  const baseColor =
+    causeColors[
+      specificCause
+    ] || "#4f6b82";
+
+  /* ================================= */
+  /* SIGNAL SYSTEM */
+  /* ================================= */
+
+  const halo = `${baseColor}20`;
+
+  const ring = `${baseColor}55`;
+
+  const glow = `${baseColor}35`;
+
+  const coreShadow = `${baseColor}66`;
+
+  /* ================================= */
+  /* HTML */
+  /* ================================= */
+
+  const html = `
+    <div
+      style="
+        position:relative;
+
+        width:20px;
+        height:20px;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      "
+    >
+
+      <!-- HALO -->
+
       <div
         style="
-          position:relative;
-          width:26px;
-          height:26px;
-          transform:rotate(45deg);
-          background:${color};
-          border-radius:6px 6px 6px 0;
-          border:2px solid rgba(255,255,255,0.95);
-          box-shadow:0 4px 10px rgba(0,0,0,0.22);
+          position:absolute;
+
+          width:24px;
+          height:24px;
+
+          border-radius:999px;
+
+          background:
+            radial-gradient(
+              circle,
+              ${halo} 0%,
+              rgba(0,0,0,0) 72%
+            );
+
+          filter:blur(3px);
+
+          pointer-events:none;
         "
-      >
-        <div
-          style="
-            position:absolute;
-            width:8px;
-            height:8px;
-            background:white;
-            border-radius:50%;
-            top:7px;
-            left:7px;
-          "
-        ></div>
-      </div>
-    `,
-    iconSize: [26, 26],
-    iconAnchor: [13, 26],
-    popupAnchor: [0, -18],
+      ></div>
+
+      <!-- OUTER RING -->
+
+      <div
+        style="
+          position:absolute;
+
+          width:14px;
+          height:14px;
+
+          border-radius:999px;
+
+          border:
+            1.2px solid ${ring};
+
+          background:
+            rgba(255,255,255,0.04);
+
+          backdrop-filter:
+            blur(6px);
+        "
+      ></div>
+
+      <!-- INNER GLOW -->
+
+      <div
+        style="
+          position:absolute;
+
+          width:10px;
+          height:10px;
+
+          border-radius:999px;
+
+          background:${glow};
+
+          filter:blur(3px);
+
+          opacity:0.9;
+        "
+      ></div>
+
+      <!-- COLOR CORE -->
+
+      <div
+        style="
+          position:absolute;
+
+          width:6px;
+          height:6px;
+
+          border-radius:999px;
+
+          background:${baseColor};
+
+          box-shadow:
+            0 0 0 1px rgba(255,255,255,0.18),
+            0 0 8px ${coreShadow};
+        "
+      ></div>
+
+    </div>
+  `;
+
+  return L.divIcon({
+
+    html,
+
+    className:
+      "arcus-marker-icon",
+
+    iconSize:
+      [20, 20],
+
+    iconAnchor:
+      [10, 10],
+
   });
-};
+}

@@ -28,107 +28,174 @@ function Sidebar({
   return (
     <div
       style={{
-        position: "absolute",
-        top: 0,
-        left: sidebarOpen ? 0 : -320,
-        zIndex: 2500,
-        width: "270px",
+        position: "relative",
+
+        width: "100%",
         height: "100%",
+
         background:
-          "rgba(244,241,236,0.88)",
-        backdropFilter: "blur(18px)",
-        boxShadow:
-          "6px 0 28px rgba(0,0,0,0.08)",
-        transition: "all 0.35s ease",
+          "linear-gradient(180deg, rgba(15,18,26,0.97) 0%, rgba(22,26,36,0.96) 100%)",
+
+        backdropFilter:
+          "blur(18px)",
+
         overflowY: "auto",
-        padding: "22px",
+
+        padding: "24px",
+
         paddingBottom: "90px",
+
+        boxSizing: "border-box",
+
+        borderRight:
+          "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      {/* TITLE */}
+
+      {/* ================================= */}
+      {/* ARCUS BRANDING */}
+      {/* ================================= */}
 
       <div
         style={{
-          marginBottom: "24px",
+          marginBottom: "28px",
         }}
       >
+
         <div
           style={{
-            fontSize: "12px",
-            letterSpacing: "1.8px",
-            textTransform: "uppercase",
-            opacity: 0.5,
+            fontSize: "28px",
+
+            fontWeight: 900,
+
+            letterSpacing: "-1.2px",
+
+            color: "#f3efe8",
+
+            lineHeight: 1,
+
             marginBottom: "6px",
-            color: "#7b746d",
           }}
         >
-          Italian Infrastructure Risk Atlas
+          ARCUS ATLAS
+        </div>
+
+        <div
+          style={{
+            fontSize: "10px",
+
+            letterSpacing: "2.2px",
+
+            textTransform:
+              "uppercase",
+
+            color:
+              "rgba(230,235,245,0.52)",
+
+            marginBottom: "20px",
+          }}
+        >
+          Infrastructure Failure Observatory
         </div>
 
         <h1
           style={{
             margin: 0,
-            fontSize: "32px",
-            lineHeight: 1.05,
+
+            fontSize: "34px",
+
+            lineHeight: 1.02,
+
             fontWeight: 800,
-            color: "#1c1a18",
+
+            letterSpacing: "-1.2px",
+
+            color: "#f4f1eb",
           }}
         >
-          Bridge Collapse Database
+          Bridge Failure Atlas
         </h1>
+
       </div>
 
+      {/* ================================= */}
       {/* STATS */}
+      {/* ================================= */}
 
       <div
         style={{
           display: "grid",
+
           gridTemplateColumns:
             "1fr 1fr",
+
           gap: "10px",
-          marginBottom: "28px",
+
+          marginBottom: "34px",
         }}
       >
+
         {[
           {
             label: "Events",
             value:
               filteredEvents.length,
           },
+
           {
             label: "Triggered",
-            value: totalTriggered,
+            value:
+              totalTriggered,
           },
+
           {
             label: "TC",
             value: totalTC,
           },
+
           {
             label: "PC",
             value: totalPC,
           },
+
         ].map((item) => (
+
           <div
             key={item.label}
+
             style={{
               background:
-                "rgba(255,250,245,0.72)",
-              borderRadius: "16px",
-              padding: "14px",
+                "rgba(255,255,255,0.06)",
+
+              borderRadius:
+                "12px",
+
+              padding: "12px",
+
               border:
-                "1px solid rgba(0,0,0,0.04)",
+                "1px solid rgba(255,255,255,0.06)",
+
+              backdropFilter:
+                "blur(12px)",
             }}
           >
+
             <div
               style={{
-                fontSize: "11px",
+                fontSize: "10px",
+
                 textTransform:
                   "uppercase",
+
                 letterSpacing:
-                  "1px",
-                opacity: 0.5,
-                marginBottom: "4px",
-                color: "#7a7068",
+                  "1.4px",
+
+                marginBottom: "6px",
+
+                fontWeight: 700,
+
+                color:
+                  "rgba(230,235,245,0.54)",
               }}
             >
               {item.label}
@@ -136,37 +203,54 @@ function Sidebar({
 
             <div
               style={{
-                fontSize: "28px",
+                fontSize: "30px",
+
                 fontWeight: 800,
-                color: "#161412",
+
+                color: "#f4f1eb",
+
+                lineHeight: 1,
               }}
             >
               {item.value}
             </div>
+
           </div>
+
         ))}
+
       </div>
 
+      {/* ================================= */}
       {/* TIMELINE */}
+      {/* ================================= */}
 
       <div
         style={{
-          marginBottom: "30px",
+          marginBottom: "34px",
+
           paddingTop: "24px",
+
           borderTop:
-            "1px solid rgba(0,0,0,0.05)",
+            "1px solid rgba(255,255,255,0.06)",
         }}
       >
+
         <div
           style={{
-            fontSize: "13px",
+            fontSize: "11px",
+
             fontWeight: 700,
-            letterSpacing: "1px",
+
+            letterSpacing: "1.8px",
+
             textTransform:
               "uppercase",
-            opacity: 0.5,
-            marginBottom: "10px",
-            color: "#746c64",
+
+            marginBottom: "12px",
+
+            color:
+              "rgba(230,235,245,0.52)",
           }}
         >
           Timeline
@@ -175,17 +259,29 @@ function Sidebar({
         <div
           style={{
             background:
-              "rgba(255,250,245,0.72)",
-            borderRadius: "16px",
+              "rgba(255,255,255,0.06)",
+
+            borderRadius:
+              "14px",
+
             padding: "16px",
+
+            border:
+              "1px solid rgba(255,255,255,0.06)",
           }}
         >
+
           <div
             style={{
-              fontSize: "34px",
+              fontSize: "42px",
+
               fontWeight: 800,
-              color: "#1b1816",
-              marginBottom: "12px",
+
+              color: "#f4f1eb",
+
+              marginBottom: "16px",
+
+              lineHeight: 1,
             }}
           >
             {yearFilter}
@@ -193,17 +289,25 @@ function Sidebar({
 
           <input
             type="range"
+
             min={minYear}
+
             max={maxYear}
+
             value={yearFilter}
+
             onChange={(e) =>
               setYearFilter(
                 Number(e.target.value)
               )
             }
+
             style={{
               width: "100%",
-              accentColor: "#93342b",
+
+              accentColor:
+                "#b13d37",
+
               cursor: "pointer",
             }}
           />
@@ -211,197 +315,488 @@ function Sidebar({
           <div
             style={{
               display: "flex",
+
               justifyContent:
                 "space-between",
-              marginTop: "8px",
+
+              marginTop: "10px",
+
               fontSize: "12px",
-              color: "#7a7068",
+
+              color:
+                "rgba(230,235,245,0.5)",
             }}
           >
             <span>{minYear}</span>
+
             <span>{maxYear}</span>
           </div>
+
         </div>
+
       </div>
 
+      {/* ================================= */}
       {/* FILTERS */}
+      {/* ================================= */}
 
       <div
         style={{
-          marginBottom: "30px",
+          marginBottom: "34px",
+
           paddingTop: "24px",
+
           borderTop:
-            "1px solid rgba(0,0,0,0.05)",
+            "1px solid rgba(255,255,255,0.06)",
         }}
       >
+
         <div
           style={{
-            fontSize: "13px",
+            fontSize: "11px",
+
             fontWeight: 700,
-            letterSpacing: "1px",
+
+            letterSpacing: "1.8px",
+
             textTransform:
               "uppercase",
-            opacity: 0.5,
-            marginBottom: "14px",
-            color: "#746c64",
+
+            marginBottom: "16px",
+
+            color:
+              "rgba(230,235,245,0.52)",
           }}
         >
           Filters
         </div>
 
-        {[
-          {
-            label: "Cause",
-            value: causeFilter,
-            setter: setCauseFilter,
-            options: uniqueCauses,
-          },
-          {
-            label: "Severity",
-            value:
-              severityFilter,
-            setter:
-              setSeverityFilter,
-            options: [
-              "All",
-              "TC",
-              "PC",
-            ],
-          },
-          {
-            label: "Triggered",
-            value:
-              triggeredFilter,
-            setter:
-              setTriggeredFilter,
-            options: [
-              "All",
-              "TRUE",
-              "FALSE",
-            ],
-          },
-        ].map((filter) => (
-          <div
-            key={filter.label}
-            style={{
-              marginBottom: "16px",
-            }}
-          >
-            <label
+        <div
+          style={{
+            display: "flex",
+
+            flexDirection:
+              "column",
+
+            gap: "16px",
+          }}
+        >
+
+          {/* CAUSE */}
+
+          <div>
+
+            <div
               style={{
-                display: "block",
-                marginBottom: "7px",
-                fontSize: "14px",
+                fontSize: "12px",
+
+                marginBottom: "8px",
+
                 fontWeight: 600,
-                color: "#514a44",
+
+                color:
+                  "#d7dde7",
               }}
             >
-              {filter.label}
-            </label>
+              Cause
+            </div>
 
             <select
-              value={filter.value}
+              value={causeFilter}
+
               onChange={(e) =>
-                filter.setter(
+                setCauseFilter(
                   e.target.value
                 )
               }
+
               style={{
                 width: "100%",
+
                 padding: "12px",
-                borderRadius: "12px",
+
+                borderRadius:
+                  "12px",
+
                 border:
-                  "1px solid rgba(0,0,0,0.06)",
+                  "1px solid rgba(255,255,255,0.08)",
+
                 background:
-                  "rgba(255,252,248,0.82)",
+                  "rgba(255,255,255,0.07)",
+
                 fontSize: "14px",
+
+                color: "#eef2f7",
+
                 outline: "none",
-                color: "#3e3935",
               }}
             >
-              {filter.options.map(
-                (option) => (
+
+              {uniqueCauses.map(
+                (cause) => (
                   <option
-                    key={option}
-                    value={option}
+                    key={cause}
+                    value={cause}
                   >
-                    {option}
+                    {cause}
                   </option>
                 )
               )}
+
             </select>
+
           </div>
-        ))}
+
+          {/* SEVERITY */}
+
+          <div>
+
+            <div
+              style={{
+                fontSize: "12px",
+
+                marginBottom: "8px",
+
+                fontWeight: 600,
+
+                color:
+                  "#d7dde7",
+              }}
+            >
+              Severity
+            </div>
+
+            <select
+              value={
+                severityFilter
+              }
+
+              onChange={(e) =>
+                setSeverityFilter(
+                  e.target.value
+                )
+              }
+
+              style={{
+                width: "100%",
+
+                padding: "12px",
+
+                borderRadius:
+                  "12px",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+
+                background:
+                  "rgba(255,255,255,0.07)",
+
+                fontSize: "14px",
+
+                color: "#eef2f7",
+
+                outline: "none",
+              }}
+            >
+
+              <option value="All">
+                All
+              </option>
+
+              <option value="TC">
+                TC
+              </option>
+
+              <option value="PC">
+                PC
+              </option>
+
+            </select>
+
+          </div>
+
+          {/* TRIGGERED */}
+
+          <div>
+
+            <div
+              style={{
+                fontSize: "12px",
+
+                marginBottom: "8px",
+
+                fontWeight: 600,
+
+                color:
+                  "#d7dde7",
+              }}
+            >
+              Triggered
+            </div>
+
+            <select
+              value={
+                triggeredFilter
+              }
+
+              onChange={(e) =>
+                setTriggeredFilter(
+                  e.target.value
+                )
+              }
+
+              style={{
+                width: "100%",
+
+                padding: "12px",
+
+                borderRadius:
+                  "12px",
+
+                border:
+                  "1px solid rgba(255,255,255,0.08)",
+
+                background:
+                  "rgba(255,255,255,0.07)",
+
+                fontSize: "14px",
+
+                color: "#eef2f7",
+
+                outline: "none",
+              }}
+            >
+
+              <option value="All">
+                All
+              </option>
+
+              <option value="TRUE">
+                Yes
+              </option>
+
+              <option value="FALSE">
+                No
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
       </div>
 
-      {/* LEGEND */}
+      {/* ================================= */}
+      {/* FAILURE TAXONOMY */}
+      {/* ================================= */}
 
       <div
         style={{
-          marginBottom: "30px",
+          marginBottom: "34px",
+
           paddingTop: "24px",
+
           borderTop:
-            "1px solid rgba(0,0,0,0.05)",
+            "1px solid rgba(255,255,255,0.06)",
         }}
       >
+
         <div
           style={{
-            fontSize: "13px",
+            fontSize: "11px",
+
             fontWeight: 700,
-            letterSpacing: "1px",
+
+            letterSpacing: "1.8px",
+
             textTransform:
               "uppercase",
-            opacity: 0.5,
-            marginBottom: "14px",
-            color: "#746c64",
+
+            marginBottom: "16px",
+
+            color:
+              "rgba(230,235,245,0.52)",
           }}
         >
-          Cause Legend
+          Failure Taxonomy
         </div>
 
-        {uniqueCauses
-          .filter(
-            (cause) =>
-              cause !== "All"
-          )
-          .map((cause) => (
-            <div
-              key={cause}
-              style={{
-                display: "flex",
-                alignItems:
-                  "center",
-                marginBottom:
-                  "10px",
-              }}
-            >
-              <div
-                style={{
-                  width: "14px",
-                  height: "14px",
-                  borderRadius: "4px",
-                  transform:
-                    "rotate(45deg)",
-                  marginRight:
-                    "12px",
-                  background:
-                    causeColors[
-                      cause
-                    ] || "#3f6b78",
-                }}
-              ></div>
+        <div
+          style={{
+            display: "flex",
 
-              <span
+            flexDirection:
+              "column",
+
+            gap: "12px",
+          }}
+        >
+
+          {uniqueCauses
+            .filter(
+              (cause) =>
+                cause !== "All"
+            )
+            .map((cause) => (
+
+              <div
+                key={cause}
+
                 style={{
-                  fontSize: "14px",
-                  color: "#514a44",
+                  display: "flex",
+
+                  alignItems:
+                    "center",
+
+                  gap: "12px",
                 }}
               >
-                {cause}
-              </span>
-            </div>
-          ))}
+
+                <div
+                  style={{
+                    width: "12px",
+
+                    height: "12px",
+
+                    borderRadius:
+                      "999px",
+
+                    background:
+                      causeColors[
+                        cause
+                      ] || "#3f6b78",
+
+                    boxShadow: `
+                      0 0 0 4px ${
+                        causeColors[
+                          cause
+                        ]
+                      }22
+                    `,
+                  }}
+                ></div>
+
+                <span
+                  style={{
+                    fontSize: "14px",
+
+                    color:
+                      "#d7dde7",
+
+                    fontWeight: 500,
+                  }}
+                >
+                  {cause}
+                </span>
+
+              </div>
+
+            ))}
+
+        </div>
+
       </div>
+
+      {/* ================================= */}
+      {/* CREDITS */}
+      {/* ================================= */}
+
+      <div
+        style={{
+          paddingTop: "24px",
+
+          borderTop:
+            "1px solid rgba(255,255,255,0.06)",
+
+          fontSize: "11px",
+
+          lineHeight: 1.8,
+
+          color:
+            "rgba(230,235,245,0.56)",
+        }}
+      >
+
+        <div
+          style={{
+            marginBottom: "12px",
+
+            fontWeight: 700,
+
+            letterSpacing: "1.5px",
+
+            textTransform:
+              "uppercase",
+
+            opacity: 0.75,
+          }}
+        >
+          Credits
+        </div>
+
+        <div>
+          Original bridge collapse
+          dataset co-developed with
+          researchers from:
+          <br />
+          Politecnico di Torino •
+          Politecnico di Milano
+        </div>
+
+        <div
+          style={{
+            marginTop: "12px",
+          }}
+        >
+          Database expansion,
+          metadata architecture,
+          source integration,
+          GIS platform and visual
+          analytics:
+          <br />
+          Christian Paolini
+        </div>
+
+        <div
+          style={{
+            marginTop: "14px",
+
+            opacity: 0.55,
+          }}
+        >
+          Updated: May 2026
+        </div>
+
+      </div>
+
+      {/* ================================= */}
+      {/* FOOTER */}
+      {/* ================================= */}
+
+      <div
+        style={{
+          marginTop: "34px",
+
+          paddingTop: "18px",
+
+          borderTop:
+            "1px solid rgba(255,255,255,0.06)",
+
+          fontSize: "10px",
+
+          letterSpacing: "2px",
+
+          textTransform:
+            "uppercase",
+
+          color:
+            "rgba(230,235,245,0.42)",
+        }}
+      >
+        ARCUS PLATFORM • v1.0
+      </div>
+
     </div>
   );
 }
