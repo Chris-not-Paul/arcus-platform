@@ -1,0 +1,354 @@
+# ARCUS — Official Palette & Visual Language
+
+## Identity Direction
+
+ARCUS is not:
+
+* a generic AI startup
+* a fintech dashboard
+* a cyberpunk interface
+* a luxury minimal SaaS
+
+ARCUS should feel like:
+
+* infrastructure intelligence platform
+* geospatial observatory
+* editorial research institution
+* cartographic archive
+* territorial monitoring system
+* cinematic but authoritative
+
+Core concept:
+
+> Dark Mineral Editorial Intelligence
+
+---
+
+# CORE PALETTE
+
+## 1. Warm Mineral Backgrounds
+
+Used for:
+
+* atlas sidebar
+* cards
+* overlays
+* editorial sections
+* glass surfaces
+
+```css
+--arcus-bg-primary: #f3efe8;
+--arcus-bg-secondary: #ebe4d8;
+--arcus-bg-surface: #dfd7ca;
+```
+
+Visual feeling:
+
+* limestone
+* paper archive
+* concrete ivory
+* mineral dust
+
+---
+
+# 2. Coal / Graphite
+
+Used for:
+
+* homepage backgrounds
+* navbar
+* deep contrast
+* typography hierarchy
+
+```css
+--arcus-coal-900: #1c1a18;
+--arcus-coal-700: #2a2622;
+--arcus-coal-500: #3b342e;
+```
+
+Visual feeling:
+
+* graphite
+* carbon steel
+* architectural charcoal
+
+IMPORTANT:
+Never use pure black.
+
+Avoid:
+
+```css
+#000000
+#09090c
+```
+
+---
+
+# 3. Oxidized Bronze
+
+Primary ARCUS accent.
+
+Used for:
+
+* glows
+* timelines
+* signal lines
+* highlights
+* borders
+* interactive elements
+
+```css
+--arcus-bronze-700: #5f4d3d;
+--arcus-bronze-500: #7a6450;
+--arcus-bronze-300: #8c735d;
+```
+
+Visual feeling:
+
+* oxidized metal
+* infrastructure rust
+* industrial bronze
+* warm cartographic light
+
+IMPORTANT:
+The bronze must remain:
+
+* dusty
+* desaturated
+* mineral
+
+NOT luxury gold.
+
+Avoid:
+
+* shiny gold
+* yellow gold
+* metallic gradients.
+
+---
+
+# 4. Dusty Steel
+
+Secondary technical accent.
+
+Used ONLY for:
+
+* maps
+* technical overlays
+* GIS/data visualization
+* cold contrast.
+
+```css
+--arcus-steel-700: #445a66;
+--arcus-steel-500: #59707a;
+--arcus-steel-300: #6e858d;
+```
+
+Visual feeling:
+
+* satellite imagery
+* cold infrastructure
+* desaturated steel
+* technical cartography
+
+IMPORTANT:
+This color is NOT the main identity.
+It exists only to create contrast with the warm editorial palette.
+
+---
+
+# 5. Collapse Burgundy
+
+Reserved for:
+
+* fatalities
+* critical failures
+* severe collapse states
+* emergency emphasis.
+
+```css
+--arcus-alert-700: #6d2f2f;
+--arcus-alert-500: #7e3a3a;
+```
+
+Visual feeling:
+
+* emergency signal
+* structural danger
+* critical infrastructure event.
+
+IMPORTANT:
+Use rarely.
+Too much burgundy destroys the editorial atmosphere.
+
+---
+
+# GLOBAL VISUAL RULES
+
+## 1. Warm Cinematic Contrast
+
+ARCUS works because of the contrast between:
+
+### Homepage
+
+Warm dark cinematic.
+
+### Atlas
+
+Warm editorial cartographic.
+
+### Maps
+
+Cold desaturated technical.
+
+This tension is essential.
+
+---
+
+# 2. Glow Philosophy
+
+ARCUS should NOT use:
+
+* neon glow
+* cyber glow
+* electric blue glow
+* synthwave aesthetics.
+
+Glow should feel like:
+
+* reflected mineral light
+* illuminated cartography
+* smoked glass
+* atmospheric depth.
+
+---
+
+# Approved Glow Colors
+
+## Bronze Glow
+
+```css
+rgba(140,115,93,0.18)
+rgba(122,100,80,0.14)
+```
+
+## Steel Glow
+
+```css
+rgba(110,133,141,0.10)
+```
+
+---
+
+# Forbidden Glow Colors
+
+Avoid:
+
+```css
+rgba(70,90,255,0.18)
+rgba(80,100,255,0.22)
+rgba(110,130,255,0.34)
+```
+
+These create:
+
+* AI startup feeling
+* futuristic UI
+* cyberpunk aesthetic.
+
+---
+
+# GLASSMORPHISM RULES
+
+ARCUS uses:
+
+* warm glass
+* mineral translucency
+* editorial surfaces.
+
+Avoid:
+
+```css
+rgba(255,255,255,0.9)
+```
+
+Prefer:
+
+```css
+rgba(255,248,242,0.62)
+rgba(245,238,231,0.72)
+```
+
+---
+
+# TYPOGRAPHY FEELING
+
+ARCUS typography should feel:
+
+* institutional
+* editorial
+* architectural
+* calm
+* authoritative.
+
+NOT:
+
+* futuristic
+* playful
+* startup-like.
+
+---
+
+# ARCUS VISUAL REFERENCES
+
+Closest references:
+
+* architectural journals
+* satellite observatories
+* cartographic archives
+* infrastructure intelligence systems
+* editorial research institutions.
+
+Mental references:
+
+* Monocle
+* Financial Times graphics
+* architectural biennale systems
+* geospatial observatories
+* scientific editorial platforms.
+
+---
+
+# EMOTIONAL TARGET
+
+When opening ARCUS the user should think:
+
+> “This feels serious, beautiful, and real.”
+
+NOT:
+
+> “Cool futuristic UI.”
+
+---
+
+# FINAL ARCUS VISUAL DNA
+
+## Homepage
+
+Dark mineral cinematic.
+
+## Atlas
+
+Warm cartographic intelligence interface.
+
+## Popups
+
+Editorial technical dossier.
+
+## Analytics
+
+Infrastructure intelligence dashboard.
+
+## Overall Feeling
+
+European infrastructure observatory.

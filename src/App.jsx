@@ -14,6 +14,7 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import PublicationsPage from "./pages/PublicationsPage";
 
 import IntroOverlay from "./components/layout/IntroOverlay";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 import "leaflet/dist/leaflet.css";
 
@@ -30,6 +31,7 @@ function App() {
       )}
 
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
 
           {/* HOME */}

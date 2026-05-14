@@ -4,6 +4,12 @@
 
 .pipeline-section {
   position: relative;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(122,100,80,0.05),
+      transparent 38%
+    );
 
   padding:
     80px
@@ -25,6 +31,9 @@
 
 .pipeline-title {
   margin: 0;
+  
+  color:
+  #f3efe8;
 
   max-width: 920px;
 
@@ -52,12 +61,7 @@
   line-height: 1.9;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.66
-    );
+    rgba(226,218,209,0.68);
 }
 
 /* ================================= */
@@ -96,7 +100,7 @@
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,0.14),
+      rgba(140,115,93,0.18),
       transparent
     );
 }
@@ -117,6 +121,9 @@
 
 .pipeline-index {
   position: relative;
+  
+  color:
+  #f3efe8;
 
   width: 84px;
   height: 84px;
@@ -132,13 +139,13 @@
   background:
     radial-gradient(
       circle,
-      rgba(90,110,255,0.22),
-      rgba(255,255,255,0.02)
+      rgba(122,100,80,0.20),
+      rgba(255,248,242,0.02)
     );
 
   border:
     1px solid
-    rgba(255,255,255,0.08);
+    rgba(140,115,93,0.14);
 
   backdrop-filter:
     blur(12px);
@@ -151,7 +158,7 @@
 
   box-shadow:
     0 0 40px
-    rgba(90,110,255,0.08);
+    rgba(122,100,80,0.14);
 }
 
 /* ================================= */
@@ -159,10 +166,11 @@
 /* ================================= */
 
 .pipeline-step-title {
+  color:
+  #f3efe8;
+
   margin:
-    0
-    0
-    24px;
+    0 0 24px;
 
   font-size: 34px;
 
@@ -187,12 +195,7 @@
   line-height: 1.9;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.68
-    );
+    rgba(226,218,209,0.70);
 }
 
 /* ================================= */

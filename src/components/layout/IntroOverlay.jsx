@@ -37,6 +37,10 @@ export default function IntroOverlay({ onFinish }) {
           <span>ARCUS</span>
           <span>ATLAS</span>
         </h1>
+        
+        <div className="intro-subtitle">
+          Infrastructure Failure Observatory
+        </div>
 
         <div className="intro-line">
           <div className="intro-line-pulse" />

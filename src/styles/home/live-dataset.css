@@ -35,12 +35,7 @@
   text-transform: uppercase;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.42
-    );
+    rgba(214,198,182,0.44);
 }
 
 /* ================================= */
@@ -63,6 +58,9 @@
 
 .live-title {
   margin: 0;
+
+  color:
+  #f3efe8;
 
   max-width: 720px;
 
@@ -90,12 +88,7 @@
   line-height: 1.9;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.62
-    );
+    rgba(226,218,209,0.66);
 }
 
 /* ================================= */
@@ -128,11 +121,11 @@
   border-radius: 999px;
 
   background:
-    rgba(255,255,255,0.02);
+    rgba(255,248,242,0.03);
 
   border:
     1px solid
-    rgba(255,255,255,0.06);
+    rgba(140,115,93,0.12);
 
   backdrop-filter:
     blur(12px);
@@ -148,10 +141,10 @@
     translateY(-2px);
 
   background:
-    rgba(255,255,255,0.04);
+    rgba(255,248,242,0.05);
 
   border-color:
-    rgba(255,255,255,0.12);
+    rgba(140,115,93,0.18);
 }
 
 /* ================================= */
@@ -167,11 +160,11 @@
   flex-shrink: 0;
 
   background:
-    rgba(140,160,255,1);
+    #8c735d;
 
   box-shadow:
     0 0 14px
-    rgba(120,140,255,0.6);
+    rgba(122,100,80,0.34);
 
   animation:
     livePulse 3s ease-in-out infinite;
@@ -208,12 +201,7 @@
   letter-spacing: 0.02em;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.72
-    );
+    rgba(243,239,232,0.74);
 }
 
 /* ================================= */
@@ -232,6 +220,12 @@
 @media (max-width: 980px) {
 
   .live-section {
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(122,100,80,0.06),
+        transparent 42%
+      );
     padding:
       60px
       32px

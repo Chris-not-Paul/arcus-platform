@@ -3,6 +3,14 @@
 /* ================================= */
 
 .why-section {
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(122,100,80,0.04),
+      transparent 42%
+    );
   padding:
     40px
     60px
@@ -39,6 +47,9 @@
 .why-title {
   margin: 0;
 
+  color:
+  #f3efe8;
+
   max-width: 700px;
 
   font-size:
@@ -74,12 +85,7 @@
   line-height: 1.95;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.68
-    );
+    rgba(226,218,209,0.70);
 }
 
 /* ================================= */

@@ -3,6 +3,15 @@
 /* ================================= */
 
 .methodology-section {
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(122,100,80,0.05),
+      transparent 40%
+    );
+
   padding:
     120px
     60px
@@ -21,6 +30,9 @@
 
 .methodology-title {
   margin: 0;
+
+  color:
+  #f3efe8;
 
   max-width: 920px;
 
@@ -74,13 +86,13 @@
   background:
     linear-gradient(
       135deg,
-      rgba(255,255,255,0.03),
-      rgba(255,255,255,0.015)
+      rgba(255,248,242,0.04),
+      rgba(255,248,242,0.018)
     );
 
   border:
     1px solid
-    rgba(255,255,255,0.06);
+    rgba(140,115,93,0.12);
 
   transition:
     transform 0.35s ease,
@@ -98,7 +110,7 @@
   background:
     radial-gradient(
       circle at top right,
-      rgba(80,100,255,0.12),
+      rgba(122,100,80,0.14),
       transparent 45%
     );
 
@@ -113,13 +125,13 @@
     translateY(-4px);
 
   border-color:
-    rgba(255,255,255,0.12);
+    rgba(140,115,93,0.18);
 
-  background:
+ background:
     linear-gradient(
       135deg,
-      rgba(255,255,255,0.05),
-      rgba(255,255,255,0.02)
+      rgba(255,248,242,0.06),
+      rgba(255,248,242,0.025)
     );
 }
 
@@ -145,12 +157,7 @@
   text-transform: uppercase;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.42
-    );
+    rgba(214,198,182,0.42);
 }
 
 /* ================================= */
@@ -159,6 +166,9 @@
 
 .methodology-card-title {
   position: relative;
+
+  color:
+  #f3efe8;
 
   z-index: 2;
 
@@ -194,12 +204,7 @@
   line-height: 1.9;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.68
-    );
+    rgba(226,218,209,0.70);
 }
 
 /* ================================= */

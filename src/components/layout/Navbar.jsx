@@ -16,7 +16,7 @@ function Navbar() {
 
     {
       label: "Methodology",
-      path: "/#methodology",
+      path: "/methodology",
     },
 
     {

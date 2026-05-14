@@ -5,6 +5,13 @@
 .breathing-section {
   position: relative;
 
+  background:
+  radial-gradient(
+    circle at center,
+    rgba(122,100,80,0.05),
+    transparent 70%
+  );
+
   padding:
     220px
     60px;
@@ -36,7 +43,7 @@
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,0.26),
+      rgba(140,115,93,0.32),
       transparent
     );
 }
@@ -54,14 +61,14 @@
 
   border-radius: 50%;
 
-  background: white;
+  background: #f3efe8;
 
   transform:
     translateY(-50%);
 
   box-shadow:
-    0 0 12px
-    rgba(255,255,255,0.8);
+    0 0 16px
+    rgba(140,115,93,0.34);
 
   animation:
     breathingTravel 4s ease-in-out infinite;
@@ -97,6 +104,9 @@
 .breathing-text {
   max-width: 920px;
 
+  color:
+  #f3efe8;
+
   font-size:
     clamp(
       40px,
@@ -125,12 +135,7 @@
   line-height: 1.85;
 
   color:
-    rgba(
-      255,
-      255,
-      255,
-      0.56
-    );
+    rgba(226,218,209,0.58);
 }
 
 /* ================================= */

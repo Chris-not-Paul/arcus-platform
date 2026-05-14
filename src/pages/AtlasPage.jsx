@@ -8,11 +8,19 @@ import "../styles/atlas/atlas-page.css";
 
 import extractYear from "../utils/extractYear";
 
+/* LAYOUT */
+
 import Sidebar from "../components/layout/Sidebar";
+
+/* MAP */
 
 import CollapseMap from "../components/map/CollapseMap";
 
 function AtlasPage() {
+
+  /* ================================= */
+  /* STATE */
+  /* ================================= */
 
   const [events, setEvents] =
     useState([]);
@@ -40,7 +48,7 @@ function AtlasPage() {
     useState(2025);
 
   /* ================================= */
-  /* DATA */
+  /* DATA LOADING */
   /* ================================= */
 
   useEffect(() => {
@@ -114,7 +122,7 @@ function AtlasPage() {
   }, [events]);
 
   /* ================================= */
-  /* SOURCES */
+  /* SOURCES INDEX */
   /* ================================= */
 
   const sourcesByEvent =
@@ -141,7 +149,7 @@ function AtlasPage() {
     }, [sources]);
 
   /* ================================= */
-  /* FILTER */
+  /* FILTERED EVENTS */
   /* ================================= */
 
   const filteredEvents =
@@ -194,165 +202,155 @@ function AtlasPage() {
   /* STATS */
   /* ================================= */
 
-  const stats = useMemo(() => {
+  const totalTC =
+    filteredEvents.filter(
+      (e) =>
+        e.collapse_severity === "TC"
+    ).length;
 
-    return {
+  const totalPC =
+    filteredEvents.filter(
+      (e) =>
+        e.collapse_severity === "PC"
+    ).length;
 
-      totalTC:
-        filteredEvents.filter(
-          (e) =>
-            e.collapse_severity ===
-            "TC"
-        ).length,
-
-      totalPC:
-        filteredEvents.filter(
-          (e) =>
-            e.collapse_severity ===
-            "PC"
-        ).length,
-
-      totalTriggered:
-        filteredEvents.filter(
-          (e) => e.triggered
-        ).length,
-
-    };
-
-  }, [filteredEvents]);
+  const totalTriggered =
+    filteredEvents.filter(
+      (e) => e.triggered
+    ).length;
 
   /* ================================= */
   /* CAUSES */
   /* ================================= */
 
-  const uniqueCauses =
-    useMemo(() => {
+  const uniqueCauses = [
 
-      return [
-        "All",
+    "All",
 
-        ...new Set(
-          events
-            .map(
-              (e) =>
-                e.specific_cause
-            )
-            .filter(Boolean)
-        ),
-      ];
+    ...new Set(
+      events
+        .map(
+          (e) =>
+            e.specific_cause
+        )
+        .filter(Boolean)
+    ),
 
-    }, [events]);
+  ];
+
+  /* ================================= */
+  /* PAGE */
+  /* ================================= */
 
   return (
 
-    <div className="atlas-page">
+    <div
+      style={{
+        width: "100vw",
+
+        height: "100vh",
+
+        position: "relative",
+
+        overflow: "hidden",
+
+        background: "#ece8e2",
+      }}
+    >
+
+      {/* ================================= */}
+      {/* SIDEBAR */}
+      {/* ================================= */}
+
+      <Sidebar
+
+        sidebarOpen={
+          sidebarOpen
+        }
+
+        setSidebarOpen={
+          setSidebarOpen
+        }
+
+        filteredEvents={
+          filteredEvents
+        }
+
+        totalTriggered={
+          totalTriggered
+        }
+
+        totalTC={totalTC}
+
+        totalPC={totalPC}
+
+        yearFilter={yearFilter}
+
+        setYearFilter={
+          setYearFilter
+        }
+
+        minYear={minYear}
+
+        maxYear={maxYear}
+
+        causeFilter={
+          causeFilter
+        }
+
+        setCauseFilter={
+          setCauseFilter
+        }
+
+        severityFilter={
+          severityFilter
+        }
+
+        setSeverityFilter={
+          setSeverityFilter
+        }
+
+        triggeredFilter={
+          triggeredFilter
+        }
+
+        setTriggeredFilter={
+          setTriggeredFilter
+        }
+
+        uniqueCauses={
+          uniqueCauses
+        }
+      />
+
+      {/* ================================= */}
+      {/* MAP */}
+      {/* ================================= */}
 
       <div
-        className={
-          sidebarOpen
-            ? "atlas-layout"
-            : "atlas-layout sidebar-closed"
-        }
+        style={{
+          position: "absolute",
+
+          inset: 0,
+
+          zIndex: 1,
+        }}
       >
 
-        {/* SIDEBAR */}
+        <CollapseMap
 
-        <div className="atlas-sidebar-wrapper">
-
-          <Sidebar
-            sidebarOpen={
-              sidebarOpen
-            }
-
-            filteredEvents={
-              filteredEvents
-            }
-
-            totalTriggered={
-              stats.totalTriggered
-            }
-
-            totalTC={
-              stats.totalTC
-            }
-
-            totalPC={
-              stats.totalPC
-            }
-
-            yearFilter={
-              yearFilter
-            }
-
-            setYearFilter={
-              setYearFilter
-            }
-
-            minYear={minYear}
-
-            maxYear={maxYear}
-
-            causeFilter={
-              causeFilter
-            }
-
-            setCauseFilter={
-              setCauseFilter
-            }
-
-            severityFilter={
-              severityFilter
-            }
-
-            setSeverityFilter={
-              setSeverityFilter
-            }
-
-            triggeredFilter={
-              triggeredFilter
-            }
-
-            setTriggeredFilter={
-              setTriggeredFilter
-            }
-
-            uniqueCauses={
-              uniqueCauses
-            }
-          />
-
-        </div>
-
-        {/* MAP */}
-
-        <div className="atlas-map-wrapper">
-
-          <CollapseMap
-            filteredEvents={
-              filteredEvents
-            }
-
-            sourcesByEvent={
-              sourcesByEvent
-            }
-          />
-
-        </div>
-
-        {/* TOGGLE */}
-
-        <button
-          className="atlas-toggle"
-          onClick={() =>
-            setSidebarOpen(
-              !sidebarOpen
-            )
+          filteredEvents={
+            filteredEvents
           }
-        >
-          {sidebarOpen
-            ? "✕"
-            : "☰"}
-        </button>
+
+          sourcesByEvent={
+            sourcesByEvent
+          }
+
+          sidebarOpen={
+            sidebarOpen
+          }
+        />
 
       </div>
 
