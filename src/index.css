@@ -1,7 +1,53 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700,800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,800&display=swap");
+
+:root {
+  --arcus-font-sans:
+    "IBM Plex Sans",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  --arcus-font-display:
+    "Source Serif 4",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  --arcus-font-logo:
+    Raleway,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  --arcus-ink: #1c1a18;
+  --arcus-ink-soft: #51483f;
+  --arcus-ink-muted: #766a5f;
+  --arcus-paper: #f3efe8;
+  --arcus-paper-warm: #ebe4d8;
+  --arcus-paper-soft: #fff8f2;
+  --arcus-night: #120f0d;
+  --arcus-night-soft: #1a1512;
+  --arcus-night-panel: #231e1a;
+  --arcus-bronze: #c49040;
+  --arcus-bronze-soft: #d0a56f;
+  --arcus-clay: #8c735d;
+  --arcus-steel: #6e858d;
+  --arcus-border-light: rgba(140,115,93,0.14);
+  --arcus-border-dark: rgba(243,239,232,0.12);
+  --arcus-text-on-dark: #f3efe8;
+  --arcus-text-on-dark-soft: rgba(226,218,209,0.74);
+  --arcus-focus: #e0b678;
+}
 
 html {
   scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(196,144,64,0.32);
+  color: var(--arcus-ink);
 }
 
 * {
@@ -20,12 +66,11 @@ body,
 
 body {
   font-family:
-    "General Sans",
-    sans-serif;
+    var(--arcus-font-sans);
 
-  background: #09090c;
+  background: var(--arcus-night);
 
-  color: white;
+  color: var(--arcus-text-on-dark);
 
   overflow-x: hidden;
 
@@ -33,6 +78,82 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   text-rendering: optimizeLegibility;
+}
+
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 1000000;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  background: var(--arcus-paper);
+  color: var(--arcus-ink);
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:focus-visible {
+  outline: 2px solid var(--arcus-focus);
+  outline-offset: 4px;
+}
+
+h1,
+h2,
+.home-hero h1,
+.home-section h2,
+.analytics-title,
+.analytics-section-title,
+.methodology-title,
+.methodology-section-title,
+.premium-analytics-title,
+.premium-section-title {
+  font-family: var(--arcus-font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+h3,
+.home-layer-card h3,
+.analytics-panel h3,
+.analytics-premium-card h3,
+.methodology-card h3,
+.premium-analytics-card h3 {
+  font-family: var(--arcus-font-display);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+.home-kicker,
+.home-section-label,
+.analytics-section-label,
+.analytics-label,
+.analytics-kpi-label,
+.analytics-metric-label,
+.methodology-section-label,
+.navbar-link,
+.navbar-language button {
+  font-family: var(--arcus-font-sans);
+  letter-spacing: 0.12em;
 }
 
 a {
@@ -52,4 +173,15 @@ img {
   display: block;
 
   max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

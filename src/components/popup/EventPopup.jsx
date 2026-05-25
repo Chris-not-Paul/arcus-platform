@@ -1,11 +1,57 @@
 import extractYear from "../../utils/extractYear";
 
 import { causeColors } from "../../utils/colors";
+import useLanguage from "../../context/useLanguage";
+import taxonomyLabel from "../../utils/taxonomyLabels";
 
 function EventPopup({
   event,
   relatedSources,
 }) {
+  const { language } = useLanguage();
+
+  const text = {
+    built: language === "it" ? "Costruito" : "Built",
+    collapse:
+      language === "it" ? "Collasso" : "Collapse",
+    crossing:
+      language === "it" ? "Attraversamento" : "Crossing",
+    eventDescription:
+      language === "it"
+        ? "Descrizione evento"
+        : "Event Description",
+    eventDriven:
+      language === "it"
+        ? "Evento innescato"
+        : "Event-driven",
+    fatalities:
+      language === "it" ? "Vittime" : "Fatalities",
+    infrastructureAge:
+      language === "it"
+        ? "Eta infrastruttura"
+        : "Infrastructure Age",
+    infrastructureProfile:
+      language === "it"
+        ? "Profilo infrastrutturale"
+        : "Infrastructure Profile",
+    infrastructureUse:
+      language === "it"
+        ? "Uso infrastrutturale"
+        : "Infrastructure Use",
+    na: language === "it" ? "N/D" : "N/A",
+    partial:
+      language === "it" ? "Parziale" : "Partial",
+    progressive:
+      language === "it" ? "Progressivo" : "Progressive",
+    sources: language === "it" ? "Fonti" : "Sources",
+    structuralType:
+      language === "it"
+        ? "Tipologia strutturale"
+        : "Structural Type",
+    total: language === "it" ? "Totale" : "Total",
+    years: language === "it" ? "anni" : "years",
+  };
+
 
   const collapseYear =
     extractYear(event.date);
@@ -84,7 +130,11 @@ function EventPopup({
                 "uppercase",
             }}
           >
-            {event.specific_cause}
+            {taxonomyLabel(
+              "cause",
+              event.specific_cause,
+              language
+            )}
           </div>
 
           {/* MATERIAL */}
@@ -126,7 +176,11 @@ function EventPopup({
                   "uppercase",
               }}
             >
-              {event.material_type}
+              {taxonomyLabel(
+                "material",
+                event.material_type,
+                language
+              )}
             </div>
           )}
 
@@ -170,8 +224,8 @@ function EventPopup({
             }}
           >
             {event.triggered
-              ? "EVENT-DRIVEN"
-              : "PROGRESSIVE"}
+              ? text.eventDriven
+              : text.progressive}
           </div>
 
         </div>
@@ -294,7 +348,7 @@ function EventPopup({
               color: "#7a7068",
             }}
           >
-            Collapse
+            {text.collapse}
           </div>
 
           <div
@@ -310,8 +364,8 @@ function EventPopup({
             }}
           >
             {isTotalCollapse
-              ? "TOTAL"
-              : "PARTIAL"}
+              ? text.total
+              : text.partial}
           </div>
         </div>
 
@@ -353,7 +407,7 @@ function EventPopup({
               color: "#7a7068",
             }}
           >
-            Fatalities
+            {text.fatalities}
           </div>
 
           <div
@@ -407,7 +461,7 @@ function EventPopup({
               color: "#7a7068",
             }}
           >
-            Built
+            {text.built}
           </div>
 
           <div
@@ -420,7 +474,7 @@ function EventPopup({
             }}
           >
             {event.construction_year ||
-              "N/A"}
+              text.na}
           </div>
         </div>
 
@@ -455,7 +509,7 @@ function EventPopup({
             color: "#7a7068",
           }}
         >
-          Infrastructure Profile
+          {text.infrastructureProfile}
         </div>
 
         <div
@@ -469,23 +523,31 @@ function EventPopup({
           {[
             {
               label:
-                "Structural Type",
+                text.structuralType,
 
               value:
-                event.structural_type,
+                taxonomyLabel(
+                  "structuralType",
+                  event.structural_type,
+                  language
+                ),
             },
 
             {
               label:
-                "Infrastructure Use",
+                text.infrastructureUse,
 
               value:
-                event.destination_use,
+                taxonomyLabel(
+                  "use",
+                  event.destination_use,
+                  language
+                ),
             },
 
             {
               label:
-                "Crossing",
+                text.crossing,
 
               value:
                 event.bridge_crossing_name,
@@ -493,11 +555,11 @@ function EventPopup({
 
             {
               label:
-                "Infrastructure Age",
+                text.infrastructureAge,
 
               value:
                 infrastructureAge
-                  ? `${infrastructureAge} years`
+                  ? `${infrastructureAge} ${text.years}`
                   : null,
             },
 
@@ -617,7 +679,7 @@ function EventPopup({
               color: "#7a7068",
             }}
           >
-            Event Description
+            {text.eventDescription}
           </div>
 
           <div
@@ -664,7 +726,7 @@ function EventPopup({
               color: "#7a7068",
             }}
           >
-            Sources
+            {text.sources}
           </div>
 
           <div

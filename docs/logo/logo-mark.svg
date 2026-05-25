@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" width="120" height="160">
+  <title>ARCUS — Logo Mark</title>
+  <g transform="translate(60, 78)">
+    <polygon points="-56,68  0,-78  0,-54  -38,68" fill="#C49040"/>
+    <polygon points="0,-78  56,68  38,68  0,-54" fill="#C49040"/>
+    <rect x="-29" y="14" width="58" height="4" fill="#C49040"/>
+    <rect x="-56" y="62" width="112" height="6" rx="1" fill="#C49040"/>
+  </g>
+</svg>

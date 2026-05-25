@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+
+import ArcusLogoReveal from "../brand/ArcusLogoReveal";
+
 import "./IntroOverlay.css";
 
 export default function IntroOverlay({ onFinish }) {
@@ -9,11 +12,11 @@ export default function IntroOverlay({ onFinish }) {
 
     const fadeTimer = setTimeout(() => {
       setFadeOut(true);
-    }, 1800);
+    }, 3200);
 
     const finishTimer = setTimeout(() => {
       onFinish();
-    }, 2600);
+    }, 3950);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -23,34 +26,27 @@ export default function IntroOverlay({ onFinish }) {
   }, [onFinish]);
 
   return (
-    <div className={`intro-overlay ${fadeOut ? "fade-out" : ""}`}>
+    <div
+      className={`intro-overlay ${fadeOut ? "fade-out" : ""}`}
+      aria-hidden="true"
+    >
 
       <div className="intro-grid" />
+      <div className="intro-beam" />
 
       <div className="intro-content">
 
-        <div className="intro-label">
+        <div className="intro-logo-shell">
+          <ArcusLogoReveal />
+        </div>
+
+        <div className="intro-signal-line">
+          <span />
+        </div>
+
+        <p className="intro-caption">
           Infrastructure Failure Observatory
-        </div>
-
-        <h1 className="intro-title">
-          <span>ARCUS</span>
-          <span>ATLAS</span>
-        </h1>
-        
-        <div className="intro-subtitle">
-          Infrastructure Failure Observatory
-        </div>
-
-        <div className="intro-line">
-          <div className="intro-line-pulse" />
-        </div>
-
-        <div className="intro-status">
-          <span>
-            Continuous infrastructure intelligence system
-          </span>
-        </div>
+        </p>
 
       </div>
     </div>

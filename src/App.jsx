@@ -11,7 +11,11 @@ import AtlasPage from "./pages/AtlasPage";
 import MethodologyPage from "./pages/MethodologyPage";
 import AboutPage from "./pages/AboutPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import PremiumAnalyticsPage from "./pages/PremiumAnalyticsPage";
 import PublicationsPage from "./pages/PublicationsPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
+import LanguageProvider from "./context/LanguageProvider";
 
 import IntroOverlay from "./components/layout/IntroOverlay";
 import ScrollToTop from "./components/layout/ScrollToTop";
@@ -24,15 +28,23 @@ function App() {
 
   return (
     <>
+      <a
+        className="skip-link"
+        href="#main-content"
+      >
+        Skip to content
+      </a>
+
       {showIntro && (
         <IntroOverlay
           onFinish={() => setShowIntro(false)}
         />
       )}
 
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
+      <LanguageProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
 
           {/* HOME */}
           <Route
@@ -58,6 +70,11 @@ function App() {
             element={<AnalyticsPage />}
           />
 
+          <Route
+            path="/analytics/pro"
+            element={<PremiumAnalyticsPage />}
+          />
+
           {/* PUBLICATIONS */}
           <Route
             path="/publications"
@@ -70,8 +87,14 @@ function App() {
             element={<AboutPage />}
           />
 
-        </Routes>
-      </BrowserRouter>
+          <Route
+            path="*"
+            element={<NotFoundPage />}
+          />
+
+          </Routes>
+        </BrowserRouter>
+      </LanguageProvider>
     </>
   );
 }

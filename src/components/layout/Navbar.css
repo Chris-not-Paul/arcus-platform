@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: space-between;
 
-  z-index: 1000;
+  z-index: 10000;
 
   border-radius: 28px;
 
@@ -86,39 +86,20 @@
   text-decoration: none;
 
   display: flex;
-  flex-direction: column;
+  align-items: center;
+
+  width: 178px;
+  min-width: 178px;
 }
 
-.navbar-title {
-  font-size: 22px;
+.navbar-logo {
+  display: block;
 
-  font-weight: 800;
+  width: 156px;
+  height: auto;
 
-  letter-spacing: -0.05em;
-
-  color: white;
-
-  line-height: 1;
-
-  text-transform: uppercase;
-}
-
-.navbar-subtitle {
-  margin-top: 4px;
-
-  font-size: 10px;
-
-  letter-spacing: 0.22em;
-
-  text-transform: uppercase;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.46
-    );
+  filter:
+    drop-shadow(0 8px 18px rgba(0,0,0,0.2));
 }
 
 /* ================================= */
@@ -133,7 +114,7 @@
   display: flex;
   align-items: center;
 
-  gap: 42px;
+  gap: 34px;
 }
 
 .navbar-link {
@@ -189,6 +170,59 @@
 }
 
 /* ================================= */
+/* LANGUAGE */
+/* ================================= */
+
+.navbar-language {
+  position: relative;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 4px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.06);
+}
+
+.navbar-language button {
+  width: 34px;
+  height: 28px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: transparent;
+
+  color:
+    rgba(243,239,232,0.58);
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.navbar-language button.active {
+  background:
+    rgba(243,239,232,0.92);
+
+  color: #201b17;
+}
+
+/* ================================= */
 /* RESPONSIVE */
 /* ================================= */
 
@@ -203,6 +237,15 @@
 
   .navbar-links {
     gap: 24px;
+  }
+
+  .navbar-brand {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .navbar-logo {
+    width: 136px;
   }
 }
 
@@ -225,18 +268,23 @@
 
     gap: 18px;
   }
+
+  .navbar-language {
+    align-self: flex-start;
+  }
 }
 
 @media (max-width: 640px) {
-  .navbar-title {
-    font-size: 18px;
+  .navbar-brand {
+    width: 144px;
+    min-width: 144px;
+  }
+
+  .navbar-logo {
+    width: 132px;
   }
 
   .navbar-link {
     font-size: 11px;
-  }
-
-  .navbar-subtitle {
-    font-size: 9px;
   }
 }

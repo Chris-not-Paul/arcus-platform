@@ -3,34 +3,39 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import useLanguage from "../../context/useLanguage";
+import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
+
 import "./Navbar.css";
 
 function Navbar() {
   const location = useLocation();
+  const { language, setLanguage, t } =
+    useLanguage();
 
   const links = [
     {
-      label: "Atlas",
+      label: t("atlas"),
       path: "/atlas",
     },
 
     {
-      label: "Methodology",
+      label: t("methodology"),
       path: "/methodology",
     },
 
     {
-      label: "Analytics",
+      label: t("analytics"),
       path: "/analytics",
     },
 
     {
-      label: "Publications",
+      label: t("publications"),
       path: "/publications",
     },
 
     {
-      label: "About",
+      label: t("about"),
       path: "/about",
     },
   ];
@@ -42,15 +47,13 @@ function Navbar() {
       <Link
         to="/"
         className="navbar-brand"
+        aria-label="ARCUS Atlas"
       >
-        <div className="navbar-title">
-          ARCUS ATLAS
-        </div>
-
-        <div className="navbar-subtitle">
-          Infrastructure Failure
-          Observatory
-        </div>
+        <img
+          className="navbar-logo"
+          src={logoHorizontal}
+          alt="ARCUS"
+        />
       </Link>
 
       {/* NAVIGATION */}
@@ -73,8 +76,13 @@ function Navbar() {
               key={link.path}
               to={link.path}
               className={`navbar-link ${
-                location.pathname ===
-                link.path
+                location.pathname === link.path ||
+                (
+                  link.path === "/analytics" &&
+                  location.pathname.startsWith(
+                    "/analytics/"
+                  )
+                )
                   ? "active"
                   : ""
               }`}
@@ -84,6 +92,21 @@ function Navbar() {
           );
         })}
       </nav>
+
+      <div className="navbar-language">
+        {["en", "it"].map((code) => (
+          <button
+            className={
+              language === code ? "active" : ""
+            }
+            key={code}
+            onClick={() => setLanguage(code)}
+            type="button"
+          >
+            {code.toUpperCase()}
+          </button>
+        ))}
+      </div>
     </header>
   );
 }

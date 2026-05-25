@@ -9,8 +9,7 @@ import {
 /* ================================= */
 
 export function createMarkerIcon(
-  specificCause,
-  triggered
+  specificCause
 ) {
 
   const baseColor =

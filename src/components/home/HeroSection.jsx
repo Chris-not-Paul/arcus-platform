@@ -1,8 +1,42 @@
 import { Link } from "react-router-dom";
 
+import useLanguage from "../../context/useLanguage";
+
 import "../../styles/home/hero.css";
 
 export default function HeroSection() {
+  const { language } = useLanguage();
+
+  const copy = {
+    en: {
+      description:
+        "ARCUS is a continuously evolving geospatial observatory dedicated to the documentation, classification, and spatial interpretation of bridge collapse events across global infrastructure systems.",
+      explore: "Explore Atlas",
+      label:
+        "Global Infrastructure Failure Observatory",
+      methodology: "Methodology",
+      manifestoA: "Infrastructure failures",
+      manifestoB: "leave patterns.",
+      manifestoC: "ARCUS ATLAS reveals them.",
+      subtitle:
+        "Geospatial intelligence for bridge collapse analysis",
+    },
+    it: {
+      description:
+        "ARCUS e un osservatorio geospaziale in continua evoluzione dedicato alla documentazione, classificazione e interpretazione spaziale degli eventi di collasso dei ponti.",
+      explore: "Esplora l'Atlante",
+      label:
+        "Osservatorio globale sui cedimenti infrastrutturali",
+      methodology: "Metodologia",
+      manifestoA: "I cedimenti infrastrutturali",
+      manifestoB: "lasciano tracce.",
+      manifestoC: "ARCUS ATLAS le rende leggibili.",
+      subtitle:
+        "Intelligence geospaziale per l'analisi dei crolli dei ponti",
+    },
+  };
+
+  const text = copy[language] || copy.en;
 
   return (
     <section className="hero-section">
@@ -16,7 +50,7 @@ export default function HeroSection() {
       <div className="hero-content">
 
         <div className="hero-label">
-          Global Infrastructure Failure Observatory
+          {text.label}
         </div>
 
         <h1 className="hero-title">
@@ -28,7 +62,7 @@ export default function HeroSection() {
         </div>
 
         <div className="hero-subtitle">
-          Geospatial intelligence for bridge collapse analysis
+          {text.subtitle}
         </div>
 
         {/* MANIFESTO */}
@@ -36,15 +70,15 @@ export default function HeroSection() {
         <div className="hero-manifesto">
 
           <span>
-            Infrastructure failures
+            {text.manifestoA}
           </span>
 
           <span className="manifesto-accent">
-            leave patterns.
+            {text.manifestoB}
           </span>
 
           <span>
-            ARCUS ATLAS reveals them.
+            {text.manifestoC}
           </span>
 
         </div>
@@ -53,11 +87,7 @@ export default function HeroSection() {
 
         <p className="hero-description">
 
-          ARCUS is a continuously evolving
-          geospatial observatory dedicated to the
-          documentation, classification, and spatial
-          interpretation of bridge collapse events
-          across global infrastructure systems.
+          {text.description}
 
         </p>
 
@@ -69,14 +99,14 @@ export default function HeroSection() {
             to="/atlas"
             className="primary-button"
           >
-            Explore Atlas
+            {text.explore}
           </Link>
 
           <Link
             to="/methodology"
             className="secondary-button"
           >
-            Methodology
+            {text.methodology}
           </Link>
 
         </div>

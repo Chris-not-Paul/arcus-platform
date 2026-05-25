@@ -23,8 +23,7 @@ function EventMarker({
       ]}
 
       icon={createMarkerIcon(
-        event.specific_cause,
-        event.triggered
+        event.specific_cause
       )}
     >
 

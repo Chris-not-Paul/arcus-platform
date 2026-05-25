@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+  <title>ARCUS — Logo Full</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+      .wm { font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif; fill: #F2E8D4; font-weight: 300; letter-spacing: 12px; font-size: 28px; }
+      .tg { font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif; fill: #6A5A42; font-size: 8px; letter-spacing: 4px; font-weight: 300; }
+    </style>
+  </defs>
+  <g transform="translate(160, 82) scale(0.62)">
+    <polygon points="-56,68  0,-78  0,-54  -38,68" fill="#C49040"/>
+    <polygon points="0,-78  56,68  38,68  0,-54" fill="#C49040"/>
+    <rect x="-29" y="14" width="58" height="4" fill="#C49040"/>
+    <rect x="-56" y="62" width="112" height="6" rx="1" fill="#C49040"/>
+  </g>
+  <text x="160" y="148" text-anchor="middle" class="wm">ARCUS</text>
+  <line x1="56" y1="161" x2="148" y2="161" stroke="#2E2820" stroke-width="0.5"/>
+  <circle cx="160" cy="161" r="1.5" fill="#C49040"/>
+  <line x1="172" y1="161" x2="264" y2="161" stroke="#2E2820" stroke-width="0.5"/>
+  <text x="160" y="180" text-anchor="middle" class="tg">INFRASTRUCTURE INTELLIGENCE</text>
+</svg>

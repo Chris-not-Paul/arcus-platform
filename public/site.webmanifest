@@ -1,0 +1,16 @@
+{
+  "name": "ARCUS Atlas",
+  "short_name": "ARCUS",
+  "description": "Scientific infrastructure failure observatory for bridge collapse records, geospatial evidence and analytics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#120f0d",
+  "theme_color": "#120f0d",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

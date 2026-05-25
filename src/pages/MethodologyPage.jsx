@@ -1,8 +1,204 @@
+import Navbar from "../components/layout/Navbar";
+import PageMeta from "../components/layout/PageMeta";
+
+import useLanguage from "../context/useLanguage";
+
 import "../styles/methodology/methodologypage.css";
 
 function MethodologyPage() {
+  const { language } = useLanguage();
+
+  const copy = {
+    en: {
+      label: "ARCUS RESEARCH FRAMEWORK",
+      subtitle:
+        "A transparent framework for identifying, validating, classifying and geolocating bridge collapse events across the Italian infrastructure network.",
+      temporalCoverage: "Temporal Coverage",
+      title:
+        "Methodology & Classification System",
+      validationFramework:
+        "Validation Framework",
+      geospatialStandard:
+        "Geospatial Standard",
+      relatedPublication:
+        "RELATED PUBLICATION",
+      contextLabel: "CONTEXT",
+      contextTitle: "Why ARCUS Exists",
+      contextParagraphs: [
+        "Information regarding bridge collapse events is often fragmented across institutional archives, scientific publications, technical reports and journalistic sources.",
+        "ARCUS was conceived to provide a structured and continuously evolving research infrastructure capable of improving the accessibility, consistency and interpretability of bridge collapse information across Italy.",
+        "The framework harmonizes historical records, technical classifications, source traceability and geospatial information into a unified database architecture designed for research, analysis and infrastructure intelligence applications.",
+      ],
+      workflowLabel: "OPERATIONAL WORKFLOW",
+      workflowTitle: "Data Collection Pipeline",
+      workflowDescription:
+        "Each event included in ARCUS follows a structured multi-step validation and classification workflow.",
+      workflowSteps: [
+        [
+          "01",
+          "Event Detection",
+          "Keyword-based searches across news archives, institutional reports and technical repositories.",
+        ],
+        [
+          "02",
+          "Screening",
+          "Removal of demolitions, non-collapse events and unverified records.",
+        ],
+        [
+          "03",
+          "Cross-Source Validation",
+          "Verification through technical reports, authorities, scientific papers and independent sources.",
+        ],
+        [
+          "04",
+          "Geospatial Localization",
+          "WGS84 coordinate assignment and municipality-level spatial standardization.",
+        ],
+        [
+          "05",
+          "Event Classification",
+          "Severity, trigger mechanism and specific collapse cause assignment.",
+        ],
+        [
+          "06",
+          "Continuous Revision",
+          "Iterative review and metadata enrichment through evolving research activities.",
+        ],
+      ],
+      taxonomyLabel: "EVENT TAXONOMY",
+      taxonomyTitle: "Classification System",
+      severity: "Severity",
+      mechanism: "Mechanism",
+      generalCause: "General Cause",
+      specificCauses: "Specific Causes",
+      sourceLabel: "VALIDATION FRAMEWORK",
+      sourceTitle:
+        "Source Hierarchy & Traceability",
+      sourceText:
+        "Each event undergoes cross-source verification and consistency checks between technical, scientific, institutional and journalistic records. Source traceability metadata are stored within the ARCUS architecture to improve transparency, reproducibility and future database revisions.",
+      extensionLabel: "ARCUS EXTENSIONS",
+      extensionTitle:
+        "Beyond the Original Dataset",
+      extensions: [
+        "Source traceability architecture",
+        "Metadata enrichment system",
+        "Multi-source event documentation",
+        "Geospatial standardization",
+        "Continuous update framework",
+        "Infrastructure intelligence integration",
+      ],
+      limitsLabel: "LIMITATIONS & UNCERTAINTY",
+      limitsTitle: "Data Completeness",
+      limitsText:
+        "Historical bridge collapse records are inherently heterogeneous and often affected by incomplete documentation, inconsistent reporting quality and varying levels of technical detail. Earlier decades may present underreporting biases, especially for localized events occurring outside major urban areas. In some cases, spatial information is limited to municipality-level accuracy due to the absence of reliable georeferenced documentation.",
+      references: "REFERENCES",
+      researchFramework: "Research Framework",
+    },
+    it: {
+      label: "QUADRO SCIENTIFICO ARCUS",
+      subtitle:
+        "Un framework trasparente per identificare, validare, classificare e geolocalizzare gli eventi di collasso dei ponti nella rete infrastrutturale italiana.",
+      temporalCoverage:
+        "Copertura Temporale",
+      title:
+        "Metodologia e Sistema di Classificazione",
+      validationFramework:
+        "Framework di Validazione",
+      geospatialStandard:
+        "Standard Geospaziale",
+      relatedPublication:
+        "PUBBLICAZIONE CORRELATA",
+      contextLabel: "CONTESTO",
+      contextTitle: "Perche esiste ARCUS",
+      contextParagraphs: [
+        "Le informazioni sui crolli dei ponti sono spesso disperse tra archivi istituzionali, pubblicazioni scientifiche, relazioni tecniche e fonti giornalistiche.",
+        "ARCUS nasce per costruire un'infrastruttura di ricerca strutturata e in continua evoluzione, capace di rendere piu accessibili, coerenti e interpretabili le informazioni sui collassi dei ponti in Italia.",
+        "Il framework armonizza registri storici, classificazioni tecniche, tracciabilita delle fonti e informazione geospaziale in un'architettura dati unificata, pensata per ricerca, analisi e infrastructure intelligence.",
+      ],
+      workflowLabel: "WORKFLOW OPERATIVO",
+      workflowTitle: "Pipeline di raccolta dati",
+      workflowDescription:
+        "Ogni evento incluso in ARCUS segue un processo strutturato di validazione e classificazione.",
+      workflowSteps: [
+        [
+          "01",
+          "Individuazione evento",
+          "Ricerche mirate su archivi stampa, report istituzionali e repository tecnici.",
+        ],
+        [
+          "02",
+          "Screening",
+          "Esclusione di demolizioni, eventi non pertinenti e record non verificati.",
+        ],
+        [
+          "03",
+          "Validazione multi-fonte",
+          "Verifica attraverso report tecnici, autorita, pubblicazioni scientifiche e fonti indipendenti.",
+        ],
+        [
+          "04",
+          "Localizzazione geospaziale",
+          "Assegnazione di coordinate WGS84 e standardizzazione spaziale su base territoriale.",
+        ],
+        [
+          "05",
+          "Classificazione evento",
+          "Attribuzione di gravita, meccanismo di innesco e causa specifica del collasso.",
+        ],
+        [
+          "06",
+          "Revisione continua",
+          "Aggiornamento iterativo e arricchimento dei metadati attraverso attivita di ricerca.",
+        ],
+      ],
+      taxonomyLabel: "TASSONOMIA EVENTI",
+      taxonomyTitle: "Sistema di classificazione",
+      severity: "Gravita",
+      mechanism: "Meccanismo",
+      generalCause: "Causa generale",
+      specificCauses: "Cause specifiche",
+      sourceLabel: "FRAMEWORK DI VALIDAZIONE",
+      sourceTitle:
+        "Gerarchia e tracciabilita delle fonti",
+      sourceText:
+        "Ogni evento viene sottoposto a verifiche incrociate tra documentazione tecnica, scientifica, istituzionale e giornalistica. I metadati di tracciabilita sono conservati nell'architettura ARCUS per migliorare trasparenza, riproducibilita e future revisioni del database.",
+      extensionLabel: "ESTENSIONI ARCUS",
+      extensionTitle:
+        "Oltre il dataset originario",
+      extensions: [
+        "Architettura di tracciabilita delle fonti",
+        "Sistema di arricchimento dei metadati",
+        "Documentazione multi-fonte degli eventi",
+        "Standardizzazione geospaziale",
+        "Framework di aggiornamento continuo",
+        "Integrazione di infrastructure intelligence",
+      ],
+      limitsLabel: "LIMITI E INCERTEZZA",
+      limitsTitle: "Completezza dei dati",
+      limitsText:
+        "I registri storici sui crolli dei ponti sono per natura eterogenei e spesso condizionati da documentazione incompleta, qualita di reporting non uniforme e livelli variabili di dettaglio tecnico. I periodi meno recenti possono presentare bias di sottorappresentazione, soprattutto per eventi locali fuori dai principali centri urbani. In alcuni casi l'informazione spaziale resta limitata alla scala comunale per assenza di documentazione georeferenziata affidabile.",
+      references: "RIFERIMENTI",
+      researchFramework: "Framework di ricerca",
+    },
+  };
+
+  const content = copy[language] || copy.en;
+
   return (
-    <div className="methodology-page">
+    <main
+      className="methodology-page"
+      id="main-content"
+    >
+      <PageMeta
+        title={content.title}
+        description={
+          language === "it"
+            ? "Metodo ARCUS per identificare, validare, classificare e geolocalizzare eventi di collasso dei ponti."
+            : "ARCUS methodology for identifying, validating, classifying and geolocating bridge collapse events."
+        }
+      />
+
+      <Navbar />
 
       {/* HERO */}
 
@@ -15,29 +211,26 @@ function MethodologyPage() {
         <div className="methodology-container">
 
           <div className="methodology-label">
-            ARCUS RESEARCH FRAMEWORK
+            {content.label}
           </div>
 
           <h1 className="methodology-title">
-            Methodology & Classification System
+            {content.title}
           </h1>
 
           <p className="methodology-subtitle">
-            A transparent framework for identifying,
-            validating, classifying and geolocating
-            bridge collapse events across the Italian
-            infrastructure network.
+            {content.subtitle}
           </p>
 
           <div className="methodology-hero-stats">
 
             <div className="methodology-stat">
               <span className="methodology-stat-value">
-                2000–2025
+                2000-2025
               </span>
 
               <span className="methodology-stat-label">
-                Temporal Coverage
+                {content.temporalCoverage}
               </span>
             </div>
 
@@ -47,7 +240,7 @@ function MethodologyPage() {
               </span>
 
               <span className="methodology-stat-label">
-                Validation Framework
+                {content.validationFramework}
               </span>
             </div>
 
@@ -57,7 +250,7 @@ function MethodologyPage() {
               </span>
 
               <span className="methodology-stat-label">
-                Geospatial Standard
+                {content.geospatialStandard}
               </span>
             </div>
 
@@ -71,7 +264,7 @@ function MethodologyPage() {
           >
 
             <div className="methodology-paper-label">
-              RELATED PUBLICATION
+              {content.relatedPublication}
             </div>
 
             <div className="methodology-paper-title">
@@ -80,7 +273,7 @@ function MethodologyPage() {
             </div>
 
             <div className="methodology-paper-meta">
-              Data in Brief · Elsevier
+              Data in Brief - Elsevier
             </div>
 
             <div className="methodology-paper-authors">
@@ -101,44 +294,24 @@ function MethodologyPage() {
           <div className="methodology-split-left">
 
             <div className="methodology-section-label">
-              CONTEXT
+              {content.contextLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Why ARCUS Exists
+              {content.contextTitle}
             </h2>
 
           </div>
 
           <div className="methodology-split-right">
 
-            <p>
-              Information regarding bridge collapse
-              events is often fragmented across
-              institutional archives, scientific
-              publications, technical reports and
-              journalistic sources.
-            </p>
-
-            <p>
-              ARCUS was conceived to provide a
-              structured and continuously evolving
-              research infrastructure capable of
-              improving the accessibility,
-              consistency and interpretability of
-              bridge collapse information across
-              Italy.
-            </p>
-
-            <p>
-              The framework harmonizes historical
-              records, technical classifications,
-              source traceability and geospatial
-              information into a unified database
-              architecture designed for research,
-              analysis and infrastructure
-              intelligence applications.
-            </p>
+            {content.contextParagraphs.map(
+              (paragraph) => (
+                <p key={paragraph}>
+                  {paragraph}
+                </p>
+              )
+            )}
 
           </div>
 
@@ -155,75 +328,36 @@ function MethodologyPage() {
           <div className="methodology-section-header">
 
             <div className="methodology-section-label">
-              OPERATIONAL WORKFLOW
+              {content.workflowLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Data Collection Pipeline
+              {content.workflowTitle}
             </h2>
 
             <p className="methodology-section-description">
-              Each event included in ARCUS follows
-              a structured multi-step validation and
-              classification workflow.
+              {content.workflowDescription}
             </p>
 
           </div>
 
           <div className="workflow-grid">
 
-            {[
-              {
-                number: "01",
-                title: "Event Detection",
-                text:
-                  "Keyword-based searches across news archives, institutional reports and technical repositories.",
-              },
-              {
-                number: "02",
-                title: "Screening",
-                text:
-                  "Removal of demolitions, non-collapse events and unverified records.",
-              },
-              {
-                number: "03",
-                title: "Cross-Source Validation",
-                text:
-                  "Verification through technical reports, authorities, scientific papers and independent sources.",
-              },
-              {
-                number: "04",
-                title: "Geospatial Localization",
-                text:
-                  "WGS84 coordinate assignment and municipality-level spatial standardization.",
-              },
-              {
-                number: "05",
-                title: "Event Classification",
-                text:
-                  "Severity, trigger mechanism and specific collapse cause assignment.",
-              },
-              {
-                number: "06",
-                title: "Continuous Revision",
-                text:
-                  "Iterative review and metadata enrichment through evolving research activities.",
-              },
-            ].map((step) => (
+            {content.workflowSteps.map((step) => (
               <div
                 className="workflow-card"
-                key={step.number}
+                key={step[0]}
               >
                 <div className="workflow-number">
-                  {step.number}
+                  {step[0]}
                 </div>
 
                 <div className="workflow-title">
-                  {step.title}
+                  {step[1]}
                 </div>
 
                 <div className="workflow-text">
-                  {step.text}
+                  {step[2]}
                 </div>
               </div>
             ))}
@@ -243,11 +377,11 @@ function MethodologyPage() {
           <div className="methodology-section-header">
 
             <div className="methodology-section-label">
-              EVENT TAXONOMY
+              {content.taxonomyLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Classification System
+              {content.taxonomyTitle}
             </h2>
 
           </div>
@@ -256,18 +390,18 @@ function MethodologyPage() {
 
             <div className="classification-card">
               <div className="classification-title">
-                Severity
+                {content.severity}
               </div>
 
               <div className="classification-tags">
-                <span>TC · Total Collapse</span>
-                <span>PC · Partial Collapse</span>
+                <span>TC - Total Collapse</span>
+                <span>PC - Partial Collapse</span>
               </div>
             </div>
 
             <div className="classification-card">
               <div className="classification-title">
-                Mechanism
+                {content.mechanism}
               </div>
 
               <div className="classification-tags">
@@ -278,7 +412,7 @@ function MethodologyPage() {
 
             <div className="classification-card">
               <div className="classification-title">
-                General Cause
+                {content.generalCause}
               </div>
 
               <div className="classification-tags">
@@ -289,7 +423,7 @@ function MethodologyPage() {
 
             <div className="classification-card">
               <div className="classification-title">
-                Specific Causes
+                {content.specificCauses}
               </div>
 
               <div className="classification-tags">
@@ -344,11 +478,11 @@ function MethodologyPage() {
           <div className="methodology-section-header">
 
             <div className="methodology-section-label">
-              VALIDATION FRAMEWORK
+              {content.sourceLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Source Hierarchy & Traceability
+              {content.sourceTitle}
             </h2>
 
           </div>
@@ -379,7 +513,7 @@ function MethodologyPage() {
             ].map((item) => (
               <div
                 className="source-card"
-                key={item}
+                key={item.tier}
               >
 
                 <div className="source-tier">
@@ -394,14 +528,7 @@ function MethodologyPage() {
           </div>
 
           <div className="methodology-body-text">
-            Each event undergoes cross-source
-            verification and consistency checks
-            between technical, scientific,
-            institutional and journalistic records.
-            Source traceability metadata are stored
-            within the ARCUS architecture to improve
-            transparency, reproducibility and future
-            database revisions.
+            {content.sourceText}
           </div>
 
         </div>
@@ -417,25 +544,18 @@ function MethodologyPage() {
           <div className="methodology-section-header">
 
             <div className="methodology-section-label">
-              ARCUS EXTENSIONS
+              {content.extensionLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Beyond the Original Dataset
+              {content.extensionTitle}
             </h2>
 
           </div>
 
           <div className="extensions-grid">
 
-            {[
-              "Source traceability architecture",
-              "Metadata enrichment system",
-              "Multi-source event documentation",
-              "Geospatial standardization",
-              "Continuous update framework",
-              "Infrastructure intelligence integration",
-            ].map((item) => (
+            {content.extensions.map((item) => (
               <div
                 className="extension-card"
                 key={item}
@@ -459,33 +579,18 @@ function MethodologyPage() {
           <div className="methodology-section-header">
 
             <div className="methodology-section-label">
-              LIMITATIONS & UNCERTAINTY
+              {content.limitsLabel}
             </div>
 
             <h2 className="methodology-section-title">
-              Data Completeness
+              {content.limitsTitle}
             </h2>
 
           </div>
 
           <div className="methodology-body-text">
 
-            Historical bridge collapse records are
-            inherently heterogeneous and often
-            affected by incomplete documentation,
-            inconsistent reporting quality and
-            varying levels of technical detail.
-
-            <br />
-            <br />
-
-            Earlier decades may present
-            underreporting biases, especially for
-            localized events occurring outside major
-            urban areas. In some cases, spatial
-            information is limited to municipality-
-            level accuracy due to the absence of
-            reliable georeferenced documentation.
+            {content.limitsText}
 
           </div>
 
@@ -500,16 +605,14 @@ function MethodologyPage() {
         <div className="methodology-container methodology-narrow">
 
           <div className="methodology-section-label">
-            REFERENCES
+            {content.references}
           </div>
 
           <h2 className="methodology-section-title">
-            Research Framework
+            {content.researchFramework}
           </h2>
 
-          <div className="reference-card">
-
-            <a
+          <a
             className="reference-card"
             href="https://doi.org/10.1016/j.dib.2025.112375"
             target="_blank"
@@ -517,7 +620,7 @@ function MethodologyPage() {
           >
 
             <div className="reference-paper-label">
-              RELATED PUBLICATION
+              {content.relatedPublication}
             </div>
 
             <div className="reference-paper-title">
@@ -526,7 +629,7 @@ function MethodologyPage() {
             </div>
 
             <div className="reference-paper-meta">
-              Data in Brief · Elsevier
+              Data in Brief - Elsevier
             </div>
 
             <div className="reference-authors">
@@ -535,13 +638,11 @@ function MethodologyPage() {
 
           </a>
 
-          </div>
-
         </div>
 
       </section>
 
-    </div>
+    </main>
   );
 }
 

@@ -1,6 +1,23 @@
 import "../../styles/home/breathing.css";
+import useLanguage from "../../context/useLanguage";
 
 export default function BreathingSection() {
+  const { language } = useLanguage();
+
+  const text =
+    language === "it"
+      ? {
+          line:
+            "I cedimenti infrastrutturali non sono anomalie isolate.",
+          subline:
+            "Sono segnali ricorrenti nello spazio, inscritti nei sistemi territoriali.",
+        }
+      : {
+          line:
+            "Infrastructure failures are not isolated anomalies.",
+          subline:
+            "They are spatially recurring signals embedded within territorial systems.",
+        };
 
   return (
     <section className="breathing-section">
@@ -17,15 +34,13 @@ export default function BreathingSection() {
 
       <div className="breathing-text">
 
-        Infrastructure failures are not
-        isolated anomalies.
+        {text.line}
 
       </div>
 
       <div className="breathing-subtext">
 
-        They are spatially recurring signals
-        embedded within territorial systems.
+        {text.subline}
 
       </div>
 

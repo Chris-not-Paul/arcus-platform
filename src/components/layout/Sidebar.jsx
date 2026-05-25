@@ -1,4 +1,6 @@
 import { causeColors } from "../../utils/colors";
+import useLanguage from "../../context/useLanguage";
+import taxonomyLabel from "../../utils/taxonomyLabels";
 
 function Sidebar({
 
@@ -29,6 +31,40 @@ function Sidebar({
   uniqueCauses,
 
 }) {
+  const { language } = useLanguage();
+
+  const text = {
+    all: language === "it" ? "Tutti" : "All",
+    brand:
+      language === "it"
+        ? "Osservatorio sui Cedimenti Infrastrutturali"
+        : "Infrastructure Failure Observatory",
+    cause: language === "it" ? "Causa" : "Cause",
+    database:
+      language === "it"
+        ? "Database dei crolli dei ponti"
+        : "Bridge Collapse Database",
+    events: language === "it" ? "Eventi" : "Events",
+    failureTaxonomy:
+      language === "it"
+        ? "Tassonomia dei cedimenti"
+        : "Failure Taxonomy",
+    filters: language === "it" ? "Filtri" : "Filters",
+    partialCollapse:
+      language === "it"
+        ? "Collasso parziale"
+        : "Partial Collapse",
+    severity:
+      language === "it" ? "Gravita" : "Severity",
+    timeline:
+      language === "it" ? "Cronologia" : "Timeline",
+    totalCollapse:
+      language === "it"
+        ? "Collasso totale"
+        : "Total Collapse",
+    triggered:
+      language === "it" ? "Innescati" : "Triggered",
+  };
 
   return (
     <>
@@ -197,7 +233,7 @@ function Sidebar({
               marginBottom: "18px",
             }}
           >
-            Infrastructure Failure Observatory
+            {text.brand}
           </div>
 
           <h1
@@ -215,8 +251,7 @@ function Sidebar({
               color: "#1d1916",
             }}
           >
-            Bridge Collapse
-            Database
+            {text.database}
           </h1>
 
         </div>
@@ -240,13 +275,13 @@ function Sidebar({
 
           {[
             {
-              label: "Events",
+              label: text.events,
               value:
                 filteredEvents.length,
             },
 
             {
-              label: "Triggered",
+              label: text.triggered,
               value:
                 totalTriggered,
             },
@@ -360,7 +395,7 @@ function Sidebar({
               color: "#746c64",
             }}
           >
-            Timeline
+            {text.timeline}
           </div>
 
           <div
@@ -458,7 +493,7 @@ function Sidebar({
               color: "#746c64",
             }}
           >
-            Filters
+            {text.filters}
           </div>
 
           {/* CAUSE */}
@@ -481,7 +516,7 @@ function Sidebar({
                 color: "#514a44",
               }}
             >
-              Cause
+              {text.cause}
             </div>
 
             <select
@@ -521,7 +556,13 @@ function Sidebar({
                     key={cause}
                     value={cause}
                   >
-                    {cause}
+                    {cause === "All"
+                      ? text.all
+                      : taxonomyLabel(
+                          "cause",
+                          cause,
+                          language
+                        )}
                   </option>
                 )
               )}
@@ -550,7 +591,7 @@ function Sidebar({
                 color: "#514a44",
               }}
             >
-              Severity
+              {text.severity}
             </div>
 
             <select
@@ -586,15 +627,15 @@ function Sidebar({
               }}
             >
               <option value="All">
-                All
+                {text.all}
               </option>
 
               <option value="TC">
-                Total Collapse
+                {text.totalCollapse}
               </option>
 
               <option value="PC">
-                Partial Collapse
+                {text.partialCollapse}
               </option>
 
             </select>
@@ -617,7 +658,7 @@ function Sidebar({
                 color: "#514a44",
               }}
             >
-              Triggered
+              {text.triggered}
             </div>
 
             <select
@@ -653,7 +694,7 @@ function Sidebar({
               }}
             >
               <option value="All">
-                All
+                {text.all}
               </option>
 
               <option value="TRUE">
@@ -703,7 +744,7 @@ function Sidebar({
               color: "#746c64",
             }}
           >
-            Failure Taxonomy
+            {text.failureTaxonomy}
           </div>
 
           {uniqueCauses
@@ -764,7 +805,11 @@ function Sidebar({
                     color: "#514a44",
                   }}
                 >
-                  {cause}
+                  {taxonomyLabel(
+                    "cause",
+                    cause,
+                    language
+                  )}
                 </span>
 
               </div>

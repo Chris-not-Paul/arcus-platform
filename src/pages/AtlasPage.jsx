@@ -4,19 +4,52 @@ import {
   useState,
 } from "react";
 
+import { Link } from "react-router-dom";
+
 import "../styles/atlas/atlas-page.css";
+
+import useLanguage from "../context/useLanguage";
 
 import extractYear from "../utils/extractYear";
 
 /* LAYOUT */
 
 import Sidebar from "../components/layout/Sidebar";
+import PageMeta from "../components/layout/PageMeta";
 
 /* MAP */
 
 import CollapseMap from "../components/map/CollapseMap";
 
+function normalizeEvent(event) {
+
+  return {
+    ...event,
+    event_id:
+      event.event_id ??
+      event["\uFEFFevent_id"] ??
+      event["ï»¿event_id"],
+  };
+}
+
+function normalizeSource(source) {
+
+  return {
+    ...source,
+    source_id:
+      source.source_id ??
+      source["\uFEFFsource_id"] ??
+      source["ï»¿source_id"],
+  };
+}
+
 function AtlasPage() {
+  const { language } = useLanguage();
+
+  const homeLabel =
+    language === "it"
+      ? "Torna ad ARCUS"
+      : "Back to ARCUS";
 
   /* ================================= */
   /* STATE */
@@ -53,15 +86,18 @@ function AtlasPage() {
 
   useEffect(() => {
 
-    fetch("/data/events.json")
+    fetch("/data/processed/events.json")
       .then((response) =>
         response.json()
       )
       .then((data) => {
 
-        setEvents(data);
+        const normalizedData =
+          data.map(normalizeEvent);
 
-        const years = data
+        setEvents(normalizedData);
+
+        const years = normalizedData
           .map((e) =>
             extractYear(e.date)
           )
@@ -75,12 +111,14 @@ function AtlasPage() {
         }
       });
 
-    fetch("/data/sources.json")
+    fetch("/data/processed/sources.json")
       .then((response) =>
         response.json()
       )
       .then((data) =>
-        setSources(data)
+        setSources(
+          data.map(normalizeSource)
+        )
       );
 
   }, []);
@@ -245,6 +283,7 @@ function AtlasPage() {
   return (
 
     <div
+      id="main-content"
       style={{
         width: "100vw",
 
@@ -257,10 +296,25 @@ function AtlasPage() {
         background: "#ece8e2",
       }}
     >
+      <PageMeta
+        title="Atlas"
+        description={
+          language === "it"
+            ? "Atlante geospaziale ARCUS dei crolli dei ponti, con eventi verificati, tassonomie, timeline e fonti documentate."
+            : "ARCUS geospatial atlas of bridge collapses, with verified events, taxonomies, timeline and documented sources."
+        }
+      />
 
       {/* ================================= */}
       {/* SIDEBAR */}
       {/* ================================= */}
+
+      <Link
+        className="atlas-home-link"
+        to="/"
+      >
+        {homeLabel}
+      </Link>
 
       <Sidebar
 

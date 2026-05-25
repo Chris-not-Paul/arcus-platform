@@ -1,0 +1,116 @@
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:440px;padding:2rem 0;">
+
+<svg id="arcus-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220" style="overflow:visible;">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+      .wm { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#F2E8D4; font-weight:300; letter-spacing:12px; font-size:28px; }
+      .tg { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#6A5A42; font-size:8px; letter-spacing:4px; font-weight:300; }
+    </style>
+  </defs>
+
+  <!-- Gamba sinistra — coordinate esatte da logo-full.svg -->
+  <polygon id="leg-left"
+    points="125.28,124.16 160,33.64 160,48.52 136.44,124.16"
+    fill="#C49040" opacity="0"/>
+
+  <!-- Gamba destra -->
+  <polygon id="leg-right"
+    points="160,33.64 194.72,124.16 183.56,124.16 160,48.52"
+    fill="#C49040" opacity="0"/>
+
+  <!-- Tirante -->
+  <rect id="tirante"
+    x="142.02" y="90.68" width="0" height="2.48" rx="0.5"
+    fill="#C49040"/>
+
+  <!-- Base -->
+  <rect id="base"
+    x="125.28" y="120.44" width="69.44" height="3.72" rx="0.6"
+    fill="#C49040" opacity="0"/>
+
+  <!-- Wordmark -->
+  <text id="wordmark" x="160" y="148" text-anchor="middle" class="wm" opacity="0">ARCUS</text>
+
+  <!-- Separatori -->
+  <line id="line-left"  x1="56"  y1="161" x2="56"  y2="161" stroke="#2E2820" stroke-width="0.5"/>
+  <line id="line-right" x1="264" y1="161" x2="264" y2="161" stroke="#2E2820" stroke-width="0.5"/>
+  <circle id="dot" cx="160" cy="161" r="0" fill="#C49040"/>
+
+  <!-- Tagline -->
+  <text id="tagline" x="160" y="180" text-anchor="middle" class="tg" opacity="0">INFRASTRUCTURE INTELLIGENCE</text>
+
+</svg>
+
+<button onclick="runReveal()" style="
+  margin-top:1.5rem;
+  font-family:'Raleway','Helvetica Neue',Arial,sans-serif;
+  font-size:10px;letter-spacing:3px;font-weight:300;
+  color:#6A5A42;background:none;
+  border:0.5px solid #2E2820;
+  padding:8px 24px;cursor:pointer;border-radius:2px;">↺ REPLAY</button>
+
+<script>
+function ease(t){ return t<0.5?2*t*t:-1+(4-2*t)*t; }
+
+function tween(id, prop, from, to, dur, delay){
+  const el = document.getElementById(id);
+  setTimeout(()=>{
+    const s = performance.now();
+    (function step(now){
+      const raw = Math.min((now-s)/dur,1);
+      const v = from+(to-from)*ease(raw);
+      if(prop==='opacity') el.setAttribute('opacity',v);
+      else if(prop==='r')  el.setAttribute('r',v);
+      else if(prop==='width') el.setAttribute('width',v);
+      else if(prop==='x2') el.setAttribute('x2',v);
+      else if(prop==='x1') el.setAttribute('x1',v);
+      if(raw<1) requestAnimationFrame(step);
+    })(performance.now());
+  }, delay);
+}
+
+function fadeSlide(id, slideY, dur, delay){
+  const el = document.getElementById(id);
+  setTimeout(()=>{
+    const s = performance.now();
+    (function step(now){
+      const raw = Math.min((now-s)/dur,1);
+      const t = ease(raw);
+      el.setAttribute('opacity', t);
+      el.setAttribute('transform', `translate(0,${slideY*(1-t)})`);
+      if(raw<1) requestAnimationFrame(step);
+      else el.setAttribute('transform','translate(0,0)');
+    })(performance.now());
+  }, delay);
+}
+
+function resetAll(){
+  ['leg-left','leg-right','base','wordmark','tagline'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.setAttribute('opacity',0);
+    el.setAttribute('transform','translate(0,0)');
+  });
+  document.getElementById('tirante').setAttribute('width',0);
+  document.getElementById('dot').setAttribute('r',0);
+  document.getElementById('line-left').setAttribute('x2',56);
+  document.getElementById('line-right').setAttribute('x1',264);
+}
+
+function runReveal(){
+  resetAll();
+  fadeSlide('leg-left',  16, 500, 150);
+  fadeSlide('leg-right', 16, 500, 340);
+  tween('tirante','width', 0, 35.96, 380, 760);
+  fadeSlide('base', 6, 300, 1060);
+  fadeSlide('wordmark', 10, 500, 1300);
+  tween('line-left',  'x2', 56,  148, 380, 1720);
+  tween('line-right', 'x1', 264, 172, 380, 1720);
+  tween('dot', 'r', 0, 1.5, 200, 1920);
+  fadeSlide('tagline', 6, 600, 2060);
+}
+
+setTimeout(runReveal, 500);
+</script>
+</div>

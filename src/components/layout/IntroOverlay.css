@@ -1,45 +1,23 @@
 .intro-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100vw;
-  height: 100vh;
-
+  inset: 0;
   z-index: 999999;
-
-  overflow: hidden;
-  isolation: isolate;
-
-  transform: translateZ(0);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+  isolation: isolate;
+
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(163,126,92,0.12),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(110,133,141,0.06),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      #120f0d,
-      #181412 42%,
-      #1e1a17 72%,
-      #151210
-    );
+    radial-gradient(circle at 50% 42%, rgba(196,144,64,0.16), transparent 30%),
+    linear-gradient(135deg, #120f0d, #181412 48%, #211c18);
 
   transition:
-    opacity 1s ease,
-    visibility 1s ease,
-    filter 1s ease;
+    opacity 0.75s ease,
+    visibility 0.75s ease,
+    filter 0.75s ease;
 }
 
 .intro-overlay::before {
@@ -49,14 +27,32 @@
   inset: 0;
 
   background:
-    radial-gradient(
-      circle at center,
-      rgba(163,126,92,0.08)
-      transparent 55%
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 78px 78px;
+
+  mask-image: radial-gradient(circle at center, black 32%, transparent 78%);
+  opacity: 0.24;
+
+  animation: introGridFloat 12s linear infinite;
+}
+
+.intro-overlay::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(245,240,232,0.08),
+      transparent
     );
 
-  animation: breathingGlow 6s ease-in-out infinite;
-
+  transform: translateX(-140%);
+  animation: introSweep 1.7s cubic-bezier(0.65, 0, 0.35, 1) 0.22s forwards;
   pointer-events: none;
 }
 
@@ -66,50 +62,36 @@
   filter: blur(8px);
 }
 
-@keyframes breathingGlow {
-
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.75;
-    transform: scale(1.05);
-  }
-}
-
 .intro-grid {
   position: absolute;
   inset: 0;
 
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background:
+    radial-gradient(circle at center, rgba(196,144,64,0.14), transparent 28%);
+  opacity: 0;
 
-  background-size: 80px 80px;
-
-  mask-image:
-    radial-gradient(
-      circle at center,
-      black 35%,
-      transparent 100%
-    );
-
-  opacity: 0.22;
-
-  animation: gridFloat 12s linear infinite;
+  animation: introAura 2.2s ease forwards;
 }
 
-@keyframes gridFloat {
+.intro-beam {
+  position: absolute;
+  width: min(760px, 78vw);
+  height: 1px;
 
-  from {
-    transform: translateY(0px);
-  }
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(245,240,232,0.42),
+      transparent
+    );
 
-  to {
-    transform: translateY(80px);
-  }
+  box-shadow:
+    0 0 28px rgba(196,144,64,0.22),
+    0 0 82px rgba(245,240,232,0.08);
+
+  transform: scaleX(0);
+  animation: introBeam 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
 }
 
 .intro-content {
@@ -120,139 +102,248 @@
   flex-direction: column;
   align-items: center;
 
+  width: min(420px, calc(100vw - 56px));
   text-align: center;
 }
 
-.intro-label {
-  margin-bottom: 1.6rem;
-
-  font-size: 0.72rem;
-  font-weight: 500;
-
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-
-  color: rgba(255,255,255,0.42);
-}
-
-.intro-title {
-  display: flex;
-  flex-direction: column;
-
-  margin: 0;
-
-  font-size: clamp(4rem, 10vw, 8rem);
-  font-weight: 800;
-  font-feature-settings: "ss01" on;
-
-  line-height: 0.88;
-  letter-spacing: -0.07em;
-
-  color: white;
-
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-.intro-subtitle {
-
-  margin-top: 1.4rem;
-
-  font-size: 0.78rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-
-  color:
-    rgba(214,198,182,0.52);
-}
-
-@keyframes pulseGlow {
-
-  0%, 100% {
-    text-shadow:
-      0 0 20px rgba(255,248,242,0.04);
-  }
-
-  50% {
-    text-shadow:
-      0 0 34px rgba(163,126,92,0.16);
-  }
-}
-
-.intro-line {
+.intro-logo-shell {
   position: relative;
 
-  width: 420px;
-  height: 1px;
+  width: min(320px, 74vw);
+  aspect-ratio: 320 / 220;
 
-  margin-top: 2.5rem;
-  margin-bottom: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(214,198,182,0.42)
-    transparent
-  );
+  transform: translateY(0) scale(1);
 }
 
-.intro-line-pulse {
+.arcus-logo-reveal {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  filter:
+    drop-shadow(0 26px 44px rgba(0,0,0,0.32))
+    drop-shadow(0 0 18px rgba(196,144,64,0.12));
+}
+
+.arcus-reveal-leg,
+.arcus-reveal-base,
+.arcus-reveal-wordmark,
+.arcus-reveal-tagline {
+  opacity: 0;
+  animation:
+    arcusRevealFadeSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.arcus-reveal-leg-left {
+  animation-delay: 0.15s;
+}
+
+.arcus-reveal-leg-right {
+  animation-delay: 0.34s;
+}
+
+.arcus-reveal-tirante {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation:
+    arcusRevealExpand 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.76s forwards;
+}
+
+.arcus-reveal-base {
+  animation-delay: 1.06s;
+}
+
+.arcus-reveal-wordmark {
+  animation-delay: 1.3s;
+}
+
+.arcus-reveal-line {
+  stroke-dasharray: 92;
+  stroke-dashoffset: 92;
+  animation:
+    arcusRevealLine 0.38s cubic-bezier(0.16, 1, 0.3, 1) 1.72s forwards;
+}
+
+.arcus-reveal-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation:
+    arcusRevealDot 0.2s cubic-bezier(0.16, 1, 0.3, 1) 1.92s forwards;
+}
+
+.arcus-reveal-tagline {
+  animation-delay: 2.06s;
+}
+
+.intro-signal-line {
+  position: relative;
+
+  width: min(340px, 68vw);
+  height: 1px;
+
+  margin-top: 1.25rem;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(245,240,232,0.32),
+      transparent
+    );
+
+  opacity: 0;
+  animation: introLineAppear 0.55s ease 1.12s forwards;
+}
+
+.intro-signal-line span {
   position: absolute;
-  top: 50%;
+  top: 0;
+  left: -28%;
 
-  width: 10px;
-  height: 10px;
+  width: 28%;
+  height: 100%;
 
-  border-radius: 50%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(196,144,64,0.96),
+      transparent
+    );
 
-  background: #d7c3ad;
-
-  box-shadow:
-    0 0 12px rgba(215,195,173,0.7),
-    0 0 28px rgba(163,126,92,0.22);
-
-  transform: translateY(-50%);
-
-  animation: pulseTravel 3s ease-in-out infinite;
+  animation: introLinePulse 1.5s ease-in-out 1.2s infinite;
 }
 
-@keyframes pulseTravel {
+.intro-caption {
+  margin: 1rem 0 0;
 
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+
+  color: rgba(245,240,232,0.58);
+
+  opacity: 0;
+  transform: translateY(8px);
+
+  animation: introCaption 0.7s ease 1.28s forwards;
+}
+
+@keyframes introGridFloat {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(78px);
+  }
+}
+
+@keyframes introSweep {
+  to {
+    transform: translateX(140%);
+  }
+}
+
+@keyframes introAura {
   0% {
-    left: -10px;
     opacity: 0;
+    transform: scale(0.88);
   }
 
-  10% {
-    opacity: 1;
-  }
-
-  50% {
-    left: calc(50% - 5px);
-    opacity: 1;
-  }
-
-  90% {
+  55% {
     opacity: 1;
   }
 
   100% {
-    left: calc(100% + 10px);
-    opacity: 0;
+    opacity: 0.6;
+    transform: scale(1.18);
   }
 }
 
-.intro-status {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+@keyframes introBeam {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
 
-  font-size: 0.82rem;
-  font-weight: 500;
+  45% {
+    opacity: 1;
+  }
 
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  100% {
+    opacity: 0.38;
+    transform: scaleX(1);
+  }
+}
 
-  color: rgba(255,255,255,0.50);
+@keyframes introLineAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes introLinePulse {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes introCaption {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes arcusRevealFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes arcusRevealExpand {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes arcusRevealLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes arcusRevealDot {
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .intro-content {
+    width: min(340px, calc(100vw - 40px));
+  }
+
+  .intro-caption {
+    font-size: 0.7rem;
+  }
 }

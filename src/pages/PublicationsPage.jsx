@@ -1,20 +1,52 @@
 import Navbar from "../components/layout/Navbar";
+import PageMeta from "../components/layout/PageMeta";
+
+import useLanguage from "../context/useLanguage";
 
 function PublicationsPage() {
+  const { language } = useLanguage();
+
+  const copy = {
+    en: {
+      eyebrow: "ARCUS",
+      title: "Publications",
+      text:
+        "Research papers, conference material, presentations, and future scientific publications related to ARCUS will be collected in this section.",
+    },
+    it: {
+      eyebrow: "ARCUS",
+      title: "Pubblicazioni",
+      text:
+        "Articoli scientifici, materiali congressuali, presentazioni e future pubblicazioni legate ad ARCUS saranno raccolti in questa sezione.",
+    },
+  };
+
+  const content = copy[language] || copy.en;
+
   return (
     <>
       <Navbar />
 
       <main
+        id="main-content"
         style={{
           minHeight: "100vh",
-          background: "#ece8e2",
+          background: "var(--arcus-paper-warm)",
           paddingTop: "140px",
           paddingLeft: "40px",
           paddingRight: "40px",
           boxSizing: "border-box",
         }}
       >
+        <PageMeta
+          title={content.title}
+          description={
+            language === "it"
+              ? "Pubblicazioni, presentazioni e materiali scientifici collegati alla piattaforma ARCUS."
+              : "Publications, presentations and scientific material connected to the ARCUS platform."
+          }
+        />
+
         <div
           style={{
             maxWidth: "1200px",
@@ -22,27 +54,30 @@ function PublicationsPage() {
           }}
         >
           <div
-            style={{
+          style={{
               fontSize: "12px",
-              letterSpacing: "0.18em",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              opacity: 0.5,
+              color: "var(--arcus-clay)",
+              fontWeight: 700,
               marginBottom: "18px",
             }}
           >
-            ARCUS
+            {content.eyebrow}
           </div>
 
           <h1
             style={{
               margin: 0,
-              fontSize: "72px",
-              lineHeight: 1,
+              fontFamily: "var(--arcus-font-display)",
+              fontSize: "clamp(52px, 8vw, 96px)",
+              fontWeight: 700,
+              lineHeight: 0.96,
               marginBottom: "24px",
-              color: "#1b1b1d",
+              color: "var(--arcus-ink)",
             }}
           >
-            Publications
+            {content.title}
           </h1>
 
           <p
@@ -50,15 +85,10 @@ function PublicationsPage() {
               maxWidth: "760px",
               fontSize: "18px",
               lineHeight: 1.8,
-              color: "#5f646b",
+              color: "var(--arcus-ink-soft)",
             }}
           >
-            Research papers,
-            conference material,
-            presentations, and future
-            scientific publications
-            related to ARCUS will be
-            collected in this section.
+            {content.text}
           </p>
         </div>
       </main>
