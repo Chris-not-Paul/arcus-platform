@@ -2,6 +2,7 @@
   <title>ARCUS — Logo Full Light</title>
   <defs>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
       .wm { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#1A1612; font-weight:300; letter-spacing:12px; font-size:28px; }
       .tg { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#8A7A60; font-size:8px; letter-spacing:4px; font-weight:300; }
     </style>

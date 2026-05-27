@@ -4,11 +4,15 @@ import {
   useState,
 } from "react";
 
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useSearchParams,
+} from "react-router-dom";
 
 import "../styles/atlas/atlas-page.css";
 
 import useLanguage from "../context/useLanguage";
+import logoMark from "../assets/logo/logo-mark.svg";
 
 import extractYear from "../utils/extractYear";
 
@@ -45,11 +49,170 @@ function normalizeSource(source) {
 
 function AtlasPage() {
   const { language } = useLanguage();
+  const [searchParams] =
+    useSearchParams();
+  const atlasMode =
+    searchParams.get("mode") ||
+    "open";
+  const isProfessionalMode =
+    atlasMode === "professional";
+  const isEnterpriseMode =
+    atlasMode === "enterprise";
+  const isEnhancedMode =
+    isProfessionalMode ||
+    isEnterpriseMode;
 
   const homeLabel =
     language === "it"
       ? "Torna ad ARCUS"
       : "Back to ARCUS";
+
+  const atlasText = {
+    currentView:
+      language === "it"
+        ? "Vista corrente"
+        : "Current view",
+    documentedSources:
+      language === "it"
+        ? "Fonti documentate"
+        : "Documented sources",
+    failureAtlas:
+      language === "it"
+        ? "Atlante dei cedimenti"
+        : "Failure atlas",
+    liveDataset:
+      language === "it"
+        ? "Dataset operativo"
+        : "Operational dataset",
+    totalCollapse:
+      language === "it"
+        ? "Collassi totali"
+        : "Total collapses",
+    partialCollapse:
+      language === "it"
+        ? "Collassi parziali"
+        : "Partial collapses",
+    reset:
+      language === "it"
+        ? "Reset filtri"
+        : "Reset filters",
+    densityLayer:
+      language === "it"
+        ? "Densita"
+        : "Density",
+    pointLayer:
+      language === "it"
+        ? "Eventi"
+        : "Events",
+    basemap:
+      language === "it"
+        ? "Base"
+        : "Base",
+    voyager:
+      language === "it"
+        ? "Atlas"
+        : "Atlas",
+    light:
+      language === "it"
+        ? "Chiara"
+        : "Light",
+    dark:
+      language === "it"
+        ? "Scura"
+        : "Dark",
+    mode:
+      language === "it"
+        ? "Modalita"
+        : "Mode",
+    openAtlas:
+      language === "it"
+        ? "Open"
+        : "Open",
+    professionalAtlas:
+      language === "it"
+        ? "Professional"
+        : "Professional",
+    enterpriseAtlas:
+      language === "it"
+        ? "Enterprise"
+        : "Enterprise",
+    openDescription:
+      language === "it"
+        ? "Dataset pubblico, timeline, tassonomie e fonti documentate."
+        : "Public dataset, timeline, taxonomies and documented sources.",
+    professionalDescription:
+      language === "it"
+        ? "Layer operativi con affidabilita fonti, vulnerabilita, hazard preview e priorita territoriali."
+        : "Operational layers with evidence reliability, vulnerability, hazard preview and territorial priorities.",
+    enterpriseDescription:
+      language === "it"
+        ? "Vista istituzionale per dashboard dedicate, monitoraggio e workspace multi-ente."
+        : "Institutional view for dedicated dashboards, monitoring and multi-organization workspaces.",
+    professionalLayers:
+      language === "it"
+        ? "Layer Professional"
+        : "Professional layers",
+    enterpriseDashboard:
+      language === "it"
+        ? "Dashboard Enterprise"
+        : "Enterprise dashboard",
+    institutionalReadiness:
+      language === "it"
+        ? "Readiness istituzionale"
+        : "Institutional readiness",
+    monitoredTerritories:
+      language === "it"
+        ? "Territori monitorati"
+        : "Monitored territories",
+    integrationQueue:
+      language === "it"
+        ? "Coda integrazione"
+        : "Integration queue",
+    territorialPriorities:
+      language === "it"
+        ? "Priorita territoriali"
+        : "Territorial priorities",
+    risk:
+      language === "it"
+        ? "rischio"
+        : "risk",
+    reliability:
+      language === "it"
+        ? "Affidabilita"
+        : "Reliability",
+    vulnerability:
+      language === "it"
+        ? "Vulnerabilita"
+        : "Vulnerability",
+    hazard:
+      language === "it"
+        ? "Hazard"
+        : "Hazard",
+    highCritical:
+      language === "it"
+        ? "High/Critical"
+        : "High/Critical",
+    evidenceGrade:
+      language === "it"
+        ? "Evidenza A/B"
+        : "A/B evidence",
+    priorityEvents:
+      language === "it"
+        ? "Eventi prioritari"
+        : "Priority events",
+    dominantHazard:
+      language === "it"
+        ? "Hazard dominante"
+        : "Dominant hazard",
+    score:
+      language === "it"
+        ? "score"
+        : "score",
+    year:
+      language === "it"
+        ? "Timeline"
+        : "Timeline",
+  };
 
   /* ================================= */
   /* STATE */
@@ -63,6 +226,9 @@ function AtlasPage() {
 
   const [causeFilter, setCauseFilter] =
     useState("All");
+
+  const [searchQuery, setSearchQuery] =
+    useState("");
 
   const [
     severityFilter,
@@ -80,9 +246,52 @@ function AtlasPage() {
   const [yearFilter, setYearFilter] =
     useState(2025);
 
+  const [showHeatmap, setShowHeatmap] =
+    useState(true);
+  const [
+    mapStyleOverride,
+    setMapStyleOverride,
+  ] = useState(null);
+  const [
+    showReliabilityLayer,
+    setShowReliabilityLayer,
+  ] = useState(true);
+  const [
+    showVulnerabilityLayer,
+    setShowVulnerabilityLayer,
+  ] = useState(true);
+  const [
+    showHazardLayer,
+    setShowHazardLayer,
+  ] = useState(true);
+  const [
+    eventReliability,
+    setEventReliability,
+  ] = useState({});
+  const [
+    eventVulnerability,
+    setEventVulnerability,
+  ] = useState({});
+  const [
+    hazardExposurePreview,
+    setHazardExposurePreview,
+  ] = useState(null);
+  const [
+    territoryProfiles,
+    setTerritoryProfiles,
+  ] = useState([]);
+
   /* ================================= */
   /* DATA LOADING */
   /* ================================= */
+
+  const mapStyle =
+    mapStyleOverride ||
+    (
+      isEnterpriseMode
+        ? "dark"
+        : "voyager"
+    );
 
   useEffect(() => {
 
@@ -122,6 +331,54 @@ function AtlasPage() {
       );
 
   }, []);
+
+  useEffect(() => {
+
+    if (!isEnhancedMode) {
+      return;
+    }
+
+    fetch("/data/professional/event-reliability.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const index = {};
+
+        (data.events || []).forEach((item) => {
+          index[item.event_id] = item;
+        });
+
+        setEventReliability(index);
+      })
+      .catch(() => setEventReliability({}));
+
+    fetch("/data/professional/event-vulnerability.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const index = {};
+
+        (data.events || []).forEach((item) => {
+          index[item.event_id] = item;
+        });
+
+        setEventVulnerability(index);
+      })
+      .catch(() => setEventVulnerability({}));
+
+    fetch("/data/professional/hazard-exposure-preview.json")
+      .then((response) => response.json())
+      .then(setHazardExposurePreview)
+      .catch(() => setHazardExposurePreview(null));
+
+    fetch("/data/professional/territory-profiles.json")
+      .then((response) => response.json())
+      .then((data) =>
+        setTerritoryProfiles(
+          data.provinces || []
+        )
+      )
+      .catch(() => setTerritoryProfiles([]));
+
+  }, [isEnhancedMode]);
 
   /* ================================= */
   /* YEARS */
@@ -193,6 +450,9 @@ function AtlasPage() {
   const filteredEvents =
     useMemo(() => {
 
+      const query =
+        searchQuery.trim().toLowerCase();
+
       return events.filter(
         (event) => {
 
@@ -219,22 +479,51 @@ function AtlasPage() {
             !eventYear ||
             eventYear <= yearFilter;
 
+          const searchMatch =
+            !query ||
+            [
+              event.event_id,
+              event.bridge_name,
+              event.bridge_crossing_name,
+              event.municipality,
+              event.province,
+              event.region,
+              event.specific_cause,
+            ]
+              .filter(Boolean)
+              .some((value) =>
+                String(value)
+                  .toLowerCase()
+                  .includes(query)
+              );
+
           return (
             causeMatch &&
             severityMatch &&
             triggeredMatch &&
-            yearMatch
+            yearMatch &&
+            searchMatch
           );
         }
       );
 
     }, [
       events,
+      searchQuery,
       causeFilter,
       severityFilter,
       triggeredFilter,
       yearFilter,
     ]);
+
+  const resetAtlasFilters = () => {
+    setSearchQuery("");
+    setCauseFilter("All");
+    setSeverityFilter("All");
+    setTriggeredFilter("All");
+    setYearFilter(maxYear);
+    setShowHeatmap(true);
+  };
 
   /* ================================= */
   /* STATS */
@@ -256,6 +545,183 @@ function AtlasPage() {
     filteredEvents.filter(
       (e) => e.triggered
     ).length;
+
+  const visibleSourceCount =
+    useMemo(() => {
+      return filteredEvents.reduce(
+        (total, event) =>
+          total +
+          (
+            sourcesByEvent[event.event_id]
+              ?.length || 0
+          ),
+        0
+      );
+    }, [filteredEvents, sourcesByEvent]);
+
+  const professionalStats =
+    useMemo(() => {
+      const visibleIds = new Set(
+        filteredEvents.map((event) => event.event_id)
+      );
+
+      const visibleVulnerability =
+        Object.values(eventVulnerability)
+          .filter((item) =>
+            visibleIds.has(item.event_id)
+          );
+
+      const visibleReliability =
+        Object.values(eventReliability)
+          .filter((item) =>
+            visibleIds.has(item.event_id)
+          );
+
+      const highCritical =
+        visibleVulnerability.filter((item) =>
+          ["High", "Critical"].includes(item.class)
+        ).length;
+
+      const evidenceAB =
+        visibleReliability.filter((item) =>
+          ["A", "B"].includes(item.grade)
+        ).length;
+
+      const priorityEvents =
+        filteredEvents
+          .map((event) => ({
+            event,
+            reliability:
+              eventReliability[event.event_id],
+            vulnerability:
+              eventVulnerability[event.event_id],
+          }))
+          .filter((item) =>
+            item.vulnerability ||
+            item.reliability
+          )
+          .sort((a, b) => {
+            const aScore =
+              a.vulnerability?.score || 0;
+            const bScore =
+              b.vulnerability?.score || 0;
+
+            return bScore - aScore;
+          })
+          .slice(0, 5);
+
+      const visibleProvinces = new Set(
+        filteredEvents
+          .map((event) => event.province)
+          .filter(Boolean)
+      );
+
+      const dominantHazards =
+        hazardExposurePreview?.provinces
+          ?.filter((province) =>
+            visibleProvinces.has(province.province)
+          )
+          ?.sort(
+            (a, b) =>
+              (b.risk_score || 0) -
+              (a.risk_score || 0)
+          ) || [];
+
+      return {
+        evidenceAB,
+        highCritical,
+        priorityEvents,
+        topHazard:
+          dominantHazards[0] || null,
+      };
+    }, [
+      filteredEvents,
+      eventReliability,
+      eventVulnerability,
+      hazardExposurePreview,
+    ]);
+
+  const hazardByProvince =
+    useMemo(() => {
+      const index = {};
+
+      (
+        hazardExposurePreview?.provinces || []
+      ).forEach((province) => {
+        index[province.province] = province;
+      });
+
+      return index;
+    }, [hazardExposurePreview]);
+
+  const enterpriseStats =
+    useMemo(() => {
+      const visibleProvinces = new Set(
+        filteredEvents
+          .map((event) => event.province)
+          .filter(Boolean)
+      );
+
+      const visibleProfiles =
+        territoryProfiles
+          .filter((profile) =>
+            visibleProvinces.has(profile.territory)
+          )
+          .sort(
+            (a, b) =>
+              (b.riskScore || 0) -
+              (a.riskScore || 0)
+          );
+
+      const readiness =
+        filteredEvents.length
+          ? Math.round(
+              (
+                visibleSourceCount /
+                Math.max(filteredEvents.length * 3, 1)
+              ) * 100
+            )
+          : 0;
+
+      return {
+        integrationQueue:
+          visibleProfiles.filter(
+            (profile) => profile.riskScore >= 70
+          ).length,
+        monitoredTerritories:
+          visibleProfiles.length,
+        priorities:
+          visibleProfiles.slice(0, 5),
+        readiness:
+          Math.min(readiness, 100),
+      };
+    }, [
+      filteredEvents,
+      territoryProfiles,
+      visibleSourceCount,
+    ]);
+
+  const atlasModeCopy =
+    isEnterpriseMode
+      ? {
+          label:
+            atlasText.enterpriseAtlas,
+          description:
+            atlasText.enterpriseDescription,
+        }
+      : isProfessionalMode
+        ? {
+            label:
+              atlasText.professionalAtlas,
+            description:
+              atlasText.professionalDescription,
+          }
+        : {
+            label:
+              atlasText.openAtlas,
+            description:
+              atlasText.openDescription,
+          };
 
   /* ================================= */
   /* CAUSES */
@@ -283,18 +749,12 @@ function AtlasPage() {
   return (
 
     <div
+      className={`atlas-page ${
+        sidebarOpen
+          ? "sidebar-open"
+          : "sidebar-closed"
+      }`}
       id="main-content"
-      style={{
-        width: "100vw",
-
-        height: "100vh",
-
-        position: "relative",
-
-        overflow: "hidden",
-
-        background: "#ece8e2",
-      }}
     >
       <PageMeta
         title="Atlas"
@@ -313,8 +773,338 @@ function AtlasPage() {
         className="atlas-home-link"
         to="/"
       >
-        {homeLabel}
+        <img
+          src={logoMark}
+          alt=""
+          aria-hidden="true"
+        />
+        <span>{homeLabel}</span>
       </Link>
+
+      <aside className="atlas-command-panel">
+        <div className="atlas-command-kicker">
+          ARCUS ATLAS / {atlasModeCopy.label}
+        </div>
+
+        <div className="atlas-command-title">
+          {atlasText.failureAtlas}
+        </div>
+
+        <p className="atlas-command-description">
+          {atlasModeCopy.description}
+        </p>
+
+        <nav
+          className="atlas-mode-switcher"
+          aria-label={atlasText.mode}
+        >
+          <Link
+            className={
+              atlasMode === "open" ? "active" : ""
+            }
+            onClick={() => setMapStyleOverride(null)}
+            to="/atlas"
+          >
+            {atlasText.openAtlas}
+          </Link>
+          <Link
+            className={
+              isProfessionalMode ? "active" : ""
+            }
+            onClick={() => setMapStyleOverride(null)}
+            to="/atlas?mode=professional"
+          >
+            {atlasText.professionalAtlas}
+          </Link>
+          <Link
+            className={
+              isEnterpriseMode ? "active" : ""
+            }
+            onClick={() => setMapStyleOverride(null)}
+            to="/atlas?mode=enterprise"
+          >
+            {atlasText.enterpriseAtlas}
+          </Link>
+        </nav>
+
+        <div className="atlas-command-grid">
+          <div>
+            <span>{atlasText.currentView}</span>
+            <strong>
+              {filteredEvents.length}
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              {atlasText.documentedSources}
+            </span>
+            <strong>
+              {visibleSourceCount}
+            </strong>
+          </div>
+
+          <div>
+            <span>{atlasText.year}</span>
+            <strong>{yearFilter}</strong>
+          </div>
+        </div>
+
+        <button
+          className="atlas-command-reset"
+          type="button"
+          onClick={resetAtlasFilters}
+        >
+          {atlasText.reset}
+        </button>
+      </aside>
+
+      <aside className="atlas-layer-switcher">
+        <span>{atlasText.pointLayer}</span>
+
+        <button
+          className={
+            showHeatmap ? "active" : ""
+          }
+          type="button"
+          onClick={() =>
+            setShowHeatmap((value) => !value)
+          }
+        >
+          {atlasText.densityLayer}
+        </button>
+      </aside>
+
+      <aside className="atlas-basemap-switcher">
+        <span>{atlasText.basemap}</span>
+
+        {[
+          ["voyager", atlasText.voyager],
+          ["light", atlasText.light],
+          ["dark", atlasText.dark],
+        ].map(([value, label]) => (
+          <button
+            className={
+              mapStyle === value ? "active" : ""
+            }
+            key={value}
+            type="button"
+            onClick={() => setMapStyleOverride(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </aside>
+
+      {isProfessionalMode && (
+        <aside className="atlas-professional-panel">
+          <div className="atlas-professional-heading">
+            <span>
+              {atlasText.professionalLayers}
+            </span>
+            <strong>{atlasModeCopy.label}</strong>
+          </div>
+
+          <div className="atlas-professional-toggles">
+            <button
+              className={
+                showReliabilityLayer ? "active" : ""
+              }
+              type="button"
+              onClick={() =>
+                setShowReliabilityLayer((value) => !value)
+              }
+            >
+              {atlasText.reliability}
+            </button>
+            <button
+              className={
+                showVulnerabilityLayer ? "active" : ""
+              }
+              type="button"
+              onClick={() =>
+                setShowVulnerabilityLayer((value) => !value)
+              }
+            >
+              {atlasText.vulnerability}
+            </button>
+            <button
+              className={
+                showHazardLayer ? "active" : ""
+              }
+              type="button"
+              onClick={() =>
+                setShowHazardLayer((value) => !value)
+              }
+            >
+              {atlasText.hazard}
+            </button>
+          </div>
+
+          <div className="atlas-professional-metrics">
+            {showVulnerabilityLayer && (
+              <div>
+                <span>
+                  {atlasText.highCritical}
+                </span>
+                <strong>
+                  {professionalStats.highCritical}
+                </strong>
+              </div>
+            )}
+            {showReliabilityLayer && (
+              <div>
+                <span>
+                  {atlasText.evidenceGrade}
+                </span>
+                <strong>
+                  {professionalStats.evidenceAB}
+                </strong>
+              </div>
+            )}
+            {showHazardLayer && (
+              <div>
+                <span>
+                  {atlasText.dominantHazard}
+                </span>
+                <strong>
+                  {professionalStats.topHazard
+                    ?.dominant_hazard || "-"}
+                </strong>
+              </div>
+            )}
+          </div>
+
+          <div className="atlas-professional-list">
+            <span>
+              {atlasText.priorityEvents}
+            </span>
+
+            {professionalStats.priorityEvents.map(
+              ({
+                event,
+                reliability,
+                vulnerability,
+              }) => (
+                <div
+                  className="atlas-professional-event"
+                  key={event.event_id}
+                >
+                  <div>
+                    <strong>
+                      {event.event_id}
+                    </strong>
+                    <small>
+                      {event.municipality ||
+                        event.province ||
+                        event.region}
+                    </small>
+                  </div>
+                  <div>
+                    {showVulnerabilityLayer && (
+                      <em>
+                        {vulnerability?.class || "-"}{" "}
+                        {vulnerability?.score ??
+                          "-"}
+                      </em>
+                    )}
+                    {showReliabilityLayer && (
+                      <em>
+                        {reliability?.grade ||
+                          "-"}
+                      </em>
+                    )}
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </aside>
+      )}
+
+      {isEnterpriseMode && (
+        <aside className="atlas-professional-panel atlas-enterprise-panel">
+          <div className="atlas-professional-heading">
+            <span>
+              {atlasText.enterpriseDashboard}
+            </span>
+            <strong>{atlasModeCopy.label}</strong>
+          </div>
+
+          <div className="atlas-professional-metrics">
+            <div>
+              <span>
+                {atlasText.monitoredTerritories}
+              </span>
+              <strong>
+                {enterpriseStats.monitoredTerritories}
+              </strong>
+            </div>
+            <div>
+              <span>
+                {atlasText.institutionalReadiness}
+              </span>
+              <strong>
+                {enterpriseStats.readiness}%
+              </strong>
+            </div>
+            <div>
+              <span>
+                {atlasText.integrationQueue}
+              </span>
+              <strong>
+                {enterpriseStats.integrationQueue}
+              </strong>
+            </div>
+          </div>
+
+          <div className="atlas-professional-list">
+            <span>
+              {atlasText.territorialPriorities}
+            </span>
+
+            {enterpriseStats.priorities.map(
+              (profile) => (
+                <div
+                  className="atlas-professional-event"
+                  key={profile.territory}
+                >
+                  <div>
+                    <strong>
+                      {profile.territory}
+                    </strong>
+                    <small>
+                      {profile.total} eventi -{" "}
+                      {profile.topCause}
+                    </small>
+                  </div>
+                  <div>
+                    <em>
+                      {profile.riskScore}{" "}
+                      {atlasText.risk}
+                    </em>
+                    <em>
+                      {profile.sourceTotal} fonti
+                    </em>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </aside>
+      )}
+
+      <aside className="atlas-map-legend">
+        <span>{atlasText.liveDataset}</span>
+        <div>
+          <strong>{totalTC}</strong>
+          {atlasText.totalCollapse}
+        </div>
+        <div>
+          <strong>{totalPC}</strong>
+          {atlasText.partialCollapse}
+        </div>
+      </aside>
 
       <Sidebar
 
@@ -372,6 +1162,10 @@ function AtlasPage() {
           setTriggeredFilter
         }
 
+        searchQuery={searchQuery}
+
+        setSearchQuery={setSearchQuery}
+
         uniqueCauses={
           uniqueCauses
         }
@@ -382,6 +1176,7 @@ function AtlasPage() {
       {/* ================================= */}
 
       <div
+        className="atlas-map-shell"
         style={{
           position: "absolute",
 
@@ -393,8 +1188,34 @@ function AtlasPage() {
 
         <CollapseMap
 
+          atlasMode={atlasMode}
+
+          eventHazards={
+            showHazardLayer || isEnterpriseMode
+              ? hazardByProvince
+              : {}
+          }
+
+          eventReliability={
+            showReliabilityLayer || isEnterpriseMode
+              ? eventReliability
+              : {}
+          }
+
+          eventVulnerability={
+            showVulnerabilityLayer || isEnterpriseMode
+              ? eventVulnerability
+              : {}
+          }
+
           filteredEvents={
             filteredEvents
+          }
+
+          mapStyle={mapStyle}
+
+          professionalMode={
+            isEnhancedMode
           }
 
           sourcesByEvent={
@@ -404,6 +1225,8 @@ function AtlasPage() {
           sidebarOpen={
             sidebarOpen
           }
+
+          showHeatmap={showHeatmap}
         />
 
       </div>

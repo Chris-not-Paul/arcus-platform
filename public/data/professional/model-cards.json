@@ -1,0 +1,106 @@
+{
+  "generated_at": "2026-05-27T11:44:06.019Z",
+  "models": [
+    {
+      "id": "territorial-risk-score",
+      "name": "Territorial Risk Score",
+      "status": "production-preview",
+      "version": "0.1.0",
+      "inputs": [
+        "event recurrence",
+        "total-collapse share",
+        "triggered-event share",
+        "human impact",
+        "evidence strength"
+      ],
+      "output": "0-100 territorial operational risk score",
+      "limitations": [
+        "Computed from historical ARCUS data only.",
+        "External hazard layers are not yet included.",
+        "Sparse territories may be sensitive to individual events."
+      ]
+    },
+    {
+      "id": "source-reliability-score",
+      "name": "Source Reliability Score",
+      "status": "production-preview",
+      "version": "0.1.0",
+      "inputs": [
+        "source volume",
+        "source authority",
+        "source type",
+        "ARCUS confidence",
+        "spatial precision",
+        "curation level",
+        "temporal traceability"
+      ],
+      "output": "0-100 evidence score and A/B/C/D grade",
+      "limitations": [
+        "Does not automatically verify source content.",
+        "Source role classification depends on curated metadata."
+      ]
+    },
+    {
+      "id": "event-vulnerability-model",
+      "name": "Event Vulnerability Model",
+      "status": "production-preview",
+      "version": "0.1.0",
+      "inputs": [
+        "collapse severity",
+        "trigger condition",
+        "failure mechanism",
+        "structural typology",
+        "material",
+        "construction year",
+        "human impact",
+        "evidence penalty"
+      ],
+      "output": "0-100 vulnerability score and Low/Medium/High/Critical class",
+      "limitations": [
+        "Not a predictive structural safety model.",
+        "Infrastructure condition and inspection data are not yet included."
+      ]
+    },
+    {
+      "id": "asset-screening-score",
+      "name": "Asset Screening Score",
+      "status": "prototype",
+      "version": "0.1.0",
+      "inputs": [
+        "asset location",
+        "province or region",
+        "nearby ARCUS events",
+        "local vulnerability matches",
+        "asset typology",
+        "material",
+        "construction year"
+      ],
+      "output": "0-100 screening priority and Priority 1/2/3/Baseline class",
+      "limitations": [
+        "Asset inventory quality strongly affects results.",
+        "External hazard exposure will be added in a later version."
+      ]
+    },
+    {
+      "id": "event-similarity-engine",
+      "name": "Event Similarity Engine",
+      "status": "prototype",
+      "version": "0.1.0",
+      "inputs": [
+        "failure mechanism",
+        "severity",
+        "cause family",
+        "structural typology",
+        "material",
+        "trigger condition",
+        "territorial context",
+        "distance when coordinates are available"
+      ],
+      "output": "0-100 similarity score with explanatory match reasons",
+      "limitations": [
+        "Similarity is rule-based, not machine learned.",
+        "It identifies technical precedents, not causal equivalence."
+      ]
+    }
+  ]
+}

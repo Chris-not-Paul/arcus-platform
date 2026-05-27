@@ -5,8 +5,13 @@ import useLanguage from "../../context/useLanguage";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 
 function EventPopup({
+  atlasMode = "open",
   event,
+  hazardProfile = null,
+  professionalMode = false,
+  reliability = null,
   relatedSources,
+  vulnerability = null,
 }) {
   const { language } = useLanguage();
 
@@ -39,16 +44,40 @@ function EventPopup({
         ? "Uso infrastrutturale"
         : "Infrastructure Use",
     na: language === "it" ? "N/D" : "N/A",
+    noSources:
+      language === "it"
+        ? "Nessuna fonte collegata a questo evento nel dataset corrente."
+        : "No source is linked to this event in the current dataset.",
     partial:
       language === "it" ? "Parziale" : "Partial",
     progressive:
       language === "it" ? "Progressivo" : "Progressive",
+    professionalIntelligence:
+      atlasMode === "enterprise"
+        ? language === "it"
+          ? "Intelligence Enterprise"
+          : "Enterprise Intelligence"
+        : language === "it"
+          ? "Intelligence Professional"
+          : "Professional Intelligence",
+    reliability:
+      language === "it"
+        ? "Affidabilita fonti"
+        : "Evidence reliability",
     sources: language === "it" ? "Fonti" : "Sources",
+    territorialHazard:
+      language === "it"
+        ? "Hazard territoriale"
+        : "Territorial hazard",
     structuralType:
       language === "it"
         ? "Tipologia strutturale"
         : "Structural Type",
     total: language === "it" ? "Totale" : "Total",
+    vulnerability:
+      language === "it"
+        ? "Vulnerabilita"
+        : "Vulnerability",
     years: language === "it" ? "anni" : "years",
   };
 
@@ -76,9 +105,15 @@ function EventPopup({
         maxWidth: "360px",
         maxHeight: "72vh",
         overflowY: "auto",
-        paddingRight: "6px",
+        padding: "18px",
+        border: "1px solid rgba(28,24,20,0.08)",
+        borderRadius: "8px",
+        background:
+          "linear-gradient(180deg, #f8f4ee 0%, #eee8df 100%)",
+        boxShadow:
+          "0 18px 46px rgba(21,17,15,0.18)",
         fontFamily:
-          "system-ui, sans-serif",
+          "var(--arcus-font-body, system-ui, sans-serif)",
       }}
     >
 
@@ -283,7 +318,7 @@ function EventPopup({
               opacity: 0.35,
             }}
           >
-            •
+            -
           </span>
 
           <span>
@@ -292,6 +327,110 @@ function EventPopup({
         </div>
 
       </div>
+
+      {/* ================================= */}
+      {/* PROFESSIONAL INTELLIGENCE */}
+      {/* ================================= */}
+
+      {professionalMode && (
+        <div
+          style={{
+            marginBottom: "24px",
+            padding: "16px",
+            borderRadius: "8px",
+            border:
+              "1px solid rgba(196,144,64,0.28)",
+            background:
+              "linear-gradient(145deg, rgba(28,24,20,0.94), rgba(18,15,13,0.88))",
+            color: "#f3efe8",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: "12px",
+              color: "rgba(243,239,232,0.58)",
+              fontSize: "11px",
+              fontWeight: 800,
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+            }}
+          >
+            {text.professionalIntelligence}
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(3, minmax(0, 1fr))",
+              gap: "10px",
+            }}
+          >
+            {[
+              {
+                label: text.vulnerability,
+                value: vulnerability
+                  ? `${vulnerability.class} ${vulnerability.score}`
+                  : text.na,
+              },
+              {
+                label: text.reliability,
+                value: reliability
+                  ? `${reliability.grade} ${reliability.score}`
+                  : text.na,
+              },
+              {
+                label: text.territorialHazard,
+                value:
+                  hazardProfile?.dominant_hazard ||
+                  text.na,
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  minWidth: 0,
+                  padding: "12px 10px",
+                  borderRadius: "8px",
+                  background:
+                    "rgba(255,248,242,0.07)",
+                  border:
+                    "1px solid rgba(243,239,232,0.08)",
+                }}
+              >
+                <div
+                  style={{
+                    marginBottom: "7px",
+                    overflow: "hidden",
+                    color:
+                      "rgba(243,239,232,0.52)",
+                    fontSize: "9px",
+                    fontWeight: 800,
+                    letterSpacing: "0.7px",
+                    textOverflow: "ellipsis",
+                    textTransform: "uppercase",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item.label}
+                </div>
+                <div
+                  style={{
+                    overflowWrap: "anywhere",
+                    color: "#C49040",
+                    fontSize: "15px",
+                    fontWeight: 900,
+                    lineHeight: 1.1,
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ================================= */}
       {/* IMPACT STRIP */}
@@ -318,7 +457,7 @@ function EventPopup({
               "rgba(255,255,255,0.74)",
 
             borderRadius:
-              "18px",
+              "8px",
 
             padding: "14px",
 
@@ -377,7 +516,7 @@ function EventPopup({
               "rgba(255,255,255,0.74)",
 
             borderRadius:
-              "18px",
+              "8px",
 
             padding: "14px",
 
@@ -431,7 +570,7 @@ function EventPopup({
               "rgba(255,255,255,0.74)",
 
             borderRadius:
-              "18px",
+              "8px",
 
             padding: "14px",
 
@@ -653,7 +792,7 @@ function EventPopup({
               "rgba(255,255,255,0.62)",
 
             borderRadius:
-              "20px",
+              "8px",
 
             border:
               "1px solid rgba(0,0,0,0.04)",
@@ -702,10 +841,7 @@ function EventPopup({
       {/* SOURCES */}
       {/* ================================= */}
 
-      {relatedSources.length >
-        0 && (
-
-        <div>
+      <div>
 
           <div
             style={{
@@ -729,52 +865,53 @@ function EventPopup({
             {text.sources}
           </div>
 
-          <div
-            style={{
-              display: "flex",
+          {relatedSources.length > 0 ? (
+            <div
+              style={{
+                display: "flex",
 
-              flexDirection:
-                "column",
+                flexDirection:
+                  "column",
 
-              gap: "10px",
-            }}
-          >
+                gap: "10px",
+              }}
+            >
 
-            {relatedSources.map(
-              (source) => (
+              {relatedSources.map(
+                (source) => (
 
-                <a
-                  key={
-                    source.source_id
-                  }
+                  <a
+                    key={
+                      source.source_id
+                    }
 
-                  href={
-                    source.source_url
-                  }
+                    href={
+                      source.source_url
+                    }
 
-                  target="_blank"
+                    target="_blank"
 
-                  rel="noreferrer"
+                    rel="noreferrer"
 
-                  style={{
-                    textDecoration:
-                      "none",
+                    style={{
+                      textDecoration:
+                        "none",
 
-                    background:
-                      "rgba(255,255,255,0.78)",
+                      background:
+                        "rgba(255,255,255,0.78)",
 
-                    borderRadius:
-                      "16px",
+                      borderRadius:
+                        "8px",
 
-                    padding: "14px",
+                      padding: "14px",
 
-                    border:
-                      "1px solid rgba(0,0,0,0.04)",
+                      border:
+                        "1px solid rgba(0,0,0,0.06)",
 
-                    transition:
-                      "all 0.2s ease",
-                  }}
-                >
+                      transition:
+                        "all 0.2s ease",
+                    }}
+                  >
 
                   <div
                     style={{
@@ -813,22 +950,36 @@ function EventPopup({
                     {
                       source.source_type
                     }{" "}
-                    •{" "}
+                    -{" "}
                     {
                       source.source_role
                     }
                   </div>
 
-                </a>
+                  </a>
 
-              )
-            )}
+                )
+              )}
 
-          </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.58)",
+                color: "#746c64",
+                fontSize: "13px",
+                fontWeight: 600,
+                lineHeight: 1.5,
+              }}
+            >
+              {text.noSources}
+            </div>
+          )}
 
         </div>
-
-      )}
 
     </div>
   );

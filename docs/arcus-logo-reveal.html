@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARCUS — Logo Reveal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0A0807;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    svg#arcus-logo {
+      overflow: visible;
+    }
+
+    button#replay {
+      margin-top: 2.5rem;
+      font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      font-weight: 300;
+      color: #6A5A42;
+      background: none;
+      border: 0.5px solid #2E2820;
+      padding: 9px 30px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    button#replay:hover {
+      color: #C49040;
+      border-color: #C49040;
+    }
+  </style>
+</head>
+<body>
+
+<svg id="arcus-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" width="320" height="240">
+  <defs>
+    <style>
+      .wm { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#F2E8D4; font-weight:300; letter-spacing:12px; font-size:28px; }
+      .tg { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#6A5A42; font-size:8px; letter-spacing:4px; font-weight:300; }
+    </style>
+  </defs>
+
+  <!-- Gamba sinistra -->
+  <polygon id="leg-left"
+    points="119.7,132.2  160,55.9  160,70.1  133.3,132.2"
+    fill="#C49040" opacity="0"/>
+
+  <!-- Gamba destra -->
+  <polygon id="leg-right"
+    points="160,55.9  200.3,132.2  186.7,132.2  160,70.1"
+    fill="#C49040" opacity="0"/>
+
+  <!-- Tirante -->
+  <rect id="tirante" x="141" y="101.2" width="0" height="2.5" rx="0.4" fill="#C49040" opacity="0"/>
+
+  <!-- Base -->
+  <rect id="base" x="119.7" y="128.4" width="0" height="3.7" rx="0.6" fill="#C49040" opacity="0"/>
+
+  <!-- Wordmark -->
+  <text id="wordmark" x="160" y="168" text-anchor="middle" class="wm" opacity="0">ARCUS</text>
+
+  <!-- Separatori -->
+  <line id="line-left"  x1="56"  y1="181" x2="56"  y2="181" stroke="#2E2820" stroke-width="0.5"/>
+  <line id="line-right" x1="264" y1="181" x2="264" y2="181" stroke="#2E2820" stroke-width="0.5"/>
+  <circle id="dot" cx="160" cy="181" r="0" fill="#C49040"/>
+
+  <!-- Tagline -->
+  <text id="tagline" x="160" y="200" text-anchor="middle" class="tg" opacity="0">INFRASTRUCTURE INTELLIGENCE</text>
+</svg>
+
+<button id="replay" onclick="runReveal()">↺ REPLAY</button>
+
+<script>
+  function easeOut(t)      { return 1-(1-t)*(1-t)*(1-t); }
+  function easeInOut(t)    { return t<0.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1; }
+  function easeOutExpo(t)  { return t===1?1:1-Math.pow(2,-10*t); }
+
+  function tween(id, prop, from, to, dur, delay, easeFn) {
+    const el = document.getElementById(id);
+    const fn = easeFn || easeInOut;
+    setTimeout(() => {
+      const s = performance.now();
+      (function step(now) {
+        const raw = Math.min((now - s) / dur, 1);
+        const v = from + (to - from) * fn(raw);
+        if (prop === 'opacity') el.setAttribute('opacity', v);
+        else if (prop === 'r')  el.setAttribute('r', v);
+        else if (prop === 'width') el.setAttribute('width', v);
+        else if (prop === 'x2') el.setAttribute('x2', v);
+        else if (prop === 'x1') el.setAttribute('x1', v);
+        else if (prop === 'x')  el.setAttribute('x', v);
+        if (raw < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }, delay);
+  }
+
+  function fadeSlide(id, slideY, dur, delay, easeFn) {
+    const el = document.getElementById(id);
+    const fn = easeFn || easeOut;
+    setTimeout(() => {
+      const s = performance.now();
+      (function step(now) {
+        const raw = Math.min((now - s) / dur, 1);
+        const t = fn(raw);
+        el.setAttribute('opacity', t);
+        el.setAttribute('transform', `translate(0,${slideY * (1 - t)})`);
+        if (raw < 1) requestAnimationFrame(step);
+        else el.setAttribute('transform', 'translate(0,0)');
+      })(performance.now());
+    }, delay);
+  }
+
+  function tweenTirante(dur, delay) {
+    const el = document.getElementById('tirante');
+    setTimeout(() => {
+      const s = performance.now();
+      (function step(now) {
+        const raw = Math.min((now - s) / dur, 1);
+        const t = easeOutExpo(raw);
+        const halfW = 19.85 * t;
+        el.setAttribute('x', 160 - halfW);
+        el.setAttribute('width', halfW * 2);
+        el.setAttribute('opacity', Math.min(t * 3, 1));
+        if (raw < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }, delay);
+  }
+
+  function tweenBase(dur, delay) {
+    const el = document.getElementById('base');
+    setTimeout(() => {
+      const s = performance.now();
+      (function step(now) {
+        const raw = Math.min((now - s) / dur, 1);
+        const t = easeOut(raw);
+        const halfW = 39.7 * t;
+        el.setAttribute('x', 160 - halfW);
+        el.setAttribute('width', halfW * 2);
+        el.setAttribute('opacity', Math.min(t * 2, 1));
+        if (raw < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }, delay);
+  }
+
+  function resetAll() {
+    ['leg-left', 'leg-right', 'wordmark', 'tagline'].forEach(id => {
+      const el = document.getElementById(id);
+      el.setAttribute('opacity', 0);
+      el.setAttribute('transform', 'translate(0,0)');
+    });
+    const tirante = document.getElementById('tirante');
+    tirante.setAttribute('width', 0);
+    tirante.setAttribute('x', 141);
+    tirante.setAttribute('opacity', 0);
+    const base = document.getElementById('base');
+    base.setAttribute('width', 0);
+    base.setAttribute('x', 119.7);
+    base.setAttribute('opacity', 0);
+    document.getElementById('dot').setAttribute('r', 0);
+    document.getElementById('line-left').setAttribute('x2', 56);
+    document.getElementById('line-right').setAttribute('x1', 264);
+  }
+
+  function runReveal() {
+    resetAll();
+    fadeSlide('leg-left',   20, 700,  100, easeOut);
+    fadeSlide('leg-right',  20, 700,  280, easeOut);
+    tweenTirante(500, 820);
+    tweenBase(450, 980);
+    fadeSlide('wordmark',   14, 700, 1300, easeOut);
+    tween('line-left',  'x2', 56,  148, 500, 1800, easeOutExpo);
+    tween('line-right', 'x1', 264, 172, 500, 1800, easeOutExpo);
+    tween('dot', 'r', 0, 1.5, 300, 2000, easeOut);
+    fadeSlide('tagline',     8, 900, 2150, easeOut);
+  }
+
+  // Avvio automatico
+  setTimeout(runReveal, 600);
+</script>
+
+</body>
+</html>

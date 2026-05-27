@@ -1,4 +1,8 @@
-import { useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useState,
+} from "react";
 
 import {
   BrowserRouter,
@@ -6,14 +10,16 @@ import {
   Route,
 } from "react-router-dom";
 
-import HomePage from "./pages/HomePage";
-import AtlasPage from "./pages/AtlasPage";
-import MethodologyPage from "./pages/MethodologyPage";
-import AboutPage from "./pages/AboutPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import PremiumAnalyticsPage from "./pages/PremiumAnalyticsPage";
-import PublicationsPage from "./pages/PublicationsPage";
-import NotFoundPage from "./pages/NotFoundPage";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const AtlasPage = lazy(() => import("./pages/AtlasPage"));
+const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const PremiumAnalyticsPage = lazy(() => import("./pages/PremiumAnalyticsPage"));
+const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
+const EnterprisePage = lazy(() => import("./pages/EnterprisePage"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -21,6 +27,26 @@ import IntroOverlay from "./components/layout/IntroOverlay";
 import ScrollToTop from "./components/layout/ScrollToTop";
 
 import "leaflet/dist/leaflet.css";
+
+function PageLoading() {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        background: "var(--arcus-night)",
+        color: "var(--arcus-text-on-dark)",
+        fontFamily:
+          "var(--arcus-font-display, system-ui, sans-serif)",
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+      }}
+    >
+      ARCUS
+    </div>
+  );
+}
 
 function App() {
 
@@ -44,7 +70,8 @@ function App() {
       <LanguageProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
+          <Suspense fallback={<PageLoading />}>
+            <Routes>
 
           {/* HOME */}
           <Route
@@ -75,6 +102,16 @@ function App() {
             element={<PremiumAnalyticsPage />}
           />
 
+          <Route
+            path="/professional"
+            element={<ProfessionalPage />}
+          />
+
+          <Route
+            path="/enterprise"
+            element={<EnterprisePage />}
+          />
+
           {/* PUBLICATIONS */}
           <Route
             path="/publications"
@@ -92,7 +129,8 @@ function App() {
             element={<NotFoundPage />}
           />
 
-          </Routes>
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </LanguageProvider>
     </>

@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-05-27T11:44:06.019Z",
+  "name": "ARCUS Professional API Manifest",
+  "version": "0.1.0",
+  "endpoints": [
+    {
+      "description": "Curated bridge-collapse events enriched with reliability and vulnerability models.",
+      "path": "/data/professional/professional-events.json",
+      "resource": "professional_events"
+    },
+    {
+      "description": "Regional and provincial risk profiles generated from ARCUS event and source data.",
+      "path": "/data/professional/territory-profiles.json",
+      "resource": "territory_profiles"
+    },
+    {
+      "description": "Event-level evidence reliability scores and classes.",
+      "path": "/data/professional/event-reliability.json",
+      "resource": "event_reliability"
+    },
+    {
+      "description": "Event-level vulnerability scores and classes.",
+      "path": "/data/professional/event-vulnerability.json",
+      "resource": "event_vulnerability"
+    },
+    {
+      "description": "Versioned model cards describing ARCUS Professional scoring logic, inputs and limitations.",
+      "path": "/data/professional/model-cards.json",
+      "resource": "model_cards"
+    },
+    {
+      "description": "Dataset completeness, coverage and professional-readiness audit.",
+      "path": "/data/professional/data-quality.json",
+      "resource": "data_quality"
+    },
+    {
+      "description": "Machine-readable data dictionary describing fields, types and coverage for ARCUS datasets.",
+      "path": "/data/professional/data-dictionary.json",
+      "resource": "data_dictionary"
+    },
+    {
+      "description": "Versioned data release metadata, counts and quality checks.",
+      "path": "/data/professional/data-release.json",
+      "resource": "data_release"
+    },
+    {
+      "description": "Registry of external hazard layers planned for ARCUS Professional enrichment.",
+      "path": "/data/professional/external-hazard-layers.json",
+      "resource": "external_hazard_layers"
+    },
+    {
+      "description": "Province-level hazard exposure preview prepared for future external layer joins.",
+      "path": "/data/professional/hazard-exposure-preview.json",
+      "resource": "hazard_exposure_preview"
+    }
+  ]
+}

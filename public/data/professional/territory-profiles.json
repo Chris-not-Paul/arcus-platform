@@ -1,0 +1,4879 @@
+{
+  "generated_at": "2026-05-27T11:44:06.019Z",
+  "provinces": [
+    {
+      "avgSources": 2.9761904761904763,
+      "causeCounts": {
+        "Hydraulic": 41,
+        "Design and Construction": 1
+      },
+      "exactLocations": 42,
+      "firstYear": 2000,
+      "injuries": 2,
+      "riskScore": 82,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 20
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 3
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 125,
+      "territory": "Torino",
+      "topCause": "Hydraulic",
+      "total": 42,
+      "totalCollapse": 30,
+      "triggered": 41,
+      "victims": 1
+    },
+    {
+      "avgSources": 2.7777777777777777,
+      "causeCounts": {
+        "Hydraulic": 8,
+        "Design and Construction": 1
+      },
+      "exactLocations": 9,
+      "firstYear": 2011,
+      "injuries": 3,
+      "riskScore": 82,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 27
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 16
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 5
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 25,
+      "territory": "Ancona",
+      "topCause": "Hydraulic",
+      "total": 9,
+      "totalCollapse": 9,
+      "triggered": 8,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 8
+      },
+      "exactLocations": 8,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 75,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 24
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 25
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 20,
+      "territory": "Nuoro",
+      "topCause": "Hydraulic",
+      "total": 8,
+      "totalCollapse": 7,
+      "triggered": 8,
+      "victims": 1
+    },
+    {
+      "avgSources": 2.769230769230769,
+      "causeCounts": {
+        "Hydraulic": 12,
+        "Material": 1
+      },
+      "exactLocations": 12,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 73,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 15
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 17
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 36,
+      "territory": "Cuneo",
+      "topCause": "Hydraulic",
+      "total": 13,
+      "totalCollapse": 7,
+      "triggered": 12,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 7
+      },
+      "exactLocations": 7,
+      "firstYear": 2002,
+      "injuries": 0,
+      "riskScore": 73,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 21
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 24
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 21,
+      "territory": "Biella",
+      "topCause": "Hydraulic",
+      "total": 7,
+      "totalCollapse": 6,
+      "triggered": 7,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.2857142857142856,
+      "causeCounts": {
+        "Hydraulic": 6,
+        "Landslide": 1
+      },
+      "exactLocations": 6,
+      "firstYear": 2000,
+      "injuries": 2,
+      "riskScore": 72,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 21
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 24
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 3
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 16,
+      "territory": "Massa-Carrara",
+      "topCause": "Hydraulic",
+      "total": 7,
+      "totalCollapse": 6,
+      "triggered": 7,
+      "victims": 1
+    },
+    {
+      "avgSources": 2.8333333333333335,
+      "causeCounts": {
+        "Hydraulic": 5,
+        "Design and Construction": 1
+      },
+      "exactLocations": 6,
+      "firstYear": 2008,
+      "injuries": 0,
+      "riskScore": 72,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 18
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 17,
+      "territory": "Catanzaro",
+      "topCause": "Hydraulic",
+      "total": 6,
+      "totalCollapse": 6,
+      "triggered": 6,
+      "victims": 1
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Material": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2013,
+      "injuries": 12,
+      "riskScore": 71,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 12
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 12
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Genova",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 2,
+      "victims": 45
+    },
+    {
+      "avgSources": 2.1666666666666665,
+      "causeCounts": {
+        "Hydraulic": 4,
+        "Design and Construction": 1,
+        "Fire and Explosion": 1
+      },
+      "exactLocations": 6,
+      "firstYear": 2001,
+      "injuries": 0,
+      "riskScore": 70,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 18
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 13,
+      "territory": "Bologna",
+      "topCause": "Hydraulic",
+      "total": 6,
+      "totalCollapse": 6,
+      "triggered": 6,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2005,
+      "injuries": 2,
+      "riskScore": 69,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 11
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Bari",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 5
+    },
+    {
+      "avgSources": 2.6,
+      "causeCounts": {
+        "Hydraulic": 5
+      },
+      "exactLocations": 5,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 67,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 13,
+      "territory": "Aosta",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 5,
+      "triggered": 5,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.8,
+      "causeCounts": {
+        "Impact": 3,
+        "Overload": 1,
+        "Fire and Explosion": 1
+      },
+      "exactLocations": 5,
+      "firstYear": 2013,
+      "injuries": 1,
+      "riskScore": 67,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 14,
+      "territory": "Roma",
+      "topCause": "Impact",
+      "total": 5,
+      "totalCollapse": 5,
+      "triggered": 5,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Impact": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2006,
+      "injuries": 14,
+      "riskScore": 66,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 7
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Siracusa",
+      "topCause": "Impact",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 1
+    },
+    {
+      "avgSources": 4,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2024,
+      "injuries": 0,
+      "riskScore": 66,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 4
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 8,
+      "territory": "Vicenza",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.6666666666666665,
+      "causeCounts": {
+        "Hydraulic": 6
+      },
+      "exactLocations": 6,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 65,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 18
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 23
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 16,
+      "territory": "Benevento",
+      "topCause": "Hydraulic",
+      "total": 6,
+      "totalCollapse": 5,
+      "triggered": 6,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2022,
+      "injuries": 0,
+      "riskScore": 65,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Pesaro Urbino",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2002,
+      "injuries": 0,
+      "riskScore": 64,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Alessandria",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 1
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 4
+      },
+      "exactLocations": 4,
+      "firstYear": 2009,
+      "injuries": 0,
+      "riskScore": 64,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 8,
+      "territory": "Modena",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 4,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 64,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 6
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Sassari",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 3
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Overload": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2016,
+      "injuries": 5,
+      "riskScore": 63,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 4
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Lecco",
+      "topCause": "Overload",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 1
+    },
+    {
+      "avgSources": 4,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2023,
+      "injuries": 0,
+      "riskScore": 63,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 4
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Pistoia",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.6666666666666665,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2009,
+      "injuries": 3,
+      "riskScore": 62,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 1
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 8,
+      "territory": "Piacenza",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 4.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2014,
+      "injuries": 0,
+      "riskScore": 62,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Parma",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.75,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Impact": 1,
+        "Material": 1
+      },
+      "exactLocations": 4,
+      "firstYear": 2015,
+      "injuries": 0,
+      "riskScore": 62,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 14
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 11,
+      "territory": "Cosenza",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 4,
+      "triggered": 3,
+      "victims": 1
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Overload": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2020,
+      "injuries": 0,
+      "riskScore": 62,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Verbania",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Landslide": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2023,
+      "injuries": 0,
+      "riskScore": 62,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Forlì Cesena",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.6,
+      "causeCounts": {
+        "Hydraulic": 4,
+        "Landslide": 1
+      },
+      "exactLocations": 5,
+      "firstYear": 2006,
+      "injuries": 0,
+      "riskScore": 61,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 13,
+      "territory": "Imperia",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 4,
+      "triggered": 5,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.6666666666666665,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2012,
+      "injuries": 0,
+      "riskScore": 61,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 8,
+      "territory": "Belluno",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.6,
+      "causeCounts": {
+        "Hydraulic": 3,
+        "Landslide": 1,
+        "Impact": 1
+      },
+      "exactLocations": 5,
+      "firstYear": 2016,
+      "injuries": 0,
+      "riskScore": 61,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 13,
+      "territory": "Savona",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 4,
+      "triggered": 5,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2018,
+      "injuries": 0,
+      "riskScore": 61,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Trento",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 4
+      },
+      "exactLocations": 4,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 21
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 10,
+      "territory": "Campobasso",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 3,
+      "triggered": 4,
+      "victims": 1
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Ivrea",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Vercelli",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2002,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Varese",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Design and Construction": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2004,
+      "injuries": 1,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Pordenone",
+      "topCause": "Design and Construction",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2014,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Fermo",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2018,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Cesena",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2018,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Cremona",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Overload": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2020,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Sud Sardegna",
+      "topCause": "Overload",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Design and Construction": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2023,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 12
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Ravenna",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2023,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Prato",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 1,
+      "firstYear": 2003,
+      "injuries": 0,
+      "riskScore": 58,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Taranto",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2012,
+      "injuries": 0,
+      "riskScore": 58,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Siena",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2018,
+      "injuries": 0,
+      "riskScore": 58,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Trapani",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 1,
+      "causeCounts": {
+        "Impact": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2000,
+      "injuries": 1,
+      "riskScore": 57,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 1,
+      "territory": "Rovigo",
+      "topCause": "Impact",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 1
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 4
+      },
+      "exactLocations": 4,
+      "firstYear": 2009,
+      "injuries": 0,
+      "riskScore": 57,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 21
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 10,
+      "territory": "Reggio Calabria",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 3,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.2,
+      "causeCounts": {
+        "Hydraulic": 4,
+        "Material": 1
+      },
+      "exactLocations": 5,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 57,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 14
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 11,
+      "territory": "La Spezia",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 4,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Macerata",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Firenze",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Olbia",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Ascoli",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Landslide": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Bergamo",
+      "topCause": "Landslide",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2019,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Napoli",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2024,
+      "injuries": 0,
+      "riskScore": 55,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Monza e Brianza",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Earthquake": 3,
+        "Hydraulic": 1
+      },
+      "exactLocations": 4,
+      "firstYear": 2009,
+      "injuries": 0,
+      "riskScore": 54,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 12,
+      "territory": "L'Aquila",
+      "topCause": "Earthquake",
+      "total": 4,
+      "totalCollapse": 2,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Material": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 53,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 9
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Chieti",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3.6666666666666665,
+      "causeCounts": {
+        "Design and Construction": 1,
+        "Landslide": 1,
+        "Material": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2014,
+      "injuries": 0,
+      "riskScore": 53,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 6
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 11,
+      "territory": "Palermo",
+      "topCause": "Design and Construction",
+      "total": 3,
+      "totalCollapse": 3,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 1.3333333333333333,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Design and Construction": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 52,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 19
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Teramo",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 2,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 50,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 6
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Messina",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 2,
+      "victims": 3
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Design and Construction": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2013,
+      "injuries": 4,
+      "riskScore": 50,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 9
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 1
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Agrigento",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 2,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Design and Construction": 1,
+        "Fire and Explosion": 1,
+        "Impact": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2005,
+      "injuries": 4,
+      "riskScore": 49,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 9
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 3
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Brescia",
+      "topCause": "Design and Construction",
+      "total": 3,
+      "totalCollapse": 1,
+      "triggered": 3,
+      "victims": 1
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2020,
+      "injuries": 0,
+      "riskScore": 48,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Crotone",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2003,
+      "injuries": 0,
+      "riskScore": 46,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 9
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Udine",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 1,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 3
+      },
+      "exactLocations": 3,
+      "firstYear": 2008,
+      "injuries": 0,
+      "riskScore": 46,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 9
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 9,
+      "territory": "Cagliari",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 1,
+      "triggered": 3,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.3333333333333335,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Material": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2009,
+      "injuries": 0,
+      "riskScore": 46,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 19
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 12
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 7,
+      "territory": "Enna",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.3333333333333335,
+      "causeCounts": {
+        "Hydraulic": 2,
+        "Material": 1
+      },
+      "exactLocations": 3,
+      "firstYear": 2014,
+      "injuries": 0,
+      "riskScore": 46,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 9
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 19
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 12
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 7,
+      "territory": "Livorno",
+      "topCause": "Hydraulic",
+      "total": 3,
+      "totalCollapse": 2,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Design and Construction": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2009,
+      "injuries": 3,
+      "riskScore": 42,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 0
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 1
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Caltanisetta",
+      "topCause": "Design and Construction",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 0,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Material": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2021,
+      "injuries": 0,
+      "riskScore": 41,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 0
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Ferrara",
+      "topCause": "Material",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 0,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Design and Construction": 1,
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 39,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 9
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Bolzano",
+      "topCause": "Design and Construction",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Material": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2020,
+      "injuries": 0,
+      "riskScore": 39,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 9
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Novara",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Material": 1,
+        "Impact": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2022,
+      "injuries": 0,
+      "riskScore": 39,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 9
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Pisa",
+      "topCause": "Material",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Material": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 37,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 0
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 2,
+      "territory": "Catania",
+      "topCause": "Material",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 0,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2012,
+      "injuries": 0,
+      "riskScore": 31,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Grosseto",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 0,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2014,
+      "injuries": 0,
+      "riskScore": 31,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Pavia",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 0,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Impact": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2019,
+      "injuries": 0,
+      "riskScore": 31,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Como",
+      "topCause": "Impact",
+      "total": 1,
+      "totalCollapse": 0,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2020,
+      "injuries": 0,
+      "riskScore": 31,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Frosinone",
+      "topCause": "Hydraulic",
+      "total": 1,
+      "totalCollapse": 0,
+      "triggered": 1,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 30,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Matera",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 0,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Impact": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 30,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Perugia",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 0,
+      "triggered": 2,
+      "victims": 0
+    }
+  ],
+  "regions": [
+    {
+      "avgSources": 2.5555555555555554,
+      "causeCounts": {
+        "Hydraulic": 13,
+        "Landslide": 2,
+        "Material": 2,
+        "Impact": 1
+      },
+      "exactLocations": 18,
+      "firstYear": 2006,
+      "injuries": 12,
+      "riskScore": 92,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 23
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 16
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 12
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 46,
+      "territory": "Liguria",
+      "topCause": "Hydraulic",
+      "total": 18,
+      "totalCollapse": 15,
+      "triggered": 16,
+      "victims": 45
+    },
+    {
+      "avgSources": 2.7333333333333334,
+      "causeCounts": {
+        "Hydraulic": 14,
+        "Design and Construction": 1
+      },
+      "exactLocations": 15,
+      "firstYear": 2011,
+      "injuries": 3,
+      "riskScore": 91,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 17
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 5
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 41,
+      "territory": "Marche",
+      "topCause": "Hydraulic",
+      "total": 15,
+      "totalCollapse": 15,
+      "triggered": 14,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.533333333333333,
+      "causeCounts": {
+        "Hydraulic": 14,
+        "Overload": 1
+      },
+      "exactLocations": 15,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 89,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 8
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 38,
+      "territory": "Sardegna",
+      "topCause": "Hydraulic",
+      "total": 15,
+      "totalCollapse": 12,
+      "triggered": 15,
+      "victims": 4
+    },
+    {
+      "avgSources": 2.7333333333333334,
+      "causeCounts": {
+        "Hydraulic": 7,
+        "Design and Construction": 3,
+        "Material": 3,
+        "Impact": 1,
+        "Landslide": 1
+      },
+      "exactLocations": 15,
+      "firstYear": 2006,
+      "injuries": 21,
+      "riskScore": 88,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 24
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 11
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 12
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 41,
+      "territory": "Sicilia",
+      "topCause": "Hydraulic",
+      "total": 15,
+      "totalCollapse": 13,
+      "triggered": 9,
+      "victims": 4
+    },
+    {
+      "avgSources": 2.75,
+      "causeCounts": {
+        "Hydraulic": 13,
+        "Impact": 1,
+        "Material": 1,
+        "Design and Construction": 1
+      },
+      "exactLocations": 16,
+      "firstYear": 2008,
+      "injuries": 0,
+      "riskScore": 87,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 25
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 17
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 4
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 44,
+      "territory": "Calabria",
+      "topCause": "Hydraulic",
+      "total": 16,
+      "totalCollapse": 14,
+      "triggered": 15,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 14,
+        "Material": 2,
+        "Landslide": 1,
+        "Impact": 1
+      },
+      "exactLocations": 17,
+      "firstYear": 2000,
+      "injuries": 2,
+      "riskScore": 86,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 16
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 7
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 45,
+      "territory": "Toscana",
+      "topCause": "Hydraulic",
+      "total": 18,
+      "totalCollapse": 14,
+      "triggered": 16,
+      "victims": 3
+    },
+    {
+      "avgSources": 2.6666666666666665,
+      "causeCounts": {
+        "Hydraulic": 16,
+        "Design and Construction": 2,
+        "Fire and Explosion": 1,
+        "Material": 1,
+        "Landslide": 1
+      },
+      "exactLocations": 21,
+      "firstYear": 2001,
+      "injuries": 3,
+      "riskScore": 86,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 16
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 1
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 56,
+      "territory": "Emilia-Romagna",
+      "topCause": "Hydraulic",
+      "total": 21,
+      "totalCollapse": 21,
+      "triggered": 19,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.942857142857143,
+      "causeCounts": {
+        "Hydraulic": 66,
+        "Material": 2,
+        "Design and Construction": 1,
+        "Overload": 1
+      },
+      "exactLocations": 69,
+      "firstYear": 2000,
+      "injuries": 2,
+      "riskScore": 83,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 20
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 17
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 5
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 206,
+      "territory": "Piemonte",
+      "topCause": "Hydraulic",
+      "total": 70,
+      "totalCollapse": 50,
+      "triggered": 67,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.8181818181818183,
+      "causeCounts": {
+        "Hydraulic": 5,
+        "Impact": 2,
+        "Design and Construction": 1,
+        "Landslide": 1,
+        "Overload": 1,
+        "Fire and Explosion": 1
+      },
+      "exactLocations": 11,
+      "firstYear": 2002,
+      "injuries": 9,
+      "riskScore": 82,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 33
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 18
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 7
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 31,
+      "territory": "Lombardia",
+      "topCause": "Hydraulic",
+      "total": 11,
+      "totalCollapse": 7,
+      "triggered": 11,
+      "victims": 2
+    },
+    {
+      "avgSources": 2.8333333333333335,
+      "causeCounts": {
+        "Hydraulic": 5,
+        "Impact": 1
+      },
+      "exactLocations": 6,
+      "firstYear": 2000,
+      "injuries": 1,
+      "riskScore": 76,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 18
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 6
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 17,
+      "territory": "Veneto",
+      "topCause": "Hydraulic",
+      "total": 6,
+      "totalCollapse": 6,
+      "triggered": 6,
+      "victims": 3
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 4
+      },
+      "exactLocations": 3,
+      "firstYear": 2003,
+      "injuries": 2,
+      "riskScore": 75,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 11
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 10,
+      "territory": "Puglia",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 4,
+      "triggered": 4,
+      "victims": 5
+    },
+    {
+      "avgSources": 2.5714285714285716,
+      "causeCounts": {
+        "Hydraulic": 7
+      },
+      "exactLocations": 7,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 69,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 21
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 24
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 18,
+      "territory": "Campania",
+      "topCause": "Hydraulic",
+      "total": 7,
+      "totalCollapse": 6,
+      "triggered": 7,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.4444444444444446,
+      "causeCounts": {
+        "Hydraulic": 4,
+        "Earthquake": 3,
+        "Material": 1,
+        "Design and Construction": 1
+      },
+      "exactLocations": 9,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 68,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 27
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 19
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 16
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 22,
+      "territory": "Abruzzo",
+      "topCause": "Hydraulic",
+      "total": 9,
+      "totalCollapse": 6,
+      "triggered": 8,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.6,
+      "causeCounts": {
+        "Hydraulic": 5
+      },
+      "exactLocations": 5,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 67,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 13,
+      "territory": "Valle d'Aosta (Valle d'Aoste)",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 5,
+      "triggered": 5,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.8333333333333335,
+      "causeCounts": {
+        "Impact": 3,
+        "Overload": 1,
+        "Hydraulic": 1,
+        "Fire and Explosion": 1
+      },
+      "exactLocations": 6,
+      "firstYear": 2013,
+      "injuries": 1,
+      "riskScore": 65,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 18
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 23
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 17,
+      "territory": "Lazio",
+      "topCause": "Impact",
+      "total": 6,
+      "totalCollapse": 5,
+      "triggered": 6,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 4
+      },
+      "exactLocations": 4,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 59,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 21
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 10,
+      "territory": "Molise",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 3,
+      "triggered": 4,
+      "victims": 1
+    },
+    {
+      "avgSources": 2.4,
+      "causeCounts": {
+        "Hydraulic": 4,
+        "Design and Construction": 1
+      },
+      "exactLocations": 4,
+      "firstYear": 2004,
+      "injuries": 0,
+      "riskScore": 57,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 15
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 22
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 14
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 12,
+      "territory": "Trentino-Alto Adige (Trentino-Südtirol)",
+      "topCause": "Hydraulic",
+      "total": 5,
+      "totalCollapse": 4,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 3,
+        "Design and Construction": 1
+      },
+      "exactLocations": 4,
+      "firstYear": 2003,
+      "injuries": 1,
+      "riskScore": 54,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 12
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 12,
+      "territory": "Friuli-Venezia Giulia",
+      "topCause": "Hydraulic",
+      "total": 4,
+      "totalCollapse": 2,
+      "triggered": 4,
+      "victims": 0
+    },
+    {
+      "avgSources": 2.5,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
+      "firstYear": 2011,
+      "injuries": 0,
+      "riskScore": 30,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 5,
+      "territory": "Basilicata",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 0,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 2,
+      "causeCounts": {
+        "Hydraulic": 1,
+        "Impact": 1
+      },
+      "exactLocations": 2,
+      "firstYear": 2013,
+      "injuries": 0,
+      "riskScore": 30,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 0
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 4,
+      "territory": "Umbria",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 0,
+      "triggered": 2,
+      "victims": 0
+    }
+  ]
+}

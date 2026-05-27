@@ -110,7 +110,7 @@
   position: relative;
 
   width: min(320px, 74vw);
-  aspect-ratio: 320 / 220;
+  aspect-ratio: 320 / 240;
 
   display: flex;
   align-items: center;
@@ -132,56 +132,12 @@
     drop-shadow(0 0 18px rgba(196,144,64,0.12));
 }
 
-.arcus-reveal-leg,
-.arcus-reveal-base,
-.arcus-reveal-wordmark,
-.arcus-reveal-tagline {
-  opacity: 0;
-  animation:
-    arcusRevealFadeSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+.arcus-logo-reveal svg {
+  width: 100%;
+  height: auto;
 
-.arcus-reveal-leg-left {
-  animation-delay: 0.15s;
-}
-
-.arcus-reveal-leg-right {
-  animation-delay: 0.34s;
-}
-
-.arcus-reveal-tirante {
-  transform-box: fill-box;
-  transform-origin: left center;
-  transform: scaleX(0);
-  animation:
-    arcusRevealExpand 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.76s forwards;
-}
-
-.arcus-reveal-base {
-  animation-delay: 1.06s;
-}
-
-.arcus-reveal-wordmark {
-  animation-delay: 1.3s;
-}
-
-.arcus-reveal-line {
-  stroke-dasharray: 92;
-  stroke-dashoffset: 92;
-  animation:
-    arcusRevealLine 0.38s cubic-bezier(0.16, 1, 0.3, 1) 1.72s forwards;
-}
-
-.arcus-reveal-dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(0);
-  animation:
-    arcusRevealDot 0.2s cubic-bezier(0.16, 1, 0.3, 1) 1.92s forwards;
-}
-
-.arcus-reveal-tagline {
-  animation-delay: 2.06s;
+  display: block;
+  overflow: visible;
 }
 
 .intro-signal-line {
@@ -305,36 +261,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes arcusRevealFadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes arcusRevealExpand {
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes arcusRevealLine {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes arcusRevealDot {
-  to {
-    transform: scale(1);
   }
 }
 

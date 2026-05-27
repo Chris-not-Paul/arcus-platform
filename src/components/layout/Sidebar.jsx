@@ -1,4 +1,4 @@
-import { causeColors } from "../../utils/colors";
+﻿import { causeColors } from "../../utils/colors";
 import useLanguage from "../../context/useLanguage";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 
@@ -28,6 +28,9 @@ function Sidebar({
   triggeredFilter,
   setTriggeredFilter,
 
+  searchQuery,
+  setSearchQuery,
+
   uniqueCauses,
 
 }) {
@@ -50,6 +53,14 @@ function Sidebar({
         ? "Tassonomia dei cedimenti"
         : "Failure Taxonomy",
     filters: language === "it" ? "Filtri" : "Filters",
+    search:
+      language === "it"
+        ? "Ricerca archivio"
+        : "Archive Search",
+    searchPlaceholder:
+      language === "it"
+        ? "Ponte, comune, id evento..."
+        : "Bridge, city, event id...",
     partialCollapse:
       language === "it"
         ? "Collasso parziale"
@@ -74,6 +85,11 @@ function Sidebar({
       {/* ================================= */}
 
       <button
+        aria-label={
+          sidebarOpen
+            ? "Close atlas controls"
+            : "Open atlas controls"
+        }
         onClick={() =>
           setSidebarOpen(
             !sidebarOpen
@@ -128,7 +144,7 @@ function Sidebar({
 
         <span
           style={{
-            fontSize: "22px",
+            fontSize: "20px",
 
             lineHeight: 1,
 
@@ -360,6 +376,74 @@ function Sidebar({
 
           ))}
 
+        </div>
+
+        {/* ================================= */}
+        {/* SEARCH */}
+        {/* ================================= */}
+
+        <div
+          style={{
+            marginBottom: "30px",
+
+            paddingTop: "24px",
+
+            borderTop:
+              "1px solid rgba(120,95,72,0.10)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "13px",
+
+              fontWeight: 700,
+
+              letterSpacing: "1px",
+
+              textTransform:
+                "uppercase",
+
+              opacity: 0.5,
+
+              marginBottom: "12px",
+
+              color: "#746c64",
+            }}
+          >
+            {text.search}
+          </div>
+
+          <input
+            value={searchQuery}
+            onChange={(event) =>
+              setSearchQuery(
+                event.target.value
+              )
+            }
+            placeholder={
+              text.searchPlaceholder
+            }
+            type="search"
+            style={{
+              width: "100%",
+
+              padding: "13px 14px",
+
+              borderRadius: "12px",
+
+              border:
+                "1px solid rgba(0,0,0,0.06)",
+
+              background:
+                "rgba(255,252,248,0.88)",
+
+              color: "#2b211b",
+
+              fontSize: "14px",
+
+              outline: "none",
+            }}
+          />
         </div>
 
         {/* ================================= */}
@@ -825,3 +909,4 @@ function Sidebar({
 }
 
 export default Sidebar;
+

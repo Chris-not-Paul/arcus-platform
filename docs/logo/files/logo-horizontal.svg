@@ -2,6 +2,7 @@
   <title>ARCUS — Logo Orizzontale</title>
   <defs>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
       .wm { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#F2E8D4; font-weight:300; letter-spacing:12px; font-size:30px; }
     </style>
   </defs>

@@ -26,6 +26,149 @@ const premiumModules = [
   "Institutional dashboards",
 ];
 
+const accessTiers = {
+  en: [
+    {
+      cta: "Explore public atlas",
+      features: [
+        "Public atlas",
+        "Timeline and filters",
+        "Popup evidence cards",
+        "Heatmaps",
+        "Methodology",
+        "Basic statistics",
+      ],
+      label: "Free / Public",
+      path: "/atlas",
+      price: "Open access",
+      target:
+        "Visibility, scientific authority, SEO reach and public engagement.",
+      title: "Public Observatory",
+    },
+    {
+      cta: "Open Pro workspace",
+      features: [
+        "Advanced analytics",
+        "CSV exports",
+        "API access",
+        "AI-generated summaries",
+        "Regional dashboards",
+        "Comparative analytics",
+      ],
+      label: "ARCUS PRO",
+      path: "/analytics/pro",
+      price: "EUR 19-49 / month",
+      target:
+        "Researchers, journalists, students, consultants and small engineering firms.",
+      title: "Research & Professional Access",
+    },
+    {
+      cta: "Professional roadmap",
+      features: [
+        "Vulnerability mapping",
+        "Flood and landslide overlays",
+        "Infrastructure aging analytics",
+        "Hotspot detection",
+        "Advanced GIS layers",
+        "Collaborative workspaces",
+      ],
+      label: "ARCUS PROFESSIONAL",
+      path: "/professional",
+      price: "EUR 199-599 / month",
+      target:
+        "Engineering companies, concessionaires, utilities and infrastructure managers.",
+      title: "Operational Risk Intelligence",
+    },
+    {
+      cta: "Institutional vision",
+      features: [
+        "Private dashboards",
+        "Predictive maintenance tools",
+        "Asset prioritization",
+        "Enterprise APIs",
+        "Custom integrations",
+        "Consulting services",
+      ],
+      label: "ENTERPRISE / GOVERNMENT",
+      path: "/enterprise",
+      price: "EUR 5k-50k / year",
+      target:
+        "Ministries, regional governments, civil protection agencies, insurers and major operators.",
+      title: "Institutional Infrastructure Intelligence",
+    },
+  ],
+  it: [
+    {
+      cta: "Esplora l'Atlante pubblico",
+      features: [
+        "Atlante pubblico",
+        "Timeline e filtri",
+        "Schede evento con fonti",
+        "Heatmap",
+        "Metodologia",
+        "Statistiche base",
+      ],
+      label: "Free / Pubblico",
+      path: "/atlas",
+      price: "Accesso aperto",
+      target:
+        "Visibilita, autorevolezza scientifica, diffusione pubblica e posizionamento SEO.",
+      title: "Osservatorio Pubblico",
+    },
+    {
+      cta: "Apri workspace Pro",
+      features: [
+        "Analytics avanzati",
+        "Export CSV",
+        "Accesso API",
+        "Sintesi generate da AI",
+        "Dashboard regionali",
+        "Comparative analytics",
+      ],
+      label: "ARCUS PRO",
+      path: "/analytics/pro",
+      price: "EUR 19-49 / mese",
+      target:
+        "Ricercatori, giornalisti, studenti, consulenti e piccoli studi di ingegneria.",
+      title: "Accesso Ricerca e Professionisti",
+    },
+    {
+      cta: "Roadmap professional",
+      features: [
+        "Mappatura vulnerabilita",
+        "Overlay alluvioni e frane",
+        "Analytics eta infrastrutturale",
+        "Hotspot detection",
+        "Layer GIS avanzati",
+        "Workspace collaborativi",
+      ],
+      label: "ARCUS PROFESSIONAL",
+      path: "/professional",
+      price: "EUR 199-599 / mese",
+      target:
+        "Societa di ingegneria, concessionari, utility e gestori infrastrutturali.",
+      title: "Risk Intelligence Operativa",
+    },
+    {
+      cta: "Visione istituzionale",
+      features: [
+        "Dashboard private",
+        "Predictive maintenance",
+        "Prioritizzazione asset",
+        "API enterprise",
+        "Integrazioni custom",
+        "Servizi di consulenza",
+      ],
+      label: "Enterprise / Government",
+      path: "/enterprise",
+      price: "EUR 5k-50k / anno",
+      target:
+        "Ministeri, regioni, protezione civile, assicurazioni e grandi operatori infrastrutturali.",
+      title: "Intelligence Infrastrutturale Istituzionale",
+    },
+  ],
+};
+
 function countBy(items, getter) {
   return Object.entries(
     items.reduce((accumulator, item) => {
@@ -167,6 +310,12 @@ function AnalyticsPage() {
           sourceRoles: "Ruolo delle fonti",
           confidenceLevel: "Livello di confidenza",
           openCore: "MODELLO OPEN CORE",
+          accessArchitecture:
+            "ARCHITETTURA DI ACCESSO",
+          accessTitle:
+            "Quattro livelli per scalare da osservatorio pubblico a piattaforma istituzionale.",
+          accessText:
+            "ARCUS mantiene un layer pubblico forte per autorevolezza e diffusione, mentre i livelli Pro, Professional ed Enterprise costruiscono sostenibilita economica e strumenti operativi per stakeholder avanzati.",
           premiumTitle:
             "Analytics pubblici, intelligence premium",
           premiumText:
@@ -225,6 +374,12 @@ function AnalyticsPage() {
           sourceRoles: "Source Roles",
           confidenceLevel: "Confidence Level",
           openCore: "OPEN CORE MODEL",
+          accessArchitecture:
+            "ACCESS ARCHITECTURE",
+          accessTitle:
+            "Four levels to scale from public observatory to institutional platform.",
+          accessText:
+            "ARCUS preserves a strong public layer for authority and diffusion, while Pro, Professional and Enterprise tiers create economic sustainability and operational tools for advanced stakeholders.",
           premiumTitle:
             "Public Analytics, Premium Intelligence",
           premiumText:
@@ -389,6 +544,7 @@ function AnalyticsPage() {
   }, [events, sources]);
 
   const hasData = analytics.totalEvents > 0;
+  const tiers = accessTiers[language] || accessTiers.en;
 
   return (
     <main
@@ -731,6 +887,54 @@ function AnalyticsPage() {
 
             <p className="analytics-section-description">
               {copy.premiumText}
+            </p>
+          </div>
+
+          <div className="analytics-tier-grid">
+            {tiers.map((tier) => (
+              <article
+                className="analytics-tier-card"
+                key={tier.label}
+              >
+                <div className="analytics-tier-label">
+                  {tier.label}
+                </div>
+
+                <h3>{tier.title}</h3>
+
+                <div className="analytics-tier-price">
+                  {tier.price}
+                </div>
+
+                <p>{tier.target}</p>
+
+                <ul>
+                  {tier.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+
+                <Link
+                  className="analytics-tier-link"
+                  to={tier.path}
+                >
+                  {tier.cta}
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <div className="analytics-section-header compact">
+            <div className="analytics-section-label">
+              {copy.accessArchitecture}
+            </div>
+
+            <h2 className="analytics-section-title">
+              {copy.accessTitle}
+            </h2>
+
+            <p className="analytics-section-description">
+              {copy.accessText}
             </p>
           </div>
 

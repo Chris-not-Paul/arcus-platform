@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useRef,
+} from "react";
 
 import ArcusLogoReveal from "../brand/ArcusLogoReveal";
 
@@ -6,17 +9,19 @@ import "./IntroOverlay.css";
 
 export default function IntroOverlay({ onFinish }) {
 
-  const [fadeOut, setFadeOut] = useState(false);
+  const overlayRef = useRef(null);
 
   useEffect(() => {
 
     const fadeTimer = setTimeout(() => {
-      setFadeOut(true);
-    }, 3200);
+      overlayRef.current?.classList.add(
+        "fade-out"
+      );
+    }, 3800);
 
     const finishTimer = setTimeout(() => {
       onFinish();
-    }, 3950);
+    }, 4550);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -27,7 +32,8 @@ export default function IntroOverlay({ onFinish }) {
 
   return (
     <div
-      className={`intro-overlay ${fadeOut ? "fade-out" : ""}`}
+      ref={overlayRef}
+      className="intro-overlay"
       aria-hidden="true"
     >
 

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
   <title>ARCUS</title>
   <rect width="160" height="160" rx="28" fill="#171311"/>
-  <g transform="translate(80, 78)">
-    <polygon points="-56,68 0,-78 0,-54 -38,68" fill="#C49040"/>
-    <polygon points="0,-78 56,68 38,68 0,-54" fill="#C49040"/>
-    <rect x="-29" y="14" width="58" height="4" fill="#C49040"/>
-    <rect x="-56" y="62" width="112" height="6" rx="1" fill="#C49040"/>
+  <g transform="translate(80, 72) scale(1.02)">
+    <polygon points="-65,68 0,-55 0,-36 -43,68" fill="#C49040"/>
+    <polygon points="0,-55 65,68 43,68 0,-36" fill="#C49040"/>
+    <rect x="-32" y="18" width="64" height="4" fill="#C49040"/>
+    <rect x="-65" y="62" width="130" height="6" rx="1" fill="#C49040"/>
   </g>
 </svg>
