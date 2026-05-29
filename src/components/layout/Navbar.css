@@ -114,13 +114,13 @@
   display: flex;
   align-items: center;
 
-  gap: 34px;
+  gap: clamp(10px, 1.35vw, 20px);
 }
 
 .navbar-link {
   position: relative;
 
-  font-size: 13px;
+  font-size: 12px;
 
   font-weight: 700;
 
@@ -236,7 +236,7 @@
   }
 
   .navbar-links {
-    gap: 24px;
+    gap: 18px;
   }
 
   .navbar-brand {

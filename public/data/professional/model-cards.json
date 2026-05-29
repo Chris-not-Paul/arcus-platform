@@ -2,27 +2,28 @@
   "generated_at": "2026-05-27T11:44:06.019Z",
   "models": [
     {
-      "id": "territorial-risk-score",
-      "name": "Territorial Risk Score",
-      "status": "production-preview",
+      "id": "infrastructure-priority-index",
+      "name": "Infrastructure Priority Index",
+      "status": "professional-v0",
       "version": "0.1.0",
       "inputs": [
         "event recurrence",
         "total-collapse share",
         "triggered-event share",
         "human impact",
-        "evidence strength"
+        "evidence strength",
+        "public hazard overlay exposure"
       ],
-      "output": "0-100 territorial operational risk score",
+      "output": "0-100 territorial infrastructure priority indicator",
       "limitations": [
-        "Computed from historical ARCUS data only.",
-        "External hazard layers are not yet included.",
+        "Computed from ARCUS historical data and province-level public hazard overlay signals.",
+        "Live geospatial WMS/API joins are not included in Professional v0.",
         "Sparse territories may be sensitive to individual events."
       ]
     },
     {
-      "id": "source-reliability-score",
-      "name": "Source Reliability Score",
+      "id": "source-reliability-indicator",
+      "name": "Source Reliability Indicator",
       "status": "production-preview",
       "version": "0.1.0",
       "inputs": [
@@ -34,7 +35,7 @@
         "curation level",
         "temporal traceability"
       ],
-      "output": "0-100 evidence score and A/B/C/D grade",
+      "output": "0-100 evidence indicator and A/B/C/D grade",
       "limitations": [
         "Does not automatically verify source content.",
         "Source role classification depends on curated metadata."
@@ -55,15 +56,15 @@
         "human impact",
         "evidence penalty"
       ],
-      "output": "0-100 vulnerability score and Low/Medium/High/Critical class",
+      "output": "0-100 vulnerability-context indicator and Low/Medium/High/Critical class",
       "limitations": [
         "Not a predictive structural safety model.",
         "Infrastructure condition and inspection data are not yet included."
       ]
     },
     {
-      "id": "asset-screening-score",
-      "name": "Asset Screening Score",
+      "id": "asset-priority-indicator",
+      "name": "Asset Priority Indicator",
       "status": "prototype",
       "version": "0.1.0",
       "inputs": [
@@ -75,10 +76,10 @@
         "material",
         "construction year"
       ],
-      "output": "0-100 screening priority and Priority 1/2/3/Baseline class",
+      "output": "0-100 screening priority indicator and Priority 1/2/3/Baseline class",
       "limitations": [
         "Asset inventory quality strongly affects results.",
-        "External hazard exposure will be added in a later version."
+        "Professional v0 uses province-level public hazard overlay signals; asset-level live joins are Enterprise functionality."
       ]
     },
     {
@@ -96,7 +97,7 @@
         "territorial context",
         "distance when coordinates are available"
       ],
-      "output": "0-100 similarity score with explanatory match reasons",
+      "output": "0-100 similarity indicator with explanatory match reasons",
       "limitations": [
         "Similarity is rule-based, not machine learned.",
         "It identifies technical precedents, not causal equivalence."

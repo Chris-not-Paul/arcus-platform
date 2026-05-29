@@ -1,4 +1,3 @@
-﻿import { causeColors } from "../../utils/colors";
 import useLanguage from "../../context/useLanguage";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 
@@ -48,10 +47,6 @@ function Sidebar({
         ? "Database dei crolli dei ponti"
         : "Bridge Collapse Database",
     events: language === "it" ? "Eventi" : "Events",
-    failureTaxonomy:
-      language === "it"
-        ? "Tassonomia dei cedimenti"
-        : "Failure Taxonomy",
     filters: language === "it" ? "Filtri" : "Filters",
     search:
       language === "it"
@@ -103,7 +98,7 @@ function Sidebar({
           top: "18px",
 
           left: sidebarOpen
-            ? "308px"
+            ? "304px"
             : "18px",
 
           width: "46px",
@@ -112,7 +107,7 @@ function Sidebar({
 
           border: "none",
 
-          borderRadius: "16px",
+          borderRadius: "8px",
 
           background:
             "rgba(24,24,28,0.92)",
@@ -174,12 +169,12 @@ function Sidebar({
 
           zIndex: 5000,
 
-          width: "290px",
+          width: "286px",
 
           height: "100vh",
 
           background:
-            "rgba(238,233,226,0.92)",
+            "rgba(241,236,229,0.94)",
 
           backdropFilter:
             "blur(22px)",
@@ -195,7 +190,7 @@ function Sidebar({
 
           overflowY: "auto",
 
-          padding: "24px",
+          padding: "22px",
 
           paddingBottom: "90px",
 
@@ -256,9 +251,9 @@ function Sidebar({
             style={{
               margin: 0,
 
-              fontSize: "30px",
+              fontSize: "27px",
 
-              letterSpacing: "-1.2px",
+              letterSpacing: "0",
 
               lineHeight: 0.98,
 
@@ -324,7 +319,7 @@ function Sidebar({
                   "rgba(255,248,242,0.58)",
 
                 borderRadius:
-                  "20px",
+                  "8px",
 
                 padding: "14px",
 
@@ -362,7 +357,7 @@ function Sidebar({
 
               <div
                 style={{
-                  fontSize: "28px",
+                  fontSize: "24px",
 
                   fontWeight: 800,
 
@@ -427,9 +422,9 @@ function Sidebar({
             style={{
               width: "100%",
 
-              padding: "13px 14px",
+              padding: "12px 13px",
 
-              borderRadius: "12px",
+              borderRadius: "8px",
 
               border:
                 "1px solid rgba(0,0,0,0.06)",
@@ -618,7 +613,7 @@ function Sidebar({
                 padding: "12px",
 
                 borderRadius:
-                  "12px",
+                  "8px",
 
                 border:
                   "1px solid rgba(0,0,0,0.06)",
@@ -695,7 +690,7 @@ function Sidebar({
                 padding: "12px",
 
                 borderRadius:
-                  "12px",
+                  "8px",
 
                 border:
                   "1px solid rgba(0,0,0,0.06)",
@@ -762,7 +757,7 @@ function Sidebar({
                 padding: "12px",
 
                 borderRadius:
-                  "12px",
+                  "8px",
 
                 border:
                   "1px solid rgba(0,0,0,0.06)",
@@ -792,113 +787,6 @@ function Sidebar({
             </select>
 
           </div>
-
-        </div>
-
-        {/* ================================= */}
-        {/* LEGEND */}
-        {/* ================================= */}
-
-        <div
-          style={{
-            marginBottom: "30px",
-
-            paddingTop: "24px",
-
-            borderTop:
-              "1px solid rgba(0,0,0,0.05)",
-          }}
-        >
-
-          <div
-            style={{
-              fontSize: "13px",
-
-              fontWeight: 700,
-
-              letterSpacing: "1px",
-
-              textTransform:
-                "uppercase",
-
-              opacity: 0.5,
-
-              marginBottom: "14px",
-
-              color: "#746c64",
-            }}
-          >
-            {text.failureTaxonomy}
-          </div>
-
-          {uniqueCauses
-            .filter(
-              (cause) =>
-                cause !== "All"
-            )
-            .map((cause) => (
-
-              <div
-                key={cause}
-
-                style={{
-                  display: "flex",
-
-                  alignItems:
-                    "center",
-
-                  marginBottom:
-                    "10px",
-                }}
-              >
-
-                <div
-                  style={{
-                    width: "15px",
-
-                    height: "15px",
-
-                    borderRadius:
-                      "4px",
-
-                    transform:
-                      "rotate(45deg)",
-
-                    marginRight:
-                      "12px",
-
-                    background:
-                      causeColors[
-                        cause
-                      ] || "#3f6b78",
-
-                    boxShadow: `
-                      0 0 0 4px ${
-                        causeColors[
-                          cause
-                        ]
-                      }22
-                    `,
-                  }}
-                ></div>
-
-                <span
-                  style={{
-                    fontSize: "14px",
-
-                    color: "#514a44",
-                  }}
-                >
-                  {taxonomyLabel(
-                    "cause",
-                    cause,
-                    language
-                  )}
-                </span>
-
-              </div>
-
-            ))}
 
         </div>
 

@@ -91,7 +91,11 @@ export default function HomePage() {
         ],
         [
           "Professional Workspace",
-          "Advanced filtering, comparative analytics, export, reports and AI-ready briefings create an institutional working layer.",
+          "Advanced analytics, hazard overlays, saved workspaces, exports and explainable outputs create the operational layer.",
+        ],
+        [
+          "Enterprise Platform",
+          "Private data integration, governance, enterprise APIs and institutional dashboards create the strategic layer.",
         ],
       ],
       atlasLabel: "Atlas Layer",
@@ -113,7 +117,38 @@ export default function HomePage() {
         ["Atlas", "/atlas"],
         ["Methodology", "/methodology"],
         ["Analytics", "/analytics"],
-        ["Premium Workspace", "/analytics/pro"],
+        ["Plans", "/plans"],
+      ],
+      pathLabel: "Choose Your Path",
+      pathTitle:
+        "Start from the question you need ARCUS to answer.",
+      pathText:
+        "A first-time user should not have to understand the whole platform before taking the right next step. ARCUS separates public discovery, research analysis, operational screening and institutional integration.",
+      clientPaths: [
+        {
+          action: "Open public evidence",
+          label: "I want to explore the observatory",
+          path: "/atlas",
+          text: "Use the Atlas to inspect events, sources, timeline and taxonomy.",
+        },
+        {
+          action: "Read the analytics",
+          label: "I need a data overview",
+          path: "/analytics",
+          text: "Use Analytics to understand patterns, territories, causes and public indicators.",
+        },
+        {
+          action: "Compare plans",
+          label: "I manage assets or territories",
+          path: "/plans",
+          text: "Compare Open, Professional and Enterprise before entering the operational workspace.",
+        },
+        {
+          action: "Evaluate Enterprise",
+          label: "I represent an institution",
+          path: "/enterprise",
+          text: "Use Enterprise when private datasets, governance and custom dashboards are required.",
+        },
       ],
     },
     it: {
@@ -143,7 +178,11 @@ export default function HomePage() {
         ],
         [
           "Workspace professionale",
-          "Filtri avanzati, comparative analytics, export, report e briefing AI-ready costruiscono un layer operativo per gli enti.",
+          "Analytics avanzati, overlay hazard, workspace salvati, export e output spiegabili costruiscono il layer operativo.",
+        ],
+        [
+          "Piattaforma Enterprise",
+          "Dati privati, governance, API enterprise e dashboard istituzionali costruiscono il livello strategico.",
         ],
       ],
       atlasLabel: "Layer Atlas",
@@ -165,7 +204,38 @@ export default function HomePage() {
         ["Atlante", "/atlas"],
         ["Metodologia", "/methodology"],
         ["Analytics", "/analytics"],
-        ["Workspace premium", "/analytics/pro"],
+        ["Piani", "/plans"],
+      ],
+      pathLabel: "Scegli il percorso",
+      pathTitle:
+        "Parti dalla domanda a cui ARCUS deve rispondere.",
+      pathText:
+        "Chi entra per la prima volta non deve capire tutta la piattaforma prima di scegliere. ARCUS separa scoperta pubblica, analisi dati, screening operativo e integrazione istituzionale.",
+      clientPaths: [
+        {
+          action: "Apri evidenze pubbliche",
+          label: "Voglio esplorare l'osservatorio",
+          path: "/atlas",
+          text: "Usa l'Atlante per consultare eventi, fonti, timeline e tassonomia.",
+        },
+        {
+          action: "Leggi gli analytics",
+          label: "Mi serve una lettura dei dati",
+          path: "/analytics",
+          text: "Usa Analytics per capire pattern, territori, cause e indicatori pubblici.",
+        },
+        {
+          action: "Confronta i piani",
+          label: "Gestisco asset o territori",
+          path: "/plans",
+          text: "Confronta Open, Professional ed Enterprise prima di entrare nel workspace operativo.",
+        },
+        {
+          action: "Valuta Enterprise",
+          label: "Rappresento un ente",
+          path: "/enterprise",
+          text: "Usa Enterprise quando servono dati privati, governance e dashboard su misura.",
+        },
       ],
     },
   };
@@ -237,6 +307,35 @@ export default function HomePage() {
               </strong>
               <span>{label}</span>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section home-client-path">
+        <div className="home-container home-split">
+          <div>
+            <div className="home-section-label">
+              {text.pathLabel}
+            </div>
+
+            <h2>{text.pathTitle}</h2>
+          </div>
+
+          <p>{text.pathText}</p>
+        </div>
+
+        <div className="home-container home-path-grid">
+          {text.clientPaths.map((item) => (
+            <article
+              className="home-path-card"
+              key={item.path}
+            >
+              <span>{item.label}</span>
+              <p>{item.text}</p>
+              <Link to={item.path}>
+                {item.action}
+              </Link>
+            </article>
           ))}
         </div>
       </section>

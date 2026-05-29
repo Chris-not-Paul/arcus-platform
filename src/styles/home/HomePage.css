@@ -233,9 +233,77 @@
 
 .home-layer-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
   margin-top: 56px;
+}
+
+.home-client-path {
+  background:
+    linear-gradient(
+      to bottom,
+      var(--arcus-paper),
+      var(--arcus-paper-warm)
+    );
+}
+
+.home-path-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 48px;
+}
+
+.home-path-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(140,115,93,0.12);
+  border-radius: 8px;
+  background: rgba(255,248,242,0.70);
+  box-shadow: 0 16px 36px rgba(28,24,20,0.06);
+}
+
+.home-path-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background:
+    linear-gradient(
+      90deg,
+      var(--arcus-bronze),
+      rgba(110,133,141,0.58)
+    );
+}
+
+.home-path-card span {
+  color: var(--arcus-clay);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.home-path-card p {
+  margin: 18px 0 24px;
+  color: var(--arcus-ink-soft);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.home-path-card a {
+  margin-top: auto;
+  color: var(--arcus-steel);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .home-layer-card {
@@ -446,6 +514,7 @@
   .home-hero-metrics,
   .home-split,
   .home-layer-grid,
+  .home-path-grid,
   .home-atlas-grid {
     grid-template-columns: 1fr;
   }

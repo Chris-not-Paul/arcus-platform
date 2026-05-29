@@ -51,6 +51,12 @@ export default function EnterprisePage() {
             "Predictive maintenance",
           reports:
             "Executive reports",
+          deployment:
+            "Modello deployment",
+          deploymentTitle:
+            "Come ARCUS entra nei processi di un ente.",
+          deploymentText:
+            "Enterprise e Government funzionano come un livello controllato: dati interni, inventari, ispezioni e priorita vengono integrati senza confondere dataset pubblico, analisi professionale e informazioni riservate.",
           scenario:
             "Scenario planning",
           score:
@@ -75,6 +81,12 @@ export default function EnterprisePage() {
             "Predictive maintenance",
           reports:
             "Executive reports",
+          deployment:
+            "Deployment model",
+          deploymentTitle:
+            "How ARCUS enters institutional workflows.",
+          deploymentText:
+            "Enterprise and Government operate as a controlled layer: internal data, inventories, inspections and priorities are integrated without mixing public datasets, professional analytics and confidential information.",
           scenario:
             "Scenario planning",
           score:
@@ -101,6 +113,21 @@ export default function EnterprisePage() {
     copy.api,
     copy.consulting,
   ];
+
+  const deploymentSteps =
+    language === "it"
+      ? [
+          ["Controlled workspace", "Ambiente dedicato per ente, territorio o gestore.", "Tenant dedicato"],
+          ["Private data join", "Inventari, ispezioni e criticita interne collegati agli eventi ARCUS.", "ETL controllato"],
+          ["Governance & audit", "Model cards, release dati, ruoli e tracciabilita delle decisioni.", "Audit trail"],
+          ["Institutional outputs", "Dashboard, report periodici, API e briefing esecutivi.", "Report/API"],
+        ]
+      : [
+          ["Controlled workspace", "Dedicated environment by institution, territory or operator.", "Dedicated tenant"],
+          ["Private data join", "Inventories, inspections and internal criticalities connected to ARCUS events.", "Controlled ETL"],
+          ["Governance & audit", "Model cards, data releases, roles and decision traceability.", "Audit trail"],
+          ["Institutional outputs", "Dashboards, periodic reports, APIs and executive briefings.", "Reports/API"],
+        ];
 
   return (
     <main
@@ -143,12 +170,13 @@ export default function EnterprisePage() {
               {copy.score}
             </div>
             <h2>
-              Explainable scoring for asset and territory prioritization.
+              Explainable indicators for asset and territory prioritization.
             </h2>
             <p>
-              Risk score combines historical recurrence,
-              collapse severity, triggered-event share,
-              human impact and evidence strength.
+              The priority indicator combines historical
+              recurrence, collapse severity,
+              triggered-event share, human impact and
+              evidence strength.
             </p>
           </div>
 
@@ -161,7 +189,7 @@ export default function EnterprisePage() {
                   </strong>
                   <span>
                     {formatValue(profile.total)} events
-                    ·{" "}
+                    {" - "}
                     {percentage(
                       profile.triggered,
                       profile.total
@@ -213,6 +241,28 @@ export default function EnterprisePage() {
         </div>
       </section>
 
+      <section className="platform-section enterprise-deployment-section">
+        <div className="platform-container platform-split">
+          <div>
+            <div className="platform-label">
+              {copy.deployment}
+            </div>
+            <h2>{copy.deploymentTitle}</h2>
+            <p>{copy.deploymentText}</p>
+          </div>
+
+          <div className="platform-workflow-strip compact">
+            {deploymentSteps.map(([title, text, output]) => (
+              <article key={title}>
+                <span>{title}</span>
+                <p>{text}</p>
+                <em>{output}</em>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="platform-section">
         <div className="platform-container platform-split">
           <div>
@@ -247,3 +297,4 @@ export default function EnterprisePage() {
     </main>
   );
 }
+

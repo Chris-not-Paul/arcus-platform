@@ -30,6 +30,21 @@ function Navbar() {
     },
 
     {
+      label: t("plans"),
+      path: "/plans",
+    },
+
+    {
+      label: t("professional"),
+      path: "/professional",
+    },
+
+    {
+      label: t("enterprise"),
+      path: "/enterprise",
+    },
+
+    {
       label: t("publications"),
       path: "/publications",
     },
@@ -81,6 +96,18 @@ function Navbar() {
                   link.path === "/analytics" &&
                   location.pathname.startsWith(
                     "/analytics/"
+                  )
+                ) ||
+                (
+                  link.path === "/professional" &&
+                  location.pathname.startsWith(
+                    "/professional"
+                  )
+                ) ||
+                (
+                  link.path === "/enterprise" &&
+                  location.pathname.startsWith(
+                    "/enterprise"
                   )
                 )
                   ? "active"

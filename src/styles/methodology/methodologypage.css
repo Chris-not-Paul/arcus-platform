@@ -148,6 +148,10 @@
   color: rgba(226,218,209,0.72);
 }
 
+.methodology-section-description.light {
+  color: var(--arcus-ink-soft);
+}
+
 .methodology-body-text {
   font-size: 18px;
   line-height: 1.9;
@@ -240,7 +244,7 @@
 
   padding: 10px 16px;
 
-  border-radius: 999px;
+  border-radius: 8px;
 
   border:
     1px solid
@@ -308,7 +312,7 @@
 .methodology-stat {
   padding: 26px;
 
-  border-radius: 28px;
+  border-radius: 8px;
 
   background:
     rgba(255,248,242,0.04);
@@ -354,7 +358,7 @@
 
   padding: 28px;
 
-  border-radius: 28px;
+  border-radius: 8px;
 
   background:
     rgba(255,248,242,0.04);
@@ -497,7 +501,7 @@
 
   padding: 38px;
 
-  border-radius: 32px;
+  border-radius: 8px;
 
   background:
     linear-gradient(
@@ -545,7 +549,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 999px;
+  border-radius: 8px;
 
   background:
     rgba(163,126,92,0.10);
@@ -597,7 +601,7 @@
 .classification-card {
   padding: 34px;
 
-  border-radius: 28px;
+  border-radius: 8px;
 
   background:
     rgba(255,248,242,0.56);
@@ -626,7 +630,7 @@
 
   padding: 11px 16px;
 
-  border-radius: 999px;
+  border-radius: 8px;
 
   font-size: 13px;
   font-weight: 700;
@@ -696,7 +700,7 @@
 
   padding: 30px;
 
-  border-radius: 26px;
+  border-radius: 8px;
 
   background:
     linear-gradient(
@@ -751,7 +755,7 @@
 .extension-card {
   padding: 32px;
 
-  border-radius: 26px;
+  border-radius: 8px;
 
   background:
     rgba(255,248,242,0.04);
@@ -766,6 +770,108 @@
 
   color:
     rgba(243,239,232,0.82);
+}
+
+/* ================================= */
+/* PLATFORM OUTPUTS */
+/* ================================= */
+
+.methodology-output-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.methodology-output-grid article {
+  position: relative;
+  overflow: hidden;
+
+  padding: 24px;
+
+  border-radius: 8px;
+  border: 1px solid var(--arcus-border-light);
+
+  background: rgba(255,248,242,0.68);
+
+  box-shadow:
+    0 16px 36px rgba(28,24,20,0.06);
+}
+
+.methodology-output-grid article::before {
+  content: "";
+
+  position: absolute;
+  inset: 0 0 auto;
+
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--arcus-bronze),
+      rgba(110,133,141,0.58)
+    );
+}
+
+.methodology-output-grid span {
+  color: var(--arcus-clay);
+
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.methodology-output-grid p {
+  margin: 14px 0 0;
+
+  color: var(--arcus-ink-soft);
+
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.methodology-scoring-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.methodology-scoring-grid article {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--arcus-border-light);
+  background: rgba(255,248,242,0.68);
+  box-shadow: 0 16px 36px rgba(28,24,20,0.06);
+}
+
+.methodology-scoring-grid article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background:
+    linear-gradient(
+      90deg,
+      var(--arcus-bronze),
+      rgba(110,133,141,0.58)
+    );
+}
+
+.methodology-scoring-grid span {
+  color: var(--arcus-clay);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.methodology-scoring-grid p {
+  margin: 14px 0 0;
+  color: var(--arcus-ink-soft);
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 /* ================================= */
@@ -786,7 +892,7 @@
 
   padding: 34px;
 
-  border-radius: 28px;
+  border-radius: 8px;
 
   background:
     rgba(255,248,242,0.58);
@@ -913,6 +1019,8 @@
   .workflow-grid,
   .classification-grid,
   .extensions-grid,
+  .methodology-output-grid,
+  .methodology-scoring-grid,
   .source-grid,
   .methodology-hero-stats {
     grid-template-columns: 1fr;

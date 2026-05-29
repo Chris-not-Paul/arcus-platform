@@ -35,7 +35,7 @@ function EventMarker({
       )}
     >
 
-      <Popup maxWidth={340}>
+      <Popup maxWidth={420}>
 
         <EventPopup
           atlasMode={atlasMode}

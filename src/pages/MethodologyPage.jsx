@@ -93,6 +93,55 @@ function MethodologyPage() {
         "Historical bridge collapse records are inherently heterogeneous and often affected by incomplete documentation, inconsistent reporting quality and varying levels of technical detail. Earlier decades may present underreporting biases, especially for localized events occurring outside major urban areas. In some cases, spatial information is limited to municipality-level accuracy due to the absence of reliable georeferenced documentation.",
       references: "REFERENCES",
       researchFramework: "Research Framework",
+      outputLabel: "PLATFORM OUTPUTS",
+      outputTitle:
+        "From validated records to operational products",
+      outputText:
+        "The same methodological core powers different levels of ARCUS: public transparency, professional analytics and controlled institutional workflows.",
+      outputs: [
+        [
+          "Open Atlas",
+          "Validated events, timeline, taxonomy, geolocation and documented sources.",
+        ],
+        [
+          "Professional",
+          "Evidence indicators, vulnerability context, asset screening and operational reports.",
+        ],
+        [
+          "Enterprise",
+          "Private joins, institutional dashboards, governance and recurring intelligence outputs.",
+        ],
+      ],
+      sourceTiers: [
+        ["TIER 01", "Official Authorities"],
+        ["TIER 02", "Technical Reports"],
+        ["TIER 03", "Scientific Publications"],
+        ["TIER 04", "Verified News Archives"],
+        ["TIER 05", "Local Corroborated Sources"],
+      ],
+      scoringLabel: "SCORING TRANSPARENCY",
+      scoringTitle:
+        "How Professional indicators should be read",
+      scoringText:
+        "ARCUS indicators support technical decision-making, but they are not structural diagnoses or safety certifications. They make evidence, vulnerability context and territorial exposure easier to compare before an inspection or institutional workflow.",
+      scoringModels: [
+        [
+          "Reliability",
+          "Ranks the documentary strength of an event using source volume, role, confidence, spatial precision and traceability.",
+        ],
+        [
+          "Vulnerability",
+          "Classifies historical fragility using severity, trigger, specific cause, structure type, material, age and human impact.",
+        ],
+        [
+          "Territorial hazard",
+          "Combines declared public layers and official-source scores for hydraulic, landslide and seismic exposure.",
+        ],
+        [
+          "Asset screening",
+          "Crosses client inventories with ARCUS precedents, local events, technical similarity and territorial context.",
+        ],
+      ],
     },
     it: {
       label: "QUADRO SCIENTIFICO ARCUS",
@@ -179,6 +228,55 @@ function MethodologyPage() {
         "I registri storici sui crolli dei ponti sono per natura eterogenei e spesso condizionati da documentazione incompleta, qualita di reporting non uniforme e livelli variabili di dettaglio tecnico. I periodi meno recenti possono presentare bias di sottorappresentazione, soprattutto per eventi locali fuori dai principali centri urbani. In alcuni casi l'informazione spaziale resta limitata alla scala comunale per assenza di documentazione georeferenziata affidabile.",
       references: "RIFERIMENTI",
       researchFramework: "Framework di ricerca",
+      outputLabel: "OUTPUT PIATTAFORMA",
+      outputTitle:
+        "Dal record validato agli strumenti operativi",
+      outputText:
+        "Lo stesso nucleo metodologico alimenta livelli diversi di ARCUS: trasparenza pubblica, analytics professionali e workflow istituzionali controllati.",
+      outputs: [
+        [
+          "Open Atlas",
+          "Eventi validati, timeline, tassonomia, geolocalizzazione e fonti documentate.",
+        ],
+        [
+          "Professional",
+          "Indicatori di evidenza, contesto di vulnerabilita, asset screening e report operativi.",
+        ],
+        [
+          "Enterprise",
+          "Join con dati privati, dashboard istituzionali, governance e output periodici.",
+        ],
+      ],
+      sourceTiers: [
+        ["TIER 01", "Autorita ufficiali"],
+        ["TIER 02", "Report tecnici"],
+        ["TIER 03", "Pubblicazioni scientifiche"],
+        ["TIER 04", "Archivi stampa verificati"],
+        ["TIER 05", "Fonti locali corroborate"],
+      ],
+      scoringLabel: "TRASPARENZA SCORE",
+      scoringTitle:
+        "Come leggere gli indicatori Professional",
+      scoringText:
+        "Gli indicatori ARCUS supportano la decisione tecnica, ma non sono diagnosi strutturali o certificazioni di sicurezza. Servono a rendere confrontabili evidenza, contesto di vulnerabilita ed esposizione territoriale prima di un'ispezione o di un workflow istituzionale.",
+      scoringModels: [
+        [
+          "Affidabilita",
+          "Misura la forza documentale dell'evento usando volume fonti, ruolo, confidenza, precisione spaziale e tracciabilita.",
+        ],
+        [
+          "Vulnerabilita",
+          "Classifica la fragilita storica usando gravita, trigger, causa specifica, tipologia, materiale, eta e impatto umano.",
+        ],
+        [
+          "Hazard territoriale",
+          "Integra layer pubblici dichiarati e score da fonti ufficiali per esposizione idraulica, frane e sismicita.",
+        ],
+        [
+          "Asset screening",
+          "Incrocia inventari cliente con precedenti ARCUS, eventi locali, similarita tecnica e contesto territoriale.",
+        ],
+      ],
     },
   };
 
@@ -489,38 +587,17 @@ function MethodologyPage() {
 
           <div className="source-grid">
 
-            {[
-              {
-                tier: "TIER 01",
-                label: "Official Authorities",
-              },
-              {
-                tier: "TIER 02",
-                label: "Technical Reports",
-              },
-              {
-                tier: "TIER 03",
-                label: "Scientific Publications",
-              },
-              {
-                tier: "TIER 04",
-                label: "Verified News Archives",
-              },
-              {
-                tier: "TIER 05",
-                label: "Local Corroborated Sources",
-              },
-            ].map((item) => (
+            {content.sourceTiers.map(([tier, label]) => (
               <div
                 className="source-card"
-                key={item.tier}
+                key={tier}
               >
 
                 <div className="source-tier">
-                  {item.tier}
+                  {tier}
                 </div>
 
-                {item.label}
+                {label}
 
               </div>
             ))}
@@ -564,6 +641,72 @@ function MethodologyPage() {
               </div>
             ))}
 
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* SCORING TRANSPARENCY */}
+
+      <section className="methodology-section methodology-light">
+
+        <div className="methodology-container methodology-split">
+
+          <div className="methodology-split-left">
+            <div className="methodology-section-label">
+              {content.scoringLabel}
+            </div>
+
+            <h2 className="methodology-section-title">
+              {content.scoringTitle}
+            </h2>
+
+            <p className="methodology-section-description light">
+              {content.scoringText}
+            </p>
+          </div>
+
+          <div className="methodology-scoring-grid">
+            {content.scoringModels.map(([title, text]) => (
+              <article key={title}>
+                <span>{title}</span>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* PLATFORM OUTPUTS */}
+
+      <section className="methodology-section methodology-light">
+
+        <div className="methodology-container methodology-split">
+
+          <div className="methodology-split-left">
+            <div className="methodology-section-label">
+              {content.outputLabel}
+            </div>
+
+            <h2 className="methodology-section-title">
+              {content.outputTitle}
+            </h2>
+
+            <p className="methodology-section-description light">
+              {content.outputText}
+            </p>
+          </div>
+
+          <div className="methodology-output-grid">
+            {content.outputs.map(([title, text]) => (
+              <article key={title}>
+                <span>{title}</span>
+                <p>{text}</p>
+              </article>
+            ))}
           </div>
 
         </div>

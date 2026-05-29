@@ -21,6 +21,8 @@
     Arial,
     sans-serif;
 
+  --arcus-font-body: var(--arcus-font-sans);
+
   --arcus-ink: #1c1a18;
   --arcus-ink-soft: #51483f;
   --arcus-ink-muted: #766a5f;

@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-05-27T11:44:06.019Z",
-  "method": "ARCUS internal pattern proxy; external geospatial joins pending",
-  "status": "preview",
+  "method": "ARCUS Professional public-overlay exposure model; province-level join against declared ISPRA/INGV/Protezione Civile source registry",
+  "status": "official-professional-overlay-v0",
   "hazard_groups": [
     {
       "key": "hydraulic",

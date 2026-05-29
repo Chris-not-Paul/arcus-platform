@@ -11,18 +11,26 @@ const translations = {
     about: "About",
     analytics: "Analytics",
     atlas: "Atlas",
+    data: "Data",
+    plans: "Plans",
     infrastructureFailureObservatory:
       "Infrastructure Failure Observatory",
+    enterprise: "Enterprise",
     methodology: "Methodology",
+    professional: "Professional",
     publications: "Publications",
   },
   it: {
     about: "Chi siamo",
     analytics: "Analytics",
     atlas: "Atlante",
+    data: "Dati",
+    plans: "Piani",
     infrastructureFailureObservatory:
       "Osservatorio sui Cedimenti Infrastrutturali",
+    enterprise: "Enterprise",
     methodology: "Metodologia",
+    professional: "Professional",
     publications: "Pubblicazioni",
   },
 };

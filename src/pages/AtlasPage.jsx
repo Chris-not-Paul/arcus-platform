@@ -14,7 +14,9 @@ import "../styles/atlas/atlas-page.css";
 import useLanguage from "../context/useLanguage";
 import logoMark from "../assets/logo/logo-mark.svg";
 
+import { causeColors } from "../utils/colors";
 import extractYear from "../utils/extractYear";
+import taxonomyLabel from "../utils/taxonomyLabels";
 
 /* LAYOUT */
 
@@ -24,6 +26,61 @@ import PageMeta from "../components/layout/PageMeta";
 /* MAP */
 
 import CollapseMap from "../components/map/CollapseMap";
+
+const publicHazardKeys = [
+  "hydraulic",
+  "landslide",
+  "seismic",
+];
+
+const hazardCauseLabels = {
+  hydraulic: "Hydraulic",
+  landslide: "Landslide",
+  seismic: "Earthquake",
+};
+
+function enrichPublicHazardProfile(profile) {
+  const publicHazards =
+    (profile.hazards || [])
+      .filter((hazard) =>
+        publicHazardKeys.includes(hazard.key)
+      )
+      .map((hazard) => ({
+        ...hazard,
+        score: Number(hazard.score || 0),
+      }));
+
+  const dominant =
+    [...publicHazards].sort(
+      (a, b) => b.score - a.score
+    )[0] || null;
+
+  const integratedScore =
+    publicHazards.length
+      ? Math.round(
+          publicHazards.reduce(
+            (total, hazard) =>
+              total + hazard.score,
+            0
+          ) / publicHazards.length
+        )
+      : null;
+
+  return {
+    ...profile,
+    public_dominant_hazard:
+      dominant?.key || null,
+    public_dominant_hazard_label:
+      dominant
+        ? hazardCauseLabels[dominant.key] ||
+          dominant.label
+        : null,
+    public_dominant_hazard_score:
+      dominant?.score ?? null,
+    public_hazard_score: integratedScore,
+    public_hazards: publicHazards,
+  };
+}
 
 function normalizeEvent(event) {
 
@@ -84,6 +141,22 @@ function AtlasPage() {
       language === "it"
         ? "Dataset operativo"
         : "Operational dataset",
+    markerColors:
+      language === "it"
+        ? "Colori marker"
+        : "Marker colors",
+    causeColorMode:
+      language === "it"
+        ? "Causa del cedimento"
+        : "Failure cause",
+    vulnerabilityColorMode:
+      language === "it"
+        ? "Classe di vulnerabilita"
+        : "Vulnerability class",
+    clusterHint:
+      language === "it"
+        ? "Cerchio numerato = eventi aggregati nello stesso livello di zoom."
+        : "Numbered circle = events grouped at the current zoom level.",
     totalCollapse:
       language === "it"
         ? "Collassi totali"
@@ -142,8 +215,8 @@ function AtlasPage() {
         : "Public dataset, timeline, taxonomies and documented sources.",
     professionalDescription:
       language === "it"
-        ? "Layer operativi con affidabilita fonti, vulnerabilita, hazard preview e priorita territoriali."
-        : "Operational layers with evidence reliability, vulnerability, hazard preview and territorial priorities.",
+        ? "Layer operativi con affidabilita fonti, vulnerabilita, overlay hazard pubblici e priorita territoriali."
+        : "Operational layers with evidence reliability, vulnerability, public hazard overlays and territorial priorities.",
     enterpriseDescription:
       language === "it"
         ? "Vista istituzionale per dashboard dedicate, monitoraggio e workspace multi-ente."
@@ -188,10 +261,46 @@ function AtlasPage() {
       language === "it"
         ? "Hazard"
         : "Hazard",
+    externalOverlays:
+      language === "it"
+        ? "Overlay pubblici"
+        : "Public overlays",
+    overlayPreview:
+      language === "it"
+        ? "Fonti ISPRA/INGV"
+        : "ISPRA/INGV sources",
+    hydraulicOverlay:
+      language === "it"
+        ? "Idraulica WMS"
+        : "Hydraulic WMS",
+    landslideOverlay:
+      language === "it"
+        ? "Frane WMS"
+        : "Landslide WMS",
+    seismicOverlay:
+      language === "it"
+        ? "Sismica MPS04"
+        : "MPS04 seismic",
     highCritical:
       language === "it"
         ? "High/Critical"
         : "High/Critical",
+    critical:
+      language === "it"
+        ? "Critica"
+        : "Critical",
+    high:
+      language === "it"
+        ? "Alta"
+        : "High",
+    medium:
+      language === "it"
+        ? "Media"
+        : "Medium",
+    low:
+      language === "it"
+        ? "Bassa"
+        : "Low",
     evidenceGrade:
       language === "it"
         ? "Evidenza A/B"
@@ -204,10 +313,6 @@ function AtlasPage() {
       language === "it"
         ? "Hazard dominante"
         : "Dominant hazard",
-    score:
-      language === "it"
-        ? "score"
-        : "score",
     year:
       language === "it"
         ? "Timeline"
@@ -264,6 +369,14 @@ function AtlasPage() {
     showHazardLayer,
     setShowHazardLayer,
   ] = useState(true);
+  const [
+    activeHazardOverlays,
+    setActiveHazardOverlays,
+  ] = useState({
+    hydraulic: true,
+    landslide: false,
+    seismic: false,
+  });
   const [
     eventReliability,
     setEventReliability,
@@ -621,10 +734,15 @@ function AtlasPage() {
           ?.filter((province) =>
             visibleProvinces.has(province.province)
           )
+          ?.map(enrichPublicHazardProfile)
           ?.sort(
             (a, b) =>
-              (b.risk_score || 0) -
-              (a.risk_score || 0)
+              (
+                b.public_hazard_score || 0
+              ) -
+              (
+                a.public_hazard_score || 0
+              )
           ) || [];
 
       return {
@@ -648,7 +766,8 @@ function AtlasPage() {
       (
         hazardExposurePreview?.provinces || []
       ).forEach((province) => {
-        index[province.province] = province;
+        index[province.province] =
+          enrichPublicHazardProfile(province);
       });
 
       return index;
@@ -741,6 +860,51 @@ function AtlasPage() {
     ),
 
   ];
+
+  const markerLegendItems =
+    isEnhancedMode
+      ? [
+          ["Critical", atlasText.critical, "#893526"],
+          ["High", atlasText.high, "#B9781F"],
+          ["Medium", atlasText.medium, "#6E858D"],
+          ["Low", atlasText.low, "#4F6B82"],
+        ]
+      : uniqueCauses
+          .filter((cause) => cause !== "All")
+          .map((cause) => [
+            cause,
+            taxonomyLabel("cause", cause, language),
+            causeColors[cause] || "#4f6b82",
+          ]);
+
+  const hazardOverlayControls = [
+    ["hydraulic", atlasText.hydraulicOverlay],
+    ["landslide", atlasText.landslideOverlay],
+    ["seismic", atlasText.seismicOverlay],
+  ];
+
+  const publicWmsOverlays = [
+    activeHazardOverlays.hydraulic
+      ? {
+          attribution:
+            "ISPRA SDI - Aree pericolosita idraulica P3",
+          id: "ispra-flood-p3",
+          layers: "aree_peric_idraulica_p3",
+          opacity: 0.38,
+          url: "https://sdi.isprambiente.it/geoserver/nz1/wms",
+        }
+      : null,
+    activeHazardOverlays.landslide
+      ? {
+          attribution:
+            "ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia",
+          id: "ispra-idrogeo-frane",
+          layers: "frane",
+          opacity: 0.42,
+          url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/frane/ows",
+        }
+      : null,
+  ].filter(Boolean);
 
   /* ================================= */
   /* PAGE */
@@ -859,41 +1023,43 @@ function AtlasPage() {
         </button>
       </aside>
 
-      <aside className="atlas-layer-switcher">
-        <span>{atlasText.pointLayer}</span>
+      <aside className="atlas-map-controls">
+        <div className="atlas-map-controls-row">
+          <span>{atlasText.basemap}</span>
 
-        <button
-          className={
-            showHeatmap ? "active" : ""
-          }
-          type="button"
-          onClick={() =>
-            setShowHeatmap((value) => !value)
-          }
-        >
-          {atlasText.densityLayer}
-        </button>
-      </aside>
+          {[
+            ["voyager", atlasText.voyager],
+            ["light", atlasText.light],
+            ["dark", atlasText.dark],
+          ].map(([value, label]) => (
+            <button
+              className={
+                mapStyle === value ? "active" : ""
+              }
+              key={value}
+              type="button"
+              onClick={() => setMapStyleOverride(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-      <aside className="atlas-basemap-switcher">
-        <span>{atlasText.basemap}</span>
+        <div className="atlas-map-controls-row compact">
+          <span>{atlasText.pointLayer}</span>
 
-        {[
-          ["voyager", atlasText.voyager],
-          ["light", atlasText.light],
-          ["dark", atlasText.dark],
-        ].map(([value, label]) => (
           <button
             className={
-              mapStyle === value ? "active" : ""
+              showHeatmap ? "active" : ""
             }
-            key={value}
             type="button"
-            onClick={() => setMapStyleOverride(value)}
+            onClick={() =>
+              setShowHeatmap((value) => !value)
+            }
           >
-            {label}
+            {atlasText.densityLayer}
           </button>
-        ))}
+        </div>
       </aside>
 
       {isProfessionalMode && (
@@ -941,6 +1107,45 @@ function AtlasPage() {
             </button>
           </div>
 
+          {showHazardLayer && (
+            <div className="atlas-external-overlays">
+              <div>
+                <span>
+                  {atlasText.externalOverlays}
+                </span>
+                <strong>
+                  {atlasText.overlayPreview}
+                </strong>
+              </div>
+
+              <div className="atlas-overlay-buttons">
+                {hazardOverlayControls.map(
+                  ([key, label]) => (
+                    <button
+                      className={
+                        activeHazardOverlays[key]
+                          ? "active"
+                          : ""
+                      }
+                      key={key}
+                      type="button"
+                      onClick={() =>
+                        setActiveHazardOverlays(
+                          (current) => ({
+                            ...current,
+                            [key]: !current[key],
+                          })
+                        )
+                      }
+                    >
+                      {label}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="atlas-professional-metrics">
             {showVulnerabilityLayer && (
               <div>
@@ -969,7 +1174,14 @@ function AtlasPage() {
                 </span>
                 <strong>
                   {professionalStats.topHazard
-                    ?.dominant_hazard || "-"}
+                    ?.public_dominant_hazard_label
+                    ? taxonomyLabel(
+                        "cause",
+                        professionalStats.topHazard
+                          .public_dominant_hazard_label,
+                        language
+                      )
+                    : "-"}
                 </strong>
               </div>
             )}
@@ -1095,14 +1307,44 @@ function AtlasPage() {
       )}
 
       <aside className="atlas-map-legend">
-        <span>{atlasText.liveDataset}</span>
-        <div>
-          <strong>{totalTC}</strong>
-          {atlasText.totalCollapse}
+        <div className="atlas-map-summary">
+          <span>{atlasText.liveDataset}</span>
+          <div>
+            <strong>{totalTC}</strong>
+            {atlasText.totalCollapse}
+          </div>
+          <div>
+            <strong>{totalPC}</strong>
+            {atlasText.partialCollapse}
+          </div>
         </div>
-        <div>
-          <strong>{totalPC}</strong>
-          {atlasText.partialCollapse}
+
+        <div className="atlas-color-legend">
+          <span>
+            {atlasText.markerColors} /{" "}
+            {isEnhancedMode
+              ? atlasText.vulnerabilityColorMode
+              : atlasText.causeColorMode}
+          </span>
+
+          <ul>
+            {markerLegendItems.map(([key, label, color]) => (
+              <li key={key}>
+                <i
+                  style={{
+                    background: color,
+                    boxShadow: `0 0 0 3px ${color}24`,
+                  }}
+                />
+                {label}
+              </li>
+            ))}
+          </ul>
+
+          <p>
+            <i />
+            {atlasText.clusterHint}
+          </p>
         </div>
       </aside>
 
@@ -1188,6 +1430,12 @@ function AtlasPage() {
 
         <CollapseMap
 
+          activeHazardOverlays={
+            showHazardLayer || isEnterpriseMode
+              ? {}
+              : {}
+          }
+
           atlasMode={atlasMode}
 
           eventHazards={
@@ -1216,6 +1464,12 @@ function AtlasPage() {
 
           professionalMode={
             isEnhancedMode
+          }
+
+          publicWmsOverlays={
+            showHazardLayer || isEnterpriseMode
+              ? publicWmsOverlays
+              : []
           }
 
           sourcesByEvent={

@@ -34,7 +34,7 @@
   ],
   "notes": [
     "Generated from ARCUS raw CSV sources through scripts/build-data.js.",
-    "Professional outputs include reliability, vulnerability, territory profiles and schema documentation.",
-    "External hazard layers are not included in this release."
+    "Professional outputs include reliability, vulnerability, territory profiles, public hazard overlay registry and schema documentation.",
+    "Professional v0 includes live public WMS overlays where exposed by the source provider and province-level official-source scores where WMS is not publicly exposed; private client layers are Enterprise functionality."
   ]
 }

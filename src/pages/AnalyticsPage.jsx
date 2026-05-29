@@ -15,21 +15,33 @@ import extractYear from "../utils/extractYear";
 
 import "../styles/analytics/analytics-page.css";
 
-const premiumModules = [
-  "Advanced comparative analytics",
-  "Data export",
-  "Temporal filtering",
-  "Reports",
-  "API access",
-  "AI insights",
-  "Monitoring",
-  "Institutional dashboards",
-];
+const premiumModules = {
+  en: [
+    "Advanced comparative analytics",
+    "Data export",
+    "Temporal filtering",
+    "Reports",
+    "API access",
+    "AI insights",
+    "Monitoring",
+    "Institutional dashboards",
+  ],
+  it: [
+    "Analytics comparativi avanzati",
+    "Export dati",
+    "Filtri temporali avanzati",
+    "Report",
+    "Accesso API",
+    "AI insights",
+    "Monitoraggio",
+    "Dashboard istituzionali",
+  ],
+};
 
 const accessTiers = {
   en: [
     {
-      cta: "Explore public atlas",
+      cta: "Explore Open Atlas",
       features: [
         "Public atlas",
         "Timeline and filters",
@@ -38,7 +50,9 @@ const accessTiers = {
         "Methodology",
         "Basic statistics",
       ],
-      label: "Free / Public",
+      label: "ARCUS OPEN",
+      nextAction:
+        "Open the atlas, filter by territory or period, and inspect the public evidence card.",
       path: "/atlas",
       price: "Open access",
       target:
@@ -46,38 +60,23 @@ const accessTiers = {
       title: "Public Observatory",
     },
     {
-      cta: "Open Pro workspace",
-      features: [
-        "Advanced analytics",
-        "CSV exports",
-        "API access",
-        "AI-generated summaries",
-        "Regional dashboards",
-        "Comparative analytics",
-      ],
-      label: "ARCUS PRO",
-      path: "/analytics/pro",
-      price: "EUR 19-49 / month",
-      target:
-        "Researchers, journalists, students, consultants and small engineering firms.",
-      title: "Research & Professional Access",
-    },
-    {
       cta: "Professional roadmap",
       features: [
+        "Advanced infrastructure analytics",
+        "Temporal and territorial comparisons",
+        "CSV / PDF / GeoJSON exports",
         "Vulnerability mapping",
         "Flood and landslide overlays",
-        "Infrastructure aging analytics",
-        "Hotspot detection",
-        "Advanced GIS layers",
-        "Collaborative workspaces",
+        "Professional workspaces",
       ],
       label: "ARCUS PROFESSIONAL",
+      nextAction:
+        "Define a technical scenario, compare assets with historical evidence and export operational outputs.",
       path: "/professional",
-      price: "EUR 199-599 / month",
+      price: "Professional licence",
       target:
-        "Engineering companies, concessionaires, utilities and infrastructure managers.",
-      title: "Operational Risk Intelligence",
+        "Engineering companies, infrastructure managers, consultants, concessionaires, analysts, insurers and research groups.",
+      title: "Infrastructure Intelligence Workspace",
     },
     {
       cta: "Institutional vision",
@@ -90,6 +89,8 @@ const accessTiers = {
         "Consulting services",
       ],
       label: "ENTERPRISE / GOVERNMENT",
+      nextAction:
+        "Connect private datasets and configure a governed institutional dashboard.",
       path: "/enterprise",
       price: "EUR 5k-50k / year",
       target:
@@ -99,7 +100,7 @@ const accessTiers = {
   ],
   it: [
     {
-      cta: "Esplora l'Atlante pubblico",
+      cta: "Esplora Open Atlas",
       features: [
         "Atlante pubblico",
         "Timeline e filtri",
@@ -108,7 +109,9 @@ const accessTiers = {
         "Metodologia",
         "Statistiche base",
       ],
-      label: "Free / Pubblico",
+      label: "ARCUS OPEN",
+      nextAction:
+        "Apri l'Atlante, filtra territorio o periodo e consulta la scheda pubblica con le fonti.",
       path: "/atlas",
       price: "Accesso aperto",
       target:
@@ -116,38 +119,23 @@ const accessTiers = {
       title: "Osservatorio Pubblico",
     },
     {
-      cta: "Apri workspace Pro",
-      features: [
-        "Analytics avanzati",
-        "Export CSV",
-        "Accesso API",
-        "Sintesi generate da AI",
-        "Dashboard regionali",
-        "Comparative analytics",
-      ],
-      label: "ARCUS PRO",
-      path: "/analytics/pro",
-      price: "EUR 19-49 / mese",
-      target:
-        "Ricercatori, giornalisti, studenti, consulenti e piccoli studi di ingegneria.",
-      title: "Accesso Ricerca e Professionisti",
-    },
-    {
       cta: "Roadmap professional",
       features: [
+        "Advanced infrastructure analytics",
+        "Comparazioni temporali e territoriali",
+        "Export CSV / PDF / GeoJSON",
         "Mappatura vulnerabilita",
         "Overlay alluvioni e frane",
-        "Analytics eta infrastrutturale",
-        "Hotspot detection",
-        "Layer GIS avanzati",
-        "Workspace collaborativi",
+        "Workspace professionali",
       ],
       label: "ARCUS PROFESSIONAL",
+      nextAction:
+        "Definisci uno scenario tecnico, confronta asset con evidenza storica ed esporta output operativi.",
       path: "/professional",
-      price: "EUR 199-599 / mese",
+      price: "Licenza professionale",
       target:
-        "Societa di ingegneria, concessionari, utility e gestori infrastrutturali.",
-      title: "Risk Intelligence Operativa",
+        "Societa di ingegneria, gestori infrastrutturali, consulenti, concessionari, analisti, assicurazioni e gruppi di ricerca.",
+      title: "Infrastructure Intelligence Workspace",
     },
     {
       cta: "Visione istituzionale",
@@ -160,6 +148,8 @@ const accessTiers = {
         "Servizi di consulenza",
       ],
       label: "Enterprise / Government",
+      nextAction:
+        "Collega dataset privati e configura una dashboard istituzionale governata.",
       path: "/enterprise",
       price: "EUR 5k-50k / anno",
       target:
@@ -313,15 +303,30 @@ function AnalyticsPage() {
           accessArchitecture:
             "ARCHITETTURA DI ACCESSO",
           accessTitle:
-            "Quattro livelli per scalare da osservatorio pubblico a piattaforma istituzionale.",
+            "Tre livelli per scalare da atlante pubblico a piattaforma istituzionale.",
           accessText:
-            "ARCUS mantiene un layer pubblico forte per autorevolezza e diffusione, mentre i livelli Pro, Professional ed Enterprise costruiscono sostenibilita economica e strumenti operativi per stakeholder avanzati.",
+            "ARCUS mantiene un layer Open forte per autorevolezza e diffusione; Professional trasforma il metodo in workflow operativi; Enterprise abilita ambienti istituzionali controllati.",
           premiumTitle:
             "Analytics pubblici, intelligence premium",
           premiumText:
             "Il layer pubblico costruisce reputazione scientifica e diffusione. Il layer privato estende lo stesso archivio verificato verso workflow professionali e sostenibilita economica.",
+          matrixTitle:
+            "Cosa resta pubblico e cosa diventa prodotto",
+          matrixText:
+            "La distinzione e intenzionale: il pubblico dimostra il metodo, il premium trasforma il metodo in workflow, export e decision support.",
+          capability: "Capacita",
+          publicLayer: "Pubblico",
+          premiumLayer: "Premium",
           openWorkspace:
-            "Apri Advanced Analytics Workspace",
+            "Apri Professional Workspace",
+          firstAction: "Primo passo",
+          validatedShare: "degli eventi validati",
+          eventDrivenShare: "eventi con innesco",
+          preciseShare: "con precisione geospaziale",
+          fatalEvents: "eventi con vittime",
+          humanImpact: "Impatto umano registrato",
+          severityNote:
+            "I collassi totali rappresentano la quota principale dell'archivio ARCUS attuale.",
           events: "eventi",
           sources: "fonti",
         }
@@ -377,15 +382,30 @@ function AnalyticsPage() {
           accessArchitecture:
             "ACCESS ARCHITECTURE",
           accessTitle:
-            "Four levels to scale from public observatory to institutional platform.",
+            "Three levels to scale from public atlas to institutional platform.",
           accessText:
-            "ARCUS preserves a strong public layer for authority and diffusion, while Pro, Professional and Enterprise tiers create economic sustainability and operational tools for advanced stakeholders.",
+            "ARCUS preserves a strong Open layer for authority and diffusion; Professional turns the method into operational workflows; Enterprise enables controlled institutional environments.",
           premiumTitle:
             "Public Analytics, Premium Intelligence",
           premiumText:
             "The public layer builds scientific reputation and diffusion. The private layer can extend the same verified archive into professional workflows and economic sustainability.",
+          matrixTitle:
+            "What remains public and what becomes product",
+          matrixText:
+            "The distinction is intentional: the public layer proves the method, the premium layer turns it into workflows, exports and decision support.",
+          capability: "Capability",
+          publicLayer: "Public",
+          premiumLayer: "Premium",
           openWorkspace:
-            "Open Advanced Analytics Workspace",
+            "Open Professional Workspace",
+          firstAction: "First action",
+          validatedShare: "of validated events",
+          eventDrivenShare: "event-driven failures",
+          preciseShare: "geospatial precision",
+          fatalEvents: "events with fatalities",
+          humanImpact: "Recorded human impact",
+          severityNote:
+            "Total collapse records represent the largest share of the current ARCUS archive.",
           events: "events",
           sources: "sources",
         };
@@ -545,6 +565,64 @@ function AnalyticsPage() {
 
   const hasData = analytics.totalEvents > 0;
   const tiers = accessTiers[language] || accessTiers.en;
+  const modules =
+    premiumModules[language] || premiumModules.en;
+  const accessMatrix =
+    language === "it"
+      ? [
+          [
+            "Atlante",
+            "eventi, fonti, timeline, filtri base",
+            "score, overlay hazard, scenari e workspace Professional",
+          ],
+          [
+            "Analytics",
+            "statistiche aggregate e letture scientifiche",
+            "benchmark, confronti, scenari e workspace avanzati",
+          ],
+          [
+            "Export",
+            "consultazione web",
+            "CSV, Excel, report HTML e snapshot progetto",
+          ],
+          [
+            "Dati/API",
+            "dataset processati e metodologia",
+            "manifest, dizionario dati, release e endpoint professionali",
+          ],
+          [
+            "Decision support",
+            "contesto generale",
+            "asset screening, watchlist, priorita e raccomandazioni",
+          ],
+        ]
+      : [
+          [
+            "Atlas",
+            "events, sources, timeline, base filters",
+            "scores, hazard overlays, scenarios and Professional workspaces",
+          ],
+          [
+            "Analytics",
+            "aggregate statistics and scientific readings",
+            "benchmarks, comparisons, scenarios and advanced workspaces",
+          ],
+          [
+            "Exports",
+            "web consultation",
+            "CSV, Excel, HTML reports and project snapshots",
+          ],
+          [
+            "Data/API",
+            "processed datasets and methodology",
+            "manifest, data dictionary, releases and professional endpoints",
+          ],
+          [
+            "Decision support",
+            "general context",
+            "asset screening, watchlists, priorities and recommendations",
+          ],
+        ];
 
   return (
     <main
@@ -636,7 +714,7 @@ function AnalyticsPage() {
                 text: `${percentage(
                   analytics.totalCollapse,
                   analytics.totalEvents
-                )}% of validated events`,
+                )}% ${copy.validatedShare}`,
               },
               {
                 value: analytics.partialCollapse,
@@ -644,7 +722,7 @@ function AnalyticsPage() {
                 text: `${percentage(
                   analytics.partialCollapse,
                   analytics.totalEvents
-                )}% of validated events`,
+                )}% ${copy.validatedShare}`,
               },
               {
                 value: analytics.triggeredEvents,
@@ -652,7 +730,7 @@ function AnalyticsPage() {
                 text: `${percentage(
                   analytics.triggeredEvents,
                   analytics.totalEvents
-                )}% event-driven failures`,
+                )}% ${copy.eventDrivenShare}`,
               },
               {
                 value: analytics.exactLocations,
@@ -660,17 +738,17 @@ function AnalyticsPage() {
                 text: `${percentage(
                   analytics.exactLocations,
                   analytics.totalEvents
-                )}% geospatial precision`,
+                )}% ${copy.preciseShare}`,
               },
               {
                 value: analytics.victims,
                 label: copy.fatalities,
-                text: `${analytics.fatalEvents} events with fatalities`,
+                text: `${analytics.fatalEvents} ${copy.fatalEvents}`,
               },
               {
                 value: analytics.injuries,
                 label: copy.injuries,
-                text: "Recorded human impact",
+                text: copy.humanImpact,
               },
             ].map((item) => (
               <div
@@ -746,9 +824,7 @@ function AnalyticsPage() {
               </div>
 
               <p>
-                Total collapse records represent the
-                largest share of the current ARCUS
-                archive.
+                {copy.severityNote}
               </p>
             </div>
           </div>
@@ -914,6 +990,11 @@ function AnalyticsPage() {
                   ))}
                 </ul>
 
+                <div className="analytics-tier-action">
+                  <span>{copy.firstAction}</span>
+                  <strong>{tier.nextAction}</strong>
+                </div>
+
                 <Link
                   className="analytics-tier-link"
                   to={tier.path}
@@ -938,8 +1019,36 @@ function AnalyticsPage() {
             </p>
           </div>
 
+          <div className="analytics-access-matrix">
+            <div className="analytics-access-matrix-head">
+              <div>
+                <h3>{copy.matrixTitle}</h3>
+                <p>{copy.matrixText}</p>
+              </div>
+            </div>
+
+            <div className="analytics-access-row heading">
+              <span>{copy.capability}</span>
+              <span>{copy.publicLayer}</span>
+              <span>{copy.premiumLayer}</span>
+            </div>
+
+            {accessMatrix.map(
+              ([capability, publicValue, premiumValue]) => (
+                <div
+                  className="analytics-access-row"
+                  key={capability}
+                >
+                  <strong>{capability}</strong>
+                  <span>{publicValue}</span>
+                  <span>{premiumValue}</span>
+                </div>
+              )
+            )}
+          </div>
+
           <div className="analytics-premium-grid">
-            {premiumModules.map((module) => (
+            {modules.map((module) => (
               <div
                 className="analytics-premium-card"
                 key={module}
@@ -951,7 +1060,7 @@ function AnalyticsPage() {
 
           <Link
             className="analytics-pro-link"
-            to="/analytics/pro"
+            to="/professional"
           >
             {copy.openWorkspace}
           </Link>

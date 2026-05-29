@@ -1,14 +1,21 @@
 import {
   MapContainer,
+  CircleMarker,
   Marker,
   Popup,
+  Rectangle,
   TileLayer,
+  Tooltip,
+  WMSTileLayer,
   ZoomControl,
   useMap,
+  useMapEvents,
 } from "react-leaflet";
 
 import {
   useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 import MarkerClusterGroup from "react-leaflet-cluster";
@@ -77,11 +84,238 @@ function MapResizeController({
   return null;
 }
 
+const hazardOverlayColors = {
+  hydraulic: "#3F6B78",
+  landslide: "#B56A1D",
+  seismic: "#6E858D",
+  structural: "#C49040",
+};
+
+function HazardExposureOverlay({
+  activeHazardOverlays,
+  events,
+  hazardProfiles,
+}) {
+  const overlayPoints = useMemo(() => {
+    const provinceIndex = {};
+
+    events.forEach((event) => {
+      const latitude = Number(event.latitude);
+      const longitude = Number(event.longitude);
+
+      if (
+        !event.province ||
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude)
+      ) {
+        return;
+      }
+
+      if (!provinceIndex[event.province]) {
+        provinceIndex[event.province] = {
+          count: 0,
+          latitude: 0,
+          longitude: 0,
+          province: event.province,
+        };
+      }
+
+      provinceIndex[event.province].count += 1;
+      provinceIndex[event.province].latitude += latitude;
+      provinceIndex[event.province].longitude += longitude;
+    });
+
+    return Object.values(provinceIndex)
+      .map((province) => {
+        const profile =
+          hazardProfiles[province.province];
+
+        if (!profile) {
+          return null;
+        }
+
+        const activeHazards =
+          (profile.hazards || [])
+            .filter(
+              (hazard) =>
+                activeHazardOverlays[hazard.key] &&
+                Number(hazard.score) > 0
+            )
+            .sort(
+              (a, b) =>
+                Number(b.score || 0) -
+                Number(a.score || 0)
+            );
+
+        if (!activeHazards.length) {
+          return null;
+        }
+
+        const dominant = activeHazards[0];
+        const score = Number(dominant.score || 0);
+
+        return {
+          color:
+            hazardOverlayColors[dominant.key] ||
+            hazardOverlayColors.structural,
+          count: province.count,
+          label: dominant.label,
+          latitude:
+            province.latitude / province.count,
+          longitude:
+            province.longitude / province.count,
+          province: province.province,
+          radius:
+            10 + Math.min(22, score / 4.5),
+          score,
+        };
+      })
+      .filter(Boolean);
+  }, [activeHazardOverlays, events, hazardProfiles]);
+
+  return (
+    <>
+      {overlayPoints.map((point) => (
+        <CircleMarker
+          center={[
+            point.latitude,
+            point.longitude,
+          ]}
+          fillColor={point.color}
+          fillOpacity={0.16}
+          key={`${point.province}-${point.label}`}
+          opacity={0.72}
+          radius={point.radius}
+          stroke
+          color={point.color}
+          weight={1.4}
+        >
+          <Tooltip direction="top">
+            <div className="arcus-hazard-tooltip">
+              <strong>{point.province}</strong>
+              <span>
+                {point.label}: {point.score}/100
+              </span>
+              <small>
+                {point.count} ARCUS events
+              </small>
+            </div>
+          </Tooltip>
+        </CircleMarker>
+      ))}
+    </>
+  );
+}
+
+function AreaSelectionController({
+  enabled,
+  label,
+  onSelectionBoundsChange,
+  selectionBounds,
+}) {
+  const map = useMap();
+  const [draftStart, setDraftStart] =
+    useState(null);
+  const [draftBounds, setDraftBounds] =
+    useState(null);
+
+  const normalizeBounds = (start, end) => ({
+    east: Math.max(start.lng, end.lng),
+    north: Math.max(start.lat, end.lat),
+    south: Math.min(start.lat, end.lat),
+    west: Math.min(start.lng, end.lng),
+  });
+
+  useEffect(() => {
+    if (!enabled) {
+      map.dragging.enable();
+
+      const timer = setTimeout(() => {
+        setDraftStart(null);
+        setDraftBounds(null);
+      }, 0);
+
+      return () => clearTimeout(timer);
+    }
+
+    return undefined;
+  }, [enabled, map]);
+
+  useMapEvents({
+    mousedown(event) {
+      if (!enabled) {
+        return;
+      }
+
+      map.dragging.disable();
+      setDraftStart(event.latlng);
+      setDraftBounds(null);
+    },
+    mousemove(event) {
+      if (!enabled || !draftStart) {
+        return;
+      }
+
+      setDraftBounds(
+        normalizeBounds(draftStart, event.latlng)
+      );
+    },
+    mouseup(event) {
+      if (!enabled || !draftStart) {
+        return;
+      }
+
+      const bounds = normalizeBounds(
+        draftStart,
+        event.latlng
+      );
+
+      setDraftStart(null);
+      setDraftBounds(null);
+      map.dragging.enable();
+
+      if (
+        Math.abs(bounds.north - bounds.south) >
+          0.02 &&
+        Math.abs(bounds.east - bounds.west) > 0.02
+      ) {
+        onSelectionBoundsChange?.(bounds);
+      }
+    },
+  });
+
+  const activeBounds =
+    draftBounds || selectionBounds;
+
+  if (!activeBounds) {
+    return null;
+  }
+
+  return (
+    <Rectangle
+      bounds={[
+        [activeBounds.south, activeBounds.west],
+        [activeBounds.north, activeBounds.east],
+      ]}
+      color="#C49040"
+      dashArray="8 6"
+      fillColor="#C49040"
+      fillOpacity={0.12}
+      weight={2}
+    >
+      <Tooltip direction="top" sticky>
+        {label || "Selected area"}
+      </Tooltip>
+    </Rectangle>
+  );
+}
+
 /* ================================= */
 /* MAIN MAP */
 /* ================================= */
 
 function CollapseMap({
+  activeHazardOverlays = {},
   atlasMode = "open",
   assetMarkers = [],
   eventHazards = {},
@@ -91,6 +325,11 @@ function CollapseMap({
   height = "100vh",
   mapStyle = "voyager",
   professionalMode = false,
+  publicWmsOverlays = [],
+  onSelectionBoundsChange,
+  selectionBounds = null,
+  selectionEnabled = false,
+  selectionLabel,
   sourcesByEvent,
   sidebarOpen,
   showHeatmap,
@@ -168,6 +407,15 @@ function CollapseMap({
           sidebarOpen={sidebarOpen}
         />
 
+        <AreaSelectionController
+          enabled={selectionEnabled}
+          label={selectionLabel}
+          onSelectionBoundsChange={
+            onSelectionBoundsChange
+          }
+          selectionBounds={selectionBounds}
+        />
+
         {/* ================================= */}
         {/* BASEMAP */}
         {/* ================================= */}
@@ -179,6 +427,23 @@ function CollapseMap({
 
           attribution={selectedMapStyle.attribution}
         />
+
+        {professionalMode &&
+          publicWmsOverlays.map((overlay) => (
+            <WMSTileLayer
+              attribution={overlay.attribution}
+              format="image/png"
+              keepBuffer={1}
+              key={overlay.id}
+              layers={overlay.layers}
+              opacity={overlay.opacity ?? 0.42}
+              transparent
+              updateWhenIdle
+              updateWhenZooming={false}
+              url={overlay.url}
+              version={overlay.version || "1.3.0"}
+            />
+          ))}
 
         {/* ================================= */}
         {/* CONTROLS */}
@@ -198,6 +463,15 @@ function CollapseMap({
           />
         )}
 
+        {professionalMode &&
+          Object.values(activeHazardOverlays).some(Boolean) && (
+            <HazardExposureOverlay
+              activeHazardOverlays={activeHazardOverlays}
+              events={filteredEvents}
+              hazardProfiles={eventHazards}
+            />
+          )}
+
         {/* ================================= */}
         {/* CLUSTERS */}
         {/* ================================= */}
@@ -210,7 +484,7 @@ function CollapseMap({
 
             showCoverageOnHover={false}
 
-            maxClusterRadius={38}
+            maxClusterRadius={34}
 
             animate={true}
 

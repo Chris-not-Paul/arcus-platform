@@ -15,35 +15,38 @@ export function createClusterCustomIcon(
   /* SIZE */
   /* ================================= */
 
-  let size = 40;
+  let size = 36;
 
   if (count > 10) {
-    size = 46;
+    size = 42;
   }
 
   if (count > 25) {
-    size = 52;
+    size = 48;
   }
 
   if (count > 50) {
-    size = 58;
+    size = 54;
   }
 
   /* ================================= */
   /* VISUAL INTENSITY */
   /* ================================= */
 
-  let ringOpacity = 0.22;
-  let fillOpacity = 0.52;
+  let accentColor = "#8C735D";
+  let ringOpacity = 0.48;
+  let fillOpacity = 0.70;
 
   if (count > 25) {
-    ringOpacity = 0.32;
-    fillOpacity = 0.58;
+    accentColor = "#C49040";
+    ringOpacity = 0.58;
+    fillOpacity = 0.74;
   }
 
   if (count > 50) {
-    ringOpacity = 0.42;
-    fillOpacity = 0.64;
+    accentColor = "#B9781F";
+    ringOpacity = 0.66;
+    fillOpacity = 0.78;
   }
 
   /* ================================= */
@@ -78,8 +81,8 @@ export function createClusterCustomIcon(
           background:
             radial-gradient(
               circle,
-              rgba(80,100,140,0.06) 0%,
-              rgba(80,100,140,0.03) 40%,
+              ${accentColor}26 0%,
+              ${accentColor}12 44%,
               rgba(80,100,140,0.00) 72%
             );
 
@@ -99,13 +102,23 @@ export function createClusterCustomIcon(
 
           border:
             1px solid
-            rgba(255,255,255,${ringOpacity});
+            ${accentColor}${Math.round(ringOpacity * 255)
+              .toString(16)
+              .padStart(2, "0")};
 
           background:
-            rgba(22,28,38,${fillOpacity});
+            linear-gradient(
+              145deg,
+              rgba(32,28,24,${fillOpacity}),
+              rgba(18,15,13,${fillOpacity})
+            );
 
           backdrop-filter:
             blur(10px);
+
+          box-shadow:
+            0 10px 24px rgba(18,15,13,0.22),
+            inset 0 1px 0 rgba(255,248,242,0.08);
         "
       ></div>
 
@@ -122,7 +135,7 @@ export function createClusterCustomIcon(
 
           border:
             1px solid
-            rgba(255,255,255,0.05);
+            ${accentColor}44;
         "
       ></div>
 
@@ -138,7 +151,7 @@ export function createClusterCustomIcon(
           border-radius:999px;
 
           background:
-            rgba(255,255,255,0.88);
+            ${accentColor};
         "
       ></div>
 
@@ -153,10 +166,10 @@ export function createClusterCustomIcon(
           color:white;
 
           font-family:
-            Inter,
+            var(--arcus-font-body),
             sans-serif;
 
-          font-size:${size * 0.23}px;
+          font-size:${size * 0.24}px;
 
           font-weight:700;
 

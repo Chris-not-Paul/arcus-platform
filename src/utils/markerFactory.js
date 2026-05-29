@@ -29,10 +29,10 @@ export function createMarkerIcon(
     ] || "#4f6b82";
 
   const markerSize =
-    vulnerabilityClass ? 24 : 20;
+    vulnerabilityClass ? 22 : 18;
 
   const coreSize =
-    vulnerabilityClass ? 8 : 6;
+    vulnerabilityClass ? 7 : 5;
 
   /* ================================= */
   /* SIGNAL SYSTEM */

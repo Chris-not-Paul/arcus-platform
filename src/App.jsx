@@ -6,6 +6,7 @@ import {
 
 import {
   BrowserRouter,
+  Navigate,
   Routes,
   Route,
 } from "react-router-dom";
@@ -15,7 +16,8 @@ const AtlasPage = lazy(() => import("./pages/AtlasPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
-const PremiumAnalyticsPage = lazy(() => import("./pages/PremiumAnalyticsPage"));
+const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
+const PlansPage = lazy(() => import("./pages/PlansPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
@@ -99,7 +101,17 @@ function App() {
 
           <Route
             path="/analytics/pro"
-            element={<PremiumAnalyticsPage />}
+            element={<Navigate replace to="/professional" />}
+          />
+
+          <Route
+            path="/data-access"
+            element={<DataAccessPage />}
+          />
+
+          <Route
+            path="/plans"
+            element={<PlansPage />}
           />
 
           <Route

@@ -43,6 +43,37 @@ function EventPopup({
       language === "it"
         ? "Uso infrastrutturale"
         : "Infrastructure Use",
+    classificationGuide:
+      language === "it"
+        ? "Lettura operativa"
+        : "Operational reading",
+    class:
+      language === "it" ? "Classe" : "Class",
+    score:
+      language === "it" ? "Indicatore" : "Indicator",
+    grade:
+      language === "it" ? "Grado" : "Grade",
+    critical:
+      language === "it" ? "Critica" : "Critical",
+    high: language === "it" ? "Alta" : "High",
+    medium: language === "it" ? "Media" : "Medium",
+    low: language === "it" ? "Bassa" : "Low",
+    guideText:
+      language === "it"
+        ? "ARCUS mostra indicatori contestuali, non diagnosi di sicurezza. Affidabilita misura qualita e copertura delle fonti. Hazard indica il segnale territoriale dominante."
+        : "ARCUS shows contextual indicators, not safety diagnoses. Evidence reliability measures source quality and coverage. Hazard indicates the dominant territorial signal.",
+    dominantSignal:
+      language === "it"
+        ? "Segnale territoriale dominante"
+        : "Dominant territorial signal",
+    integratedScore:
+      language === "it"
+        ? "Indicatore integrato"
+        : "Integrated indicator",
+    dominantLayer:
+      language === "it"
+        ? "Layer dominante"
+        : "Dominant layer",
     na: language === "it" ? "N/D" : "N/A",
     noSources:
       language === "it"
@@ -76,8 +107,8 @@ function EventPopup({
     total: language === "it" ? "Totale" : "Total",
     vulnerability:
       language === "it"
-        ? "Vulnerabilita"
-        : "Vulnerability",
+        ? "Contesto vulnerabilita"
+        : "Vulnerability context",
     years: language === "it" ? "anni" : "years",
   };
 
@@ -98,12 +129,68 @@ function EventPopup({
     event.collapse_severity ===
     "TC";
 
+  const vulnerabilityLabels = {
+    Critical: text.critical,
+    High: text.high,
+    Medium: text.medium,
+    Low: text.low,
+  };
+
+  const professionalCards = [
+    {
+      label: text.vulnerability,
+      primary: vulnerability
+        ? vulnerabilityLabels[
+            vulnerability.class
+          ] || vulnerability.class
+        : text.na,
+      secondary: vulnerability
+        ? `${text.class}: ${
+            vulnerabilityLabels[
+              vulnerability.class
+            ] || vulnerability.class
+          } / ${text.score}: ${
+            vulnerability.score
+          }/100`
+        : text.na,
+    },
+    {
+      label: text.reliability,
+      primary: reliability
+        ? `${text.grade} ${reliability.grade}`
+        : text.na,
+      secondary: reliability
+        ? `${text.score}: ${reliability.score}/100`
+        : text.na,
+    },
+    {
+      label: text.territorialHazard,
+      primary: hazardProfile?.public_dominant_hazard_label
+        ? taxonomyLabel(
+            "cause",
+            hazardProfile.public_dominant_hazard_label,
+            language
+          )
+        : text.na,
+      secondary: hazardProfile?.public_dominant_hazard_label
+        ? `${text.integratedScore}: ${
+            hazardProfile.public_hazard_score ??
+            text.na
+          }/100 · ${text.dominantLayer}: ${
+            hazardProfile.public_dominant_hazard_score ??
+            text.na
+          }/100`
+        : text.na,
+    },
+  ];
+
   return (
     <div
       style={{
-        minWidth: "320px",
-        maxWidth: "360px",
-        maxHeight: "72vh",
+        width: "min(420px, calc(100vw - 40px))",
+        minWidth: "min(340px, calc(100vw - 40px))",
+        maxWidth: "420px",
+        maxHeight: "78vh",
         overflowY: "auto",
         padding: "18px",
         border: "1px solid rgba(28,24,20,0.08)",
@@ -135,7 +222,7 @@ function EventPopup({
             alignItems: "center",
             flexWrap: "wrap",
             gap: "8px",
-            marginBottom: "16px",
+            marginBottom: "14px",
           }}
         >
 
@@ -146,7 +233,7 @@ function EventPopup({
               display: "inline-flex",
               alignItems: "center",
               padding: "6px 12px",
-              borderRadius: "999px",
+              borderRadius: "8px",
 
               background:
                 causeColors[
@@ -187,7 +274,7 @@ function EventPopup({
                   "6px 12px",
 
                 borderRadius:
-                  "999px",
+                  "8px",
 
                 background:
                   "rgba(0,0,0,0.05)",
@@ -233,7 +320,7 @@ function EventPopup({
                 "6px 12px",
 
               borderRadius:
-                "999px",
+                "8px",
 
               background:
                 event.triggered
@@ -271,7 +358,7 @@ function EventPopup({
           style={{
             margin: 0,
 
-            fontSize: "28px",
+            fontSize: "26px",
 
             lineHeight: 1.05,
 
@@ -363,34 +450,15 @@ function EventPopup({
               display: "grid",
               gridTemplateColumns:
                 "repeat(3, minmax(0, 1fr))",
-              gap: "10px",
+              gap: "12px",
             }}
           >
-            {[
-              {
-                label: text.vulnerability,
-                value: vulnerability
-                  ? `${vulnerability.class} ${vulnerability.score}`
-                  : text.na,
-              },
-              {
-                label: text.reliability,
-                value: reliability
-                  ? `${reliability.grade} ${reliability.score}`
-                  : text.na,
-              },
-              {
-                label: text.territorialHazard,
-                value:
-                  hazardProfile?.dominant_hazard ||
-                  text.na,
-              },
-            ].map((item) => (
+            {professionalCards.map((item) => (
               <div
                 key={item.label}
                 style={{
                   minWidth: 0,
-                  padding: "12px 10px",
+                  padding: "12px",
                   borderRadius: "8px",
                   background:
                     "rgba(255,248,242,0.07)",
@@ -401,15 +469,13 @@ function EventPopup({
                 <div
                   style={{
                     marginBottom: "7px",
-                    overflow: "hidden",
                     color:
                       "rgba(243,239,232,0.52)",
                     fontSize: "9px",
                     fontWeight: 800,
                     letterSpacing: "0.7px",
-                    textOverflow: "ellipsis",
+                    lineHeight: 1.25,
                     textTransform: "uppercase",
-                    whiteSpace: "nowrap",
                   }}
                 >
                   {item.label}
@@ -418,16 +484,60 @@ function EventPopup({
                   style={{
                     overflowWrap: "anywhere",
                     color: "#C49040",
-                    fontSize: "15px",
+                    fontSize: "16px",
                     fontWeight: 900,
                     lineHeight: 1.1,
                     textTransform: "capitalize",
                   }}
                 >
-                  {item.value}
+                  {item.primary}
+                </div>
+                <div
+                  style={{
+                    marginTop: "7px",
+                    color:
+                      "rgba(243,239,232,0.66)",
+                    fontSize: "11px",
+                    fontWeight: 650,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {item.secondary}
                 </div>
               </div>
             ))}
+          </div>
+
+          <div
+            style={{
+              marginTop: "14px",
+              paddingTop: "12px",
+              borderTop:
+                "1px solid rgba(243,239,232,0.10)",
+            }}
+          >
+            <div
+              style={{
+                marginBottom: "6px",
+                color: "rgba(243,239,232,0.58)",
+                fontSize: "10px",
+                fontWeight: 800,
+                letterSpacing: "0.8px",
+                textTransform: "uppercase",
+              }}
+            >
+              {text.classificationGuide}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                color: "rgba(243,239,232,0.72)",
+                fontSize: "12px",
+                lineHeight: 1.55,
+              }}
+            >
+              {text.guideText}
+            </p>
           </div>
         </div>
       )}
@@ -441,7 +551,7 @@ function EventPopup({
           display: "grid",
 
           gridTemplateColumns:
-            "1fr 1fr 1fr",
+            "repeat(3, minmax(0, 1fr))",
 
           gap: "10px",
 
@@ -459,7 +569,7 @@ function EventPopup({
             borderRadius:
               "8px",
 
-            padding: "14px",
+            padding: "12px",
 
             border:
               "1px solid rgba(0,0,0,0.04)",
@@ -492,7 +602,7 @@ function EventPopup({
 
           <div
             style={{
-              fontSize: "18px",
+              fontSize: "16px",
 
               fontWeight: 800,
 
@@ -518,7 +628,7 @@ function EventPopup({
             borderRadius:
               "8px",
 
-            padding: "14px",
+            padding: "12px",
 
             border:
               "1px solid rgba(0,0,0,0.04)",
@@ -551,7 +661,7 @@ function EventPopup({
 
           <div
             style={{
-              fontSize: "18px",
+              fontSize: "16px",
 
               fontWeight: 800,
 
@@ -572,7 +682,7 @@ function EventPopup({
             borderRadius:
               "8px",
 
-            padding: "14px",
+            padding: "12px",
 
             border:
               "1px solid rgba(0,0,0,0.04)",
@@ -605,7 +715,7 @@ function EventPopup({
 
           <div
             style={{
-              fontSize: "18px",
+              fontSize: "16px",
 
               fontWeight: 800,
 
