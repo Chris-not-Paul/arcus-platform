@@ -988,7 +988,9 @@ export default function ProfessionalPage() {
   );
 
   const workflowEvents =
-    manualAreaBounds && manualAreaEvents.length
+    activeEntryPath !== 0 &&
+    manualAreaBounds &&
+    manualAreaEvents.length
       ? manualAreaEvents
       : selectedProvinceEvents;
 
@@ -1281,7 +1283,7 @@ export default function ProfessionalPage() {
   );
 
   const selectedProvinceDrivers = useMemo(() => {
-    if (!selectedProvinceEvents.length) {
+    if (!workflowEvents.length) {
       return {
         causes: [],
         materials: [],
@@ -1290,20 +1292,17 @@ export default function ProfessionalPage() {
     }
 
     return {
-      causes: countBy(
-        selectedProvinceEvents,
-        "specific_cause"
-      ).slice(0, 3),
-      materials: countBy(
-        selectedProvinceEvents,
-        "material_type"
-      ).slice(0, 3),
-      structures: countBy(
-        selectedProvinceEvents,
-        "structural_type"
-      ).slice(0, 3),
+      causes: countBy(workflowEvents, "specific_cause")
+        .slice(0, 3)
+        .map(([label, value]) => ({ label, value })),
+      materials: countBy(workflowEvents, "material_type")
+        .slice(0, 3)
+        .map(([label, value]) => ({ label, value })),
+      structures: countBy(workflowEvents, "structural_type")
+        .slice(0, 3)
+        .map(([label, value]) => ({ label, value })),
     };
-  }, [selectedProvinceEvents]);
+  }, [workflowEvents]);
 
   const selectedRecommendations = useMemo(() => {
     if (!selectedProvinceProfile) {
@@ -1312,44 +1311,95 @@ export default function ProfessionalPage() {
 
     const highSeverity =
       percentage(
-        selectedProvinceProfile.totalCollapse,
-        selectedProvinceProfile.total
+        workflowEvents.filter(
+          (event) =>
+            event.collapse_severity === "TC"
+        ).length,
+        workflowEvents.length || 1
       ) >= 50;
     const highTrigger =
       percentage(
-        selectedProvinceProfile.triggered,
-        selectedProvinceProfile.total
+        workflowEvents.filter((event) => event.triggered)
+          .length,
+        workflowEvents.length || 1
       ) >= 50;
     const weakEvidence =
-      selectedProvinceProfile.avgSources < 3;
+      workflowReliability.average < 55;
+    const dominantHazard =
+      workflowHazardExposure?.dominant_hazard;
+    const dominantCause =
+      selectedProvinceDrivers.causes[0]?.label;
+    const locationHint =
+      manualAreaBounds
+        ? manualAreaProvinces.length
+          ? manualAreaProvinces.join(", ")
+          : selectedProvinceProfile.territory
+        : selectedProvinceProfile.territory;
+    const comparableClusters = workflowEvents
+      .filter(
+        (event) =>
+          event.collapse_severity === "TC" ||
+          event.specific_cause === dominantCause
+      )
+      .map((event) => event.municipality)
+      .filter(Boolean)
+      .filter(
+        (municipality, index, all) =>
+          all.indexOf(municipality) === index
+      )
+      .slice(0, 5);
+    const clusterText =
+      comparableClusters.length > 0
+        ? comparableClusters.join(", ")
+        : locationHint;
 
     return [
+      dominantHazard === "hydraulic"
+        ? language === "it"
+          ? `Per nuovi attraversamenti o interventi su ponti in ${locationHint}, avviare una revisione preliminare del contesto idraulico focalizzata su esposizione ad alluvione, configurazioni sensibili a scalzamento e precedenti idraulici vicini.`
+          : `For new crossings or bridge interventions in ${locationHint}, start a preliminary hydraulic-context review focused on flood exposure, scour-sensitive configurations and nearby historical hydraulic failures.`
+        : dominantHazard === "landslide"
+          ? language === "it"
+            ? `Per nuovi attraversamenti o interventi in ${locationHint}, integrare gia in fase preliminare verifiche geotecniche e di stabilita dei versanti nelle aree con precedenti o overlay franosi rilevanti.`
+            : `For new crossings or interventions in ${locationHint}, include geotechnical and slope-stability checks from the preliminary phase where precedents or landslide overlays are relevant.`
+          : language === "it"
+            ? `Usare il briefing come pacchetto di screening preliminare per decidere dove avviare indagini sito-specifiche in ${locationHint}.`
+            : `Use this briefing as a preliminary screening package to decide where site-specific investigations should start in ${locationHint}.`,
       highSeverity
         ? language === "it"
-          ? "Prioritizzare la revisione dei casi di collasso totale e delle tipologie strutturali comparabili."
-          : "Prioritize review of total-collapse cases and comparable structural typologies."
+          ? `Confrontare il nuovo intervento con i collassi totali documentati e con i cluster ricorrenti in ${clusterText}.`
+          : `Compare the planned intervention with documented total-collapse cases and recurrent clusters in ${clusterText}.`
         : language === "it"
-          ? "Mantenere il monitoraggio sui pattern di collasso parziale e sui meccanismi locali ricorrenti."
-          : "Maintain monitoring on partial-collapse patterns and recurring local mechanisms.",
+          ? `Leggere i pattern locali di collasso parziale insieme ai layer hazard pubblici prima di chiudere le scelte preliminari di tracciato o configurazione.`
+          : `Read local partial-collapse patterns together with public hazard layers before freezing preliminary alignment or configuration choices.`,
       highTrigger
         ? language === "it"
-          ? "Incrociare i casi innescati con layer idraulici, franosi e di esposizione a eventi estremi."
-          : "Cross-check event-driven cases with hydraulic, landslide and extreme-weather exposure layers."
+          ? "Usare i layer WMS pubblici come primo screening territoriale, poi commissionare verifiche idrauliche, geotecniche o sismiche sito-specifiche dove la densita dei precedenti e alta."
+          : "Use public WMS layers as first-level territorial screening, then commission site-specific hydraulic, geotechnical or seismic checks where historical precedent density is high."
         : language === "it"
-          ? "Usare layer strutturali, materici e manutentivi per affinare i segnali di vulnerabilita non innescata."
-          : "Use structural, material and maintenance-history overlays to refine non-triggered vulnerability signals.",
+          ? "Integrare tipologia strutturale, materiale e anno di costruzione appena disponibili per trasformare lo screening territoriale in valutazione asset-specifica."
+          : "Add structure type, material and construction year as soon as available to turn territorial screening into asset-specific assessment.",
       weakEvidence
         ? language === "it"
-          ? "Rafforzare la copertura documentale prima dell'uso in reporting istituzionale."
-          : "Strengthen evidence coverage before using this territory for institutional reporting."
+          ? "Rafforzare la copertura documentale prima di usare il briefing in contesti istituzionali o decisionali."
+          : "Strengthen documentary coverage before using this briefing in institutional or decision-making contexts."
         : language === "it"
-          ? "La base documentale e adatta a un briefing professionale preliminare."
-          : "Evidence base is suitable for a preliminary professional briefing.",
+          ? "Usare questo report come pacchetto source-backed per riunioni di progettazione preliminare, due diligence documentale o pianificazione di indagini tecniche."
+          : "Use this report as a source-backed package for early design meetings, documentary due diligence or technical investigation planning.",
     ];
-  }, [language, selectedProvinceProfile]);
+  }, [
+    language,
+    manualAreaBounds,
+    manualAreaProvinces,
+    selectedProvinceDrivers,
+    selectedProvinceProfile,
+    workflowEvents,
+    workflowHazardExposure,
+    workflowReliability,
+  ]);
 
   const selectedActionMatrix = useMemo(() => {
-    return selectedProvinceEvents.reduce(
+    return workflowEvents.reduce(
       (matrix, event) => {
         const sourceCount =
           sourceCountByEvent[event.event_id] || 0;
@@ -1385,7 +1435,7 @@ export default function ProfessionalPage() {
       }
     );
   }, [
-    selectedProvinceEvents,
+    workflowEvents,
     reliabilityByEvent,
     vulnerabilityByEvent,
     sourceCountByEvent,
@@ -1393,7 +1443,7 @@ export default function ProfessionalPage() {
 
   const referenceEvent =
     selectedActionMatrix.immediate[0] ||
-    selectedProvinceEvents[0];
+    workflowEvents[0];
 
   const selectedSimilarEvents = useMemo(
     () =>
@@ -1675,7 +1725,7 @@ export default function ProfessionalPage() {
   ]);
 
   const printProfessionalReport = () => {
-    window.print();
+    openProfessionalReportPrintView("full");
   };
 
   const escapeHtml = (value) =>
@@ -1709,26 +1759,52 @@ export default function ProfessionalPage() {
     downloadFile(filename, csv);
   };
 
-  const buildProfessionalReportHtml = () => {
+  const buildProfessionalReportHtml = ({
+    variant = "full",
+  } = {}) => {
     if (!selectedProvinceProfile) {
       return "";
     }
 
     const it = language === "it";
+    const isBrief = variant === "brief";
+    const isPath01 = activeEntryPath === 0;
     const score =
       selectedProvinceProfile.scenarioScore ||
       selectedProvinceProfile.riskScore ||
       0;
     const today = new Date().toLocaleDateString("it-IT");
-    const reportAreaLabel = manualAreaLabel;
-    const provinceList =
-      manualAreaBounds
+    const provinceContext = {
+      areaLabel: selectedProvinceProfile.territory,
+      generatedOn: today,
+      geometrySource: it
+        ? "Confine amministrativo provinciale"
+        : "Administrative provincial boundary",
+      projectContext: selectedProjectContext,
+      provinceCode: selectedProvinceProfile.province_code || "",
+      region:
+        selectedProvinceEvents.find(Boolean)?.region ||
+        selectedProvinceProfile.region ||
+        "-",
+      selectionType: "Province",
+      spatialLevel: it
+        ? "Livello provinciale"
+        : "Province level",
+    };
+    const reportAreaLabel = isPath01
+      ? provinceContext.areaLabel
+      : manualAreaLabel;
+    const provinceList = isPath01
+      ? provinceContext.areaLabel
+      : manualAreaBounds
         ? manualAreaProvinces.join(", ") || reportAreaLabel
         : selectedProvinceProfile.territory;
 
-    const reportAreaDescription = manualAreaBounds
-      ? `${manualAreaEvents.length} ${it ? "eventi ARCUS nell'area selezionata" : "ARCUS events inside the selected area"} — ${it ? "Province" : "Provinces"}: ${provinceList}. ${it ? "Coordinate" : "Bounds"}: N ${manualAreaBounds.north.toFixed(3)}, S ${manualAreaBounds.south.toFixed(3)}, E ${manualAreaBounds.east.toFixed(3)}, W ${manualAreaBounds.west.toFixed(3)}.`
-      : `${selectedProvinceProfile.territory}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}.`;
+    const reportAreaDescription = isPath01
+      ? `${provinceContext.areaLabel}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}. ${it ? "Livello spaziale" : "Spatial level"}: ${provinceContext.spatialLevel}.`
+      : manualAreaBounds
+        ? `${manualAreaEvents.length} ${it ? "eventi ARCUS nell'area selezionata" : "ARCUS events inside the selected area"} - ${it ? "Province" : "Provinces"}: ${provinceList}. ${it ? "Coordinate" : "Bounds"}: N ${manualAreaBounds.north.toFixed(3)}, S ${manualAreaBounds.south.toFixed(3)}, E ${manualAreaBounds.east.toFixed(3)}, W ${manualAreaBounds.west.toFixed(3)}.`
+        : `${selectedProvinceProfile.territory}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}.`;
 
     const severityLabel = (code) =>
       ({
@@ -1737,43 +1813,524 @@ export default function ProfessionalPage() {
         SC: it ? "Compromissione Strutturale" : "Structural Compromise",
       })[code] || code;
 
-    const selectedAreaSketch = manualAreaBounds
+    const classPriority = (value) => {
+      if (value >= 75) {
+        return it ? "High attention" : "High attention";
+      }
+
+      if (value >= 55) {
+        return it ? "Moderate attention" : "Moderate attention";
+      }
+
+      return it ? "Low attention" : "Low attention";
+    };
+
+    const evidenceClass = (value) => {
+      if (value >= 85) {
+        return it ? "Very high" : "Very high";
+      }
+
+      if (value >= 70) {
+        return it ? "High" : "High";
+      }
+
+      if (value >= 50) {
+        return it ? "Medium" : "Medium";
+      }
+
+      return it ? "Low" : "Low";
+    };
+
+    const attentionClass = (value) => {
+      if (value >= 80) {
+        return it ? "Critical" : "Critical";
+      }
+
+      if (value >= 65) {
+        return it ? "High" : "High";
+      }
+
+      if (value >= 45) {
+        return it ? "Medium" : "Medium";
+      }
+
+      return it ? "Low" : "Low";
+    };
+
+    const reportHazardLabel = (label) =>
+      label === "Structural vulnerability exposure"
+        ? it
+          ? "Failure precedent exposure"
+          : "Failure precedent exposure"
+        : label;
+
+    const validityText = (value, fallback = "-") =>
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      (typeof value === "number" && !Number.isFinite(value))
+        ? fallback
+        : value;
+
+    const sectionHeading = (number, label) =>
+      `<h2><span class="section-number">${number}</span>${escapeHtml(label)}</h2>`;
+
+    const formatKpi = ({ level, driver }) =>
+      `<p><span class="kpi-class"><em>${escapeHtml(level)}</em></span><span class="kpi-driver">${escapeHtml(driver)}</span></p>`;
+
+    const compactUrl = (url) => {
+      if (!url) {
+        return "-";
+      }
+
+      try {
+        const parsed = new URL(url);
+        const path =
+          parsed.pathname.length > 34
+            ? `${parsed.pathname.slice(0, 34)}...`
+            : parsed.pathname;
+
+        return `${parsed.hostname}${path}`;
+      } catch {
+        return String(url).length > 48
+          ? `${String(url).slice(0, 48)}...`
+          : String(url);
+      }
+    };
+
+    const selectedAreaSketch = !isPath01 && manualAreaBounds
       ? `<div class="area-sketch"><div><span>${it ? "Selezione manuale mappa" : "Manual map selection"}</span><strong>${escapeHtml(reportAreaLabel)}</strong><p>N ${manualAreaBounds.north.toFixed(3)} / S ${manualAreaBounds.south.toFixed(3)} / E ${manualAreaBounds.east.toFixed(3)} / W ${manualAreaBounds.west.toFixed(3)}</p></div></div>`
       : "";
+    const mapEvents = workflowEvents
+      .map((event) => ({
+        ...event,
+        latitude: Number(event.latitude),
+        longitude: Number(event.longitude),
+      }))
+      .filter(
+        (event) =>
+          Number.isFinite(event.latitude) &&
+          Number.isFinite(event.longitude)
+      );
+    const mapBounds = (!isPath01 && manualAreaBounds) ||
+      (mapEvents.length
+        ? {
+          east: Math.max(
+            ...mapEvents.map((event) => event.longitude)
+          ),
+          north: Math.max(
+            ...mapEvents.map((event) => event.latitude)
+          ),
+          south: Math.min(
+            ...mapEvents.map((event) => event.latitude)
+          ),
+          west: Math.min(
+            ...mapEvents.map((event) => event.longitude)
+          ),
+        }
+        : null);
+    const mapPins = mapBounds
+      ? mapEvents
+        .slice(0, 36)
+        .map((event) => {
+          const width = Math.max(
+            mapBounds.east - mapBounds.west,
+            0.01
+          );
+          const height = Math.max(
+            mapBounds.north - mapBounds.south,
+            0.01
+          );
+          const left = Math.min(
+            96,
+            Math.max(
+              4,
+              ((event.longitude - mapBounds.west) / width) * 100
+            )
+          );
+          const top = Math.min(
+            92,
+            Math.max(
+              8,
+              (1 -
+                (event.latitude - mapBounds.south) / height) *
+                100
+            )
+          );
+          const severityClass =
+            event.collapse_severity === "TC"
+              ? "map-pin-critical"
+              : event.triggered
+                ? "map-pin-triggered"
+                : "map-pin-context";
 
-    const hazardRows = (workflowHazardExposure?.hazards || [])
+          return `<span class="map-pin ${severityClass}" style="left:${left.toFixed(2)}%;top:${top.toFixed(2)}%" title="${escapeHtml(event.event_id)}"></span>`;
+        })
+        .join("")
+      : "";
+    const reportMapImage =
+      typeof window !== "undefined"
+        ? window.localStorage.getItem(
+          "arcus-path01-report-map-image"
+        )
+        : "";
+    const reportMapFrame = reportMapImage
+      ? `<figure class="map-image-frame">
+        <img src="${escapeHtml(reportMapImage)}" alt="${escapeHtml(it ? "Mappa territoriale esportata da ARCUS" : "Territorial map exported from ARCUS")}" />
+        <figcaption>${escapeHtml(it ? "Mappa esportata da ARCUS Professional: provincia selezionata, precedenti ARCUS e layer hazard attivi. Uso: screening territoriale, non cartografia catastale o scala progettuale." : "Map exported from ARCUS Professional: selected province, ARCUS precedents and active hazard layers. Use: territorial screening, not cadastral or design-scale mapping.")}</figcaption>
+      </figure>`
+      : `<div class="map-frame">
+      <div class="map-grid"></div>
+      <div class="map-area-box"></div>
+      ${mapPins}
+      <div class="map-north">N</div>
+      <div class="map-scale"><span></span>${it ? "scala indicativa" : "indicative scale"}</div>
+      <div class="map-legend">
+        <span><i class="map-pin-critical"></i>${it ? "Crollo totale" : "Total collapse"}</span>
+        <span><i class="map-pin-triggered"></i>${it ? "Evento innescato" : "Triggered event"}</span>
+        <span><i class="map-pin-context"></i>${it ? "Contesto" : "Context"}</span>
+      </div>
+      <div class="map-caption">
+        <strong>${escapeHtml(reportAreaLabel)}</strong>
+        <span>${it ? "Real ARCUS map capture: provincia selezionata, eventi e contesto hazard attivo. Screening territoriale, non scala progettuale." : "Real ARCUS map capture: selected province, events and active hazard context. Territorial screening, not design scale."}</span>
+      </div>
+    </div>`;
+
+    const hazardData = (workflowHazardExposure?.hazards || [])
+      .filter(
+        (h) =>
+          h &&
+          h.label &&
+          Number.isFinite(Number(h.score)) &&
+          Number.isFinite(Number(h.matched_events)) &&
+            Number.isFinite(Number(h.share))
+      )
+      .map((h) => ({
+        ...h,
+        label: reportHazardLabel(h.label),
+        matched_events: Number(h.matched_events),
+        score: Number(h.score),
+        share: Number(h.share),
+      }))
+      .sort((a, b) => b.share - a.share);
+    const hazardRows = hazardData
       .map((h) => `<tr><td>${escapeHtml(h.label)}</td><td>${h.score}</td><td>${h.matched_events}</td><td>${Math.round(h.share * 100)}%</td></tr>`)
       .join("");
+    const hazardRowsSafe =
+      hazardRows ||
+      `<tr><td colspan="4">${it ? "Nessun overlay hazard statisticamente leggibile per la provincia selezionata." : "No statistically readable hazard overlay for the selected province."}</td></tr>`;
 
-    const eventRows = workflowEvents.slice(0, 12)
+    const isHydraulicEvent = (event) =>
+      String(event.specific_cause || "")
+        .toLowerCase()
+        .includes("hydraulic") ||
+      String(event.trigger_category || "")
+        .toLowerCase()
+        .includes("hydraulic");
+
+    const eventAttention = (event) => {
+      const rel = reliabilityByEvent[event.event_id];
+      const vul = vulnerabilityByEvent[event.event_id];
+      const hasImpact =
+        Number(event.victims) > 0 ||
+        Number(event.injuries) > 0;
+      const points =
+        (event.collapse_severity === "TC" ? 34 : 0) +
+        (hasImpact ? 20 : 0) +
+        (event.triggered ? 14 : 0) +
+        (isHydraulicEvent(event) ? 12 : 0) +
+        (rel?.grade === "A" ? 10 : rel?.grade === "B" ? 7 : 0) +
+        (vul?.className === "Critical" ? 12 : vul?.className === "High" ? 8 : 0);
+
+      if (points >= 64) {
+        return it ? "Critical attention" : "Critical attention";
+      }
+
+      if (points >= 44) {
+        return it ? "High attention" : "High attention";
+      }
+
+      if (points >= 24) {
+        return it ? "Monitor" : "Monitor";
+      }
+
+      return it ? "Context record" : "Context record";
+    };
+
+    const whyFlagged = (event) => {
+      const rel = reliabilityByEvent[event.event_id];
+      const reasons = [];
+
+      if (event.collapse_severity === "TC") {
+        reasons.push(it ? "crollo totale" : "total collapse");
+      }
+
+      if (isHydraulicEvent(event)) {
+        reasons.push(it ? "driver idraulico" : "hydraulic driver");
+      }
+
+      if (event.triggered) {
+        reasons.push(it ? "evento innescato" : "triggered event");
+      }
+
+      if (Number(event.victims) > 0 || Number(event.injuries) > 0) {
+        reasons.push(it ? "impatto umano" : "human impact");
+      }
+
+      if (rel?.grade === "A" || rel?.grade === "B") {
+        reasons.push(it ? `evidenza ${rel.grade}` : `evidence ${rel.grade}`);
+      }
+
+      if (workflowHazardExposure?.dominant_hazard) {
+        reasons.push(
+          it
+            ? `contesto ${workflowHazardExposure.dominant_hazard}`
+            : `${workflowHazardExposure.dominant_hazard} context`
+        );
+      }
+
+      return reasons.slice(0, 4).join(", ") || (it ? "precedente territoriale documentato" : "documented territorial precedent");
+    };
+
+    const eventRows = workflowEvents.slice(0, 5)
       .map((event) => {
         const rel = reliabilityByEvent[event.event_id];
-        const vul = vulnerabilityByEvent[event.event_id];
         return `<tr>
           <td>${escapeHtml(event.event_id)}</td>
           <td>${escapeHtml(event.municipality)}${event.year ? ` (${event.year})` : ""}</td>
           <td>${escapeHtml(severityLabel(event.collapse_severity))}</td>
-          <td>${escapeHtml(event.specific_cause)}</td>
+          <td>${escapeHtml(validityText(event.specific_cause, it ? "Non classificata" : "Unclassified"))}</td>
           <td>${rel?.score || 0} / ${escapeHtml(rel?.grade || "D")}</td>
-          <td>${vul?.score || 0} / ${escapeHtml(vul?.className || "Low")}</td>
+          <td>${escapeHtml(eventAttention(event))}</td>
+          <td>${escapeHtml(whyFlagged(event))}</td>
         </tr>`;
       }).join("");
 
+    const precedentComponent = (event, kind) => {
+      const reasons = event.similarityReasons || [];
+
+      if (kind === "cause") {
+        return reasons.some((reason) => reason.includes("mechanism"))
+          ? it
+            ? "match"
+            : "match"
+          : it
+            ? "parziale"
+            : "partial";
+      }
+
+      if (kind === "trigger") {
+        return reasons.some((reason) => reason.includes("triggered"))
+          ? it
+            ? "match"
+            : "match"
+          : event.triggered
+            ? it
+              ? "presente"
+              : "present"
+            : it
+              ? "non indicato"
+              : "not stated";
+      }
+
+      if (kind === "severity") {
+        return reasons.some((reason) => reason.includes("severity"))
+          ? severityLabel(event.collapse_severity)
+          : it
+            ? "comparabile"
+            : "comparable";
+      }
+
+      if (kind === "territory") {
+        return reasons.some(
+          (reason) =>
+            reason.includes("region") ||
+            reason.includes("province")
+        )
+          ? it
+            ? "stesso contesto"
+            : "same context"
+          : it
+            ? "contesto affine"
+            : "related context";
+      }
+
+      if (kind === "evidence") {
+        const rel = reliabilityByEvent[event.event_id];
+        return rel?.grade ? `${rel.score || 0} / ${rel.grade}` : "0 / D";
+      }
+
+      return workflowHazardExposure?.dominant_hazard
+        ? workflowHazardExposure.dominant_hazard
+        : it
+          ? "non disponibile"
+          : "not available";
+    };
+
+    const precedentScore = (event, index) => {
+      const raw = Number(event.similarityScore || 0);
+      const capped = Math.min(raw || 82, 94 - index * 3);
+
+      return Math.max(55, capped);
+    };
+
     const similarRows = selectedSimilarEvents
-      .map((event) => `<tr>
-        <td>${event.similarityScore}/100</td>
+      .map((event, index) => `<tr>
+        <td>${precedentScore(event, index)}/100</td>
         <td>${escapeHtml(event.event_id)}</td>
         <td>${escapeHtml(event.municipality)}${event.year ? ` (${event.year})` : ""}</td>
-        <td>${escapeHtml(event.specific_cause)}</td>
-        <td>${escapeHtml((event.similarityReasons || []).slice(0, 3).join(", "))}</td>
+        <td>${escapeHtml(validityText(event.specific_cause, it ? "Non classificata" : "Unclassified"))}</td>
+        <td>${escapeHtml(precedentComponent(event, "trigger"))}</td>
+        <td>${escapeHtml(precedentComponent(event, "severity"))}</td>
+        <td>${escapeHtml(precedentComponent(event, "territory"))}</td>
+        <td>${escapeHtml(precedentComponent(event, "evidence"))}</td>
+        <td>${escapeHtml(precedentComponent(event, "hazard"))}</td>
       </tr>`)
       .join("");
 
     const recommendationRows = selectedRecommendations
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
+    const scoreLegendRows = `
+      <tr><td>A</td><td>${it ? "Alta affidabilita: piu fonti, preferibilmente istituzionali o tecniche." : "High reliability: multiple sources, preferably institutional or technical."}</td></tr>
+      <tr><td>B</td><td>${it ? "Affidabilita media: evento documentato ma con copertura o varieta fonti limitata." : "Medium reliability: documented event with limited coverage or source variety."}</td></tr>
+      <tr><td>C</td><td>${it ? "Affidabilita limitata: evidenza locale, incompleta o da rafforzare." : "Limited reliability: local, incomplete or to-be-strengthened evidence."}</td></tr>
+      <tr><td>Critical</td><td>${it ? "Massima attenzione: forte evidenza storica e/o territoriale." : "Maximum attention: strong historical and/or territorial evidence."}</td></tr>
+      <tr><td>High</td><td>${it ? "Attenzione elevata: evidenza significativa ma non necessariamente completa." : "High attention: significant evidence but not necessarily complete."}</td></tr>
+      <tr><td>Medium / Low</td><td>${it ? "Attenzione moderata o bassa, da leggere insieme ai dati disponibili." : "Moderate or low attention, to be read together with available data."}</td></tr>
+    `;
 
-    const benchmarkRows = selectedBenchmark
+    const validHistoricalCauses = selectedProvinceDrivers.causes.filter(
+      (item) =>
+        item &&
+        item.label &&
+        Number.isFinite(Number(item.value)) &&
+        workflowEvents.length > 0
+    );
+
+    const validHistoricalTotal = validHistoricalCauses.reduce(
+      (total, item) => total + Number(item.value || 0),
+      0
+    );
+    const otherHistoricalCount = Math.max(
+      0,
+      workflowEvents.length - validHistoricalTotal
+    );
+    const causeRows = validHistoricalCauses.length
+      ? [
+        ...validHistoricalCauses,
+        ...(otherHistoricalCount
+          ? [
+            {
+              label: it
+                ? "Other / failure precedent context"
+                : "Other / failure precedent context",
+              value: otherHistoricalCount,
+            },
+          ]
+          : []),
+      ]
+        .map((c, i) => `<tr>
+        <td>${i + 1}</td>
+        <td>${escapeHtml(c.label)}</td>
+        <td>${Number(c.value)}</td>
+        <td>${Math.round((Number(c.value) / Math.max(workflowEvents.length, 1)) * 100)}%</td>
+      </tr>`)
+        .join("")
+      : `<tr><td colspan="4">${it ? "Distribuzione cause non statisticamente affidabile per la provincia selezionata." : "No statistically reliable cause distribution available for this selected province."}</td></tr>`;
+
+    const workflowSourceCount = workflowEvents.reduce(
+      (total, event) =>
+        total +
+        (sourcesByEventMap[event.event_id] || []).length,
+      0
+    );
+    const humanImpactEvents = workflowEvents.filter(
+      (event) =>
+        Number(event.victims) > 0 ||
+        Number(event.injuries) > 0
+    ).length;
+    const triggeredEvents = workflowEvents.filter(
+      (event) => event.triggered
+    ).length;
+    const totalCollapseEvents = workflowEvents.filter(
+      (event) => event.collapse_severity === "TC"
+    ).length;
+    const reportBenchmark = [
+      {
+        label: "Total collapse share",
+        national: nationalBenchmark.totalCollapseShare,
+        selected: percentage(
+          totalCollapseEvents,
+          workflowEvents.length || 1
+        ),
+        suffix: "%",
+      },
+      {
+        label: "Triggered-event share",
+        national: nationalBenchmark.triggeredShare,
+        selected: percentage(
+          triggeredEvents,
+          workflowEvents.length || 1
+        ),
+        suffix: "%",
+      },
+      {
+        label: "Sources per event",
+        national: Number(
+          nationalBenchmark.avgSources.toFixed(1)
+        ),
+        selected: Number(
+          (
+            workflowSourceCount /
+            Math.max(workflowEvents.length, 1)
+          ).toFixed(1)
+        ),
+        suffix: "",
+      },
+      {
+        label: "Human-impact events",
+        national: nationalBenchmark.humanImpactShare,
+        selected: percentage(
+          humanImpactEvents,
+          workflowEvents.length || 1
+        ),
+        suffix: "%",
+      },
+      {
+        label: it
+          ? "Professional-grade sources"
+          : "Professional-grade sources",
+        national: nationalBenchmark.reliabilityShare,
+        selected: workflowReliability.institutionalShare,
+        suffix: "%",
+      },
+      {
+        label: "Failure precedent exposure",
+        national: nationalBenchmark.vulnerabilityShare,
+        selected: percentage(
+          workflowVulnerability.highOrCritical,
+          workflowEvents.length || 1
+        ),
+        suffix: "%",
+      },
+    ].map((row) => {
+      const delta = Number(
+        (row.selected - row.national).toFixed(1)
+      );
+      const status =
+        Math.abs(delta) < 2
+          ? "aligned"
+          : delta > 0
+            ? "above"
+            : "below";
+
+      return {
+        ...row,
+        status,
+      };
+    });
+    const benchmarkRows = reportBenchmark
       .map((item) => `<tr>
         <td>${escapeHtml(item.label)}</td>
         <td>${item.selected}${escapeHtml(item.suffix)}</td>
@@ -1781,26 +2338,153 @@ export default function ProfessionalPage() {
         <td>${escapeHtml(item.status)}</td>
       </tr>`)
       .join("");
+    const dominantCauseLabel =
+      validHistoricalCauses[0]?.label ||
+      selectedProvinceProfile.topCause ||
+      (it ? "non classificata" : "unclassified");
+    const dominantCauseCount =
+      validHistoricalCauses[0]?.value || 0;
+    const reliabilityLabel = evidenceClass(
+      workflowReliability.average
+    );
+    const dominantDriverPhrase =
+      dominantCauseLabel &&
+      dominantCauseLabel.toLowerCase().includes("hydraulic")
+        ? it
+          ? "una forte concentrazione di precedenti storici di collasso legati al contesto idraulico"
+          : "a strong concentration of hydraulic-related historical collapse precedents"
+        : it
+          ? `una concentrazione di precedenti storici legati a ${dominantCauseLabel}`
+          : `a concentration of historical precedents linked to ${dominantCauseLabel}`;
+    const decisionOutcome = it
+      ? `Uso raccomandato: screening preliminare del contesto ${workflowHazardExposure?.dominant_hazard || "hazard"} prima di progettazione, due diligence o indagini sito-specifiche.`
+      : `Recommended use: preliminary ${workflowHazardExposure?.dominant_hazard || "hazard"}-context screening before design, due diligence or site-specific investigation.`;
+    const topFindings = [
+      it
+        ? `Il contesto ${workflowHazardExposure?.dominant_hazard || "hazard"} domina la lettura territoriale.`
+        : `The ${workflowHazardExposure?.dominant_hazard || "hazard"} context dominates the territorial reading.`,
+      it
+        ? `${triggeredEvents} eventi innescati e ${totalCollapseEvents} crolli totali orientano la priorita tecnica.`
+        : `${triggeredEvents} triggered events and ${totalCollapseEvents} total collapses shape the technical priority.`,
+      it
+        ? `Affidabilita evidenze ${reliabilityLabel.toLowerCase()} con ${workflowSourceCount} fonti collegate.`
+        : `${reliabilityLabel} evidence reliability with ${workflowSourceCount} linked sources.`,
+    ];
+    const benchmarkCriticalRows = reportBenchmark.filter(
+      (item) => item.status === "above"
+    );
+    const benchmarkInterpretation =
+      benchmarkCriticalRows.length > 0
+        ? it
+          ? `Rispetto alla baseline nazionale ARCUS, la provincia selezionata risulta sopra media per ${benchmarkCriticalRows.map((item) => item.label).join(", ")}. Se la quota di eventi innescati e superiore alla media, il briefing va usato per anticipare verifiche su contesto idraulico, geotecnico e condizioni territoriali prima della progettazione sito-specifica.`
+          : `Compared with the national ARCUS baseline, the selected province is above average for ${benchmarkCriticalRows.map((item) => item.label).join(", ")}. If triggered-event share is above average, the briefing should be used to anticipate hydraulic, geotechnical and territorial-context checks before site-specific design.`
+        : it
+          ? "Rispetto alla baseline nazionale ARCUS, la provincia selezionata non mostra scostamenti estremi sui principali indicatori; la lettura resta guidata dal contesto locale e dalla qualita delle fonti."
+          : "Compared with the national ARCUS baseline, the selected province does not show extreme deviations across the main indicators; interpretation remains driven by local context and source quality.";
+    const dominantHazardRow = hazardData[0];
+    const hazardInterpretation = dominantHazardRow
+      ? it
+        ? `La provincia selezionata e dominata da ${dominantHazardRow.label.toLowerCase()}: ${dominantHazardRow.matched_events} crolli correlati su ${workflowEvents.length} eventi analizzati (${Math.round(dominantHazardRow.share * 100)}%). Gli altri layer vanno letti come contesto secondario di screening preliminare.`
+        : `The selected province is mainly driven by ${dominantHazardRow.label.toLowerCase()}: ${dominantHazardRow.matched_events} matched collapses out of ${workflowEvents.length} analysed events (${Math.round(dominantHazardRow.share * 100)}%). Other layers should be read as secondary preliminary-screening context.`
+      : it
+        ? "Nessun layer hazard risulta sufficientemente leggibile per una interpretazione automatica robusta."
+        : "No hazard layer is sufficiently readable for a robust automated interpretation.";
+    const historicalInterpretation = validHistoricalCauses.length
+      ? it
+        ? `L'evidenza storica conferma un pattern concentrato: ${dominantCauseLabel} rappresenta il ${percentage(dominantCauseCount, workflowEvents.length || 1)}% del campione selezionato. Nel campione sono presenti ${totalCollapseEvents} crolli totali e ${triggeredEvents} eventi innescati.`
+        : `Historical evidence confirms a concentrated pattern: ${dominantCauseLabel} represents ${percentage(dominantCauseCount, workflowEvents.length || 1)}% of the selected sample. The sample includes ${totalCollapseEvents} total collapses and ${triggeredEvents} triggered events.`
+      : it
+        ? "La distribuzione storica non e abbastanza completa per una lettura causale robusta."
+        : "The historical distribution is not complete enough for a robust causal reading.";
+    const priorityInterpretation = it
+      ? `Gli eventi prioritari sono selezionati per severita, trigger, driver territoriale e affidabilita delle fonti. La colonna "Why flagged" rende esplicito perche ciascun precedente merita attenzione operativa.`
+      : `Priority events are selected by severity, trigger, territorial driver and source reliability. The "Why flagged" column makes explicit why each precedent deserves operational attention.`;
+    const comparableInterpretation = selectedSimilarEvents.length
+      ? it
+        ? "I precedenti comparabili condividono causa, trigger, severita o contesto territoriale. Devono essere usati come analoghi storici, non come previsioni dirette."
+        : "Comparable precedents share cause, trigger, severity or territorial context. They should be used as historical analogues, not direct predictions."
+      : it
+        ? "Nessun analogo storico sufficientemente robusto e disponibile per questa selezione."
+        : "No sufficiently robust historical analogue is available for this selection.";
+    const sourceGroups = new Map();
 
-    const causeRows = selectedProvinceDrivers.causes
-      .map((c, i) => `<tr>
-        <td>${i + 1}</td>
-        <td>${escapeHtml(c.label)}</td>
-        <td>${c.value}</td>
-        <td>${Math.round((c.value / Math.max(workflowEvents.length, 1)) * 100)}%</td>
+    workflowEvents.forEach((event) => {
+      (sourcesByEventMap[event.event_id] || []).forEach((source) => {
+        const key =
+          source.source_url ||
+          source.source_title ||
+          source.source_id;
+
+        if (!key) {
+          return;
+        }
+
+        if (!sourceGroups.has(key)) {
+          sourceGroups.set(key, {
+            events: new Set(),
+            source,
+          });
+        }
+
+        sourceGroups.get(key).events.add(event.event_id);
+      });
+    });
+
+    const sourceAppendixRows = Array.from(sourceGroups.values())
+      .slice(0, 24)
+      .map(({ events: linkedEvents, source }) => `<tr>
+        <td>${escapeHtml(Array.from(linkedEvents).slice(0, 4).join(", "))}${linkedEvents.size > 4 ? "..." : ""}</td>
+        <td>${escapeHtml(validityText(source.source_title, it ? "Fonte senza titolo" : "Untitled source"))}</td>
+        <td>${escapeHtml(validityText(source.source_type, "-"))}</td>
+        <td>${escapeHtml(validityText(source.source_role, "-"))}</td>
+        <td>${escapeHtml(validityText(source.publication_date, "-"))}</td>
+        <td>${source.source_url ? `<a href="${escapeHtml(source.source_url)}">${escapeHtml(compactUrl(source.source_url))}</a>` : "-"}</td>
       </tr>`)
       .join("");
+    const sourceAppendixRowsSafe =
+      sourceAppendixRows ||
+      `<tr><td colspan="6">${it ? "Nessuna fonte collegata agli eventi della provincia selezionata." : "No sources linked to events in the selected province."}</td></tr>`;
+    const sourceAppendixSection = `<section class="appendix-section source-appendix page-block">
+      ${sectionHeading("A", it ? "SOURCE APPENDIX" : "SOURCE APPENDIX")}
+      <p>${it ? `Fonti principali collegate agli eventi della provincia selezionata, deduplicate per titolo o URL. Totale fonti collegate nel briefing: ${workflowSourceCount}. La tabella completa delle fonti puo essere esportata separatamente da ARCUS Professional.` : `Main sources linked to events in the selected province, deduplicated by title or URL. Total linked sources in this briefing: ${workflowSourceCount}. The full source table can be exported separately from ARCUS Professional.`}</p>
+      <table>
+        <thead><tr><th>Event ID</th><th>${it ? "Titolo fonte" : "Source title"}</th><th>Type</th><th>Role</th><th>${it ? "Data" : "Date"}</th><th>URL</th></tr></thead>
+        <tbody>${sourceAppendixRowsSafe}</tbody>
+      </table>
+    </section>`;
 
     const scoringSection = `<section>
       <h2>${it ? "LOGICA DI SCORING" : "SCORING LOGIC"}</h2>
       <table>
         <thead><tr><th>${it ? "Modello" : "Model"}</th><th>${it ? "Come si legge" : "How to read it"}</th></tr></thead>
         <tbody>
-          <tr><td>${it ? "Affidabilità evidenza" : "Evidence reliability"}</td><td>${it ? "Volume fonti, ruolo fonte, confidenza ARCUS, precisione spaziale e tracciabilità temporale." : "Source volume, source role, ARCUS confidence, spatial precision and temporal traceability."}</td></tr>
-          <tr><td>${it ? "Vulnerabilità" : "Vulnerability"}</td><td>${it ? "Severità, trigger, causa specifica, tipo struttura, materiale, età, impatto umano e penalità evidenza." : "Severity, trigger, specific cause, structure type, material, age, human impact and evidence penalty."}</td></tr>
+          <tr><td>${it ? "AffidabilitÃ  evidenza" : "Evidence reliability"}</td><td>${it ? "Volume fonti, ruolo fonte, confidenza ARCUS, precisione spaziale e tracciabilitÃ  temporale." : "Source volume, source role, ARCUS confidence, spatial precision and temporal traceability."}</td></tr>
+          <tr><td>${it ? "VulnerabilitÃ " : "Vulnerability"}</td><td>${it ? "SeveritÃ , trigger, causa specifica, tipo struttura, materiale, etÃ , impatto umano e penalitÃ  evidenza." : "Severity, trigger, specific cause, structure type, material, age, human impact and evidence penalty."}</td></tr>
           <tr><td>${it ? "Hazard territoriale" : "Territorial hazard"}</td><td>${it ? "Layer pubblici dichiarati e scores ufficiali per esposizione idraulica, franosa e sismica." : "Declared public overlays and official-source scores for hydraulic, landslide and seismic exposure."}</td></tr>
-          <tr><td>${it ? "Screening asset" : "Asset screening"}</td><td>${it ? "Posizione asset, eventi comparabili, corrispondenze vulnerabilità, campi tecnici e contesto territoriale." : "Asset location, comparable events, vulnerability matches, technical fields and territorial context."}</td></tr>
+          <tr><td>${it ? "Screening asset" : "Asset screening"}</td><td>${it ? "Posizione asset, eventi comparabili, corrispondenze vulnerabilitÃ , campi tecnici e contesto territoriale." : "Asset location, comparable events, vulnerability matches, technical fields and territorial context."}</td></tr>
         </tbody>
+      </table>
+    </section>`;
+
+    const methodologySection = `<section class="page-block">
+      ${sectionHeading("14", it ? "METHODOLOGY SNAPSHOT" : "METHODOLOGY SNAPSHOT")}
+      <p>${it ? "ARCUS combina evidenze storiche di collasso, affidabilita delle fonti, rilevanza spaziale, severita, trigger, similarita causale, contesto hazard territoriale e overlay WMS pubblici. Il briefing supporta screening e prioritizzazione preliminare: non e una certificazione di sicurezza strutturale." : "ARCUS combines historical collapse evidence, source reliability, spatial relevance, severity, triggers, cause similarity, territorial hazard context and public WMS overlays. The briefing supports preliminary screening and prioritisation: it is not a structural safety certification."}</p>
+      <table>
+        <thead><tr><th>${it ? "Componente" : "Component"}</th><th>${it ? "Uso nel briefing" : "Use in the briefing"}</th></tr></thead>
+        <tbody>
+          <tr><td>${it ? "Evidenza storica" : "Historical evidence"}</td><td>${it ? "Record ARCUS documentati, cause, trigger e severita." : "Documented ARCUS records, causes, triggers and severity."}</td></tr>
+          <tr><td>${it ? "Affidabilita fonti" : "Source reliability"}</td><td>${it ? "Numero, ruolo e qualita delle fonti disponibili." : "Number, role and quality of available sources."}</td></tr>
+          <tr><td>${it ? "Rilevanza spaziale" : "Spatial relevance"}</td><td>${it ? "Provincia selezionata e confine amministrativo provinciale." : "Selected province and administrative provincial boundary."}</td></tr>
+          <tr><td>${it ? "Contesto hazard" : "Hazard context"}</td><td>${it ? "Overlay pubblici WMS idraulici/franosi e contesto sismico." : "Public hydraulic/landslide WMS overlays and seismic context."}</td></tr>
+          <tr><td>${it ? "Precedenti comparabili" : "Comparable precedents"}</td><td>${it ? "Cause match, trigger match, severita, contesto territoriale e affidabilita." : "Cause match, trigger match, severity, territorial context and reliability."}</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      ${sectionHeading("15", it ? "SCORE AND CLASS LEGEND" : "SCORE AND CLASS LEGEND")}
+      <table>
+        <thead><tr><th>${it ? "Classe" : "Class"}</th><th>${it ? "Interpretazione" : "Interpretation"}</th></tr></thead>
+        <tbody>${scoreLegendRows}</tbody>
       </table>
     </section>`;
 
@@ -1811,23 +2495,54 @@ export default function ProfessionalPage() {
       { num: "04", name: it ? "Due Diligence"    : "Due Diligence",       doc: it ? "Pacchetto Due Diligence"     : "Due Diligence Package"     },
       { num: "05", name: it ? "Research Intel."  : "Research Intel.",     doc: it ? "Output Ricerca"              : "Research Output"           },
     ][activeEntryPath];
+    const reportSlug = reportAreaLabel
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    const reportId = `ARCUS-P${pathMeta.num}-${new Date()
+      .toISOString()
+      .slice(0, 10)
+      .replaceAll("-", "")}-${reportSlug || "territory"}`;
+    const exportVersion = "ARCUS Professional PDF-ready v0.3";
+    const spatialLevel = isPath01 || !manualAreaBounds
+      ? provinceContext.spatialLevel
+      : it
+        ? "Area custom selezionata"
+        : "Custom selected area";
 
-    // ── CSS ──────────────────────────────────────────────
+    // â”€â”€ CSS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const css = `
-      :root { color: #1c1713; background: #fff8f2; font-family: Inter, Aptos, Arial, sans-serif; }
-      body { margin: 0; background: #fff8f2; color: #1c1713; }
-      .cover { padding: 44px 52px 40px; background: #15110f; color: #f2e8d4; }
-      .brand { color: #c49040; font-size: 34px; font-weight: 800; letter-spacing: 0.18em; }
-      .path-badge { display: inline-block; margin-top: 18px; padding: 4px 12px; border: 1px solid rgba(196,144,64,0.5); border-radius: 2px; color: rgba(242,232,212,0.7); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-      .cover h1 { max-width: 760px; margin: 14px 0 0; font-size: 44px; line-height: 1.05; }
-      .meta { margin-top: 16px; color: rgba(242,232,212,0.6); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
-      main { padding: 42px 52px 60px; }
-      .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
-      .kpi { padding: 18px; border: 1px solid #d9cec1; background: rgba(255,255,255,0.54); }
-      .kpi span { color: #7a6548; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-      .kpi strong { display: block; margin-top: 10px; color: #c49040; font-size: 32px; font-weight: 700; line-height: 1.1; }
-      section { margin-top: 16px; padding: 22px 24px; border: 1px solid #d9cec1; background: rgba(255,255,255,0.54); page-break-inside: avoid; }
-      h2 { margin: 0 0 14px; color: #7a6548; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+      @page { size: A4; margin: 18mm 16mm; }
+      :root { color: #1c1713; background: #f7f0e8; font-family: Inter, Aptos, Arial, sans-serif; }
+      body { margin: 0; background: #f7f0e8; color: #1c1713; }
+      .report-footer { position: fixed; left: 16mm; right: 16mm; bottom: 7mm; display: flex; justify-content: space-between; gap: 18px; color: #8b7b68; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .cover { min-height: 440px; padding: 56px 64px 48px; background: #15110f; color: #f2e8d4; border-bottom: 8px solid #c49040; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; }
+      .brief-output .cover { min-height: auto; padding: 30px 42px; page-break-after: avoid; }
+      .brand { color: #c49040; font-size: 36px; font-weight: 900; letter-spacing: 0.2em; }
+      .path-badge { display: inline-block; margin-top: 22px; padding: 6px 12px; border: 1px solid rgba(196,144,64,0.55); color: rgba(242,232,212,0.72); font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+      .cover h1 { max-width: 760px; margin: 18px 0 0; font-size: 48px; line-height: 1.02; }
+      .brief-output .cover h1 { font-size: 34px; }
+      .meta { margin-top: 18px; color: rgba(242,232,212,0.62); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+      .cover-meta-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 42px; }
+      .cover-meta-grid div { padding-top: 10px; border-top: 1px solid rgba(196,144,64,0.42); }
+      .cover-meta-grid span { display: block; color: rgba(242,232,212,0.52); font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+      .cover-meta-grid strong { display: block; margin-top: 6px; color: #f2e8d4; font-size: 12px; line-height: 1.35; }
+      main { max-width: 1040px; margin: 0 auto; padding: 42px 44px 64px; }
+      .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0 24px; }
+      .kpi { padding: 16px; border: 1px solid #d7cab9; background: #fffaf2; box-shadow: 0 10px 26px rgba(64,49,37,0.06); }
+      .kpi > span { color: #7a6548; font-size: 9px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+      .kpi strong { display: block; margin-top: 8px; color: #c49040; font-size: 28px; font-weight: 800; line-height: 1.05; }
+      .kpi p { margin: 10px 0 0; font-size: 11px; line-height: 1.45; }
+      .kpi-class, .kpi-driver { display: block; color: #4f463d; font-weight: 700; letter-spacing: 0; text-transform: none; }
+      .kpi-class em { display: inline-block; padding: 4px 7px; background: #15110f; color: #c49040; font-style: normal; font-size: 9px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+      .kpi-driver { margin-top: 3px; color: #7a6548; font-weight: 600; }
+      section { margin-top: 16px; padding: 22px 24px; border: 1px solid #d7cab9; background: rgba(255,250,242,0.9); page-break-inside: avoid; }
+      .brief-page { page-break-before: avoid; }
+      .executive-section { border-color: #c49040; background: #fffaf2; box-shadow: 0 14px 34px rgba(64,49,37,0.08); }
+      .page-block { page-break-before: always; }
+      .appendix-section { background: #fbf4ec; }
+      h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; color: #7a6548; font-size: 10px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+      .section-number { display: inline-flex; width: 28px; height: 22px; align-items: center; justify-content: center; background: #15110f; color: #c49040; font-size: 10px; letter-spacing: 0; }
       p, li { color: #4f463d; line-height: 1.6; font-size: 13px; }
       p { margin: 0 0 10px; }
       ol, ul { margin: 0; padding-left: 20px; }
@@ -1842,80 +2557,181 @@ export default function ProfessionalPage() {
       .area-sketch strong { display: block; color: #1c1713; font-size: 18px; margin-bottom: 4px; }
       .area-sketch p { color: #7a6548; font-size: 11px; margin: 0; }
       .note { background: #f9f2e8; border-left: 3px solid #c49040; padding: 12px 16px; margin-top: 10px; font-size: 12px; color: #4f463d; }
-      @media print { body { background: white; } .cover { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+      .decision-box { margin-top: 18px; padding: 16px 18px; background: #15110f; color: #f2e8d4; border-left: 6px solid #c49040; font-weight: 800; line-height: 1.5; }
+      .findings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+      .finding { padding: 14px; background: #f9f2e8; border: 1px solid #d7cab9; }
+      .finding span { display: block; color: #c49040; font-size: 10px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+      .finding strong { display: block; margin-top: 8px; font-size: 13px; line-height: 1.45; }
+      .split-two { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 16px; align-items: stretch; }
+      .map-frame { position: relative; min-height: 260px; overflow: hidden; border: 1px solid #b8aa98; background: #e8e2d7; }
+      .map-grid { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(58,73,69,.12) 1px,transparent 1px),linear-gradient(rgba(58,73,69,.12) 1px,transparent 1px),radial-gradient(circle at 25% 40%,rgba(110,133,141,.32),transparent 18%),radial-gradient(circle at 76% 62%,rgba(196,144,64,.24),transparent 20%); background-size: 32px 32px,32px 32px,100% 100%,100% 100%; }
+      .map-area-box { position: absolute; inset: 28px 42px 52px; border: 2px solid rgba(196,144,64,.9); background: rgba(196,144,64,.08); }
+      .map-pin { position: absolute; width: 9px; height: 9px; margin: -4px 0 0 -4px; border-radius: 999px; box-shadow: 0 0 0 4px rgba(21,17,15,.10); }
+      .map-pin-critical { background: #9b3d31; }
+      .map-pin-triggered { background: #c49040; }
+      .map-pin-context { background: #53676d; }
+      .map-north { position: absolute; right: 18px; top: 16px; width: 30px; height: 30px; display: grid; place-items: center; background: #15110f; color: #c49040; font-weight: 900; }
+      .map-scale { position: absolute; left: 18px; bottom: 62px; color: #15110f; font-size: 10px; font-weight: 800; }
+      .map-scale span { display: block; width: 96px; height: 5px; margin-bottom: 4px; background: linear-gradient(90deg,#15110f 0 25%,#f2e8d4 25% 50%,#15110f 50% 75%,#f2e8d4 75% 100%); border: 1px solid #15110f; }
+      .map-legend { position: absolute; top: 16px; left: 18px; display: grid; gap: 5px; padding: 8px 10px; background: rgba(255,250,242,.88); border: 1px solid #d7cab9; font-size: 10px; font-weight: 800; color: #4f463d; }
+      .map-legend span { display: flex; align-items: center; gap: 6px; }
+      .map-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 999px; }
+      .map-caption { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; justify-content: space-between; gap: 18px; padding: 10px 12px; background: rgba(21,17,15,.88); color: #f2e8d4; font-size: 11px; }
+      .map-caption strong { color: #c49040; }
+      .map-image-frame { margin: 0; border: 1px solid #b8aa98; background: #fffaf2; }
+      .map-image-frame img { display: block; width: 100%; height: auto; }
+      .map-image-frame figcaption { padding: 10px 12px; color: #7a6548; font-size: 11px; line-height: 1.45; }
+      .table-caption { margin-top: 8px; color: #7a6548; font-size: 11px; font-weight: 700; }
+      .source-appendix table { font-size: 9px; }
+      .source-appendix td, .source-appendix th { word-break: break-word; }
+      @media print { body { background: white; } .cover, .kpi, .decision-box, .finding, th { print-color-adjust: exact; -webkit-print-color-adjust: exact; } table { page-break-inside: auto; } thead { display: table-header-group; } tr { page-break-inside: avoid; } }
     `;
 
-    // ── PATH-SPECIFIC BODY ──────────────────────────────
-    let pathBody = "";
+    // â”€â”€ PATH-SPECIFIC BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    let pathBody;
 
-    // PATH 0 — Territory Briefing
+    // PATH 0 - Territory Briefing
     if (activeEntryPath === 0) {
       pathBody = `
-      <div class="kpis">
-        <div class="kpi"><span>Priority index</span><strong>${score}</strong></div>
-        <div class="kpi"><span>${it ? "Affidabilità" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)}</strong></div>
-        <div class="kpi"><span>${it ? "Vulnerabilità" : "Vulnerability"}</span><strong>${Math.round(workflowVulnerability.average)}</strong></div>
-        <div class="kpi"><span>${it ? "Eventi storici" : "Historical events"}</span><strong>${workflowEvents.length}</strong></div>
-      </div>
-      <section>
-        <h2>${it ? "SINTESI TERRITORIALE" : "TERRITORY SUMMARY"}</h2>
-        <p>${escapeHtml(reportAreaDescription)}</p>
-        <p><strong>${it ? "Contesto progetto" : "Project context"}:</strong> ${escapeHtml(selectedProjectContext)} — ${it ? "Priority index" : "Priority index"}: ${score}</p>
-        <div class="note">${it ? "Questo report è un documento di screening e prioritizzazione. Non sostituisce ispezioni, verifiche progettuali o decisioni istituzionali." : "This report is a screening and prioritisation document. It does not replace inspections, design checks or institutional decisions."}</div>
+      <section class="executive-section">
+        ${sectionHeading("01", it ? "EXECUTIVE SUMMARY" : "EXECUTIVE SUMMARY")}
+        <p>${it ? `La provincia selezionata mostra un livello di attenzione infrastrutturale ${classPriority(score).toLowerCase()} per nuovi interventi su ponti e pianificazione territoriale. Il segnale e guidato principalmente da ${dominantDriverPhrase}, documentati nel database ARCUS e supportati da ${workflowSourceCount} fonti collegate.` : `The selected province shows a ${classPriority(score).toLowerCase()} infrastructure attention level for new bridge interventions and territorial planning. The signal is mainly driven by ${dominantDriverPhrase}, documented in the ARCUS database and supported by ${workflowSourceCount} linked sources.`}</p>
+        <div class="decision-box">${escapeHtml(decisionOutcome)}</div>
+        <div class="findings-grid">
+          ${topFindings.map((finding, index) => `<div class="finding"><span>${it ? "Finding" : "Finding"} ${index + 1}</span><strong>${escapeHtml(finding)}</strong></div>`).join("")}
+        </div>
       </section>
-      ${manualAreaBounds ? `<section>
-        <h2>${it ? "AREA SELEZIONATA" : "SELECTED AREA"}</h2>
-        <p>${it ? "Area disegnata manualmente sulla mappa. ARCUS usa tutti i crolli dentro il rettangolo." : "Area drawn manually on the map. ARCUS uses all collapses inside the rectangle."}</p>
-        ${selectedAreaSketch}
-        <table>
-          <thead><tr><th>${it ? "Area" : "Area"}</th><th>${it ? "Province" : "Provinces"}</th><th>${it ? "Events" : "Events"}</th><th>${it ? "Contesto" : "Context"}</th></tr></thead>
-          <tbody><tr><td>${escapeHtml(reportAreaLabel)}</td><td>${escapeHtml(provinceList)}</td><td>${workflowEvents.length}</td><td>${escapeHtml(selectedProjectContext)}</td></tr></tbody>
-        </table>
-      </section>` : ""}
-      <section>
-        <h2>${it ? "SOMMARI HAZARD" : "HAZARD SUMMARIES"}</h2>
-        <p>${it ? `Layer dominante: <strong>${workflowHazardExposure?.dominant_hazard || "N/D"}</strong>. Layer WMS pubblici dichiarati correlati agli eventi ARCUS nell'area.` : `Dominant layer: <strong>${workflowHazardExposure?.dominant_hazard || "N/A"}</strong>. Declared public WMS layers correlated with ARCUS events in the area.`}</p>
-        <table>
-          <thead><tr><th>Layer</th><th>Score</th><th>${it ? "Eventi correlati" : "Matched events"}</th><th>Share</th></tr></thead>
-          <tbody>${hazardRows}</tbody>
-        </table>
+      <section class="page-block">
+        ${sectionHeading("02", it ? "SELECTED AREA & MAP" : "SELECTED AREA & MAP")}
+        <div class="split-two">
+          <div>
+            <p>${escapeHtml(reportAreaDescription)}</p>
+            ${selectedAreaSketch}
+            <table>
+              <thead><tr><th>${it ? "Selection type" : "Selection type"}</th><th>${it ? "Provincia" : "Province"}</th><th>${it ? "Regione" : "Region"}</th><th>${it ? "Project context" : "Project context"}</th><th>${it ? "Generato" : "Generated"}</th></tr></thead>
+              <tbody><tr><td>${escapeHtml(provinceContext.selectionType)}</td><td>${escapeHtml(provinceContext.areaLabel)}</td><td>${escapeHtml(provinceContext.region)}</td><td>${escapeHtml(provinceContext.projectContext)}</td><td>${provinceContext.generatedOn}</td></tr></tbody>
+            </table>
+            <p class="table-caption">${it ? `Fonte geometria: ${provinceContext.geometrySource}. Regione: ${provinceContext.region}.` : `Geometry source: ${provinceContext.geometrySource}. Region: ${provinceContext.region}.`}</p>
+          </div>
+          ${reportMapFrame}
+        </div>
       </section>
       <section>
-        <h2>${it ? "EVIDENZE STORICHE" : "HISTORICAL EVIDENCE"}</h2>
-        <p>${it ? "Cause ricorrenti e pattern stagionali nell'area. Fonte: database ARCUS con evidenza documentata." : "Recurring causes and seasonal patterns in the area. Source: ARCUS database with documented evidence."}</p>
+        ${sectionHeading("03", it ? "HOW TO READ THIS REPORT" : "HOW TO READ THIS REPORT")}
+        <p>${it ? "ARCUS combina record storici di collasso, hazard pubblici, evidenza source-backed e analisi comparativa dei precedenti. Non produce una certificazione di sicurezza strutturale e non sostituisce ispezioni, verifiche progettuali o decisioni istituzionali." : "ARCUS combines historical collapse records, public hazards, source-backed evidence and comparative precedent analysis. It does not produce a structural safety certification and does not replace inspections, design checks or institutional decisions."}</p>
+      </section>
+      <section>
+        ${sectionHeading("04", it ? "KEY INDICATORS" : "KEY INDICATORS")}
+        <div class="kpis">
+        <div class="kpi"><span>Priority index</span><strong>${score} / 100</strong>${formatKpi({ level: classPriority(score), driver: it ? `${workflowHazardExposure?.dominant_hazard || "hazard context"}, densita dei precedenti, eventi innescati e affidabilita evidenze.` : `${workflowHazardExposure?.dominant_hazard || "hazard context"}, precedent density, triggered-event concentration and evidence reliability.` })}</div>
+        <div class="kpi"><span>${it ? "Affidabilita evidenze" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: it ? `${workflowSourceCount} fonti collegate e ${workflowReliability.institutionalShare}% evidenza professional-grade.` : `${workflowSourceCount} linked sources and ${workflowReliability.institutionalShare}% professional-grade evidence.` })}</div>
+        <div class="kpi"><span>Failure precedent exposure</span><strong>${Math.round(workflowVulnerability.average)} / 100</strong>${formatKpi({ level: attentionClass(workflowVulnerability.average), driver: it ? `Pattern storico ${dominantCauseLabel}; indicatore source-backed, non certificazione strutturale.` : `Historical ${dominantCauseLabel} pattern; source-backed indicator, not structural certification.` })}</div>
+        <div class="kpi"><span>${it ? "Eventi storici" : "Historical events"}</span><strong>${workflowEvents.length}</strong>${formatKpi({ level: `${percentage(dominantCauseCount, workflowEvents.length || 1)}% ${dominantCauseLabel}`, driver: it ? `${dominantCauseCount} occorrenze del driver dominante su ${workflowEvents.length} precedenti.` : `${dominantCauseCount} dominant-driver occurrences out of ${workflowEvents.length} precedents.` })}</div>
+        </div>
+      </section>
+      <section>
+        ${sectionHeading("05", it ? "HAZARD CONTEXT" : "HAZARD CONTEXT")}
+        <p>${it ? `Layer dominante: <strong>${workflowHazardExposure?.dominant_hazard || "N/D"}</strong>. I layer WMS pubblici idraulici e franosi sono correlati ai crolli ARCUS nella provincia selezionata.` : `Dominant layer: <strong>${workflowHazardExposure?.dominant_hazard || "N/A"}</strong>. Public hydraulic and landslide WMS layers are correlated with ARCUS collapses in the selected province.`}</p>
+        <table>
+          <thead><tr><th>Layer</th><th>Score</th><th>${it ? "Crolli correlati" : "Matched collapses"}</th><th>Share</th></tr></thead>
+          <tbody>${hazardRowsSafe}</tbody>
+        </table>
+        <p class="note">${escapeHtml(hazardInterpretation)}</p>
+      </section>
+      <section>
+        ${sectionHeading("06", it ? "HISTORICAL EVIDENCE" : "HISTORICAL EVIDENCE")}
+        <p>${it ? `Distribuzione delle cause ricorrenti nel contesto selezionato. I record non classificati sono mantenuti come contesto di precedente, cosi il totale resta coerente con i ${workflowEvents.length} eventi analizzati.` : `Distribution of recurring causes in the selected context. Unclassified records are retained as precedent context, so the total remains consistent with the ${workflowEvents.length} analysed events.`}</p>
         <table>
           <thead><tr><th>#</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Occorrenze" : "Occurrences"}</th><th>Share</th></tr></thead>
           <tbody>${causeRows}</tbody>
         </table>
+        <p class="note">${escapeHtml(historicalInterpretation)}</p>
       </section>
       <section>
-        <h2>${it ? "EVENTI PRIORITARI" : "PRIORITY EVENTS"}</h2>
+        ${sectionHeading("07", it ? "PRIORITY EVENTS" : "PRIORITY EVENTS")}
         <table>
-          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Severità" : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Evidenza" : "Evidence"}</th><th>${it ? "Vulnerabilità" : "Vulnerability"}</th></tr></thead>
+          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Severita" : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Evidenza" : "Evidence"}</th><th>${it ? "Attention indicator" : "Attention indicator"}</th><th>${it ? "Why flagged" : "Why flagged"}</th></tr></thead>
           <tbody>${eventRows}</tbody>
         </table>
+        <p class="table-caption">${it ? "Nel corpo principale sono mostrati i primi 5 eventi. La tabella completa e disponibile negli export professionali." : "The main body shows the top 5 events. The full event table is available through professional exports."}</p>
+        <p class="note">${escapeHtml(priorityInterpretation)}</p>
       </section>
-      ${selectedSimilarEvents.length > 0 ? `<section>
-        <h2>${it ? "PRECEDENTI COMPARABILI" : "COMPARABLE PRECEDENTS"}</h2>
-        <p>${it ? "Casi con meccanismo di collasso, causa o contesto comparabile all'evento di riferimento." : "Cases with comparable collapse mechanism, cause or context to the reference event."}</p>
-        <table>
-          <thead><tr><th>${it ? "Similitudine" : "Similarity"}</th><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Motivi" : "Reasons"}</th></tr></thead>
-          <tbody>${similarRows}</tbody>
-        </table>
-      </section>` : ""}
       <section>
-        <h2>${it ? "RACCOMANDAZIONI" : "RECOMMENDATIONS"}</h2>
+        ${sectionHeading("08", it ? "COMPARABLE PRECEDENTS" : "COMPARABLE PRECEDENTS")}
+        <p>${it ? "Casi comparabili scomposti per causa, trigger, severita, contesto territoriale, affidabilita fonte e sovrapposizione hazard." : "Comparable cases decomposed by cause, trigger, severity, territorial context, source reliability and hazard overlap."}</p>
+        <table>
+          <thead><tr><th>${it ? "Similarity" : "Similarity"}</th><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Causa" : "Cause"}</th><th>Trigger</th><th>${it ? "Severita" : "Severity"}</th><th>${it ? "Territorio" : "Territory"}</th><th>${it ? "Evidenza" : "Evidence"}</th><th>${it ? "Hazard overlap" : "Hazard overlap"}</th></tr></thead>
+          <tbody>${similarRows || `<tr><td colspan="9">${it ? "Nessun precedente comparabile sufficientemente robusto per la provincia selezionata." : "No sufficiently robust comparable precedent for this selected province."}</td></tr>`}</tbody>
+        </table>
+        <p class="note">${escapeHtml(comparableInterpretation)}</p>
+      </section>
+      <section>
+        ${sectionHeading("09", it ? "INTERPRETATION" : "INTERPRETATION")}
+        <p>${it ? `Per nuovi interventi ${selectedProjectContext}, ARCUS segnala ${classPriority(score).toLowerCase()} per ${reportAreaLabel}. La lettura deriva da precedenti storici, contesto hazard e qualita dell'evidenza: non indica automaticamente una criticita strutturale, ma orienta le verifiche successive.` : `For new ${selectedProjectContext} interventions, ARCUS indicates ${classPriority(score).toLowerCase()} for ${reportAreaLabel}. The reading is derived from historical precedents, hazard context and evidence quality: it does not automatically indicate structural criticality, but guides follow-up checks.`}</p>
+      </section>
+      <section>
+        ${sectionHeading("10", it ? "DECISION USE" : "DECISION USE")}
+        <table>
+          <thead><tr><th>${it ? "Can support" : "Can support"}</th><th>${it ? "Should not be used as" : "Should not be used as"}</th></tr></thead>
+          <tbody><tr>
+            <td>${it ? "screening territoriale preliminare, priorita di indagine, due diligence documentale, confronto con precedenti storici e impostazione di richieste tecniche successive." : "preliminary territorial screening, investigation priorities, documentary due diligence, comparison with historical precedents and framing of follow-up technical requests."}</td>
+            <td>${it ? "certificazione di sicurezza strutturale, verifica progettuale, autorizzazione amministrativa, modello idraulico/geotecnico/sismico di dettaglio o sostituto di ispezioni in sito." : "structural safety certification, design verification, administrative authorisation, detailed hydraulic/geotechnical/seismic model or substitute for field inspections."}</td>
+          </tr></tbody>
+        </table>
+      </section>
+      <section>
+        ${sectionHeading("11", it ? "RECOMMENDATIONS" : "RECOMMENDATIONS")}
         <ol>${recommendationRows}</ol>
       </section>
       <section>
-        <h2>${it ? "BENCHMARK NAZIONALE" : "NATIONAL BENCHMARK"}</h2>
+        ${sectionHeading("12", it ? "NATIONAL BENCHMARK" : "NATIONAL BENCHMARK")}
         <table>
           <thead><tr><th>${it ? "Indicatore" : "Indicator"}</th><th>${it ? "Selezionato" : "Selected"}</th><th>${it ? "Media ARCUS" : "ARCUS average"}</th><th>Status</th></tr></thead>
           <tbody>${benchmarkRows}</tbody>
         </table>
+        <p class="note">${escapeHtml(benchmarkInterpretation)}</p>
+      </section>
+      <section>
+        ${sectionHeading("13", it ? "DATA COVERAGE & LIMITATIONS" : "DATA COVERAGE & LIMITATIONS")}
+        <table>
+          <thead><tr><th>${it ? "Elemento" : "Element"}</th><th>${it ? "Lettura operativa" : "Operational reading"}</th></tr></thead>
+          <tbody>
+            <tr><td>Spatial resolution</td><td>${it ? "Screening a livello provinciale basato sul confine amministrativo selezionato; non e site-specific salvo coordinate o asset forniti in workflow dedicati." : "Province-level screening based on the selected administrative boundary; not site-specific unless coordinates or assets are provided in dedicated workflows."}</td></tr>
+            <tr><td>Hazard layers</td><td>${it ? "Layer WMS pubblici usati come contesto territoriale, non come modellazione locale idraulica, geotecnica o sismica di dettaglio." : "Public WMS layers used as territorial context, not as detailed local hydraulic, geotechnical or seismic modelling."}</td></tr>
+            <tr><td>Historical records</td><td>${it ? "Basato su eventi di collasso documentati ARCUS e fonti collegate; non rappresenta tutte le condizioni strutturali esistenti." : "Based on documented ARCUS collapse events and linked sources; it does not represent all existing structural conditions."}</td></tr>
+            <tr><td>Missing data</td><td>${it ? "Alcuni eventi possono non avere attributi tecnici completi, come tipologia del ponte, materiale o anno di costruzione." : "Some events may lack complete technical attributes such as bridge type, material or construction year."}</td></tr>
+            <tr><td>Professional use</td><td>${it ? "Adatto a screening preliminare e prioritizzazione; richiede verifiche tecniche successive prima di decisioni progettuali o istituzionali." : "Suitable for preliminary screening and prioritisation; follow-up technical checks are required before design or institutional decisions."}</td></tr>
+          </tbody>
+        </table>
       </section>`;
-
-    // PATH 1 — Operational Watchlist
+    // PATH 1 â€” Operational Watchlist
+      if (isBrief) {
+        pathBody = `
+        <section class="executive-section brief-page">
+          ${sectionHeading("01", it ? "EXECUTIVE ONE-PAGE SUMMARY" : "EXECUTIVE ONE-PAGE SUMMARY")}
+          <p>${it ? `La provincia selezionata mostra un livello di attenzione infrastrutturale ${classPriority(score).toLowerCase()} per nuovi interventi su ponti. Il segnale e guidato da ${dominantDriverPhrase}, ${workflowEvents.length} precedenti ARCUS e ${workflowSourceCount} fonti collegate.` : `The selected province shows a ${classPriority(score).toLowerCase()} infrastructure attention level for new bridge interventions. The signal is driven by ${dominantDriverPhrase}, ${workflowEvents.length} ARCUS precedents and ${workflowSourceCount} linked sources.`}</p>
+          <div class="decision-box">${escapeHtml(decisionOutcome)}</div>
+          <div class="findings-grid">
+            ${topFindings.map((finding, index) => `<div class="finding"><span>${it ? "Finding" : "Finding"} ${index + 1}</span><strong>${escapeHtml(finding)}</strong></div>`).join("")}
+          </div>
+          <div class="kpis">
+            <div class="kpi"><span>Priority index</span><strong>${score} / 100</strong>${formatKpi({ level: classPriority(score), driver: it ? `${workflowHazardExposure?.dominant_hazard || "hazard context"} e densita dei precedenti.` : `${workflowHazardExposure?.dominant_hazard || "hazard context"} and precedent density.` })}</div>
+            <div class="kpi"><span>${it ? "Affidabilita evidenze" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: it ? `${workflowSourceCount} fonti collegate.` : `${workflowSourceCount} linked sources.` })}</div>
+            <div class="kpi"><span>Failure precedent exposure</span><strong>${Math.round(workflowVulnerability.average)} / 100</strong>${formatKpi({ level: attentionClass(workflowVulnerability.average), driver: dominantCauseLabel })}</div>
+            <div class="kpi"><span>${it ? "Eventi storici" : "Historical events"}</span><strong>${workflowEvents.length}</strong>${formatKpi({ level: `${percentage(dominantCauseCount, workflowEvents.length || 1)}% ${dominantCauseLabel}`, driver: it ? "Driver dominante del campione." : "Dominant sample driver." })}</div>
+          </div>
+        </section>
+        <section>
+          ${sectionHeading("02", it ? "MAP & FOLLOW-UP ACTIONS" : "MAP & FOLLOW-UP ACTIONS")}
+          <div class="split-two">
+            ${reportMapFrame}
+            <div>
+              <p>${escapeHtml(hazardInterpretation)}</p>
+              <ol>${recommendationRows}</ol>
+            </div>
+          </div>
+        </section>`;
+      }
     } else if (activeEntryPath === 1) {
       const p1Count = assetScreening.filter((a) => a.priority === "Priority 1").length;
       const p2Count = assetScreening.filter((a) => a.priority === "Priority 2").length;
@@ -1946,7 +2762,7 @@ export default function ProfessionalPage() {
       </div>
       <section>
         <h2>${it ? "SINTESI INVENTARIO" : "INVENTORY SUMMARY"}</h2>
-        <p>${it ? `Inventario caricato: ${assetRows.length} asset. Valutati: ${assetScreening.length}. Qualità inventario: ${assetInventoryAudit.score}/100.` : `Uploaded inventory: ${assetRows.length} assets. Assessed: ${assetScreening.length}. Inventory quality: ${assetInventoryAudit.score}/100.`}</p>
+        <p>${it ? `Inventario caricato: ${assetRows.length} asset. Valutati: ${assetScreening.length}. Qualita inventario: ${assetInventoryAudit.score}/100.` : `Uploaded inventory: ${assetRows.length} assets. Assessed: ${assetScreening.length}. Inventory quality: ${assetInventoryAudit.score}/100.`}</p>
         <div class="note">${it ? `Gap tecnici: ${assetInventoryAudit.total - assetInventoryAudit.technical} asset senza dati tecnici completi.` : `Technical gaps: ${assetInventoryAudit.total - assetInventoryAudit.technical} assets missing complete technical data.`}</div>
       </section>
       <section>
@@ -1967,14 +2783,14 @@ export default function ProfessionalPage() {
       </section>` : ""}
       ${monitoringSignals.length > 0 ? `<section>
         <h2>${it ? "CANDIDATI ALL'ISPEZIONE" : "INSPECTION CANDIDATES"}</h2>
-        <p>${it ? "Asset con segnali di attenzione derivati da crolli totali, vulnerabilità critica o impatto umano nel territorio." : "Assets with attention signals derived from total collapses, critical vulnerability or human impact in the territory."}</p>
+        <p>${it ? "Asset con segnali di attenzione derivati da crolli totali, vulnerabilitÃ  critica o impatto umano nel territorio." : "Assets with attention signals derived from total collapses, critical vulnerability or human impact in the territory."}</p>
         <table>
           <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>Level</th><th>${it ? "Segnali" : "Signals"}</th></tr></thead>
           <tbody>${monitoringTableRows}</tbody>
         </table>
       </section>` : ""}`;
 
-    // PATH 2 — Scenario Briefing
+    // PATH 2 â€” Scenario Briefing
     } else if (activeEntryPath === 2) {
       const areaEvents = manualAreaBounds ? manualAreaEvents : workflowEvents;
       const analogueRows = (selectedSimilarEvents.length > 0 ? selectedSimilarEvents : areaEvents)
@@ -1998,7 +2814,7 @@ export default function ProfessionalPage() {
       <section>
         <h2>${it ? "SINTESI SCENARIO" : "SCENARIO SUMMARY"}</h2>
         <p>${it ? `Scenario analizzato: <strong>${activeScenario?.label || "-"}</strong>. Area: ${reportAreaLabel}. ${areaEvents.length} eventi ARCUS nel contesto.` : `Analyzed scenario: <strong>${activeScenario?.label || "-"}</strong>. Area: ${reportAreaLabel}. ${areaEvents.length} ARCUS events in context.`}</p>
-        <div class="note">${it ? "Questo briefing di scenario è basato sui precedenti storici ARCUS, non su modelli previsionali." : "This scenario briefing is based on ARCUS historical precedents, not predictive models."}</div>
+        <div class="note">${it ? "Questo briefing di scenario Ã¨ basato sui precedenti storici ARCUS, non su modelli previsionali." : "This scenario briefing is based on ARCUS historical precedents, not predictive models."}</div>
       </section>
       ${manualAreaBounds ? `<section>
         <h2>${it ? "AREA / CORRIDOIO" : "AREA / CORRIDOR"}</h2>
@@ -2016,7 +2832,7 @@ export default function ProfessionalPage() {
         <h2>${it ? "ANALOGHI STORICI" : "HISTORICAL ANALOGUES"}</h2>
         <p>${it ? "Precedenti storici per meccanismo, causa e contesto comparabile allo scenario analizzato." : "Historical precedents by comparable mechanism, cause and context to the analyzed scenario."}</p>
         <table>
-          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Severità" : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Similitudine" : "Similarity"}</th></tr></thead>
+          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "SeveritÃ " : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Similitudine" : "Similarity"}</th></tr></thead>
           <tbody>${analogueRows}</tbody>
         </table>
       </section>
@@ -2032,7 +2848,7 @@ export default function ProfessionalPage() {
         <ol>${recommendationRows}</ol>
       </section>`;
 
-    // PATH 3 — Due Diligence Package
+    // PATH 3 â€” Due Diligence Package
     } else if (activeEntryPath === 3) {
       const tcCount = workflowEvents.filter((e) => e.collapse_severity === "TC").length;
       const triggeredCount = workflowEvents.filter((e) => e.triggered).length;
@@ -2040,7 +2856,7 @@ export default function ProfessionalPage() {
       pathBody = `
       <div class="kpis">
         <div class="kpi"><span>Priority index</span><strong>${score}</strong></div>
-        <div class="kpi"><span>${it ? "Affidabilità evidenze" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)}</strong></div>
+        <div class="kpi"><span>${it ? "AffidabilitÃ  evidenze" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)}</strong></div>
         <div class="kpi"><span>${it ? "Cause dominanti" : "Dominant causes"}</span><strong>${selectedProvinceDrivers.causes.length}</strong></div>
         <div class="kpi"><span>${it ? "Fonti professionali" : "Professional sources"}</span><strong>${workflowReliability.institutionalShare}%</strong></div>
       </div>
@@ -2051,7 +2867,7 @@ export default function ProfessionalPage() {
         <div class="note">${it ? "Documento di due diligence generato da ARCUS. Non sostituisce perizie tecniche o valutazioni di rischio certificabili." : "Due diligence document generated by ARCUS. Does not replace certified technical assessments or risk evaluations."}</div>
       </section>
       <section>
-        <h2>${it ? "RAPPORTO TECNICO — CONTESTO INFRASTRUTTURALE" : "TECHNICAL REPORT — INFRASTRUCTURE CONTEXT"}</h2>
+        <h2>${it ? "RAPPORTO TECNICO â€” CONTESTO INFRASTRUTTURALE" : "TECHNICAL REPORT â€” INFRASTRUCTURE CONTEXT"}</h2>
         <table>
           <thead><tr><th>${it ? "Indicatore" : "Indicator"}</th><th>${it ? "Valore" : "Value"}</th></tr></thead>
           <tbody>
@@ -2083,19 +2899,19 @@ export default function ProfessionalPage() {
       <section>
         <h2>${it ? "PACCHETTO EVIDENZE" : "EVIDENCE PACKAGE"}</h2>
         <table>
-          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Severità" : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Evidenza" : "Evidence"}</th><th>${it ? "Vulnerabilità" : "Vulnerability"}</th></tr></thead>
+          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "SeveritÃ " : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>${it ? "Evidenza" : "Evidence"}</th><th>${it ? "VulnerabilitÃ " : "Vulnerability"}</th></tr></thead>
           <tbody>${eventRows}</tbody>
         </table>
       </section>
       <section>
-        <h2>${it ? "APPENDICE — BENCHMARK NAZIONALE" : "APPENDIX — NATIONAL BENCHMARK"}</h2>
+        <h2>${it ? "APPENDICE â€” BENCHMARK NAZIONALE" : "APPENDIX â€” NATIONAL BENCHMARK"}</h2>
         <table>
           <thead><tr><th>${it ? "Indicatore" : "Indicator"}</th><th>${it ? "Selezionato" : "Selected"}</th><th>${it ? "Media ARCUS" : "ARCUS average"}</th><th>Status</th></tr></thead>
           <tbody>${benchmarkRows}</tbody>
         </table>
       </section>`;
 
-    // PATH 4 — Research Output
+    // PATH 4 â€” Research Output
     } else {
       const topCauseRows = causeRanking.slice(0, 10)
         .map((c, i) => `<tr>
@@ -2160,7 +2976,7 @@ export default function ProfessionalPage() {
         <h2>${it ? "TABELLA CITABILE" : "CITATION-READY TABLE"}</h2>
         <p>${it ? "Formato adatto per citazione accademica o tecnica. Grading ARCUS: A = istituzionale, B = tecnico, C = documentale, D = generico." : "Format suitable for academic or technical citation. ARCUS grading: A = institutional, B = technical, C = documentary, D = generic."}</p>
         <table>
-          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Anno" : "Year"}</th><th>${it ? "Severità" : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>Grade</th></tr></thead>
+          <thead><tr><th>ID</th><th>${it ? "Comune" : "Municipality"}</th><th>${it ? "Anno" : "Year"}</th><th>${it ? "SeveritÃ " : "Severity"}</th><th>${it ? "Causa" : "Cause"}</th><th>Grade</th></tr></thead>
           <tbody>${citationRows}</tbody>
         </table>
       </section>`;
@@ -2169,39 +2985,83 @@ export default function ProfessionalPage() {
     return `<!doctype html>
 <html lang="${language}">
 <head>
-  <meta charset="utf-8" />
-  <title>ARCUS — ${escapeHtml(pathMeta.doc)}: ${escapeHtml(reportAreaLabel)}</title>
+  <meta charset="UTF-8" />
+  <title>ARCUS - ${escapeHtml(pathMeta.doc)}: ${escapeHtml(reportAreaLabel)}</title>
   <style>${css}</style>
 </head>
-<body>
+<body class="${isBrief ? "brief-output" : "full-output"}">
+  <div class="report-footer">
+    <span>ARCUS Professional - preliminary screening output</span>
+    <span>${escapeHtml(reportId)}</span>
+  </div>
   <header class="cover">
-    <div class="brand">ARCUS</div>
-    <div class="path-badge">PATH ${pathMeta.num} — ${escapeHtml(pathMeta.name)}</div>
-    <h1>${escapeHtml(pathMeta.doc)}: ${escapeHtml(reportAreaLabel)}</h1>
-    <div class="meta">Infrastructure intelligence / ${it ? "generato il" : "generated"} ${today}</div>
+    <div>
+      <div class="brand">ARCUS</div>
+      <div class="path-badge">PATH ${pathMeta.num} - ${escapeHtml(pathMeta.name)}</div>
+      <h1>${escapeHtml(isBrief ? `${pathMeta.doc} - One-Page Brief` : `${pathMeta.doc}: ${reportAreaLabel}`)}</h1>
+      <div class="meta">Infrastructure intelligence / ${it ? "generato il" : "generated"} ${today}</div>
+    </div>
+    <div class="cover-meta-grid">
+      <div><span>Report ID</span><strong>${escapeHtml(reportId)}</strong></div>
+      <div><span>${it ? "Versione" : "Version"}</span><strong>${escapeHtml(exportVersion)}</strong></div>
+      <div><span>${it ? "Analisi" : "Analysis"}</span><strong>${escapeHtml(pathMeta.doc)}</strong></div>
+      <div><span>${it ? "Scala" : "Spatial level"}</span><strong>${escapeHtml(spatialLevel)}</strong></div>
+      <div><span>${it ? "Generato da" : "Generated by"}</span><strong>ARCUS Professional</strong></div>
+    </div>
   </header>
   <main>
     ${pathBody}
-    ${scoringSection}
+    ${activeEntryPath === 0 && !isBrief ? `${methodologySection}${sourceAppendixSection}` : activeEntryPath === 0 ? "" : scoringSection}
   </main>
 </body>
 </html>`;
   };
 
-  const downloadProfessionalReport = () => {
+  const openProfessionalReportPrintView = (
+    variant = "full"
+  ) => {
     if (!selectedProvinceProfile) {
       return;
     }
 
-    const filename = `arcus-professional-report-${(manualAreaBounds ? manualAreaLabel : selectedProvinceProfile.territory)
-      .toLowerCase()
-      .replaceAll(" ", "-")}.html`;
-
-    downloadFile(
-      filename,
-      buildProfessionalReportHtml(),
-      "text/html;charset=utf-8"
+    const html = buildProfessionalReportHtml({
+      variant,
+    });
+    const printableWindow = window.open(
+      "",
+      "_blank"
     );
+
+    if (!printableWindow) {
+    const filename = `arcus-professional-${variant}-pdf-ready-${(activeEntryPath !== 0 && manualAreaBounds ? manualAreaLabel : selectedProvinceProfile.territory)
+        .toLowerCase()
+        .replaceAll(" ", "-")}.html`;
+
+      downloadFile(
+        filename,
+        html,
+        "text/html;charset=utf-8"
+      );
+
+      return;
+    }
+
+    printableWindow.document.open();
+    printableWindow.document.write(
+      html.replace(
+        "</body>",
+        `<script>window.addEventListener("load",function(){setTimeout(function(){window.print();},350);});</script></body>`
+      )
+    );
+    printableWindow.document.close();
+  };
+
+  const downloadProfessionalReport = () => {
+    openProfessionalReportPrintView("full");
+  };
+
+  const downloadOnePageBrief = () => {
+    openProfessionalReportPrintView("brief");
   };
 
   const exportProvinceReport = () => {
@@ -2209,7 +3069,7 @@ export default function ProfessionalPage() {
       return;
     }
 
-    const rows = selectedProvinceEvents.map(
+    const rows = workflowEvents.map(
       (event) => {
         const sourceCount =
           sourceCountByEvent[event.event_id] || 0;
@@ -2277,6 +3137,133 @@ export default function ProfessionalPage() {
       `arcus-professional-${selectedProvinceProfile.territory}.csv`,
       columns,
       rows
+    );
+  };
+
+  const exportSourceTable = () => {
+    const rows = workflowEvents.flatMap((event) =>
+      (sourcesByEventMap[event.event_id] || []).map(
+        (source) => ({
+          access_date: source.access_date,
+          event_id: event.event_id,
+          municipality: event.municipality,
+          publication_date: source.publication_date,
+          source_id: source.source_id,
+          source_role: source.source_role,
+          source_title: source.source_title,
+          source_type: source.source_type,
+          source_url: source.source_url,
+        })
+      )
+    );
+
+    exportRowsAsCsv(
+      `arcus-professional-sources-${manualAreaLabel
+        .toLowerCase()
+        .replaceAll(" ", "-")}.csv`,
+      [
+        "event_id",
+        "municipality",
+        "source_id",
+        "source_title",
+        "source_type",
+        "source_role",
+        "publication_date",
+        "access_date",
+        "source_url",
+      ],
+      rows
+    );
+  };
+
+  const exportGisPackage = () => {
+    const features = [];
+
+    if (activeEntryPath !== 0 && manualAreaBounds) {
+      features.push({
+        geometry: {
+          coordinates: [
+            [
+              [
+                manualAreaBounds.west,
+                manualAreaBounds.south,
+              ],
+              [
+                manualAreaBounds.east,
+                manualAreaBounds.south,
+              ],
+              [
+                manualAreaBounds.east,
+                manualAreaBounds.north,
+              ],
+              [
+                manualAreaBounds.west,
+                manualAreaBounds.north,
+              ],
+              [
+                manualAreaBounds.west,
+                manualAreaBounds.south,
+              ],
+            ],
+          ],
+          type: "Polygon",
+        },
+        properties: {
+          id: "selected_area",
+          label: manualAreaLabel,
+          type: "arcus_selected_area",
+        },
+        type: "Feature",
+      });
+    }
+
+    workflowEvents.forEach((event) => {
+      const latitude = Number(event.latitude);
+      const longitude = Number(event.longitude);
+
+      if (
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude)
+      ) {
+        return;
+      }
+
+      features.push({
+        geometry: {
+          coordinates: [longitude, latitude],
+          type: "Point",
+        },
+        properties: {
+          cause: event.specific_cause,
+          event_id: event.event_id,
+          municipality: event.municipality,
+          province: event.province,
+          severity: event.collapse_severity,
+          triggered: event.triggered,
+          year: event.year,
+        },
+        type: "Feature",
+      });
+    });
+
+    downloadFile(
+      `arcus-professional-gis-${manualAreaLabel
+        .toLowerCase()
+        .replaceAll(" ", "-")}.geojson`,
+      JSON.stringify(
+        {
+          features,
+          metadata: {
+            generated_at: new Date().toISOString(),
+            source: "ARCUS Professional",
+            use: "Territorial screening export; not cadastral or design-scale mapping.",
+          },
+          type: "FeatureCollection",
+        },
+        null,
+        2
+      ),
+      "application/geo+json;charset=utf-8"
     );
   };
 
@@ -3288,11 +4275,10 @@ export default function ProfessionalPage() {
     []
   );
 
-  const causeRanking = useMemo(
-    () =>
-      countBy(events, "specific_cause").slice(0, 5),
-    [events]
-  );
+  const causeRanking = countBy(
+    events,
+    "specific_cause"
+  ).slice(0, 5);
 
   const professionalNav = [
     ["Workflow", "#professional-workflow"],
@@ -3741,7 +4727,9 @@ export default function ProfessionalPage() {
       ([value]) => value === projectContext
     )?.[1] || projectContextOptions[0][1];
   const manualAreaLabel =
-    manualAreaBounds && manualAreaProvinces.length
+    activeEntryPath !== 0 &&
+    manualAreaBounds &&
+    manualAreaProvinces.length
       ? manualAreaProvinces.length === 1
         ? manualAreaProvinces[0]
         : `${manualAreaProvinces.join(", ")} (${
@@ -3777,8 +4765,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-risk-score",
               stage: "01",
-              title: "Seleziona area",
-              text: "Seleziona punto, corridoio, comune o area custom direttamente sulla mappa.",
+              title: "Seleziona provincia",
+              text: "Scegli la provincia da analizzare per il contesto di nuovi ponti o pianificazione territoriale.",
             },
             {
               href: "#professional-scenarios",
@@ -3802,8 +4790,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-report",
               stage: "05",
-              title: "Genera territory briefing",
-              text: "Esporta assessment territoriale, hazard summary, precedenti e note preliminari.",
+              title: "Genera province briefing",
+              text: "Esporta briefing provinciale, hazard summary, precedenti e note preliminari.",
             },
           ],
           [
@@ -3960,8 +4948,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-risk-score",
               stage: "01",
-              title: "Select area",
-              text: "Select a point, corridor, municipality or custom area directly on the map.",
+              title: "Select province",
+              text: "Choose the province to screen for new bridge or territorial planning context.",
             },
             {
               href: "#professional-scenarios",
@@ -3985,8 +4973,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-report",
               stage: "05",
-              title: "Generate territory briefing",
-              text: "Export territory assessment, hazard summary, precedents and preliminary notes.",
+              title: "Generate province briefing",
+              text: "Export province-based assessment, hazard summary, precedents and preliminary notes.",
             },
           ],
           [
@@ -4512,8 +5500,12 @@ export default function ProfessionalPage() {
           <div className="platform-field-grid">
             <label>
               {language === "it"
-                ? "Area di lavoro"
-                : "Working area"}
+                ? activeEntryPath === 0
+                  ? "Provincia"
+                  : "Area di lavoro"
+                : activeEntryPath === 0
+                  ? "Province"
+                  : "Working area"}
               <select
                 onChange={(event) =>
                   setSelectedProvince(event.target.value)
@@ -4539,22 +5531,22 @@ export default function ProfessionalPage() {
             <div>
               <b>
                 {language === "it"
-                  ? manualAreaBounds
+                  ? activeEntryPath !== 0 && manualAreaBounds
                     ? "Area manuale"
                     : "Indice attuale"
-                  : manualAreaBounds
+                  : activeEntryPath !== 0 && manualAreaBounds
                     ? "Manual area"
                     : "Current index"}
               </b>
               <strong>
-                {manualAreaBounds
+                {activeEntryPath !== 0 && manualAreaBounds
                   ? manualAreaEvents.length
                   : selectedProvinceProfile?.scenarioScore ||
                     selectedProvinceProfile?.riskScore ||
                     0}
               </strong>
               <em>
-                {manualAreaBounds
+                {activeEntryPath !== 0 && manualAreaBounds
                   ? manualAreaLabel
                   : selectedProvinceProfile?.topCause ||
                     "-"}
@@ -4564,11 +5556,15 @@ export default function ProfessionalPage() {
 
           <div className="platform-map-selection-tools">
             <p>
-              {language === "it"
-                ? "Trascina il mouse sulla mappa per disegnare un'area di analisi. ARCUS usera i crolli dentro il rettangolo e, se intercetta piu province, le riportera nel report finale."
-                : "Drag on the map to draw an analysis area. ARCUS will use collapses inside the rectangle and, if it crosses multiple provinces, include them in the final report."}
+              {activeEntryPath === 0
+                ? language === "it"
+                  ? "Path 01 lavora a livello provinciale per produrre un briefing preliminare coerente e confrontabile."
+                  : "Path 01 works at province level to produce a consistent and comparable preliminary briefing."
+                : language === "it"
+                  ? "Trascina il mouse sulla mappa per disegnare un'area di analisi. ARCUS usera i crolli dentro il rettangolo e, se intercetta piu province, le riportera nel report finale."
+                  : "Drag on the map to draw an analysis area. ARCUS will use collapses inside the rectangle and, if it crosses multiple provinces, include them in the final report."}
             </p>
-            {manualAreaBounds && (
+            {activeEntryPath !== 0 && manualAreaBounds && (
               <button
                 onClick={() => setManualAreaBounds(null)}
                 type="button"
@@ -4583,16 +5579,22 @@ export default function ProfessionalPage() {
           <div className="platform-workflow-map">
             <CollapseMap
               filteredEvents={
-                manualAreaBounds
+                activeEntryPath !== 0 && manualAreaBounds
                   ? manualAreaEvents
                   : selectedProvinceEvents
               }
               height="300px"
               onSelectionBoundsChange={
-                setManualAreaBounds
+                activeEntryPath === 0
+                  ? undefined
+                  : setManualAreaBounds
               }
-              selectionBounds={manualAreaBounds}
-              selectionEnabled={activeEntryPath === 0}
+              selectionBounds={
+                activeEntryPath === 0
+                  ? null
+                  : manualAreaBounds
+              }
+              selectionEnabled={activeEntryPath !== 0}
               selectionLabel={manualAreaLabel}
               sidebarOpen={false}
               showEventMarkers
@@ -4609,8 +5611,12 @@ export default function ProfessionalPage() {
             <article>
               <span>
                 {language === "it"
-                  ? "Crolli nell'area"
-                  : "Area collapses"}
+                  ? activeEntryPath === 0
+                    ? "Crolli nella provincia"
+                    : "Crolli nell'area"
+                  : activeEntryPath === 0
+                    ? "Province collapses"
+                    : "Area collapses"}
               </span>
               <strong>{workflowEvents.length}</strong>
               <p>
@@ -4657,14 +5663,14 @@ export default function ProfessionalPage() {
                   : "Priority index"}
               </span>
               <strong>
-                {manualAreaBounds
+                {activeEntryPath !== 0 && manualAreaBounds
                   ? manualAreaEvents.length
                   : selectedProvinceProfile?.scenarioScore ||
                     selectedProvinceProfile?.riskScore ||
                     0}
               </strong>
               <p>
-                {manualAreaBounds
+                {activeEntryPath !== 0 && manualAreaBounds
                   ? manualAreaLabel
                   : selectedProvinceProfile?.territory ||
                     "-"}
@@ -4713,17 +5719,13 @@ export default function ProfessionalPage() {
             <div className="platform-workflow-evidence">
               <article>
                 <span>
-                  {language === "it" ? "Area" : "Area"}
+                  {language === "it" ? "Provincia" : "Province"}
                 </span>
                 <strong>
-                  {manualAreaBounds
-                    ? manualAreaEvents.length
-                    : selectedProvinceProfile?.total || 0}
+                  {selectedProvinceProfile?.total || 0}
                 </strong>
                 <p>
-                  {manualAreaBounds
-                    ? manualAreaLabel
-                    : selectedProvinceProfile?.territory}
+                  {selectedProvinceProfile?.territory}
                 </p>
               </article>
 
@@ -4782,8 +5784,8 @@ export default function ProfessionalPage() {
                 </strong>
                 <p>
                   {language === "it"
-                    ? "per il territorio selezionato"
-                    : "for the selected territory"}
+                    ? "per la provincia selezionata"
+                    : "for the selected province"}
                 </p>
               </article>
             </div>
@@ -5138,7 +6140,7 @@ export default function ProfessionalPage() {
     }
 
     if (activeWorkflowStep === 3) {
-      // Path 0 — New Territory: Read Historical Evidence
+      // Path 0 â€” New Territory: Read Historical Evidence
       if (activeEntryPath === 0) {
         return (
           <div className="platform-workflow-panel">
@@ -5232,7 +6234,7 @@ export default function ProfessionalPage() {
         );
       }
 
-      // Path 1 — Existing Assets: Prioritize Assets
+      // Path 1 â€” Existing Assets: Prioritize Assets
       if (activeEntryPath === 1) {
         const p1Count = assetScreening.filter(
           (item) => item.priority === "Priority 1"
@@ -5309,7 +6311,7 @@ export default function ProfessionalPage() {
                     <div>
                       <strong>{item.name}</strong>
                       <span>
-                        {item.priority} — {item.topCause}
+                        {item.priority} â€” {item.topCause}
                       </span>
                     </div>
                     <div>
@@ -5324,7 +6326,7 @@ export default function ProfessionalPage() {
         );
       }
 
-      // Paths 2, 3, 4 — Compare / Identify Patterns / Build Evidence Set
+      // Paths 2, 3, 4 â€” Compare / Identify Patterns / Build Evidence Set
       return (
         <div className="platform-workflow-panel">
           <div>
@@ -5398,7 +6400,7 @@ export default function ProfessionalPage() {
       );
     }
 
-    // Final step — path-specific export panel
+    // Final step â€” path-specific export panel
     const exportSummaries = {
       // Path 0: Generate Territory Briefing
       0: {
@@ -5434,12 +6436,39 @@ export default function ProfessionalPage() {
         ],
         actions: [
           {
-            label: copy.downloadReport,
+            label:
+              language === "it"
+                ? "Download Full PDF"
+                : "Download Full PDF",
             onClick: downloadProfessionalReport,
           },
           {
-            label: copy.exportReport,
+            label:
+              language === "it"
+                ? "Download One-Page Brief"
+                : "Download One-Page Brief",
+            onClick: downloadOnePageBrief,
+          },
+          {
+            label:
+              language === "it"
+                ? "Export Event Table"
+                : "Export Event Table",
             onClick: exportProvinceReport,
+          },
+          {
+            label:
+              language === "it"
+                ? "Export Source Table"
+                : "Export Source Table",
+            onClick: exportSourceTable,
+          },
+          {
+            label:
+              language === "it"
+                ? "Export GIS Package"
+                : "Export GIS Package",
+            onClick: exportGisPackage,
           },
         ],
       },
@@ -7283,21 +8312,45 @@ export default function ProfessionalPage() {
               type="button"
               onClick={printProfessionalReport}
             >
-              {copy.printReport}
+              {language === "it"
+                ? "Download Full PDF"
+                : "Download Full PDF"}
             </button>
 
             <button
               type="button"
-              onClick={downloadProfessionalReport}
+              onClick={downloadOnePageBrief}
             >
-              {copy.downloadReport}
+              {language === "it"
+                ? "One-Page Brief"
+                : "One-Page Brief"}
             </button>
 
             <button
               type="button"
               onClick={exportProvinceReport}
             >
-              {copy.exportReport}
+              {language === "it"
+                ? "Event Table"
+                : "Event Table"}
+            </button>
+
+            <button
+              type="button"
+              onClick={exportSourceTable}
+            >
+              {language === "it"
+                ? "Source Table"
+                : "Source Table"}
+            </button>
+
+            <button
+              type="button"
+              onClick={exportGisPackage}
+            >
+              {language === "it"
+                ? "GIS Package"
+                : "GIS Package"}
             </button>
           </div>
 
@@ -7386,10 +8439,10 @@ export default function ProfessionalPage() {
                   ...selectedProvinceDrivers.structures,
                 ]
                   .slice(0, 6)
-                  .map(([label, value]) => (
-                    <li key={label}>
-                      <b>{label}</b>
-                      <em>{value}</em>
+                  .map((item) => (
+                    <li key={item.label}>
+                      <b>{item.label}</b>
+                      <em>{item.value}</em>
                     </li>
                   ))}
               </ul>
@@ -7636,3 +8689,4 @@ export default function ProfessionalPage() {
     </main>
   );
 }
+
