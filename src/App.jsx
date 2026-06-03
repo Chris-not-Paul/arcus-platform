@@ -22,6 +22,7 @@ const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
 const EnterprisePage = lazy(() => import("./pages/EnterprisePage"));
+const ReportMapPath01 = lazy(() => import("./pages/ReportMapPath01"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -53,17 +54,22 @@ function PageLoading() {
 function App() {
 
   const [showIntro, setShowIntro] = useState(true);
+  const isReportExportRoute =
+    typeof window !== "undefined" &&
+    window.location.pathname.startsWith("/report-map/");
 
   return (
     <>
-      <a
-        className="skip-link"
-        href="#main-content"
-      >
-        Skip to content
-      </a>
+      {!isReportExportRoute && (
+        <a
+          className="skip-link"
+          href="#main-content"
+        >
+          Skip to content
+        </a>
+      )}
 
-      {showIntro && (
+      {!isReportExportRoute && showIntro && (
         <IntroOverlay
           onFinish={() => setShowIntro(false)}
         />
@@ -117,6 +123,11 @@ function App() {
           <Route
             path="/professional"
             element={<ProfessionalPage />}
+          />
+
+          <Route
+            path="/report-map/path01"
+            element={<ReportMapPath01 />}
           />
 
           <Route

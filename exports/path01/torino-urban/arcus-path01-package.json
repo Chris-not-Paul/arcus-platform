@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-03T14:48:58.320Z",
+  "outputs": {
+    "events_csv": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\arcus-path01-events.csv",
+    "full_pdf": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\arcus-path01-full-report.pdf",
+    "geojson": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\arcus-path01-events.geojson",
+    "map_png": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\atlas-map.png",
+    "one_page_pdf": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\arcus-path01-one-page-brief.pdf",
+    "sources_csv": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-urban\\arcus-path01-sources.csv"
+  },
+  "path": "Path 01 / New Territory",
+  "dominant_exposure": "Hydraulic exposure",
+  "exposure_score": 97,
+  "project_context": "Urban infrastructure",
+  "province": "Torino",
+  "report_id": "ARCUS-P01-20260603-torino"
+}

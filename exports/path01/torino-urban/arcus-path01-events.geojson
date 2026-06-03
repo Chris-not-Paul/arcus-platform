@@ -1,0 +1,972 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          7.2887,
+          45.3131
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.03",
+        "map_ref": "P2",
+        "municipality": "Ala di Stura",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.29657818693116,
+          45.3135853526999
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.04",
+        "map_ref": "",
+        "municipality": "Ala di Stura",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.2999,
+          45.3121
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.05",
+        "map_ref": "P3",
+        "municipality": "Ala di Stura",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.7552,
+          45.3092
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.06",
+        "map_ref": "",
+        "municipality": "Felleto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.20799616291084,
+          45.3020694813747
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.07",
+        "map_ref": "",
+        "municipality": "Balme",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.17715316394916,
+          45.3024231876392
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.08",
+        "map_ref": "",
+        "municipality": "Balme",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.34222029499744,
+          45.3624718640682
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.09",
+        "map_ref": "",
+        "municipality": "Chialamberto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.34517738330256,
+          45.3626772288527
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.10",
+        "map_ref": "",
+        "municipality": "Chialamberto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3347469256552,
+          44.8674241589211
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.11",
+        "map_ref": "",
+        "municipality": "Pinerolo",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3105,
+          44.8749
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.12",
+        "map_ref": "",
+        "municipality": "Pinerolo",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.28264930626527,
+          44.8853074510205
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.13",
+        "map_ref": "",
+        "municipality": "Pinerolo",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.355,
+          45.0241
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.14",
+        "map_ref": "",
+        "municipality": "Giaveno",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.71108119476556,
+          45.3590443263878
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.15",
+        "map_ref": "P1",
+        "municipality": "Castellamonte",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.314,
+          45.454
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.16",
+        "map_ref": "",
+        "municipality": "Noasca",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.5724,
+          45.2043
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.17",
+        "map_ref": "",
+        "municipality": "Robassomero",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.7117,
+          45.3592
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.18",
+        "map_ref": "",
+        "municipality": "Salassa",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.7105,
+          45.0786
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.21",
+        "map_ref": "",
+        "municipality": "Bardonecchia",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.1432,
+          45.1382
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.22",
+        "map_ref": "",
+        "municipality": "Bussoleno",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.1635,
+          45.1281
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.23",
+        "map_ref": "",
+        "municipality": "Bussoleno",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3422,
+          45.3624
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.24",
+        "map_ref": "",
+        "municipality": "Chialamberto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.91276980813103,
+          45.1023290659492
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.25",
+        "map_ref": "",
+        "municipality": "San Colombano",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.0441,
+          45.0375
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.26",
+        "map_ref": "",
+        "municipality": "Fenestrelle",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3014,
+          45.3674
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.27",
+        "map_ref": "",
+        "municipality": "Bonzo",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.5034,
+          45.4065
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.28",
+        "map_ref": "",
+        "municipality": "Locana",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3668,
+          45.4317
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.29",
+        "map_ref": "",
+        "municipality": "Noasca",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.2215,
+          44.9429
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.30",
+        "map_ref": "",
+        "municipality": "Inverso Pinasca",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.3348,
+          44.8674
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.31",
+        "map_ref": "",
+        "municipality": "San Germano Chisone",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.6132,
+          45.4149
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.32",
+        "map_ref": "",
+        "municipality": "Pont Canavese",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.5639,
+          45.4178
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.33",
+        "map_ref": "",
+        "municipality": "Pont Canavese",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.26,
+          44.8897
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.34",
+        "map_ref": "",
+        "municipality": "Porte",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.8103,
+          45.2412
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.35",
+        "map_ref": "",
+        "municipality": "San Benigno Canavese",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          6.9602,
+          45.0302
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.36",
+        "map_ref": "",
+        "municipality": "Pragelato",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.8055,
+          45.5703
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.37",
+        "map_ref": "",
+        "municipality": "Quincinetto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.2435,
+          44.9147
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.38",
+        "map_ref": "",
+        "municipality": "San Germano Chisone",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.5752,
+          45.5388
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.39",
+        "map_ref": "",
+        "municipality": "Pianetto",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.9395,
+          45.8477
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.40",
+        "map_ref": "",
+        "municipality": "Alagna",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "PC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.8924,
+          45.4133
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2000-10-13",
+        "event_id": "B00.10.43",
+        "map_ref": "",
+        "municipality": "Comune di Strambino",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.948959,
+          44.963093
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Design and Construction",
+        "date": "2005-11-15",
+        "event_id": "B05.11.01",
+        "map_ref": "",
+        "municipality": "Villanova d'Asti",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": false
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.2173,
+          45.2305
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2008-05-29",
+        "event_id": "B08.05.02",
+        "map_ref": "",
+        "municipality": "Usseglio",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "Medium",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.2062,
+          44.817
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": "Ponte Bertenga",
+        "cause": "Hydraulic",
+        "date": "2011-11-06",
+        "event_id": "B11.11.01",
+        "map_ref": "",
+        "municipality": "Torre Pellice",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.9041,
+          45.4052
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": "Ponte di Cerone",
+        "cause": "Hydraulic",
+        "date": "2017-06-15",
+        "event_id": "B17.06.01",
+        "map_ref": "",
+        "municipality": "Strambino",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "High",
+        "triggered": true
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          7.137,
+          45.1264
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "bridge_name": null,
+        "cause": "Hydraulic",
+        "date": "2024-09-05",
+        "event_id": "B24.09.01",
+        "map_ref": "",
+        "municipality": "Mattie",
+        "province": "Torino",
+        "region": "Piemonte",
+        "severity": "TC",
+        "source_confidence": "Medium",
+        "triggered": true
+      },
+      "type": "Feature"
+    }
+  ],
+  "name": "ARCUS Path 01 event export",
+  "type": "FeatureCollection"
+}

@@ -1,0 +1,630 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>ARCUS - Territory Briefing - Torino</title>
+  <style>
+      @page { size: A4; margin: 18mm 16mm; }
+      :root { color: #1c1713; background: #f7f0e8; font-family: Inter, Aptos, Arial, sans-serif; }
+      body { margin: 0; background: #f7f0e8; color: #1c1713; }
+      .report-footer { position: fixed; left: 16mm; right: 16mm; bottom: 7mm; display: flex; align-items: center; justify-content: space-between; gap: 18px; color: #8b7b68; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .footer-logo { width: 18px; height: 18px; opacity: 0.55; margin-right: 7px; vertical-align: middle; }
+      .report-footer span:first-child { display: inline-flex; align-items: center; }
+      .cover { min-height: 680px; padding: 54px 62px 46px; position: relative; overflow: hidden; background: radial-gradient(circle at 78% 18%, rgba(196,144,64,.18), transparent 28%), linear-gradient(135deg,#15110f 0%,#211b16 58%,#15110f 100%); color: #f2e8d4; border-bottom: 8px solid #c49040; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; }
+      .cover::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(242,232,212,.045) 1px,transparent 1px),linear-gradient(rgba(242,232,212,.035) 1px,transparent 1px); background-size: 46px 46px; opacity: .55; }
+      .cover > * { position: relative; z-index: 1; }
+      .brief-output .cover { min-height: auto; padding: 30px 42px; page-break-after: avoid; }
+      .brief-output .cover, .brief-output .report-footer { display: none; }
+      .brief-output main { max-width: none; padding: 0; }
+      .cover-logo { width: 168px; height: auto; display: block; margin-bottom: 30px; }
+      .brand { color: #c49040; font-size: 36px; font-weight: 900; letter-spacing: 0.2em; }
+      .path-badge { display: inline-block; margin-top: 0; padding: 7px 12px; border: 1px solid rgba(196,144,64,0.55); color: #c49040; background: rgba(196,144,64,.08); font-size: 10px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
+      .cover h1 { max-width: 760px; margin: 22px 0 0; color: #fff8f2; font-family: Georgia, serif; font-size: 54px; line-height: 1.02; letter-spacing: 0; }
+      .cover-subtitle { max-width: 620px; margin-top: 18px; color: rgba(242,232,212,.72); font-size: 15px; line-height: 1.55; }
+      .brief-output .cover h1 { font-size: 34px; }
+      .meta { margin-top: 18px; color: rgba(242,232,212,0.62); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+      .cover-meta-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 42px; }
+      .cover-meta-grid div { padding: 12px 10px; border: 1px solid rgba(196,144,64,0.30); background: rgba(255,248,242,.045); }
+      .cover-meta-grid span { display: block; color: rgba(242,232,212,0.52); font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+      .cover-meta-grid strong { display: block; margin-top: 6px; color: #f2e8d4; font-size: 12px; line-height: 1.35; }
+      main { max-width: 1040px; margin: 0 auto; padding: 42px 44px 64px; }
+      .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0 24px; }
+      .kpi { padding: 16px; border: 1px solid #d7cab9; background: #fffaf2; box-shadow: 0 10px 26px rgba(64,49,37,0.06); }
+      .kpi > span { color: #7a6548; font-size: 9px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+      .kpi strong { display: block; margin-top: 8px; color: #c49040; font-size: 28px; font-weight: 800; line-height: 1.05; }
+      .kpi p { margin: 10px 0 0; font-size: 11px; line-height: 1.45; }
+      .kpi-class, .kpi-driver { display: block; color: #4f463d; font-weight: 700; letter-spacing: 0; text-transform: none; }
+      .kpi-class em { display: inline-block; padding: 4px 7px; background: #15110f; color: #c49040; font-style: normal; font-size: 9px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+      .kpi-driver { margin-top: 3px; color: #7a6548; font-weight: 600; }
+      section { margin-top: 16px; padding: 22px 24px; border: 1px solid #d7cab9; background: rgba(255,250,242,0.9); page-break-inside: avoid; }
+      .brief-page { page-break-before: avoid; }
+      .brief-sheet { width: 178mm; min-height: 260mm; max-height: 260mm; overflow: hidden; display: grid; grid-template-rows: auto auto 1fr auto; gap: 6px; margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+      .brief-sheet-head { display: grid; grid-template-columns: 112px 1fr 182px; gap: 14px; align-items: start; padding-bottom: 8px; border-bottom: 2px solid #15110f; }
+      .brief-sheet-head .cover-logo { width: 92px; margin: 0; }
+      .brief-sheet-head h1 { color: #15110f; font-family: Georgia, serif; font-size: 24px; line-height: 1.02; margin: 2px 0 0; }
+      .brief-sheet-head p { margin: 5px 0 0; color: #4f463d; font-size: 8.7px; line-height: 1.3; }
+      .brief-meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+      .brief-meta div { padding: 6px 7px; border: 1px solid #d7cab9; background: #fffaf2; }
+      .brief-meta span, .brief-kicker, .brief-box span { display: block; color: #c49040; font-size: 7.4px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+      .brief-meta strong { display: block; margin-top: 3px; color: #15110f; font-size: 8.4px; line-height: 1.2; }
+      .brief-top { display: grid; grid-template-columns: 1.04fr .96fr; gap: 8px; }
+      .brief-panel { margin: 0; padding: 8px 9px; border: 1px solid #d7cab9; background: rgba(255,250,242,.94); }
+      .brief-panel h2 { margin: 0 0 6px; color: #15110f; font-family: Georgia, serif; font-size: 15px; line-height: 1.05; letter-spacing: 0; text-transform: none; }
+      .brief-panel h2 span { margin-right: 6px; color: #c49040; font-family: Arial, sans-serif; font-size: 8px; letter-spacing: .14em; }
+      .brief-map .map-image-frame figcaption, .brief-map .atlas-extract figcaption { display: none; }
+      .brief-map .map-image-frame img { aspect-ratio: 1400 / 760; object-fit: cover; max-height: none; }
+      .brief-map .report-map-legend { gap: 4px 7px; margin-top: 5px; padding: 5px 6px; font-size: 7.2px; line-height: 1.2; }
+      .brief-map .report-map-legend i { width: 6px; height: 6px; box-shadow: 0 0 0 2px rgba(21,17,15,.10); }
+      .brief-signal { background: #15110f; color: #f2e8d4; border-color: #15110f; }
+      .brief-signal h2, .brief-signal p, .brief-signal li { color: #f2e8d4; }
+      .brief-signal strong { color: #f2e8d4; }
+      .brief-signal p { margin: 6px 0 0; font-size: 8.6px; line-height: 1.36; }
+      .brief-kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-top: 8px; }
+      .brief-kpi { padding: 7px; border: 1px solid rgba(196,144,64,.42); background: rgba(255,248,242,.06); }
+      .brief-kpi span { display: block; color: #c49040; font-size: 7px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+      .brief-kpi strong { display: block; margin-top: 4px; color: #f2e8d4; font-size: 15px; line-height: 1; }
+      .brief-bottom { display: grid; grid-template-columns: .92fr 1.16fr .92fr; gap: 7px; }
+      .brief-box { margin: 0; padding: 7px 8px; border: 1px solid #d7cab9; background: #fffaf2; }
+      .brief-box h3 { margin: 0 0 6px; color: #15110f; font-family: Georgia, serif; font-size: 13.5px; line-height: 1.05; }
+      .brief-box ul, .brief-box ol { margin: 0; padding-left: 15px; }
+      .brief-box li { margin-bottom: 3px; color: #4f463d; font-size: 8px; line-height: 1.27; }
+      .brief-limit { background: #fbf4ec; border-left: 4px solid #c49040; }
+      .brief-export { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 6px; border-top: 1px solid #d7cab9; color: #7a6548; font-size: 7.2px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .brief-export strong { color: #15110f; }
+      .executive-section { border-color: #c49040; background: #fffaf2; box-shadow: 0 14px 34px rgba(64,49,37,0.08); }
+      .page-block { page-break-before: always; }
+      .appendix-section { background: #fbf4ec; }
+      h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; color: #7a6548; font-size: 10px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+      .section-number { display: inline-flex; width: 28px; height: 22px; align-items: center; justify-content: center; background: #15110f; color: #c49040; font-size: 10px; letter-spacing: 0; }
+      p, li { color: #4f463d; line-height: 1.6; font-size: 13px; }
+      p { margin: 0 0 10px; }
+      ol, ul { margin: 0; padding-left: 20px; }
+      li { margin-bottom: 6px; }
+      table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+      th { background: #c49040; color: #15110f; text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+      th, td { border: 1px solid #d9cec1; padding: 8px 10px; vertical-align: top; }
+      tr:nth-child(even) td { background: #fbf4ec; }
+      .area-sketch { min-height: 160px; margin: 14px 0; display: grid; place-items: center; border: 1px dashed #c49040; background: linear-gradient(90deg,rgba(110,133,141,.10) 1px,transparent 1px),linear-gradient(rgba(110,133,141,.10) 1px,transparent 1px),#fbf4ec; background-size: 32px 32px; }
+      .area-sketch > div { width: 60%; min-height: 86px; padding: 16px; border: 3px solid #c49040; background: rgba(196,144,64,.12); }
+      .area-sketch span { color: #7a6548; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+      .area-sketch strong { display: block; color: #1c1713; font-size: 18px; margin-bottom: 4px; }
+      .area-sketch p { color: #7a6548; font-size: 11px; margin: 0; }
+      .note { background: #f9f2e8; border-left: 3px solid #c49040; padding: 12px 16px; margin-top: 10px; font-size: 12px; color: #4f463d; }
+      .decision-box { margin-top: 18px; padding: 16px 18px; background: #15110f; color: #f2e8d4; border-left: 6px solid #c49040; font-weight: 800; line-height: 1.5; }
+      .findings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+      .finding { padding: 14px; background: #f9f2e8; border: 1px solid #d7cab9; }
+      .finding span { display: block; color: #c49040; font-size: 10px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+      .finding strong { display: block; margin-top: 8px; font-size: 13px; line-height: 1.45; }
+      .signal-band { display: grid; grid-template-columns: 1.05fr .95fr; gap: 12px; margin-top: 12px; }
+      .signal-card, .action-card, .data-card { padding: 14px; border: 1px solid #d7cab9; background: #fffaf2; }
+      .signal-card.dark { background: #15110f; color: #f2e8d4; border-color: #15110f; }
+      .signal-card.dark p, .signal-card.dark li { color: #f2e8d4; }
+      .signal-card span, .action-card span, .data-card span { display: block; color: #c49040; font-size: 9px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+      .signal-card strong { display: block; margin-top: 7px; color: #15110f; font-size: 17px; line-height: 1.25; }
+      .signal-card.dark strong { color: #f2e8d4; }
+      .signal-card p { margin: 8px 0 0; }
+      .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+      .action-card b, .data-card b { display: block; margin-top: 5px; color: #15110f; font-size: 13px; line-height: 1.35; }
+      .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+      .data-card { min-height: 72px; background: #f9f2e8; }
+      .limitation-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+      .limitation-strip div { padding: 10px 12px; background: #fbf4ec; border-left: 3px solid #c49040; color: #4f463d; font-size: 10.5px; line-height: 1.45; }
+      .precedent-list { display: grid; gap: 8px; margin-top: 12px; }
+      .precedent-card { display: grid; grid-template-columns: 46px 1fr 90px; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid #d7cab9; background: #fffaf2; }
+      .precedent-card .map-ref { display: inline-block; min-width: 34px; padding: 4px 6px; background: #15110f; color: #c49040; font-weight: 900; text-align: center; }
+      .precedent-card strong { color: #15110f; font-size: 12px; }
+      .precedent-card span { color: #7a6548; font-size: 10px; font-weight: 800; }
+      .source-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+      .source-card { padding: 10px 12px; border: 1px solid #d7cab9; background: #fffaf2; }
+      .source-card strong { display: block; color: #15110f; font-size: 11px; line-height: 1.35; }
+      .source-card span { color: #7a6548; font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .source-card a { display: block; margin-top: 6px; color: #7a6548; font-size: 9px; word-break: break-all; }
+      .mini-bars { display: grid; gap: 7px; margin-top: 12px; }
+      .mini-bar { display: grid; grid-template-columns: 150px 1fr 42px; align-items: center; gap: 8px; color: #4f463d; font-size: 10px; font-weight: 800; }
+      .mini-bar i { display: block; height: 8px; background: #eadfcc; }
+      .mini-bar b { display: block; height: 8px; background: #c49040; }
+      .split-two { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 16px; align-items: stretch; }
+      .report-map-section .split-two { grid-template-columns: 1fr; }
+      .report-map-section .map-image-frame img { max-height: 430px; object-fit: cover; }
+      .report-map-section .atlas-map-svg { min-height: 360px; }
+      .atlas-extract { position: relative; margin: 0; border: 1px solid #b8aa98; background: #fffaf2; overflow: hidden; }
+      .atlas-map-svg { display: block; width: 100%; height: auto; min-height: 260px; }
+      .atlas-title text:first-child { fill: #15110f; font-size: 22px; font-weight: 900; font-family: Georgia, serif; }
+      .atlas-title text:last-child { fill: #6e5b45; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .atlas-label { fill: #15110f; font-size: 10px; font-weight: 900; paint-order: stroke; stroke: #fffaf2; stroke-width: 3px; stroke-linejoin: round; }
+      .atlas-north rect { fill: #15110f; }
+      .atlas-north text { fill: #c49040; font-size: 18px; font-weight: 900; }
+      .atlas-scale text { fill: #15110f; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+      .atlas-extract figcaption { padding: 10px 12px; color: #6e5b45; font-size: 11px; line-height: 1.45; border-top: 1px solid #d7cab9; }
+      .atlas-extract figcaption strong { color: #15110f; margin-right: 6px; }
+      .atlas-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; padding: 0 12px 12px; color: #4f463d; font-size: 10px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+      .atlas-legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .atlas-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 999px; box-shadow: 0 0 0 3px rgba(21,17,15,.10); }
+      .legend-critical { background: #9b3d31; }
+      .legend-triggered { background: #c49040; }
+      .legend-context { background: #53676d; }
+      .legend-hydraulic { background: #3F6B78; }
+      .legend-landslide { background: #B56A1D; }
+      .legend-seismic { background: #6E858D; }
+      .map-frame { position: relative; min-height: 260px; overflow: hidden; border: 1px solid #b8aa98; background: #e8e2d7; }
+      .map-grid { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(58,73,69,.12) 1px,transparent 1px),linear-gradient(rgba(58,73,69,.12) 1px,transparent 1px),radial-gradient(circle at 25% 40%,rgba(110,133,141,.32),transparent 18%),radial-gradient(circle at 76% 62%,rgba(196,144,64,.24),transparent 20%); background-size: 32px 32px,32px 32px,100% 100%,100% 100%; }
+      .map-area-box { position: absolute; inset: 28px 42px 52px; border: 2px solid rgba(196,144,64,.9); background: rgba(196,144,64,.08); }
+      .map-pin { position: absolute; width: 9px; height: 9px; margin: -4px 0 0 -4px; border-radius: 999px; box-shadow: 0 0 0 4px rgba(21,17,15,.10); }
+      .map-pin-critical { background: #9b3d31; }
+      .map-pin-triggered { background: #c49040; }
+      .map-pin-context { background: #53676d; }
+      .map-north { position: absolute; right: 18px; top: 16px; width: 30px; height: 30px; display: grid; place-items: center; background: #15110f; color: #c49040; font-weight: 900; }
+      .map-scale { position: absolute; left: 18px; bottom: 62px; color: #15110f; font-size: 10px; font-weight: 800; }
+      .map-scale span { display: block; width: 96px; height: 5px; margin-bottom: 4px; background: linear-gradient(90deg,#15110f 0 25%,#f2e8d4 25% 50%,#15110f 50% 75%,#f2e8d4 75% 100%); border: 1px solid #15110f; }
+      .map-legend { position: absolute; top: 16px; left: 18px; display: grid; gap: 5px; padding: 8px 10px; background: rgba(255,250,242,.88); border: 1px solid #d7cab9; font-size: 10px; font-weight: 800; color: #4f463d; }
+      .map-legend span { display: flex; align-items: center; gap: 6px; }
+      .map-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 999px; }
+      .map-caption { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; justify-content: space-between; gap: 18px; padding: 10px 12px; background: rgba(21,17,15,.88); color: #f2e8d4; font-size: 11px; }
+      .map-caption strong { color: #c49040; }
+      .map-image-frame { margin: 0; border: 1px solid #b8aa98; background: #fffaf2; }
+      .map-image-frame img { display: block; width: 100%; height: auto; }
+      .map-image-frame figcaption { padding: 10px 12px; color: #7a6548; font-size: 11px; line-height: 1.45; }
+      .report-map-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; padding: 9px 11px; border: 1px solid #d7cab9; background: #fffaf2; color: #4f463d; font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+      .report-map-legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .report-map-legend i { width: 9px; height: 9px; display: inline-block; border-radius: 999px; box-shadow: 0 0 0 3px rgba(21,17,15,.10); }
+      .legend-critical { background: #9b3d31; }
+      .legend-triggered { background: #c49040; }
+      .legend-context { background: #53676d; }
+      .legend-hydraulic { background: #3F6B78; }
+      .legend-landslide { background: #B56A1D; }
+      .legend-seismic { background: #6E858D; }
+      .table-caption { margin-top: 8px; color: #7a6548; font-size: 11px; font-weight: 700; }
+      .source-appendix table { font-size: 9px; }
+      .source-appendix td, .source-appendix th { word-break: break-word; }
+      @media print { body { background: white; } .cover, .kpi, .decision-box, .finding, th, .report-map-legend, .report-map-legend i, .atlas-point circle, .map-pin, .signal-card.dark, .mini-bar b, .precedent-card .map-ref { print-color-adjust: exact; -webkit-print-color-adjust: exact; } table { page-break-inside: auto; } thead { display: table-header-group; } tr { page-break-inside: avoid; } }
+    </style>
+</head>
+<body class="full-output">
+  <div class="report-footer">
+    <span><img class="footer-logo" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20140%20160'%20width='140'%20height='160'%3e%3ctitle%3eARCUS%20—%20Logo%20Mark%3c/title%3e%3cg%20transform='translate(70,%2072)'%3e%3cpolygon%20points='-65,68%200,-55%200,-36%20-43,68'%20fill='%23C49040'/%3e%3cpolygon%20points='0,-55%2065,68%2043,68%200,-36'%20fill='%23C49040'/%3e%3crect%20x='-32'%20y='18'%20width='64'%20height='4'%20fill='%23C49040'/%3e%3crect%20x='-65'%20y='62'%20width='130'%20height='6'%20rx='1'%20fill='%23C49040'/%3e%3c/g%3e%3c/svg%3e" alt="">ARCUS Professional - preliminary screening output</span>
+    <span>ARCUS-P01-20260603-torino</span>
+  </div>
+  <header class="cover">
+    <div>
+      <img class="cover-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMjMwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIzMCI+CiAgPHRpdGxlPkFSQ1VTIOKAlCBMb2dvIEZ1bGw8L3RpdGxlPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAud20geyBmb250LWZhbWlseTonUmFsZXdheScsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmOyBmaWxsOiNGMkU4RDQ7IGZvbnQtd2VpZ2h0OjMwMDsgbGV0dGVyLXNwYWNpbmc6MTJweDsgZm9udC1zaXplOjI4cHg7IH0KICAgICAgLnRnIHsgZm9udC1mYW1pbHk6J1JhbGV3YXknLCdIZWx2ZXRpY2EgTmV1ZScsQXJpYWwsc2Fucy1zZXJpZjsgZmlsbDojNkE1QTQyOyBmb250LXNpemU6OHB4OyBsZXR0ZXItc3BhY2luZzo0cHg7IGZvbnQtd2VpZ2h0OjMwMDsgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPCEtLSBTaW1ib2xvIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2MCw4Mikgc2NhbGUoMC42MikiPgogICAgPHBvbHlnb24gcG9pbnRzPSItNjUsNjggIDAsLTU1ICAwLC0zNiAgLTQzLDY4IiBmaWxsPSIjQzQ5MDQwIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjAsLTU1ICA2NSw2OCAgNDMsNjggIDAsLTM2IiBmaWxsPSIjQzQ5MDQwIi8+CiAgICA8cmVjdCB4PSItMzIiIHk9IjE4IiB3aWR0aD0iNjQiIGhlaWdodD0iNCIgZmlsbD0iI0M0OTA0MCIvPgogICAgPHJlY3QgeD0iLTY1IiB5PSI2MiIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI2IiByeD0iMSIgZmlsbD0iI0M0OTA0MCIvPgogIDwvZz4KICA8IS0tIFdvcmRtYXJrIGNvbiBzcGF6aW8gbmV0dG8gc290dG8gbGEgQSAtLT4KICA8dGV4dCB4PSIxNjAiIHk9IjE1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgY2xhc3M9IndtIj5BUkNVUzwvdGV4dD4KICA8IS0tIFNlcGFyYXRvcmUgLS0+CiAgPGxpbmUgeDE9IjU2IiB5MT0iMTcxIiB4Mj0iMTQ4IiB5Mj0iMTcxIiBzdHJva2U9IiMyRTI4MjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+CiAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iMTcxIiByPSIxLjUiIGZpbGw9IiNDNDkwNDAiLz4KICA8bGluZSB4MT0iMTcyIiB5MT0iMTcxIiB4Mj0iMjY0IiB5Mj0iMTcxIiBzdHJva2U9IiMyRTI4MjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+CiAgPCEtLSBUYWdsaW5lIC0tPgogIDx0ZXh0IHg9IjE2MCIgeT0iMTkwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBjbGFzcz0idGciPklORlJBU1RSVUNUVVJFIElOVEVMTElHRU5DRTwvdGV4dD4KPC9zdmc+Cg==" alt="ARCUS">
+      <div class="path-badge">PATH 01 - New Territory</div>
+      <h1>Territory Briefing: Torino</h1>
+      <p class="cover-subtitle">Professional province-level preliminary briefing: historical evidence, Atlas map, project-context focus and operational next checks.</p>
+      <div class="meta">Infrastructure intelligence / generated 03/06/2026</div>
+    </div>
+    <div class="cover-meta-grid">
+      <div><span>Report ID</span><strong>ARCUS-P01-20260603-torino</strong></div>
+      <div><span>Version</span><strong>ARCUS Professional PDF-ready v0.3</strong></div>
+      <div><span>Analysis</span><strong>Territory Briefing</strong></div>
+      <div><span>Spatial level</span><strong>Province level</strong></div>
+      <div><span>Generated by</span><strong>ARCUS Professional</strong></div>
+    </div>
+  </header>
+  <main>
+    
+      <section class="executive-section">
+        <h2><span class="section-number">01</span>EXECUTIVE SUMMARY</h2>
+        <p>ARCUS identifies 42 documented precedents in the selected province and translates the Step 3 hazard-overlay state into operational actions for bridge interventions. The dominant territorial signal is <strong>hydraulic</strong>; the leading historical driver is <strong>Hydraulic</strong>.</p>
+        <div class="decision-box">Recommended use: province-level preliminary screening for bridge interventions, before design, due diligence or site-specific investigation.</div>
+        <div class="findings-grid">
+          <div class="finding"><span>Finding 1</span><strong>The hydraulic context dominates the territorial reading.</strong></div><div class="finding"><span>Finding 2</span><strong>41 triggered events and 30 total collapses shape the technical priority.</strong></div><div class="finding"><span>Finding 3</span><strong>Very high evidence reliability with 125 linked sources.</strong></div>
+        </div>
+      </section>
+      <section class="page-block report-map-section">
+        <h2><span class="section-number">02</span>SELECTED PROVINCE &amp; STEP 3 MAP</h2>
+        <figure class="atlas-extract">
+        <svg class="atlas-map-svg" viewBox="0 0 800 430" role="img" aria-label="ARCUS Atlas extract for the selected province">
+          <defs>
+            <pattern id="atlas-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#d2c6b8" stroke-width="1" opacity="0.55"></path>
+            </pattern>
+            <linearGradient id="atlas-bg" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#f7efe3"></stop>
+              <stop offset="1" stop-color="#e2ddd1"></stop>
+            </linearGradient>
+            <clipPath id="atlas-map-clip"><rect width="800" height="430"></rect></clipPath>
+          </defs>
+          <rect width="800" height="430" fill="url(#atlas-bg)"></rect>
+          
+          <rect width="800" height="430" fill="url(#atlas-grid)"></rect>
+          <path d="M40 300 C150 255 205 270 310 218 S505 168 760 116" fill="none" stroke="#6e858d" stroke-width="8" stroke-linecap="round" opacity="0.16"></path>
+          <path d="M32 314 C155 265 215 282 320 226 S510 180 770 126" fill="none" stroke="#6e858d" stroke-width="2" stroke-linecap="round" opacity="0.55"></path>
+          <polygon points="343.6,148.5 456.4,148.5 456.4,282.0 343.6,282.0" fill="#c49040" opacity="0.10" stroke="#c49040" stroke-width="2.2" stroke-dasharray="8 6"></polygon>
+          <g class="atlas-point">
+            <circle cx="434.7" cy="212.1" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="434.7" cy="212.1" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.15 - Castellamonte</title>
+          </g><g class="atlas-point">
+            <circle cx="396.3" cy="218.0" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="396.3" cy="218.0" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.03 - Ala di Stura</title>
+          </g><g class="atlas-point">
+            <circle cx="397.3" cy="218.2" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="397.3" cy="218.2" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.05 - Ala di Stura</title>
+          </g><g class="atlas-point">
+            <circle cx="438.7" cy="218.5" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="438.7" cy="218.5" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.06 - Felleto</title>
+          </g><g class="atlas-point">
+            <circle cx="388.9" cy="219.4" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="388.9" cy="219.4" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.07 - Balme</title>
+          </g><g class="atlas-point">
+            <circle cx="386.1" cy="219.4" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="386.1" cy="219.4" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.08 - Balme</title>
+          </g><g class="atlas-point">
+            <circle cx="401.1" cy="211.6" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="401.1" cy="211.6" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.09 - Chialamberto</title>
+          </g><g class="atlas-point">
+            <circle cx="401.4" cy="211.6" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="401.4" cy="211.6" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.10 - Chialamberto</title>
+          </g><g class="atlas-point">
+            <circle cx="400.5" cy="275.5" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="400.5" cy="275.5" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.11 - Pinerolo</title>
+          </g><g class="atlas-point">
+            <circle cx="395.7" cy="273.2" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="395.7" cy="273.2" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.13 - Pinerolo</title>
+          </g><g class="atlas-point">
+            <circle cx="402.3" cy="255.3" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="402.3" cy="255.3" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.14 - Giaveno</title>
+          </g><g class="atlas-point">
+            <circle cx="422.1" cy="232.1" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="422.1" cy="232.1" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.17 - Robassomero</title>
+          </g><g class="atlas-point">
+            <circle cx="434.8" cy="212.1" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="434.8" cy="212.1" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.18 - Salassa</title>
+          </g><g class="atlas-point">
+            <circle cx="343.6" cy="248.3" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="343.6" cy="248.3" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.21 - Bardonecchia</title>
+          </g><g class="atlas-point">
+            <circle cx="383.0" cy="240.6" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="383.0" cy="240.6" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.22 - Bussoleno</title>
+          </g><g class="atlas-point">
+            <circle cx="384.9" cy="241.9" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="384.9" cy="241.9" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.23 - Bussoleno</title>
+          </g><g class="atlas-point">
+            <circle cx="401.1" cy="211.6" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="401.1" cy="211.6" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.24 - Chialamberto</title>
+          </g><g class="atlas-point">
+            <circle cx="362.0" cy="245.3" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="362.0" cy="245.3" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.25 - San Colombano</title>
+          </g><g class="atlas-point">
+            <circle cx="397.4" cy="211.0" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="397.4" cy="211.0" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.27 - Bonzo</title>
+          </g><g class="atlas-point">
+            <circle cx="390.1" cy="265.8" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="390.1" cy="265.8" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.30 - Inverso Pinasca</title>
+          </g><g class="atlas-point">
+            <circle cx="400.5" cy="275.5" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="400.5" cy="275.5" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.31 - San Germano Chisone</title>
+          </g><g class="atlas-point">
+            <circle cx="421.3" cy="204.5" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="421.3" cy="204.5" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.33 - Pont Canavese</title>
+          </g><g class="atlas-point">
+            <circle cx="443.7" cy="227.3" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="443.7" cy="227.3" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.35 - San Benigno Canavese</title>
+          </g><g class="atlas-point">
+            <circle cx="366.4" cy="254.5" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="366.4" cy="254.5" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.36 - Pragelato</title>
+          </g><g class="atlas-point">
+            <circle cx="451.2" cy="205.0" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="451.2" cy="205.0" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.43 - Comune di Strambino</title>
+          </g><g class="atlas-point">
+            <circle cx="456.4" cy="263.2" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="456.4" cy="263.2" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B05.11.01 - Villanova d'Asti</title>
+          </g><g class="atlas-point">
+            <circle cx="389.8" cy="228.7" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="389.8" cy="228.7" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B08.05.02 - Usseglio</title>
+          </g><g class="atlas-point">
+            <circle cx="452.3" cy="206.1" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="452.3" cy="206.1" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B17.06.01 - Strambino</title>
+          </g><g class="atlas-point">
+            <circle cx="382.5" cy="242.1" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="382.5" cy="242.1" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B24.09.01 - Mattie</title>
+          </g><g class="atlas-point">
+            <circle cx="388.8" cy="282.0" r="10.2" fill="#9B3D31" opacity="0.16"></circle>
+            <circle cx="388.8" cy="282.0" r="6.2" fill="#9B3D31" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B11.11.01 - Torre Pellice</title>
+          </g><g class="atlas-point">
+            <circle cx="397.0" cy="218.0" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="397.0" cy="218.0" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.04 - Ala di Stura</title>
+          </g><g class="atlas-point">
+            <circle cx="398.2" cy="274.5" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="398.2" cy="274.5" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.12 - Pinerolo</title>
+          </g><g class="atlas-point">
+            <circle cx="398.6" cy="199.8" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="398.6" cy="199.8" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.16 - Noasca</title>
+          </g><g class="atlas-point">
+            <circle cx="374.0" cy="253.6" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="374.0" cy="253.6" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.26 - Fenestrelle</title>
+          </g><g class="atlas-point">
+            <circle cx="415.8" cy="205.9" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="415.8" cy="205.9" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.28 - Locana</title>
+          </g><g class="atlas-point">
+            <circle cx="403.4" cy="202.7" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="403.4" cy="202.7" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.29 - Noasca</title>
+          </g><g class="atlas-point">
+            <circle cx="425.8" cy="204.8" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="425.8" cy="204.8" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.32 - Pont Canavese</title>
+          </g><g class="atlas-point">
+            <circle cx="393.7" cy="272.6" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="393.7" cy="272.6" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.34 - Porte</title>
+          </g><g class="atlas-point">
+            <circle cx="443.3" cy="184.7" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="443.3" cy="184.7" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.37 - Quincinetto</title>
+          </g><g class="atlas-point">
+            <circle cx="392.2" cy="269.4" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="392.2" cy="269.4" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.38 - San Germano Chisone</title>
+          </g><g class="atlas-point">
+            <circle cx="422.3" cy="188.7" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="422.3" cy="188.7" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.39 - Pianetto</title>
+          </g><g class="atlas-point">
+            <circle cx="455.5" cy="148.5" r="9.2" fill="#C49040" opacity="0.16"></circle>
+            <circle cx="455.5" cy="148.5" r="5.2" fill="#C49040" stroke="#fffaf2" stroke-width="1.6"></circle>
+            <title>B00.10.40 - Alagna</title>
+          </g>
+          <g class="atlas-north">
+            <rect x="732" y="18" width="36" height="36" rx="2"></rect>
+            <text x="750" y="42" text-anchor="middle">N</text>
+          </g>
+          <g class="atlas-scale">
+            <rect x="28" y="374" width="112" height="8" fill="#15110f"></rect>
+            <rect x="56" y="374" width="28" height="8" fill="#fffaf2"></rect>
+            <rect x="112" y="374" width="28" height="8" fill="#fffaf2"></rect>
+            <text x="28" y="398">indicative scale</text>
+          </g>
+          <g class="atlas-title">
+            <text x="28" y="34">Torino</text>
+            <text x="28" y="54">42 georeferenced ARCUS cases</text>
+          </g>
+        </svg>
+        <figcaption>
+          <strong>ARCUS Atlas extract</strong>
+          Selected province highlighted through the geographic extent of ARCUS cases. Georeferenced cases in the ARCUS database for Torino are shown. Bounds: N 46.013 / S 44.652 / E 8.122 / W 6.537.
+        </figcaption>
+      </figure>
+        <div class="report-map-legend"><span><i class="legend-critical"></i>Total collapse</span><span><i class="legend-triggered"></i>Triggered event</span><span><i class="legend-hydraulic"></i>Hydraulic overlay</span><span><i class="legend-landslide"></i>Landslide overlay</span><span><i class="legend-seismic"></i>Seismic context</span></div>
+        <p class="note">Territorial screening map, not design scale. P1/P2/P3 identify the priority precedents referenced in the report.</p>
+      </section>
+      <section>
+        <h2><span class="section-number">03</span>HOW TO READ THIS REPORT</h2>
+        <p>ARCUS combines historical collapse records, public hazard overlays, source-backed evidence and comparable precedents. The objective is to turn overlays and collapse history into operational next steps, not to produce a structural safety certification.</p>
+        <div class="signal-band">
+          <article class="signal-card dark">
+            <span>Selected project context</span>
+            <strong>bridge</strong>
+            <p>For a bridge project context, the dominant driver (Hydraulic) is translated into preliminary attention points. This section does not prescribe design solutions: it frames checks, data requests and comparison with precedents in the province of Torino.</p>
+          </article>
+          <article class="signal-card">
+            <span>Dominant exposure</span>
+            <strong>hydraulic / 97</strong>
+            <p>The selected province is mainly driven by hydraulic exposure: 41 matched collapses out of 42 analysed events (98%). Other layers should be read as secondary preliminary-screening context.</p>
+          </article>
+        </div>
+      </section>
+      <section>
+        <h2><span class="section-number">04</span>KEY INDICATORS</h2>
+        <div class="kpis">
+          <div class="kpi"><span>Priority index</span><strong>82 / 100</strong><p><span class="kpi-class"><em>High attention</em></span><span class="kpi-driver">hydraulic</span></p></div>
+          <div class="kpi"><span>Evidence reliability</span><strong>96 / 100</strong><p><span class="kpi-class"><em>Very high</em></span><span class="kpi-driver">125 linked sources</span></p></div>
+          <div class="kpi"><span>Failure precedent exposure</span><strong>72 / 100</strong><p><span class="kpi-class"><em>High</em></span><span class="kpi-driver">Hydraulic</span></p></div>
+          <div class="kpi"><span>Historical events</span><strong>42</strong><p><span class="kpi-class"><em>98% Hydraulic</em></span><span class="kpi-driver">41 triggered events</span></p></div>
+        </div>
+      </section>
+      <section>
+        <h2><span class="section-number">05</span>HAZARD / EXPOSURE CONTEXT</h2>
+        <p>The Step 3 state combines hydraulic overlays, landslides, seismic context and ARCUS historical collapses. The bars summarise the territorial signal used to guide recommendations.</p>
+        <div class="mini-bars"><div class="mini-bar">
+          <span>Hydraulic exposure</span>
+          <i><b style="width:97%"></b></i>
+          <strong>97</strong>
+        </div><div class="mini-bar">
+          <span>Failure precedent exposure</span>
+          <i><b style="width:30%"></b></i>
+          <strong>30</strong>
+        </div><div class="mini-bar">
+          <span>Landslide exposure</span>
+          <i><b style="width:28%"></b></i>
+          <strong>28</strong>
+        </div><div class="mini-bar">
+          <span>Seismic exposure</span>
+          <i><b style="width:28%"></b></i>
+          <strong>28</strong>
+        </div></div>
+      </section>
+      <section>
+        <h2><span class="section-number">06</span>OPERATIONAL MEANING</h2>
+        <div class="signal-band">
+          <article class="signal-card">
+            <span>Primary focus</span>
+            <strong>Preliminary hydraulic compatibility; Scour susceptibility; Foundation, pier and abutment exposure</strong>
+            <p>For a bridge project context, the dominant driver (Hydraulic) is translated into preliminary attention points. This section does not prescribe design solutions: it frames checks, data requests and comparison with precedents in the province of Torino.</p>
+          </article>
+          <article class="signal-card">
+            <span>Attention points</span>
+            <ul><li>Preliminary hydraulic compatibility</li><li>Scour susceptibility</li><li>Foundation, pier and abutment exposure</li><li>Riverbed dynamics and sediment/debris transport</li><li>Flood/debris scenarios and inspection accessibility</li></ul>
+          </article>
+        </div>
+      </section>
+      <section>
+        <h2><span class="section-number">07</span>PRIORITY ARCUS PRECEDENTS</h2>
+        <p>Priority events are selected by severity, trigger, territorial driver and source reliability. The "Why flagged" column makes explicit why each precedent deserves operational attention.</p>
+        <div class="precedent-list"><article class="precedent-card">
+          <div><span class="map-ref">P1</span></div>
+          <div>
+            <strong>B00.10.15 - Castellamonte</strong>
+            <span>2000-10-13 / Hydraulic</span>
+          </div>
+          <span>Total Collapse / A</span>
+        </article><article class="precedent-card">
+          <div><span class="map-ref">P2</span></div>
+          <div>
+            <strong>B00.10.03 - Ala di Stura</strong>
+            <span>2000-10-13 / Hydraulic</span>
+          </div>
+          <span>Total Collapse / A</span>
+        </article><article class="precedent-card">
+          <div><span class="map-ref">P3</span></div>
+          <div>
+            <strong>B00.10.05 - Ala di Stura</strong>
+            <span>2000-10-13 / Hydraulic</span>
+          </div>
+          <span>Total Collapse / A</span>
+        </article></div>
+      </section>
+      <section>
+        <h2><span class="section-number">08</span>COMPARABLE PRECEDENTS</h2>
+        <p>Comparable precedents share cause, trigger, severity or territorial context. They should be used as historical analogues, not direct predictions.</p>
+      </section>
+      <section>
+        <h2><span class="section-number">09</span>INTERPRETATION</h2>
+        <p>For new Bridge interventions, ARCUS directs first checks toward hydraulic. The reading is derived from historical precedents, hazard overlays and evidence quality: it does not automatically indicate structural criticality, but defines what should be checked next.</p>
+      </section>
+      <section>
+        <h2><span class="section-number">10</span>IMMEDIATE SCREENING ACTIONS</h2>
+        <div class="action-grid"><article class="action-card">
+        <span>Action 1</span>
+        <b>For new bridge interventions in the province of Torino, prioritise preliminary hydraulic compatibility checks, including flood levels, flow concentration, debris transport and riverbed evolution.</b>
+      </article><article class="action-card">
+        <span>Action 2</span>
+        <b>Treat scour susceptibility as a primary design-screening topic where foundations, abutments or piers interact with active watercourses.</b>
+      </article><article class="action-card">
+        <span>Action 3</span>
+        <b>Compare the planned intervention with documented hydraulic or total-collapse precedents in Castellamonte, Ala di Stura, Felleto, Balme, Chialamberto before defining investigation priorities.</b>
+      </article><article class="action-card">
+        <span>Action 4</span>
+        <b>Use public WMS layers and ARCUS historical precedents as first-level screening, then commission site-specific hydraulic, geotechnical and structural checks before design decisions.</b>
+      </article></div>
+      </section>
+      <section>
+        <h2><span class="section-number">11</span>DATA TO REQUEST BEFORE DESIGN DECISIONS</h2>
+        <div class="data-grid"><article class="data-card">
+        <span>Data 1</span>
+        <b>Hydraulic model or preliminary hydraulic study</b>
+      </article><article class="data-card">
+        <span>Data 2</span>
+        <b>Riverbed survey / bathymetry where relevant</b>
+      </article><article class="data-card">
+        <span>Data 3</span>
+        <b>Geotechnical investigation and foundation concept</b>
+      </article><article class="data-card">
+        <span>Data 4</span>
+        <b>Historical flood levels</b>
+      </article><article class="data-card">
+        <span>Data 5</span>
+        <b>Inspection accessibility constraints</b>
+      </article></div>
+      </section>
+      <section>
+        <h2><span class="section-number">12</span>RECOMMENDED CLIENT PATH</h2>
+        <ol><li>For new bridge interventions in the province of Torino, prioritise preliminary hydraulic compatibility checks, including flood levels, flow concentration, debris transport and riverbed evolution.</li><li>Treat scour susceptibility as a primary design-screening topic where foundations, abutments or piers interact with active watercourses.</li><li>Compare the planned intervention with documented hydraulic or total-collapse precedents in Castellamonte, Ala di Stura, Felleto, Balme, Chialamberto before defining investigation priorities.</li><li>Use public WMS layers and ARCUS historical precedents as first-level screening, then commission site-specific hydraulic, geotechnical and structural checks before design decisions.</li><li>Where historical precedent density is high, include inspection accessibility and monitoring feasibility in early design discussion.</li></ol>
+      </section>
+      <section>
+        <h2><span class="section-number">13</span>NATIONAL BENCHMARK</h2>
+        <p>Compared with the national ARCUS baseline, the selected province is above average for Triggered-event share, Professional-grade sources, Failure precedent exposure. If triggered-event share is above average, the briefing should be used to anticipate hydraulic, geotechnical and territorial-context checks before site-specific design.</p>
+      </section>
+      <section>
+        <h2><span class="section-number">14</span>DATA COVERAGE &amp; LIMITATIONS</h2>
+        <div class="limitation-strip"><div>Province-level screening: not design scale.</div><div>ARCUS does not certify structural safety or asset condition.</div><div>Public overlays guide priorities and must be followed by site-specific checks.</div></div>
+      </section>
+    <section class="appendix-section source-appendix page-block">
+      <h2><span class="section-number">A</span>SOURCE APPENDIX</h2>
+      <p>Main sources linked to events in the selected province, deduplicated by title or URL. Total linked sources in this briefing: 125. The full source table can be exported separately from ARCUS Professional.</p>
+      <div class="source-cards"><article class="source-card">
+        <span>B00.10.15, B00.10.03, B00.10.05... / ARPA Piemonte</span>
+        <strong>Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale</strong>
+        <a href="https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf">www.arpa.piemonte.it/sites/default/files/media/2023-10...</a>
+      </article><article class="source-card">
+        <span>B00.10.15, B00.10.03, B00.10.05... / ANSA</span>
+        <strong>10 anni fa alluvione Nord-Ovest. fu inferno d'acqua – Piemonte e Valle d'Aosta</strong>
+        <a href="https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html">www.ansa.it/web/notizie/photostory/primopiano...</a>
+      </article><article class="source-card">
+        <span>B00.10.15, B00.10.03, B00.10.05... / Journal Paper</span>
+        <strong>Bridge collapses in Italy across the 21st century: survey and statistical analysis</strong>
+        <a href="https://doi.org/10.1080/15732479.2025.2483500">doi.org/10.1080/15732479.2025.2483500</a>
+      </article><article class="source-card">
+        <span>B05.11.01 / Corriere della Sera</span>
+        <strong>Bloccata la linea ferroviaria Torino-Roma</strong>
+        <a href="https://www.corriere.it/Primo_Piano/Cronache/2005/11_Novembre/14/ferrovia.shtml">www.corriere.it/Primo_Piano/Cronache/2005/11_Nove...</a>
+      </article><article class="source-card">
+        <span>B05.11.01 / Gazzetta d'Asti</span>
+        <strong>Crollo della passerella a Villanova: condanne in Tribunale</strong>
+        <a href="https://www.gazzettadasti.it/2011/06/22/crollo-della-passerella-a-villanova-condanne-in-tribunale-gazzetta-dasti/">www.gazzettadasti.it/2011/06/22/crollo-della-passerell...</a>
+      </article><article class="source-card">
+        <span>B08.05.02 / Regione Piemonte</span>
+        <strong>Evento alluvionale 29-30 maggio 2008 – relazione tecnica ufficiale</strong>
+        <a href="https://www.regione.piemonte.it/web/sites/default/files/media/documenti/2023-07/evento_maggio_2008_pv_cn.pdf">www.regione.piemonte.it/web/sites/default/files/media/doc...</a>
+      </article><article class="source-card">
+        <span>B08.05.02 / MeteoNetwork</span>
+        <strong>Alluvione maggio 2008 in Provincia di Cuneo: resoconto completo</strong>
+        <a href="https://www.meteonetwork.it/wp-content/uploads/2017/03/Alluvione-nel-Cuneese.pdf">www.meteonetwork.it/wp-content/uploads/2017/03/Alluvi...</a>
+      </article><article class="source-card">
+        <span>B17.06.01 / TorinoToday</span>
+        <strong>Cedimento strutturale: è crollato lo storico ponte di Strambino</strong>
+        <a href="https://www.torinotoday.it/cronaca/crollo-ponte-chiusella-strambino.html">www.torinotoday.it/cronaca/crollo-ponte-chiusella-st...</a>
+      </article></div>
+    </section><section class="page-block">
+      <h2><span class="section-number">15</span>METHODOLOGY SNAPSHOT</h2>
+      <p>ARCUS combines historical collapse evidence, source reliability, spatial relevance, severity, triggers, cause similarity, territorial hazard context and public WMS overlays. The briefing supports preliminary screening and prioritisation: it is not a structural safety certification.</p>
+      <table>
+        <thead><tr><th>Component</th><th>Use in the briefing</th></tr></thead>
+        <tbody>
+          <tr><td>Historical evidence</td><td>Documented ARCUS records, causes, triggers and severity.</td></tr>
+          <tr><td>Source reliability</td><td>Number, role and quality of available sources.</td></tr>
+          <tr><td>Spatial relevance</td><td>Selected province and administrative provincial boundary.</td></tr>
+          <tr><td>Hazard context</td><td>Public hydraulic/landslide WMS overlays and seismic context.</td></tr>
+          <tr><td>Comparable precedents</td><td>Cause match, trigger match, severity, territorial context and reliability.</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h2><span class="section-number">16</span>SCORE AND CLASS LEGEND</h2>
+      <table>
+        <thead><tr><th>Class</th><th>Interpretation</th></tr></thead>
+        <tbody>
+      <tr><td>A</td><td>High reliability: multiple sources, preferably institutional or technical.</td></tr>
+      <tr><td>B</td><td>Medium reliability: documented event with limited coverage or source variety.</td></tr>
+      <tr><td>C</td><td>Limited reliability: local, incomplete or to-be-strengthened evidence.</td></tr>
+      <tr><td>Critical</td><td>Maximum attention: strong historical and/or territorial evidence.</td></tr>
+      <tr><td>High</td><td>High attention: significant evidence but not necessarily complete.</td></tr>
+      <tr><td>Medium / Low</td><td>Moderate or low attention, to be read together with available data.</td></tr>
+    </tbody>
+      </table>
+    </section>
+  </main>
+<script>document.title="ARCUS - Territory Briefing - Torino";window.addEventListener("load",function(){setTimeout(function(){window.print();},350);});</script>
+</body></html>
