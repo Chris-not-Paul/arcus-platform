@@ -56,7 +56,8 @@ function App() {
   const [showIntro, setShowIntro] = useState(true);
   const isReportExportRoute =
     typeof window !== "undefined" &&
-    window.location.pathname.startsWith("/report-map/");
+    (window.location.pathname.startsWith("/report-map/") ||
+      window.location.pathname.startsWith("/professional/atlas-export/"));
 
   return (
     <>
@@ -127,6 +128,11 @@ function App() {
 
           <Route
             path="/report-map/path01"
+            element={<ReportMapPath01 />}
+          />
+
+          <Route
+            path="/professional/atlas-export/path01"
             element={<ReportMapPath01 />}
           />
 

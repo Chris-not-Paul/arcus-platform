@@ -84,7 +84,7 @@ function loadLogoDataUri() {
     "src",
     "assets",
     "logo",
-    "logo-full.svg"
+    "logo-full-light.svg"
   );
 
   if (!fs.existsSync(logoPath)) {
@@ -108,7 +108,27 @@ function loadHazardExposurePreview() {
     return null;
   }
 
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  return JSON.parse(
+    fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "")
+  );
+}
+
+function loadAinopBridgeIndex() {
+  const filePath = path.join(
+    root,
+    "public",
+    "data",
+    "professional",
+    "ainop-bridge-index.json"
+  );
+
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  return JSON.parse(
+    fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "")
+  );
 }
 
 function makePriorityEvents(events, dominantCause) {
@@ -177,8 +197,20 @@ const exposureLabels = {
   hydraulic: "Hydraulic exposure",
   landslide: "Landslide exposure",
   seismic: "Seismic exposure",
-  structural: "Structural / failure precedent exposure",
+  structural: "Historical Failure Context",
 };
+
+function titleCaseLabel(value) {
+  return String(value || "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function driverLabel(value) {
+  return titleCaseLabel(String(value || "").replace(/\s*exposure\s*$/i, ""));
+}
 
 const contextScope = {
   bridge:
@@ -297,7 +329,7 @@ const recommendationMatrix = {
         "As-built drawings or design documentation",
       ],
       wording:
-        "For bridge interventions in the selected province, ARCUS indicates that preliminary attention should focus on documented structural/design-construction precedents and related checks because the dominant indicator is structural / failure precedent exposure.",
+        "For bridge interventions in the selected province, ARCUS indicates that preliminary attention should focus on documented structural/design-construction precedents and related checks because the dominant indicator is historical failure context.",
     },
   },
   road: {
@@ -404,7 +436,7 @@ const recommendationMatrix = {
         "Photos or condition notes",
       ],
       wording:
-        "For road crossing interventions in the selected province, ARCUS indicates that preliminary attention should focus on minor bridge/culvert condition data and related checks because the dominant indicator is structural / failure precedent exposure.",
+        "For road crossing interventions in the selected province, ARCUS indicates that preliminary attention should focus on minor bridge/culvert condition data and related checks because the dominant indicator is historical failure context.",
     },
   },
   railway: {
@@ -511,7 +543,7 @@ const recommendationMatrix = {
         "Operational restrictions",
       ],
       wording:
-        "For railway crossing interventions in the selected province, ARCUS indicates that preliminary attention should focus on structural records of rail crossings and related checks because the dominant indicator is structural / failure precedent exposure.",
+        "For railway crossing interventions in the selected province, ARCUS indicates that preliminary attention should focus on structural records of rail crossings and related checks because the dominant indicator is historical failure context.",
     },
   },
   urban: {
@@ -618,7 +650,7 @@ const recommendationMatrix = {
         "Local incident records",
       ],
       wording:
-        "For urban infrastructure interventions in the selected province, ARCUS indicates that preliminary attention should focus on urban minor structures and underpasses and related checks because the dominant indicator is structural / failure precedent exposure.",
+        "For urban infrastructure interventions in the selected province, ARCUS indicates that preliminary attention should focus on urban minor structures and underpasses and related checks because the dominant indicator is historical failure context.",
     },
   },
 };
@@ -657,6 +689,7 @@ function getProjectContextRecommendations({
     priorityMunicipalities.slice(0, 5).join(", ") || provinceName;
   const contextLabel = contextLabels[contextKey] || contextLabels.bridge;
   const exposureLabel = exposureLabels[exposureKey];
+  const driver = driverLabel(exposureLabel);
   const exposureStats = exposureProfile?.hazards?.find(
     (hazard) => normalizeExposureKey(hazard.key) === exposureKey
   );
@@ -677,8 +710,8 @@ function getProjectContextRecommendations({
     immediateScreeningActions: template.actions,
     designPhaseChecks: [
       "Translate province-level screening into site-specific checks by qualified professionals.",
-      "Compare planned intervention assumptions with P1/P2/P3 historical precedents.",
-      "Use public WMS overlays as context, not as detailed hydraulic, geotechnical or seismic modelling.",
+      "Review the documented historical pattern and use map/appendix cases only as evidence references.",
+      "Use exposure indicators as a synthesis of public Hydraulic, Landslide and Seismic layers, not as detailed hydraulic, geotechnical or seismic modelling.",
     ],
     dataToRequest: template.dataToRequest,
     limitations: [
@@ -687,14 +720,80 @@ function getProjectContextRecommendations({
       "Public overlays support prioritisation and must be followed by site-specific investigations.",
     ],
     operationalMeaning:
-      `${template.wording} This is a province-level screening signal and must be translated into site-specific checks by qualified professionals.`,
+      `ARCUS reading: ${template.wording} This signal does not define a design solution. It identifies the technical attention fields that should be checked before design, due diligence or site-specific investigation decisions.`,
     priorityPlaces: places,
     recommendations: [
-      ...template.actions,
-      `Compare the planned intervention with ARCUS priority precedents around ${places}.`,
-      "Request the missing technical data before design or institutional decisions.",
-    ].slice(0, 6),
+      `Use the Step 3 exposure indicators to identify the dominant ${driver} signal.`,
+      "Read the documented historical pattern and use individual cases as map/appendix references.",
+      "Request the minimum technical data package.",
+      exposureKey === "hydraulic"
+        ? "Commission site-specific hydraulic and geotechnical checks."
+        : `Commission site-specific checks for the ${driver.toLowerCase()} signal.`,
+      "Use CSV and GeoJSON exports for technical coordination.",
+    ],
   };
+}
+
+function getEvidenceYearRange(events) {
+  const years = events
+    .map((event) => Number(String(event.date || "").slice(0, 4)))
+    .filter(Number.isFinite);
+
+  if (!years.length) {
+    return "Not available";
+  }
+
+  const firstYear = Math.min(...years);
+  const lastYear = Math.max(...years);
+
+  return firstYear === lastYear
+    ? String(firstYear)
+    : `${firstYear}-${lastYear}`;
+}
+
+function getEvidenceYearsLabel(events) {
+  const years = events
+    .map((event) => Number(String(event.date || "").slice(0, 4)))
+    .filter(Number.isFinite);
+
+  if (!years.length) {
+    return "Historical evidence window";
+  }
+
+  const firstYear = Math.min(...years);
+  const lastYear = Math.max(...years);
+  const span = Math.max(1, lastYear - firstYear + 1);
+
+  return `${getEvidenceYearRange(events)} (${span} years of evidence)`;
+}
+
+function getPriorityTriggerNote(priorityEvents, province) {
+  const topThree = priorityEvents.slice(0, 3);
+
+  if (topThree.length < 3) {
+    return "";
+  }
+
+  const dates = new Set(topThree.map((event) => event.date).filter(Boolean));
+  const descriptions = topThree
+    .map((event) => normalizeText(event.description))
+    .join(" ");
+  const isOctober2000Flood =
+    dates.has("2000-10-13") &&
+    normalizeText(province).includes("torino") &&
+    descriptions.includes("13 16 october 2000");
+
+  if (isOctober2000Flood) {
+    return "Note: P1-P3 refer to the same 13-16 October 2000 flood event in Piemonte and Valle d'Aosta. This contextualises the signal as documented extreme-flood vulnerability, not three independent recurrent events.";
+  }
+
+  if (dates.size === 1) {
+    const [date] = Array.from(dates);
+
+    return `Note: P1-P3 share the same event date (${date}). Treat them as a clustered trigger signal before interpreting recurrence frequency.`;
+  }
+
+  return "";
 }
 
 function toCsvValue(value) {
@@ -764,29 +863,31 @@ function buildCss() {
     @page { size: A4; margin: 14mm; }
     * { box-sizing: border-box; }
     body { margin: 0; background: #f7f0e8; color: #1c1713; font-family: Arial, sans-serif; }
-    .cover { min-height: 210mm; padding: 36px; position: relative; overflow: hidden; background: radial-gradient(circle at 78% 18%, rgba(196,144,64,.18), transparent 28%), linear-gradient(135deg,#15110f 0%,#211b16 58%,#15110f 100%); color: #f2e8d4; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
-    .cover::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(242,232,212,.045) 1px,transparent 1px),linear-gradient(rgba(242,232,212,.035) 1px,transparent 1px); background-size: 46px 46px; opacity: .55; }
+    .cover { min-height: 210mm; padding: 36px; position: relative; overflow: hidden; background: linear-gradient(180deg,#fffaf2 0%,#f7f0e8 64%,#efe4d5 100%); color: #15110f; border: 1px solid #d7cab9; border-top: 8px solid #c49040; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
+    .cover::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(196,144,64,.09) 1px,transparent 1px),linear-gradient(rgba(21,17,15,.045) 1px,transparent 1px); background-size: 48px 48px; opacity: .42; }
+    .cover::after { content: ""; position: absolute; right: -80px; top: -110px; width: 330px; height: 330px; border: 1px solid rgba(196,144,64,.24); border-radius: 999px; background: radial-gradient(circle,rgba(196,144,64,.10),transparent 62%); }
     .cover > * { position: relative; z-index: 1; }
-    .logo { width: 165px; height: auto; }
+    .logo { width: 188px; height: auto; filter: saturate(1.12) contrast(1.08); }
     .brand-fallback { color: #c49040; font-size: 42px; font-family: Georgia, serif; font-weight: 900; letter-spacing: 0.08em; }
-    .badge { display: inline-block; margin-top: 22px; padding: 8px 10px; border: 1px solid rgba(196,144,64,.55); color: #c49040; font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-    h1 { max-width: 720px; margin: 28px 0 0; color: #fff8f2; font-family: Georgia, serif; font-size: 52px; line-height: 1.02; }
-    .subtitle { max-width: 620px; color: rgba(242,232,212,.72); font-size: 15px; line-height: 1.55; }
+    .badge { display: inline-block; margin-top: 22px; padding: 8px 10px; border: 1px solid rgba(196,144,64,.55); background: rgba(196,144,64,.10); color: #7a4f19; font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { max-width: 720px; margin: 28px 0 0; color: #15110f; font-family: Georgia, serif; font-size: 52px; line-height: 1.02; }
+    .subtitle { max-width: 620px; color: #5e5144; font-size: 15px; line-height: 1.55; }
     .meta { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
-    .meta div { border-top: 1px solid rgba(196,144,64,.5); padding-top: 10px; }
+    .meta div { border-top: 1px solid rgba(196,144,64,.55); background: rgba(255,255,255,.32); padding: 10px 8px 0; }
     .meta span, h2 span, .kpi span { display: block; color: #c49040; font-size: 10px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-    .meta strong { display: block; margin-top: 5px; color: #fff8f2; font-size: 13px; }
-    main { padding: 24px 30px 40px; }
-    section { page-break-inside: avoid; margin-bottom: 22px; padding: 16px 18px; border: 1px solid #d7cab9; background: rgba(255,250,242,.92); }
-    h2 { margin: 0 0 12px; font-family: Georgia, serif; font-size: 24px; }
-    p, li { color: #4f463d; font-size: 12px; line-height: 1.55; }
+    .meta strong { display: block; margin-top: 5px; color: #15110f; font-size: 13px; }
+    main { padding: 24px 30px 62px; }
+    section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 22px; padding: 16px 18px; border: 1px solid #d7cab9; background: rgba(255,250,242,.92); overflow-wrap: anywhere; }
+    h2 { margin: 0 0 12px; font-family: Georgia, serif; font-size: 24px; break-after: avoid; page-break-after: avoid; }
+    p, li { color: #4f463d; font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
     ul, ol { margin: 0; padding-left: 19px; }
     .map-frame { margin: 0; border: 1px solid #b8aa98; background: #fff; }
     .map-frame img { display: block; width: 100%; height: auto; }
     .map-frame.compact img { max-height: 112mm; object-fit: cover; }
-    .map-section { page-break-before: always; }
+    .map-section { break-before: page; break-after: page; page-break-before: always; page-break-after: always; }
     .map-section .map-frame { background: #e9e2d8; }
-    .map-section .map-frame img { aspect-ratio: 1400 / 760; object-fit: cover; }
+    .map-section .map-frame img { aspect-ratio: 900 / 760; object-fit: contain; }
+    .hazard-section { break-before: page; page-break-before: always; }
     .map-legend-row { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 9px; padding: 9px 11px; border: 1px solid #d7cab9; background: #fffaf2; color: #4f463d; font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
     .map-legend-row span { display: inline-flex; align-items: center; gap: 6px; }
     .map-legend-row i { width: 9px; height: 9px; display: inline-block; border-radius: 999px; box-shadow: 0 0 0 3px rgba(21,17,15,.10); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -797,15 +898,24 @@ function buildCss() {
     .legend-landslide { background: #B56A1D; }
     .legend-seismic { background: #6E858D; }
     .kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-    .kpi { padding: 14px; background: #f9f2e8; border: 1px solid #d7cab9; }
-    .kpi strong { display: block; margin-top: 8px; color: #15110f; font-size: 22px; }
+    .kpi { min-height: 112px; display: grid; grid-template-rows: auto auto 1fr; padding: 14px; background: #f9f2e8; border: 1px solid #d7cab9; }
+    .kpi strong { display: flex; align-items: flex-end; min-height: 34px; margin-top: 8px; color: #15110f; font-size: 22px; }
+    .kpi p { margin: 7px 0 0; color: #7a6548; font-size: 10px; line-height: 1.35; font-weight: 700; }
     .findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
     .finding { padding: 12px; border: 1px solid #d7cab9; background: #f9f2e8; }
     .finding b { display: block; color: #15110f; font-size: 12px; line-height: 1.45; }
+    .asset-statement { padding: 12px 14px; border: 1px solid rgba(196,144,64,.62); background: #fbf4ec; color: #15110f; font-weight: 800; }
     .decision { padding: 14px 16px; background: #15110f; color: #f2e8d4; border-left: 5px solid #c49040; font-weight: 800; line-height: 1.45; }
+    .flag-box { margin-top: 16px; padding: 16px 18px; border: 1px solid rgba(196,144,64,.72); background: linear-gradient(135deg,#15110f 0%,#211911 100%); color: #f2e8d4; box-shadow: 0 14px 30px rgba(64,49,37,.16); }
+    .flag-box span { display: block; color: #c49040; font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .flag-box ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; margin: 10px 0 0; padding-left: 17px; }
+    .flag-box li { color: #f2e8d4; font-size: 11px; line-height: 1.42; margin-bottom: 4px; }
     .focus-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 14px; align-items: start; }
     .focus-card { padding: 14px; background: #f9f2e8; border: 1px solid #d7cab9; }
     .signal-band { display: grid; grid-template-columns: 1.05fr .95fr; gap: 12px; margin-top: 12px; }
+    .operational-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 10px; margin-top: 12px; }
+    .operational-grid .reading-card { grid-column: 1 / -1; background: #15110f; color: #f2e8d4; border-color: #15110f; }
+    .operational-grid .reading-card strong, .operational-grid .reading-card p { color: #f2e8d4; }
     .signal-card { padding: 15px; border: 1px solid #d7cab9; background: #fffaf2; }
     .signal-card.dark { background: #15110f; color: #f2e8d4; border-color: #15110f; }
     .signal-card.dark p, .signal-card.dark li { color: #f2e8d4; }
@@ -813,11 +923,14 @@ function buildCss() {
     .signal-card strong { display: block; margin-top: 7px; color: #15110f; font-size: 17px; line-height: 1.25; }
     .signal-card.dark strong { color: #f2e8d4; }
     .signal-card p { margin: 8px 0 0; }
+    .attention-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .attention-badges span { display: inline-flex; align-items: center; padding: 6px 8px; border: 1px solid #d7cab9; background: #fbf4ec; color: #4f463d; font-size: 10px; font-weight: 800; letter-spacing: 0; text-transform: none; }
     .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
     .action-card, .data-card { padding: 13px 14px; border: 1px solid #d7cab9; background: #fffaf2; }
     .action-card b, .data-card b { display: block; margin-top: 5px; color: #15110f; font-size: 13px; line-height: 1.35; }
-    .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
-    .data-card { min-height: 72px; background: #f9f2e8; }
+    .data-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .data-card { min-height: 84px; background: #fffaf2; border-top: 4px solid #c49040; }
+    .data-card b { font-size: 12px; }
     .limitation-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
     .limitation-strip div { padding: 10px 12px; background: #fbf4ec; border-left: 3px solid #c49040; color: #4f463d; font-size: 10.5px; line-height: 1.45; }
     .precedent-list { display: grid; gap: 8px; margin-top: 12px; }
@@ -833,11 +946,20 @@ function buildCss() {
     .mini-bar { display: grid; grid-template-columns: 150px 1fr 42px; align-items: center; gap: 8px; color: #4f463d; font-size: 10px; font-weight: 800; }
     .mini-bar i { display: block; height: 8px; background: #eadfcc; }
     .mini-bar b { display: block; height: 8px; background: #c49040; }
+    .index-layer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0 12px; }
+    .index-layer-card { min-height: 150px; padding: 14px 16px; border: 1px solid #d7cab9; background: #fffaf2; border-top: 4px solid #c49040; }
+    .index-layer-card span { display: block; color: #7a6548; font-size: 9px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .index-layer-card strong { display: block; margin-top: 7px; color: #15110f; font-size: 16px; line-height: 1.15; }
+    .index-layer-card b { display: block; margin-top: 9px; color: #c49040; font-size: 24px; line-height: 1.05; }
+    .index-layer-card p { margin-top: 9px; font-size: 11px; line-height: 1.45; }
+    .confidence-pill { display: inline-block; margin-top: 8px; padding: 4px 7px; background: #15110f; color: #c49040; font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
     table { width: 100%; border-collapse: collapse; font-size: 11px; }
     th { background: #c49040; color: #15110f; text-align: left; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
-    th, td { border: 1px solid #d9cec1; padding: 7px 9px; vertical-align: top; }
+    th, td { border: 1px solid #d9cec1; padding: 7px 9px; vertical-align: top; overflow-wrap: anywhere; }
     .map-ref { display: inline-block; min-width: 24px; padding: 4px 6px; background: #15110f; color: #c49040; font-weight: 900; text-align: center; }
     .note { background: #f9f2e8; border-left: 3px solid #c49040; padding: 10px 12px; }
+    .report-footer { position: fixed; left: 16mm; right: 16mm; bottom: 7mm; display: flex; align-items: center; justify-content: space-between; gap: 18px; color: #8b7b68; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .report-footer span { white-space: nowrap; }
     .footer-mark { position: fixed; right: 14mm; bottom: 6mm; width: 34px; opacity: .4; }
     .brief-page { width: 182mm; min-height: 269mm; max-height: 269mm; overflow: hidden; padding: 0; }
     .brief-sheet { display: grid; grid-template-rows: auto auto 1fr auto; gap: 7px; }
@@ -853,62 +975,35 @@ function buildCss() {
     .brief-panel { padding: 9px 10px; border: 1px solid #d7cab9; background: rgba(255,250,242,.94); }
     .brief-panel h2 { margin: 0 0 6px; color: #15110f; font-family: Georgia, serif; font-size: 15px; line-height: 1.05; }
     .brief-panel h2 span { margin-right: 6px; color: #c49040; font-family: Arial, sans-serif; font-size: 8px; letter-spacing: .14em; }
-    .brief-map .map-frame img { aspect-ratio: 1400 / 760; object-fit: cover; }
+    .brief-map .map-frame img { aspect-ratio: 900 / 760; object-fit: cover; }
     .brief-map .map-legend-row { gap: 4px 7px; margin-top: 5px; padding: 5px 6px; font-size: 7.2px; line-height: 1.2; }
     .brief-map .map-legend-row i { width: 6px; height: 6px; box-shadow: 0 0 0 2px rgba(21,17,15,.10); }
-    .brief-signal { background: #15110f; color: #f2e8d4; border-color: #15110f; }
-    .brief-signal h2, .brief-signal p, .brief-signal li { color: #f2e8d4; }
-    .brief-signal strong { color: #f2e8d4; }
+    .brief-map-note { margin: 4px 0 0; color: #7a6548; font-size: 6.8px; line-height: 1.2; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .brief-signal { background: #fffaf2; color: #15110f; border-color: #c49040; box-shadow: inset 0 0 0 2px rgba(196,144,64,.08); }
+    .brief-signal h2, .brief-signal p, .brief-signal li { color: #4f463d; }
+    .brief-signal > strong { color: #15110f; }
     .brief-signal p { margin: 6px 0 0; font-size: 8.6px; line-height: 1.36; }
     .brief-kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-top: 8px; }
-    .brief-kpi { padding: 7px; border: 1px solid rgba(196,144,64,.42); background: rgba(255,248,242,.06); }
+    .brief-kpi { padding: 7px; border: 1px solid rgba(196,144,64,.42); background: #fbf4ec; }
     .brief-kpi span { display: block; color: #c49040; font-size: 7px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
-    .brief-kpi strong { display: block; margin-top: 4px; font-size: 15px; line-height: 1; }
+    .brief-kpi strong { display: block; margin-top: 4px; color: #15110f; font-size: 15px; line-height: 1; }
     .brief-bottom { display: grid; grid-template-columns: .92fr 1.16fr .92fr; gap: 8px; }
     .brief-box { padding: 8px 9px; border: 1px solid #d7cab9; background: #fffaf2; }
     .brief-box h3 { margin: 0 0 6px; color: #15110f; font-family: Georgia, serif; font-size: 13.5px; line-height: 1.05; }
+    .brief-case-note { margin: 0 0 5px; color: #4f463d; font-size: 7.6px; line-height: 1.24; font-weight: 700; overflow-wrap: anywhere; }
+    .brief-limit-note { margin: 7px 0 0; padding-top: 6px; border-top: 1px solid #d7cab9; color: #7a6548; font-size: 7.2px; line-height: 1.24; font-weight: 800; overflow-wrap: anywhere; }
     .brief-box ul, .brief-box ol { margin: 0; padding-left: 15px; }
-    .brief-box li { margin-bottom: 3px; color: #4f463d; font-size: 8px; line-height: 1.27; }
+    .brief-box li { margin-bottom: 3px; color: #4f463d; font-size: 8px; line-height: 1.27; overflow-wrap: anywhere; }
     .brief-limit { background: #fbf4ec; border-left: 4px solid #c49040; }
     .brief-export { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 6px; border-top: 1px solid #d7cab9; color: #7a6548; font-size: 7.2px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
     .brief-export strong { color: #15110f; }
     @media print {
-      .cover, .kpi, .decision, th, .map-ref, .map-legend-row, .map-legend-row i {
+      .cover, .kpi, .decision, .flag-box, th, .map-ref, .map-legend-row, .map-legend-row i {
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
       }
     }
   `;
-}
-
-function buildMapLegend(events) {
-  const items = [];
-
-  if (events.some((event) => event.collapse_severity === "TC")) {
-    items.push(`<span><i class="legend-critical"></i>Total collapse</span>`);
-  }
-
-  if (events.some((event) => event.triggered)) {
-    items.push(`<span><i class="legend-triggered"></i>Triggered event</span>`);
-  }
-
-  if (
-    events.some(
-      (event) =>
-        event.collapse_severity !== "TC" &&
-        !event.triggered
-    )
-  ) {
-    items.push(`<span><i class="legend-context"></i>Other ARCUS precedent</span>`);
-  }
-
-  items.push(`<span><i class="legend-hydraulic"></i>Hydraulic overlay</span>`);
-  items.push(`<span><i class="legend-landslide"></i>Landslide overlay</span>`);
-  items.push(`<span><i class="legend-seismic"></i>Seismic context</span>`);
-
-  return items.length
-    ? `<div class="map-legend-row">${items.join("")}</div>`
-    : "";
 }
 
 function listItems(items) {
@@ -928,6 +1023,7 @@ function actionCards(items) {
 
 function dataCards(items) {
   return items
+    .slice(0, 5)
     .map(
       (item, index) => `<article class="data-card">
         <span>Data ${index + 1}</span>
@@ -972,7 +1068,7 @@ function priorityEventCards(priorityEvents) {
     .slice(0, 3)
     .map(
       (event, index) => `<article class="precedent-card">
-        <div>${event.map_ref ? `<span class="map-ref">${event.map_ref}</span>` : `<span class="map-ref">${index + 1}</span>`}</div>
+        <div>${event.map_ref ? `<span class="map-ref">${event.map_ref}</span>` : `<span class="map-ref">P${index + 1}</span>`}</div>
         <div>
           <strong>${escapeHtml(event.event_id)} - ${escapeHtml(event.municipality || "-")}</strong>
           <span>${escapeHtml(event.year || event.date || "-")} / ${escapeHtml(event.specific_cause || "-")}</span>
@@ -1027,13 +1123,14 @@ function buildCover({
       <div><span>Events</span><strong>${events.length}</strong></div>
       <div><span>Spatial level</span><strong>Province level</strong></div>
       <div><span>Analysis type</span><strong>Territory Briefing</strong></div>
-      <div><span>Version</span><strong>ARCUS Path 01 v1.0</strong></div>
+      <div><span>Version</span><strong>ARCUS Professional v1.0-preview</strong></div>
       <div><span>Generated by</span><strong>ARCUS Professional</strong></div>
     </div>
   </header>`;
 }
 
 function buildFullReportHtml({
+  ainopBridgeIndex,
   dominantCause,
   events,
   exposureProfile,
@@ -1049,45 +1146,118 @@ function buildFullReportHtml({
 }) {
   const contextLabel =
     contextLabels[projectContext] || contextLabels.bridge;
+  const ainopProvince = ainopBridgeIndex?.provinces?.find(
+    (item) =>
+      normalizeText(item.province) === normalizeText(province)
+  );
   const totalCollapse = events.filter(
     (event) => event.collapse_severity === "TC"
   ).length;
   const triggered = events.filter((event) => event.triggered).length;
   const imageRelative = `./${path.relative(outputDir, mapImagePath).replaceAll("\\", "/")}`;
-  const mapLegend = buildMapLegend(events);
+  const mapLegend = "";
   const topCauseShare = Math.round(
     (countBy(events, "specific_cause")[0]?.[1] || 0) / events.length * 100
   );
   const matchedText = focus.matchedEvents
     ? `${focus.matchedEvents} matched ARCUS events`
     : "Province-level exposure signal";
+  const priorityRefs = priorityEvents
+    .slice(0, 3)
+    .map((event) => `${event.map_ref || "-"} ${event.municipality || "-"}`)
+    .join(", ");
+  const displayDriver = driverLabel(focus.dominantExposureLabel);
+  const evidenceYearsLabel = getEvidenceYearsLabel(events);
+  const priorityTriggerNote = getPriorityTriggerNote(priorityEvents, province);
+  const priorityIndex =
+    Number(exposureProfile?.risk_score || 0) ||
+    Math.round(
+      (Number(focus.exposureScore || 0) +
+        Math.min(100, (totalCollapse / Math.max(events.length, 1)) * 100) +
+        Math.min(100, (triggered / Math.max(events.length, 1)) * 100)) /
+        3
+    );
+  const collapseRateAvailable =
+    Number(ainopProvince?.ainop_bridges_total || 0) > 0 &&
+    Number.isFinite(Number(ainopProvince?.collapse_rate_per_100_ainop_bridges));
+  const collapseRateValue = collapseRateAvailable
+    ? String(ainopProvince.collapse_rate_per_100_ainop_bridges)
+    : "N/A";
+  const collapseRateMultiplier = collapseRateAvailable &&
+    Number.isFinite(Number(ainopProvince?.relative_to_national))
+    ? `${ainopProvince.relative_to_national}x`
+    : "N/A";
+  const collapseRateConfidence =
+    String(ainopProvince?.collapse_rate_confidence || "unavailable").replaceAll("_", " ");
+  const collapseRateReason =
+    ainopProvince?.collapse_rate_confidence_reason ||
+    "No AINOP bridge denominator available for this province.";
+  const flagReasons = [
+    "ARCUS is based on the first systematic database of collapsed bridges in Italy from 2000 to today.",
+    `Dominant exposure: ${displayDriver} (${focus.exposureScore || "-"} / 100).`,
+    `Historical severity: ${totalCollapse} total collapses and ${triggered} triggered events in the selected province.`,
+    `Evidence window: ${evidenceYearsLabel}.`,
+    `Map-linked cases: ${priorityRefs || "P1/P2/P3 priority cases"}.`,
+    `Evidence package: ${sources.length} linked sources supporting the screening signal.`,
+  ];
+  const ainopIndexText = ainopProvince?.ainop_bridges_total
+    ? `ARCUS/AINOP Collapse Rate: ${ainopProvince.collapse_rate_per_100_ainop_bridges} ARCUS cases per 100 AINOP bridges; ${ainopProvince.relative_to_national}x the national ARCUS/AINOP rate. Denominator: ${ainopProvince.ainop_bridges_total} AINOP bridges (${ainopProvince.ainop_road_bridges} road, ${ainopProvince.ainop_rail_bridges} rail).`
+    : "ARCUS/AINOP Collapse Rate not available for this province.";
+  const indexLayerCards = `
+    <div class="index-layer-grid">
+      <article class="index-layer-card">
+        <span>Layer 1 / Territorial exposure</span>
+        <strong>Priority Index</strong>
+        <b>${Math.round(priorityIndex)} / 100</b>
+        <p>Measures exposure and hazard context. It answers: this territory has elevated hazard/exposure characteristics.</p>
+      </article>
+      <article class="index-layer-card">
+        <span>Layer 2 / Heritage vulnerability</span>
+        <strong>Collapse Rate</strong>
+        <b>${escapeHtml(collapseRateMultiplier)}</b>
+        <p>${collapseRateAvailable
+          ? `${escapeHtml(collapseRateValue)} ARCUS cases per 100 AINOP bridges; denominator ${escapeHtml(String(ainopProvince.ainop_bridges_total))} AINOP bridges.`
+          : "No reliable AINOP bridge denominator is available for this province."}</p>
+        <i class="confidence-pill">Confidence: ${escapeHtml(collapseRateConfidence)}</i>
+      </article>
+    </div>`;
 
   return `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8" /><title>ARCUS Path 01 - ${escapeHtml(province)}</title><style>${buildCss()}</style></head>
 <body>
   ${buildCover({ contextLabel, dominantCause, events, logoDataUri, province, reportId })}
-  ${logoDataUri ? `<img class="footer-mark" src="${logoDataUri}" alt="" />` : ""}
+  <div class="report-footer">
+    <span>ARCUS Professional</span>
+    <span>Path 01 / New Territory</span>
+    <span>${escapeHtml(reportId)}</span>
+  </div>
   <main>
     <section>
       <h2><span>01</span>Executive Summary</h2>
-      <p>ARCUS identifies ${events.length} documented collapse precedents in the selected province and translates the Step 3 hazard-overlay state into operational next steps for ${escapeHtml(contextLabel.toLowerCase())} interventions. The dominant territorial signal is <strong>${escapeHtml(focus.dominantExposureLabel)}</strong>; the leading historical cause is <strong>${escapeHtml(dominantCause)}</strong>.</p>
+      <p class="asset-statement">ARCUS is based on the first systematic database of collapsed bridges in Italy from 2000 to today. The value of this report is not map aggregation: it is the translation of documented collapse evidence into operational infrastructure intelligence.</p>
+      <p>ARCUS identifies ${events.length} documented cases in the selected province and translates the Step 3 exposure indicators into operational actions for ${escapeHtml(contextLabel)} interventions. The PDF map shows ARCUS cases; the hazard-layer contribution is summarised through the exposure indicators below. The dominant territorial signal is <strong>${escapeHtml(displayDriver)}</strong>; the leading historical cause is <strong>${escapeHtml(dominantCause)}</strong>.</p>
       <div class="decision">Recommended use: province-level preliminary screening before design, due diligence or site-specific investigation.</div>
       <div class="findings">
-        <div class="finding"><span>Dominant exposure</span><b>${escapeHtml(focus.dominantExposureLabel)} / score ${focus.exposureScore || "-"}</b></div>
-        <div class="finding"><span>Historical signal</span><b>${escapeHtml(dominantCause)} represents ${topCauseShare}% of the selected evidence.</b></div>
-        <div class="finding"><span>Priority use</span><b>${escapeHtml(focus.immediateScreening)}</b></div>
+        <div class="finding"><span>Dominant Exposure</span><b>${escapeHtml(displayDriver)} / score ${focus.exposureScore || "-"}</b></div>
+        <div class="finding"><span>Historical Signal</span><b>${escapeHtml(dominantCause)} represents ${topCauseShare}% of the selected evidence.</b></div>
+        <div class="finding"><span>Priority Use</span><b>${escapeHtml(focus.immediateScreening)}</b></div>
+      </div>
+      <div class="flag-box">
+        <span>Why ARCUS flags this</span>
+        <ul>${listItems(flagReasons)}</ul>
       </div>
     </section>
     <section class="map-section">
-      <h2><span>02</span>Selected Province & Real Atlas Map</h2>
+      <h2><span>02</span>ARCUS Cases Map</h2>
       <figure class="map-frame"><img src="${escapeHtml(imageRelative)}" alt="ARCUS Atlas map extract - ${escapeHtml(province)}" /></figure>
       ${mapLegend}
-      <p class="note">Territorial screening map. Not for design scale. P1/P2/P3 markers identify priority events listed in the table below.</p>
+      <p class="note">Static ARCUS cases map - full interactive view available in Professional Atlas.</p>
     </section>
     <section>
-      <h2><span>03</span>How to Read This Report</h2>
-      <p>ARCUS combines historical collapse records, public hazard context, source-backed evidence and comparable precedents. The output is intended for preliminary screening and planning of follow-up checks, not for structural safety certification.</p>
+      <h2><span>03</span>How to Read</h2>
+      <p>ARCUS starts from the selected province, reads all ARCUS records available for that administrative area, identifies the dominant territorial pattern and turns that signal into operational next checks. This is province-level screening, not structural safety certification.</p>
+      <p class="note">Province-level reading is the minimum comparable screening scale. Large provinces can include mountain valleys, plains, hills and urban corridors; a specific site, municipality or alignment requires a more granular follow-up analysis.</p>
       <div class="signal-band">
         <article class="signal-card dark">
           <span>Selected project context</span>
@@ -1096,7 +1266,7 @@ function buildFullReportHtml({
         </article>
         <article class="signal-card">
           <span>Dominant exposure</span>
-          <strong>${escapeHtml(focus.dominantExposureLabel)}</strong>
+          <strong>${escapeHtml(displayDriver)}</strong>
           <p>${escapeHtml(matchedText)}. Public overlays are used as screening context and must be followed by site-specific checks.</p>
         </article>
       </div>
@@ -1104,50 +1274,58 @@ function buildFullReportHtml({
     <section>
       <h2><span>04</span>Key Indicators</h2>
       <div class="kpis">
-        <div class="kpi"><span>ARCUS events</span><strong>${events.length}</strong></div>
-        <div class="kpi"><span>Total collapse</span><strong>${totalCollapse}</strong></div>
-        <div class="kpi"><span>Triggered</span><strong>${triggered}</strong></div>
-        <div class="kpi"><span>Sources</span><strong>${sources.length}</strong></div>
+        <div class="kpi"><span>ARCUS Events</span><strong>${events.length}</strong><p>Selected province</p></div>
+        <div class="kpi"><span>Total Collapse</span><strong>${totalCollapse}</strong><p>Historical severity</p></div>
+        <div class="kpi"><span>Triggered Events</span><strong>${triggered}</strong><p>External initiating condition</p></div>
+        <div class="kpi"><span>Evidence Window</span><strong>${escapeHtml(getEvidenceYearRange(events))}</strong><p>${escapeHtml(evidenceYearsLabel)}</p></div>
       </div>
+      <p class="note">Evidence package: ${sources.length} linked and deduplicated sources support the selected provincial screening signal.</p>
+      ${indexLayerCards}
+      <p class="note">Read the two indicators as separate layers, not as a composite score. A province can show high territorial exposure with a low Collapse Rate, or low exposure with a high Collapse Rate; the combination is more informative than a single merged number.</p>
+      <p class="note">${escapeHtml(ainopIndexText)} Confidence note: ${escapeHtml(collapseRateReason)}</p>
     </section>
-    <section>
+    <section class="hazard-section">
       <h2><span>05</span>Hazard / Exposure Context</h2>
-      <p>The Step 3 view combines hydraulic WMS, landslide WMS, seismic context and ARCUS historical collapses. The bars below summarise the province-level exposure signal used by the recommendation engine.</p>
+      <p>The Step 3 analysis combines public Hydraulic, Landslide and Seismic layers with ARCUS historical cases. For PDF readability, the map displays ARCUS cases only. The influence of the active hazard layers is represented through the exposure scores below.</p>
       ${hazardBars(focus, exposureProfile)}
     </section>
     <section>
       <h2><span>06</span>Operational Meaning</h2>
-      <div class="signal-band">
-        <article class="signal-card">
-          <span>Primary focus</span>
-          <strong>${escapeHtml(focus.primaryFocus)}</strong>
+      <div class="operational-grid">
+        <article class="signal-card reading-card">
+          <span>ARCUS Reading</span>
           <p>${escapeHtml(focus.operationalMeaning)}</p>
         </article>
         <article class="signal-card">
-          <span>Attention points</span>
-          <ul>${listItems(focus.attentionPoints)}</ul>
+          <span>Primary Focus</span>
+          <strong>${escapeHtml(focus.primaryFocus)}</strong>
+        </article>
+        <article class="signal-card">
+          <span>Attention Points</span>
+          <div class="attention-badges">${focus.attentionPoints.slice(0, 6).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
         </article>
       </div>
     </section>
     <section>
-      <h2><span>07</span>Priority ARCUS Precedents</h2>
-      <p>P1/P2/P3 are shown on the Step 3 map. These records are historical analogues for screening and investigation planning, not direct predictions.</p>
+      <h2><span>07</span>Priority ARCUS Cases</h2>
+      <p>The selected province contains all ARCUS records available for that administrative area. This section highlights the highest-priority cases within the provincial set, ranked by severity, trigger, dominant driver and evidence reliability. These cases are not external comparables: they explain the dominant territorial signal used by the report.</p>
+      ${priorityTriggerNote ? `<p class="note">${escapeHtml(priorityTriggerNote)}</p>` : ""}
       <div class="precedent-list">${priorityEventCards(priorityEvents)}</div>
     </section>
     <section>
-      <h2><span>08</span>Comparable Precedents</h2>
-      <p>Comparable precedents are selected by severity, trigger, dominant driver, evidence confidence and human impact. For this context, the useful question is not whether a future event is predicted, but which mechanisms and data gaps should be checked before design decisions.</p>
+      <h2><span>08</span>Territorial Pattern</h2>
+      <p>The selected province shows a concentrated ${escapeHtml(displayDriver)} pattern. This pattern supports preliminary attention toward ${escapeHtml(focus.primaryFocus.toLowerCase())} for ${escapeHtml(contextLabel)} interventions.</p>
     </section>
     <section>
       <h2><span>09</span>Interpretation</h2>
-      <p>For ${escapeHtml(contextLabel.toLowerCase())} interventions in ${escapeHtml(province)}, ARCUS indicates that preliminary investigation should be framed around ${escapeHtml(focus.dominantExposureLabel.toLowerCase())}, documented collapse precedents and the operational consequences implied by the selected project context.</p>
+      <p>For ${escapeHtml(contextLabel)} interventions in ${escapeHtml(province)}, ARCUS indicates that preliminary investigation should be framed around ${escapeHtml(displayDriver)}, documented cases and the operational consequences implied by the selected project context.</p>
     </section>
     <section>
-      <h2><span>10</span>Immediate Screening Actions</h2>
+      <h2><span>10</span>Immediate Actions</h2>
       <div class="action-grid">${actionCards(focus.immediateScreeningActions)}</div>
     </section>
     <section>
-      <h2><span>11</span>Data to Request Before Design Decisions</h2>
+      <h2><span>11</span>Data to Request</h2>
       <div class="data-grid">${dataCards(focus.dataToRequest)}</div>
     </section>
     <section>
@@ -1161,14 +1339,15 @@ function buildFullReportHtml({
     <section>
       <h2><span>14</span>Data Coverage & Limitations</h2>
       <div class="limitation-strip">${limitationCards(focus.limitations)}</div>
+      <p class="note">ARCUS currently reports the provincial evidence window as ${escapeHtml(evidenceYearsLabel)}. The Collapse Rate is a derived ARCUS/AINOP indicator: AINOP is fed by owners/managers and may under-represent local assets, especially in small mountain municipalities. For this province the denominator confidence is ${escapeHtml(collapseRateConfidence)}: ${escapeHtml(collapseRateReason)}</p>
     </section>
     <section>
       <h2><span>15</span>Methodology Snapshot</h2>
-      <p>ARCUS combines documented collapse events, source reliability, spatial relevance, severity, triggers, cause similarity, territorial hazard context and comparable precedents. The dominant exposure indicator is calculated from Step 3 scores: hydraulic, landslide, seismic and structural/failure precedent exposure.</p>
+      <p>ARCUS combines documented collapse events, source reliability, spatial relevance, severity, triggers, cause distribution, territorial hazard context and province-level priority cases. The dominant exposure indicator is calculated from Step 3 scores: hydraulic, landslide, seismic and historical failure context.</p>
     </section>
     <section>
       <h2><span>16</span>Score and Class Legend</h2>
-      <p>P1/P2/P3 identify the top priority historical precedents on the exported Atlas map. Severity TC means total collapse; triggered events indicate an external initiating condition was recorded. Prefer "Failure precedent exposure" unless asset-level structural data are available.</p>
+      <p>P1/P2/P3 identify the highest-priority ARCUS cases within the selected province on the exported Atlas map. Severity TC means total collapse; triggered events indicate an external initiating condition was recorded. Use "Historical Failure Context" for province-level screening unless asset-level structural data are available.</p>
     </section>
     <section>
       <h2><span>A</span>Short Source Appendix</h2>
@@ -1181,6 +1360,7 @@ function buildFullReportHtml({
 }
 
 function buildBriefHtml({
+  ainopBridgeIndex,
   events,
   exposureProfile,
   focus,
@@ -1195,12 +1375,18 @@ function buildBriefHtml({
 }) {
   const contextLabel =
     contextLabels[projectContext] || contextLabels.bridge;
+  const ainopProvince = ainopBridgeIndex?.provinces?.find(
+    (item) =>
+      normalizeText(item.province) === normalizeText(province)
+  );
   const totalCollapse = events.filter(
     (event) => event.collapse_severity === "TC"
   ).length;
   const triggered = events.filter((event) => event.triggered).length;
   const imageRelative = `./${path.relative(outputDir, mapImagePath).replaceAll("\\", "/")}`;
-  const mapLegend = buildMapLegend(events);
+  const mapLegend = "";
+  const mapNote =
+    "Static ARCUS cases map. Full interactive view available in Professional Atlas.";
   const priorityIndex =
     Number(exposureProfile?.risk_score || 0) ||
     Math.round(
@@ -1209,19 +1395,43 @@ function buildBriefHtml({
         Math.min(100, (triggered / Math.max(events.length, 1)) * 100)) /
         3
     );
+  const collapseRateAvailable =
+    Number(ainopProvince?.ainop_bridges_total || 0) > 0 &&
+    Number.isFinite(Number(ainopProvince?.collapse_rate_per_100_ainop_bridges));
+  const collapseRateMultiplier = collapseRateAvailable &&
+    Number.isFinite(Number(ainopProvince?.relative_to_national))
+    ? `${ainopProvince.relative_to_national}x`
+    : "N/A";
+  const collapseRateConfidence =
+    String(ainopProvince?.collapse_rate_confidence || "unavailable").replaceAll("_", " ");
+  const collapseRateReason =
+    ainopProvince?.collapse_rate_confidence_reason ||
+    "No AINOP bridge denominator available for this province.";
+  const displayDriver = driverLabel(focus.dominantExposureLabel);
+  const evidenceYearsLabel = getEvidenceYearsLabel(events);
+  const priorityTriggerNote = getPriorityTriggerNote(priorityEvents, province);
   const nextChecks = [
-    ...focus.immediateScreeningActions,
-    ...focus.designPhaseChecks,
-  ].slice(0, 5);
-  const topFindings = [
-    `${focus.dominantExposureLabel} is the dominant Step 3 exposure signal (${focus.exposureScore || "-"} / 100).`,
-    `${priorityEvents.slice(0, 3).map((event) => `${event.map_ref} ${event.municipality}`).join(", ")} are the map-referenced priority precedents.`,
-    `${focus.contextLabel} changes the operational reading: ${focus.primaryFocus}`,
+    "Translate the province signal into site-specific checks.",
+    "Review P1-P3 priority ARCUS cases.",
+    `Check ${displayDriver} assumptions on site.`,
+    "Use WMS overlays as screening context only.",
+    "Document limits before design decisions.",
   ];
+  const briefDataToRequest = focus.dataToRequest.slice(0, 5);
+  const topFindings = [
+    "Asset: first systematic database of collapsed bridges in Italy from 2000 to today.",
+    `Signal: ${displayDriver} ${focus.exposureScore || "-"} / 100.`,
+    collapseRateAvailable
+      ? `Collapse Rate: ${collapseRateMultiplier} national ARCUS/AINOP rate, read separately from Priority Index.`
+      : `Evidence window: ${evidenceYearsLabel}.`,
+    `Evidence package: ${sources.length} linked sources; run site-specific checks before design decisions.`,
+  ];
+  const signalSentence =
+    `Province-level ${displayDriver} signal. Use it to frame ${contextLabel} checks; confirm with site-specific data. ARCUS translates documented collapse history into operational next checks.`;
   const shortLimitations = [
     "Province-level screening only, not design scale.",
     "ARCUS does not certify structural safety or asset condition.",
-    "CSV and GeoJSON exports remain the detailed data package.",
+    `Collapse Rate confidence: ${collapseRateConfidence}. ${collapseRateReason}`,
   ];
 
   return `<!doctype html>
@@ -1236,51 +1446,52 @@ function buildBriefHtml({
       <div>
         <span class="brief-kicker">Path 01 / New Territory</span>
         <h1>Territory Briefing: ${escapeHtml(province)}</h1>
-        <p>Province-level professional screening for ${escapeHtml(contextLabel.toLowerCase())}. Generated as an executive decision sheet; full analytical detail is provided in the full PDF and exports.</p>
+        <p>Province-level professional screening for ${escapeHtml(contextLabel)}. Built on ARCUS' systematic Italian bridge-collapse evidence base; full analytical detail is provided in the full PDF and exports.</p>
       </div>
       <div class="brief-meta">
         <div><span>Report ID</span><strong>${escapeHtml(reportId)}</strong></div>
-        <div><span>Project context</span><strong>${escapeHtml(contextLabel)}</strong></div>
-        <div><span>Dominant driver</span><strong>${escapeHtml(focus.dominantExposureLabel)}</strong></div>
+        <div><span>Context</span><strong>${escapeHtml(contextLabel)}</strong></div>
+        <div><span>Driver</span><strong>${escapeHtml(displayDriver)}</strong></div>
         <div><span>Date</span><strong>${new Date().toISOString().slice(0, 10)}</strong></div>
       </div>
     </header>
     <section class="brief-top">
       <article class="brief-panel brief-map">
-        <h2><span>01</span>Real Atlas Map</h2>
+        <h2><span>01</span>ARCUS Cases Map</h2>
         <figure class="map-frame"><img src="${escapeHtml(imageRelative)}" alt="ARCUS Atlas map extract - ${escapeHtml(province)}" /></figure>
         ${mapLegend}
+        <p class="brief-map-note">${escapeHtml(mapNote)}</p>
       </article>
       <article class="brief-panel brief-signal">
         <h2><span>02</span>Executive Signal</h2>
-        <strong>${escapeHtml(focus.dominantExposureLabel)} / ${escapeHtml(contextLabel)}</strong>
-        <p>${escapeHtml(focus.operationalMeaning)}</p>
+        <strong>${escapeHtml(displayDriver)} / ${escapeHtml(contextLabel)}</strong>
+        <p>${escapeHtml(signalSentence)}</p>
         <div class="brief-kpi-grid">
-          <div class="brief-kpi"><span>Priority index</span><strong>${Math.round(priorityIndex)}</strong></div>
-          <div class="brief-kpi"><span>Evidence package</span><strong>${sources.length}</strong></div>
-          <div class="brief-kpi"><span>Historical events</span><strong>${events.length}</strong></div>
-          <div class="brief-kpi"><span>Exposure score</span><strong>${focus.exposureScore || "-"}</strong></div>
+          <div class="brief-kpi"><span>Priority Index</span><strong>${Math.round(priorityIndex)}</strong></div>
+          <div class="brief-kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong></div>
+          <div class="brief-kpi"><span>Confidence</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
+          <div class="brief-kpi"><span>Historical Events</span><strong>${events.length}</strong></div>
         </div>
         ${hazardBars(focus, exposureProfile)}
       </article>
     </section>
     <section class="brief-bottom">
       <article class="brief-box">
-        <span>3 key findings</span>
-        <h3>Why it matters</h3>
+        <span>3 Key Findings</span>
+        <h3>Why It Matters</h3>
+        <p class="brief-case-note">P1-P3 are the highest-priority ARCUS cases within the selected province and help explain the dominant territorial signal. ${priorityTriggerNote ? escapeHtml(priorityTriggerNote) : ""}</p>
         <ul>${listItems(topFindings)}</ul>
       </article>
       <article class="brief-box">
-        <span>5 next checks</span>
-        <h3>What to do next</h3>
+        <span>Checks</span>
+        <h3>What To Check</h3>
         <ol>${listItems(nextChecks)}</ol>
       </article>
-      <article class="brief-box brief-limit">
-        <span>Limitations</span>
-        <h3>Use correctly</h3>
-        <ul>${listItems(shortLimitations)}</ul>
-        <span style="margin-top:7px">Top data to request</span>
-        <ul>${listItems(focus.dataToRequest.slice(0, 3))}</ul>
+      <article class="brief-box brief-limit brief-data">
+        <span>Data to Request</span>
+        <h3>Before Decisions</h3>
+        <ul>${listItems(briefDataToRequest)}</ul>
+        <p class="brief-limit-note">${escapeHtml(shortLimitations.join(" "))}</p>
       </article>
     </section>
     <footer class="brief-export">
@@ -1331,6 +1542,7 @@ async function main() {
   const allEvents = JSON.parse(fs.readFileSync(eventsPath, "utf8"));
   const allSources = JSON.parse(fs.readFileSync(sourcesPath, "utf8"));
   const hazardExposurePreview = loadHazardExposurePreview();
+  const ainopBridgeIndex = loadAinopBridgeIndex();
   const events = allEvents.filter(
     (event) =>
       normalizeText(event.province) === normalizeText(province)
@@ -1434,10 +1646,10 @@ async function main() {
     deviceScaleFactor: 2,
     viewport: {
       height: 760,
-      width: 1400,
+      width: 900,
     },
   });
-  const mapUrl = `${args.baseUrl}/report-map/path01?province=${encodeURIComponent(province)}&context=${encodeURIComponent(projectContext)}&priority=${encodeURIComponent(priorityEvents.slice(0, 3).map((event) => event.event_id).join(","))}`;
+  const mapUrl = `${args.baseUrl}/professional/atlas-export/path01?province=${encodeURIComponent(province)}&context=${encodeURIComponent(projectContext)}&clean=1`;
 
   await page.goto(mapUrl, {
     waitUntil: "networkidle",
@@ -1452,6 +1664,7 @@ async function main() {
   fs.writeFileSync(
     fullHtmlPath,
     buildFullReportHtml({
+      ainopBridgeIndex,
       dominantCause,
       events,
       exposureProfile,
@@ -1470,6 +1683,7 @@ async function main() {
   fs.writeFileSync(
     briefHtmlPath,
     buildBriefHtml({
+      ainopBridgeIndex,
       events,
       exposureProfile,
       focus,

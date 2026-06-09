@@ -14,6 +14,38 @@
   background: #e9e2d8;
 }
 
+.atlas-map-export-clean {
+  width: 900px;
+  height: 760px;
+  background: #f3f1ea;
+}
+
+.atlas-map-export-page.atlas-map-export-embed .atlas-map-export {
+  width: 100vw;
+  height: 100vh;
+}
+
+.atlas-map-export-page.atlas-map-export-embed:not(.atlas-map-export-compact) {
+  width: 900px;
+  min-height: 760px;
+}
+
+.atlas-map-export-page.atlas-map-export-embed:not(.atlas-map-export-compact)
+  .atlas-map-export {
+  width: 900px;
+  height: 760px;
+}
+
+.atlas-map-export-page.atlas-map-export-embed.atlas-map-export-compact
+  .atlas-map-export {
+  width: 100vw;
+  height: 100vh;
+}
+
+.atlas-map-export-clean::after {
+  display: none;
+}
+
 .atlas-map-export::after {
   content: "";
   position: absolute;
@@ -38,6 +70,23 @@
 
 .atlas-map-export .leaflet-tile-pane {
   opacity: 0.9;
+}
+
+.atlas-map-export-page.atlas-map-export-embed
+  .arcus-cluster-icon
+  div[style*="backdrop-filter"] {
+  backdrop-filter: none !important;
+  box-shadow:
+    0 5px 12px rgba(18, 15, 13, 0.18),
+    inset 0 1px 0 rgba(255, 248, 242, 0.12) !important;
+}
+
+.atlas-map-export-page.atlas-map-export-embed
+  .arcus-marker-icon
+  div[style*="box-shadow"] {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 0 4px rgba(63, 107, 120, 0.34) !important;
 }
 
 .local-basemap-label {
@@ -154,6 +203,18 @@
   background: #53676d;
 }
 
+.atlas-export-legend .hydraulic {
+  background: #3f6b78;
+}
+
+.atlas-export-legend .landslide {
+  background: #b56a1d;
+}
+
+.atlas-export-legend .seismic {
+  background: #6e858d;
+}
+
 .atlas-export-note {
   position: absolute;
   right: 24px;
@@ -166,6 +227,34 @@
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.atlas-export-scale {
+  position: absolute;
+  left: 24px;
+  bottom: 92px;
+  z-index: 500;
+  display: grid;
+  gap: 4px;
+  color: #15110f;
+  font-family: var(--arcus-font-body, Inter, Arial, sans-serif);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-export-scale i {
+  display: block;
+  width: 86px;
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    #15110f 0 33%,
+    #fff8f2 33% 66%,
+    #15110f 66% 100%
+  );
+  border: 1px solid rgba(21, 17, 15, 0.5);
 }
 
 .atlas-export-popup {
@@ -191,6 +280,34 @@
   font-size: 11px;
 }
 
+.atlas-context-label {
+  border: 0;
+  background: transparent;
+}
+
+.atlas-context-label span {
+  display: block;
+  color: rgba(21, 17, 15, 0.48);
+  font-family: var(--arcus-font-body, Inter, Arial, sans-serif);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  paint-order: stroke;
+  text-align: center;
+  text-shadow:
+    0 1px 0 rgba(255, 248, 242, 0.9),
+    1px 0 0 rgba(255, 248, 242, 0.9),
+    0 -1px 0 rgba(255, 248, 242, 0.9),
+    -1px 0 0 rgba(255, 248, 242, 0.9);
+  text-transform: uppercase;
+}
+
+.atlas-context-label.is-selected span {
+  color: #15110f;
+  font-size: 12px;
+}
+
 .atlas-priority-marker {
   border: 0;
   background: transparent;
@@ -212,19 +329,26 @@
 }
 
 .atlas-priority-marker .priority-p1 {
-  transform: translate(14px, -12px);
+  transform: translate(28px, -34px);
 }
 
 .atlas-priority-marker .priority-p2 {
-  transform: translate(-14px, -12px);
+  transform: translate(-42px, -8px);
 }
 
 .atlas-priority-marker .priority-p3 {
-  transform: translate(-16px, 16px);
+  transform: translate(18px, 30px);
 }
 
 @media print {
   .atlas-map-export-page {
     background: #fff;
   }
+}
+
+.atlas-map-export-page.atlas-map-export-embed .atlas-export-title,
+.atlas-map-export-page.atlas-map-export-embed .atlas-export-note,
+.atlas-map-export-page.atlas-map-export-embed .atlas-export-legend,
+.atlas-map-export-page.atlas-map-export-embed .atlas-export-scale {
+  display: none;
 }

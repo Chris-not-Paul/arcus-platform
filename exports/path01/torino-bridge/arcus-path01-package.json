@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T14:48:58.339Z",
+  "generated_at": "2026-06-09T06:39:29.112Z",
   "outputs": {
     "events_csv": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-bridge\\arcus-path01-events.csv",
     "full_pdf": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\exports\\path01\\torino-bridge\\arcus-path01-full-report.pdf",
@@ -13,5 +13,5 @@
   "exposure_score": 97,
   "project_context": "Bridge",
   "province": "Torino",
-  "report_id": "ARCUS-P01-20260603-torino"
+  "report_id": "ARCUS-P01-20260609-torino"
 }
