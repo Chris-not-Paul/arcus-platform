@@ -1,0 +1,352 @@
+{
+  "provinces": [
+    "Agrigento",
+    "Alessandria",
+    "Ancona",
+    "Aosta",
+    "Ascoli",
+    "Bari",
+    "Belluno",
+    "Benevento",
+    "Bergamo",
+    "Biella",
+    "Bologna",
+    "Bolzano",
+    "Brescia",
+    "Cagliari",
+    "Caltanisetta",
+    "Campobasso",
+    "Catania",
+    "Catanzaro",
+    "Cesena",
+    "Chieti",
+    "Como",
+    "Cosenza",
+    "Cremona",
+    "Crotone",
+    "Cuneo",
+    "Enna",
+    "Fermo",
+    "Ferrara",
+    "Firenze",
+    "Forlì Cesena",
+    "Frosinone",
+    "Genova",
+    "Grosseto",
+    "Imperia",
+    "Ivrea",
+    "L'Aquila",
+    "La Spezia",
+    "Lecco",
+    "Livorno",
+    "Macerata",
+    "Massa-Carrara",
+    "Matera",
+    "Messina",
+    "Modena",
+    "Monza e Brianza",
+    "Napoli",
+    "Novara",
+    "Nuoro",
+    "Olbia",
+    "Palermo",
+    "Parma",
+    "Pavia",
+    "Perugia",
+    "Pesaro Urbino",
+    "Piacenza",
+    "Pisa",
+    "Pistoia",
+    "Pordenone",
+    "Prato",
+    "Ravenna",
+    "Reggio Calabria",
+    "Roma",
+    "Rovigo",
+    "Sassari",
+    "Savona",
+    "Siena",
+    "Siracusa",
+    "Sud Sardegna",
+    "Taranto",
+    "Teramo",
+    "Torino",
+    "Trapani",
+    "Trento",
+    "Udine",
+    "Varese",
+    "Verbania",
+    "Vercelli",
+    "Vicenza"
+  ],
+  "results": [
+    {
+      "province": "Agrigento",
+      "index": 1,
+      "full": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\tmp-pdf-audit\\pdfs\\01-agrigento-full.pdf",
+      "brief": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\tmp-pdf-audit\\pdfs\\01-agrigento-brief.pdf",
+      "errors": []
+    },
+    {
+      "province": "Alessandria",
+      "index": 2,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Ancona",
+      "index": 3,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Aosta",
+      "index": 4,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Ascoli",
+      "index": 5,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Bari",
+      "index": 6,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Belluno",
+      "index": 7,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Benevento",
+      "index": 8,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Bergamo",
+      "index": 9,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Biella",
+      "index": 10,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Bologna",
+      "index": 11,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Bolzano",
+      "index": 12,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Brescia",
+      "index": 13,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Cagliari",
+      "index": 14,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Caltanisetta",
+      "index": 15,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Campobasso",
+      "index": 16,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Catania",
+      "index": 17,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Catanzaro",
+      "index": 18,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Cesena",
+      "index": 19,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Chieti",
+      "index": 20,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Como",
+      "index": 21,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Cosenza",
+      "index": 22,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Cremona",
+      "index": 23,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Crotone",
+      "index": 24,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Cuneo",
+      "index": 25,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Enna",
+      "index": 26,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Fermo",
+      "index": 27,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Ferrara",
+      "index": 28,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Firenze",
+      "index": 29,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    },
+    {
+      "province": "Forlì Cesena",
+      "index": 30,
+      "full": null,
+      "brief": null,
+      "errors": [
+        "locator.selectOption: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label:has-text(\"Province\") select, label:has-text(\"Provincia\") select').first()\u001b[22m\n"
+      ]
+    }
+  ]
+}

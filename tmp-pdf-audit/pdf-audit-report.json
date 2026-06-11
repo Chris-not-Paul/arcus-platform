@@ -1,0 +1,67 @@
+{
+  "pdfs_checked": 156,
+  "provinces": 78,
+  "issues_count": 3,
+  "full_pages": [
+    5
+  ],
+  "brief_pages": [
+    1
+  ],
+  "char_stats": {
+    "min": 1412,
+    "median": 3518.0,
+    "max": 6294
+  },
+  "issues": [
+    {
+      "province": "Caltanissetta",
+      "variant": "full",
+      "path": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\tmp-pdf-audit\\pdfs\\15-caltanissetta-full.pdf",
+      "issues": [
+        {
+          "bad_caltanissetta": [
+            "Territory Briefing: Caltanisetta Professional province-level screening based on ARCUS historical evidence, territorial exp",
+            "cal patterns to guide preliminary checks. ARCUS Professional Path 1 / Caltanisetta 1  01 EXECUTIVE SUMMARY The selected province requires preliminary screening for Bridge i",
+            "e because AINOP coverage is insufficient. ARCUS Professional Path 1 / Caltanisetta 2  02 TERRITORY READING & MAP CALTANISETTA / ARCUS ATLAS EXTRACT GEOMORPHOLOGY AND CONTEX"
+          ]
+        }
+      ],
+      "pages": 5,
+      "chars": 5296,
+      "min_page_chars": 605
+    },
+    {
+      "province": "Caltanissetta",
+      "variant": "brief",
+      "path": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\tmp-pdf-audit\\pdfs\\15-caltanissetta-brief.pdf",
+      "issues": [
+        {
+          "bad_caltanissetta": [
+            "Caltanisetta ARCUS PROFESSIONAL / ONE-PAGE TERRITORY BRIEFING The selected province requires prelimina",
+            " unavailable EVENTS 1 ARCUS cases in sample EVIDENCE 3 linked sources CALTANISETTA / ARCUS ATLAS EXTRACT DECISION MESSAGE Concentrated critical event collapses concentrated",
+            "e because AINOP coverage is insufficient. ARCUS Professional Path 1 / Caltanisetta 1 "
+          ]
+        }
+      ],
+      "pages": 1,
+      "chars": 1412,
+      "min_page_chars": 1412
+    },
+    {
+      "province": "Chieti",
+      "variant": "full",
+      "path": "C:\\Users\\W12-OPERATOR\\Desktop\\arcus-platform\\tmp-pdf-audit\\pdfs\\20-chieti-full.pdf",
+      "issues": [
+        {
+          "torino_leak": [
+            "l pattern. ID Date Municipality Severity Cause B04.10.01 Oct 24, 2004 Torino di Sangro Marina Total Collapse Hydraulic B22.02.01 Feb 13, 2022 Guastacconcio Total Coll"
+          ]
+        }
+      ],
+      "pages": 5,
+      "chars": 5804,
+      "min_page_chars": 607
+    }
+  ]
+}

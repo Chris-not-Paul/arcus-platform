@@ -1,4 +1,5 @@
 import {
+  GeoJSON,
   MapContainer,
   TileLayer,
   useMap,
@@ -54,6 +55,55 @@ function getEventBounds(events) {
   };
 }
 
+function getGeometryBounds(geometry) {
+  const points = [];
+
+  const visit = (coordinates) => {
+    if (!Array.isArray(coordinates)) {
+      return;
+    }
+
+    if (
+      coordinates.length >= 2 &&
+      Number.isFinite(Number(coordinates[0])) &&
+      Number.isFinite(Number(coordinates[1]))
+    ) {
+      points.push({
+        latitude: Number(coordinates[1]),
+        longitude: Number(coordinates[0]),
+      });
+      return;
+    }
+
+    coordinates.forEach(visit);
+  };
+
+  visit(geometry?.coordinates);
+
+  if (!points.length) {
+    return null;
+  }
+
+  return {
+    east: Math.max(...points.map((point) => point.longitude)),
+    north: Math.max(...points.map((point) => point.latitude)),
+    south: Math.min(...points.map((point) => point.latitude)),
+    west: Math.min(...points.map((point) => point.longitude)),
+  };
+}
+
+function provinceFeatureMatches(feature, province) {
+  const selected = normalizeText(province);
+  const properties = feature?.properties || {};
+
+  return [
+    properties.den_uts,
+    properties.den_cm,
+    properties.den_prov,
+    properties.sigla,
+  ].some((value) => normalizeText(value) === selected);
+}
+
 function padBounds(bounds, ratio = 0.08) {
   if (!bounds) {
     return null;
@@ -63,9 +113,9 @@ function padBounds(bounds, ratio = 0.08) {
   const latSpan = Math.max(bounds.north - bounds.south, 0.22);
 
   return {
-    east: bounds.east + lonSpan * Math.max(ratio, 0.9),
-    north: bounds.north + latSpan * Math.max(ratio, 0.16),
-    south: bounds.south - latSpan * Math.max(ratio, 0.65),
+    east: bounds.east + lonSpan * ratio,
+    north: bounds.north + latSpan * ratio,
+    south: bounds.south - latSpan * ratio,
     west: bounds.west - lonSpan * ratio,
   };
 }
@@ -106,8 +156,8 @@ function AtlasFitController({
         ],
         {
           animate: false,
-          paddingBottomRight: [72, 72],
-          paddingTopLeft: [72, 72],
+          paddingBottomRight: [28, 28],
+          paddingTopLeft: [28, 28],
         }
       );
 
@@ -165,6 +215,7 @@ function AtlasFitController({
 
 export default function ReportMapPath01() {
   const [events, setEvents] = useState([]);
+  const [provinceGeoJson, setProvinceGeoJson] = useState(null);
   const [sources, setSources] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const searchParams = new URLSearchParams(
@@ -189,6 +240,11 @@ export default function ReportMapPath01() {
         setSources(Array.isArray(data) ? data : data.sources || [])
       )
       .catch(() => setSources([]));
+
+    fetch("/data/geo/italy-provinces.geojson")
+      .then((response) => response.json())
+      .then(setProvinceGeoJson)
+      .catch(() => setProvinceGeoJson(null));
   }, []);
 
   const provinceEvents = useMemo(() => {
@@ -225,7 +281,19 @@ export default function ReportMapPath01() {
     () => getEventBounds(provinceEvents),
     [provinceEvents]
   );
-  const mapBounds = useMemo(() => padBounds(eventBounds), [eventBounds]);
+  const selectedProvinceFeature = useMemo(() => {
+    return provinceGeoJson?.features?.find((feature) =>
+      provinceFeatureMatches(feature, province)
+    );
+  }, [province, provinceGeoJson]);
+  const provinceBounds = useMemo(
+    () => getGeometryBounds(selectedProvinceFeature?.geometry),
+    [selectedProvinceFeature]
+  );
+  const mapBounds = useMemo(
+    () => padBounds(provinceBounds || eventBounds, provinceBounds ? 0.035 : 0.12),
+    [eventBounds, provinceBounds]
+  );
   const minZoomAfterFit = useMemo(() => {
     if (!eventBounds) {
       return 0;
@@ -270,6 +338,7 @@ export default function ReportMapPath01() {
           zoomControl={false}
         >
           <TileLayer
+            crossOrigin={useLocalTiles ? false : "anonymous"}
             eventHandlers={{
               load: () => {
                 window.setTimeout(() => setIsReady(true), 450);
@@ -288,6 +357,20 @@ export default function ReportMapPath01() {
             onReady={() => setIsReady(true)}
             zoomBoost={compactMode ? 1 : 0}
           />
+
+          {selectedProvinceFeature ? (
+            <GeoJSON
+              data={selectedProvinceFeature}
+              key={`${province}-boundary`}
+              style={{
+                color: "#8f6f3d",
+                fillColor: "#c49040",
+                fillOpacity: 0.06,
+                opacity: 0.95,
+                weight: 2,
+              }}
+            />
+          ) : null}
 
           <MarkerClusterGroup
             animate={false}

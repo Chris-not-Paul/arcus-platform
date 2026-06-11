@@ -84,6 +84,66 @@ function MapResizeController({
   return null;
 }
 
+function MapFitController({
+  assetMarkers = [],
+  events = [],
+  selectionBounds = null,
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    const points = [];
+
+    if (selectionBounds) {
+      points.push(
+        [selectionBounds.south, selectionBounds.west],
+        [selectionBounds.north, selectionBounds.east]
+      );
+    }
+
+    assetMarkers.forEach((asset) => {
+      const latitude = Number(asset.latitude);
+      const longitude = Number(asset.longitude);
+
+      if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+        points.push([latitude, longitude]);
+      }
+    });
+
+    if (!points.length) {
+      events.slice(0, 80).forEach((event) => {
+        const latitude = Number(event.latitude);
+        const longitude = Number(event.longitude);
+
+        if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+          points.push([latitude, longitude]);
+        }
+      });
+    }
+
+    if (!points.length) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (points.length === 1) {
+        map.setView(points[0], 10, { animate: false });
+        return;
+      }
+
+      map.fitBounds(points, {
+        animate: false,
+        maxZoom: 11,
+        padding: [28, 28],
+      });
+    }, 120);
+
+    return () => clearTimeout(timer);
+  }, [assetMarkers, events, map, selectionBounds]);
+
+  return null;
+}
+
 const hazardOverlayColors = {
   hydraulic: "#3F6B78",
   landslide: "#B56A1D",
@@ -405,6 +465,14 @@ function CollapseMap({
 
         <MapResizeController
           sidebarOpen={sidebarOpen}
+        />
+
+        <MapFitController
+          assetMarkers={
+            showAssetMarkers ? assetMarkers : []
+          }
+          events={filteredEvents}
+          selectionBounds={selectionBounds}
         />
 
         <AreaSelectionController

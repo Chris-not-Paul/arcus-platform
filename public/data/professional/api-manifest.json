@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-27T11:44:06.019Z",
+  "generated_at": "2026-06-11T07:35:38.781Z",
   "name": "ARCUS Professional API Manifest",
   "version": "0.1.0",
   "endpoints": [
@@ -44,12 +44,12 @@
       "resource": "data_release"
     },
     {
-      "description": "Official ARCUS Professional registry of public and institutional hazard overlays.",
+      "description": "Registry of external hazard layers planned for ARCUS Professional enrichment.",
       "path": "/data/professional/external-hazard-layers.json",
       "resource": "external_hazard_layers"
     },
     {
-      "description": "Official ARCUS Professional public-hazard overlay model with province-level exposure readings from declared institutional source registry.",
+      "description": "Province-level hazard exposure preview prepared for future external layer joins.",
       "path": "/data/professional/hazard-exposure-preview.json",
       "resource": "hazard_exposure_preview"
     }

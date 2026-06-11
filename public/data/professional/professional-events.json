@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-27T11:44:06.019Z",
+  "generated_at": "2026-06-11T07:35:38.781Z",
   "events": [
     {
       "event_id": "B00.01.01",
@@ -5205,7 +5205,7 @@
       "event_slug": "alagna-2000",
       "date": "2000-10-13",
       "municipality": "Alagna",
-      "province": "Torino",
+      "province": "Vercelli",
       "region": "Piemonte",
       "latitude": 45.8477,
       "longitude": 7.9395,
@@ -8950,7 +8950,7 @@
       "event_slug": "villanova-d-asti-2005",
       "date": "2005-11-15",
       "municipality": "Villanova d'Asti",
-      "province": "Torino",
+      "province": "Asti",
       "region": "Piemonte",
       "latitude": 44.963093,
       "longitude": 7.948959,

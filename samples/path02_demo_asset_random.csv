@@ -1,0 +1,2 @@
+bridge_id;name;municipality_declared;province_declared;region;lat;lon;structural_type;construction_year;last_inspection_date;underwater_inspection
+ARCUS-DEMO-001;Ponte Rio Valverde;Ivrea;Torino;Piemonte;45.4669;7.8764;beam;1974;2023-10-18;no

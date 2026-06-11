@@ -1,4 +1,4 @@
-﻿source_id;event_id;source_role;source_type;source_title;source_url;publication_date;access_date;language;notes
+source_id;event_id;source_role;source_type;source_title;source_url;publication_date;access_date;language;notes
 SRC0001;B18.08.01;Official/Technical;MIT;Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera;https://www.mit.gov.it/sites/default/files/media/notizia/2018-09/Comm_Isp_Mit%20Relaz_Viadotto_Polcevera_%20parte1.pdf;2018-09-14;2026-05-06;IT;Official technical report published by the Italian Ministry of Infrastructure and Transport
 SRC0002;B18.08.01;News;ANSA;Le 43 vittime del crollo del ponte Morandi;https://www.ansa.it/liguria/notizie/2018/08/18/-le-43-vittime-del-crollo-del-ponte-morandi_9f53cd46-1b85-45ae-a23a-dc92c9c5cef3.html;2018-08-18;2026-05-06;IT;National news agency coverage
 SRC0003;B18.08.01;Scientific;Journal Paper;Bridge collapses in Italy across the 21st century: survey and statistical analysis;https://doi.org/10.1080/15732479.2025.2483500;2025-01-01;2026-05-06;EN;Peer-reviewed paper including Morandi Bridge case

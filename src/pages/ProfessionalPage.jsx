@@ -6,7 +6,6 @@ import {
 
 import { Link } from "react-router-dom";
 import {
-  toJpeg,
   toPng,
 } from "html-to-image";
 import { jsPDF } from "jspdf";
@@ -32,6 +31,28 @@ import {
 } from "../utils/analytics";
 
 import "../styles/platform-levels.css";
+
+function cleanDisplayText(value) {
+  return String(value ?? "")
+    .replaceAll("ÃƒÂ¬", "ì")
+    .replaceAll("ÃƒÂ²", "ò")
+    .replaceAll("ÃƒÂ ", "à")
+    .replaceAll("ÃƒÂ¨", "è")
+    .replaceAll("ÃƒÂ©", "é")
+    .replaceAll("ÃƒÂ¹", "ù")
+    .replaceAll("Ã¬", "ì")
+    .replaceAll("Ã²", "ò")
+    .replaceAll("Ã ", "à")
+    .replaceAll("Ã¨", "è")
+    .replaceAll("Ã©", "é")
+    .replaceAll("Ã¹", "ù")
+    .replaceAll("â€“", "-")
+    .replaceAll("â€”", "-")
+    .replaceAll("â€™", "'")
+    .replaceAll("â€œ", '"')
+    .replaceAll("â€", '"')
+    .replaceAll("Caltanisetta", "Caltanissetta");
+}
 
 function loadStoredWorkspaces() {
   if (typeof window === "undefined") {
@@ -76,6 +97,12 @@ export default function ProfessionalPage() {
   const [assetRows, setAssetRows] = useState([]);
   const [assetError, setAssetError] =
     useState("");
+  const [assetSession, setAssetSession] = useState({
+    fileName: "",
+    uploadedAt: "",
+  });
+  const [path02ReadingMode, setPath02ReadingMode] =
+    useState("monitoring_priority");
   const [apiManifest, setApiManifest] =
     useState(null);
   const [modelCards, setModelCards] =
@@ -839,6 +866,18 @@ export default function ProfessionalPage() {
       );
   }, [activeScenario, provinceProfiles]);
 
+  const alphabeticalProvinceProfiles = useMemo(
+    () =>
+      [...scenarioProvinceProfiles].sort((a, b) =>
+        cleanDisplayText(a.territory).localeCompare(
+          cleanDisplayText(b.territory),
+          language === "it" ? "it" : "en",
+          { sensitivity: "base" }
+        )
+      ),
+    [language, scenarioProvinceProfiles]
+  );
+
   const scenarioMatrix = useMemo(() => {
     return scenarios
       .filter((item) => item.value !== "baseline")
@@ -1152,17 +1191,48 @@ export default function ProfessionalPage() {
     workflowEvents,
   ]);
 
+  const assetRowsForScreening = useMemo(() => {
+    const hasValue = (asset, keys) =>
+      keys.some((key) => {
+        const value = asset[key];
+        return (
+          value !== null &&
+          value !== undefined &&
+          String(value).trim() !== ""
+        );
+      });
+    const validCoordinate = (asset, keys, min, max) => {
+      const key = keys.find((item) => hasValue(asset, [item]));
+      const value = key ? Number(String(asset[key]).replace(",", ".")) : NaN;
+
+      return Number.isFinite(value) && value >= min && value <= max;
+    };
+
+    return assetRows.filter(
+      (asset) =>
+        hasValue(asset, ["bridge_id", "asset_id", "id", "code", "codice"]) &&
+        validCoordinate(asset, ["latitude", "lat"], -90, 90) &&
+        validCoordinate(asset, ["longitude", "lon", "lng"], -180, 180) &&
+        hasValue(asset, ["province_declared", "province", "provincia"]) &&
+        hasValue(asset, [
+          "municipality_declared",
+          "municipality",
+          "comune",
+        ])
+    );
+  }, [assetRows]);
+
   const assetScreening = useMemo(
     () =>
       buildAssetScreening(
-        assetRows,
+        assetRowsForScreening,
         events,
         scenarioProvinceProfiles,
         vulnerabilityByEvent,
         hazardExposurePreview
       ),
     [
-      assetRows,
+      assetRowsForScreening,
       events,
       scenarioProvinceProfiles,
       vulnerabilityByEvent,
@@ -1181,6 +1251,46 @@ export default function ProfessionalPage() {
           String(value).trim() !== ""
         );
       });
+    const knownProvinceKeys = new Set(
+      scenarioProvinceProfiles.map((profile) =>
+        cleanDisplayText(profile.territory || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim()
+      )
+    );
+    const validCoordinate = (asset, keys, min, max) => {
+      const key = keys.find((item) => hasValue(asset, [item]));
+      const value = key ? Number(String(asset[key]).replace(",", ".")) : NaN;
+
+      return Number.isFinite(value) && value >= min && value <= max;
+    };
+    const hasRequiredFields = (asset) =>
+      hasValue(asset, ["bridge_id", "asset_id", "id", "code", "codice"]) &&
+      validCoordinate(asset, ["latitude", "lat"], -90, 90) &&
+      validCoordinate(asset, ["longitude", "lon", "lng"], -180, 180) &&
+      hasValue(asset, ["province_declared", "province", "provincia"]) &&
+      hasValue(asset, [
+        "municipality_declared",
+        "municipality",
+        "comune",
+      ]);
+    const mandatory = assetRows.filter(hasRequiredFields).length;
+    const blocked = Math.max(0, total - mandatory);
+    const provinceWarnings = assetRows.filter((asset) => {
+      const province =
+        asset.province_declared || asset.province || asset.provincia || "";
+      const key = cleanDisplayText(province)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+
+      return key && !knownProvinceKeys.has(key);
+    }).length;
     const coordinates = assetRows.filter(
       (asset) =>
         hasValue(asset, ["latitude", "lat"]) &&
@@ -1231,13 +1341,17 @@ export default function ProfessionalPage() {
 
     return {
       age,
+      blocked,
       coordinates,
+      mandatory,
+      provinceWarnings,
       score,
       technical,
       territory,
       total,
+      warnings: provinceWarnings,
     };
-  }, [assetRows]);
+  }, [assetRows, scenarioProvinceProfiles]);
 
   const professionalAssetMapMarkers = useMemo(() => {
     const readAssetValue = (asset, keys) => {
@@ -1253,17 +1367,21 @@ export default function ProfessionalPage() {
     return assetScreening
       .map((item) => {
         const latitude = Number(
-          readAssetValue(item.asset, [
-            "latitude",
-            "lat",
-          ])
+          String(
+            readAssetValue(item.asset, [
+              "latitude",
+              "lat",
+            ])
+          ).replace(",", ".")
         );
         const longitude = Number(
-          readAssetValue(item.asset, [
-            "longitude",
-            "lon",
-            "lng",
-          ])
+          String(
+            readAssetValue(item.asset, [
+              "longitude",
+              "lon",
+              "lng",
+            ])
+          ).replace(",", ".")
         );
 
         if (
@@ -1300,6 +1418,60 @@ export default function ProfessionalPage() {
       vulnerabilityByEvent,
     ]
   );
+
+  const assetAttentionSummary = useMemo(() => {
+    const summary = {
+      dominantHazard: "-",
+      hazardCounts: [],
+      immediate: 0,
+      ordinary: 0,
+      programmed: 0,
+      sourceCount: 0,
+    };
+
+    assetScreening.forEach((item) => {
+      if (item.attentionLevel === "Immediate attention") {
+        summary.immediate += 1;
+      } else if (item.attentionLevel === "Programmed attention") {
+        summary.programmed += 1;
+      } else {
+        summary.ordinary += 1;
+      }
+
+      item.comparableEvents.slice(0, 3).forEach((event) => {
+        summary.sourceCount += sourceCountByEvent[event.event_id] || 0;
+      });
+    });
+
+    summary.hazardCounts = countBy(
+      assetScreening.map((item) => ({
+        hazard: item.hazardProfileLabel || item.dominantHazard || "Contextual",
+      })),
+      "hazard"
+    ).map(([label, value]) => ({ label, value }));
+    summary.dominantHazard = summary.hazardCounts[0]?.label || "-";
+
+    return summary;
+  }, [assetScreening, sourceCountByEvent]);
+
+  const path02DecisionMessage = useMemo(() => {
+    const total = assetScreening.length;
+    const dominant = assetAttentionSummary.dominantHazard;
+
+    if (language === "it") {
+      if (!total) {
+        return "Carica un inventario ponti per generare una watchlist operativa fondata su esposizione territoriale e precedenti ARCUS.";
+      }
+
+      return `${assetAttentionSummary.immediate} asset richiedono attenzione immediata su ${total}. Il profilo dominante del patrimonio caricato e ${dominant}; la watchlist ordina i controlli per Asset Priority Score, Proximity Score e contesto storico ARCUS.`;
+    }
+
+    if (!total) {
+      return "Upload a bridge inventory to generate an operational watchlist grounded in territorial exposure and ARCUS precedents.";
+    }
+
+    return `${assetAttentionSummary.immediate} assets require immediate attention out of ${total}. The dominant profile in the uploaded stock is ${dominant}; the watchlist orders checks by Asset Priority Score, Proximity Score and ARCUS historical context.`;
+  }, [assetAttentionSummary, assetScreening.length, language]);
 
   const selectedProvinceDrivers = useMemo(() => {
     if (!workflowEvents.length) {
@@ -1946,7 +2118,7 @@ export default function ProfessionalPage() {
   };
 
   const escapeHtml = (value) =>
-    String(value ?? "")
+    cleanDisplayText(value)
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;")
@@ -1954,7 +2126,7 @@ export default function ProfessionalPage() {
       .replaceAll("'", "&#039;");
 
   const titleCaseLabel = (value) =>
-    String(value || "")
+    cleanDisplayText(value || "")
       .replace(/[_-]+/g, " ")
       .replace(/\s+/g, " ")
       .trim()
@@ -1986,25 +2158,33 @@ export default function ProfessionalPage() {
     downloadFile(filename, csv);
   };
 
-  const waitForReportMapFrame = (iframe) =>
+  const waitForReportMapFrame = (
+    iframe,
+    { requireTiles = false, timeoutMs = 16000 } = {}
+  ) =>
     new Promise((resolve, reject) => {
       const startedAt = Date.now();
       const checkReady = () => {
         const frameDocument = iframe.contentDocument;
+        const hasLoadedTiles =
+          frameDocument?.querySelectorAll(".leaflet-tile-loaded")
+            .length > 0;
+        const hasVectorMap =
+          frameDocument?.querySelector(
+            ".leaflet-overlay-pane svg path, .leaflet-marker-pane img, .leaflet-marker-icon"
+          );
 
         if (
           frameDocument?.querySelector(
             ".atlas-map-export-ready"
           ) &&
-          frameDocument.querySelectorAll(
-            ".leaflet-tile-loaded"
-          ).length > 0
+          (requireTiles ? hasLoadedTiles : hasLoadedTiles || hasVectorMap)
         ) {
           window.setTimeout(resolve, 900);
           return;
         }
 
-        if (Date.now() - startedAt > 12000) {
+        if (Date.now() - startedAt > timeoutMs) {
           reject(
             new Error(
               "ARCUS report map export timed out"
@@ -2019,7 +2199,10 @@ export default function ProfessionalPage() {
       checkReady();
     });
 
-  const capturePath01ReportMapImage = async () => {
+  const capturePath01ReportMapImageAttempt = async ({
+    localTiles = true,
+    timeoutMs = 16000,
+  } = {}) => {
     if (
       typeof window === "undefined" ||
       !selectedProvinceProfile
@@ -2031,7 +2214,7 @@ export default function ProfessionalPage() {
       activeEntryPath !== 0 && manualAreaBounds
         ? manualAreaLabel
         : selectedProvinceProfile.territory;
-    const mapUrl = `${window.location.origin}/professional/atlas-export/path01?province=${encodeURIComponent(territory)}&context=${encodeURIComponent(selectedProjectContext)}&clean=1&embed=1&localTiles=1`;
+    const mapUrl = `${window.location.origin}/professional/atlas-export/path01?province=${encodeURIComponent(territory)}&context=${encodeURIComponent(selectedProjectContext)}&clean=1&embed=1&localTiles=${localTiles ? "1" : "0"}`;
     const iframe = document.createElement("iframe");
 
     iframe.setAttribute(
@@ -2051,7 +2234,10 @@ export default function ProfessionalPage() {
     document.body.appendChild(iframe);
 
     try {
-      await waitForReportMapFrame(iframe);
+      await waitForReportMapFrame(iframe, {
+        requireTiles: true,
+        timeoutMs,
+      });
       iframe.contentWindow?.dispatchEvent(
         new Event("resize")
       );
@@ -2070,16 +2256,268 @@ export default function ProfessionalPage() {
 
       return await toPng(mapNode, {
         backgroundColor: "#f3f1ea",
-        cacheBust: false,
+        cacheBust: !localTiles,
         height: 760,
         pixelRatio: 2,
         width: 900,
       });
     } catch (error) {
-      console.warn("ARCUS map PNG export failed", error);
+      console.warn(
+        `ARCUS map PNG export failed (${localTiles ? "local" : "remote"} tiles)`,
+        error
+      );
       return "";
     } finally {
       iframe.remove();
+    }
+  };
+
+  const capturePath01ReportMapImage = async () => {
+    const localImage = await capturePath01ReportMapImageAttempt({
+      localTiles: true,
+      timeoutMs: 6500,
+    });
+
+    if (localImage) {
+      return localImage;
+    }
+
+    return capturePath01ReportMapImageAttempt({
+      localTiles: false,
+      timeoutMs: 18000,
+    });
+  };
+
+  const captureCurrentProfessionalMapImage = async () => {
+    if (typeof document === "undefined") {
+      return "";
+    }
+
+    const mapNode = document.querySelector(
+      "#professional-map .platform-map-preview-shell"
+    );
+
+    if (!mapNode) {
+      return "";
+    }
+
+    try {
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, 500)
+      );
+
+      return await toPng(mapNode, {
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+        pixelRatio: 1.6,
+      });
+    } catch (error) {
+      console.warn("ARCUS current map export failed", error);
+      return "";
+    }
+  };
+
+  const createFallbackPath01MapImage = async () => {
+    if (
+      typeof window === "undefined" ||
+      !selectedProvinceProfile
+    ) {
+      return "";
+    }
+
+    try {
+      const territory =
+        activeEntryPath !== 0 && manualAreaBounds
+          ? manualAreaLabel
+          : selectedProvinceProfile.territory;
+      const geoJson = await fetch(
+        "/data/geo/italy-provinces.geojson"
+      ).then((response) => response.json());
+      const selectedKey = normalizeProvinceKey(territory);
+      const feature = geoJson?.features?.find((item) => {
+        const properties = item?.properties || {};
+        return [
+          properties.den_uts,
+          properties.den_cm,
+          properties.den_prov,
+          properties.sigla,
+        ].some(
+          (value) =>
+            normalizeProvinceKey(value) === selectedKey
+        );
+      });
+
+      const rings = [];
+      const collectRings = (coordinates) => {
+        if (!Array.isArray(coordinates)) {
+          return;
+        }
+
+        if (
+          coordinates.length > 2 &&
+          coordinates.every(
+            (point) =>
+              Array.isArray(point) &&
+              Number.isFinite(Number(point[0])) &&
+              Number.isFinite(Number(point[1]))
+          )
+        ) {
+          rings.push(coordinates);
+          return;
+        }
+
+        coordinates.forEach(collectRings);
+      };
+
+      collectRings(feature?.geometry?.coordinates);
+
+      const fallbackEvents = workflowEvents
+        .map((event) => ({
+          latitude: Number(event.latitude),
+          longitude: Number(event.longitude),
+        }))
+        .filter(
+          (point) =>
+            Number.isFinite(point.latitude) &&
+            Number.isFinite(point.longitude)
+        );
+      const geometryPoints = rings.flat();
+      const boundsPoints = [
+        ...geometryPoints.map((point) => ({
+          longitude: Number(point[0]),
+          latitude: Number(point[1]),
+        })),
+        ...fallbackEvents,
+      ].filter(
+        (point) =>
+          Number.isFinite(point.latitude) &&
+          Number.isFinite(point.longitude)
+      );
+
+      if (!boundsPoints.length) {
+        return "";
+      }
+
+      const bounds = {
+        east: Math.max(
+          ...boundsPoints.map((point) => point.longitude)
+        ),
+        north: Math.max(
+          ...boundsPoints.map((point) => point.latitude)
+        ),
+        south: Math.min(
+          ...boundsPoints.map((point) => point.latitude)
+        ),
+        west: Math.min(
+          ...boundsPoints.map((point) => point.longitude)
+        ),
+      };
+      const canvas = document.createElement("canvas");
+      const width = 900;
+      const height = 760;
+      const padding = 58;
+      const context = canvas.getContext("2d");
+
+      canvas.width = width * 2;
+      canvas.height = height * 2;
+
+      if (!context) {
+        return "";
+      }
+
+      context.scale(2, 2);
+      context.fillStyle = "#f3f1ea";
+      context.fillRect(0, 0, width, height);
+
+      for (let index = 0; index < 9; index += 1) {
+        context.strokeStyle =
+          index % 2 === 0
+            ? "rgba(143,111,61,0.08)"
+            : "rgba(63,107,120,0.07)";
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(0, 80 + index * 78);
+        context.bezierCurveTo(
+          260,
+          40 + index * 82,
+          520,
+          130 + index * 70,
+          width,
+          70 + index * 78
+        );
+        context.stroke();
+      }
+
+      const lonSpan = Math.max(bounds.east - bounds.west, 0.08);
+      const latSpan = Math.max(bounds.north - bounds.south, 0.08);
+      const scale = Math.min(
+        (width - padding * 2) / lonSpan,
+        (height - padding * 2) / latSpan
+      );
+      const drawWidth = lonSpan * scale;
+      const drawHeight = latSpan * scale;
+      const offsetX = (width - drawWidth) / 2;
+      const offsetY = (height - drawHeight) / 2;
+      const project = (longitude, latitude) => ({
+        x: offsetX + (longitude - bounds.west) * scale,
+        y: offsetY + (bounds.north - latitude) * scale,
+      });
+
+      if (rings.length) {
+        context.fillStyle = "rgba(196,144,64,0.10)";
+        context.strokeStyle = "#8f6f3d";
+        context.lineWidth = 3;
+        rings.forEach((ring) => {
+          context.beginPath();
+          ring.forEach((point, index) => {
+            const projected = project(
+              Number(point[0]),
+              Number(point[1])
+            );
+
+            if (index === 0) {
+              context.moveTo(projected.x, projected.y);
+              return;
+            }
+
+            context.lineTo(projected.x, projected.y);
+          });
+          context.closePath();
+          context.fill();
+          context.stroke();
+        });
+      }
+
+      fallbackEvents.forEach((event, index) => {
+        const projected = project(event.longitude, event.latitude);
+        context.beginPath();
+        context.fillStyle = "rgba(28,30,30,0.72)";
+        context.arc(projected.x, projected.y, 12, 0, Math.PI * 2);
+        context.fill();
+        context.strokeStyle = "rgba(255,255,255,0.88)";
+        context.lineWidth = 2;
+        context.stroke();
+        context.fillStyle = "#ffffff";
+        context.font = "700 9px Arial, sans-serif";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(String(index + 1), projected.x, projected.y);
+      });
+
+      context.fillStyle = "#8f6f3d";
+      context.font = "800 15px Arial, sans-serif";
+      context.textAlign = "left";
+      context.textBaseline = "alphabetic";
+      context.fillText(
+        `${cleanDisplayText(territory).toUpperCase()} / ARCUS PROVINCE EXTRACT`,
+        28,
+        height - 24
+      );
+
+      return canvas.toDataURL("image/png");
+    } catch (error) {
+      console.warn("ARCUS fallback map export failed", error);
+      return "";
     }
   };
 
@@ -2976,22 +3414,8 @@ export default function ProfessionalPage() {
         .map((event) => event.date)
         .filter(Boolean)
     );
-    const priorityDescriptions = priorityTopThree
-      .map((event) =>
-        normalizeReportText(event.description)
-      )
-      .join(" ");
-    const isTorinoOctober2000Cluster =
-      normalizeReportText(reportAreaLabel).includes("torino") &&
-      priorityDates.has("2000-10-13") &&
-      priorityDescriptions.includes("13 16 october 2000");
     const priorityTriggerNote =
-      priorityTopThree.length >= 3 &&
-      isTorinoOctober2000Cluster
-        ? it
-          ? "Nota: i casi selezionati in mappa/appendice sono riferiti allo stesso evento alluvionale del 13-16 ottobre 2000 in Piemonte e Valle d'Aosta. Il segnale va letto come vulnerabilita estrema documentata in scenario di piena eccezionale, non come eventi ricorrenti indipendenti."
-          : "Note: the cases selected for map/appendix refer to the same 13-16 October 2000 flood event in Piemonte and Valle d'Aosta. This should be read as documented extreme-flood vulnerability, not independent recurrent events."
-        : priorityTopThree.length >= 3 && priorityDates.size === 1
+      priorityTopThree.length >= 3 && priorityDates.size === 1
           ? it
             ? `Nota: i casi selezionati condividono la stessa data evento (${Array.from(priorityDates)[0]}). Leggerli come cluster di trigger prima di interpretare la frequenza.`
             : `Note: the selected cases share the same event date (${Array.from(priorityDates)[0]}). Treat them as a clustered trigger signal before interpreting recurrence frequency.`
@@ -3855,15 +4279,13 @@ export default function ProfessionalPage() {
         </section>`;
       }
     } else if (activeEntryPath === 1) {
-      const p1Count = assetScreening.filter((a) => a.priority === "Priority 1").length;
-      const p2Count = assetScreening.filter((a) => a.priority === "Priority 2").length;
       const assetTableRows = assetScreening
         .map((asset) => `<tr>
-          <td>${escapeHtml(asset.name || asset.asset_id)}</td>
-          <td><strong>${escapeHtml(asset.priority)}</strong></td>
-          <td>${escapeHtml(asset.topCause || "-")}</td>
+          <td>${escapeHtml(asset.name || asset.id)}</td>
+          <td><strong>${escapeHtml(asset.attentionLevel)}</strong></td>
+          <td>${escapeHtml(asset.hazardProfileLabel || "-")}</td>
           <td>${asset.score || 0}</td>
-          <td>${escapeHtml(asset.province || "-")}</td>
+          <td>${asset.proximityScore || 0}</td>
         </tr>`)
         .join("");
       const monitoringTableRows = monitoringSignals.slice(0, 12)
@@ -3878,9 +4300,9 @@ export default function ProfessionalPage() {
       pathBody = `
       <div class="kpis">
         <div class="kpi"><span>${it ? "Asset valutati" : "Assessed assets"}</span><strong>${assetScreening.length}</strong></div>
-        <div class="kpi"><span>Priority 1</span><strong>${p1Count}</strong></div>
-        <div class="kpi"><span>Priority 2</span><strong>${p2Count}</strong></div>
-        <div class="kpi"><span>${it ? "Segnali monitoraggio" : "Monitoring signals"}</span><strong>${monitoringSignals.length}</strong></div>
+        <div class="kpi"><span>${it ? "Attenzione immediata" : "Immediate attention"}</span><strong>${assetAttentionSummary.immediate}</strong></div>
+        <div class="kpi"><span>${it ? "Attenzione programmata" : "Programmed attention"}</span><strong>${assetAttentionSummary.programmed}</strong></div>
+        <div class="kpi"><span>${it ? "Hazard dominante" : "Dominant hazard"}</span><strong>${escapeHtml(assetAttentionSummary.dominantHazard)}</strong></div>
       </div>
       <section>
         <h2>${it ? "SINTESI INVENTARIO" : "INVENTORY SUMMARY"}</h2>
@@ -3897,9 +4319,9 @@ export default function ProfessionalPage() {
       </section>
       ${assetScreening.length > 0 ? `<section>
         <h2>${it ? "SCREENING ASSET" : "ASSET SCREENING"}</h2>
-        <p>${it ? "Prioritizzazione automatica basata su esposizione territoriale, crolli storici vicini e meccanismi di collasso dominanti." : "Automatic prioritisation based on territorial exposure, nearby historical collapses and dominant failure mechanisms."}</p>
+        <p>${it ? "Watchlist automatica basata su Asset Priority Score, Hazard Profile, Proximity Score e precedenti ARCUS comparabili." : "Automatic watchlist based on Asset Priority Score, Hazard Profile, Proximity Score and comparable ARCUS precedents."}</p>
         <table>
-          <thead><tr><th>${it ? "Asset" : "Asset"}</th><th>Priority</th><th>${it ? "Causa principale" : "Top cause"}</th><th>Score</th><th>${it ? "Provincia" : "Province"}</th></tr></thead>
+          <thead><tr><th>${it ? "Asset" : "Asset"}</th><th>${it ? "Livello" : "Level"}</th><th>Hazard Profile</th><th>Score</th><th>Proximity</th></tr></thead>
           <tbody>${assetTableRows}</tbody>
         </table>
       </section>` : ""}
@@ -4141,304 +4563,1593 @@ export default function ProfessionalPage() {
 </html>`;
   };
 
-  const waitForReportAssets = async (doc) => {
-    try {
-      await doc.fonts?.ready;
-    } catch {
-      // Hidden print frames can skip optional fonts; keep PDF creation moving.
+  const loadPdfLogoDataUrl = async () => {
+    if (typeof window === "undefined") {
+      return "";
     }
 
-    const images = Array.from(doc.images || []);
-
-    await Promise.all(
-      images.map(
-        (image) =>
-          new Promise((resolve) => {
-            if (image.complete) {
-              resolve();
-              return;
-            }
-
-            image.onload = resolve;
-            image.onerror = resolve;
-          })
-      )
-    );
-
-    await Promise.all(
-      images.map((image) =>
-        typeof image.decode === "function"
-          ? image.decode().catch(() => {})
-          : Promise.resolve()
-      )
-    );
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    try {
+      const svg = await fetch(arcusLogoFullLight).then((response) =>
+        response.text()
+      );
+      const whiteLogoSvg = svg.replace(
+        /<rect width="320" height="230" fill="[^"]+"\/>/,
+        '<rect width="320" height="230" fill="#FFFFFF"/>'
+      );
+      image.src = `data:image/svg+xml;base64,${window.btoa(
+        unescape(encodeURIComponent(whiteLogoSvg))
+      )}`;
+    } catch {
+      image.src = arcusLogoFullLight;
+    }
 
     await new Promise((resolve) => {
-      window.setTimeout(resolve, 120);
+      image.onload = resolve;
+      image.onerror = resolve;
     });
+
+    if (!image.naturalWidth || !image.naturalHeight) {
+      return "";
+    }
+
+    const canvas = document.createElement("canvas");
+    const scale = 3;
+    canvas.width = image.naturalWidth * scale;
+    canvas.height = image.naturalHeight * scale;
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return "";
+    }
+
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL("image/png");
   };
 
-  const createReportPdfFrame = async (html) => {
-    const iframe = document.createElement("iframe");
-    iframe.setAttribute("aria-hidden", "true");
-    iframe.style.position = "fixed";
-    iframe.style.left = "-12000px";
-    iframe.style.top = "0";
-    iframe.style.width = "794px";
-    iframe.style.height = "1123px";
-    iframe.style.border = "0";
-    iframe.style.pointerEvents = "none";
+  const loadImageSize = async (src) => {
+    if (!src?.startsWith("data:image")) {
+      return null;
+    }
 
-    const loaded = new Promise((resolve, reject) => {
-      iframe.onload = resolve;
-      iframe.onerror = reject;
+    const image = new Image();
+    image.src = src;
+
+    await new Promise((resolve) => {
+      image.onload = resolve;
+      image.onerror = resolve;
     });
 
-    document.body.appendChild(iframe);
-    iframe.srcdoc = html;
-    await loaded;
-
-    const frameDocument = iframe.contentDocument;
-
-    if (!frameDocument) {
-      document.body.removeChild(iframe);
-      throw new Error("Unable to prepare report document.");
-    }
-
-    await waitForReportAssets(frameDocument);
-
-    return {
-      frameDocument,
-      iframe,
-    };
-  };
-
-  const buildReportPdfPages = (doc, variant) => {
-    const pageWidth = 794;
-    const pageHeight = 1123;
-    const maxPageHeight = pageHeight + 10;
-    const staging = doc.createElement("div");
-    staging.style.cssText = [
-      "position:absolute",
-      "left:0",
-      "top:0",
-      `width:${pageWidth}px`,
-      "background:#f8f7f2",
-      "z-index:9999",
-    ].join(";");
-
-    const sourceHeader = doc.querySelector(".cover");
-    const sourceMain = doc.querySelector("main");
-    const sourceFooter = doc.querySelector(".report-footer");
-    const pages = [];
-
-    doc.body.appendChild(staging);
-
-    const addFooter = (page) => {
-      if (!sourceFooter || variant === "brief") {
-        return;
-      }
-
-      const footer = sourceFooter.cloneNode(true);
-      footer.style.position = "absolute";
-      footer.style.left = "42px";
-      footer.style.right = "42px";
-      footer.style.bottom = "20px";
-      footer.style.color = "#7b817a";
-      page.appendChild(footer);
-    };
-
-    const createPage = (padding = "38px 44px 58px") => {
-      const page = doc.createElement("div");
-      const content = doc.createElement("div");
-
-      page.style.cssText = [
-        "position:relative",
-        `width:${pageWidth}px`,
-        `min-height:${pageHeight}px`,
-        "background:#f8f7f2",
-        `padding:${padding}`,
-        "overflow:visible",
-        "box-sizing:border-box",
-      ].join(";");
-      content.style.cssText = "display:block;width:100%;";
-      page.appendChild(content);
-      addFooter(page);
-      staging.appendChild(page);
-
-      return {
-        content,
-        page,
-      };
-    };
-
-    const finalizePage = (page) => {
-      if (page.scrollHeight < pageHeight) {
-        page.style.height = `${pageHeight}px`;
-      } else {
-        page.style.minHeight = `${page.scrollHeight}px`;
-      }
-
-      pages.push(page);
-    };
-
-    if (variant === "brief") {
-      const briefSource =
-        doc.querySelector(".brief-page") || sourceMain || doc.body;
-      const { content, page } = createPage("32px 42px 40px");
-      content.appendChild(briefSource.cloneNode(true));
-      finalizePage(page);
-
-      return {
-        pages,
-        staging,
-      };
-    }
-
-    if (sourceHeader) {
-      const coverPage = doc.createElement("div");
-      const cover = sourceHeader.cloneNode(true);
-
-      coverPage.style.cssText = [
-        "position:relative",
-        `width:${pageWidth}px`,
-        `height:${pageHeight}px`,
-        "background:#f8f7f2",
-        "box-sizing:border-box",
-        "overflow:hidden",
-      ].join(";");
-      cover.style.width = `${pageWidth}px`;
-      cover.style.height = `${pageHeight}px`;
-      cover.style.minHeight = `${pageHeight}px`;
-      cover.style.border = "0";
-      coverPage.appendChild(cover);
-      staging.appendChild(coverPage);
-      pages.push(coverPage);
-    }
-
-    const mainChildren = Array.from(sourceMain?.children || []);
-    let current = createPage();
-
-    mainChildren.forEach((child) => {
-      const clone = child.cloneNode(true);
-      current.content.appendChild(clone);
-
-      if (
-        current.page.scrollHeight > maxPageHeight &&
-        current.content.children.length > 1
-      ) {
-        current.content.removeChild(clone);
-        finalizePage(current.page);
-        current = createPage();
-        current.content.appendChild(clone);
-      }
-
-      if (
-        current.page.scrollHeight > pageHeight + 160 &&
-        current.content.children.length === 1
-      ) {
-        finalizePage(current.page);
-        current = createPage();
-      }
-    });
-
-    if (current.content.children.length > 0) {
-      finalizePage(current.page);
-    } else {
-      current.page.remove();
+    if (!image.naturalWidth || !image.naturalHeight) {
+      return null;
     }
 
     return {
-      pages,
-      staging,
+      height: image.naturalHeight,
+      width: image.naturalWidth,
     };
   };
 
-  const saveReportPagesAsPdf = async (pages, filename) => {
+  const saveStructuredReportPdf = async ({
+    filename,
+    logoImage,
+    mapImage,
+    mapImageSize,
+    variant = "full",
+  }) => {
     const pdf = new jsPDF({
-      compress: true,
+      compress: false,
       format: "a4",
       orientation: "portrait",
       unit: "mm",
     });
-    const dataUrlToBytes = (dataUrl) => {
-      const base64 = dataUrl.split(",")[1] || "";
-      const binary = window.atob(base64);
-      const bytes = new Uint8Array(binary.length);
-
-      for (let index = 0; index < binary.length; index += 1) {
-        bytes[index] = binary.charCodeAt(index);
-      }
-
-      return bytes;
+    const it = language === "it";
+    const palette = {
+      accent: [143, 111, 61],
+      border: [217, 221, 213],
+      ink: [36, 49, 58],
+      muted: [92, 103, 102],
+      paper: [248, 247, 242],
+      panel: [255, 255, 255],
+      soft: [238, 240, 235],
     };
-
-    for (const [index, page] of pages.entries()) {
-      if (index > 0) {
-        pdf.addPage();
+    const margin = 16;
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const bottom = 280;
+    const contentWidth = pageWidth - margin * 2;
+    const today = new Date().toLocaleDateString(
+      language === "it" ? "it-IT" : "en-US",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
       }
-
-      let image = await toPng(page, {
-        backgroundColor: "#f8f7f2",
-        cacheBust: false,
-        height: page.scrollHeight,
-        pixelRatio: 2,
-        width: page.offsetWidth,
-      });
-      let imageFormat = "PNG";
-
-      if (!image.startsWith("data:image/png")) {
-        image = await toJpeg(page, {
-          backgroundColor: "#f8f7f2",
-          cacheBust: false,
-          height: page.scrollHeight,
-          pixelRatio: 2,
-          quality: 0.96,
-          width: page.offsetWidth,
-        });
-        imageFormat = "JPEG";
-      }
-
-      const renderedWidth = page.offsetWidth || 794;
-      const renderedHeight = page.scrollHeight || 1123;
-      const ratio = renderedHeight / renderedWidth;
-      let imageWidth = 210;
-      let imageHeight = imageWidth * ratio;
-      let offsetX = 0;
-      let offsetY = 0;
-
-      if (imageHeight > 297) {
-        imageHeight = 297;
-        imageWidth = imageHeight / ratio;
-        offsetX = (210 - imageWidth) / 2;
-      } else if (imageHeight < 297) {
-        offsetY = (297 - imageHeight) / 2;
-      }
-
-      if (
-        !Number.isFinite(imageWidth) ||
-        !Number.isFinite(imageHeight) ||
-        imageWidth <= 0 ||
-        imageHeight <= 0
-      ) {
-        imageWidth = 210;
-        imageHeight = 297;
-        offsetX = 0;
-        offsetY = 0;
-      }
-
-      pdf.addImage(
-        dataUrlToBytes(image),
-        imageFormat,
-        offsetX,
-        offsetY,
-        imageWidth,
-        imageHeight,
-        undefined,
-        "FAST"
+    );
+    const reportArea =
+      cleanDisplayText(
+        activeEntryPath !== 0 && manualAreaBounds
+          ? manualAreaLabel
+          : selectedProvinceProfile?.territory || "Territory"
       );
+    const pdfEvidenceYears = workflowEvents
+      .map((event) =>
+        Number(String(event.date || event.year || "").slice(0, 4))
+      )
+      .filter(Number.isFinite);
+    const pdfEvidenceYearRange = pdfEvidenceYears.length
+      ? Math.min(...pdfEvidenceYears) === Math.max(...pdfEvidenceYears)
+        ? String(Math.min(...pdfEvidenceYears))
+        : `${Math.min(...pdfEvidenceYears)}-${Math.max(...pdfEvidenceYears)}`
+      : "";
+    const dominantCause =
+      selectedProvinceDrivers.causes[0]?.label ||
+      selectedProvinceProfile?.topCause ||
+      "-";
+    const evidenceSources = workflowEvents.reduce(
+      (total, event) =>
+        total + (sourceCountByEvent[event.event_id] || 0),
+      0
+    );
+    const pdfMunicipalityCount = new Set(
+      workflowEvents
+        .map((event) => event.municipality)
+        .filter(Boolean)
+    ).size;
+    const reliabilityValue = Math.round(
+      workflowReliability?.average || 0
+    );
+    const hazardLabel =
+      workflowHazardExposure?.dominant_hazard ||
+      dominantCause ||
+      "hazard";
+    const collapseRateRank = Number(
+      selectedAinopProvinceIndex?.national_rank_by_rate
+    );
+    const collapseRateRankLabel = Number.isFinite(collapseRateRank)
+      ? it
+        ? `rank nazionale ${collapseRateRank}`
+        : `national rank ${collapseRateRank}`
+      : "";
+    const collapseRateRankSentence = collapseRateRankLabel
+      ? it
+        ? `${reportArea} e ${collapseRateRankLabel} per tasso ARCUS/AINOP documentato.`
+        : `${reportArea} is ${collapseRateRankLabel} by documented ARCUS/AINOP collapse rate.`
+      : "";
+    const pdfSeverityLabel = (code) =>
+      ({
+        TC: it ? "Crollo Totale" : "Total Collapse",
+        PC: it ? "Crollo Parziale" : "Partial Collapse",
+        SC: it
+          ? "Compromissione Strutturale"
+          : "Structural Compromise",
+      })[code] || code || "-";
+    const collapseInterpretation =
+      selectedCollapseRateAvailable
+        ? it
+          ? `Il tasso ${selectedCollapseRateMultiplier} rispetto alla media nazionale posiziona ${reportArea} tra le province con vulnerabilita storica documentata superiore al benchmark ARCUS/AINOP.${collapseRateRankSentence ? ` ${collapseRateRankSentence}` : ""}`
+          : `The ${selectedCollapseRateMultiplier} rate versus the national average places ${reportArea} among the provinces with documented historical vulnerability above the ARCUS/AINOP benchmark.${collapseRateRankSentence ? ` ${collapseRateRankSentence}` : ""}`
+        : it
+          ? "Collapse Rate non disponibile: denominatore AINOP insufficiente o copertura non validata per questa provincia."
+          : "Collapse Rate unavailable: AINOP denominator is insufficient or coverage is not validated for this province.";
+    const eventClusterNote =
+      historicalPatternReading.topDateCount >= 2
+          ? it
+            ? `I ${historicalPatternReading.topDateCount} casi concentrati nella data ${historicalPatternReading.topDate} vanno letti come cluster di evento, non come eventi indipendenti ricorrenti.`
+            : `The ${historicalPatternReading.topDateCount} cases concentrated on ${historicalPatternReading.topDate} should be read as an event cluster, not as independent recurring events.`
+          : "";
+    const collapseConfidenceNote = selectedCollapseRateAvailable
+      ? it
+        ? `Confidenza Collapse Rate: ${selectedCollapseRateConfidence}. Il denominatore AINOP deve essere letto come copertura disponibile del censimento ponti, non come inventario perfetto del patrimonio.`
+        : `Collapse Rate confidence: ${selectedCollapseRateConfidence}. The AINOP denominator should be read as available bridge-census coverage, not as a perfect inventory of the bridge stock.`
+      : it
+        ? "Confidenza Collapse Rate non disponibile per copertura AINOP insufficiente."
+        : "Collapse Rate confidence unavailable because AINOP coverage is insufficient.";
+    let y = margin;
+
+    const setFill = (color) => pdf.setFillColor(...color);
+    const setDraw = (color) => pdf.setDrawColor(...color);
+    const setText = (color) => pdf.setTextColor(...color);
+    const clean = (value) =>
+      cleanDisplayText(value)
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    const isHydraulicDominant = String(
+      hazardLabel || dominantCause
+    )
+      .toLowerCase()
+      .includes("hydraulic");
+    const hasClusteredHistoricalPattern =
+      historicalPatternReading.isConcentrated ||
+      historicalPatternReading.isClusteredEvent;
+    const technicalDataRequestAction = isHydraulicDominant
+      ? `For hydraulic-triggered collapses in ${reportArea}, priority data includes: hydraulic model with TR100/TR200 flood scenarios, preliminary scour depth estimate at piers, riverbed/bathymetry evidence at crossings and debris-transport indicators where mountain, confined-channel or minor-torrent basins are involved.`
+      : `Request the minimum technical data package for the dominant ${hazardLabel} signal: local hazard study, asset geometry, foundation/abutment exposure, inspection history and source-backed site constraints.`;
+    const geomorphologyCheckAction = isHydraulicDominant
+      ? `Differentiate checks by geomorphology in ${reportArea}: torrential, confined or steep watercourses require scour susceptibility and debris-transport checks; lowland river crossings require flood level verification, inundation duration and backwater sensitivity.`
+      : `Commission site-specific checks calibrated to the dominant ${hazardLabel} context and local geomorphology before moving from provincial screening to design assumptions.`;
+    const pdfActionRows = selectedRecommendations
+      .map((item) =>
+        clean(item)
+          .replace(
+            /Use the Step 3 exposure indicators/i,
+            "Use the territorial exposure indicators"
+          )
+          .replace(
+            /Usare la mappa Step 3/i,
+            "Usare gli indicatori territoriali di esposizione"
+          )
+      )
+      .slice(0, 5);
+    pdfActionRows[1] = hasClusteredHistoricalPattern
+      ? it
+        ? "Leggere lo scenario storico concentrato documentato e usare mappa/appendice solo come riferimento ai casi."
+        : "Review the documented concentrated historical scenario and use the map/appendix only as case reference."
+      : it
+        ? "Leggere il pattern storico distribuito e usare i casi singoli come riferimento in mappa/appendice."
+        : "Read the documented distributed historical pattern and use individual cases as map/appendix references.";
+    pdfActionRows[2] = technicalDataRequestAction;
+    pdfActionRows[3] = geomorphologyCheckAction;
+    const briefActionRows = [...pdfActionRows];
+    briefActionRows[2] = isHydraulicDominant
+      ? "Request TR100/TR200 hydraulic model, preliminary scour estimate, riverbed/bathymetry evidence and debris-transport indicators where relevant."
+      : `Request the minimum technical data package for the dominant ${hazardLabel} signal before site-specific design assumptions.`;
+    briefActionRows[3] = isHydraulicDominant
+      ? "Differentiate checks by geomorphology: torrential/confined channels require scour/debris checks; lowland crossings require flood level and duration checks."
+      : `Commission site-specific checks calibrated to the dominant ${hazardLabel} context and local geomorphology.`;
+    const dataRequestSummary = isHydraulicDominant
+      ? "TR100/TR200 hydraulic model; preliminary scour depth; riverbed/bathymetry evidence; debris transport indicators where relevant."
+      : "Local hazard study; asset geometry and foundations; inspection history; source-backed site constraints.";
+    const hydraulicMethodologyNote = it
+      ? "Hydraulic cause category: ARCUS uses 'hydraulic' as the documented trigger when sources confirm a flood or high-water event as the proximate cause. Mechanism-level classification - scour, bank erosion, debris impact, overtopping - is applied only where primary technical sources provide sufficient engineering evidence."
+      : "Hydraulic cause category: ARCUS uses 'hydraulic' as the documented trigger when sources confirm a flood or high-water event as the proximate cause. Mechanism-level classification - scour, bank erosion, debris impact, overtopping - is applied only where primary technical sources provide sufficient engineering evidence.";
+    const formatPdfDate = (value) => {
+      if (!value) {
+        return "-";
+      }
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return clean(value);
+      }
+
+      return date.toLocaleDateString(it ? "it-IT" : "en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    };
+    const addFooter = () => {
+      const pages = pdf.internal.getNumberOfPages();
+      setDraw(palette.border);
+      pdf.setLineWidth(0.2);
+      pdf.line(margin, 284, pageWidth - margin, 284);
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7.5);
+      setText(palette.muted);
+      pdf.text("ARCUS Professional", margin, 289);
+      pdf.text(
+        `Path ${activeEntryPath + 1} / ${reportArea}`,
+        pageWidth / 2,
+        289,
+        { align: "center" }
+      );
+      pdf.text(String(pages), pageWidth - margin, 289, {
+        align: "right",
+      });
+    };
+    const newPage = () => {
+      addFooter();
+      pdf.addPage();
+      y = margin;
+    };
+    const ensure = (height) => {
+      if (y + height > bottom) {
+        newPage();
+      }
+    };
+    const drawText = (
+      text,
+      x,
+      startY,
+      width,
+      {
+        align = "left",
+        color = palette.ink,
+        font = "normal",
+        lineHeight = 5,
+        size = 10,
+      } = {}
+    ) => {
+      pdf.setFont("helvetica", font);
+      pdf.setFontSize(size);
+      setText(color);
+      const lines = pdf.splitTextToSize(clean(text), width);
+      lines.forEach((line, index) => {
+        pdf.text(line, x, startY + index * lineHeight, {
+          align,
+          maxWidth: width,
+        });
+      });
+      return lines.length * lineHeight;
+    };
+    const heading = (number, title, reserve = 18) => {
+      ensure(reserve);
+      setFill(palette.soft);
+      setDraw(palette.border);
+      pdf.roundedRect(margin, y - 1, 10, 8, 1, 1, "FD");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(8);
+      setText(palette.accent);
+      pdf.text(String(number).padStart(2, "0"), margin + 5, y + 4, {
+        align: "center",
+      });
+      pdf.setFontSize(10);
+      setText(palette.accent);
+      pdf.text(String(title).toUpperCase(), margin + 14, y + 4);
+      y += 15;
+    };
+    const paragraph = (text, options = {}) => {
+      const width = options.width || contentWidth;
+      const lineHeight = options.lineHeight || 5;
+      const lines = pdf.splitTextToSize(clean(text), width);
+      ensure(lines.length * lineHeight + 3);
+      drawText(text, options.x || margin, y, width, {
+        color: options.color || palette.muted,
+        font: options.font || "normal",
+        lineHeight,
+        size: options.size || 9.5,
+      });
+      y += lines.length * lineHeight + 4;
+    };
+    const box = ({
+      accent = false,
+      height,
+      text,
+      title,
+      value,
+      width = contentWidth,
+      x = margin,
+    }) => {
+      ensure(height);
+      setFill(accent ? palette.soft : palette.panel);
+      setDraw(accent ? palette.accent : palette.border);
+      pdf.roundedRect(x, y, width, height, 1.4, 1.4, "FD");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7.5);
+      setText(palette.accent);
+      const titleLines = pdf
+        .splitTextToSize(clean(title).toUpperCase(), width - 8)
+        .slice(0, 1);
+      pdf.text(titleLines, x + 4, y + 6);
+      let valueLineCount = 0;
+      if (value) {
+        pdf.setFontSize(String(value).length > 18 ? 10.5 : 14);
+        setText(palette.ink);
+        const valueLines = pdf
+          .splitTextToSize(clean(value), width - 8)
+          .slice(0, 2);
+        valueLineCount = valueLines.length;
+        pdf.text(valueLines, x + 4, y + 15);
+      }
+      if (text) {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8.1);
+        setText(palette.muted);
+        const textY = y + (value ? 17 + valueLineCount * 5 : 13);
+        const maxLines = Math.max(
+          1,
+          Math.floor((height - (textY - y) - 4) / 4.1)
+        );
+        const textLines = pdf
+          .splitTextToSize(clean(text), width - 8)
+          .slice(0, maxLines);
+
+        if (
+          textLines.length === maxLines &&
+          pdf.splitTextToSize(clean(text), width - 8).length >
+            maxLines
+        ) {
+          textLines[maxLines - 1] = `${textLines[
+            maxLines - 1
+          ].replace(/\s+\S*$/, "")}...`;
+        }
+
+        pdf.text(textLines, x + 4, textY);
+      }
+    };
+    const kpiGrid = (items) => {
+      const gap = 4;
+      const cardWidth = (contentWidth - gap * 3) / 4;
+      const cardHeight = 43;
+      const startY = y;
+      items.slice(0, 4).forEach((item, index) => {
+        box({
+          height: cardHeight,
+          text: item.text,
+          title: item.title,
+          value: item.value,
+          width: cardWidth,
+          x: margin + index * (cardWidth + gap),
+        });
+      });
+      y = startY + cardHeight + 6;
+    };
+    const compactKpiGrid = (items) => {
+      const gap = 3;
+      const cardWidth = (contentWidth - gap * 3) / 4;
+      const cardHeight = 29;
+      const startY = y;
+
+      items.slice(0, 4).forEach((item, index) => {
+        const x = margin + index * (cardWidth + gap);
+        setFill(palette.panel);
+        setDraw(palette.border);
+        pdf.roundedRect(x, startY, cardWidth, cardHeight, 1.2, 1.2, "FD");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(6.6);
+        setText(palette.accent);
+        pdf.text(clean(item.title).toUpperCase(), x + 3, startY + 5);
+        pdf.setFontSize(String(item.value).length > 12 ? 9.5 : 12);
+        setText(palette.ink);
+        pdf.text(clean(item.value), x + 3, startY + 14);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(7);
+        setText(palette.muted);
+        pdf.text(
+          pdf.splitTextToSize(clean(item.text), cardWidth - 6).slice(0, 2),
+          x + 3,
+          startY + 22
+        );
+      });
+
+      y = startY + cardHeight + 5;
+    };
+    const bulletList = (items) => {
+      items.filter(Boolean).forEach((item) => {
+        ensure(10);
+        setFill(palette.accent);
+        pdf.circle(margin + 1.8, y - 1.5, 1.1, "F");
+        const used = drawText(item, margin + 6, y, contentWidth - 6, {
+          color: palette.muted,
+          lineHeight: 4.5,
+          size: 9,
+        });
+        y += Math.max(used, 5) + 2;
+      });
+      y += 2;
+    };
+    const compactBulletList = (items) => {
+      items.filter(Boolean).forEach((item) => {
+        ensure(8);
+        setFill(palette.accent);
+        pdf.circle(margin + 1.6, y - 1.2, 0.9, "F");
+        const used = drawText(item, margin + 5.5, y, contentWidth - 5.5, {
+          color: palette.muted,
+          lineHeight: 4,
+          size: 8.1,
+        });
+        y += Math.max(used, 4.5) + 1;
+      });
+      y += 1;
+    };
+    const table = (
+      columns,
+      rows,
+      {
+        columnWeights,
+        fontSize = 7.3,
+        headerHeight = 8,
+        lineHeight = 3.6,
+        maxLines = 4,
+        minRowHeight = 11,
+        rowPadding = 5,
+      } = {}
+    ) => {
+      const weights =
+        columnWeights?.length === columns.length
+          ? columnWeights
+          : columns.map(() => 1);
+      const totalWeight = weights.reduce((total, weight) => total + weight, 0);
+      const colWidths = weights.map(
+        (weight) => (contentWidth * weight) / totalWeight
+      );
+      const colXs = colWidths.reduce(
+        (positions, width, index) => [
+          ...positions,
+          index === 0 ? margin : positions[index - 1] + colWidths[index - 1],
+        ],
+        []
+      );
+      ensure(headerHeight + 8);
+      setFill(palette.soft);
+      setDraw(palette.border);
+      pdf.rect(margin, y, contentWidth, headerHeight, "FD");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7.5);
+      setText(palette.ink);
+      columns.forEach((column, index) => {
+        pdf.text(clean(column), colXs[index] + 2, y + headerHeight - 3);
+      });
+      y += headerHeight;
+      rows.forEach((row) => {
+        const cellLines = row.map((cell, index) =>
+          pdf
+            .splitTextToSize(clean(cell), colWidths[index] - 4)
+            .slice(0, maxLines)
+        );
+        const rowHeight = Math.max(
+          minRowHeight,
+          Math.max(...cellLines.map((lines) => lines.length)) * lineHeight +
+            rowPadding
+        );
+        ensure(rowHeight);
+        setDraw(palette.border);
+        pdf.rect(margin, y, contentWidth, rowHeight);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(fontSize);
+        setText(palette.muted);
+        cellLines.forEach((lines, index) => {
+          pdf.text(
+            lines,
+            colXs[index] + 2,
+            y + 4
+          );
+        });
+        y += rowHeight;
+      });
+      y += 5;
+    };
+    const fullTextBox = ({
+      accent = false,
+      text,
+      title,
+      width = contentWidth,
+      x = margin,
+    }) => {
+      const titleHeight = title ? 7 : 0;
+      const lines = pdf.splitTextToSize(clean(text), width - 7);
+      const height = Math.max(20, titleHeight + lines.length * 4.1 + 7);
+      ensure(height);
+      setFill(accent ? palette.soft : palette.panel);
+      setDraw(accent ? palette.accent : palette.border);
+      pdf.roundedRect(x, y, width, height, 1.4, 1.4, "FD");
+
+      if (title) {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(7.5);
+        setText(palette.accent);
+        pdf.text(clean(title).toUpperCase(), x + 3.5, y + 5.5);
+      }
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(8.4);
+      setText(palette.muted);
+      pdf.text(lines, x + 3.5, y + (title ? 12.8 : 6.2));
+      y += height + 5;
+    };
+    const addLogo = (x, logoY, width, height) => {
+      setFill(palette.panel);
+      setDraw(palette.accent);
+      pdf.setLineWidth(0.35);
+      pdf.roundedRect(x, logoY, width, height, 1.6, 1.6, "FD");
+
+      if (logoImage) {
+        const inset = 2.2;
+        pdf.addImage(
+          logoImage,
+          "PNG",
+          x + inset,
+          logoY + inset,
+          width - inset * 2,
+          height - inset * 2,
+          undefined,
+          "FAST"
+        );
+        return;
+      }
+
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(20);
+      setText(palette.accent);
+      pdf.text("ARCUS", x + width / 2, logoY + height / 2 + 3, {
+        align: "center",
+      });
+    };
+    const getMapFrameMetrics = (height = 82, width = contentWidth) => {
+      const naturalRatio =
+        mapImageSize?.width && mapImageSize?.height
+          ? mapImageSize.width / mapImageSize.height
+          : 900 / 760;
+      const innerHeight = height - 13;
+      const maxInnerWidth = width - 6;
+      let drawWidth = maxInnerWidth;
+      let drawHeight = drawWidth / naturalRatio;
+
+      if (drawHeight > innerHeight) {
+        drawHeight = innerHeight;
+        drawWidth = drawHeight * naturalRatio;
+      }
+
+      const frameWidth =
+        drawWidth < maxInnerWidth * 0.9
+          ? Math.min(width, Math.max(drawWidth + 6, 58))
+          : width;
+
+      return {
+        drawHeight,
+        drawWidth,
+        frameWidth,
+        isNarrow: frameWidth < width * 0.82,
+      };
+    };
+    const addMap = (
+      height = 82,
+      {
+        advance = true,
+        width = contentWidth,
+        x = margin,
+      } = {}
+    ) => {
+      if (advance) {
+        ensure(height + 11);
+      }
+
+      let frameX = x;
+      let frameWidth = width;
+      let imagePlacement = null;
+
+      if (mapImage?.startsWith("data:image")) {
+        const naturalRatio =
+          mapImageSize?.width && mapImageSize?.height
+            ? mapImageSize.width / mapImageSize.height
+            : 900 / 760;
+        const innerHeight = height - 13;
+        const metrics = getMapFrameMetrics(height, width);
+        frameWidth = metrics.frameWidth;
+        if (frameWidth < width) {
+          frameX = x + (width - frameWidth) / 2;
+        }
+
+        const innerX = frameX + 3;
+        const innerY = y + 3;
+        const innerWidth = frameWidth - 6;
+
+        let drawWidth = innerWidth;
+        let drawHeight = drawWidth / naturalRatio;
+        if (drawHeight > innerHeight) {
+          drawHeight = innerHeight;
+          drawWidth = drawHeight * naturalRatio;
+        }
+
+        imagePlacement = {
+          drawHeight,
+          drawWidth,
+          drawX: innerX + (innerWidth - drawWidth) / 2,
+          drawY: innerY + (innerHeight - drawHeight) / 2,
+          innerHeight,
+          innerWidth,
+          innerX,
+          innerY,
+        };
+      }
+
+      setFill(palette.panel);
+      setDraw(palette.border);
+      pdf.roundedRect(frameX, y, frameWidth, height, 1.5, 1.5, "FD");
+      if (mapImage?.startsWith("data:image")) {
+        try {
+          setFill([246, 246, 241]);
+          pdf.rect(
+            imagePlacement.innerX,
+            imagePlacement.innerY,
+            imagePlacement.innerWidth,
+            imagePlacement.innerHeight,
+            "F"
+          );
+          pdf.addImage(
+            mapImage,
+            mapImage.includes("jpeg") ? "JPEG" : "PNG",
+            imagePlacement.drawX,
+            imagePlacement.drawY,
+            imagePlacement.drawWidth,
+            imagePlacement.drawHeight,
+            undefined,
+            "FAST"
+          );
+        } catch {
+          drawText(
+            it
+              ? "Mappa non incorporabile in questa sessione."
+            : "Map cannot be embedded in this session.",
+            frameX + 6,
+            y + 18,
+            frameWidth - 12,
+            { color: palette.muted, size: 9 }
+          );
+        }
+      } else {
+        drawText(
+          it
+            ? "Mappa non disponibile: il PDF resta valido come report analitico."
+            : "Map unavailable: the PDF remains valid as analytical report.",
+          x + 6,
+          y + 18,
+          width - 12,
+          { color: palette.muted, size: 9 }
+        );
+      }
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(7.5);
+      setText(palette.accent);
+      pdf.text(
+        `${reportArea.toUpperCase()} / ARCUS ATLAS EXTRACT`,
+        frameX + 4,
+        y + height - 3.5
+      );
+
+      if (advance) {
+        y += height + 9;
+      }
+
+      return { frameWidth, height };
+    };
+    const cover = () => {
+      setFill([255, 255, 255]);
+      pdf.rect(0, 0, pageWidth, pageHeight, "F");
+      setFill(palette.accent);
+      pdf.rect(margin, 8, contentWidth, 0.7, "F");
+      setFill(palette.panel);
+      setDraw(palette.border);
+      pdf.roundedRect(14, 16, 182, 262, 2, 2, "FD");
+      addLogo(24, 28, 54, 39);
+      pdf.setFont("times", "bold");
+      pdf.setFontSize(27);
+      setText(palette.ink);
+      const title = variant === "brief"
+        ? it
+          ? "Territory Briefing / One-Page"
+          : "Territory Briefing / One-Page"
+        : it
+          ? "Territory Briefing"
+          : "Territory Briefing";
+      pdf.text(pdf.splitTextToSize(`${title}: ${reportArea}`, 142), 27, 84);
+      drawText(
+        it
+          ? "Screening professionale a scala provinciale basato su evidenza storica ARCUS, esposizione territoriale, Collapse Rate ARCUS/AINOP e lettura del pattern storico."
+          : "Professional province-level screening based on ARCUS historical evidence, territorial exposure, ARCUS/AINOP Collapse Rate and historical-pattern reading.",
+        27,
+        122,
+        142,
+        { color: palette.muted, lineHeight: 5.4, size: 10.2 }
+      );
+      const coverSignalY = 146;
+      const coverSignalWidth = 42;
+      [
+        ["Priority", `${selectedFinalPriorityIndex}/100`],
+        [
+          "Collapse",
+          collapseRateRankLabel
+            ? `${selectedCollapseRateMultiplier} / ${collapseRateRankLabel}`
+            : selectedCollapseRateMultiplier,
+        ],
+        ["Events", String(workflowEvents.length)],
+      ].forEach(([label, value], index) => {
+        const x = 27 + index * (coverSignalWidth + 6);
+        setFill(palette.soft);
+        setDraw(palette.border);
+        pdf.roundedRect(
+          x,
+          coverSignalY,
+          coverSignalWidth,
+          18,
+          1,
+          1,
+          "FD"
+        );
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(6.4);
+        setText(palette.accent);
+        pdf.text(label.toUpperCase(), x + 3, coverSignalY + 5);
+        pdf.setFontSize(String(value).length > 16 ? 8 : 10);
+        setText(palette.ink);
+        pdf.text(clean(value), x + 3, coverSignalY + 12);
+      });
+      setFill(palette.panel);
+      setDraw(palette.accent);
+      pdf.roundedRect(27, 170, 134, 20, 1.2, 1.2, "FD");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(6.5);
+      setText(palette.accent);
+      pdf.text(
+        (it ? "MESSAGGIO DECISIONALE" : "DECISION MESSAGE"),
+        31,
+        176
+      );
+      drawText(
+        historicalPatternReading.type,
+        31,
+        184,
+        126,
+        { color: palette.ink, font: "bold", lineHeight: 4.2, size: 9.2 }
+      );
+      const meta = [
+        ["Report date", today],
+        ["Context", projectDesignFocus.contextLabel],
+        ["Province", reportArea],
+        ["Output", selectedPath01Intent?.label || "Path 1"],
+        [
+          it ? "Finestra evidenza" : "Evidence window",
+          pdfEvidenceYearRange
+            ? pdfEvidenceYearRange
+            : it
+              ? "2000-oggi"
+              : "2000-today",
+        ],
+      ];
+      meta.forEach(([label, value], index) => {
+        const isWide = index === 4;
+        const x = isWide ? 27 : 27 + (index % 2) * 72;
+        const yy = index < 4 ? 198 + Math.floor(index / 2) * 21 : 240;
+        const boxWidth = isWide ? 134 : 62;
+        setFill(palette.soft);
+        setDraw(palette.border);
+        pdf.roundedRect(x, yy, boxWidth, 15, 1, 1, "FD");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(6.5);
+        setText(palette.accent);
+        pdf.text(label.toUpperCase(), x + 3, yy + 5);
+        pdf.setFontSize(8);
+        setText(palette.ink);
+        pdf.text(
+          pdf.splitTextToSize(clean(value), boxWidth - 8).slice(0, 2),
+          x + 3,
+          yy + 10
+        );
+      });
+      setFill(palette.panel);
+      setDraw(palette.border);
+      pdf.roundedRect(27, 260, 134, 16, 1.2, 1.2, "FD");
+      drawText(
+        it
+          ? "ARCUS nasce dal primo database sistematico dei ponti crollati in Italia dal 2000 a oggi: il report non classifica soltanto casi, ma legge pattern storici documentati per orientare controlli preliminari."
+          : "ARCUS is built on the first systematic database of collapsed bridges in Italy from 2000 to today: the report does not merely rank cases, it reads documented historical patterns to guide preliminary checks.",
+        31,
+        266,
+        126,
+        { color: palette.muted, lineHeight: 3.5, size: 7 }
+      );
+      addFooter();
+      pdf.addPage();
+      y = margin;
+    };
+    const summaryText = it
+      ? `La provincia selezionata richiede uno screening preliminare per interventi ${projectDesignFocus.contextLabel}. Il valore ARCUS non e la lista dei casi: e capire se ${reportArea} ha gia mostrato vulnerabilita concentrata in condizioni estreme o un rischio distribuito nel tempo.`
+      : `The selected province requires preliminary screening for ${projectDesignFocus.contextLabel} interventions. The value is not the case list: it is understanding whether ${reportArea} has already shown concentrated vulnerability under extreme conditions or risk distributed over time.`;
+    const eventRows = workflowEvents.slice(0, 7).map((event) => [
+      event.event_id,
+      formatPdfDate(event.date || event.event_date || event.collapse_date),
+      `${event.municipality || "-"}${event.year ? ` (${event.year})` : ""}`,
+      pdfSeverityLabel(event.collapse_severity),
+      event.specific_cause || "-",
+    ]);
+
+    const path02DataPackage = (hazard) => {
+      const value = String(hazard || "").toLowerCase();
+
+      if (value.includes("multi")) {
+        return "Integrated hydraulic, geotechnical and structural inspection plan; foundation details; last inspection reports; local hazard studies.";
+      }
+
+      if (value.includes("hydraulic") && value.includes("torrential")) {
+        return "TR100/TR200 hydraulic model; preliminary scour depth at piers; riverbed/bathymetry evidence; debris transport indicators; post-event inspection log.";
+      }
+
+      if (value.includes("hydraulic")) {
+        return "TR100/TR200 flood levels; residual freeboard; abutment and access embankment condition; inundation duration and backwater sensitivity.";
+      }
+
+      if (value.includes("landslide")) {
+        return "Updated PAI landslide perimeter; slope movement indicators; drainage condition upstream; abutment crack/movement log.";
+      }
+
+      if (value.includes("seismic")) {
+        return "Structural drawings; bearing and restraint condition; year/design code; vulnerability assessment for pre-1980 bridges in zones 1 or 2.";
+      }
+
+      return "Asset geometry, inspection history, foundation/abutment exposure, local hazard study and source-backed site constraints.";
+    };
+    const path02AttentionLabel = (label) =>
+      it
+        ? ({
+            "Immediate attention": "Attenzione immediata",
+            "Ordinary monitoring": "Monitoraggio ordinario",
+            "Programmed attention": "Attenzione programmata",
+          }[label] || label)
+        : label;
+    const path02TopRows = assetScreening.slice(0, 12).map((item) => [
+      item.id,
+      item.municipality || item.territory || "-",
+      String(item.score || 0),
+      item.hazardProfileLabel || item.dominantHazard || "-",
+      path02AttentionLabel(item.attentionLevel),
+      String(item.proximityScore || 0),
+    ]);
+    const path02CriticalAssets = (
+      assetScreening.filter(
+        (item) => item.attentionLevel === "Immediate attention"
+      ).length
+        ? assetScreening.filter(
+            (item) => item.attentionLevel === "Immediate attention"
+          )
+        : assetScreening.slice(0, 5)
+    ).slice(
+      0,
+      assetScreening.length <= 20
+        ? Math.min(8, assetScreening.length)
+        : assetScreening.length <= 100
+          ? 10
+          : 5
+    );
+    const path02ClusterRows = assetAttentionSummary.hazardCounts
+      .slice(0, 5)
+      .map((item) => [
+        item.label,
+        String(item.value),
+        path02DataPackage(item.label),
+      ]);
+
+    if (activeEntryPath === 1) {
+      const uploadedDate = assetSession.uploadedAt
+        ? formatPdfDate(assetSession.uploadedAt)
+        : today;
+      const fileName = assetSession.fileName || "ARCUS asset inventory";
+      const reportId = `P02-${new Date()
+        .toISOString()
+        .slice(0, 10)
+        .replaceAll("-", "")}-${String(assetScreening.length).padStart(
+        3,
+        "0"
+      )}`;
+      const contextCollapseRate = selectedCollapseRateAvailable
+        ? selectedCollapseRateMultiplier
+        : "N/A";
+
+      if (variant === "brief") {
+        setFill([255, 255, 255]);
+        pdf.rect(0, 0, pageWidth, pageHeight, "F");
+        setFill(palette.accent);
+        pdf.rect(margin, 8, contentWidth, 0.7, "F");
+        addLogo(margin, 12, 34, 24);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(19);
+        setText(palette.ink);
+        pdf.text("Asset Watchlist", logoImage ? 52 : margin, 21);
+        pdf.setFontSize(8);
+        setText(palette.accent);
+        pdf.text(
+          "ARCUS PROFESSIONAL / PATH 02 ONE-PAGE BRIEF",
+          logoImage ? 52 : margin,
+          28
+        );
+        y = 42;
+        paragraph(path02DecisionMessage, { size: 9.1, lineHeight: 4.6 });
+        compactKpiGrid([
+          {
+            text: it ? "asset validi analizzati" : "valid assets assessed",
+            title: it ? "Asset" : "Assets",
+            value: String(assetScreening.length),
+          },
+          {
+            text: it ? "da controllare prima" : "to check first",
+            title: it ? "Immediati" : "Immediate",
+            value: String(assetAttentionSummary.immediate),
+          },
+          {
+            text: it ? "nel piano annuale" : "in annual plan",
+            title: it ? "Programmati" : "Programmed",
+            value: String(assetAttentionSummary.programmed),
+          },
+          {
+            text: it ? "contesto provinciale" : "provincial context",
+            title: "Collapse Rate",
+            value: contextCollapseRate,
+          },
+        ]);
+        addMap(58);
+        table(
+          ["ID", it ? "Comune" : "Municipality", "Score", "Hazard"],
+          path02TopRows.slice(0, 5).map((row) => [
+            row[0],
+            row[1],
+            row[2],
+            row[3],
+          ]),
+          {
+            columnWeights: [0.65, 1, 0.55, 1.1],
+            fontSize: 6.3,
+            maxLines: 2,
+            minRowHeight: 8,
+          }
+        );
+        fullTextBox({
+          accent: true,
+          title: it
+            ? "Raccomandazione dominante"
+            : "Dominant Monitoring Recommendation",
+          text: `${assetAttentionSummary.dominantHazard}: ${path02DataPackage(
+            assetAttentionSummary.dominantHazard
+          )}`,
+        });
+        fullTextBox({
+          title: "Data Request Package",
+          text: path02DataPackage(assetAttentionSummary.dominantHazard),
+        });
+        fullTextBox({
+          title: it ? "Nota di confidenza" : "Confidence Note",
+          text: `${collapseConfidenceNote} ${assetInventoryAudit.blocked} uploaded records were blocked because required fields were incomplete.`,
+        });
+        addFooter();
+        pdf.save(filename);
+        return;
+      }
+
+      setFill([255, 255, 255]);
+      pdf.rect(0, 0, pageWidth, pageHeight, "F");
+      setFill(palette.accent);
+      pdf.rect(margin, 8, contentWidth, 0.7, "F");
+      setFill(palette.panel);
+      setDraw(palette.border);
+      pdf.roundedRect(14, 16, 182, 262, 2, 2, "FD");
+      addLogo(24, 28, 54, 39);
+      pdf.setFont("times", "bold");
+      pdf.setFontSize(26);
+      setText(palette.ink);
+      pdf.text(
+        pdf.splitTextToSize("Asset Watchlist & Monitoring Priority", 142),
+        27,
+        84
+      );
+      drawText(
+        "ARCUS Path 02 crosses the uploaded bridge inventory with documented Italian bridge-collapse evidence, territorial hazard context and proximity to ARCUS precedents to produce a prioritized monitoring watchlist.",
+        27,
+        116,
+        142,
+        { color: palette.muted, lineHeight: 5.2, size: 9.6 }
+      );
+      [
+        ["Assets", String(assetScreening.length)],
+        ["Immediate", String(assetAttentionSummary.immediate)],
+        ["Dominant", assetAttentionSummary.dominantHazard],
+      ].forEach(([label, value], index) => {
+        const cardX = 27 + index * 46;
+        setFill(palette.soft);
+        setDraw(palette.border);
+        pdf.roundedRect(cardX, 146, 40, 20, 1, 1, "FD");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(6.4);
+        setText(palette.accent);
+        pdf.text(label.toUpperCase(), cardX + 3, 152);
+        pdf.setFontSize(String(value).length > 14 ? 7.4 : 11);
+        setText(palette.ink);
+        pdf.text(
+          pdf.splitTextToSize(clean(value), 34).slice(0, 2),
+          cardX + 3,
+          159
+        );
+      });
+      setFill(palette.panel);
+      setDraw(palette.accent);
+      pdf.roundedRect(27, 174, 134, 28, 1.2, 1.2, "FD");
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(6.5);
+      setText(palette.accent);
+      pdf.text(it ? "MESSAGGIO DECISIONALE" : "DECISION MESSAGE", 31, 180);
+      drawText(path02DecisionMessage, 31, 188, 126, {
+        color: palette.ink,
+        lineHeight: 4,
+        size: 8.2,
+      });
+      [
+        ["Report ID", reportId],
+        ["File", fileName],
+        ["Upload", uploadedDate],
+        ["Mode", selectedPath02ReadingMode],
+        ["Output", "Watchlist / PDF / CSV / GeoJSON"],
+      ].forEach(([label, value], index) => {
+        const isWide = index === 4;
+        const boxX = isWide ? 27 : 27 + (index % 2) * 72;
+        const boxY = index < 4 ? 212 + Math.floor(index / 2) * 19 : 252;
+        const boxW = isWide ? 134 : 62;
+        setFill(palette.soft);
+        setDraw(palette.border);
+        pdf.roundedRect(boxX, boxY, boxW, 14, 1, 1, "FD");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(6.3);
+        setText(palette.accent);
+        pdf.text(label.toUpperCase(), boxX + 3, boxY + 5);
+        pdf.setFontSize(7.4);
+        setText(palette.ink);
+        pdf.text(
+          pdf.splitTextToSize(clean(value), boxW - 8).slice(0, 2),
+          boxX + 3,
+          boxY + 10
+        );
+      });
+      addFooter();
+      pdf.addPage();
+      y = margin;
+
+      heading("01", "Executive Summary");
+      paragraph(path02DecisionMessage);
+      compactKpiGrid([
+        {
+          text: it ? "record validi" : "valid records",
+          title: it ? "Asset analizzati" : "Assessed assets",
+          value: String(assetScreening.length),
+        },
+        {
+          text: it ? "prima stagione di rischio" : "next risk season",
+          title: it ? "Attenzione immediata" : "Immediate attention",
+          value: String(assetAttentionSummary.immediate),
+        },
+        {
+          text: it ? "piano annuale" : "annual plan",
+          title: it ? "Attenzione programmata" : "Programmed attention",
+          value: String(assetAttentionSummary.programmed),
+        },
+        {
+          text: it ? "contesto provincia" : "province context",
+          title: "Collapse Rate",
+          value: contextCollapseRate,
+        },
+      ]);
+      table(
+        [
+          it ? "Livello" : "Level",
+          it ? "Asset" : "Assets",
+          it ? "Azione" : "Action",
+        ],
+        [
+          [
+            path02AttentionLabel("Immediate attention"),
+            String(assetAttentionSummary.immediate),
+            it
+              ? "Ispezione prima della prossima stagione di rischio."
+              : "Inspect before the next risk season.",
+          ],
+          [
+            path02AttentionLabel("Programmed attention"),
+            String(assetAttentionSummary.programmed),
+            it
+              ? "Inserire nel piano annuale con priorita."
+              : "Include in the annual inspection plan with priority.",
+          ],
+          [
+            path02AttentionLabel("Ordinary monitoring"),
+            String(assetAttentionSummary.ordinary),
+            it
+              ? "Mantenere ciclo ordinario e arricchire dati tecnici."
+              : "Maintain ordinary cycle and enrich technical data.",
+          ],
+        ],
+        { columnWeights: [0.8, 0.45, 1.75], maxLines: 3 }
+      );
+
+      heading("02", "Asset Map");
+      paragraph(
+        it
+          ? "Mappa degli asset caricati con marker colorati per livello di attenzione. La mappa e un estratto operativo, non una base catastale o progettuale."
+          : "Map of uploaded assets with markers by attention level. The map is an operational extract, not cadastral or design-scale mapping."
+      );
+      addMap(88);
+
+      heading("03", "Prioritized Watchlist");
+      table(
+        [
+          "ID",
+          it ? "Comune" : "Municipality",
+          "Score",
+          "Hazard Profile",
+          it ? "Livello" : "Level",
+          "Proximity",
+        ],
+        path02TopRows,
+        {
+          columnWeights: [0.75, 1, 0.45, 1.2, 1.1, 0.55],
+          fontSize: 6.5,
+          maxLines: 3,
+          minRowHeight: 9,
+        }
+      );
+
+      heading("04", "Critical Asset Sheets");
+      path02CriticalAssets.forEach((item) => {
+        fullTextBox({
+          accent: item.attentionLevel === "Immediate attention",
+          title: `${item.id} / ${item.name} / ${item.score}`,
+          text: `${path02AttentionLabel(item.attentionLevel)}. Hazard Profile: ${
+            item.hazardProfileLabel
+          }. Proximity Score: ${item.proximityScore}. Nearest ARCUS case: ${
+            item.nearestEvent?.event_id || "not available"
+          }. ${item.monitoringRecommendation}`,
+        });
+      });
+
+      heading("05", "Risk-Cluster Recommendations");
+      table(
+        [
+          "Hazard Profile",
+          it ? "Asset" : "Assets",
+          "Data Request Package",
+        ],
+        path02ClusterRows.length
+          ? path02ClusterRows
+          : [["-", "0", path02DataPackage("")]],
+        {
+          columnWeights: [0.8, 0.35, 1.85],
+          fontSize: 6.8,
+          maxLines: 6,
+          minRowHeight: 14,
+        }
+      );
+
+      heading("06", "Methodology Snapshot");
+      table(
+        [it ? "Elemento" : "Element", it ? "Significato" : "Meaning"],
+        [
+          [
+            "Asset Priority Score",
+            "Single-asset score (0-100) combining territorial exposure, dominant hazard, ARCUS proximity, comparable failures and available technical fields. It is distinct from the provincial Path 01 Priority Index.",
+          ],
+          [
+            "Proximity Score",
+            "Distance to documented ARCUS collapses: <=500m direct signal, 500m-2km high, 2-10km medium, above 10km provincial context.",
+          ],
+          [
+            "Hazard Profile",
+            "Dominant asset-level profile: Hydraulic, Landslide, Seismic or Multi-hazard. Hydraulic profiles are differentiated as torrential/confined or lowland/plain when evidence allows.",
+          ],
+          ["Hydraulic Cause Category", hydraulicMethodologyNote],
+          [
+            "AINOP Coverage",
+            collapseConfidenceNote,
+          ],
+          [
+            "Inventory Validation",
+            `${assetInventoryAudit.mandatory}/${assetInventoryAudit.total} uploaded records had all required fields. ${assetInventoryAudit.blocked} records were blocked from scoring; ${assetInventoryAudit.warnings} province labels require verification.`,
+          ],
+          [
+            "Evidence Classes",
+            "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen.",
+          ],
+        ],
+        {
+          columnWeights: [0.52, 1.48],
+          fontSize: 6.6,
+          maxLines: 8,
+          minRowHeight: 9,
+        }
+      );
+      addFooter();
+      pdf.save(filename);
+      return;
     }
 
+    if (variant === "brief") {
+      setFill([255, 255, 255]);
+      pdf.rect(0, 0, pageWidth, pageHeight, "F");
+      setFill(palette.accent);
+      pdf.rect(margin, 8, contentWidth, 0.7, "F");
+      addLogo(margin, 12, 34, 24);
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(20);
+      setText(palette.ink);
+      pdf.text(`${reportArea}`, logoImage ? 52 : margin, 21);
+      pdf.setFontSize(8);
+      setText(palette.accent);
+      pdf.text(
+        "ARCUS PROFESSIONAL / ONE-PAGE TERRITORY BRIEFING",
+        logoImage ? 52 : margin,
+        28
+      );
+      y = 42;
+      paragraph(summaryText, { size: 9.2, lineHeight: 4.7 });
+      compactKpiGrid([
+        {
+          text: it ? "esposizione territoriale" : "territorial exposure",
+          title: "Priority Index",
+          value: `${selectedFinalPriorityIndex}/100`,
+        },
+        {
+          text: collapseRateRankLabel || (it ? `confidenza ${selectedCollapseRateConfidence}` : `confidence ${selectedCollapseRateConfidence}`),
+          title: "Collapse Rate",
+          value: selectedCollapseRateMultiplier,
+        },
+        {
+          text: it ? "casi ARCUS nel campione" : "ARCUS cases in sample",
+          title: it ? "Eventi" : "Events",
+          value: String(workflowEvents.length),
+        },
+        {
+          text: it ? "fonti collegate" : "linked sources",
+          title: it ? "Evidenza" : "Evidence",
+          value: String(evidenceSources),
+        },
+      ]);
+      ensure(82);
+      const sideStartY = y;
+      const nominalMapColumnWidth = 96;
+      const briefMapMetrics = getMapFrameMetrics(76, nominalMapColumnWidth);
+      const mapColumnWidth = Math.max(78, briefMapMetrics.frameWidth);
+      addMap(76, {
+        advance: false,
+        width: mapColumnWidth,
+        x: margin,
+      });
+      box({
+        accent: true,
+        height: 76,
+        title: it ? "Messaggio decisionale" : "Decision Message",
+        value: historicalPatternReading.type,
+        text: `${historicalPatternReading.temporal} ${collapseInterpretation}`,
+        width: contentWidth - mapColumnWidth - 7,
+        x: margin + mapColumnWidth + 7,
+      });
+      y = sideStartY + 84;
+      heading("01", it ? "Prossime azioni" : "Next Actions");
+      compactBulletList(briefActionRows.slice(0, 4));
+      y = y <= 214 ? 218 : y + 4;
+      const miniStartY = y;
+      box({
+        height: 32,
+        title: it ? "Data request package" : "Data request package",
+        text: dataRequestSummary,
+        width: (contentWidth - 6) / 2,
+      });
+      box({
+        height: 32,
+        title: it ? "Nota confidenza" : "Confidence note",
+        text: collapseConfidenceNote,
+        width: (contentWidth - 6) / 2,
+        x: margin + (contentWidth + 6) / 2,
+      });
+      y = miniStartY + 38;
+      addFooter();
+      pdf.save(filename);
+      return;
+    }
+
+    cover();
+    heading("01", "Executive Summary");
+    paragraph(summaryText);
+    box({
+      accent: true,
+      height: 42,
+      title: it ? "Uso raccomandato" : "Recommended use",
+      text: projectDesignFocus.paragraph,
+    });
+    y += 48;
+    kpiGrid([
+      {
+        text: it ? "indice di esposizione + lettura heritage" : "exposure index + heritage reading",
+        title: "Priority Index",
+        value: `${selectedFinalPriorityIndex}/100`,
+      },
+      {
+        text: selectedCollapseRateAvailable
+          ? it
+            ? `benchmark nazionale ARCUS/AINOP; confidenza ${selectedCollapseRateConfidence}`
+            : `ARCUS/AINOP national benchmark; confidence ${selectedCollapseRateConfidence}`
+          : collapseConfidenceNote,
+        title: "Collapse Rate",
+        value: selectedCollapseRateMultiplier,
+      },
+      {
+        text: it ? `${dominantCause} dominante` : `${dominantCause} dominant`,
+        title: it ? "Eventi Storici" : "Historical Events",
+        value: String(workflowEvents.length),
+      },
+      {
+        text: it ? `${evidenceSources} fonti collegate` : `${evidenceSources} linked sources`,
+        title: it ? "Affidabilita" : "Reliability",
+        value: `${reliabilityValue}/100`,
+      },
+    ]);
+    fullTextBox({
+      accent: true,
+      title: it
+        ? "Interpretazione Collapse Rate"
+        : "Collapse Rate interpretation",
+      text: `${collapseInterpretation} ${collapseConfidenceNote}`,
+    });
+    newPage();
+    heading(
+      "02",
+      it ? "Territory Reading & Map" : "Territory Reading & Map",
+      188
+    );
+    const fullMapHeight = 92;
+    const fullMapMetrics = getMapFrameMetrics(fullMapHeight, contentWidth);
+    const canUseMapSideLayout =
+      fullMapMetrics.isNarrow &&
+      contentWidth - fullMapMetrics.frameWidth - 8 >= 62;
+
+    if (canUseMapSideLayout) {
+      ensure(fullMapHeight + 10);
+      const mapBlockY = y;
+      addMap(fullMapHeight, {
+        advance: false,
+        width: fullMapMetrics.frameWidth,
+        x: margin,
+      });
+      const sideX = margin + fullMapMetrics.frameWidth + 8;
+      const sideWidth = contentWidth - fullMapMetrics.frameWidth - 8;
+
+      y = mapBlockY;
+      box({
+        height: 42,
+        title: it ? "Geomorfologia e contesto" : "Geomorphology and context",
+        text: territoryReading,
+        width: sideWidth,
+        x: sideX,
+      });
+      y = mapBlockY + 48;
+      box({
+        accent: true,
+        height: 44,
+        title: it ? "Lettura mappa" : "Map reading",
+        text: it
+          ? `La mappa localizza ${workflowEvents.length} casi ARCUS in ${pdfMunicipalityCount || 1} comuni e va letta insieme al pattern storico: ${historicalPatternReading.type}. Data dominante: ${historicalPatternReading.topDate || "n.d."}.`
+          : `The map locates ${workflowEvents.length} ARCUS cases across ${pdfMunicipalityCount || 1} municipalities and should be read with the historical pattern: ${historicalPatternReading.type}. Dominant date: ${historicalPatternReading.topDate || "n/a"}.`,
+        width: sideWidth,
+        x: sideX,
+      });
+      y = mapBlockY + fullMapHeight + 9;
+    } else {
+      fullTextBox({
+        title: it ? "Geomorfologia e contesto" : "Geomorphology and context",
+        text: territoryReading,
+      });
+      addMap(fullMapHeight);
+    }
+    heading(
+      "03",
+      it ? "Historical Failure Context" : "Historical Failure Context",
+      68
+    );
+    fullTextBox({
+      accent: true,
+      title: it ? "Pattern storico" : "Historical pattern",
+      text: `${historicalPatternReading.type}. ${historicalPatternReading.temporal} ${eventClusterNote}`,
+    });
+    const patternStartY = y;
+    const readingQuantitativeNote =
+      hasClusteredHistoricalPattern
+        ? historicalPatternReading.topDateShare >= 45
+          ? `${historicalPatternReading.topDateShare}% in one flood scenario; check extreme single-event design scenarios.`
+          : `${historicalPatternReading.topDateCount} cases on ${historicalPatternReading.topDate}; treat as an event cluster before reading recurrence.`
+        : `${historicalPatternReading.topDateShare}% on the most recurrent date; read as distributed temporal risk plus local event clusters.`;
+    box({
+      height: 42,
+      title: it ? "Trigger dominante" : "Dominant trigger",
+      value: `${historicalPatternReading.dominantCauseShare}%`,
+      text: dominantCause,
+      width: (contentWidth - 8) / 3,
+    });
+    box({
+      height: 42,
+      title: "Hazard",
+      value: hazardLabel,
+      text: it ? "segnale territoriale dominante" : "dominant territorial signal",
+      width: (contentWidth - 8) / 3,
+      x: margin + (contentWidth + 4) / 3,
+    });
+    box({
+      height: 42,
+      title: it ? "Lettura" : "Reading",
+      value:
+        hasClusteredHistoricalPattern
+          ? it
+            ? "evento unico"
+            : "single event"
+          : it
+            ? "rischio distribuito"
+            : "distributed risk",
+      text: readingQuantitativeNote,
+      width: (contentWidth - 8) / 3,
+      x: margin + ((contentWidth + 4) / 3) * 2,
+    });
+    y = patternStartY + 50;
+    heading("04", it ? "Actions" : "Actions", 60);
+    bulletList(pdfActionRows);
+    fullTextBox({
+      title: it ? "Pacchetto dati richiesto" : "Data request package",
+      text: dataRequestSummary,
+    });
+    fullTextBox({
+      title: it ? "Nota confidenza Collapse Rate" : "Collapse Rate confidence note",
+      text: collapseConfidenceNote,
+    });
+    newPage();
+    heading("05", it ? "Event Reference Appendix" : "Event Reference Appendix");
+    paragraph(
+      it
+        ? "La lista seguente e un riferimento documentale, non una classifica operativa P1/P2/P3. Il messaggio decisionale resta il pattern storico provinciale."
+        : "The following list is a documentary reference, not an operational P1/P2/P3 ranking. The decision message remains the provincial historical pattern.",
+      { size: 8.8 }
+    );
+    table(
+      ["ID", it ? "Data" : "Date", it ? "Comune" : "Municipality", it ? "Severita" : "Severity", it ? "Causa" : "Cause"],
+      eventRows
+    );
+    heading("06", "Methodology Snapshot");
+    table(
+      [it ? "Layer" : "Layer", it ? "Significato" : "Meaning"],
+      [
+        [
+          "Priority Index",
+          it
+            ? "Indice di esposizione territoriale: sintetizza hazard dominante, densita casi ARCUS, concentrazione di eventi e affidabilita delle evidenze. Non misura direttamente la vulnerabilita storica del patrimonio ponte."
+            : "Territorial exposure index: synthesizes dominant hazard, ARCUS case density, event concentration and evidence reliability. It does not directly measure historical bridge-stock vulnerability.",
+        ],
+        [
+          "Collapse Rate",
+          it
+            ? `Rapporto tra casi ARCUS e ponti censiti AINOP nella provincia. Valore: ${selectedCollapseRateMultiplier}${collapseRateRankLabel ? `, ${collapseRateRankLabel}` : ""}; da leggere separatamente dal Priority Index.`
+            : `Ratio between ARCUS cases and AINOP counted bridges in the province. Value: ${selectedCollapseRateMultiplier}${collapseRateRankLabel ? `, ${collapseRateRankLabel}` : ""}; it should be read separately from the Priority Index.`,
+        ],
+        [
+          it ? "Why Separate" : "Why Separate",
+          it
+            ? "Priority Index indica dove il territorio espone a pericolosita elevate; Collapse Rate indica dove il patrimonio ponte ha mostrato vulnerabilita storica superiore o inferiore alla media nazionale."
+            : "Priority Index indicates where the territory has elevated hazard exposure; Collapse Rate indicates where the bridge stock has shown historical vulnerability above or below the national average.",
+        ],
+        [
+          "Historical Failure Context",
+          it
+            ? "Lettura del pattern storico: evento concentrato o rischio distribuito nel tempo."
+            : "Historical-pattern reading: concentrated event or distributed risk over time.",
+        ],
+        [
+          "Hydraulic Cause Category",
+          hydraulicMethodologyNote,
+        ],
+        [
+          "Evidence Window",
+          it
+            ? "Periodo osservato: database ARCUS dei ponti crollati in Italia dal 2000 a oggi; gli eventi ravvicinati nella stessa finestra temporale sono letti come scenario, non duplicati decisionali."
+            : "Observed period: ARCUS database of collapsed bridges in Italy from 2000 to today; close events in the same time window are read as one scenario, not decision duplicates.",
+        ],
+        [
+          "AINOP Coverage",
+          it
+            ? `Il Collapse Rate usa i ponti censiti AINOP come denominatore provinciale. Confidenza: ${selectedCollapseRateConfidence}; possibili sottocensimenti locali possono gonfiare il rapporto.`
+            : `Collapse Rate uses AINOP counted bridges as provincial denominator. Confidence: ${selectedCollapseRateConfidence}; local undercounting may inflate the ratio.`,
+        ],
+        [
+          "Evidence Classes",
+          it
+            ? "A = fonte istituzionale/tecnica primaria; B = fonte tecnica o media affidabile; C = evidenza documentale generica; D = evidenza debole da rafforzare."
+            : "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen.",
+        ],
+      ],
+      {
+        columnWeights: [0.52, 1.48],
+        fontSize: 6.6,
+        headerHeight: 7,
+        lineHeight: 3.05,
+        maxLines: 8,
+        minRowHeight: 9,
+        rowPadding: 4,
+      }
+    );
+    addFooter();
     pdf.save(filename);
   };
 
@@ -4450,13 +6161,18 @@ export default function ProfessionalPage() {
     }
 
     setIsPreparingReport(true);
-    let iframe;
 
     try {
-      const mapImage =
+      let mapImage =
         activeEntryPath === 0
           ? await capturePath01ReportMapImage()
+          : activeEntryPath === 1
+            ? await captureCurrentProfessionalMapImage()
           : "";
+
+      if (activeEntryPath === 0 && !mapImage) {
+        mapImage = await createFallbackPath01MapImage();
+      }
 
       if (mapImage) {
         window.localStorage.setItem(
@@ -4465,35 +6181,44 @@ export default function ProfessionalPage() {
         );
       }
 
-      const html = buildProfessionalReportHtml({
-        mapImage,
-        variant,
-      });
+      if (
+        window.localStorage.getItem("arcus-debug-report-html") ===
+        "1"
+      ) {
+        window.localStorage.setItem(
+          "arcus-debug-report-html-output",
+          buildProfessionalReportHtml({
+            mapImage,
+            variant,
+          })
+        );
+      }
+
       const reportArea =
         activeEntryPath !== 0 && manualAreaBounds
           ? manualAreaLabel
           : selectedProvinceProfile.territory;
       const slug =
-        String(reportArea || "territory")
+        cleanDisplayText(reportArea || "territory")
           .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-|-$/g, "") || "territory";
       const filename = `arcus-professional-${variant}-${slug}.pdf`;
-      const preparedFrame = await createReportPdfFrame(html);
-      const { pages, staging } = buildReportPdfPages(
-        preparedFrame.frameDocument,
-        variant
-      );
+      const [logoImage, mapImageSize] = await Promise.all([
+        loadPdfLogoDataUrl(),
+        loadImageSize(mapImage),
+      ]);
 
-      iframe = preparedFrame.iframe;
-      await waitForReportAssets(preparedFrame.frameDocument);
-      await saveReportPagesAsPdf(pages, filename);
-      staging.remove();
+      await saveStructuredReportPdf({
+        filename,
+        logoImage,
+        mapImage,
+        mapImageSize,
+        variant,
+      });
     } finally {
-      if (iframe?.parentNode) {
-        iframe.parentNode.removeChild(iframe);
-      }
-
       setIsPreparingReport(false);
     }
   };
@@ -4583,10 +6308,27 @@ export default function ProfessionalPage() {
   };
 
   const exportSourceTable = () => {
-    const rows = workflowEvents.flatMap((event) =>
+    const sourceEvents =
+      activeEntryPath === 1
+        ? assetScreening
+            .filter(
+              (item) =>
+                item.attentionLevel === "Immediate attention"
+            )
+            .flatMap((item) =>
+              item.comparableEvents.slice(0, 5).map((event) => ({
+                ...event,
+                asset_id: item.id,
+                asset_name: item.name,
+              }))
+            )
+        : workflowEvents;
+    const rows = sourceEvents.flatMap((event) =>
       (sourcesByEventMap[event.event_id] || []).map(
         (source) => ({
           access_date: source.access_date,
+          asset_id: event.asset_id || "",
+          asset_name: event.asset_name || "",
           event_id: event.event_id,
           municipality: event.municipality,
           publication_date: source.publication_date,
@@ -4604,6 +6346,8 @@ export default function ProfessionalPage() {
         .toLowerCase()
         .replaceAll(" ", "-")}.csv`,
       [
+        "asset_id",
+        "asset_name",
         "event_id",
         "municipality",
         "source_id",
@@ -4620,6 +6364,61 @@ export default function ProfessionalPage() {
 
   const exportGisPackage = () => {
     const features = [];
+
+    if (activeEntryPath === 1) {
+      professionalAssetMapMarkers.forEach((asset) => {
+        const screening = assetScreening.find(
+          (item) => item.id === asset.id
+        );
+
+        features.push({
+          geometry: {
+            coordinates: [asset.longitude, asset.latitude],
+            type: "Point",
+          },
+          properties: {
+            asset_priority_score: screening?.score || asset.score,
+            attention_level: screening?.attentionLevel || asset.priority,
+            bridge_id: asset.id,
+            hazard_profile:
+              screening?.hazardProfileLabel ||
+              screening?.dominantHazard ||
+              "",
+            monitoring_recommendation:
+              screening?.monitoringRecommendation || "",
+            name: asset.name,
+            nearest_arcus_event:
+              screening?.nearestEvent?.event_id || "",
+            proximity_score: screening?.proximityScore || 0,
+            territory: asset.territory,
+            type: "path02_existing_asset",
+          },
+          type: "Feature",
+        });
+      });
+
+      downloadFile(
+        `arcus-path02-assets-${(assetSession.fileName || manualAreaLabel)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "")}.geojson`,
+        JSON.stringify(
+          {
+            features,
+            metadata: {
+              generated_at: new Date().toISOString(),
+              source: "ARCUS Professional / Path 02",
+              use: "Existing-asset watchlist export; not cadastral or design-scale mapping.",
+            },
+            type: "FeatureCollection",
+          },
+          null,
+          2
+        ),
+        "application/geo+json;charset=utf-8"
+      );
+      return;
+    }
 
     if (activeEntryPath !== 0 && manualAreaBounds) {
       features.push({
@@ -4772,6 +6571,7 @@ export default function ProfessionalPage() {
         );
 
         return (
+          cells.includes("bridge_id") ||
           cells.includes("asset_id") ||
           cells.includes("id")
         );
@@ -4825,6 +6625,7 @@ export default function ProfessionalPage() {
       const cells = row.map(normalizeAssetHeader);
 
       return (
+        cells.includes("bridge_id") ||
         cells.includes("asset_id") ||
         cells.includes("id")
       );
@@ -4962,6 +6763,11 @@ export default function ProfessionalPage() {
       return;
     }
 
+    setAssetSession({
+      fileName: file.name,
+      uploadedAt: new Date().toISOString(),
+    });
+
     if (
       !/\.(csv|xls|html?)$/i.test(file.name)
     ) {
@@ -5047,16 +6853,17 @@ export default function ProfessionalPage() {
 
   const buildAssetTemplateWorkbook = () => {
     const headers = [
-      "asset_id",
+      "bridge_id",
       "name",
-      "municipality",
-      "province",
+      "municipality_declared",
+      "province_declared",
       "region",
-      "latitude",
-      "longitude",
+      "lat",
+      "lon",
       "structural_type",
-      "material_type",
       "construction_year",
+      "last_inspection_date",
+      "underwater_inspection",
     ];
     const rows = [
       [
@@ -5067,9 +6874,10 @@ export default function ProfessionalPage() {
         "Molise",
         "41.7396",
         "14.7401",
-        "Beam bridge",
-        "Reinforced concrete",
+        "beam",
         "1965",
+        "2024-04-15",
+        "no",
       ],
       [
         "BR-002",
@@ -5079,9 +6887,10 @@ export default function ProfessionalPage() {
         "Liguria",
         "44.4056",
         "8.9463",
-        "Truss bridge",
-        "Steel",
+        "arch",
         "1972",
+        "2023-11-02",
+        "yes",
       ],
       [
         "",
@@ -5094,20 +6903,23 @@ export default function ProfessionalPage() {
         "",
         "",
         "",
-      ],
-      [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
         "",
       ],
       [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+      ],
+      [
+        "",
         "",
         "",
         "",
@@ -5237,17 +7049,17 @@ export default function ProfessionalPage() {
    <Row ss:Height="30">${spreadsheetCell("Workflow", "Section", "String", 2)}</Row>
    <Row>${spreadsheetCell("1", "Section")}${spreadsheetCell("Compila Asset_Data", "Cell")}${spreadsheetCell("Inserisci un ponte o asset per riga mantenendo le intestazioni originali.", "Cell")}</Row>
    <Row>${spreadsheetCell("2", "Section")}${spreadsheetCell("Salva il file", "Cell")}${spreadsheetCell("Puoi ricaricare questo template ARCUS oppure esportare un CSV con le stesse colonne.", "Cell")}</Row>
-   <Row>${spreadsheetCell("3", "Section")}${spreadsheetCell("Carica in ARCUS", "Cell")}${spreadsheetCell("La piattaforma produce ranking, priorita, casi comparabili e segnali di vulnerabilita.", "Cell")}</Row>
+   <Row>${spreadsheetCell("3", "Section")}${spreadsheetCell("Carica in ARCUS", "Cell")}${spreadsheetCell("La piattaforma produce Asset Priority Score, Hazard Profile, Proximity Score e watchlist operativa.", "Cell")}</Row>
    <Row><Cell ss:MergeAcross="2"/></Row>
    <Row ss:Height="30">${spreadsheetCell("Field guide", "Section", "String", 2)}</Row>
-   <Row>${spreadsheetCell("Required", "Section")}${spreadsheetCell("asset_id, name, province, region", "Cell")}${spreadsheetCell("Sono i campi minimi per lo screening territoriale.", "Cell")}</Row>
-   <Row>${spreadsheetCell("Recommended", "Section")}${spreadsheetCell("latitude, longitude", "Cell")}${spreadsheetCell("Consentono ad ARCUS di trovare eventi entro 35 km. Usa coordinate decimali con punto.", "Cell")}</Row>
-   <Row>${spreadsheetCell("Technical", "Section")}${spreadsheetCell("structural_type, material_type, construction_year", "Cell")}${spreadsheetCell("Migliorano gli indicatori con informazioni su tipologia, materiale ed eta infrastrutturale.", "Cell")}</Row>
+   <Row>${spreadsheetCell("Required", "Section")}${spreadsheetCell("bridge_id, lat, lon, province_declared, municipality_declared", "Cell")}${spreadsheetCell("Sono i campi obbligatori: senza questi il record resta bloccato e non entra nello scoring.", "Cell")}</Row>
+   <Row>${spreadsheetCell("Recommended", "Section")}${spreadsheetCell("construction_year, structural_type", "Cell")}${spreadsheetCell("Migliorano Asset Priority Score e Hazard Profile. Usa arch / beam / suspended quando possibile.", "Cell")}</Row>
+   <Row>${spreadsheetCell("Optional", "Section")}${spreadsheetCell("last_inspection_date, underwater_inspection", "Cell")}${spreadsheetCell("Sbloccano raccomandazioni di monitoraggio piu specifiche, soprattutto in contesto idraulico.", "Cell")}</Row>
   </Table>
  </Worksheet>
  <Worksheet ss:Name="Asset_Data">
   <Table id="asset-data">
-   <Column ss:Width="85"/><Column ss:Width="170"/><Column ss:Width="130"/><Column ss:Width="130"/><Column ss:Width="115"/><Column ss:Width="90"/><Column ss:Width="90"/><Column ss:Width="145"/><Column ss:Width="145"/><Column ss:Width="105"/>
+   <Column ss:Width="85"/><Column ss:Width="170"/><Column ss:Width="130"/><Column ss:Width="130"/><Column ss:Width="115"/><Column ss:Width="90"/><Column ss:Width="90"/><Column ss:Width="110"/><Column ss:Width="105"/><Column ss:Width="118"/><Column ss:Width="125"/>
    <Row ss:Height="44">${spreadsheetCell("", "BrandBlock")}${spreadsheetCell("ARCUS Professional - Asset Data", "Brand", "String", 8)}</Row>
    <Row ss:Height="24">${spreadsheetCell("", "MutedDark")}${spreadsheetCell("Compila le righe sotto. Le prime due righe sono esempi e possono essere sostituite.", "MutedDark", "String", 8)}</Row>
    <Row>${headers.map((header, index) => spreadsheetCell(header, index <= 4 ? "RequiredHeader" : "Header")).join("")}</Row>
@@ -5419,6 +7231,7 @@ export default function ProfessionalPage() {
 </Workbook>`;
   };
 
+  // eslint-disable-next-line no-unused-vars
   const buildAssetScreeningWorkbook = (rows) => {
     const headers = [
       "asset_id",
@@ -5570,26 +7383,51 @@ export default function ProfessionalPage() {
     }
 
     const rows = assetScreening.map((item) => ({
-      asset_id: item.id,
+      attention_level: item.attentionLevel,
+      bridge_id: item.id,
       comparable_events:
         item.comparableEvents.length,
+      hazard_profile:
+        item.hazardProfileLabel || item.dominantHazard || "",
+      hazard_score: item.hazardScore || 0,
       high_vulnerability_matches:
         item.highVulnerabilityMatches,
+      monitoring_recommendation:
+        item.monitoringRecommendation,
+      municipality: item.municipality || "",
       name: item.name,
-      dominant_hazard:
-        item.dominantHazard || "",
-      hazard_score: item.hazardScore || 0,
-      nearby_events: item.nearbyEvents.length,
-      priority: item.priority,
-      score: item.score,
+      nearest_arcus_event:
+        item.nearestEvent?.event_id || "",
+      nearest_arcus_km:
+        item.nearestEvent?.distance !== undefined
+          ? item.nearestEvent.distance.toFixed(2)
+          : "",
+      priority_score: item.score,
+      proximity_score: item.proximityScore || 0,
       territory: item.territory,
       top_cause: item.topCause,
     }));
 
-    downloadFile(
-      "arcus-asset-screening-results.xls",
-      buildAssetScreeningWorkbook(rows),
-      "application/vnd.ms-excel;charset=utf-8"
+    exportRowsAsCsv(
+      "arcus-path02-asset-table.csv",
+      [
+        "bridge_id",
+        "name",
+        "municipality",
+        "territory",
+        "priority_score",
+        "hazard_profile",
+        "attention_level",
+        "proximity_score",
+        "nearest_arcus_event",
+        "nearest_arcus_km",
+        "top_cause",
+        "hazard_score",
+        "comparable_events",
+        "high_vulnerability_matches",
+        "monitoring_recommendation",
+      ],
+      rows
     );
   };
 
@@ -6176,7 +8014,7 @@ export default function ProfessionalPage() {
   const selectedProjectContext =
     language === "it" ? "Ponte" : "Bridge";
   const normalizeProvinceKey = (value) =>
-    String(value || "")
+    cleanDisplayText(value || "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
@@ -6216,6 +8054,14 @@ export default function ProfessionalPage() {
     path01IntentOptions.find(
       (item) => item.id === path01ReportIntent
     ) || path01IntentOptions[0];
+  const selectedPath02ReadingMode =
+    path02ReadingMode === "vulnerability_assessment"
+      ? language === "it"
+        ? "Vulnerability assessment"
+        : "Vulnerability assessment"
+      : language === "it"
+        ? "Monitoring priority"
+        : "Monitoring priority";
   const selectedCollapseRateAvailable =
     Number(selectedAinopProvinceIndex?.ainop_bridges_total || 0) >
       0 &&
@@ -6260,7 +8106,7 @@ export default function ProfessionalPage() {
     selectedExposurePriorityScore * 0.7 +
       selectedCollapseRateScore * 0.3
   );
-  const territoryReading = useMemo(() => {
+  const territoryReading = (() => {
     const province =
       selectedProvinceProfile?.territory ||
       (language === "it"
@@ -6277,31 +8123,24 @@ export default function ProfessionalPage() {
         .map((event) => event.municipality)
         .filter(Boolean)
     ).size;
-    const isTorino =
-      normalizeProvinceKey(province).includes("torino");
     const isHydraulic =
       hazardText.includes("hydraulic") ||
       hazardText.includes("idraul");
 
     if (language === "it") {
-      if (isTorino && isHydraulic) {
-        return "Torino combina ambienti alpini e vallivi con corsi d'acqua a regime torrentizio e aree di pianura attraversate da fiumi maggiori. Il segnale dominante va quindi letto come esposizione idraulica differenziata: piene rapide e trasporto solido nei bacini montani, dinamiche di esondazione e attraversamenti maggiori in pianura.";
+      if (isHydraulic) {
+        return `${province} mostra un profilo idraulico da leggere per contesti geomorfologici, non come segnale uniforme: ${eventCount} eventi ARCUS distribuiti in ${municipalities || 1} comuni indicano che corsi d'acqua confinati o torrentizi, attraversamenti vallivi e aste di pianura devono essere distinti nella fase di verifica.`;
       }
 
       return `${province} mostra un profilo territoriale eterogeneo: ${eventCount} eventi ARCUS distribuiti in ${municipalities || 1} comuni indicano che il driver ${hazard} va letto insieme a morfologia locale, reticolo idrografico, versanti e continuita degli attraversamenti.`;
     }
 
-    if (isTorino && isHydraulic) {
-      return "Torino combines alpine and valley settings with torrential watercourses and lowland areas crossed by major rivers. The dominant signal should therefore be read as differentiated hydraulic exposure: rapid floods and sediment/debris transport in mountain basins, overflow dynamics and major crossings in the plain.";
+    if (isHydraulic) {
+      return `${province} shows a hydraulic profile that should be read by geomorphological setting, not as a uniform signal: ${eventCount} ARCUS events across ${municipalities || 1} municipalities indicate that confined or torrential watercourses, valley crossings and lowland river reaches must be separated during verification.`;
     }
 
     return `${province} shows a heterogeneous territorial profile: ${eventCount} ARCUS events across ${municipalities || 1} municipalities indicate that the ${hazard} driver must be read together with local morphology, drainage network, slopes and crossing continuity.`;
-  }, [
-    language,
-    selectedProvinceProfile,
-    workflowEvents,
-    workflowHazardExposure,
-  ]);
+  })();
   const historicalPatternReading = (() => {
     const dateCounts = countBy(workflowEvents, "date");
     const topDate = dateCounts[0];
@@ -6343,6 +8182,11 @@ export default function ProfessionalPage() {
       dominantCause,
       dominantCauseShare,
       geomorphologyHint,
+      isClusteredEvent,
+      isConcentrated,
+      topDate: topDate?.[0] || "",
+      topDateCount,
+      topDateShare,
       temporal:
         language === "it"
           ? isConcentrated
@@ -6457,7 +8301,7 @@ export default function ProfessionalPage() {
               },
               stage: "01",
               title: "Carica inventario",
-              text: "Vai al template Excel e importa ponti o asset da monitorare.",
+              text: "Carica il file CSV/Excel dei ponti in gestione e valida campi obbligatori, avvisi e record bloccati.",
             },
             {
               href: "#professional-map",
@@ -6468,26 +8312,26 @@ export default function ProfessionalPage() {
                 watchlist: true,
               },
               stage: "02",
-              title: "Associa asset al territorio",
-              text: "ARCUS collega ogni ponte a esposizione hazard, contesto territoriale e precedenti di collasso comparabili.",
+              title: "Configura lettura",
+              text: "Scegli Monitoring priority o Vulnerability assessment. La scelta cambia il linguaggio dell'output, non lo scoring.",
             },
             {
               href: "#professional-assets",
               stage: "03",
-              title: "Confronta con collassi storici",
-              text: "Confronta gli asset caricati con crolli simili per tipologia, causa e contesto.",
+              title: "Processa e calcola score",
+              text: "Calcola Asset Priority Score, Hazard Profile e Proximity Score per ogni ponte valido.",
             },
             {
               href: "#professional-similarity",
               stage: "04",
-              title: "Prioritizza asset",
-              text: "Genera indicatori spiegabili di priorita infrastrutturale.",
+              title: "Leggi watchlist",
+              text: "Esplora watchlist prioritizzata, asset critici e precedenti ARCUS comparabili.",
             },
             {
               href: "#professional-monitoring",
               stage: "05",
-              title: "Esporta watchlist",
-              text: "Esporta liste prioritarie, casi comparabili, GIS export e sintesi operative.",
+              title: "Genera report",
+              text: "Esporta Full PDF, One-Page Brief, Asset Table, Source Table e GIS Package.",
             },
           ],
           [
@@ -6640,7 +8484,7 @@ export default function ProfessionalPage() {
               },
               stage: "01",
               title: "Upload inventory",
-              text: "Go to the Excel template and import bridges or assets to monitor.",
+              text: "Upload the CSV/Excel bridge inventory and validate required fields, warnings and blocked records.",
             },
             {
               href: "#professional-map",
@@ -6651,26 +8495,26 @@ export default function ProfessionalPage() {
                 watchlist: true,
               },
               stage: "02",
-              title: "Match assets with territory",
-              text: "ARCUS associates each bridge with hazard exposure, territorial context and comparable collapse precedents.",
+              title: "Configure reading",
+              text: "Choose Monitoring priority or Vulnerability assessment. The choice changes output language, not scoring.",
             },
             {
               href: "#professional-assets",
               stage: "03",
-              title: "Compare with historical failures",
-              text: "Compare uploaded assets with similar collapses by typology, cause and context.",
+              title: "Process and score",
+              text: "Calculate Asset Priority Score, Hazard Profile and Proximity Score for every valid bridge.",
             },
             {
               href: "#professional-similarity",
               stage: "04",
-              title: "Prioritize assets",
-              text: "Generate explainable infrastructure priority indicators.",
+              title: "Read watchlist",
+              text: "Explore the prioritized watchlist, critical assets and comparable ARCUS precedents.",
             },
             {
               href: "#professional-monitoring",
               stage: "05",
-              title: "Export watchlist",
-              text: "Export priority lists, comparable cases, GIS outputs and operational summaries.",
+              title: "Generate report",
+              text: "Export Full PDF, One-Page Brief, Asset Table, Source Table and GIS Package.",
             },
           ],
           [
@@ -6825,12 +8669,16 @@ export default function ProfessionalPage() {
             activePath.label.replace(/^\d+\s\/\s/, ""),
           ],
           [
-            "Territorio",
-            manualAreaLabel,
+            activeEntryPath === 1 ? "File caricato" : "Territorio",
+            activeEntryPath === 1
+              ? assetSession.fileName || "-"
+              : manualAreaLabel,
           ],
           [
-            "Contesto progetto",
-            selectedProjectContext,
+            activeEntryPath === 1 ? "Modalita" : "Contesto progetto",
+            activeEntryPath === 1
+              ? selectedPath02ReadingMode
+              : selectedProjectContext,
           ],
           [
             "Scenario",
@@ -6846,12 +8694,16 @@ export default function ProfessionalPage() {
           ],
           [
             "Hazard dominante",
-            workflowHazardExposure?.dominant_hazard ||
-              "-",
+            activeEntryPath === 1
+              ? assetAttentionSummary.dominantHazard
+              : workflowHazardExposure?.dominant_hazard ||
+                "-",
           ],
           [
-            "Precedenti",
-            `${selectedSimilarEvents.length || selectedProvinceEvents.length} disponibili`,
+            activeEntryPath === 1 ? "Attenzione immediata" : "Precedenti",
+            activeEntryPath === 1
+              ? `${assetAttentionSummary.immediate} asset`
+              : `${selectedSimilarEvents.length || selectedProvinceEvents.length} disponibili`,
           ],
           [
             "Output",
@@ -6864,12 +8716,16 @@ export default function ProfessionalPage() {
             activePath.label.replace(/^\d+\s\/\s/, ""),
           ],
           [
-            "Territory",
-            manualAreaLabel,
+            activeEntryPath === 1 ? "Uploaded file" : "Territory",
+            activeEntryPath === 1
+              ? assetSession.fileName || "-"
+              : manualAreaLabel,
           ],
           [
-            "Project context",
-            selectedProjectContext,
+            activeEntryPath === 1 ? "Mode" : "Project context",
+            activeEntryPath === 1
+              ? selectedPath02ReadingMode
+              : selectedProjectContext,
           ],
           [
             "Scenario",
@@ -6885,19 +8741,25 @@ export default function ProfessionalPage() {
           ],
           [
             "Dominant hazard",
-            workflowHazardExposure?.dominant_hazard ||
-              "-",
+            activeEntryPath === 1
+              ? assetAttentionSummary.dominantHazard
+              : workflowHazardExposure?.dominant_hazard ||
+                "-",
           ],
           [
-            language === "it"
-              ? "Casi mappa/appendice"
-              : "Map/appendix cases",
-            `${
-              selectedSimilarEvents.length ||
-              Math.min(5, selectedProvinceEvents.length)
-            } ${
-              language === "it" ? "selezionati su" : "selected of"
-            } ${workflowEvents.length}`,
+            activeEntryPath === 1
+              ? "Immediate attention"
+              : language === "it"
+                ? "Casi mappa/appendice"
+                : "Map/appendix cases",
+            activeEntryPath === 1
+              ? `${assetAttentionSummary.immediate} assets`
+              : `${
+                  selectedSimilarEvents.length ||
+                  Math.min(5, selectedProvinceEvents.length)
+                } ${
+                  language === "it" ? "selezionati su" : "selected of"
+                } ${workflowEvents.length}`,
           ],
           [
             "Output",
@@ -6929,7 +8791,7 @@ export default function ProfessionalPage() {
             <label>
               {copy.assetUpload}
               <input
-                accept=".csv,.json"
+                accept=".csv,.xls,.html,text/csv,application/vnd.ms-excel"
                 onChange={handleAssetUpload}
                 type="file"
               />
@@ -7196,12 +9058,12 @@ export default function ProfessionalPage() {
                   ""
                 }
               >
-                {scenarioProvinceProfiles.map((profile) => (
+                {alphabeticalProvinceProfiles.map((profile) => (
                   <option
                     key={profile.territory}
                     value={profile.territory}
                   >
-                    {profile.territory}
+                    {cleanDisplayText(profile.territory)}
                   </option>
                 ))}
               </select>
@@ -7473,6 +9335,123 @@ export default function ProfessionalPage() {
                   {language === "it"
                     ? "per la provincia selezionata"
                     : "for the selected province"}
+                </p>
+              </article>
+            </div>
+          </div>
+        );
+      }
+
+      if (activeEntryPath === 1) {
+        const options = [
+          {
+            id: "monitoring_priority",
+            label:
+              language === "it"
+                ? "Monitoring priority"
+                : "Monitoring priority",
+            text:
+              language === "it"
+                ? "Prioritizza ispezioni e controlli sul patrimonio esistente."
+                : "Prioritizes inspections and checks across the existing stock.",
+          },
+          {
+            id: "vulnerability_assessment",
+            label:
+              language === "it"
+                ? "Vulnerability assessment"
+                : "Vulnerability assessment",
+            text:
+              language === "it"
+                ? "Legge l'esposizione complessiva del patrimonio per due diligence o reporting."
+                : "Reads the overall exposure of the asset stock for due diligence or reporting.",
+          },
+        ];
+
+        return (
+          <div className="platform-workflow-panel">
+            <div>
+              <span>{activeWorkflowAction.stage}</span>
+              <h3>{activeWorkflowAction.title}</h3>
+              <p>{activeWorkflowAction.text}</p>
+            </div>
+
+            <div className="platform-context-summary">
+              <span>
+                {language === "it"
+                  ? "Contesto fisso"
+                  : "Fixed context"}
+              </span>
+              <strong>{selectedProjectContext}</strong>
+              <p>
+                {language === "it"
+                  ? "La scelta cambia il linguaggio dell'output, non il calcolo degli indici."
+                  : "This choice changes report language, not the scoring logic."}
+              </p>
+            </div>
+
+            <div className="platform-intent-grid">
+              {options.map((option) => (
+                <button
+                  className={
+                    path02ReadingMode === option.id
+                      ? "active"
+                      : ""
+                  }
+                  key={option.id}
+                  onClick={() =>
+                    setPath02ReadingMode(option.id)
+                  }
+                  type="button"
+                >
+                  <span>{option.label}</span>
+                  <p>{option.text}</p>
+                </button>
+              ))}
+            </div>
+
+            <div className="platform-workflow-output-header">
+              {language === "it" ? "ARCUS mostra" : "ARCUS shows"}
+            </div>
+
+            <div className="platform-workflow-evidence">
+              <article>
+                <span>
+                  {language === "it"
+                    ? "Record validi"
+                    : "Valid records"}
+                </span>
+                <strong>{assetScreening.length}</strong>
+                <p>
+                  {language === "it"
+                    ? "entrano nello scoring"
+                    : "enter scoring"}
+                </p>
+              </article>
+              <article>
+                <span>
+                  {language === "it"
+                    ? "Record bloccati"
+                    : "Blocked records"}
+                </span>
+                <strong>{assetInventoryAudit.blocked}</strong>
+                <p>
+                  {language === "it"
+                    ? "campi obbligatori mancanti"
+                    : "missing required fields"}
+                </p>
+              </article>
+              <article>
+                <span>
+                  {language === "it"
+                    ? "Avvisi"
+                    : "Warnings"}
+                </span>
+                <strong>{assetInventoryAudit.warnings}</strong>
+                <p>
+                  {language === "it"
+                    ? "province da verificare"
+                    : "provinces to verify"}
                 </p>
               </article>
             </div>
@@ -7822,32 +9801,71 @@ export default function ProfessionalPage() {
           </div>
 
           <div className="platform-workflow-evidence">
-            {(workflowHazardExposure?.hazards || [])
-              .slice(0, 4)
-              .map((hazard) => (
-                <article key={hazard.label}>
-                  <span>{hazard.label}</span>
-                  <strong>{hazard.score}</strong>
-                  <p>
-                    {hazard.matched_events}{" "}
-                    {language === "it"
-                      ? "eventi collegati"
-                      : "linked events"}
-                  </p>
-                </article>
-              ))}
+            {activeEntryPath === 1
+              ? [
+                  [
+                    language === "it"
+                      ? "Attenzione immediata"
+                      : "Immediate attention",
+                    assetAttentionSummary.immediate,
+                    language === "it"
+                      ? "asset da controllare prima"
+                      : "assets to check first",
+                  ],
+                  [
+                    language === "it"
+                      ? "Attenzione programmata"
+                      : "Programmed attention",
+                    assetAttentionSummary.programmed,
+                    language === "it"
+                      ? "nel piano annuale"
+                      : "in the annual plan",
+                  ],
+                  [
+                    language === "it"
+                      ? "Hazard dominante"
+                      : "Dominant hazard",
+                    assetAttentionSummary.dominantHazard,
+                    language === "it"
+                      ? "nel patrimonio caricato"
+                      : "in uploaded stock",
+                  ],
+                ].map(([label, value, text]) => (
+                  <article key={label}>
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                    <p>{text}</p>
+                  </article>
+                ))
+              : (workflowHazardExposure?.hazards || [])
+                  .slice(0, 4)
+                  .map((hazard) => (
+                    <article key={hazard.label}>
+                      <span>{hazard.label}</span>
+                      <strong>{hazard.score}</strong>
+                      <p>
+                        {hazard.matched_events}{" "}
+                        {language === "it"
+                          ? "eventi collegati"
+                          : "linked events"}
+                      </p>
+                    </article>
+                  ))}
           </div>
 
           {activeEntryPath === 1 && (
             <div className="platform-table">
               {assetScreening.slice(0, 4).map((asset) => (
-                <article key={asset.asset_id}>
+                <article key={asset.id}>
                   <div>
                     <strong>{asset.name}</strong>
-                    <span>{asset.province}</span>
+                    <span>
+                      {asset.territory} -{" "}
+                      {asset.hazardProfileLabel}
+                    </span>
                   </div>
                   <div>
-                    <b>{asset.priority_score}</b>
+                    <b>{asset.score}</b>
                     <span>{copy.screeningScore}</span>
                   </div>
                 </article>
@@ -7962,13 +9980,6 @@ export default function ProfessionalPage() {
 
       // Path 1 - Existing Assets: Prioritize Assets
       if (activeEntryPath === 1) {
-        const p1Count = assetScreening.filter(
-          (item) => item.priority === "Priority 1"
-        ).length;
-        const p2Count = assetScreening.filter(
-          (item) => item.priority === "Priority 2"
-        ).length;
-
         return (
           <div className="platform-workflow-panel">
             <div>
@@ -7983,22 +9994,51 @@ export default function ProfessionalPage() {
 
             <div className="platform-workflow-evidence">
               <article>
-                <span>Priority 1</span>
-                <strong>{p1Count}</strong>
+                <span>
+                  {language === "it"
+                    ? "Attenzione immediata"
+                    : "Immediate attention"}
+                </span>
+                <strong>{assetAttentionSummary.immediate}</strong>
                 <p>
                   {language === "it"
-                    ? "attenzione immediata"
-                    : "immediate attention"}
+                    ? "ispezione prima della prossima stagione di rischio"
+                    : "inspection before next risk season"}
                 </p>
               </article>
 
               <article>
-                <span>Priority 2</span>
-                <strong>{p2Count}</strong>
+                <span>
+                  {language === "it"
+                    ? "Attenzione programmata"
+                    : "Programmed attention"}
+                </span>
+                <strong>{assetAttentionSummary.programmed}</strong>
                 <p>
                   {language === "it"
-                    ? "monitoraggio attivo"
-                    : "active monitoring"}
+                    ? "da inserire nel piano annuale"
+                    : "to add to annual plan"}
+                </p>
+              </article>
+
+              <article>
+                <span>
+                  {language === "it"
+                    ? "Hazard dominante"
+                    : "Dominant hazard"}
+                </span>
+                <strong
+                  style={{
+                    fontSize: "18px",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  {assetAttentionSummary.dominantHazard}
+                </strong>
+                <p>
+                  {language === "it"
+                    ? "nel patrimonio caricato"
+                    : "in uploaded stock"}
                 </p>
               </article>
 
@@ -8011,33 +10051,18 @@ export default function ProfessionalPage() {
                 <strong>{assetInventoryAudit.score}</strong>
                 <p>readiness score</p>
               </article>
-
-              <article>
-                <span>
-                  {language === "it"
-                    ? "Gap tecnici"
-                    : "Technical gaps"}
-                </span>
-                <strong>
-                  {assetInventoryAudit.total -
-                    assetInventoryAudit.technical}
-                </strong>
-                <p>
-                  {language === "it"
-                    ? "asset senza dati tecnici"
-                    : "assets missing technical data"}
-                </p>
-              </article>
             </div>
 
             {assetScreening.length > 0 && (
               <div className="platform-table">
-                {assetScreening.slice(0, 3).map((item) => (
+                {assetScreening.slice(0, 5).map((item) => (
                   <article key={item.id}>
                     <div>
                       <strong>{item.name}</strong>
                       <span>
-                        {item.priority} - {item.topCause}
+                        {item.attentionLevel} -{" "}
+                        {item.hazardProfileLabel} - proximity{" "}
+                        {item.proximityScore}
                       </span>
                     </div>
                     <div>
@@ -8204,18 +10229,16 @@ export default function ProfessionalPage() {
             String(assetScreening.length),
           ],
           [
-            "Priority 1",
-            `${
-              assetScreening.filter(
-                (item) => item.priority === "Priority 1"
-              ).length
-            } assets`,
+            language === "it"
+              ? "Attenzione immediata"
+              : "Immediate attention",
+            `${assetAttentionSummary.immediate} assets`,
           ],
           [
             language === "it"
-              ? "Segnali monitoraggio"
-              : "Monitoring signals",
-            String(monitoringSignals.length),
+              ? "Hazard dominante"
+              : "Dominant hazard",
+            assetAttentionSummary.dominantHazard,
           ],
           [
             language === "it"
@@ -8228,22 +10251,41 @@ export default function ProfessionalPage() {
           ...(assetScreening.length > 0
             ? [
                 {
-                  label: copy.assetExport,
+                  label:
+                    language === "it"
+                      ? "Export Asset Table"
+                      : "Export Asset Table",
                   onClick: exportAssetScreening,
                 },
               ]
             : []),
-          ...(monitoringSignals.length > 0
-            ? [
-                {
-                  label: copy.monitoringExport,
-                  onClick: exportMonitoringWatchlist,
-                },
-              ]
-            : []),
           {
-            label: copy.downloadReport,
+            label:
+              language === "it"
+                ? "Export Source Table"
+                : "Export Source Table",
+            onClick: exportSourceTable,
+          },
+          {
+            label:
+              language === "it"
+                ? "Export GIS Package"
+                : "Export GIS Package",
+            onClick: exportGisPackage,
+          },
+          {
+            label:
+              language === "it"
+                ? "Download Full PDF"
+                : "Download Full PDF",
             onClick: downloadProfessionalReport,
+          },
+          {
+            label:
+              language === "it"
+                ? "Download One-Page Brief"
+                : "Download One-Page Brief",
+            onClick: downloadOnePageBrief,
           },
         ],
       },
@@ -9272,13 +11314,12 @@ export default function ProfessionalPage() {
                   .map((item) => (
                     <article key={item.id}>
                       <div>
-                        <span>{item.priority}</span>
+                        <span>{item.attentionLevel}</span>
                         <strong>{item.name}</strong>
                         <p>
                           {item.territory} -{" "}
-                          {item.topCause} -{" "}
-                          {item.dominantHazard ||
-                            "hazard n/a"}
+                          {item.hazardProfileLabel} - proximity{" "}
+                          {item.proximityScore}
                         </p>
                       </div>
 
@@ -9301,7 +11342,8 @@ export default function ProfessionalPage() {
                 <div className="platform-asset-hazard">
                   <span>{copy.assetHazard}</span>
                   <strong>
-                    {assetScreening[0].dominantHazard ||
+                    {assetScreening[0].hazardProfileLabel ||
+                      assetScreening[0].dominantHazard ||
                       "-"}
                   </strong>
                   <b>
@@ -9323,6 +11365,9 @@ export default function ProfessionalPage() {
                       .highVulnerabilityMatches
                   }{" "}
                   {copy.highCriticalMatches}.
+                </p>
+                <p>
+                  {assetScreening[0].monitoringRecommendation}
                 </p>
 
                 <div className="platform-asset-events">

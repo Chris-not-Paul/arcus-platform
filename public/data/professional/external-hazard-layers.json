@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-27T11:44:06.019Z",
-  "status": "official-professional-registry; live geospatial ingestion reserved for Enterprise",
+  "generated_at": "2026-06-11T07:35:38.781Z",
+  "status": "registry-ready; geospatial ingestion pending",
   "layers": [
     {
       "id": "ispra-idrogeo-landslide-hazard",
@@ -9,10 +9,8 @@
       "provider": "ISPRA IdroGEO",
       "source_url": "https://developers.italia.it/it/api/ispra-idrogeo.html",
       "documentation_url": "https://www.isprambiente.gov.it/it/banche-dati/banche-dati-folder/suolo-e-territorio/rischi-geologici-e-naturali",
-      "service_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/frane/ows",
-      "wms_layer": "frane",
       "arcus_use": "Enrich asset screening and territorial vulnerability with landslide susceptibility and IFFI context.",
-      "integration_status": "live-wms-professional-overlay",
+      "integration_status": "planned",
       "join_strategy": "asset coordinates intersect hazard polygons or nearest-area lookup",
       "priority": "high"
     },
@@ -23,12 +21,8 @@
       "provider": "ISPRA IdroGEO",
       "source_url": "https://developers.italia.it/it/api/ispra-idrogeo.html",
       "documentation_url": "https://www.isprambiente.gov.it/it/banche-dati/banche-dati-folder/suolo-e-territorio/rischi-geologici-e-naturali",
-      "service_url": "https://sdi.isprambiente.it/geoserver/nz1/wms",
-      "wms_layers": [
-        "aree_peric_idraulica_p3"
-      ],
       "arcus_use": "Support hydraulic scenario scoring, flood exposure and asset screening near river systems.",
-      "integration_status": "live-wms-professional-overlay",
+      "integration_status": "planned",
       "join_strategy": "asset coordinates intersect flood hazard classes or municipal/provincial aggregation",
       "priority": "high"
     },
@@ -39,10 +33,9 @@
       "provider": "INGV",
       "source_url": "https://esse1-gis.mi.ingv.it/mps04_ita.jsp",
       "documentation_url": "https://zonesismiche.mi.ingv.it/",
-      "service_url": "https://esse1-gis.mi.ingv.it/mps04_ita.jsp",
       "arcus_use": "Add seismic hazard context to territorial scoring and scenario comparison.",
-      "integration_status": "official-source-score",
-      "join_strategy": "province-level ARCUS exposure score documented against INGV MPS04 source; direct WMS layer not exposed in the current public service",
+      "integration_status": "planned",
+      "join_strategy": "asset coordinates sampled against seismic hazard grid or zone lookup",
       "priority": "high"
     },
     {
@@ -52,8 +45,8 @@
       "provider": "Dipartimento della Protezione Civile",
       "source_url": "https://rischi.protezionecivile.it/it/meteo-idro/allertamento",
       "documentation_url": "https://rischi.protezionecivile.gov.it/en/approfondimento/alert-meteo-hydro-risk/",
-      "arcus_use": "Monitoring signal for hydrogeological and hydraulic alert conditions; live structured feeds reserved for Enterprise.",
-      "integration_status": "professional-registry",
+      "arcus_use": "Future live monitoring signal for hydrogeological and hydraulic alert conditions.",
+      "integration_status": "research",
       "join_strategy": "map alert zones to assets, provinces or regions when structured feeds are available",
       "priority": "medium"
     },
@@ -65,7 +58,7 @@
       "source_url": "https://www.isprambiente.gov.it/it/banche-dati/banche-dati-folder/suolo-e-territorio/rischi-geologici-e-naturali",
       "documentation_url": "https://www.isprambiente.gov.it/it/banche-dati/banche-dati-folder/suolo-e-territorio/rischi-geologici-e-naturali",
       "arcus_use": "Contextual seismic/geological exposure layer for advanced professional assessments.",
-      "integration_status": "professional-registry",
+      "integration_status": "planned",
       "join_strategy": "distance from asset/event coordinates to mapped capable fault segments",
       "priority": "medium"
     }

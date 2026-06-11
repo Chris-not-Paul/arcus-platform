@@ -590,10 +590,10 @@ export function distanceKm(
   secondLatitude,
   secondLongitude
 ) {
-  const lat1 = Number(firstLatitude);
-  const lon1 = Number(firstLongitude);
-  const lat2 = Number(secondLatitude);
-  const lon2 = Number(secondLongitude);
+  const lat1 = Number(String(firstLatitude).replace(",", "."));
+  const lon1 = Number(String(firstLongitude).replace(",", "."));
+  const lat2 = Number(String(secondLatitude).replace(",", "."));
+  const lon2 = Number(String(secondLongitude).replace(",", "."));
 
   if (
     !Number.isFinite(lat1) ||
@@ -705,20 +705,155 @@ function assetTypologyScore(asset) {
   return Math.min(score, 16);
 }
 
-function screeningClass(score) {
-  if (score >= 78) {
-    return "Priority 1";
+function proximityScore(distance, hasLocalContext = false) {
+  if (distance === null || distance === undefined) {
+    return hasLocalContext ? 18 : 0;
   }
 
-  if (score >= 62) {
-    return "Priority 2";
+  if (distance <= 0.5) {
+    return 100;
   }
 
-  if (score >= 42) {
-    return "Priority 3";
+  if (distance <= 2) {
+    return 82;
   }
 
-  return "Baseline";
+  if (distance <= 10) {
+    return 58;
+  }
+
+  return hasLocalContext ? 34 : 18;
+}
+
+function attentionLevel(score, proximity) {
+  if (score > 75 || proximity >= 82) {
+    return "Immediate attention";
+  }
+
+  if (score >= 50) {
+    return "Programmed attention";
+  }
+
+  return "Ordinary monitoring";
+}
+
+function classifyHazardProfile(hazardProfile, asset, profile) {
+  const hazards = [...(hazardProfile?.hazards || [])].sort(
+    (a, b) => Number(b.score || 0) - Number(a.score || 0)
+  );
+  const top = hazards[0];
+  const second = hazards[1];
+
+  if (
+    top &&
+    second &&
+    Number(top.score || 0) >= 65 &&
+    Number(second.score || 0) >= 60 &&
+    Number(top.score || 0) - Number(second.score || 0) <= 16
+  ) {
+    return "Multi-hazard";
+  }
+
+  const rawHazard = normalizeAssetText(
+    top?.key || top?.label || profile?.topCause || ""
+  );
+  const structure = normalizeAssetText(
+    assetValue(asset, [
+      "structural_type",
+      "structure",
+      "typology",
+      "tipologia",
+    ])
+  );
+
+  if (
+    rawHazard.includes("hydraulic") ||
+    rawHazard.includes("flood") ||
+    rawHazard.includes("scour") ||
+    rawHazard.includes("idraul")
+  ) {
+    const context = normalizeAssetText(
+      `${assetValue(asset, [
+        "watercourse_type",
+        "geomorphology",
+        "morfologia",
+      ])} ${profile?.topCause || ""} ${structure}`
+    );
+
+    if (
+      context.includes("alpine") ||
+      context.includes("torrent") ||
+      context.includes("confined") ||
+      context.includes("mont")
+    ) {
+      return "Hydraulic - torrential/confined";
+    }
+
+    if (
+      context.includes("plain") ||
+      context.includes("lowland") ||
+      context.includes("pian")
+    ) {
+      return "Hydraulic - lowland/plain";
+    }
+
+    return "Hydraulic";
+  }
+
+  if (
+    rawHazard.includes("landslide") ||
+    rawHazard.includes("frana") ||
+    rawHazard.includes("slope")
+  ) {
+    return "Landslide";
+  }
+
+  if (
+    rawHazard.includes("seismic") ||
+    rawHazard.includes("sism")
+  ) {
+    return "Seismic";
+  }
+
+  return top?.label || top?.key || "Contextual";
+}
+
+function monitoringRecommendation(hazardProfile, asset, proximity) {
+  const profile = normalizeAssetText(hazardProfile);
+  const underwater = normalizeAssetText(
+    assetValue(asset, [
+      "underwater_inspection",
+      "ispezione_subacquea",
+    ])
+  );
+
+  if (profile.includes("multi")) {
+    return "Coordinated hydraulic/structural inspection with one integrated report.";
+  }
+
+  if (profile.includes("hydraulic") && profile.includes("torrential")) {
+    return underwater === "no"
+      ? "Prioritize scour and underwater/foundation inspection before the next flood season."
+      : "Post-event visual checks, scour susceptibility review and debris transport verification.";
+  }
+
+  if (profile.includes("hydraulic")) {
+    return "Verify TR100/TR200 flood levels, residual freeboard, abutments and access embankments.";
+  }
+
+  if (profile.includes("landslide")) {
+    return "Check slope stability, abutment movement indicators and surface drainage upstream.";
+  }
+
+  if (profile.includes("seismic")) {
+    return "Inspect bearings, deck-substructure connections and pre-1980 seismic vulnerability.";
+  }
+
+  if (proximity >= 82) {
+    return "Review the nearest ARCUS precedent and verify whether the same local mechanism can affect the asset.";
+  }
+
+  return "Maintain ordinary inspection cycle and enrich technical asset data.";
 }
 
 export function buildAssetScreening(
@@ -747,6 +882,7 @@ export function buildAssetScreening(
     .map((asset, index) => {
       const id =
         assetValue(asset, [
+          "bridge_id",
           "asset_id",
           "id",
           "code",
@@ -760,8 +896,14 @@ export function buildAssetScreening(
           "nome",
         ]) || id;
       const province = assetValue(asset, [
+        "province_declared",
         "province",
         "provincia",
+      ]);
+      const municipality = assetValue(asset, [
+        "municipality_declared",
+        "municipality",
+        "comune",
       ]);
       const region = assetValue(asset, [
         "region",
@@ -815,6 +957,7 @@ export function buildAssetScreening(
             event.distance <= 35
         )
         .sort((a, b) => a.distance - b.distance);
+      const nearestEvent = nearbyEvents[0] || null;
       const comparableEvents =
         nearbyEvents.length > 0
           ? nearbyEvents
@@ -836,6 +979,10 @@ export function buildAssetScreening(
         );
       const hazardScore =
         dominantHazard?.score || 0;
+      const proximity = proximityScore(
+        nearestEvent?.distance,
+        localEvents.length > 0
+      );
       const localityScore = Math.min(
         24,
         comparableEvents.length * 4
@@ -856,9 +1003,10 @@ export function buildAssetScreening(
       const score = Math.min(
         100,
         Math.round(
-          profileScore * 0.28 +
-            hazardScore * 0.12 +
-            localityScore +
+          profileScore * 0.22 +
+            hazardScore * 0.16 +
+            proximity * 0.22 +
+            localityScore * 0.35 +
             vulnerabilityScore +
             ageScore +
             typologyScore
@@ -871,20 +1019,38 @@ export function buildAssetScreening(
         )[0]?.[0] ||
         profile?.topCause ||
         "-";
+      const assetHazardProfile = classifyHazardProfile(
+        hazardProfile,
+        asset,
+        profile
+      );
+      const level = attentionLevel(score, proximity);
 
       return {
         asset,
+        attentionLevel: level,
         comparableEvents,
         dominantHazard:
           hazardProfile?.dominant_hazard || null,
         hazardProfile,
+        hazardProfileLabel: assetHazardProfile,
         hazardScore,
         highVulnerabilityMatches,
         id,
+        latitude,
+        longitude,
+        monitoringRecommendation: monitoringRecommendation(
+          assetHazardProfile,
+          asset,
+          proximity
+        ),
+        municipality,
         name,
+        nearestEvent,
         nearbyEvents,
-        priority: screeningClass(score),
+        priority: level,
         profile,
+        proximityScore: proximity,
         region,
         score,
         topCause,

@@ -1,56 +1,6 @@
 {
-  "generated_at": "2026-05-27T11:44:06.019Z",
+  "generated_at": "2026-06-11T07:35:38.781Z",
   "provinces": [
-    {
-      "avgSources": 2.9761904761904763,
-      "causeCounts": {
-        "Hydraulic": 41,
-        "Design and Construction": 1
-      },
-      "exactLocations": 42,
-      "firstYear": 2000,
-      "injuries": 2,
-      "riskScore": 82,
-      "scoreBreakdown": [
-        {
-          "key": "recurrence",
-          "label": "Historical recurrence",
-          "max": 35,
-          "value": 35
-        },
-        {
-          "key": "severity",
-          "label": "Total collapse share",
-          "max": 28,
-          "value": 20
-        },
-        {
-          "key": "trigger",
-          "label": "Triggered-event share",
-          "max": 18,
-          "value": 18
-        },
-        {
-          "key": "impact",
-          "label": "Human impact",
-          "max": 12,
-          "value": 3
-        },
-        {
-          "key": "evidence",
-          "label": "Evidence strength",
-          "max": 10,
-          "value": 6
-        }
-      ],
-      "sourceTotal": 125,
-      "territory": "Torino",
-      "topCause": "Hydraulic",
-      "total": 42,
-      "totalCollapse": 30,
-      "triggered": 41,
-      "victims": 1
-    },
     {
       "avgSources": 2.7777777777777777,
       "causeCounts": {
@@ -100,6 +50,55 @@
       "totalCollapse": 9,
       "triggered": 8,
       "victims": 2
+    },
+    {
+      "avgSources": 2.975,
+      "causeCounts": {
+        "Hydraulic": 40
+      },
+      "exactLocations": 40,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 81,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 35
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 20
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 2
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 6
+        }
+      ],
+      "sourceTotal": 119,
+      "territory": "Torino",
+      "topCause": "Hydraulic",
+      "total": 40,
+      "totalCollapse": 29,
+      "triggered": 40,
+      "victims": 1
     },
     {
       "avgSources": 2.5,
@@ -1592,55 +1591,6 @@
         "Hydraulic": 1
       },
       "exactLocations": 1,
-      "firstYear": 2000,
-      "injuries": 0,
-      "riskScore": 59,
-      "scoreBreakdown": [
-        {
-          "key": "recurrence",
-          "label": "Historical recurrence",
-          "max": 35,
-          "value": 3
-        },
-        {
-          "key": "severity",
-          "label": "Total collapse share",
-          "max": 28,
-          "value": 28
-        },
-        {
-          "key": "trigger",
-          "label": "Triggered-event share",
-          "max": 18,
-          "value": 18
-        },
-        {
-          "key": "impact",
-          "label": "Human impact",
-          "max": 12,
-          "value": 0
-        },
-        {
-          "key": "evidence",
-          "label": "Evidence strength",
-          "max": 10,
-          "value": 10
-        }
-      ],
-      "sourceTotal": 3,
-      "territory": "Vercelli",
-      "topCause": "Hydraulic",
-      "total": 1,
-      "totalCollapse": 1,
-      "triggered": 1,
-      "victims": 0
-    },
-    {
-      "avgSources": 3,
-      "causeCounts": {
-        "Hydraulic": 1
-      },
-      "exactLocations": 1,
       "firstYear": 2002,
       "injuries": 0,
       "riskScore": 59,
@@ -3023,6 +2973,55 @@
         "Hydraulic": 2
       },
       "exactLocations": 2,
+      "firstYear": 2000,
+      "injuries": 0,
+      "riskScore": 48,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 6
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 14
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 18
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 0
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 6,
+      "territory": "Vercelli",
+      "topCause": "Hydraulic",
+      "total": 2,
+      "totalCollapse": 1,
+      "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Hydraulic": 2
+      },
+      "exactLocations": 2,
       "firstYear": 2020,
       "injuries": 0,
       "riskScore": 48,
@@ -3262,6 +3261,55 @@
       "total": 3,
       "totalCollapse": 2,
       "triggered": 2,
+      "victims": 0
+    },
+    {
+      "avgSources": 3,
+      "causeCounts": {
+        "Design and Construction": 1
+      },
+      "exactLocations": 1,
+      "firstYear": 2005,
+      "injuries": 2,
+      "riskScore": 42,
+      "scoreBreakdown": [
+        {
+          "key": "recurrence",
+          "label": "Historical recurrence",
+          "max": 35,
+          "value": 3
+        },
+        {
+          "key": "severity",
+          "label": "Total collapse share",
+          "max": 28,
+          "value": 28
+        },
+        {
+          "key": "trigger",
+          "label": "Triggered-event share",
+          "max": 18,
+          "value": 0
+        },
+        {
+          "key": "impact",
+          "label": "Human impact",
+          "max": 12,
+          "value": 1
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence strength",
+          "max": 10,
+          "value": 10
+        }
+      ],
+      "sourceTotal": 3,
+      "territory": "Asti",
+      "topCause": "Design and Construction",
+      "total": 1,
+      "totalCollapse": 1,
+      "triggered": 0,
       "victims": 0
     },
     {

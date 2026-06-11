@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-27T11:44:06.019Z",
-  "method": "ARCUS Professional public-overlay exposure model; province-level join against declared ISPRA/INGV/Protezione Civile source registry",
-  "status": "official-professional-overlay-v0",
+  "generated_at": "2026-06-11T07:35:38.781Z",
+  "method": "ARCUS internal pattern proxy; external geospatial joins pending",
+  "status": "preview",
   "hazard_groups": [
     {
       "key": "hydraulic",
@@ -57,54 +57,6 @@
           ],
           "key": "hydraulic",
           "label": "Hydraulic exposure",
-          "matched_events": 41,
-          "score": 97,
-          "share": 0.976
-        },
-        {
-          "external_layers": [
-            "ispra-idrogeo-landslide-hazard"
-          ],
-          "key": "landslide",
-          "label": "Landslide exposure",
-          "matched_events": 0,
-          "score": 28,
-          "share": 0
-        },
-        {
-          "external_layers": [
-            "ingv-mps04-seismic-hazard",
-            "ispra-ithaca-capable-faults"
-          ],
-          "key": "seismic",
-          "label": "Seismic exposure",
-          "matched_events": 0,
-          "score": 28,
-          "share": 0
-        },
-        {
-          "external_layers": [],
-          "key": "structural",
-          "label": "Structural vulnerability exposure",
-          "matched_events": 1,
-          "score": 30,
-          "share": 0.024
-        }
-      ],
-      "province": "Torino",
-      "risk_score": 82,
-      "total_events": 42
-    },
-    {
-      "dominant_hazard": "hydraulic",
-      "hazards": [
-        {
-          "external_layers": [
-            "ispra-idrogeo-flood-hazard",
-            "protezione-civile-meteo-hydro-alerts"
-          ],
-          "key": "hydraulic",
-          "label": "Hydraulic exposure",
           "matched_events": 8,
           "score": 88,
           "share": 0.889
@@ -142,6 +94,54 @@
       "province": "Ancona",
       "risk_score": 82,
       "total_events": 9
+    },
+    {
+      "dominant_hazard": "hydraulic",
+      "hazards": [
+        {
+          "external_layers": [
+            "ispra-idrogeo-flood-hazard",
+            "protezione-civile-meteo-hydro-alerts"
+          ],
+          "key": "hydraulic",
+          "label": "Hydraulic exposure",
+          "matched_events": 40,
+          "score": 98,
+          "share": 1
+        },
+        {
+          "external_layers": [
+            "ispra-idrogeo-landslide-hazard"
+          ],
+          "key": "landslide",
+          "label": "Landslide exposure",
+          "matched_events": 0,
+          "score": 28,
+          "share": 0
+        },
+        {
+          "external_layers": [
+            "ingv-mps04-seismic-hazard",
+            "ispra-ithaca-capable-faults"
+          ],
+          "key": "seismic",
+          "label": "Seismic exposure",
+          "matched_events": 0,
+          "score": 28,
+          "share": 0
+        },
+        {
+          "external_layers": [],
+          "key": "structural",
+          "label": "Structural vulnerability exposure",
+          "matched_events": 0,
+          "score": 28,
+          "share": 0
+        }
+      ],
+      "province": "Torino",
+      "risk_score": 81,
+      "total_events": 40
     },
     {
       "dominant_hazard": "hydraulic",
@@ -1627,54 +1627,6 @@
           "share": 0
         }
       ],
-      "province": "Vercelli",
-      "risk_score": 59,
-      "total_events": 1
-    },
-    {
-      "dominant_hazard": "hydraulic",
-      "hazards": [
-        {
-          "external_layers": [
-            "ispra-idrogeo-flood-hazard",
-            "protezione-civile-meteo-hydro-alerts"
-          ],
-          "key": "hydraulic",
-          "label": "Hydraulic exposure",
-          "matched_events": 1,
-          "score": 78,
-          "share": 1
-        },
-        {
-          "external_layers": [
-            "ispra-idrogeo-landslide-hazard"
-          ],
-          "key": "landslide",
-          "label": "Landslide exposure",
-          "matched_events": 0,
-          "score": 8,
-          "share": 0
-        },
-        {
-          "external_layers": [
-            "ingv-mps04-seismic-hazard",
-            "ispra-ithaca-capable-faults"
-          ],
-          "key": "seismic",
-          "label": "Seismic exposure",
-          "matched_events": 0,
-          "score": 8,
-          "share": 0
-        },
-        {
-          "external_layers": [],
-          "key": "structural",
-          "label": "Structural vulnerability exposure",
-          "matched_events": 0,
-          "score": 8,
-          "share": 0
-        }
-      ],
       "province": "Varese",
       "risk_score": 59,
       "total_events": 1
@@ -3019,6 +2971,54 @@
           "share": 0
         }
       ],
+      "province": "Vercelli",
+      "risk_score": 48,
+      "total_events": 2
+    },
+    {
+      "dominant_hazard": "hydraulic",
+      "hazards": [
+        {
+          "external_layers": [
+            "ispra-idrogeo-flood-hazard",
+            "protezione-civile-meteo-hydro-alerts"
+          ],
+          "key": "hydraulic",
+          "label": "Hydraulic exposure",
+          "matched_events": 2,
+          "score": 79,
+          "share": 1
+        },
+        {
+          "external_layers": [
+            "ispra-idrogeo-landslide-hazard"
+          ],
+          "key": "landslide",
+          "label": "Landslide exposure",
+          "matched_events": 0,
+          "score": 9,
+          "share": 0
+        },
+        {
+          "external_layers": [
+            "ingv-mps04-seismic-hazard",
+            "ispra-ithaca-capable-faults"
+          ],
+          "key": "seismic",
+          "label": "Seismic exposure",
+          "matched_events": 0,
+          "score": 9,
+          "share": 0
+        },
+        {
+          "external_layers": [],
+          "key": "structural",
+          "label": "Structural vulnerability exposure",
+          "matched_events": 0,
+          "score": 9,
+          "share": 0
+        }
+      ],
       "province": "Crotone",
       "risk_score": 48,
       "total_events": 2
@@ -3214,6 +3214,54 @@
       "province": "Livorno",
       "risk_score": 46,
       "total_events": 3
+    },
+    {
+      "dominant_hazard": "structural",
+      "hazards": [
+        {
+          "external_layers": [
+            "ispra-idrogeo-flood-hazard",
+            "protezione-civile-meteo-hydro-alerts"
+          ],
+          "key": "hydraulic",
+          "label": "Hydraulic exposure",
+          "matched_events": 0,
+          "score": 6,
+          "share": 0
+        },
+        {
+          "external_layers": [
+            "ispra-idrogeo-landslide-hazard"
+          ],
+          "key": "landslide",
+          "label": "Landslide exposure",
+          "matched_events": 0,
+          "score": 6,
+          "share": 0
+        },
+        {
+          "external_layers": [
+            "ingv-mps04-seismic-hazard",
+            "ispra-ithaca-capable-faults"
+          ],
+          "key": "seismic",
+          "label": "Seismic exposure",
+          "matched_events": 0,
+          "score": 6,
+          "share": 0
+        },
+        {
+          "external_layers": [],
+          "key": "structural",
+          "label": "Structural vulnerability exposure",
+          "matched_events": 1,
+          "score": 76,
+          "share": 1
+        }
+      ],
+      "province": "Asti",
+      "risk_score": 42,
+      "total_events": 1
     },
     {
       "dominant_hazard": "structural",
