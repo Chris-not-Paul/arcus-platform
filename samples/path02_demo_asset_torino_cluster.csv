@@ -1,0 +1,11 @@
+bridge_id;name;municipality_declared;province_declared;region;lat;lon;structural_type;construction_year;last_inspection_date;underwater_inspection
+ARCUS-TOR-001;Ponte Dora Nord;Torino;Torino;Piemonte;45.0824;7.6731;beam;1972;2024-02-12;no
+ARCUS-TOR-002;Ponte Stura Ovest;Torino;Torino;Piemonte;45.1035;7.7042;arch;1964;2023-11-20;no
+ARCUS-TOR-003;Ponte Sangone Sud;Moncalieri;Torino;Piemonte;44.9998;7.6825;beam;1981;2024-01-18;yes
+ARCUS-TOR-004;Viadotto Collina Est;Chieri;Torino;Piemonte;45.0144;7.8219;beam;1976;2023-09-07;no
+ARCUS-TOR-005;Ponte Dora Baltea;Ivrea;Torino;Piemonte;45.4669;7.8764;arch;1968;2023-10-18;no
+ARCUS-TOR-006;Ponte Chisola;Pinerolo;Torino;Piemonte;44.8858;7.3316;beam;1986;2024-03-22;yes
+ARCUS-TOR-007;Ponte Po Centrale;Carmagnola;Torino;Piemonte;44.8496;7.7189;suspended;1992;2024-04-03;yes
+ARCUS-TOR-008;Ponte Malone;Rivarolo Canavese;Torino;Piemonte;45.3291;7.7200;beam;1970;2022-12-14;no
+ARCUS-TOR-009;Ponte Orco;Cuorgne;Torino;Piemonte;45.3908;7.6491;arch;1959;2023-06-30;no
+ARCUS-TOR-010;Ponte Pellice;Luserna San Giovanni;Torino;Piemonte;44.8148;7.2465;beam;1979;2023-08-19;no

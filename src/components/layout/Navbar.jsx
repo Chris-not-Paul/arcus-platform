@@ -40,11 +40,6 @@ function Navbar() {
     },
 
     {
-      label: t("enterprise"),
-      path: "/enterprise",
-    },
-
-    {
       label: t("publications"),
       path: "/publications",
     },
@@ -77,6 +72,20 @@ function Navbar() {
         {links.map((link) => {
           const isAnchor =
             link.path.includes("#");
+          const isActive =
+            location.pathname === link.path ||
+            (
+              link.path === "/analytics" &&
+              location.pathname.startsWith(
+                "/analytics/"
+              )
+            ) ||
+            (
+              link.path === "/professional" &&
+              location.pathname.startsWith(
+                "/professional"
+              )
+            );
 
           return isAnchor ? (
             <a
@@ -91,27 +100,7 @@ function Navbar() {
               key={link.path}
               to={link.path}
               className={`navbar-link ${
-                location.pathname === link.path ||
-                (
-                  link.path === "/analytics" &&
-                  location.pathname.startsWith(
-                    "/analytics/"
-                  )
-                ) ||
-                (
-                  link.path === "/professional" &&
-                  location.pathname.startsWith(
-                    "/professional"
-                  )
-                ) ||
-                (
-                  link.path === "/enterprise" &&
-                  location.pathname.startsWith(
-                    "/enterprise"
-                  )
-                )
-                  ? "active"
-                  : ""
+                isActive ? "active" : ""
               }`}
             >
               {link.label}

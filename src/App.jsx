@@ -21,7 +21,6 @@ const PlansPage = lazy(() => import("./pages/PlansPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
-const EnterprisePage = lazy(() => import("./pages/EnterprisePage"));
 const ReportMapPath01 = lazy(() => import("./pages/ReportMapPath01"));
 
 import LanguageProvider from "./context/LanguageProvider";
@@ -134,11 +133,6 @@ function App() {
           <Route
             path="/professional/atlas-export/path01"
             element={<ReportMapPath01 />}
-          />
-
-          <Route
-            path="/enterprise"
-            element={<EnterprisePage />}
           />
 
           {/* PUBLICATIONS */}

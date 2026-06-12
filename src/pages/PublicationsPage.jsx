@@ -3,96 +3,109 @@ import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
 
+import "../styles/publications-page.css";
+
 function PublicationsPage() {
   const { language } = useLanguage();
 
   const copy = {
     en: {
-      eyebrow: "ARCUS",
-      title: "Publications",
+      eyebrow: "ARCUS RESEARCH",
+      title: "Publications and Scientific Basis",
       text:
-        "Research papers, conference material, presentations, and future scientific publications related to ARCUS will be collected in this section.",
+        "ARCUS is grounded in a documented research dataset and a transparent classification method. This section collects the scientific material that supports the observatory and its professional outputs.",
+      primaryLabel: "Peer-reviewed dataset",
+      paperTitle:
+        "Dataset of bridge collapses in Italy from 2000 to 2025",
+      paperMeta: "Data in Brief - Elsevier",
+      paperText:
+        "The published dataset is the scientific base for the public Atlas, methodology, analytics and Professional workspace.",
+      openPaper: "Open DOI",
+      resourcesLabel: "Research Assets",
+      resources: [
+        ["Methodology", "Validation, classification, taxonomy and known limitations."],
+        ["Public Atlas", "Geospatial reading of documented collapse events and source evidence."],
+        ["Analytics", "Aggregate patterns, source traceability and public indicators."],
+      ],
     },
     it: {
-      eyebrow: "ARCUS",
-      title: "Pubblicazioni",
+      eyebrow: "RICERCA ARCUS",
+      title: "Pubblicazioni e Base Scientifica",
       text:
-        "Articoli scientifici, materiali congressuali, presentazioni e future pubblicazioni legate ad ARCUS saranno raccolti in questa sezione.",
+        "ARCUS nasce da un dataset di ricerca documentato e da un metodo di classificazione trasparente. Questa sezione raccoglie i materiali scientifici che sostengono l'osservatorio e gli output professionali.",
+      primaryLabel: "Dataset peer-reviewed",
+      paperTitle:
+        "Dataset of bridge collapses in Italy from 2000 to 2025",
+      paperMeta: "Data in Brief - Elsevier",
+      paperText:
+        "Il dataset pubblicato e la base scientifica per Atlante pubblico, metodologia, analytics e workspace Professional.",
+      openPaper: "Apri DOI",
+      resourcesLabel: "Asset di ricerca",
+      resources: [
+        ["Metodologia", "Validazione, classificazione, tassonomia e limiti dichiarati."],
+        ["Atlante pubblico", "Lettura geospaziale degli eventi documentati e delle fonti."],
+        ["Analytics", "Pattern aggregati, tracciabilita delle fonti e indicatori pubblici."],
+      ],
     },
   };
 
   const content = copy[language] || copy.en;
 
   return (
-    <>
+    <main className="publications-page" id="main-content">
+      <PageMeta
+        title={content.title}
+        description={
+          language === "it"
+            ? "Pubblicazioni, presentazioni e materiali scientifici collegati alla piattaforma ARCUS."
+            : "Publications, presentations and scientific material connected to the ARCUS platform."
+        }
+      />
+
       <Navbar />
 
-      <main
-        id="main-content"
-        style={{
-          minHeight: "100vh",
-          background: "var(--arcus-paper-warm)",
-          paddingTop: "140px",
-          paddingLeft: "40px",
-          paddingRight: "40px",
-          boxSizing: "border-box",
-        }}
-      >
-        <PageMeta
-          title={content.title}
-          description={
-            language === "it"
-              ? "Pubblicazioni, presentazioni e materiali scientifici collegati alla piattaforma ARCUS."
-              : "Publications, presentations and scientific material connected to the ARCUS platform."
-          }
-        />
-
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
-          <div
-          style={{
-              fontSize: "12px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--arcus-clay)",
-              fontWeight: 700,
-              marginBottom: "18px",
-            }}
-          >
-            {content.eyebrow}
-          </div>
-
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: "var(--arcus-font-display)",
-              fontSize: "clamp(52px, 8vw, 96px)",
-              fontWeight: 700,
-              lineHeight: 0.96,
-              marginBottom: "24px",
-              color: "var(--arcus-ink)",
-            }}
-          >
-            {content.title}
-          </h1>
-
-          <p
-            style={{
-              maxWidth: "760px",
-              fontSize: "18px",
-              lineHeight: 1.8,
-              color: "var(--arcus-ink-soft)",
-            }}
-          >
-            {content.text}
-          </p>
+      <section className="publications-hero">
+        <div className="publications-container">
+          <div className="publications-label">{content.eyebrow}</div>
+          <h1>{content.title}</h1>
+          <p>{content.text}</p>
         </div>
-      </main>
-    </>
+      </section>
+
+      <section className="publications-section">
+        <div className="publications-container publications-feature">
+          <article>
+            <span>{content.primaryLabel}</span>
+            <h2>{content.paperTitle}</h2>
+            <strong>{content.paperMeta}</strong>
+            <p>{content.paperText}</p>
+            <a
+              href="https://doi.org/10.1016/j.dib.2025.112375"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {content.openPaper}
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section className="publications-section publications-dark">
+        <div className="publications-container">
+          <div className="publications-label">
+            {content.resourcesLabel}
+          </div>
+          <div className="publications-grid">
+            {content.resources.map(([title, text]) => (
+              <article key={title}>
+                <span>{title}</span>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 

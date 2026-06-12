@@ -12,10 +12,9 @@ const translations = {
     analytics: "Analytics",
     atlas: "Atlas",
     data: "Data",
-    plans: "Plans",
+    plans: "Solutions",
     infrastructureFailureObservatory:
       "Infrastructure Failure Observatory",
-    enterprise: "Enterprise",
     methodology: "Methodology",
     professional: "Professional",
     publications: "Publications",
@@ -25,10 +24,9 @@ const translations = {
     analytics: "Analytics",
     atlas: "Atlante",
     data: "Dati",
-    plans: "Piani",
+    plans: "Soluzioni",
     infrastructureFailureObservatory:
       "Osservatorio sui Cedimenti Infrastrutturali",
-    enterprise: "Enterprise",
     methodology: "Metodologia",
     professional: "Professional",
     publications: "Pubblicazioni",

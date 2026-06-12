@@ -725,6 +725,30 @@ function proximityScore(distance, hasLocalContext = false) {
   return hasLocalContext ? 34 : 18;
 }
 
+function proximityBand(distance, hasLocalContext = false) {
+  if (distance === null || distance === undefined) {
+    return hasLocalContext
+      ? "Provincial context"
+      : "No spatial precedent";
+  }
+
+  if (distance <= 0.5) {
+    return "Direct local signal";
+  }
+
+  if (distance <= 2) {
+    return "High proximity";
+  }
+
+  if (distance <= 10) {
+    return "Medium proximity";
+  }
+
+  return hasLocalContext
+    ? "Provincial context"
+    : "Distant context";
+}
+
 function attentionLevel(score, proximity) {
   if (score > 75 || proximity >= 82) {
     return "Immediate attention";
@@ -737,12 +761,81 @@ function attentionLevel(score, proximity) {
   return "Ordinary monitoring";
 }
 
+function extractEventYear(event) {
+  const raw = String(
+    event?.event_date ||
+      event?.collapse_date ||
+      event?.date ||
+      event?.year ||
+      event?.publication_date ||
+      ""
+  );
+  const match = raw.match(/\b(19|20)\d{2}\b/);
+
+  return match?.[0] || "";
+}
+
+function nearestEventSummary(event) {
+  if (!event) {
+    return "not available";
+  }
+
+  const place = [event.municipality, event.province]
+    .filter(Boolean)
+    .join(", ");
+  const details = [
+    place,
+    extractEventYear(event),
+    event.specific_cause || event.cause || "",
+    event.collapse_severity || "",
+  ].filter(Boolean);
+
+  return `${event.event_id}${details.length ? ` - ${details.join("; ")}` : ""}`;
+}
+
+function evidenceGradeWeight(grade) {
+  return (
+    {
+      A: 4,
+      B: 3,
+      C: 2,
+      D: 1,
+    }[String(grade || "").toUpperCase()] || 0
+  );
+}
+
+function nearestDistanceWeight(asset) {
+  const distance = Number(asset?.nearestEvent?.distance);
+
+  return Number.isFinite(distance) ? distance : Number.POSITIVE_INFINITY;
+}
+
 function classifyHazardProfile(hazardProfile, asset, profile) {
   const hazards = [...(hazardProfile?.hazards || [])].sort(
     (a, b) => Number(b.score || 0) - Number(a.score || 0)
   );
-  const top = hazards[0];
-  const second = hazards[1];
+  const recognizedHazards = hazards.filter((hazard) => {
+    const value = normalizeAssetText(
+      `${hazard.key || ""} ${hazard.label || ""}`
+    );
+
+    return (
+      value.includes("hydraulic") ||
+      value.includes("flood") ||
+      value.includes("scour") ||
+      value.includes("idraul") ||
+      value.includes("landslide") ||
+      value.includes("frana") ||
+      value.includes("slope") ||
+      value.includes("seismic") ||
+      value.includes("sism")
+    );
+  });
+  const hazardCandidates = recognizedHazards.length
+    ? recognizedHazards
+    : hazards;
+  const top = hazardCandidates[0];
+  const second = hazardCandidates[1];
 
   if (
     top &&
@@ -861,7 +954,8 @@ export function buildAssetScreening(
   events,
   provinceProfiles,
   vulnerabilityByEvent,
-  hazardExposurePreview = null
+  hazardExposurePreview = null,
+  reliabilityByEvent = {}
 ) {
   const profilesByProvince = Object.fromEntries(
     provinceProfiles.map((profile) => [
@@ -878,7 +972,7 @@ export function buildAssetScreening(
     )
   );
 
-  return assets
+  const screenedAssets = assets
     .map((asset, index) => {
       const id =
         assetValue(asset, [
@@ -962,6 +1056,11 @@ export function buildAssetScreening(
         nearbyEvents.length > 0
           ? nearbyEvents
           : localEvents;
+      const evidenceEvent = nearestEvent || comparableEvents[0] || null;
+      const evidenceClass =
+        reliabilityByEvent[evidenceEvent?.event_id]?.grade ||
+        evidenceEvent?.reliability?.grade ||
+        "D";
       const highVulnerabilityMatches =
         comparableEvents.filter((event) =>
           ["High", "Critical"].includes(
@@ -980,6 +1079,10 @@ export function buildAssetScreening(
       const hazardScore =
         dominantHazard?.score || 0;
       const proximity = proximityScore(
+        nearestEvent?.distance,
+        localEvents.length > 0
+      );
+      const proximityBandLabel = proximityBand(
         nearestEvent?.distance,
         localEvents.length > 0
       );
@@ -1032,6 +1135,7 @@ export function buildAssetScreening(
         comparableEvents,
         dominantHazard:
           hazardProfile?.dominant_hazard || null,
+        evidenceClass,
         hazardProfile,
         hazardProfileLabel: assetHazardProfile,
         hazardScore,
@@ -1047,9 +1151,11 @@ export function buildAssetScreening(
         municipality,
         name,
         nearestEvent,
+        nearestEventSummary: nearestEventSummary(nearestEvent),
         nearbyEvents,
         priority: level,
         profile,
+        proximityBand: proximityBandLabel,
         proximityScore: proximity,
         region,
         score,
@@ -1058,7 +1164,55 @@ export function buildAssetScreening(
           province || region || "Unspecified",
       };
     })
-    .sort((a, b) => b.score - a.score);
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        evidenceGradeWeight(b.evidenceClass) -
+          evidenceGradeWeight(a.evidenceClass) ||
+        b.proximityScore - a.proximityScore ||
+        nearestDistanceWeight(a) - nearestDistanceWeight(b) ||
+        b.highVulnerabilityMatches - a.highVulnerabilityMatches
+    );
+
+  const immediateCount = screenedAssets.filter(
+    (item) => item.attentionLevel === "Immediate attention"
+  ).length;
+  const firstBatchLimit = Math.min(
+    10,
+    Math.max(3, Math.ceil(immediateCount * 0.1))
+  );
+  const secondBatchLimit = Math.min(
+    immediateCount,
+    Math.max(firstBatchLimit + 4, Math.ceil(immediateCount * 0.5))
+  );
+  let immediateIndex = 0;
+
+  return screenedAssets.map((item, index) => {
+    let actionTier = "Ordinary monitoring cycle";
+
+    if (item.attentionLevel === "Immediate attention") {
+      immediateIndex += 1;
+      if (immediateIndex <= firstBatchLimit) {
+        actionTier = "Batch 1 - check first";
+      } else if (immediateIndex <= secondBatchLimit) {
+        actionTier = "Batch 2 - next immediate";
+      } else {
+        actionTier = "Batch 3 - complete immediate queue";
+      }
+    } else if (item.attentionLevel === "Programmed attention") {
+      actionTier = "Annual inspection plan";
+    }
+
+    return {
+      ...item,
+      actionRank: index + 1,
+      actionTier,
+      immediateRank:
+        item.attentionLevel === "Immediate attention"
+          ? immediateIndex
+          : null,
+    };
+  });
 }
 
 function similarityMatchScore(first, second) {

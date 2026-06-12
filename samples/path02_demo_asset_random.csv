@@ -1,2 +1,11 @@
 bridge_id;name;municipality_declared;province_declared;region;lat;lon;structural_type;construction_year;last_inspection_date;underwater_inspection
 ARCUS-DEMO-001;Ponte Rio Valverde;Ivrea;Torino;Piemonte;45.4669;7.8764;beam;1974;2023-10-18;no
+ARCUS-DEMO-002;Viadotto San Michele;Torino;Torino;Piemonte;45.0703;7.6869;arch;1962;2022-09-12;no
+ARCUS-DEMO-003;Ponte della Roggia Nord;Chivasso;Torino;Piemonte;45.1909;7.8898;beam;1988;2024-03-05;yes
+ARCUS-DEMO-004;Ponte Torrente Stura;Cuneo;Cuneo;Piemonte;44.3845;7.5427;beam;1978;2023-05-22;no
+ARCUS-DEMO-005;Viadotto Costa Ligure;Genova;Genova;Liguria;44.4056;8.9463;beam;1969;2022-11-18;yes
+ARCUS-DEMO-006;Ponte Valle Scrivia;Busalla;Genova;Liguria;44.5708;8.9447;arch;1958;2021-10-04;no
+ARCUS-DEMO-007;Ponte Adda Industriale;Lecco;Lecco;Lombardia;45.8566;9.3977;beam;1982;2024-01-30;yes
+ARCUS-DEMO-008;Ponte Lamone Sud;Faenza;Ravenna;Emilia-Romagna;44.2857;11.8833;beam;1971;2023-07-14;no
+ARCUS-DEMO-009;Ponte Reno Ovest;Bologna;Bologna;Emilia-Romagna;44.4949;11.3426;suspended;1995;2024-04-08;yes
+ARCUS-DEMO-010;Ponte Magra di Piano;Aulla;Massa-Carrara;Toscana;44.2062;9.9685;arch;1966;2022-12-02;no

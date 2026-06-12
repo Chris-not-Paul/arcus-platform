@@ -12,21 +12,21 @@ function PlansPage() {
   const copy =
     language === "it"
       ? {
-          label: "ARCUS PLANS",
+          label: "ARCUS SOLUTIONS",
           title:
-            "Open, Professional, Enterprise: tre livelli chiari.",
+            "Scegli quanto in profondita vuoi lavorare con ARCUS.",
           text:
-            "ARCUS non e un GIS generico. Il valore nasce dall'unione tra database proprietario sui collassi, metodo scientifico, analytics territoriali, overlay hazard e output spiegabili.",
-          compare: "Architettura piattaforma",
+            "ARCUS parte da un osservatorio pubblico verificabile e cresce in un workspace professionale per analisi, scenari, report ed export operativi.",
+          compare: "Livelli di accesso",
           next: "Percorso utente",
-          backendLabel: "Accesso cliente",
-          backendTitle:
-            "La logica backend dovra seguire i tre livelli strategici.",
-          backendText:
-            "Il flusso corretto diventa account -> piano -> permessi -> workspace -> export/API filtrati. Open resta pubblico, Professional abilita il workspace operativo, Enterprise aggiunge ambiente dedicato, ruoli e dati privati.",
+          accessLabel: "Accesso cliente",
+          accessTitle:
+            "Un percorso semplice: esplora, analizza, produci output.",
+          accessText:
+            "Open serve a capire il metodo, verificare le fonti e leggere il dataset pubblico. Professional aggiunge strumenti di lavoro: scenari territoriali, screening asset, watchlist, report e formati esportabili.",
           positionLabel: "Posizionamento finale",
           positionTitle:
-            "Da database sui crolli a piattaforma di infrastructure intelligence.",
+            "Un nucleo scientifico, due modi di usarlo.",
           tiers: [
             {
               action: "Apri Atlante",
@@ -38,7 +38,7 @@ function PlansPage() {
               role:
                 "Atlante pubblico e autorita scientifica.",
               target:
-                "Studenti, ricercatori, giornalisti, cittadini, universita e comunita tecnica.",
+                "Ricercatori, universita, tecnici, giornalisti, studenti e stakeholder che vogliono consultare evidenze pubbliche.",
               unlocks: [
                 "Public Atlas e mappa interattiva",
                 "Schede evento, fonti e riferimenti",
@@ -58,11 +58,11 @@ function PlansPage() {
               href: "/professional",
               name: "Professional",
               objective:
-                "Monetizzazione e workflow operativi basati su evidenza storica.",
+                "Workflow operativi basati su evidenza storica, scenari e output esportabili.",
               role:
                 "Workspace di infrastructure intelligence.",
               target:
-                "Societa di ingegneria, gestori, consulenti, concessionari, analisti, assicurazioni e gruppi di ricerca.",
+                "Societa di ingegneria, gestori, consulenti, concessionari, analisti, assicurazioni e gruppi di ricerca che devono produrre letture operative.",
               unlocks: [
                 "Advanced infrastructure analytics e comparazioni",
                 "Workspace, filtri salvati, watchlist e snapshot progetto",
@@ -76,58 +76,35 @@ function PlansPage() {
                 "Deployment white-label",
               ],
             },
-            {
-              action: "Valuta Enterprise",
-              badge: "Institutional Platform",
-              href: "/enterprise",
-              name: "Enterprise",
-              objective:
-                "Adozione strategica su larga scala per enti e operatori nazionali.",
-              role:
-                "Piattaforma istituzionale di infrastructure intelligence.",
-              target:
-                "Agenzie pubbliche, protezione civile, ministeri, utilities, operatori ferroviari, assicurazioni e proprietari infrastrutturali.",
-              unlocks: [
-                "Ambiente dedicato e integrazione asset privati",
-                "Dashboard istituzionali, API enterprise e monitoraggio",
-                "Ruoli, permessi, governance e workflow ricorrenti",
-                "Digital twin, anomaly detection e predictive workflows",
-              ],
-              excludes: [
-                "Accesso pubblico non controllato ai dati riservati",
-                "Workflow standard non personalizzati",
-              ],
-            },
           ],
           flow: [
             ["Open", "Dimostra metodo, autorevolezza e ampiezza del dataset pubblico."],
             ["Professional", "Trasforma il metodo in analisi, scenari, export e decision support."],
-            ["Enterprise", "Integra dati privati, governance e dashboard istituzionali."],
           ],
           workflow: [
-            "Explore infrastructure context",
-            "Define technical scenario",
-            "Compare assets with historical evidence",
-            "Generate explainable insights",
-            "Export operational outputs",
+            "Esplora il contesto infrastrutturale",
+            "Definisci uno scenario tecnico",
+            "Confronta asset ed evidenze storiche",
+            "Genera letture spiegabili",
+            "Esporta output operativi",
           ],
         }
       : {
-          label: "ARCUS PLANS",
+          label: "ARCUS SOLUTIONS",
           title:
-            "Open, Professional, Enterprise: three clear levels.",
+            "Choose how deeply you need to work with ARCUS.",
           text:
-            "ARCUS is not a generic GIS. Its value comes from combining proprietary collapse intelligence, scientific methodology, territorial analytics, hazard overlays and explainable outputs.",
-          compare: "Platform architecture",
+            "ARCUS starts as a verifiable public observatory and grows into a Professional workspace for analysis, scenarios, reports and operational exports.",
+          compare: "Access levels",
           next: "User journey",
-          backendLabel: "Client Access",
-          backendTitle:
-            "The backend logic should follow the three strategic levels.",
-          backendText:
-            "The right flow becomes account -> plan -> permissions -> workspace -> filtered exports/APIs. Open remains public, Professional unlocks the operational workspace, Enterprise adds dedicated environments, roles and private data.",
+          accessLabel: "Client Access",
+          accessTitle:
+            "A simple path: explore, analyze, produce outputs.",
+          accessText:
+            "Open helps users understand the method, verify the sources and read the public dataset. Professional adds working tools: territorial scenarios, asset screening, watchlists, reports and exportable formats.",
           positionLabel: "Final positioning",
           positionTitle:
-            "From bridge collapse database to infrastructure intelligence platform.",
+            "One scientific core, two ways to use it.",
           tiers: [
             {
               action: "Open Atlas",
@@ -139,7 +116,7 @@ function PlansPage() {
               role:
                 "Public atlas and scientific authority.",
               target:
-                "Students, researchers, journalists, citizens, universities and the technical community.",
+                "Researchers, universities, technical users, journalists, students and stakeholders who need to inspect public evidence.",
               unlocks: [
                 "Public Atlas and interactive map",
                 "Event cards, sources and references",
@@ -159,11 +136,11 @@ function PlansPage() {
               href: "/professional",
               name: "Professional",
               objective:
-                "Monetization and operational workflows built on historical evidence.",
+                "Operational workflows built on historical evidence, scenarios and exportable outputs.",
               role:
                 "Infrastructure intelligence workspace.",
               target:
-                "Engineering companies, managers, consultants, concessionaires, analysts, insurers and research groups.",
+                "Engineering companies, infrastructure managers, consultants, concessionaires, analysts, insurers and research groups that need operational readings.",
               unlocks: [
                 "Advanced infrastructure analytics and comparisons",
                 "Workspaces, saved filters, watchlists and project snapshots",
@@ -177,33 +154,10 @@ function PlansPage() {
                 "White-label deployment",
               ],
             },
-            {
-              action: "Evaluate Enterprise",
-              badge: "Institutional Platform",
-              href: "/enterprise",
-              name: "Enterprise",
-              objective:
-                "Large-scale strategic adoption for institutions and national operators.",
-              role:
-                "Institutional infrastructure intelligence platform.",
-              target:
-                "Public agencies, civil protection, ministries, utilities, railway operators, insurers and infrastructure owners.",
-              unlocks: [
-                "Dedicated environment and private asset integration",
-                "Institutional dashboards, enterprise APIs and monitoring",
-                "Roles, permissions, governance and recurring workflows",
-                "Digital twin, anomaly detection and predictive workflows",
-              ],
-              excludes: [
-                "Uncontrolled public access to confidential data",
-                "Non-custom standard workflows",
-              ],
-            },
           ],
           flow: [
             ["Open", "Proves methodology, authority and the breadth of the public dataset."],
             ["Professional", "Turns the method into analytics, scenarios, exports and decision support."],
-            ["Enterprise", "Integrates private data, governance and institutional dashboards."],
           ],
           workflow: [
             "Explore infrastructure context",
@@ -220,7 +174,7 @@ function PlansPage() {
       id="main-content"
     >
       <PageMeta
-        title="ARCUS Plans"
+        title="ARCUS Solutions"
         description={copy.text}
       />
 
@@ -294,10 +248,10 @@ function PlansPage() {
         <div className="plans-container plans-split">
           <div>
             <div className="plans-label">
-              {copy.backendLabel}
+              {copy.accessLabel}
             </div>
-            <h2>{copy.backendTitle}</h2>
-            <p>{copy.backendText}</p>
+            <h2>{copy.accessTitle}</h2>
+            <p>{copy.accessText}</p>
           </div>
 
           <div className="plans-flow">

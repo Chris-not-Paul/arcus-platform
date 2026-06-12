@@ -78,25 +78,6 @@ const accessTiers = {
         "Engineering companies, infrastructure managers, consultants, concessionaires, analysts, insurers and research groups.",
       title: "Infrastructure Intelligence Workspace",
     },
-    {
-      cta: "Institutional vision",
-      features: [
-        "Private dashboards",
-        "Predictive maintenance tools",
-        "Asset prioritization",
-        "Enterprise APIs",
-        "Custom integrations",
-        "Consulting services",
-      ],
-      label: "ENTERPRISE / GOVERNMENT",
-      nextAction:
-        "Connect private datasets and configure a governed institutional dashboard.",
-      path: "/enterprise",
-      price: "EUR 5k-50k / year",
-      target:
-        "Ministries, regional governments, civil protection agencies, insurers and major operators.",
-      title: "Institutional Infrastructure Intelligence",
-    },
   ],
   it: [
     {
@@ -136,25 +117,6 @@ const accessTiers = {
       target:
         "Societa di ingegneria, gestori infrastrutturali, consulenti, concessionari, analisti, assicurazioni e gruppi di ricerca.",
       title: "Infrastructure Intelligence Workspace",
-    },
-    {
-      cta: "Visione istituzionale",
-      features: [
-        "Dashboard private",
-        "Predictive maintenance",
-        "Prioritizzazione asset",
-        "API enterprise",
-        "Integrazioni custom",
-        "Servizi di consulenza",
-      ],
-      label: "Enterprise / Government",
-      nextAction:
-        "Collega dataset privati e configura una dashboard istituzionale governata.",
-      path: "/enterprise",
-      price: "EUR 5k-50k / anno",
-      target:
-        "Ministeri, regioni, protezione civile, assicurazioni e grandi operatori infrastrutturali.",
-      title: "Intelligence Infrastrutturale Istituzionale",
     },
   ],
 };
@@ -303,13 +265,13 @@ function AnalyticsPage() {
           accessArchitecture:
             "ARCHITETTURA DI ACCESSO",
           accessTitle:
-            "Tre livelli per scalare da atlante pubblico a piattaforma istituzionale.",
+            "Due livelli per passare dall'atlante pubblico al workspace operativo.",
           accessText:
-            "ARCUS mantiene un layer Open forte per autorevolezza e diffusione; Professional trasforma il metodo in workflow operativi; Enterprise abilita ambienti istituzionali controllati.",
+            "ARCUS mantiene un layer Open forte per autorevolezza e diffusione; Professional trasforma il metodo in workflow operativi, export e supporto decisionale.",
           premiumTitle:
             "Analytics pubblici, intelligence premium",
           premiumText:
-            "Il layer pubblico costruisce reputazione scientifica e diffusione. Il layer privato estende lo stesso archivio verificato verso workflow professionali e sostenibilita economica.",
+            "Il layer pubblico costruisce reputazione scientifica e diffusione. Il layer Professional estende lo stesso archivio verificato verso workflow tecnici, export e supporto decisionale.",
           matrixTitle:
             "Cosa resta pubblico e cosa diventa prodotto",
           matrixText:
@@ -382,13 +344,13 @@ function AnalyticsPage() {
           accessArchitecture:
             "ACCESS ARCHITECTURE",
           accessTitle:
-            "Three levels to scale from public atlas to institutional platform.",
+            "Two levels to move from public atlas to operational workspace.",
           accessText:
-            "ARCUS preserves a strong Open layer for authority and diffusion; Professional turns the method into operational workflows; Enterprise enables controlled institutional environments.",
+            "ARCUS preserves a strong Open layer for authority and diffusion; Professional turns the method into operational workflows, exports and decision support.",
           premiumTitle:
             "Public Analytics, Premium Intelligence",
           premiumText:
-            "The public layer builds scientific reputation and diffusion. The private layer can extend the same verified archive into professional workflows and economic sustainability.",
+            "The public layer builds scientific reputation and diffusion. The Professional layer extends the same verified archive into technical workflows, exports and decision support.",
           matrixTitle:
             "What remains public and what becomes product",
           matrixText:

@@ -109,8 +109,9 @@ function AtlasPage() {
   const [searchParams] =
     useSearchParams();
   const atlasMode =
-    searchParams.get("mode") ||
-    "open";
+    searchParams.get("mode") === "professional"
+      ? "professional"
+      : "open";
   const isProfessionalMode =
     atlasMode === "professional";
   const isEnterpriseMode =
@@ -979,15 +980,6 @@ function AtlasPage() {
             to="/atlas?mode=professional"
           >
             {atlasText.professionalAtlas}
-          </Link>
-          <Link
-            className={
-              isEnterpriseMode ? "active" : ""
-            }
-            onClick={() => setMapStyleOverride(null)}
-            to="/atlas?mode=enterprise"
-          >
-            {atlasText.enterpriseAtlas}
           </Link>
         </nav>
 

@@ -54,6 +54,24 @@ function cleanDisplayText(value) {
     .replaceAll("Caltanisetta", "Caltanissetta");
 }
 
+function evidenceGradeFromScore(value) {
+  const score = Number(value) || 0;
+
+  if (score >= 82) {
+    return "A";
+  }
+
+  if (score >= 68) {
+    return "B";
+  }
+
+  if (score >= 50) {
+    return "C";
+  }
+
+  return "D";
+}
+
 function loadStoredWorkspaces() {
   if (typeof window === "undefined") {
     return [];
@@ -101,7 +119,7 @@ export default function ProfessionalPage() {
     fileName: "",
     uploadedAt: "",
   });
-  const [path02ReadingMode, setPath02ReadingMode] =
+  const [path02ReadingMode] =
     useState("monitoring_priority");
   const [apiManifest, setApiManifest] =
     useState(null);
@@ -254,7 +272,7 @@ export default function ProfessionalPage() {
           hazard:
             "Layer di esposizione",
           hazardText:
-            "Il valore Professional nasce dall'incrocio tra eventi ARCUS e overlay pubblici dichiarati: frane, alluvioni, idraulica, sismicita ed eta infrastrutturale. Le integrazioni private restano nel livello Enterprise.",
+            "Il valore Professional nasce dall'incrocio tra eventi ARCUS e overlay pubblici dichiarati: frane, alluvioni, idraulica, sismicita ed eta infrastrutturale. Le integrazioni private possono essere valutate come sviluppo dedicato.",
           heroLabel:
             "ARCUS PROFESSIONAL",
           heroTitle:
@@ -478,7 +496,7 @@ export default function ProfessionalPage() {
           hazardPreviewTitle:
             "Profilo esposizione pronto per i join geospaziali.",
           hazardPreviewText:
-            "Questo modulo usa il registro degli overlay pubblici ARCUS Professional e produce una lettura provinciale di esposizione. Le connessioni live e i layer proprietari restano riservati al livello Enterprise.",
+            "Questo modulo usa il registro degli overlay pubblici ARCUS Professional e produce una lettura provinciale di esposizione. Le connessioni live e i layer proprietari restano possibili estensioni dedicate.",
           dominantHazard:
             "Hazard dominante",
           aboveAverage:
@@ -504,7 +522,7 @@ export default function ProfessionalPage() {
           hazard:
             "Exposure Layers",
           hazardText:
-            "Professional value comes from crossing ARCUS events with declared public overlays: landslides, floods, hydraulic exposure, seismicity and infrastructure age. Private integrations remain part of the Enterprise tier.",
+            "Professional value comes from crossing ARCUS events with declared public overlays: landslides, floods, hydraulic exposure, seismicity and infrastructure age. Private integrations can be evaluated as dedicated extensions.",
           heroLabel:
             "ARCUS PROFESSIONAL",
           heroTitle:
@@ -728,7 +746,7 @@ export default function ProfessionalPage() {
           hazardPreviewTitle:
             "Exposure profile ready for geospatial joins.",
           hazardPreviewText:
-            "This module uses the ARCUS Professional public-overlay registry and produces a province-level exposure reading. Live connections and proprietary layers remain reserved for Enterprise.",
+            "This module uses the ARCUS Professional public-overlay registry and produces a province-level exposure reading. Live connections and proprietary layers remain possible dedicated extensions.",
           dominantHazard:
             "Dominant hazard",
           aboveAverage:
@@ -1229,7 +1247,8 @@ export default function ProfessionalPage() {
         events,
         scenarioProvinceProfiles,
         vulnerabilityByEvent,
-        hazardExposurePreview
+        hazardExposurePreview,
+        reliabilityByEvent
       ),
     [
       assetRowsForScreening,
@@ -1237,8 +1256,18 @@ export default function ProfessionalPage() {
       scenarioProvinceProfiles,
       vulnerabilityByEvent,
       hazardExposurePreview,
+      reliabilityByEvent,
     ]
   );
+  const getEventEvidenceGrade = (event) =>
+    reliabilityByEvent[event?.event_id]?.grade || "D";
+  const getAssetEvidenceGrade = (item) =>
+    item?.evidenceClass ||
+    (item?.nearestEvent
+      ? getEventEvidenceGrade(item.nearestEvent)
+      : item?.comparableEvents?.length
+        ? getEventEvidenceGrade(item.comparableEvents[0])
+        : "D");
 
   const assetInventoryAudit = useMemo(() => {
     const total = assetRows.length;
@@ -1421,6 +1450,9 @@ export default function ProfessionalPage() {
 
   const assetAttentionSummary = useMemo(() => {
     const summary = {
+      batchOne: 0,
+      batchThree: 0,
+      batchTwo: 0,
       dominantHazard: "-",
       hazardCounts: [],
       immediate: 0,
@@ -1432,6 +1464,15 @@ export default function ProfessionalPage() {
     assetScreening.forEach((item) => {
       if (item.attentionLevel === "Immediate attention") {
         summary.immediate += 1;
+        if (item.actionTier === "Batch 1 - check first") {
+          summary.batchOne += 1;
+        } else if (item.actionTier === "Batch 2 - next immediate") {
+          summary.batchTwo += 1;
+        } else if (
+          item.actionTier === "Batch 3 - complete immediate queue"
+        ) {
+          summary.batchThree += 1;
+        }
       } else if (item.attentionLevel === "Programmed attention") {
         summary.programmed += 1;
       } else {
@@ -1457,21 +1498,47 @@ export default function ProfessionalPage() {
   const path02DecisionMessage = useMemo(() => {
     const total = assetScreening.length;
     const dominant = assetAttentionSummary.dominantHazard;
+    const firstBatch = assetScreening
+      .filter((item) => item.actionTier === "Batch 1 - check first")
+      .slice(0, 3)
+      .map((item) => item.id)
+      .join(", ");
 
     if (language === "it") {
       if (!total) {
         return "Carica un inventario ponti per generare una watchlist operativa fondata su esposizione territoriale e precedenti ARCUS.";
       }
 
-      return `${assetAttentionSummary.immediate} asset richiedono attenzione immediata su ${total}. Il profilo dominante del patrimonio caricato e ${dominant}; la watchlist ordina i controlli per Asset Priority Score, Proximity Score e contesto storico ARCUS.`;
+      if (path02ReadingMode === "vulnerability_assessment") {
+        const immediateShare = percentage(
+          assetAttentionSummary.immediate,
+          total
+        );
+        return `${immediateShare}% del portafoglio caricato ricade in attenzione immediata. Il profilo dominante e ${dominant}; il report descrive distribuzione del rischio, benchmark di contesto e gap dati prima delle decisioni di due diligence.`;
+      }
+
+      return `${assetAttentionSummary.immediate} asset richiedono attenzione immediata su ${total}. Il profilo dominante e ${dominant}; se le risorse sono limitate, partire dal Batch 1 (${firstBatch || "top score"}), poi completare gli altri asset immediati per score e contesto ARCUS.`;
     }
 
     if (!total) {
       return "Upload a bridge inventory to generate an operational watchlist grounded in territorial exposure and ARCUS precedents.";
     }
 
-    return `${assetAttentionSummary.immediate} assets require immediate attention out of ${total}. The dominant profile in the uploaded stock is ${dominant}; the watchlist orders checks by Asset Priority Score, Proximity Score and ARCUS historical context.`;
-  }, [assetAttentionSummary, assetScreening.length, language]);
+    if (path02ReadingMode === "vulnerability_assessment") {
+      const immediateShare = percentage(
+        assetAttentionSummary.immediate,
+        total
+      );
+      return `${immediateShare}% of the uploaded portfolio falls in immediate attention. The dominant profile is ${dominant}; the report describes risk distribution, contextual benchmark and data gaps before due-diligence decisions.`;
+    }
+
+    return `${assetAttentionSummary.immediate} assets require immediate attention out of ${total}. The dominant profile is ${dominant}; if resources are constrained, start with Batch 1 (${firstBatch || "top score"}), then complete the remaining immediate assets by score and ARCUS context.`;
+  }, [
+    assetAttentionSummary,
+    assetScreening,
+    language,
+    path02ReadingMode,
+  ]);
 
   const selectedProvinceDrivers = useMemo(() => {
     if (!workflowEvents.length) {
@@ -2517,6 +2584,218 @@ export default function ProfessionalPage() {
       return canvas.toDataURL("image/png");
     } catch (error) {
       console.warn("ARCUS fallback map export failed", error);
+      return "";
+    }
+  };
+
+  const createFallbackPath02AssetMapImage = async ({
+    numbered = true,
+    markers = professionalAssetMapMarkers,
+  } = {}) => {
+    if (
+      typeof document === "undefined" ||
+      !markers.length
+    ) {
+      return "";
+    }
+
+    try {
+      const points = markers
+        .map((asset) => ({
+          ...asset,
+          latitude: Number(asset.latitude),
+          longitude: Number(asset.longitude),
+        }))
+        .filter(
+          (asset) =>
+            Number.isFinite(asset.latitude) &&
+            Number.isFinite(asset.longitude)
+        );
+
+      if (!points.length) {
+        return "";
+      }
+
+      const width = 900;
+      const height = 760;
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = width * 2;
+      canvas.height = height * 2;
+
+      if (!context) {
+        return "";
+      }
+
+      context.scale(2, 2);
+      context.fillStyle = "#f3f1ea";
+      context.fillRect(0, 0, width, height);
+
+      const rawBounds = {
+        east: Math.max(...points.map((point) => point.longitude)),
+        north: Math.max(...points.map((point) => point.latitude)),
+        south: Math.min(...points.map((point) => point.latitude)),
+        west: Math.min(...points.map((point) => point.longitude)),
+      };
+      const lonSpan = Math.max(rawBounds.east - rawBounds.west, 0.12);
+      const latSpan = Math.max(rawBounds.north - rawBounds.south, 0.12);
+      const bounds = {
+        east: rawBounds.east + lonSpan * 0.18,
+        north: rawBounds.north + latSpan * 0.2,
+        south: rawBounds.south - latSpan * 0.2,
+        west: rawBounds.west - lonSpan * 0.18,
+      };
+      const mercatorX = (longitude, zoom) =>
+        ((longitude + 180) / 360) * 256 * 2 ** zoom;
+      const mercatorY = (latitude, zoom) => {
+        const clampedLat = Math.max(
+          -85.05112878,
+          Math.min(85.05112878, latitude)
+        );
+        const rad = (clampedLat * Math.PI) / 180;
+
+        return (
+          ((1 -
+            Math.log(Math.tan(rad) + 1 / Math.cos(rad)) /
+              Math.PI) /
+            2) *
+          256 *
+          2 ** zoom
+        );
+      };
+      const zoom = (() => {
+        for (let candidate = 11; candidate >= 6; candidate -= 1) {
+          const pixelWidth =
+            mercatorX(bounds.east, candidate) -
+            mercatorX(bounds.west, candidate);
+          const pixelHeight =
+            mercatorY(bounds.south, candidate) -
+            mercatorY(bounds.north, candidate);
+
+          if (pixelWidth <= width - 80 && pixelHeight <= height - 100) {
+            return candidate;
+          }
+        }
+
+        return 6;
+      })();
+      const centerX =
+        (mercatorX(bounds.east, zoom) + mercatorX(bounds.west, zoom)) /
+        2;
+      const centerY =
+        (mercatorY(bounds.north, zoom) + mercatorY(bounds.south, zoom)) /
+        2;
+      const viewport = {
+        left: centerX - width / 2,
+        top: centerY - height / 2,
+      };
+      const loadTile = (tileX, tileY) =>
+        new Promise((resolve) => {
+          const image = new Image();
+
+          image.onload = () => resolve(image);
+          image.onerror = () => resolve(null);
+          image.src = `/data/map-tiles/voyager/${zoom}/${tileX}/${tileY}.png`;
+        });
+      const tileMinX = Math.floor(viewport.left / 256);
+      const tileMaxX = Math.floor((viewport.left + width) / 256);
+      const tileMinY = Math.floor(viewport.top / 256);
+      const tileMaxY = Math.floor((viewport.top + height) / 256);
+      const tileJobs = [];
+
+      for (let tileX = tileMinX; tileX <= tileMaxX; tileX += 1) {
+        for (let tileY = tileMinY; tileY <= tileMaxY; tileY += 1) {
+          tileJobs.push({ tileX, tileY, image: loadTile(tileX, tileY) });
+        }
+      }
+
+      const loadedTiles = await Promise.all(
+        tileJobs.map(async (tile) => ({
+          ...tile,
+          image: await tile.image,
+        }))
+      );
+
+      loadedTiles.forEach((tile) => {
+        if (!tile.image) {
+          return;
+        }
+
+        context.drawImage(
+          tile.image,
+          tile.tileX * 256 - viewport.left,
+          tile.tileY * 256 - viewport.top,
+          256,
+          256
+        );
+      });
+
+      if (!loadedTiles.some((tile) => tile.image)) {
+        for (let index = 0; index < 9; index += 1) {
+          context.strokeStyle =
+            index % 2 === 0
+              ? "rgba(143,111,61,0.08)"
+              : "rgba(63,107,120,0.07)";
+          context.lineWidth = 1;
+          context.beginPath();
+          context.moveTo(0, 80 + index * 78);
+          context.bezierCurveTo(
+            260,
+            40 + index * 82,
+            520,
+            130 + index * 70,
+            width,
+            70 + index * 78
+          );
+          context.stroke();
+        }
+      }
+
+      const project = (longitude, latitude) => ({
+        x: mercatorX(longitude, zoom) - viewport.left,
+        y: mercatorY(latitude, zoom) - viewport.top,
+      });
+
+      points.forEach((asset, index) => {
+        const projected = project(asset.longitude, asset.latitude);
+
+        context.beginPath();
+        context.fillStyle =
+          asset.priority === "Immediate attention"
+            ? "rgba(137,53,38,0.88)"
+            : asset.priority === "Programmed attention"
+              ? "rgba(196,144,64,0.88)"
+              : "rgba(63,107,120,0.86)";
+        context.arc(projected.x, projected.y, 13, 0, Math.PI * 2);
+        context.fill();
+        context.strokeStyle = "rgba(255,255,255,0.95)";
+        context.lineWidth = 3;
+        context.stroke();
+        if (numbered) {
+          context.fillStyle = "#ffffff";
+          context.font = "800 9px Arial, sans-serif";
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillText(String(index + 1), projected.x, projected.y);
+        }
+      });
+
+      context.fillStyle = "rgba(255,255,255,0.90)";
+      context.fillRect(20, height - 58, 450, 34);
+      context.fillStyle = "#8f6f3d";
+      context.font = "800 14px Arial, sans-serif";
+      context.textAlign = "left";
+      context.textBaseline = "alphabetic";
+      context.fillText(
+        `${assetSession.fileName || "PATH 02 ASSET INVENTORY"} / ARCUS ASSET MAP`,
+        32,
+        height - 36
+      );
+
+      return canvas.toDataURL("image/png");
+    } catch (error) {
+      console.warn("ARCUS Path 02 fallback map export failed", error);
       return "";
     }
   };
@@ -3955,7 +4234,7 @@ export default function ProfessionalPage() {
         ${sectionHeading("04", it ? "KEY INDICATORS" : "KEY INDICATORS")}
         <div class="kpis">
         <div class="kpi"><span>Priority Index</span><strong>${score} / 100</strong>${formatKpi({ level: classPriority(score), driver: it ? `${workflowHazardExposure?.dominant_hazard || "hazard context"}, densita casi ARCUS, eventi innescati e affidabilita evidenze.` : `${workflowHazardExposure?.dominant_hazard || "hazard context"}, ARCUS case density, triggered-event concentration and evidence reliability.` })}</div>
-        <div class="kpi"><span>${it ? "Affidabilita Evidenze" : "Evidence Reliability"}</span><strong>${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: it ? `${workflowSourceCount} fonti collegate e ${workflowReliability.institutionalShare}% evidenza professional-grade.` : `${workflowSourceCount} linked sources and ${workflowReliability.institutionalShare}% professional-grade evidence.` })}</div>
+        <div class="kpi"><span>${it ? "Affidabilita Evidenze" : "Evidence Reliability"}</span><strong>${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: it ? `${workflowSourceCount} fonti collegate e ${workflowReliability.institutionalShare}% evidenza professional-grade.` : `${workflowSourceCount} linked sources and ${workflowReliability.institutionalShare}% professional-grade evidence.` })}</div>
         <div class="kpi"><span>Failure Precedent Exposure</span><strong>${Math.round(workflowVulnerability.average)} / 100</strong>${formatKpi({ level: attentionClass(workflowVulnerability.average), driver: it ? `Pattern storico ${dominantCauseLabel}; indicatore source-backed, non certificazione strutturale.` : `Historical ${dominantCauseLabel} pattern; source-backed indicator, not structural certification.` })}</div>
         <div class="kpi"><span>${it ? "Eventi Storici" : "Historical Events"}</span><strong>${workflowEvents.length}</strong>${formatKpi({ level: `${percentage(dominantCauseCount, workflowEvents.length || 1)}% ${dominantCauseLabel}`, driver: it ? `${dominantCauseCount} occorrenze del driver dominante su ${workflowEvents.length} casi.` : `${dominantCauseCount} dominant-driver occurrences out of ${workflowEvents.length} cases.` })}</div>
         </div>
@@ -4119,7 +4398,7 @@ export default function ProfessionalPage() {
           <div class="kpi"><span>${it ? "Trigger dominante" : "Dominant trigger"}</span><strong>${historicalPatternReading.dominantCauseShare}%</strong>${formatKpi({ level: historicalPatternReading.dominantCause, driver: it ? "quota sul campione provinciale ARCUS" : "share of the provincial ARCUS sample" })}</div>
           <div class="kpi"><span>${it ? "Distribuzione temporale" : "Temporal distribution"}</span><strong style="font-size:18px">${escapeHtml(historicalPatternReading.type)}</strong>${formatKpi({ level: evidenceYearRange, driver: historicalPatternReading.temporal })}</div>
           <div class="kpi"><span>${it ? "Geomorfologia" : "Geomorphology"}</span><strong style="font-size:18px">${escapeHtml(displayDriverLabel)}</strong>${formatKpi({ level: dominantCauseLabel, driver: historicalPatternReading.geomorphologyHint })}</div>
-          <div class="kpi"><span>${it ? "Affidabilita" : "Reliability"}</span><strong>${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: `${workflowSourceCount} ${it ? "fonti collegate" : "linked sources"}` })}</div>
+          <div class="kpi"><span>${it ? "Affidabilita" : "Reliability"}</span><strong>${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: `${workflowSourceCount} ${it ? "fonti collegate" : "linked sources"}` })}</div>
         </div>
         ${priorityTriggerNote ? `<p class="note">${escapeHtml(priorityTriggerNote)}</p>` : ""}
         <p class="note">${it ? "I casi individuali restano consultabili sulla mappa e in appendice: nel corpo principale ARCUS espone il pattern, non una classifica di casi." : "Individual cases remain available on the map and in the appendix: the main report presents the pattern, not a case ranking."}</p>
@@ -4400,7 +4679,7 @@ export default function ProfessionalPage() {
       pathBody = `
       <div class="kpis">
         <div class="kpi"><span>Priority index</span><strong>${score}</strong></div>
-        <div class="kpi"><span>${it ? "Affidabilita evidenze" : "Evidence reliability"}</span><strong>${Math.round(workflowReliability.average)}</strong></div>
+        <div class="kpi"><span>${it ? "Affidabilita evidenze" : "Evidence reliability"}</span><strong>${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)}</strong></div>
         <div class="kpi"><span>${it ? "Cause dominanti" : "Dominant causes"}</span><strong>${selectedProvinceDrivers.causes.length}</strong></div>
         <div class="kpi"><span>${it ? "Fonti professionali" : "Professional sources"}</span><strong>${workflowReliability.institutionalShare}%</strong></div>
       </div>
@@ -4672,7 +4951,9 @@ export default function ProfessionalPage() {
     );
     const reportArea =
       cleanDisplayText(
-        activeEntryPath !== 0 && manualAreaBounds
+        activeEntryPath === 1
+          ? assetSession.fileName || "Path 02 Asset Inventory"
+          : activeEntryPath !== 0 && manualAreaBounds
           ? manualAreaLabel
           : selectedProvinceProfile?.territory || "Territory"
       );
@@ -4703,6 +4984,9 @@ export default function ProfessionalPage() {
     const reliabilityValue = Math.round(
       workflowReliability?.average || 0
     );
+    const eventEvidenceGrade = (event) =>
+      reliabilityByEvent[event?.event_id]?.grade || "D";
+    const reliabilityGrade = evidenceGradeFromScore(reliabilityValue);
     const hazardLabel =
       workflowHazardExposure?.dominant_hazard ||
       dominantCause ||
@@ -4878,8 +5162,65 @@ export default function ProfessionalPage() {
       });
       return lines.length * lineHeight;
     };
+    const drawJustifiedText = (
+      text,
+      x,
+      startY,
+      width,
+      {
+        color = palette.muted,
+        font = "normal",
+        justifyLastLine = false,
+        lineHeight = 4.5,
+        maxLines = Infinity,
+        size = 8.4,
+      } = {}
+    ) => {
+      pdf.setFont("helvetica", font);
+      pdf.setFontSize(size);
+      setText(color);
+
+      const lines = pdf
+        .splitTextToSize(clean(text), width)
+        .slice(0, maxLines);
+
+      lines.forEach((line, index) => {
+        const isLast = index === lines.length - 1;
+        const words = clean(line).split(/\s+/).filter(Boolean);
+        const shouldJustify =
+          words.length > 1 &&
+          (!isLast || justifyLastLine) &&
+          pdf.getTextWidth(words.join(" ")) > width * 0.55;
+
+        if (!shouldJustify) {
+          pdf.text(words.join(" "), x, startY + index * lineHeight, {
+            maxWidth: width,
+          });
+          return;
+        }
+
+        const wordsWidth = words.reduce(
+          (total, word) => total + pdf.getTextWidth(word),
+          0
+        );
+        const gap = (width - wordsWidth) / (words.length - 1);
+        let cursorX = x;
+
+        words.forEach((word, wordIndex) => {
+          pdf.text(word, cursorX, startY + index * lineHeight);
+          cursorX +=
+            pdf.getTextWidth(word) +
+            (wordIndex < words.length - 1 ? gap : 0);
+        });
+      });
+
+      return lines.length * lineHeight;
+    };
     const heading = (number, title, reserve = 18) => {
-      ensure(reserve);
+      const topGap = y > margin + 2 ? 5 : 0;
+
+      ensure(reserve + topGap);
+      y += topGap;
       setFill(palette.soft);
       setDraw(palette.border);
       pdf.roundedRect(margin, y - 1, 10, 8, 1, 1, "FD");
@@ -4892,14 +5233,14 @@ export default function ProfessionalPage() {
       pdf.setFontSize(10);
       setText(palette.accent);
       pdf.text(String(title).toUpperCase(), margin + 14, y + 4);
-      y += 15;
+      y += 11;
     };
     const paragraph = (text, options = {}) => {
       const width = options.width || contentWidth;
       const lineHeight = options.lineHeight || 5;
       const lines = pdf.splitTextToSize(clean(text), width);
       ensure(lines.length * lineHeight + 3);
-      drawText(text, options.x || margin, y, width, {
+      drawJustifiedText(text, options.x || margin, y, width, {
         color: options.color || palette.muted,
         font: options.font || "normal",
         lineHeight,
@@ -4960,7 +5301,12 @@ export default function ProfessionalPage() {
           ].replace(/\s+\S*$/, "")}...`;
         }
 
-        pdf.text(textLines, x + 4, textY);
+        drawJustifiedText(textLines.join(" "), x + 4, textY, width - 8, {
+          color: palette.muted,
+          lineHeight: 4.1,
+          maxLines,
+          size: 8.1,
+        });
       }
     };
     const kpiGrid = (items) => {
@@ -5043,12 +5389,13 @@ export default function ProfessionalPage() {
       rows,
       {
         columnWeights,
+        cellPaddingX = 2.2,
         fontSize = 7.3,
         headerHeight = 8,
         lineHeight = 3.6,
         maxLines = 4,
         minRowHeight = 11,
-        rowPadding = 5,
+        rowPadding = 7.2,
       } = {}
     ) => {
       const weights =
@@ -5066,40 +5413,100 @@ export default function ProfessionalPage() {
         ],
         []
       );
-      ensure(headerHeight + 8);
-      setFill(palette.soft);
-      setDraw(palette.border);
-      pdf.rect(margin, y, contentWidth, headerHeight, "FD");
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(7.5);
-      setText(palette.ink);
-      columns.forEach((column, index) => {
-        pdf.text(clean(column), colXs[index] + 2, y + headerHeight - 3);
-      });
-      y += headerHeight;
-      rows.forEach((row) => {
+      const ellipsize = (value, width) => {
+        const text = clean(value);
+
+        if (pdf.getTextWidth(text) <= width) {
+          return text;
+        }
+
+        let shortened = text;
+
+        while (
+          shortened.length > 0 &&
+          pdf.getTextWidth(`${shortened}...`) > width
+        ) {
+          shortened = shortened.slice(0, -1).trimEnd();
+        }
+
+        return shortened ? `${shortened}...` : "...";
+      };
+      const normalizeCellLines = (cell, width) => {
+        const availableWidth = Math.max(8, width - cellPaddingX * 2);
+        const allLines = pdf.splitTextToSize(clean(cell), availableWidth);
+        const lines = allLines.slice(0, maxLines);
+
+        if (allLines.length > maxLines && lines.length) {
+          lines[lines.length - 1] = ellipsize(
+            lines[lines.length - 1].replace(/\s+\S*$/, "").trim() ||
+              lines[lines.length - 1],
+            availableWidth
+          );
+        }
+
+        return lines.length ? lines : ["-"];
+      };
+      const drawHeader = () => {
+        ensure(headerHeight + 8);
+        setFill(palette.soft);
+        setDraw(palette.border);
+        pdf.rect(margin, y, contentWidth, headerHeight, "FD");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(7.2);
+        setText(palette.ink);
+        columns.forEach((column, index) => {
+          const headerText = ellipsize(
+            clean(column).toUpperCase(),
+            colWidths[index] - cellPaddingX * 2
+          );
+          pdf.text(
+            headerText,
+            colXs[index] + cellPaddingX,
+            y + headerHeight - 3
+          );
+        });
+        y += headerHeight;
+      };
+
+      drawHeader();
+      rows.forEach((row, rowIndex) => {
         const cellLines = row.map((cell, index) =>
-          pdf
-            .splitTextToSize(clean(cell), colWidths[index] - 4)
-            .slice(0, maxLines)
+          normalizeCellLines(cell, colWidths[index])
+        );
+        const maxCellLines = Math.max(
+          1,
+          Math.max(...cellLines.map((lines) => lines.length))
         );
         const rowHeight = Math.max(
           minRowHeight,
-          Math.max(...cellLines.map((lines) => lines.length)) * lineHeight +
-            rowPadding
+          maxCellLines * lineHeight + rowPadding
         );
-        ensure(rowHeight);
+
+        if (y + rowHeight > bottom) {
+          newPage();
+          drawHeader();
+        }
+
+        setFill(rowIndex % 2 === 0 ? [255, 255, 255] : palette.panel);
         setDraw(palette.border);
-        pdf.rect(margin, y, contentWidth, rowHeight);
+        pdf.rect(margin, y, contentWidth, rowHeight, "FD");
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(fontSize);
         setText(palette.muted);
         cellLines.forEach((lines, index) => {
-          pdf.text(
-            lines,
-            colXs[index] + 2,
-            y + 4
-          );
+          const textStartY =
+            y +
+            (rowHeight - (lines.length - 1) * lineHeight) / 2 +
+            1.2;
+
+          lines.forEach((line, lineIndex) => {
+            pdf.text(
+              line,
+              colXs[index] + cellPaddingX,
+              textStartY + lineIndex * lineHeight,
+              { maxWidth: colWidths[index] - cellPaddingX * 2 }
+            );
+          });
         });
         y += rowHeight;
       });
@@ -5107,14 +5514,19 @@ export default function ProfessionalPage() {
     };
     const fullTextBox = ({
       accent = false,
+      minHeight = 24,
       text,
       title,
       width = contentWidth,
       x = margin,
     }) => {
-      const titleHeight = title ? 7 : 0;
+      const bodyStartOffset = title ? 12.8 : 6.2;
+      const lineHeight = 4.8;
       const lines = pdf.splitTextToSize(clean(text), width - 7);
-      const height = Math.max(20, titleHeight + lines.length * 4.1 + 7);
+      const height = Math.max(
+        minHeight,
+        bodyStartOffset + lines.length * lineHeight + 6
+      );
       ensure(height);
       setFill(accent ? palette.soft : palette.panel);
       setDraw(accent ? palette.accent : palette.border);
@@ -5130,7 +5542,11 @@ export default function ProfessionalPage() {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(8.4);
       setText(palette.muted);
-      pdf.text(lines, x + 3.5, y + (title ? 12.8 : 6.2));
+      drawJustifiedText(lines.join(" "), x + 3.5, y + bodyStartOffset, width - 7, {
+        color: palette.muted,
+        lineHeight,
+        size: 8.4,
+      });
       y += height + 5;
     };
     const addLogo = (x, logoY, width, height) => {
@@ -5192,6 +5608,11 @@ export default function ProfessionalPage() {
       height = 82,
       {
         advance = true,
+        caption = `${reportArea.toUpperCase()} / ARCUS ATLAS EXTRACT`,
+        forceMessage = false,
+        message = it
+          ? "Mappa non disponibile: il PDF resta valido come report analitico."
+          : "Map unavailable: the PDF remains valid as analytical report.",
         width = contentWidth,
         x = margin,
       } = {}
@@ -5204,7 +5625,7 @@ export default function ProfessionalPage() {
       let frameWidth = width;
       let imagePlacement = null;
 
-      if (mapImage?.startsWith("data:image")) {
+      if (!forceMessage && mapImage?.startsWith("data:image")) {
         const naturalRatio =
           mapImageSize?.width && mapImageSize?.height
             ? mapImageSize.width / mapImageSize.height
@@ -5275,9 +5696,7 @@ export default function ProfessionalPage() {
         }
       } else {
         drawText(
-          it
-            ? "Mappa non disponibile: il PDF resta valido come report analitico."
-            : "Map unavailable: the PDF remains valid as analytical report.",
+          message,
           x + 6,
           y + 18,
           width - 12,
@@ -5288,7 +5707,7 @@ export default function ProfessionalPage() {
       pdf.setFontSize(7.5);
       setText(palette.accent);
       pdf.text(
-        `${reportArea.toUpperCase()} / ARCUS ATLAS EXTRACT`,
+        caption,
         frameX + 4,
         y + height - 3.5
       );
@@ -5436,6 +5855,7 @@ export default function ProfessionalPage() {
       formatPdfDate(event.date || event.event_date || event.collapse_date),
       `${event.municipality || "-"}${event.year ? ` (${event.year})` : ""}`,
       pdfSeverityLabel(event.collapse_severity),
+      eventEvidenceGrade(event),
       event.specific_cause || "-",
     ]);
 
@@ -5464,6 +5884,31 @@ export default function ProfessionalPage() {
 
       return "Asset geometry, inspection history, foundation/abutment exposure, local hazard study and source-backed site constraints.";
     };
+    const path02BriefDataPackage = (hazard) => {
+      const value = String(hazard || "").toLowerCase();
+
+      if (value.includes("multi")) {
+        return "Integrated inspection plan; foundation details; local hazard studies.";
+      }
+
+      if (value.includes("hydraulic") && value.includes("torrential")) {
+        return "TR100/TR200 model; scour estimate; bathymetry; debris indicators.";
+      }
+
+      if (value.includes("hydraulic")) {
+        return "TR100/TR200 levels; freeboard; abutments; inundation duration.";
+      }
+
+      if (value.includes("landslide")) {
+        return "Updated PAI perimeter; slope movement; drainage and abutment logs.";
+      }
+
+      if (value.includes("seismic")) {
+        return "Drawings; bearings/restraints; design code; seismic vulnerability screen.";
+      }
+
+      return "Geometry, inspection history, foundation exposure and local hazard study.";
+    };
     const path02AttentionLabel = (label) =>
       it
         ? ({
@@ -5472,13 +5917,65 @@ export default function ProfessionalPage() {
             "Programmed attention": "Attenzione programmata",
           }[label] || label)
         : label;
+    const path02ActionTierLabel = (label) =>
+      it
+        ? ({
+            "Annual inspection plan": "Piano annuale",
+            "Batch 1 - check first": "Batch 1 - prima verifica",
+            "Batch 2 - next immediate": "Batch 2 - immediati successivi",
+            "Batch 3 - complete immediate queue":
+              "Batch 3 - completare coda immediata",
+            "Ordinary monitoring cycle": "Ciclo ordinario",
+          }[label] || label)
+        : label;
+    const path02ProximityLabel = (item) => {
+      const distance =
+        item.nearestEvent?.distance !== undefined
+          ? `${item.nearestEvent.distance.toFixed(1)} km`
+          : "";
+      const band = item.proximityBand || "No spatial precedent";
+
+      return distance ? `${band} / ${distance}` : band;
+    };
+    const path02TableProximityLabel = (item) => {
+      const distance =
+        item.nearestEvent?.distance !== undefined
+          ? `${item.nearestEvent.distance.toFixed(1)} km`
+          : "";
+      const band =
+        {
+          "Direct local signal": "Direct",
+          "Distant context": "Distant",
+          "High proximity": "High",
+          "Medium proximity": "Medium",
+          "No spatial precedent": "No precedent",
+          "Provincial context": "Provincial",
+        }[item.proximityBand] ||
+        item.proximityBand ||
+        "No precedent";
+
+      return distance ? `${band} / ${distance}` : band;
+    };
+    const path02BriefConfidenceNote = selectedCollapseRateAvailable
+      ? it
+        ? `Confidenza Collapse Rate: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} record caricati bloccati per campi obbligatori incompleti.`
+        : `Collapse Rate confidence: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} uploaded records were blocked for incomplete required fields.`
+      : it
+        ? `Collapse Rate non disponibile. ${assetInventoryAudit.blocked} record caricati bloccati per campi obbligatori incompleti.`
+        : `Collapse Rate unavailable. ${assetInventoryAudit.blocked} uploaded records were blocked for incomplete required fields.`;
     const path02TopRows = assetScreening.slice(0, 12).map((item) => [
       item.id,
       item.municipality || item.territory || "-",
-      String(item.score || 0),
+      `${item.score || 0} / ${getAssetEvidenceGrade(item)}`,
       item.hazardProfileLabel || item.dominantHazard || "-",
-      path02AttentionLabel(item.attentionLevel),
-      String(item.proximityScore || 0),
+      path02ActionTierLabel(item.actionTier),
+      path02TableProximityLabel(item),
+    ]);
+    const path02BriefRows = assetScreening.slice(0, 5).map((item) => [
+      `#${item.actionRank} ${item.id}`,
+      item.municipality || item.territory || "-",
+      `${item.score || 0}/${getAssetEvidenceGrade(item)}`,
+      path02ActionTierLabel(item.actionTier),
     ]);
     const path02CriticalAssets = (
       assetScreening.filter(
@@ -5488,14 +5985,7 @@ export default function ProfessionalPage() {
             (item) => item.attentionLevel === "Immediate attention"
           )
         : assetScreening.slice(0, 5)
-    ).slice(
-      0,
-      assetScreening.length <= 20
-        ? Math.min(8, assetScreening.length)
-        : assetScreening.length <= 100
-          ? 10
-          : 5
-    );
+    ).slice(0, 5);
     const path02ClusterRows = assetAttentionSummary.hazardCounts
       .slice(0, 5)
       .map((item) => [
@@ -5503,6 +5993,68 @@ export default function ProfessionalPage() {
         String(item.value),
         path02DataPackage(item.label),
       ]);
+    const path02Coordinates = assetScreening
+      .map((item) => ({
+        latitude: Number(String(item.latitude).replace(",", ".")),
+        longitude: Number(String(item.longitude).replace(",", ".")),
+        province: item.territory,
+      }))
+      .filter(
+        (item) =>
+          Number.isFinite(item.latitude) &&
+          Number.isFinite(item.longitude)
+      );
+    const path02LatSpan = path02Coordinates.length
+      ? Math.max(...path02Coordinates.map((item) => item.latitude)) -
+        Math.min(...path02Coordinates.map((item) => item.latitude))
+      : 0;
+    const path02LonSpan = path02Coordinates.length
+      ? Math.max(...path02Coordinates.map((item) => item.longitude)) -
+        Math.min(...path02Coordinates.map((item) => item.longitude))
+      : 0;
+    const path02ApproxSpanKm = Math.round(
+      Math.sqrt(
+        (path02LatSpan * 111) ** 2 +
+          (path02LonSpan * 85) ** 2
+      )
+    );
+    const path02ProvinceCount = new Set(
+      path02Coordinates.map((item) => item.province).filter(Boolean)
+    ).size;
+    const path02ProvinceList = [
+      ...new Set(path02Coordinates.map((item) => item.province).filter(Boolean)),
+    ];
+    const path02MapIsUseful =
+      path02Coordinates.length > 0 &&
+      path02ApproxSpanKm <= 320 &&
+      path02ProvinceCount <= 5;
+    const path02MapMessage = it
+      ? "La distribuzione degli asset supera la scala utile di una singola mappa: usa Asset Table e GIS Package per il dettaglio geografico completo."
+      : "Asset distribution exceeds single-map scale: see Asset Table and GIS Package exports for full geographic detail.";
+    const path02DistributionText = it
+      ? `${assetScreening.length} asset distribuiti su ${path02ProvinceCount} province: ${path02ProvinceList.slice(0, 9).join(", ")}${path02ProvinceList.length > 9 ? "..." : ""}. L'estensione approssimativa del dataset e ${path02ApproxSpanKm} km; per questo il dettaglio geografico completo e demandato ad Asset Table e GIS Package.`
+      : `${assetScreening.length} assets across ${path02ProvinceCount} provinces: ${path02ProvinceList.slice(0, 9).join(", ")}${path02ProvinceList.length > 9 ? "..." : ""}. Approximate dataset span is ${path02ApproxSpanKm} km; full geographic detail is provided through Asset Table and GIS Package exports.`;
+    const path02IsVulnerabilityAssessment =
+      path02ReadingMode === "vulnerability_assessment";
+    const path02ReportTitle = path02IsVulnerabilityAssessment
+      ? "Portfolio Vulnerability Assessment"
+      : "Asset Watchlist & Monitoring Priority";
+    const path02HazardDistributionRows = assetAttentionSummary.hazardCounts
+      .slice(0, 6)
+      .map((item) => [
+        item.label,
+        String(item.value),
+        `${percentage(item.value, assetScreening.length || 1)}%`,
+      ]);
+    const path02AttentionDistributionRows = [
+      ["Immediate attention", assetAttentionSummary.immediate],
+      ["Programmed attention", assetAttentionSummary.programmed],
+      ["Ordinary monitoring", assetAttentionSummary.ordinary],
+    ].map(([label, value]) => [
+      path02AttentionLabel(label),
+      String(value),
+      `${percentage(value, assetScreening.length || 1)}%`,
+    ]);
 
     if (activeEntryPath === 1) {
       const uploadedDate = assetSession.uploadedAt
@@ -5526,10 +6078,114 @@ export default function ProfessionalPage() {
         setFill(palette.accent);
         pdf.rect(margin, 8, contentWidth, 0.7, "F");
         addLogo(margin, 12, 34, 24);
+        const drawBriefBox = ({
+          accent = false,
+          height,
+          text,
+          title,
+          width,
+          x,
+          yy,
+        }) => {
+          setFill(accent ? palette.soft : palette.panel);
+          setDraw(accent ? palette.accent : palette.border);
+          pdf.roundedRect(x, yy, width, height, 1.2, 1.2, "FD");
+          pdf.setFont("helvetica", "bold");
+          pdf.setFontSize(6.5);
+          setText(palette.accent);
+          pdf.text(clean(title).toUpperCase(), x + 3, yy + 5);
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(7.1);
+          setText(palette.muted);
+          drawJustifiedText(clean(text), x + 3, yy + 12, width - 6, {
+            color: palette.muted,
+            lineHeight: 3.8,
+            maxLines: Math.floor((height - 11) / 3.8),
+            size: 7.1,
+          });
+        };
+        const drawBriefTable = (x, yy, width, rows) => {
+          const colWidths = [0.35, 0.28, 0.16, 0.21].map(
+            (share) => share * width
+          );
+          const briefCellPadding = 1.6;
+          const briefEllipsize = (value, availableWidth) => {
+            const text = clean(value);
+
+            if (pdf.getTextWidth(text) <= availableWidth) {
+              return text;
+            }
+
+            let shortened = text;
+
+            while (
+              shortened.length > 0 &&
+              pdf.getTextWidth(`${shortened}...`) > availableWidth
+            ) {
+              shortened = shortened.slice(0, -1).trimEnd();
+            }
+
+            return shortened ? `${shortened}...` : "...";
+          };
+          const headers = [
+            "Priority",
+            it ? "Comune" : "Municipality",
+            "Score",
+            it ? "Azione" : "Action",
+          ];
+          let cx = x;
+
+          setFill(palette.soft);
+          setDraw(palette.border);
+          pdf.rect(x, yy, width, 7, "FD");
+          pdf.setFont("helvetica", "bold");
+          pdf.setFontSize(5.8);
+          setText(palette.accent);
+          headers.forEach((header, index) => {
+            pdf.text(
+              briefEllipsize(
+                header.toUpperCase(),
+                colWidths[index] - briefCellPadding * 2
+              ),
+              cx + briefCellPadding,
+              yy + 4.8
+            );
+            cx += colWidths[index];
+          });
+
+          rows.slice(0, 5).forEach((row, rowIndex) => {
+            const rowHeight = 8.4;
+            const rowY = yy + 7 + rowIndex * rowHeight;
+            cx = x;
+            setDraw(palette.border);
+            setFill(rowIndex % 2 === 0 ? [255, 255, 255] : palette.panel);
+            pdf.rect(x, rowY, width, rowHeight, "FD");
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(6.1);
+            setText(palette.ink);
+            [row[0], row[1], row[2], row[3]].forEach((cell, index) => {
+              pdf.text(
+                briefEllipsize(
+                  cell,
+                  colWidths[index] - briefCellPadding * 2
+                ),
+                cx + briefCellPadding,
+                rowY + 5.2
+              );
+              cx += colWidths[index];
+            });
+          });
+        };
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(19);
         setText(palette.ink);
-        pdf.text("Asset Watchlist", logoImage ? 52 : margin, 21);
+        pdf.text(
+          path02IsVulnerabilityAssessment
+            ? "Portfolio Vulnerability"
+            : "Asset Watchlist",
+          logoImage ? 52 : margin,
+          21
+        );
         pdf.setFontSize(8);
         setText(palette.accent);
         pdf.text(
@@ -5537,8 +6193,15 @@ export default function ProfessionalPage() {
           logoImage ? 52 : margin,
           28
         );
-        y = 42;
-        paragraph(path02DecisionMessage, { size: 9.1, lineHeight: 4.6 });
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8.3);
+        setText(palette.muted);
+        pdf.text(
+          pdf.splitTextToSize(clean(path02DecisionMessage), contentWidth).slice(0, 3),
+          margin,
+          43
+        );
+        y = 57;
         compactKpiGrid([
           {
             text: it ? "asset validi analizzati" : "valid assets assessed",
@@ -5551,9 +6214,11 @@ export default function ProfessionalPage() {
             value: String(assetAttentionSummary.immediate),
           },
           {
-            text: it ? "nel piano annuale" : "in annual plan",
-            title: it ? "Programmati" : "Programmed",
-            value: String(assetAttentionSummary.programmed),
+            text: it
+              ? "prima sequenza operativa"
+              : "first operating batch",
+            title: "Batch 1",
+            value: String(assetAttentionSummary.batchOne),
           },
           {
             text: it ? "contesto provinciale" : "provincial context",
@@ -5561,38 +6226,63 @@ export default function ProfessionalPage() {
             value: contextCollapseRate,
           },
         ]);
-        addMap(58);
-        table(
-          ["ID", it ? "Comune" : "Municipality", "Score", "Hazard"],
-          path02TopRows.slice(0, 5).map((row) => [
-            row[0],
-            row[1],
-            row[2],
-            row[3],
-          ]),
-          {
-            columnWeights: [0.65, 1, 0.55, 1.1],
-            fontSize: 6.3,
-            maxLines: 2,
-            minRowHeight: 8,
-          }
+        y = 89;
+        if (path02MapIsUseful) {
+          addMap(68, {
+            advance: false,
+            caption: `PATH 02 / ${reportId} / TOP 5 BY PRIORITY`,
+          });
+        } else {
+          drawBriefBox({
+            accent: true,
+            height: 68,
+            title: `Asset distribution / ${reportId}`,
+            text: `${path02MapMessage} ${path02DistributionText}`,
+            width: contentWidth,
+            x: margin,
+            yy: y,
+          });
+        }
+        drawBriefTable(
+          margin,
+          163,
+          contentWidth,
+          path02BriefRows
         );
-        fullTextBox({
+        drawBriefBox({
           accent: true,
+          height: 31,
           title: it
-            ? "Raccomandazione dominante"
-            : "Dominant Monitoring Recommendation",
-          text: `${assetAttentionSummary.dominantHazard}: ${path02DataPackage(
-            assetAttentionSummary.dominantHazard
-          )}`,
+            ? path02IsVulnerabilityAssessment
+              ? "Lettura dominante del portafoglio"
+              : "Raccomandazione dominante"
+            : path02IsVulnerabilityAssessment
+              ? "Dominant Portfolio Reading"
+              : "Dominant Monitoring Recommendation",
+          text: it
+            ? `Prima Batch 1 (${assetAttentionSummary.batchOne}), poi Batch 2 (${assetAttentionSummary.batchTwo}). Proximity provinciale puo restare immediate se hazard, vulnerabilita e comparabili sono alti.`
+            : `Batch 1 first (${assetAttentionSummary.batchOne}), then Batch 2 (${assetAttentionSummary.batchTwo}). Provincial-context proximity can remain immediate when hazard, vulnerability and comparables are high.`,
+          width: contentWidth,
+          x: margin,
+          yy: 214,
         });
-        fullTextBox({
-          title: "Data Request Package",
-          text: path02DataPackage(assetAttentionSummary.dominantHazard),
+        drawBriefBox({
+          height: 25,
+          title: path02IsVulnerabilityAssessment
+            ? "Data Gaps To Close"
+            : "Data Request Package",
+          text: path02BriefDataPackage(assetAttentionSummary.dominantHazard),
+          width: (contentWidth - 6) / 2,
+          x: margin,
+          yy: 247,
         });
-        fullTextBox({
+        drawBriefBox({
+          height: 25,
           title: it ? "Nota di confidenza" : "Confidence Note",
-          text: `${collapseConfidenceNote} ${assetInventoryAudit.blocked} uploaded records were blocked because required fields were incomplete.`,
+          text: path02BriefConfidenceNote,
+          width: (contentWidth - 6) / 2,
+          x: margin + (contentWidth + 6) / 2,
+          yy: 247,
         });
         addFooter();
         pdf.save(filename);
@@ -5611,12 +6301,14 @@ export default function ProfessionalPage() {
       pdf.setFontSize(26);
       setText(palette.ink);
       pdf.text(
-        pdf.splitTextToSize("Asset Watchlist & Monitoring Priority", 142),
+        pdf.splitTextToSize(path02ReportTitle, 142),
         27,
         84
       );
       drawText(
-        "ARCUS Path 02 crosses the uploaded bridge inventory with documented Italian bridge-collapse evidence, territorial hazard context and proximity to ARCUS precedents to produce a prioritized monitoring watchlist.",
+        path02IsVulnerabilityAssessment
+          ? "ARCUS Path 02 reads the uploaded bridge portfolio as a risk distribution: hazard profile shares, attention levels, contextual collapse-rate benchmark and data gaps for due diligence."
+          : "ARCUS Path 02 crosses the uploaded bridge inventory with documented Italian bridge-collapse evidence, territorial hazard context and proximity to ARCUS precedents to produce a prioritized monitoring watchlist.",
         27,
         116,
         142,
@@ -5660,7 +6352,12 @@ export default function ProfessionalPage() {
         ["File", fileName],
         ["Upload", uploadedDate],
         ["Mode", selectedPath02ReadingMode],
-        ["Output", "Watchlist / PDF / CSV / GeoJSON"],
+        [
+          "Output",
+          path02IsVulnerabilityAssessment
+            ? "Assessment / PDF / CSV / GeoJSON"
+            : "Watchlist / PDF / CSV / GeoJSON",
+        ],
       ].forEach(([label, value], index) => {
         const isWide = index === 4;
         const boxX = isWide ? 27 : 27 + (index % 2) * 72;
@@ -5685,7 +6382,7 @@ export default function ProfessionalPage() {
       pdf.addPage();
       y = margin;
 
-      heading("01", "Executive Summary");
+      heading("01", "Executive Summary", 78);
       paragraph(path02DecisionMessage);
       compactKpiGrid([
         {
@@ -5711,95 +6408,204 @@ export default function ProfessionalPage() {
       ]);
       table(
         [
-          it ? "Livello" : "Level",
+          path02IsVulnerabilityAssessment
+            ? "Portfolio band"
+            : it
+              ? "Livello"
+              : "Level",
           it ? "Asset" : "Assets",
-          it ? "Azione" : "Action",
+          path02IsVulnerabilityAssessment
+            ? "Portfolio reading"
+            : it
+              ? "Azione"
+              : "Action",
         ],
         [
           [
             path02AttentionLabel("Immediate attention"),
             String(assetAttentionSummary.immediate),
-            it
-              ? "Ispezione prima della prossima stagione di rischio."
-              : "Inspect before the next risk season.",
+            path02IsVulnerabilityAssessment
+              ? `${percentage(
+                  assetAttentionSummary.immediate,
+                  assetScreening.length || 1
+                )}% of the uploaded portfolio shows the highest attention band.`
+              : it
+                ? "Ispezione prima della prossima stagione di rischio."
+                : "Inspect before the next risk season.",
           ],
           [
             path02AttentionLabel("Programmed attention"),
             String(assetAttentionSummary.programmed),
-            it
-              ? "Inserire nel piano annuale con priorita."
-              : "Include in the annual inspection plan with priority.",
+            path02IsVulnerabilityAssessment
+              ? `${percentage(
+                  assetAttentionSummary.programmed,
+                  assetScreening.length || 1
+                )}% of the uploaded portfolio sits in the annual-priority band.`
+              : it
+                ? "Inserire nel piano annuale con priorita."
+                : "Include in the annual inspection plan with priority.",
           ],
           [
             path02AttentionLabel("Ordinary monitoring"),
             String(assetAttentionSummary.ordinary),
-            it
-              ? "Mantenere ciclo ordinario e arricchire dati tecnici."
-              : "Maintain ordinary cycle and enrich technical data.",
+            path02IsVulnerabilityAssessment
+              ? `${percentage(
+                  assetAttentionSummary.ordinary,
+                  assetScreening.length || 1
+                )}% of the uploaded portfolio remains in the ordinary-monitoring band.`
+              : it
+                ? "Mantenere ciclo ordinario e arricchire dati tecnici."
+                : "Maintain ordinary cycle and enrich technical data.",
           ],
         ],
         { columnWeights: [0.8, 0.45, 1.75], maxLines: 3 }
       );
 
-      heading("02", "Asset Map");
+      heading("02", "Asset Map", path02MapIsUseful ? 108 : 56);
+      paragraph(
+        path02MapIsUseful
+          ? it
+            ? "La mappa mostra i top 5 asset per Asset Priority Score. La distribuzione completa resta disponibile in Asset Table e GIS Package."
+            : "Map shows top 5 assets by Asset Priority Score. Full distribution is available in Asset Table and GIS Package exports."
+          : path02MapMessage
+      );
+      if (path02MapIsUseful) {
+        addMap(102, {
+          caption: `PATH 02 / ${reportId} / TOP 5 BY PRIORITY`,
+        });
+      } else {
+        fullTextBox({
+          accent: true,
+          title: `Asset Distribution / ${reportId}`,
+          text: `${path02MapMessage} ${path02DistributionText}`,
+        });
+      }
+
+      heading("03", "Prioritized Watchlist", 90);
       paragraph(
         it
-          ? "Mappa degli asset caricati con marker colorati per livello di attenzione. La mappa e un estratto operativo, non una base catastale o progettuale."
-          : "Map of uploaded assets with markers by attention level. The map is an operational extract, not cadastral or design-scale mapping."
+          ? "Nota di lettura: la Proximity e uno dei segnali dello score, non il criterio decisivo. Un asset con proximity 'Provincial context' puo restare in Immediate attention quando esposizione territoriale, profilo hazard, vulnerabilita comparabili, eta o tipologia mantengono alto l'Asset Priority Score. A parita di score, i batch sono ordinati per classe evidenza, fascia proximity e distanza ARCUS esatta nella fascia."
+          : "Reading note: Proximity is one signal inside the score, not the decisive criterion. An asset with 'Provincial context' proximity can remain in Immediate attention when territorial exposure, hazard profile, comparable vulnerability, age or typology keep the Asset Priority Score high. For tied scores, batches are ordered by evidence class, proximity band and exact ARCUS distance within the band.",
+        { lineHeight: 4.2, size: 8.1 }
       );
-      addMap(88);
-
-      heading("03", "Prioritized Watchlist");
       table(
         [
           "ID",
           it ? "Comune" : "Municipality",
           "Score",
           "Hazard Profile",
-          it ? "Livello" : "Level",
+          it ? "Batch operativo" : "Action Tier",
           "Proximity",
         ],
         path02TopRows,
         {
-          columnWeights: [0.75, 1, 0.45, 1.2, 1.1, 0.55],
+          columnWeights: [0.78, 0.95, 0.45, 1, 1.05, 0.82],
           fontSize: 6.5,
-          maxLines: 3,
+          maxLines: 2,
           minRowHeight: 9,
         }
       );
 
-      heading("04", "Critical Asset Sheets");
-      path02CriticalAssets.forEach((item) => {
+      if (path02IsVulnerabilityAssessment) {
+        heading("04", "Portfolio Vulnerability Snapshot", 96);
+        table(
+          ["Hazard Profile", it ? "Asset" : "Assets", "Share"],
+          path02HazardDistributionRows.length
+            ? path02HazardDistributionRows
+            : [["-", "0", "0%"]],
+          {
+            columnWeights: [1.2, 0.55, 0.55],
+            fontSize: 7,
+            maxLines: 3,
+            minRowHeight: 10,
+          }
+        );
+        table(
+          [it ? "Livello" : "Attention Level", it ? "Asset" : "Assets", "Share"],
+          path02AttentionDistributionRows,
+          {
+            columnWeights: [1.2, 0.55, 0.55],
+            fontSize: 7,
+            maxLines: 3,
+            minRowHeight: 10,
+          }
+        );
+
+        heading("05", "Context Benchmark And Data Gaps", 72);
+        table(
+          [it ? "Elemento" : "Element", it ? "Lettura" : "Reading"],
+          [
+            [
+              "Collapse Rate Context",
+              selectedCollapseRateAvailable
+                ? `${contextCollapseRate} versus national ARCUS/AINOP benchmark; ${collapseConfidenceNote}`
+                : "No usable AINOP denominator is available for a contextual Collapse Rate benchmark.",
+            ],
+            [
+              "Portfolio Concentration",
+              `${assetAttentionSummary.dominantHazard} is the dominant profile across ${percentage(
+                assetAttentionSummary.hazardCounts[0]?.value || 0,
+                assetScreening.length || 1
+              )}% of assessed assets.`,
+            ],
+            [
+              "Inventory Completeness",
+              `${assetInventoryAudit.mandatory}/${assetInventoryAudit.total} records entered scoring; ${assetInventoryAudit.blocked} blocked records and ${assetInventoryAudit.warnings} territory warnings.`,
+            ],
+          ],
+          {
+            columnWeights: [0.65, 1.35],
+            fontSize: 6.8,
+            maxLines: 6,
+            minRowHeight: 13,
+          }
+        );
+      } else {
         fullTextBox({
-          accent: item.attentionLevel === "Immediate attention",
-          title: `${item.id} / ${item.name} / ${item.score}`,
-          text: `${path02AttentionLabel(item.attentionLevel)}. Hazard Profile: ${
-            item.hazardProfileLabel
-          }. Proximity Score: ${item.proximityScore}. Nearest ARCUS case: ${
-            item.nearestEvent?.event_id || "not available"
-          }. ${item.monitoringRecommendation}`,
+          accent: true,
+          minHeight: 29,
+          title: it
+            ? "Sequenza operativa del portafoglio"
+            : "Portfolio Action Sequence",
+          text: it
+            ? `Partire dal Batch 1 (${assetAttentionSummary.batchOne} asset con score piu alto e contesto ARCUS piu rilevante), quindi completare Batch 2 (${assetAttentionSummary.batchTwo}) e Batch 3 (${assetAttentionSummary.batchThree}). La classe Immediate attention resta il perimetro urgente; i batch definiscono l'ordine operativo quando budget o squadre sono limitati.`
+            : `Start with Batch 1 (${assetAttentionSummary.batchOne} highest-score assets with the strongest ARCUS context), then complete Batch 2 (${assetAttentionSummary.batchTwo}) and Batch 3 (${assetAttentionSummary.batchThree}). Immediate attention remains the urgent perimeter; batches define the operating order when budget or crews are constrained.`,
         });
-      });
+        heading("04", "Critical Asset Sheets", 58);
+        path02CriticalAssets.forEach((item) => {
+          fullTextBox({
+            accent: item.attentionLevel === "Immediate attention",
+            title: `${item.id} / ${item.name} / ${item.score} / Evidence ${getAssetEvidenceGrade(item)}`,
+            text: `${path02ActionTierLabel(item.actionTier)} within ${path02AttentionLabel(
+              item.attentionLevel
+            )}. Hazard Profile: ${item.hazardProfileLabel}. Proximity: ${path02ProximityLabel(
+              item
+            )}. Nearest ARCUS case: ${
+              item.nearestEventSummary || "not available"
+            } (evidence ${getAssetEvidenceGrade(item)}). ${item.monitoringRecommendation}`,
+          });
+        });
 
-      heading("05", "Risk-Cluster Recommendations");
-      table(
-        [
-          "Hazard Profile",
-          it ? "Asset" : "Assets",
-          "Data Request Package",
-        ],
-        path02ClusterRows.length
-          ? path02ClusterRows
-          : [["-", "0", path02DataPackage("")]],
-        {
-          columnWeights: [0.8, 0.35, 1.85],
-          fontSize: 6.8,
-          maxLines: 6,
-          minRowHeight: 14,
-        }
-      );
+        heading("05", "Risk-Cluster Recommendations", 82);
+        table(
+          [
+            "Hazard Profile",
+            it ? "Asset" : "Assets",
+            "Data Request Package",
+          ],
+          path02ClusterRows.length
+            ? path02ClusterRows
+            : [["-", "0", path02DataPackage("")]],
+          {
+            columnWeights: [0.8, 0.35, 1.85],
+            fontSize: 6.8,
+            maxLines: 6,
+            minRowHeight: 14,
+          }
+        );
+      }
 
-      heading("06", "Methodology Snapshot");
+      heading("06", "Methodology Snapshot", 92);
       table(
         [it ? "Elemento" : "Element", it ? "Significato" : "Meaning"],
         [
@@ -5809,7 +6615,11 @@ export default function ProfessionalPage() {
           ],
           [
             "Proximity Score",
-            "Distance to documented ARCUS collapses: <=500m direct signal, 500m-2km high, 2-10km medium, above 10km provincial context.",
+            "Displayed with an operative band, not as false precision: <=500m direct signal, 500m-2km high, 2-10km medium, above 10km provincial context.",
+          ],
+          [
+            "Action Tier",
+            "A sequencing layer inside the attention class. If many assets are all immediate, Batch 1 identifies the first checks under constrained capacity. Ordering uses Asset Priority Score, evidence class, proximity band and exact ARCUS distance within the band.",
           ],
           [
             "Hazard Profile",
@@ -5826,7 +6636,7 @@ export default function ProfessionalPage() {
           ],
           [
             "Evidence Classes",
-            "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen.",
+            "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen. The class is shown next to asset scores and nearest ARCUS precedents.",
           ],
         ],
         {
@@ -5879,7 +6689,7 @@ export default function ProfessionalPage() {
         {
           text: it ? "fonti collegate" : "linked sources",
           title: it ? "Evidenza" : "Evidence",
-          value: String(evidenceSources),
+          value: `${reliabilityGrade} / ${evidenceSources}`,
         },
       ]);
       ensure(82);
@@ -5958,7 +6768,7 @@ export default function ProfessionalPage() {
       {
         text: it ? `${evidenceSources} fonti collegate` : `${evidenceSources} linked sources`,
         title: it ? "Affidabilita" : "Reliability",
-        value: `${reliabilityValue}/100`,
+        value: `${reliabilityGrade} / ${reliabilityValue}`,
       },
     ]);
     fullTextBox({
@@ -6085,8 +6895,14 @@ export default function ProfessionalPage() {
       { size: 8.8 }
     );
     table(
-      ["ID", it ? "Data" : "Date", it ? "Comune" : "Municipality", it ? "Severita" : "Severity", it ? "Causa" : "Cause"],
-      eventRows
+      ["ID", it ? "Data" : "Date", it ? "Comune" : "Municipality", it ? "Severita" : "Severity", "Evidence", it ? "Causa" : "Cause"],
+      eventRows,
+      {
+        columnWeights: [0.58, 0.72, 1.05, 1, 0.5, 0.85],
+        fontSize: 6.7,
+        maxLines: 3,
+        minRowHeight: 9,
+      }
     );
     heading("06", "Methodology Snapshot");
     table(
@@ -6135,8 +6951,8 @@ export default function ProfessionalPage() {
         [
           "Evidence Classes",
           it
-            ? "A = fonte istituzionale/tecnica primaria; B = fonte tecnica o media affidabile; C = evidenza documentale generica; D = evidenza debole da rafforzare."
-            : "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen.",
+            ? "A = fonte istituzionale/tecnica primaria; B = fonte tecnica o media affidabile; C = evidenza documentale generica; D = evidenza debole da rafforzare. La lettera e riportata accanto agli score e ai casi in appendice."
+            : "A = primary institutional/technical source; B = reliable technical or media source; C = generic documentary evidence; D = weak evidence to strengthen. The letter is displayed next to scores and appendix cases.",
         ],
       ],
       {
@@ -6174,6 +6990,20 @@ export default function ProfessionalPage() {
         mapImage = await createFallbackPath01MapImage();
       }
 
+      if (activeEntryPath === 1 && !mapImage) {
+        mapImage = await createFallbackPath02AssetMapImage({
+          numbered: variant !== "brief",
+          markers: assetScreening
+            .slice(0, 5)
+            .map((item) =>
+              professionalAssetMapMarkers.find(
+                (marker) => marker.id === item.id
+              )
+            )
+            .filter(Boolean),
+        });
+      }
+
       if (mapImage) {
         window.localStorage.setItem(
           "arcus-path01-report-map-image",
@@ -6195,7 +7025,9 @@ export default function ProfessionalPage() {
       }
 
       const reportArea =
-        activeEntryPath !== 0 && manualAreaBounds
+        activeEntryPath === 1
+          ? assetSession.fileName || "path02-asset-inventory"
+          : activeEntryPath !== 0 && manualAreaBounds
           ? manualAreaLabel
           : selectedProvinceProfile.territory;
       const slug =
@@ -6377,6 +7209,8 @@ export default function ProfessionalPage() {
             type: "Point",
           },
           properties: {
+            action_rank: screening?.actionRank || "",
+            action_tier: screening?.actionTier || "",
             asset_priority_score: screening?.score || asset.score,
             attention_level: screening?.attentionLevel || asset.priority,
             bridge_id: asset.id,
@@ -6384,11 +7218,17 @@ export default function ProfessionalPage() {
               screening?.hazardProfileLabel ||
               screening?.dominantHazard ||
               "",
+            evidence_class:
+              screening ? getAssetEvidenceGrade(screening) : "",
             monitoring_recommendation:
               screening?.monitoringRecommendation || "",
             name: asset.name,
             nearest_arcus_event:
               screening?.nearestEvent?.event_id || "",
+            nearest_arcus_summary:
+              screening?.nearestEventSummary || "",
+            proximity_band:
+              screening?.proximityBand || "",
             proximity_score: screening?.proximityScore || 0,
             territory: asset.territory,
             type: "path02_existing_asset",
@@ -7383,12 +8223,15 @@ export default function ProfessionalPage() {
     }
 
     const rows = assetScreening.map((item) => ({
+      action_rank: item.actionRank,
+      action_tier: item.actionTier,
       attention_level: item.attentionLevel,
       bridge_id: item.id,
       comparable_events:
         item.comparableEvents.length,
       hazard_profile:
         item.hazardProfileLabel || item.dominantHazard || "",
+      evidence_class: getAssetEvidenceGrade(item),
       hazard_score: item.hazardScore || 0,
       high_vulnerability_matches:
         item.highVulnerabilityMatches,
@@ -7398,10 +8241,13 @@ export default function ProfessionalPage() {
       name: item.name,
       nearest_arcus_event:
         item.nearestEvent?.event_id || "",
+      nearest_arcus_summary:
+        item.nearestEventSummary || "",
       nearest_arcus_km:
         item.nearestEvent?.distance !== undefined
           ? item.nearestEvent.distance.toFixed(2)
           : "",
+      proximity_band: item.proximityBand || "",
       priority_score: item.score,
       proximity_score: item.proximityScore || 0,
       territory: item.territory,
@@ -7415,11 +8261,16 @@ export default function ProfessionalPage() {
         "name",
         "municipality",
         "territory",
+        "action_rank",
         "priority_score",
+        "evidence_class",
+        "action_tier",
         "hazard_profile",
         "attention_level",
+        "proximity_band",
         "proximity_score",
         "nearest_arcus_event",
+        "nearest_arcus_summary",
         "nearest_arcus_km",
         "top_cause",
         "hazard_score",
@@ -7953,13 +8804,13 @@ export default function ProfessionalPage() {
     language === "it"
       ? [
           ["Dataset", "Eventi, fonti, release e dizionario dati generati.", dataRelease?.version ? `v${dataRelease.version}` : "Ready"],
-          ["Atlas", "Open, Professional ed Enterprise differenziati per layer e linguaggio.", "3 livelli"],
+          ["Atlas", "Open e Professional differenziati per layer e linguaggio.", "2 livelli"],
           ["Export", "Template, screening asset, report e watchlist in formato tabellare.", "Excel/CSV"],
           ["Governance", "Model cards, limiti dichiarati, qualita dati e audit trail visibili.", `${modelCards.length} model cards`],
         ]
       : [
           ["Dataset", "Events, sources, release and data dictionary generated.", dataRelease?.version ? `v${dataRelease.version}` : "Ready"],
-          ["Atlas", "Open, Professional and Enterprise differentiated by layers and language.", "3 tiers"],
+          ["Atlas", "Open and Professional differentiated by layers and language.", "2 tiers"],
           ["Export", "Templates, asset screening, reports and watchlists in tabular format.", "Excel/CSV"],
           ["Governance", "Model cards, declared limitations, data quality and audit trail visible.", `${modelCards.length} model cards`],
         ];
@@ -8268,8 +9119,8 @@ export default function ProfessionalPage() {
               href: "#professional-scenarios",
               scenario: "baseline",
               stage: "02",
-              title: "Configura lettura",
-              text: "Scegli se il briefing deve parlare di nuova costruzione o di valutazione di asset/area esistente.",
+              title: "Conferma e anteprima",
+              text: "Verifica contesto d'uso, provincia selezionata e segnali disponibili prima della lettura territoriale.",
             },
             {
               href: "#professional-external-layers",
@@ -8312,8 +9163,8 @@ export default function ProfessionalPage() {
                 watchlist: true,
               },
               stage: "02",
-              title: "Configura lettura",
-              text: "Scegli Monitoring priority o Vulnerability assessment. La scelta cambia il linguaggio dell'output, non lo scoring.",
+              title: "Conferma e anteprima",
+              text: "Verifica file caricato, contesto d'uso e record validi prima del calcolo degli score.",
             },
             {
               href: "#professional-assets",
@@ -8451,8 +9302,8 @@ export default function ProfessionalPage() {
               href: "#professional-scenarios",
               scenario: "baseline",
               stage: "02",
-              title: "Configure reading",
-              text: "Choose whether the briefing should speak about new construction or existing asset/area assessment.",
+              title: "Confirm and preview",
+              text: "Review use context, selected province and available signals before the territory reading.",
             },
             {
               href: "#professional-external-layers",
@@ -8495,8 +9346,8 @@ export default function ProfessionalPage() {
                 watchlist: true,
               },
               stage: "02",
-              title: "Configure reading",
-              text: "Choose Monitoring priority or Vulnerability assessment. The choice changes output language, not scoring.",
+              title: "Confirm and preview",
+              text: "Review uploaded file, use context and valid records before score processing.",
             },
             {
               href: "#professional-assets",
@@ -8812,22 +9663,14 @@ export default function ProfessionalPage() {
             <article>
               <span>
                 {language === "it"
-                  ? "Project context"
-                  : "Project context"}
+                  ? "Qualita inventario"
+                  : "Inventory quality"}
               </span>
-              <strong
-                style={{
-                  fontSize: "18px",
-                  lineHeight: "1.2",
-                  marginTop: "10px",
-                }}
-              >
-                {selectedProjectContext}
-              </strong>
+              <strong>{assetInventoryAudit.score}</strong>
               <p>
                 {language === "it"
-                  ? "prioritizzazione adattata"
-                  : "adapted prioritization"}
+                  ? "readiness score"
+                  : "readiness score"}
               </p>
             </article>
 
@@ -9040,10 +9883,10 @@ export default function ProfessionalPage() {
             <p>{activeWorkflowAction.text}</p>
           </div>
 
-          <div className="platform-field-grid">
-            <label>
-              {language === "it"
-                ? activeEntryPath === 0
+            <div className="platform-field-grid">
+              <label>
+                {language === "it"
+                  ? activeEntryPath === 0
                   ? "Provincia"
                   : "Area di lavoro"
                 : activeEntryPath === 0
@@ -9068,6 +9911,26 @@ export default function ProfessionalPage() {
                 ))}
               </select>
             </label>
+
+            {activeEntryPath === 0 && (
+              <label>
+                {language === "it"
+                  ? "Contesto d'uso"
+                  : "Use context"}
+                <select
+                  onChange={(event) =>
+                    setPath01ReportIntent(event.target.value)
+                  }
+                  value={path01ReportIntent}
+                >
+                  {path01IntentOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
 
             <div>
               <b>
@@ -9230,35 +10093,15 @@ export default function ProfessionalPage() {
             <div className="platform-context-summary">
               <span>
                 {language === "it"
-                  ? "Contesto fisso"
-                  : "Fixed context"}
+                  ? "Conferma contesto"
+                  : "Context confirmation"}
               </span>
-              <strong>{selectedProjectContext}</strong>
+              <strong>{selectedPath01Intent.label}</strong>
               <p>
                 {language === "it"
-                  ? "La base dati resta ponte su ponte. Qui scegli solo se il report deve parlare di controlli prima di progettare o di vulnerabilita gia dimostrata dal patrimonio."
-                  : "The data basis remains bridge to bridge. Here you only choose whether the report should speak about checks before design or vulnerability already demonstrated by the bridge stock."}
+                  ? "ARCUS produrra una sola lettura territoriale basata su evidenza storica. Il contesto d'uso serve solo a orientare il framing del report finale."
+                  : "ARCUS will produce one evidence-based territory reading. The use context only frames the final report."}
               </p>
-            </div>
-
-            <div className="platform-intent-grid">
-              {path01IntentOptions.map((option) => (
-                <button
-                  className={
-                    path01ReportIntent === option.id
-                      ? "active"
-                      : ""
-                  }
-                  key={option.id}
-                  onClick={() =>
-                    setPath01ReportIntent(option.id)
-                  }
-                  type="button"
-                >
-                  <span>{option.label}</span>
-                  <p>{option.text}</p>
-                </button>
-              ))}
             </div>
 
             <div className="platform-workflow-output-header">
@@ -9343,31 +10186,6 @@ export default function ProfessionalPage() {
       }
 
       if (activeEntryPath === 1) {
-        const options = [
-          {
-            id: "monitoring_priority",
-            label:
-              language === "it"
-                ? "Monitoring priority"
-                : "Monitoring priority",
-            text:
-              language === "it"
-                ? "Prioritizza ispezioni e controlli sul patrimonio esistente."
-                : "Prioritizes inspections and checks across the existing stock.",
-          },
-          {
-            id: "vulnerability_assessment",
-            label:
-              language === "it"
-                ? "Vulnerability assessment"
-                : "Vulnerability assessment",
-            text:
-              language === "it"
-                ? "Legge l'esposizione complessiva del patrimonio per due diligence o reporting."
-                : "Reads the overall exposure of the asset stock for due diligence or reporting.",
-          },
-        ];
-
         return (
           <div className="platform-workflow-panel">
             <div>
@@ -9379,35 +10197,15 @@ export default function ProfessionalPage() {
             <div className="platform-context-summary">
               <span>
                 {language === "it"
-                  ? "Contesto fisso"
-                  : "Fixed context"}
+                  ? "Conferma contesto"
+                  : "Context confirmation"}
               </span>
-              <strong>{selectedProjectContext}</strong>
+              <strong>{selectedPath02ReadingMode}</strong>
               <p>
                 {language === "it"
-                  ? "La scelta cambia il linguaggio dell'output, non il calcolo degli indici."
-                  : "This choice changes report language, not the scoring logic."}
+                  ? "ARCUS produrra una sola lettura del patrimonio. Il contesto d'uso e stato dichiarato nello step di upload e orienta il formato del report."
+                  : "ARCUS will produce one asset-stock reading. The use context was declared during upload and frames the report format."}
               </p>
-            </div>
-
-            <div className="platform-intent-grid">
-              {options.map((option) => (
-                <button
-                  className={
-                    path02ReadingMode === option.id
-                      ? "active"
-                      : ""
-                  }
-                  key={option.id}
-                  onClick={() =>
-                    setPath02ReadingMode(option.id)
-                  }
-                  type="button"
-                >
-                  <span>{option.label}</span>
-                  <p>{option.text}</p>
-                </button>
-              ))}
             </div>
 
             <div className="platform-workflow-output-header">
@@ -9814,12 +10612,12 @@ export default function ProfessionalPage() {
                   ],
                   [
                     language === "it"
-                      ? "Attenzione programmata"
-                      : "Programmed attention",
-                    assetAttentionSummary.programmed,
+                      ? "Batch 1"
+                      : "Batch 1",
+                    assetAttentionSummary.batchOne,
                     language === "it"
-                      ? "nel piano annuale"
-                      : "in the annual plan",
+                      ? "asset da controllare per primi"
+                      : "assets to inspect first",
                   ],
                   [
                     language === "it"
@@ -9865,7 +10663,9 @@ export default function ProfessionalPage() {
                     </span>
                   </div>
                   <div>
-                    <b>{asset.score}</b>
+                    <b>
+                      {asset.score}/{getAssetEvidenceGrade(asset)}
+                    </b>
                     <span>{copy.screeningScore}</span>
                   </div>
                 </article>
@@ -9953,6 +10753,7 @@ export default function ProfessionalPage() {
                     : "Evidence reliability"}
                 </span>
                 <strong>
+                  {evidenceGradeFromScore(workflowReliability.average)} /{" "}
                   {Math.round(workflowReliability.average)}
                 </strong>
                 <p>
@@ -10066,7 +10867,9 @@ export default function ProfessionalPage() {
                       </span>
                     </div>
                     <div>
-                      <b>{item.score}</b>
+                      <b>
+                        {item.score}/{getAssetEvidenceGrade(item)}
+                      </b>
                       <span>{copy.screeningScore}</span>
                     </div>
                   </article>
@@ -10361,7 +11164,7 @@ export default function ProfessionalPage() {
             language === "it"
               ? "Affidabilita evidenze"
               : "Evidence reliability",
-            `${Math.round(workflowReliability.average)}/100`,
+            `${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)}/100`,
           ],
         ],
         actions: [
@@ -11314,17 +12117,19 @@ export default function ProfessionalPage() {
                   .map((item) => (
                     <article key={item.id}>
                       <div>
-                        <span>{item.attentionLevel}</span>
+                        <span>{item.actionTier}</span>
                         <strong>{item.name}</strong>
                         <p>
                           {item.territory} -{" "}
-                          {item.hazardProfileLabel} - proximity{" "}
-                          {item.proximityScore}
+                          {item.hazardProfileLabel} -{" "}
+                          {item.proximityBand}
                         </p>
                       </div>
 
                       <div>
-                        <b>{item.score}</b>
+                        <b>
+                          {item.score}/{getAssetEvidenceGrade(item)}
+                        </b>
                         <em>{copy.screeningScore}</em>
                       </div>
                     </article>
@@ -11336,7 +12141,8 @@ export default function ProfessionalPage() {
                 <h3>{assetScreening[0].name}</h3>
 
                 <div className="platform-asset-score">
-                  {assetScreening[0].score}
+                  {assetScreening[0].score}/
+                  {getAssetEvidenceGrade(assetScreening[0])}
                 </div>
 
                 <div className="platform-asset-hazard">
@@ -11365,6 +12171,10 @@ export default function ProfessionalPage() {
                       .highVulnerabilityMatches
                   }{" "}
                   {copy.highCriticalMatches}.
+                </p>
+                <p>
+                  {assetScreening[0].actionTier}. Nearest ARCUS case:{" "}
+                  {assetScreening[0].nearestEventSummary}.
                 </p>
                 <p>
                   {assetScreening[0].monitoringRecommendation}

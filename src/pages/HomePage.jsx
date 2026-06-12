@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
+import ScrollReveal from "../components/motion/ScrollReveal";
 
 import useLanguage from "../context/useLanguage";
 
@@ -66,13 +67,13 @@ export default function HomePage() {
   const copy = {
     en: {
       atlasCta: "Open Atlas",
-      briefingCta: "View Analytics",
+      professionalCta: "Open Professional",
       heroLabel:
-        "Scientific Infrastructure Failure Observatory",
+        "Verified Bridge Collapse Intelligence",
       heroTitle:
-        "Bridge collapse intelligence, built as a research infrastructure.",
+        "Verified bridge-collapse intelligence for infrastructure analysis.",
       heroText:
-        "ARCUS transforms verified collapse records, source traceability and geospatial evidence into an observatory for infrastructure failure analysis.",
+        "ARCUS connects documented collapse events, source traceability, causes, territory and professional outputs so infrastructure evidence can be explored, compared and turned into technical decisions.",
       metrics: [
         ["Validated events", metrics.events],
         ["Documented sources", metrics.sources],
@@ -80,86 +81,100 @@ export default function HomePage() {
         ["Total collapses", metrics.totalCollapse],
       ],
       evidenceLabel: "Evidence System",
-      evidenceTitle:
-        "From fragmented records to structured infrastructure intelligence.",
+      evidenceTitle: "What ARCUS connects.",
       evidenceText:
-        "The platform connects event classification, territorial context, source validation and analytical interpretation. It is designed for researchers, institutions and professional stakeholders who need more than a static map.",
+        "ARCUS is not only a map. It is a structured evidence layer where each event remains connected to the information needed to interpret it.",
       layers: [
         [
-          "Public Observatory",
-          "Atlas, methodology, dataset overview and selected analytics create scientific credibility and public diffusion.",
+          "Verified events",
+          "Collapse records are organized by location, year, severity, trigger and failure mechanism.",
         ],
         [
-          "Professional Workspace",
-          "Advanced analytics, hazard overlays, saved workspaces, exports and explainable outputs create the operational layer.",
+          "Source traceability",
+          "Each record stays connected to its documentary base: scientific, institutional, technical and verified news sources.",
         ],
         [
-          "Enterprise Platform",
-          "Private data integration, governance, enterprise APIs and institutional dashboards create the strategic layer.",
+          "Territorial context",
+          "Events become readable across provinces, regions, hazard layers and infrastructure patterns.",
+        ],
+        [
+          "Analytical indicators",
+          "Reliability, vulnerability and exposure signals help compare places and cases before deeper technical work.",
+        ],
+        [
+          "Operational outputs",
+          "Professional workflows turn the same evidence into screening, watchlists, reports and exportable files.",
         ],
       ],
       atlasLabel: "Atlas Layer",
-      atlasTitle:
-        "A national failure observatory, not just a map.",
+      atlasTitle: "Start with the public evidence.",
       atlasText:
-        "The Atlas turns each bridge collapse into a traceable spatial record: location, cause, severity, trigger mechanism and source evidence remain connected in one analytical surface.",
+        "The public Atlas lets a user inspect where bridge collapses occurred, how they are classified and which sources support each record. It is the fastest way to understand the evidence base behind ARCUS.",
       atlasEvidence: [
         ["Cause taxonomy", "Hydraulic, impact, material, seismic and construction-related mechanisms."],
         ["Event severity", "Total and partial collapses remain readable at territorial scale."],
         ["Source traceability", "Each bridge card connects the event to its documented evidence base."],
       ],
-      methodologyLabel: "Methodology",
+      professionalLabel: "Professional Workspace",
+      professionalTitle:
+        "Move from observation to operational analysis.",
+      professionalText:
+        "Professional is for users who need to turn historical evidence into technical work: compare territories, screen asset inventories, generate explainable reports and export data for GIS or internal workflows.",
+      professionalOutputs: [
+        ["Territorial scenarios", "Compare provinces and technical stress scenarios."],
+        ["Asset screening", "Upload inventories and identify priority checks."],
+        ["Reports and exports", "Produce PDF, CSV and GeoJSON outputs."],
+      ],
+      professionalSignals: [
+        ["Priority index", "82"],
+        ["Evidence grade", "A/B"],
+        ["Export pack", "PDF + GIS"],
+      ],
+      methodologyLabel: "Why It Is Credible",
       methodologyTitle:
-        "Designed for traceability, reproducibility and long-term credibility.",
+        "Built for traceability, reproducibility and declared limits.",
       methodologyText:
-        "Every record is part of a validation logic: event detection, cross-source verification, geolocation, classification and continuous revision.",
+        "Every record is part of a validation logic: event detection, cross-source verification, geolocation, classification and continuous revision. ARCUS supports technical screening; it does not replace inspection, diagnosis or safety certification.",
       routes: [
         ["Atlas", "/atlas"],
         ["Methodology", "/methodology"],
         ["Analytics", "/analytics"],
-        ["Plans", "/plans"],
+        ["Solutions", "/plans"],
       ],
-      pathLabel: "Choose Your Path",
-      pathTitle:
-        "Start from the question you need ARCUS to answer.",
+      pathLabel: "Choose Your Use Case",
+      pathTitle: "Start from the job you need to do.",
       pathText:
-        "A first-time user should not have to understand the whole platform before taking the right next step. ARCUS separates public discovery, research analysis, operational screening and institutional integration.",
+        "A first-time user should not have to understand the whole platform before choosing the right next step.",
       clientPaths: [
         {
           action: "Open public evidence",
-          label: "I want to explore the observatory",
+          label: "Explore evidence",
           path: "/atlas",
           text: "Use the Atlas to inspect events, sources, timeline and taxonomy.",
         },
         {
           action: "Read the analytics",
-          label: "I need a data overview",
+          label: "Understand patterns",
           path: "/analytics",
           text: "Use Analytics to understand patterns, territories, causes and public indicators.",
         },
         {
-          action: "Compare plans",
-          label: "I manage assets or territories",
-          path: "/plans",
-          text: "Compare Open, Professional and Enterprise before entering the operational workspace.",
-        },
-        {
-          action: "Evaluate Enterprise",
-          label: "I represent an institution",
-          path: "/enterprise",
-          text: "Use Enterprise when private datasets, governance and custom dashboards are required.",
+          action: "Open Professional",
+          label: "Produce outputs",
+          path: "/professional",
+          text: "Use Professional when you need scenarios, asset screening, reports and exportable evidence.",
         },
       ],
     },
     it: {
       atlasCta: "Apri l'Atlante",
-      briefingCta: "Vedi gli analytics",
+      professionalCta: "Apri Professional",
       heroLabel:
-        "Osservatorio scientifico sui cedimenti infrastrutturali",
+        "Intelligence verificata sui crolli dei ponti",
       heroTitle:
-        "Intelligence sui crolli dei ponti, costruita come infrastruttura di ricerca.",
+        "Intelligence verificata sui crolli dei ponti per l'analisi infrastrutturale.",
       heroText:
-        "ARCUS trasforma eventi verificati, tracciabilita delle fonti ed evidenza geospaziale in un osservatorio per l'analisi dei cedimenti infrastrutturali.",
+        "ARCUS connette eventi documentati, tracciabilita delle fonti, cause, territorio e output professionali per esplorare, confrontare e trasformare l'evidenza in decisioni tecniche.",
       metrics: [
         ["Eventi validati", metrics.events],
         ["Fonti documentate", metrics.sources],
@@ -167,74 +182,88 @@ export default function HomePage() {
         ["Collassi totali", metrics.totalCollapse],
       ],
       evidenceLabel: "Sistema di evidenza",
-      evidenceTitle:
-        "Da registri frammentati a intelligence infrastrutturale strutturata.",
+      evidenceTitle: "Cosa connette ARCUS.",
       evidenceText:
-        "La piattaforma collega classificazione degli eventi, contesto territoriale, validazione delle fonti e interpretazione analitica. E pensata per ricercatori, enti e stakeholder professionali che hanno bisogno di piu di una mappa statica.",
+        "ARCUS non e soltanto una mappa. E un layer di evidenza strutturata in cui ogni evento resta collegato alle informazioni necessarie per interpretarlo.",
       layers: [
         [
-          "Osservatorio pubblico",
-          "Atlante, metodologia, panoramica dataset e analytics selezionati costruiscono credibilita scientifica e diffusione pubblica.",
+          "Eventi verificati",
+          "I record di collasso sono organizzati per localizzazione, anno, gravita, trigger e meccanismo di cedimento.",
         ],
         [
-          "Workspace professionale",
-          "Analytics avanzati, overlay hazard, workspace salvati, export e output spiegabili costruiscono il layer operativo.",
+          "Tracciabilita fonti",
+          "Ogni record resta collegato alla base documentale: fonti scientifiche, istituzionali, tecniche e giornalistiche verificate.",
         ],
         [
-          "Piattaforma Enterprise",
-          "Dati privati, governance, API enterprise e dashboard istituzionali costruiscono il livello strategico.",
+          "Contesto territoriale",
+          "Gli eventi diventano leggibili per province, regioni, layer hazard e pattern infrastrutturali.",
+        ],
+        [
+          "Indicatori analitici",
+          "Affidabilita, vulnerabilita ed esposizione aiutano a confrontare luoghi e casi prima del lavoro tecnico di dettaglio.",
+        ],
+        [
+          "Output operativi",
+          "I workflow Professional trasformano la stessa evidenza in screening, watchlist, report e file esportabili.",
         ],
       ],
       atlasLabel: "Layer Atlas",
-      atlasTitle:
-        "Un osservatorio nazionale dei cedimenti, non solo una mappa.",
+      atlasTitle: "Parti dall'evidenza pubblica.",
       atlasText:
-        "L'Atlante trasforma ogni collasso in un record spaziale tracciabile: localizzazione, causa, gravita, meccanismo di innesco e fonti restano connessi in un'unica superficie analitica.",
+        "L'Atlante pubblico permette di ispezionare dove sono avvenuti i crolli, come sono classificati e quali fonti sostengono ogni record. E il modo piu rapido per capire la base di evidenza di ARCUS.",
       atlasEvidence: [
         ["Tassonomia cause", "Meccanismi idraulici, impatto, materiali, sisma e criticita progettuali/costruttive."],
         ["Gravita evento", "Collassi totali e parziali restano leggibili alla scala territoriale."],
         ["Tracciabilita fonti", "Ogni scheda ponte collega l'evento alla sua base documentale."],
       ],
-      methodologyLabel: "Metodologia",
+      professionalLabel: "Workspace Professional",
+      professionalTitle:
+        "Passa dall'osservazione all'analisi operativa.",
+      professionalText:
+        "Professional e per chi deve trasformare l'evidenza storica in lavoro tecnico: confrontare territori, analizzare inventari asset, generare report spiegabili ed esportare dati per GIS o workflow interni.",
+      professionalOutputs: [
+        ["Scenari territoriali", "Confronta province e scenari di stress tecnico."],
+        ["Asset screening", "Carica inventari e individua controlli prioritari."],
+        ["Report ed export", "Produci output PDF, CSV e GeoJSON."],
+      ],
+      professionalSignals: [
+        ["Priority index", "82"],
+        ["Classe evidenza", "A/B"],
+        ["Export pack", "PDF + GIS"],
+      ],
+      methodologyLabel: "Perche e credibile",
       methodologyTitle:
-        "Progettato per tracciabilita, riproducibilita e credibilita nel tempo.",
+        "Costruito per tracciabilita, riproducibilita e limiti dichiarati.",
       methodologyText:
-        "Ogni record entra in una logica di validazione: individuazione evento, verifica multi-fonte, geolocalizzazione, classificazione e revisione continua.",
+        "Ogni record entra in una logica di validazione: individuazione evento, verifica multi-fonte, geolocalizzazione, classificazione e revisione continua. ARCUS supporta lo screening tecnico; non sostituisce ispezioni, diagnosi strutturali o certificazioni di sicurezza.",
       routes: [
         ["Atlante", "/atlas"],
         ["Metodologia", "/methodology"],
         ["Analytics", "/analytics"],
-        ["Piani", "/plans"],
+        ["Soluzioni", "/plans"],
       ],
-      pathLabel: "Scegli il percorso",
-      pathTitle:
-        "Parti dalla domanda a cui ARCUS deve rispondere.",
+      pathLabel: "Scegli il caso d'uso",
+      pathTitle: "Parti dal lavoro che devi fare.",
       pathText:
-        "Chi entra per la prima volta non deve capire tutta la piattaforma prima di scegliere. ARCUS separa scoperta pubblica, analisi dati, screening operativo e integrazione istituzionale.",
+        "Chi entra per la prima volta non deve capire tutta la piattaforma prima di scegliere il passo giusto.",
       clientPaths: [
         {
           action: "Apri evidenze pubbliche",
-          label: "Voglio esplorare l'osservatorio",
+          label: "Esplorare evidenze",
           path: "/atlas",
           text: "Usa l'Atlante per consultare eventi, fonti, timeline e tassonomia.",
         },
         {
           action: "Leggi gli analytics",
-          label: "Mi serve una lettura dei dati",
+          label: "Capire i pattern",
           path: "/analytics",
           text: "Usa Analytics per capire pattern, territori, cause e indicatori pubblici.",
         },
         {
-          action: "Confronta i piani",
-          label: "Gestisco asset o territori",
-          path: "/plans",
-          text: "Confronta Open, Professional ed Enterprise prima di entrare nel workspace operativo.",
-        },
-        {
-          action: "Valuta Enterprise",
-          label: "Rappresento un ente",
-          path: "/enterprise",
-          text: "Usa Enterprise quando servono dati privati, governance e dashboard su misura.",
+          action: "Apri Professional",
+          label: "Produrre output",
+          path: "/professional",
+          text: "Usa Professional quando servono scenari, asset screening, report ed evidenza esportabile.",
         },
       ],
     },
@@ -251,8 +280,8 @@ export default function HomePage() {
         title="ARCUS"
         description={
           language === "it"
-            ? "ARCUS e un osservatorio scientifico sui crolli dei ponti, con atlante geospaziale, metodologia verificabile e analytics infrastrutturali."
-            : "ARCUS is a scientific bridge collapse observatory with a geospatial atlas, verifiable methodology and infrastructure analytics."
+            ? "ARCUS collega eventi verificati, fonti, territorio e output professionali per l'analisi dei crolli dei ponti."
+            : "ARCUS connects verified bridge-collapse events, sources, territory and professional outputs for infrastructure analysis."
         }
       />
 
@@ -266,9 +295,38 @@ export default function HomePage() {
           aria-hidden="true"
         />
 
+        <div
+          className="home-hero-visual"
+          aria-hidden="true"
+        >
+          <div className="home-hero-map-grid" />
+
+          <div className="home-hero-vector one" />
+          <div className="home-hero-vector two" />
+          <div className="home-hero-vector three" />
+
+          {[
+            ["2000", "Hydraulic", "34%"],
+            ["2018", "Material", "A/B"],
+            ["2024", "Impact", "TC"],
+          ].map(([year, cause, value], index) => (
+            <div
+              className={`home-hero-node node-${index + 1}`}
+              key={year}
+            >
+              <span>{year}</span>
+              <strong>{cause}</strong>
+              <em>{value}</em>
+            </div>
+          ))}
+        </div>
+
         <div className="home-hero-shade" />
 
-        <div className="home-container home-hero-content">
+        <ScrollReveal
+          className="home-container home-hero-content"
+          variant="scale"
+        >
           <div className="home-kicker">
             {text.heroLabel}
           </div>
@@ -287,18 +345,21 @@ export default function HomePage() {
 
             <Link
               className="home-secondary-action"
-              to="/analytics"
+              to="/professional"
             >
-              {text.briefingCta}
+              {text.professionalCta}
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
 
         <div className="home-container home-hero-metrics">
-          {text.metrics.map(([label, value]) => (
-            <div
+          {text.metrics.map(([label, value], index) => (
+            <ScrollReveal
+              as="div"
               className="home-metric"
+              delay={index * 80}
               key={label}
+              variant="soft"
             >
               <strong>
                 {typeof value === "number"
@@ -306,42 +367,13 @@ export default function HomePage() {
                   : value}
               </strong>
               <span>{label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-section home-client-path">
-        <div className="home-container home-split">
-          <div>
-            <div className="home-section-label">
-              {text.pathLabel}
-            </div>
-
-            <h2>{text.pathTitle}</h2>
-          </div>
-
-          <p>{text.pathText}</p>
-        </div>
-
-        <div className="home-container home-path-grid">
-          {text.clientPaths.map((item) => (
-            <article
-              className="home-path-card"
-              key={item.path}
-            >
-              <span>{item.label}</span>
-              <p>{item.text}</p>
-              <Link to={item.path}>
-                {item.action}
-              </Link>
-            </article>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       <section className="home-section home-evidence">
-        <div className="home-container home-split">
+        <ScrollReveal className="home-container home-split">
           <div>
             <div className="home-section-label">
               {text.evidenceLabel}
@@ -351,24 +383,62 @@ export default function HomePage() {
           </div>
 
           <p>{text.evidenceText}</p>
-        </div>
+        </ScrollReveal>
 
         <div className="home-container home-layer-grid">
-          {text.layers.map(([title, body]) => (
-            <article
+          {text.layers.map(([title, body], index) => (
+            <ScrollReveal
+              as="article"
               className="home-layer-card"
+              delay={index * 70}
               key={title}
+              variant="soft"
             >
+              <span>
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <h3>{title}</h3>
               <p>{body}</p>
-            </article>
+            </ScrollReveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section home-client-path">
+        <ScrollReveal className="home-container home-split">
+          <div>
+            <div className="home-section-label">
+              {text.pathLabel}
+            </div>
+
+            <h2>{text.pathTitle}</h2>
+          </div>
+
+          <p>{text.pathText}</p>
+        </ScrollReveal>
+
+        <div className="home-container home-path-grid">
+          {text.clientPaths.map((item, index) => (
+            <ScrollReveal
+              as="article"
+              className="home-path-card"
+              delay={index * 90}
+              key={item.path}
+              variant="scale"
+            >
+              <span>{item.label}</span>
+              <p>{item.text}</p>
+              <Link to={item.path}>
+                {item.action}
+              </Link>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       <section className="home-section home-dark-band">
         <div className="home-container home-atlas-grid">
-          <div>
+          <ScrollReveal>
             <div className="home-section-label">
               {text.atlasLabel}
             </div>
@@ -382,9 +452,32 @@ export default function HomePage() {
             >
               {text.atlasCta}
             </Link>
-          </div>
+          </ScrollReveal>
 
-          <div className="home-atlas-brief">
+          <ScrollReveal
+            className="home-atlas-brief"
+            delay={120}
+            variant="scale"
+          >
+            <div
+              className="home-atlas-preview"
+              aria-hidden="true"
+            >
+              <div className="home-atlas-preview-map">
+                <i className="marker marker-one" />
+                <i className="marker marker-two" />
+                <i className="marker marker-three" />
+                <i className="marker marker-four" />
+                <span className="cluster">12</span>
+              </div>
+
+              <div className="home-atlas-preview-panel">
+                <span>Event card</span>
+                <strong>TC / Hydraulic</strong>
+                <em>4 sources linked</em>
+              </div>
+            </div>
+
             <div className="home-atlas-brief-header">
               <span>ARCUS ATLAS</span>
               <strong>{metrics.events}</strong>
@@ -419,12 +512,82 @@ export default function HomePage() {
                 {metrics.totalCollapse} TC
               </span>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
+      <section className="home-section home-professional">
+        <ScrollReveal className="home-container home-split">
+          <div>
+            <div className="home-section-label">
+              {text.professionalLabel}
+            </div>
+
+            <h2>{text.professionalTitle}</h2>
+          </div>
+
+          <div>
+            <p>{text.professionalText}</p>
+
+            <div
+              className="home-professional-mockup"
+              aria-hidden="true"
+            >
+              <div className="home-professional-topbar">
+                <span>Professional Workspace</span>
+                <strong>Live scenario</strong>
+              </div>
+
+              <div className="home-professional-signal-grid">
+                {text.professionalSignals.map(([label, value]) => (
+                  <article key={label}>
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                  </article>
+                ))}
+              </div>
+
+              <div className="home-professional-rows">
+                {[
+                  ["Asset screening", 84],
+                  ["Source reliability", 72],
+                  ["Hazard exposure", 61],
+                ].map(([label, width]) => (
+                  <div key={label}>
+                    <span>{label}</span>
+                    <i>
+                      <em
+                        style={{
+                          width: `${width}%`,
+                        }}
+                      />
+                    </i>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="home-professional-grid">
+              {text.professionalOutputs.map(([title, body]) => (
+                <article key={title}>
+                  <span>{title}</span>
+                  <p>{body}</p>
+                </article>
+              ))}
+            </div>
+
+            <Link
+              className="home-professional-link"
+              to="/professional"
+            >
+              {text.professionalCta}
+            </Link>
+          </div>
+        </ScrollReveal>
+      </section>
+
       <section className="home-section home-method">
-        <div className="home-container home-split">
+        <ScrollReveal className="home-container home-split">
           <div>
             <div className="home-section-label">
               {text.methodologyLabel}
@@ -448,7 +611,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </main>
   );

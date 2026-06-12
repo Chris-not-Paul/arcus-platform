@@ -1,0 +1,52 @@
+.scroll-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.scroll-reveal-can-animate {
+  will-change: opacity, transform;
+}
+
+.scroll-reveal-can-animate.scroll-reveal-rise {
+  --reveal-scale: 1;
+  --reveal-y: 28px;
+}
+
+.scroll-reveal-can-animate.scroll-reveal-soft {
+  --reveal-scale: 1;
+  --reveal-y: 16px;
+}
+
+.scroll-reveal-can-animate.scroll-reveal-scale {
+  --reveal-scale: 0.985;
+  --reveal-y: 20px;
+}
+
+.scroll-reveal-can-animate.is-visible {
+  animation:
+    scrollRevealIn 760ms cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes scrollRevealIn {
+  from {
+    opacity: 0;
+    transform:
+      translateY(var(--reveal-y, 24px))
+      scale(var(--reveal-scale, 1));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

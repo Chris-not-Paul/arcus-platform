@@ -97,7 +97,7 @@ function MethodologyPage() {
       outputTitle:
         "From validated records to operational products",
       outputText:
-        "The same methodological core powers different levels of ARCUS: public transparency, professional analytics and controlled institutional workflows.",
+        "The same methodological core powers the public observatory and the Professional workspace: transparency, analytics and explainable operational outputs.",
       outputs: [
         [
           "Open Atlas",
@@ -106,10 +106,6 @@ function MethodologyPage() {
         [
           "Professional",
           "Evidence indicators, vulnerability context, asset screening and operational reports.",
-        ],
-        [
-          "Enterprise",
-          "Private joins, institutional dashboards, governance and recurring intelligence outputs.",
         ],
       ],
       sourceTiers: [
@@ -232,7 +228,7 @@ function MethodologyPage() {
       outputTitle:
         "Dal record validato agli strumenti operativi",
       outputText:
-        "Lo stesso nucleo metodologico alimenta livelli diversi di ARCUS: trasparenza pubblica, analytics professionali e workflow istituzionali controllati.",
+        "Lo stesso nucleo metodologico alimenta l'osservatorio pubblico e il workspace Professional: trasparenza, analytics e output operativi spiegabili.",
       outputs: [
         [
           "Open Atlas",
@@ -241,10 +237,6 @@ function MethodologyPage() {
         [
           "Professional",
           "Indicatori di evidenza, contesto di vulnerabilita, asset screening e report operativi.",
-        ],
-        [
-          "Enterprise",
-          "Join con dati privati, dashboard istituzionali, governance e output periodici.",
         ],
       ],
       sourceTiers: [
