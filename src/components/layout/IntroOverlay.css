@@ -12,7 +12,7 @@
 
   background:
     radial-gradient(circle at 50% 42%, rgba(196,144,64,0.16), transparent 30%),
-    linear-gradient(135deg, #120f0d, #181412 48%, #211c18);
+    linear-gradient(135deg, var(--arcus-night), var(--arcus-night-soft) 48%, var(--arcus-night-panel));
 
   transition:
     opacity 0.75s ease,

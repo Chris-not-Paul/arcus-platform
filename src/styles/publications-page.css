@@ -17,8 +17,9 @@
 
 .publications-label {
   color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -29,6 +30,7 @@
   color: var(--arcus-ink);
   font-family: var(--arcus-font-display);
   font-size: clamp(42px, 6vw, 82px);
+  font-weight: 400;
   line-height: 0.98;
   letter-spacing: 0;
 }
@@ -56,8 +58,9 @@
 .publications-feature span,
 .publications-grid span {
   color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -67,6 +70,7 @@
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
   font-size: clamp(32px, 4vw, 54px);
+  font-weight: 400;
   line-height: 1.02;
 }
 
@@ -97,7 +101,7 @@
   background: var(--arcus-bronze);
   color: var(--arcus-night);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;

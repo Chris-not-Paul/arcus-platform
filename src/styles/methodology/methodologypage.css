@@ -97,8 +97,8 @@
     ),
     linear-gradient(
       135deg,
-      #1a1715,
-      #211d1a
+      var(--arcus-night-soft),
+      var(--arcus-night-panel)
     );
 
   color: var(--arcus-text-on-dark);
@@ -196,10 +196,10 @@
     ),
     linear-gradient(
       135deg,
-      #120f0d,
-      #1a1715 42%,
-      #1e1a17 72%,
-      #181412
+      var(--arcus-night),
+      var(--arcus-night-soft) 42%,
+      var(--arcus-night-panel) 72%,
+      var(--arcus-night-soft)
     );
 }
 
@@ -330,7 +330,7 @@
   font-size: 28px;
   font-weight: 800;
 
-  color: #f3efe8;
+  color: var(--arcus-paper);
 
   margin-bottom: 10px;
 }
@@ -406,7 +406,7 @@
   line-height: 1.4;
   font-weight: 700;
 
-  color: #f3efe8;
+  color: var(--arcus-paper);
 
   margin-bottom: 10px;
 }
@@ -453,7 +453,7 @@
   font-size: 18px;
   line-height: 1.9;
 
-  color: #4f463d;
+  color: var(--arcus-ink-soft);
 }
 
 /* ================================= */
@@ -573,7 +573,7 @@
   line-height: 1.2;
   font-weight: 700;
 
-  color: #f3efe8;
+  color: var(--arcus-paper);
 
   margin-bottom: 18px;
 }
@@ -617,7 +617,7 @@
 
   margin-bottom: 24px;
 
-  color: #1c1a18;
+  color: var(--arcus-ink);
 }
 
 .classification-tags {
@@ -640,17 +640,17 @@
 
 .taxonomy-material {
   background: rgba(163,126,92,0.12);
-  color: #7b5c43;
+  color: var(--arcus-clay);
 }
 
 .taxonomy-hydraulic {
   background: rgba(94,124,139,0.12);
-  color: #4c6976;
+  color: var(--arcus-steel);
 }
 
 .taxonomy-earthquake {
   background: rgba(149,78,68,0.12);
-  color: #8a4a3f;
+  color: var(--arcus-risk);
 }
 
 .taxonomy-landslide {
@@ -670,7 +670,7 @@
 
 .taxonomy-fire {
   background: rgba(142,74,52,0.12);
-  color: #8a4638;
+  color: var(--arcus-risk);
 }
 
 .taxonomy-design {
@@ -734,7 +734,7 @@
   text-transform: uppercase;
   font-weight: 800;
 
-  color: #9a7c63;
+  color: var(--arcus-clay);
 
   margin-bottom: 18px;
 }
@@ -882,8 +882,8 @@
   background:
     linear-gradient(
       to bottom,
-      #ebe4d8,
-      #f3efe8
+      var(--arcus-paper-warm),
+      var(--arcus-paper)
     );
 }
 
@@ -928,19 +928,19 @@
   line-height: 1.4;
   font-weight: 700;
 
-  color: #1c1a18;
+  color: var(--arcus-ink);
 
   margin-bottom: 12px;
 }
 
 .reference-meta {
-  color: #7a6450;
+  color: var(--arcus-clay);
 
   margin-bottom: 8px;
 }
 
 .reference-authors {
-  color: #51483f;
+  color: var(--arcus-ink-soft);
 }
 
 .reference-paper-label {
@@ -950,7 +950,7 @@
   text-transform: uppercase;
   font-weight: 700;
 
-  color: #a18770;
+  color: var(--arcus-clay);
 
   margin-bottom: 14px;
 }
@@ -961,7 +961,7 @@
   line-height: 1.35;
   font-weight: 700;
 
-  color: #1c1a18;
+  color: var(--arcus-ink);
 
   margin-bottom: 14px;
 }
@@ -970,7 +970,7 @@
 
   font-size: 15px;
 
-  color: #7a6450;
+  color: var(--arcus-clay);
 }
 
 .reference-authors {

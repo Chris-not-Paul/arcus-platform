@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Libre+Caslon+Display&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap");
 
 :root {
   --arcus-font-sans:
-    "IBM Plex Sans",
+    Inter,
     "Segoe UI",
     system-ui,
     -apple-system,
@@ -10,6 +10,7 @@
     sans-serif;
 
   --arcus-font-display:
+    "Libre Caslon Display",
     "Source Serif 4",
     Georgia,
     "Times New Roman",
@@ -22,25 +23,35 @@
     sans-serif;
 
   --arcus-font-body: var(--arcus-font-sans);
+  --arcus-font-mono:
+    "JetBrains Mono",
+    "IBM Plex Mono",
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
 
-  --arcus-ink: #1c1a18;
-  --arcus-ink-soft: #51483f;
-  --arcus-ink-muted: #766a5f;
-  --arcus-paper: #f3efe8;
-  --arcus-paper-warm: #ebe4d8;
-  --arcus-paper-soft: #fff8f2;
-  --arcus-night: #120f0d;
-  --arcus-night-soft: #1a1512;
-  --arcus-night-panel: #231e1a;
-  --arcus-bronze: #c49040;
-  --arcus-bronze-soft: #d0a56f;
-  --arcus-clay: #8c735d;
-  --arcus-steel: #6e858d;
-  --arcus-border-light: rgba(140,115,93,0.14);
-  --arcus-border-dark: rgba(243,239,232,0.12);
-  --arcus-text-on-dark: #f3efe8;
-  --arcus-text-on-dark-soft: rgba(226,218,209,0.74);
-  --arcus-focus: #e0b678;
+  --arcus-ink: #171a18;
+  --arcus-ink-soft: #424842;
+  --arcus-ink-muted: #6f756d;
+  --arcus-paper: #f1eee7;
+  --arcus-paper-warm: #e5ded2;
+  --arcus-paper-soft: #faf7f0;
+  --arcus-night: #0f1413;
+  --arcus-night-soft: #18201f;
+  --arcus-night-panel: #202927;
+  --arcus-bronze: #a06f38;
+  --arcus-bronze-soft: #c08b4f;
+  --arcus-clay: #8a6045;
+  --arcus-steel: #4f6f78;
+  --arcus-risk: #9a4f36;
+  --arcus-signal: #b78a45;
+  --arcus-border-light: rgba(77,69,58,0.16);
+  --arcus-border-dark: rgba(241,238,231,0.13);
+  --arcus-text-on-dark: #f1eee7;
+  --arcus-text-on-dark-soft: rgba(226,221,211,0.74);
+  --arcus-focus: #c08b4f;
 }
 
 html {
@@ -48,12 +59,17 @@ html {
 }
 
 ::selection {
-  background: rgba(196,144,64,0.32);
+  background: rgba(160,111,56,0.30);
   color: var(--arcus-ink);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  font-variant-ligatures: none;
+  -webkit-font-feature-settings: "liga" 0, "dlig" 0;
+  font-feature-settings: "liga" 0, "dlig" 0;
 }
 
 html,
@@ -96,7 +112,7 @@ body {
   color: var(--arcus-ink);
 
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
@@ -124,7 +140,7 @@ h2,
 .premium-analytics-title,
 .premium-section-title {
   font-family: var(--arcus-font-display);
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0;
   text-wrap: balance;
 }
@@ -135,8 +151,8 @@ h3,
 .analytics-premium-card h3,
 .methodology-card h3,
 .premium-analytics-card h3 {
-  font-family: var(--arcus-font-display);
-  font-weight: 650;
+  font-family: var(--arcus-font-sans);
+  font-weight: 600;
   letter-spacing: 0;
 }
 
@@ -151,10 +167,16 @@ li {
 .analytics-label,
 .analytics-kpi-label,
 .analytics-metric-label,
-.methodology-section-label,
+.methodology-section-label {
+  font-family: var(--arcus-font-mono);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
 .navbar-link,
 .navbar-language button {
   font-family: var(--arcus-font-sans);
+  font-weight: 600;
   letter-spacing: 0.12em;
 }
 

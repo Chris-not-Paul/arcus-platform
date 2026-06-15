@@ -58,8 +58,8 @@
     ),
     linear-gradient(
       135deg,
-      #181512,
-      #231f1b
+      var(--arcus-night-soft),
+      var(--arcus-night-panel)
     );
 
   color: var(--arcus-text-on-dark);
@@ -145,9 +145,9 @@
     ),
     linear-gradient(
       135deg,
-      #120f0d,
-      #1a1715 46%,
-      #201b17
+      var(--arcus-night),
+      var(--arcus-night-soft) 46%,
+      var(--arcus-night-panel)
     );
 }
 
@@ -325,7 +325,7 @@
   font-size: 15px;
   line-height: 1.65;
 
-  color: #5d5147;
+  color: var(--arcus-ink-soft);
 }
 
 /* ================================= */
@@ -467,8 +467,8 @@
   background:
     linear-gradient(
       to right,
-      #9d7455,
-      #c59b68
+      var(--arcus-bronze),
+      var(--arcus-bronze-soft)
     );
 }
 
@@ -477,8 +477,8 @@
   background:
     linear-gradient(
       to right,
-      #6b7f87,
-      #a47a58
+      var(--arcus-steel),
+      var(--arcus-bronze)
     );
 }
 
@@ -516,13 +516,13 @@
 }
 
 .analytics-ratio div:first-child {
-  background: #9d7455;
-  color: #fff8f2;
+  background: var(--arcus-bronze);
+  color: var(--arcus-paper-soft);
 }
 
 .analytics-ratio div:last-child {
-  background: #6b7f87;
-  color: #fff8f2;
+  background: var(--arcus-steel);
+  color: var(--arcus-paper-soft);
 }
 
 /* ================================= */
@@ -740,6 +740,7 @@
   color: var(--arcus-text-on-dark);
   font-family: var(--arcus-font-display);
   font-size: clamp(26px, 3vw, 38px);
+  font-weight: 400;
   line-height: 1.05;
 }
 
@@ -821,7 +822,7 @@
 
 .analytics-pro-link:hover {
   transform: translateY(-2px);
-  background: #d5ad78;
+  background: var(--arcus-bronze-soft);
 }
 
 /* ================================= */

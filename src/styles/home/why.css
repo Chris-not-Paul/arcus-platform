@@ -48,7 +48,7 @@
   margin: 0;
 
   color:
-  #f3efe8;
+  var(--arcus-paper);
 
   max-width: 700px;
 

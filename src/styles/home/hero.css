@@ -108,7 +108,7 @@
 
 .hero-title {
   margin: 0;
-  color: #f3efe8;
+  color: var(--arcus-paper);
 
   font-size:
     clamp(
@@ -260,7 +260,7 @@
    rgba(243,239,232,0.92);
 
   color:
-   #1f1b18;
+   var(--arcus-night-panel);
 }
 
 .primary-button:hover {

@@ -8,7 +8,7 @@
 
   background:
     radial-gradient(circle at 78% 18%, rgba(196,144,64,0.16), transparent 26%),
-    linear-gradient(135deg, var(--arcus-night), #211c18);
+    linear-gradient(135deg, var(--arcus-night), var(--arcus-night-panel));
 }
 
 .atlas-page::before {
@@ -230,8 +230,9 @@
 .atlas-color-legend > span {
   color: rgba(226,218,209,0.58);
 
+  font-family: var(--arcus-font-mono);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -241,7 +242,7 @@
 
   font-family: var(--arcus-font-display);
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1;
 }
 
@@ -459,7 +460,7 @@
 
 .atlas-enterprise-panel
 .atlas-professional-metrics strong {
-  color: #A8C0C7;
+  color: rgba(241,238,231,0.74);
 }
 
 .atlas-enterprise-panel
@@ -478,8 +479,9 @@
 .atlas-professional-list > span {
   color: rgba(226,218,209,0.56);
 
+  font-family: var(--arcus-font-mono);
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -487,6 +489,7 @@
 .atlas-professional-heading strong {
   font-family: var(--arcus-font-display);
   font-size: 18px;
+  font-weight: 400;
   line-height: 1;
 }
 

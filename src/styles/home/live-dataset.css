@@ -60,7 +60,7 @@
   margin: 0;
 
   color:
-  #f3efe8;
+  var(--arcus-paper);
 
   max-width: 720px;
 
@@ -160,7 +160,7 @@
   flex-shrink: 0;
 
   background:
-    #8c735d;
+    var(--arcus-clay);
 
   box-shadow:
     0 0 14px

@@ -20,8 +20,9 @@
 
 .about-label {
   color: var(--arcus-bronze-soft);
+  font-family: var(--arcus-font-mono);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -32,6 +33,7 @@
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
   font-size: clamp(42px, 6vw, 82px);
+  font-weight: 400;
   line-height: 0.98;
   letter-spacing: 0;
 }
@@ -87,8 +89,9 @@
 .about-principles span,
 .about-audience-list span {
   color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }

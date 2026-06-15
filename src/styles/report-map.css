@@ -121,14 +121,14 @@
 }
 
 .atlas-export-title span {
-  color: #c49040;
+  color: var(--arcus-bronze);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.14em;
 }
 
 .atlas-export-title strong {
-  color: #fff8f2;
+  color: var(--arcus-paper-soft);
   font-family: var(--arcus-font-display, Georgia, serif);
   font-size: 34px;
   line-height: 1;
@@ -152,7 +152,7 @@
   height: 42px;
   place-items: center;
   background: #15110f;
-  color: #c49040;
+  color: var(--arcus-bronze);
   font-size: 20px;
   font-weight: 950;
   box-shadow: 0 12px 34px rgba(21, 17, 15, 0.2);
@@ -196,7 +196,7 @@
 }
 
 .atlas-export-legend .triggered {
-  background: #c49040;
+  background: var(--arcus-bronze);
 }
 
 .atlas-export-legend .context {
@@ -212,7 +212,7 @@
 }
 
 .atlas-export-legend .seismic {
-  background: #6e858d;
+  background: var(--arcus-steel);
 }
 
 .atlas-export-note {
@@ -251,7 +251,7 @@
   background: linear-gradient(
     90deg,
     #15110f 0 33%,
-    #fff8f2 33% 66%,
+    var(--arcus-paper-soft) 33% 66%,
     #15110f 66% 100%
   );
   border: 1px solid rgba(21, 17, 15, 0.5);
@@ -318,10 +318,10 @@
   width: 30px;
   height: 30px;
   place-items: center;
-  border: 2px solid #fff8f2;
+  border: 2px solid var(--arcus-paper-soft);
   border-radius: 999px;
   background: #15110f;
-  color: #c49040;
+  color: var(--arcus-bronze);
   font-family: var(--arcus-font-body, Inter, Arial, sans-serif);
   font-size: 12px;
   font-weight: 950;

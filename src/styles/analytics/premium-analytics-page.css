@@ -230,7 +230,7 @@
   background:
     rgba(107,127,135,0.12);
 
-  color: #596f78;
+  color: var(--arcus-steel);
 
   white-space: nowrap;
 }
@@ -263,7 +263,7 @@
 }
 
 .premium-kpi-card span {
-  color: #8c735d;
+  color: var(--arcus-clay);
 }
 
 .premium-kpi-card p {
@@ -271,7 +271,7 @@
 
   font-size: 14px;
   line-height: 1.55;
-  color: #5d5147;
+  color: var(--arcus-ink-soft);
 }
 
 .premium-grid {
@@ -306,7 +306,7 @@
 }
 
 .premium-panel-heading span {
-  color: #8c735d;
+  color: var(--arcus-clay);
 }
 
 .premium-panel-heading h3 {
@@ -362,7 +362,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
 
-  color: #8c735d;
+  color: var(--arcus-clay);
 }
 
 .premium-ranking-track {
@@ -384,8 +384,8 @@
   background:
     linear-gradient(
       to right,
-      #6b7f87,
-      #c59b68
+      var(--arcus-steel),
+      var(--arcus-bronze-soft)
     );
 }
 
@@ -431,7 +431,7 @@
   font-size: 13px;
   line-height: 1.45;
 
-  color: #675b50;
+  color: var(--arcus-ink-muted);
 }
 
 .premium-briefing {
@@ -444,7 +444,7 @@
       rgba(20,17,15,0.92)
     );
 
-  color: #f3efe8;
+  color: var(--arcus-paper);
 }
 
 .premium-briefing

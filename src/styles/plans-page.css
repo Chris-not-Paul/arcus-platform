@@ -20,8 +20,9 @@
 
 .plans-label {
   color: var(--arcus-bronze-soft);
+  font-family: var(--arcus-font-mono);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -32,6 +33,7 @@
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
   font-size: clamp(42px, 6vw, 82px);
+  font-weight: 400;
   line-height: 0.98;
 }
 
@@ -92,8 +94,9 @@
 .plans-next span,
 .plans-flow span {
   color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -104,6 +107,7 @@
   color: var(--arcus-ink);
   font-family: var(--arcus-font-display);
   font-size: 38px;
+  font-weight: 400;
   line-height: 1;
 }
 
@@ -113,7 +117,7 @@
   color: var(--arcus-steel);
   font-size: 12px;
   font-style: normal;
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.10em;
   text-transform: uppercase;
 }
@@ -180,7 +184,7 @@
   background: var(--arcus-bronze);
   color: var(--arcus-night);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
@@ -197,8 +201,9 @@
 
 .plans-excludes span {
   color: var(--arcus-steel);
+  font-family: var(--arcus-font-mono);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }

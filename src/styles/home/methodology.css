@@ -32,7 +32,7 @@
   margin: 0;
 
   color:
-  #f3efe8;
+  var(--arcus-paper);
 
   max-width: 920px;
 
@@ -168,7 +168,7 @@
   position: relative;
 
   color:
-  #f3efe8;
+  var(--arcus-paper);
 
   z-index: 2;
 

@@ -76,8 +76,8 @@
 
   linear-gradient(
     135deg,
-    #1a1715,
-    #211d1a
+    var(--arcus-night-soft),
+    var(--arcus-night-panel)
   );
 
   border:
@@ -188,7 +188,7 @@
 
   border-radius: 50%;
 
-  background: #f3efe8;
+  background: var(--arcus-paper);
 
   box-shadow:
     0 0 18px
@@ -363,7 +363,7 @@
 
   border-radius: 50%;
 
-  background: #f3efe8;
+  background: var(--arcus-paper);
 
   box-shadow:
     0 0 24px
