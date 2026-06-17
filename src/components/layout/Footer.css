@@ -1,5 +1,5 @@
 .site-footer {
-  background: #14110f;
+  background: var(--arcus-night);
   color: var(--arcus-text-on-dark);
 }
 

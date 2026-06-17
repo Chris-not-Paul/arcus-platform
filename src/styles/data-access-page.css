@@ -115,6 +115,12 @@
   box-shadow: 0 16px 36px rgba(28,24,20,0.06);
 }
 
+.data-access-section.dark .data-access-card-list article {
+  border-color: var(--arcus-border-dark);
+  background: rgba(243,239,232,0.05);
+  box-shadow: none;
+}
+
 .data-access-card-list article::before,
 .data-access-endpoints article::before,
 .data-access-release::before {
@@ -150,6 +156,10 @@
   overflow-wrap: anywhere;
 }
 
+.data-access-section.dark .data-access-card-list strong {
+  color: var(--arcus-text-on-dark);
+}
+
 .data-access-card-list p,
 .data-access-endpoints p,
 .data-access-release p {
@@ -157,6 +167,10 @@
   color: var(--arcus-ink-soft);
   font-size: 15px;
   line-height: 1.65;
+}
+
+.data-access-section.dark .data-access-card-list p {
+  color: var(--arcus-text-on-dark-soft);
 }
 
 .data-access-section.dark .data-access-label,

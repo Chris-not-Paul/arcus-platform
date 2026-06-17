@@ -39,6 +39,8 @@ const hazardCauseLabels = {
   seismic: "Earthquake",
 };
 
+const PUBLIC_RELEASE_END_YEAR = 2025;
+
 function enrichPublicHazardProfile(profile) {
   const publicHazards =
     (profile.hazards || [])
@@ -104,6 +106,38 @@ function normalizeSource(source) {
   };
 }
 
+function csvCell(value) {
+  const text =
+    value === null || value === undefined
+      ? ""
+      : String(value);
+
+  return `"${text.replaceAll('"', '""')}"`;
+}
+
+function downloadCsv(filename, headers, rows) {
+  const csv = [
+    headers.map(csvCell).join(","),
+    ...rows.map((row) =>
+      headers
+        .map((header) => csvCell(row[header]))
+        .join(",")
+    ),
+  ].join("\n");
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+
+  URL.revokeObjectURL(url);
+}
+
 function AtlasPage() {
   const { language } = useLanguage();
   const [searchParams] =
@@ -134,6 +168,30 @@ function AtlasPage() {
       language === "it"
         ? "Fonti documentate"
         : "Documented sources",
+    researchUse:
+      language === "it"
+        ? "Uso ricerca"
+        : "Research use",
+    citeDataset:
+      language === "it"
+        ? "Citazione"
+        : "Cite dataset",
+    methodology:
+      language === "it"
+        ? "Metodo"
+        : "Method",
+    dataAccess:
+      language === "it"
+        ? "Dati"
+        : "Data access",
+    downloadCsv:
+      language === "it"
+        ? "CSV public release"
+        : "Public release CSV",
+    researchCoverage:
+      language === "it"
+        ? "Export limitato alla release citabile Data in Brief 2000-2025. Il database ARCUS live e gli indicatori Professional non sono esportabili in bulk dal layer Open."
+        : "Export limited to the citable Data in Brief 2000-2025 release. The ARCUS live evidence base and Professional indicators are not bulk-downloadable from the Open layer.",
     failureAtlas:
       language === "it"
         ? "Atlante dei cedimenti"
@@ -170,30 +228,6 @@ function AtlasPage() {
       language === "it"
         ? "Reset filtri"
         : "Reset filters",
-    densityLayer:
-      language === "it"
-        ? "Densita"
-        : "Density",
-    pointLayer:
-      language === "it"
-        ? "Eventi"
-        : "Events",
-    basemap:
-      language === "it"
-        ? "Base"
-        : "Base",
-    voyager:
-      language === "it"
-        ? "Atlas"
-        : "Atlas",
-    light:
-      language === "it"
-        ? "Chiara"
-        : "Light",
-    dark:
-      language === "it"
-        ? "Scura"
-        : "Dark",
     mode:
       language === "it"
         ? "Modalita"
@@ -226,6 +260,22 @@ function AtlasPage() {
       language === "it"
         ? "Layer Professional"
         : "Professional layers",
+    outputActions:
+      language === "it"
+        ? "Output operativi"
+        : "Operational outputs",
+    createBrief:
+      language === "it"
+        ? "Crea brief"
+        : "Create brief",
+    exportPriority:
+      language === "it"
+        ? "Esporta priorita"
+        : "Export priority",
+    openConsole:
+      language === "it"
+        ? "Console"
+        : "Console",
     enterpriseDashboard:
       language === "it"
         ? "Dashboard Enterprise"
@@ -347,17 +397,11 @@ function AtlasPage() {
   ] = useState("All");
 
   const [sidebarOpen, setSidebarOpen] =
-    useState(true);
+    useState(false);
 
   const [yearFilter, setYearFilter] =
-    useState(2025);
+    useState(PUBLIC_RELEASE_END_YEAR);
 
-  const [showHeatmap, setShowHeatmap] =
-    useState(true);
-  const [
-    mapStyleOverride,
-    setMapStyleOverride,
-  ] = useState(null);
   const [
     showReliabilityLayer,
     setShowReliabilityLayer,
@@ -369,7 +413,7 @@ function AtlasPage() {
   const [
     showHazardLayer,
     setShowHazardLayer,
-  ] = useState(true);
+  ] = useState(false);
   const [
     activeHazardOverlays,
     setActiveHazardOverlays,
@@ -399,13 +443,9 @@ function AtlasPage() {
   /* DATA LOADING */
   /* ================================= */
 
-  const mapStyle =
-    mapStyleOverride ||
-    (
-      isEnterpriseMode
-        ? "dark"
-        : "voyager"
-    );
+  const mapStyle = isEnterpriseMode
+    ? "dark"
+    : "voyager";
 
   useEffect(() => {
 
@@ -420,18 +460,6 @@ function AtlasPage() {
 
         setEvents(normalizedData);
 
-        const years = normalizedData
-          .map((e) =>
-            extractYear(e.date)
-          )
-          .filter(Boolean);
-
-        if (years.length > 0) {
-
-          setYearFilter(
-            Math.max(...years)
-          );
-        }
       });
 
     fetch("/data/processed/sources.json")
@@ -498,13 +526,28 @@ function AtlasPage() {
   /* YEARS */
   /* ================================= */
 
+  const atlasEvents = useMemo(() => {
+    if (isEnhancedMode) {
+      return events;
+    }
+
+    return events.filter((event) => {
+      const eventYear = extractYear(event.date);
+
+      return (
+        eventYear &&
+        eventYear <= PUBLIC_RELEASE_END_YEAR
+      );
+    });
+  }, [events, isEnhancedMode]);
+
   const minYear = useMemo(() => {
 
-    if (!events.length) {
+    if (!atlasEvents.length) {
       return 2000;
     }
 
-    const years = events
+    const years = atlasEvents
       .map((e) =>
         extractYear(e.date)
       )
@@ -512,15 +555,15 @@ function AtlasPage() {
 
     return Math.min(...years);
 
-  }, [events]);
+  }, [atlasEvents]);
 
   const maxYear = useMemo(() => {
 
-    if (!events.length) {
-      return 2025;
+    if (!atlasEvents.length) {
+      return PUBLIC_RELEASE_END_YEAR;
     }
 
-    const years = events
+    const years = atlasEvents
       .map((e) =>
         extractYear(e.date)
       )
@@ -528,7 +571,12 @@ function AtlasPage() {
 
     return Math.max(...years);
 
-  }, [events]);
+  }, [atlasEvents]);
+
+  const activeYearFilter = Math.min(
+    yearFilter,
+    maxYear
+  );
 
   /* ================================= */
   /* SOURCES INDEX */
@@ -567,7 +615,7 @@ function AtlasPage() {
       const query =
         searchQuery.trim().toLowerCase();
 
-      return events.filter(
+      return atlasEvents.filter(
         (event) => {
 
           const causeMatch =
@@ -591,7 +639,7 @@ function AtlasPage() {
 
           const yearMatch =
             !eventYear ||
-            eventYear <= yearFilter;
+            eventYear <= activeYearFilter;
 
           const searchMatch =
             !query ||
@@ -622,12 +670,12 @@ function AtlasPage() {
       );
 
     }, [
-      events,
+      atlasEvents,
       searchQuery,
       causeFilter,
       severityFilter,
       triggeredFilter,
-      yearFilter,
+      activeYearFilter,
     ]);
 
   const resetAtlasFilters = () => {
@@ -636,7 +684,68 @@ function AtlasPage() {
     setSeverityFilter("All");
     setTriggeredFilter("All");
     setYearFilter(maxYear);
-    setShowHeatmap(true);
+  };
+
+  const handleDownloadFilteredCsv = () => {
+    const headers = [
+      "event_id",
+      "bridge_name",
+      "municipality",
+      "province",
+      "region",
+      "date",
+      "year",
+      "collapse_severity",
+      "cause_category",
+      "specific_cause",
+      "triggered",
+      "victims",
+      "injuries",
+      "source_count",
+      "release",
+    ];
+
+    const publicReleaseEvents = filteredEvents.filter(
+      (event) => {
+        const eventYear = extractYear(event.date);
+
+        return (
+          eventYear &&
+          eventYear <= PUBLIC_RELEASE_END_YEAR
+        );
+      }
+    );
+
+    const rows = publicReleaseEvents.map((event) => ({
+      event_id: event.event_id,
+      bridge_name:
+        event.bridge_name ||
+        event.bridge_crossing_name ||
+        "",
+      municipality: event.municipality,
+      province: event.province,
+      region: event.region,
+      date: event.date,
+      year: extractYear(event.date),
+      collapse_severity: event.collapse_severity,
+      cause_category: event.cause_category,
+      specific_cause: event.specific_cause,
+      triggered: event.triggered,
+      victims: event.victims ?? 0,
+      injuries: event.injuries ?? 0,
+      source_count:
+        sourcesByEvent[event.event_id]?.length || 0,
+      release: "Data in Brief public release 2000-2025",
+    }));
+
+    downloadCsv(
+      `arcus-public-release-2000-${Math.min(
+        activeYearFilter,
+        PUBLIC_RELEASE_END_YEAR
+      )}.csv`,
+      headers,
+      rows
+    );
   };
 
   /* ================================= */
@@ -759,6 +868,45 @@ function AtlasPage() {
       eventVulnerability,
       hazardExposurePreview,
     ]);
+
+  const handleExportPriorityCsv = () => {
+    const headers = [
+      "event_id",
+      "municipality",
+      "province",
+      "region",
+      "vulnerability_class",
+      "vulnerability_score",
+      "reliability_grade",
+      "reliability_score",
+      "source_count",
+    ];
+
+    const rows = professionalStats.priorityEvents.map(
+      ({ event, reliability, vulnerability }) => ({
+        event_id: event.event_id,
+        municipality: event.municipality,
+        province: event.province,
+        region: event.region,
+        vulnerability_class:
+          vulnerability?.class || "",
+        vulnerability_score:
+          vulnerability?.score ?? "",
+        reliability_grade:
+          reliability?.grade || "",
+        reliability_score:
+          reliability?.score ?? "",
+        source_count:
+          sourcesByEvent[event.event_id]?.length || 0,
+      })
+    );
+
+    downloadCsv(
+      `arcus-priority-events-${activeYearFilter}.csv`,
+      headers,
+      rows
+    );
+  };
 
   const hazardByProvince =
     useMemo(() => {
@@ -967,7 +1115,6 @@ function AtlasPage() {
             className={
               atlasMode === "open" ? "active" : ""
             }
-            onClick={() => setMapStyleOverride(null)}
             to="/atlas"
           >
             {atlasText.openAtlas}
@@ -976,7 +1123,6 @@ function AtlasPage() {
             className={
               isProfessionalMode ? "active" : ""
             }
-            onClick={() => setMapStyleOverride(null)}
             to="/atlas?mode=professional"
           >
             {atlasText.professionalAtlas}
@@ -1002,9 +1148,37 @@ function AtlasPage() {
 
           <div>
             <span>{atlasText.year}</span>
-            <strong>{yearFilter}</strong>
+            <strong>{activeYearFilter}</strong>
           </div>
         </div>
+
+        {!isProfessionalMode && (
+          <div className="atlas-research-actions">
+            <span>{atlasText.researchUse}</span>
+
+            <div>
+              <Link to="/publications">
+                {atlasText.citeDataset}
+              </Link>
+              <Link to="/methodology">
+                {atlasText.methodology}
+              </Link>
+              <Link to="/data-access">
+                {atlasText.dataAccess}
+              </Link>
+              <button
+                type="button"
+                onClick={handleDownloadFilteredCsv}
+              >
+                {atlasText.downloadCsv}
+              </button>
+            </div>
+
+            <small>
+              {atlasText.researchCoverage}
+            </small>
+          </div>
+        )}
 
         <button
           className="atlas-command-reset"
@@ -1013,45 +1187,6 @@ function AtlasPage() {
         >
           {atlasText.reset}
         </button>
-      </aside>
-
-      <aside className="atlas-map-controls">
-        <div className="atlas-map-controls-row">
-          <span>{atlasText.basemap}</span>
-
-          {[
-            ["voyager", atlasText.voyager],
-            ["light", atlasText.light],
-            ["dark", atlasText.dark],
-          ].map(([value, label]) => (
-            <button
-              className={
-                mapStyle === value ? "active" : ""
-              }
-              key={value}
-              type="button"
-              onClick={() => setMapStyleOverride(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="atlas-map-controls-row compact">
-          <span>{atlasText.pointLayer}</span>
-
-          <button
-            className={
-              showHeatmap ? "active" : ""
-            }
-            type="button"
-            onClick={() =>
-              setShowHeatmap((value) => !value)
-            }
-          >
-            {atlasText.densityLayer}
-          </button>
-        </div>
       </aside>
 
       {isProfessionalMode && (
@@ -1140,7 +1275,7 @@ function AtlasPage() {
 
           <div className="atlas-professional-metrics">
             {showVulnerabilityLayer && (
-              <div>
+              <div className="atlas-professional-metric metric-critical">
                 <span>
                   {atlasText.highCritical}
                 </span>
@@ -1150,7 +1285,7 @@ function AtlasPage() {
               </div>
             )}
             {showReliabilityLayer && (
-              <div>
+              <div className="atlas-professional-metric metric-evidence">
                 <span>
                   {atlasText.evidenceGrade}
                 </span>
@@ -1160,7 +1295,7 @@ function AtlasPage() {
               </div>
             )}
             {showHazardLayer && (
-              <div>
+              <div className="atlas-professional-metric metric-hazard">
                 <span>
                   {atlasText.dominantHazard}
                 </span>
@@ -1206,14 +1341,18 @@ function AtlasPage() {
                   </div>
                   <div>
                     {showVulnerabilityLayer && (
-                      <em>
+                      <em
+                        className={`atlas-priority-badge severity-${String(
+                          vulnerability?.class || "unknown"
+                        ).toLowerCase()}`}
+                      >
                         {vulnerability?.class || "-"}{" "}
                         {vulnerability?.score ??
                           "-"}
                       </em>
                     )}
                     {showReliabilityLayer && (
-                      <em>
+                      <em className="atlas-priority-badge evidence">
                         {reliability?.grade ||
                           "-"}
                       </em>
@@ -1222,6 +1361,25 @@ function AtlasPage() {
                 </div>
               )
             )}
+          </div>
+
+          <div className="atlas-professional-actions">
+            <span>{atlasText.outputActions}</span>
+
+            <div>
+              <Link to="/professional">
+                {atlasText.openConsole}
+              </Link>
+              <Link to="/professional">
+                {atlasText.createBrief}
+              </Link>
+              <button
+                type="button"
+                onClick={handleExportPriorityCsv}
+              >
+                {atlasText.exportPriority}
+              </button>
+            </div>
           </div>
         </aside>
       )}
@@ -1362,7 +1520,7 @@ function AtlasPage() {
 
         totalPC={totalPC}
 
-        yearFilter={yearFilter}
+        yearFilter={activeYearFilter}
 
         setYearFilter={
           setYearFilter
@@ -1472,7 +1630,6 @@ function AtlasPage() {
             sidebarOpen
           }
 
-          showHeatmap={showHeatmap}
         />
 
       </div>

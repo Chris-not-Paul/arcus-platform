@@ -17,24 +17,80 @@ import "../styles/analytics/analytics-page.css";
 
 const premiumModules = {
   en: [
-    "Advanced comparative analytics",
-    "Data export",
-    "Temporal filtering",
-    "Reports",
-    "API access",
-    "AI insights",
-    "Monitoring",
-    "Institutional dashboards",
+    {
+      label: "Professional",
+      title: "Provincial normalized collapse ratio",
+      text: "Compares documented collapses with an internal bridge-stock denominator to move beyond absolute event counts.",
+      output: "Priority ranking",
+    },
+    {
+      label: "Hazard overlays",
+      title: "ISPRA / INGV territorial intersection",
+      text: "Reads ARCUS events against declared public layers for hydraulic, landslide and seismic exposure.",
+      output: "Hazard profile",
+    },
+    {
+      label: "Scenario matrix",
+      title: "Hydraulic, landslide, seismic and structural scenarios",
+      text: "Recalibrates territory priority when a technical team wants to stress one risk domain.",
+      output: "Scenario benchmark",
+    },
+    {
+      label: "Asset analytics",
+      title: "Inventory screening and precedent matching",
+      text: "Compares uploaded bridge inventories with historical evidence, territorial context and similar cases.",
+      output: "Asset watchlist",
+    },
+    {
+      label: "Export package",
+      title: "PDF, CSV, Excel, GeoJSON and GIS outputs",
+      text: "Turns the analytical reading into reusable material for meetings, audits and technical coordination.",
+      output: "Professional report",
+    },
+    {
+      label: "Governance",
+      title: "Model cards, release and data dictionary",
+      text: "Documents inputs, output meaning, limitations, data readiness and versioned professional resources.",
+      output: "Audit trail",
+    },
   ],
   it: [
-    "Analytics comparativi avanzati",
-    "Export dati",
-    "Filtri temporali avanzati",
-    "Report",
-    "Accesso API",
-    "AI insights",
-    "Monitoraggio",
-    "Dashboard istituzionali",
+    {
+      label: "Professional",
+      title: "Rapporto provinciale normalizzato",
+      text: "Confronta i crolli documentati con un denominatore interno di stock ponti per superare il semplice conteggio assoluto.",
+      output: "Ranking priorita",
+    },
+    {
+      label: "Overlay hazard",
+      title: "Intersezione territoriale ISPRA / INGV",
+      text: "Legge gli eventi ARCUS rispetto a layer pubblici dichiarati per esposizione idraulica, frane e sismicita.",
+      output: "Profilo hazard",
+    },
+    {
+      label: "Matrice scenari",
+      title: "Scenari idraulici, frane, sismici e strutturali",
+      text: "Ricalibra la priorita territoriale quando un team tecnico vuole stressare un dominio di rischio.",
+      output: "Benchmark scenario",
+    },
+    {
+      label: "Asset analytics",
+      title: "Screening inventari e precedenti comparabili",
+      text: "Confronta inventari ponti caricati con evidenza storica, contesto territoriale e casi simili.",
+      output: "Watchlist asset",
+    },
+    {
+      label: "Export package",
+      title: "Output PDF, CSV, Excel, GeoJSON e GIS",
+      text: "Trasforma la lettura analitica in materiale riutilizzabile per riunioni, audit e coordinamento tecnico.",
+      output: "Report Professional",
+    },
+    {
+      label: "Governance",
+      title: "Model cards, release e dizionario dati",
+      text: "Documenta input, significato degli output, limiti, readiness dati e risorse professionali versionate.",
+      output: "Audit trail",
+    },
   ],
 };
 
@@ -44,38 +100,38 @@ const accessTiers = {
       cta: "Explore Open Atlas",
       features: [
         "Public atlas",
-        "Timeline and filters",
-        "Popup evidence cards",
-        "Heatmaps",
-        "Methodology",
-        "Basic statistics",
+        "Aggregate indicators",
+        "Failure taxonomy",
+        "Temporal blocks",
+        "Source traceability",
+        "Scientific methodology",
       ],
       label: "ARCUS OPEN",
       nextAction:
         "Open the atlas, filter by territory or period, and inspect the public evidence card.",
       path: "/atlas",
-      price: "Open access",
+      price: "Open evidence layer",
       target:
-        "Visibility, scientific authority, SEO reach and public engagement.",
+        "Scientific authority, public evidence reading and transparent dataset interpretation.",
       title: "Public Observatory",
     },
     {
       cta: "Professional roadmap",
       features: [
-        "Advanced infrastructure analytics",
-        "Temporal and territorial comparisons",
-        "CSV / PDF / GeoJSON exports",
-        "Vulnerability mapping",
-        "Flood and landslide overlays",
-        "Professional workspaces",
+        "Normalized provincial ratios",
+        "Hazard overlay intersections",
+        "Scenario recalibration",
+        "Asset inventory screening",
+        "PDF / CSV / Excel / GeoJSON exports",
+        "Model cards and data releases",
       ],
       label: "ARCUS PROFESSIONAL",
       nextAction:
         "Define a technical scenario, compare assets with historical evidence and export operational outputs.",
       path: "/professional",
-      price: "Professional licence",
+      price: "Operational intelligence layer",
       target:
-        "Engineering companies, infrastructure managers, consultants, concessionaires, analysts, insurers and research groups.",
+        "Engineering companies, infrastructure managers, concessionaires, public authorities, analysts and research groups.",
       title: "Infrastructure Intelligence Workspace",
     },
   ],
@@ -84,38 +140,38 @@ const accessTiers = {
       cta: "Esplora Open Atlas",
       features: [
         "Atlante pubblico",
-        "Timeline e filtri",
-        "Schede evento con fonti",
-        "Heatmap",
-        "Metodologia",
-        "Statistiche base",
+        "Indicatori aggregati",
+        "Tassonomia cedimenti",
+        "Blocchi temporali",
+        "Tracciabilita fonti",
+        "Metodologia scientifica",
       ],
       label: "ARCUS OPEN",
       nextAction:
         "Apri l'Atlante, filtra territorio o periodo e consulta la scheda pubblica con le fonti.",
       path: "/atlas",
-      price: "Accesso aperto",
+      price: "Layer evidenza open",
       target:
-        "Visibilita, autorevolezza scientifica, diffusione pubblica e posizionamento SEO.",
+        "Autorevolezza scientifica, lettura pubblica dell'evidenza e interpretazione trasparente del dataset.",
       title: "Osservatorio Pubblico",
     },
     {
       cta: "Roadmap professional",
       features: [
-        "Advanced infrastructure analytics",
-        "Comparazioni temporali e territoriali",
-        "Export CSV / PDF / GeoJSON",
-        "Mappatura vulnerabilita",
-        "Overlay alluvioni e frane",
-        "Workspace professionali",
+        "Rapporti provinciali normalizzati",
+        "Intersezione overlay hazard",
+        "Ricalibrazione scenari",
+        "Screening inventari asset",
+        "Export PDF / CSV / Excel / GeoJSON",
+        "Model cards e data release",
       ],
       label: "ARCUS PROFESSIONAL",
       nextAction:
         "Definisci uno scenario tecnico, confronta asset con evidenza storica ed esporta output operativi.",
       path: "/professional",
-      price: "Licenza professionale",
+      price: "Layer intelligence operativa",
       target:
-        "Societa di ingegneria, gestori infrastrutturali, consulenti, concessionari, analisti, assicurazioni e gruppi di ricerca.",
+        "Societa di ingegneria, gestori infrastrutturali, concessionari, enti pubblici, analisti e gruppi di ricerca.",
       title: "Infrastructure Intelligence Workspace",
     },
   ],
@@ -215,9 +271,18 @@ function AnalyticsPage() {
       ? {
           atlas: "Atlante",
           briefingTitle:
-            "Briefing di Intelligence Infrastrutturale",
+            "Analytics pubblici da evidenze verificate di collasso.",
           publicSubtitle:
-            "Analytics pubblici dall'osservatorio ARCUS sui collassi, progettati per leggere dati verificati sui cedimenti infrastrutturali come un sistema di intelligence scientifica.",
+            "Questa pagina espone letture aggregate del dataset ARCUS: pattern temporali, cause, distribuzione territoriale, profilo infrastrutturale e tracciabilita delle fonti.",
+          heroNote:
+            "Layer pubblico: dataset, fonti, tassonomia e pattern aggregati. Le letture operative restano separate per non confondere osservatorio e decision support.",
+          heroPreviewTitle:
+            "Estensione operativa",
+          heroPreviewItems: [
+            ["Priority ranking", "Province e aree ordinate per attenzione tecnica."],
+            ["Asset watchlist", "Inventari ponti confrontati con precedenti e hazard."],
+            ["Export package", "PDF, CSV, Excel, GeoJSON e pacchetto GIS."],
+          ],
           validatedEvents: "eventi validati",
           documentedSources: "fonti documentate",
           temporalCoverage: "copertura temporale",
@@ -262,6 +327,8 @@ function AnalyticsPage() {
           sourceRoles: "Ruolo delle fonti",
           confidenceLevel: "Livello di confidenza",
           openCore: "MODELLO OPEN CORE",
+          advancedLabel:
+            "ADVANCED ANALYTICS",
           accessArchitecture:
             "ARCHITETTURA DI ACCESSO",
           accessTitle:
@@ -269,9 +336,40 @@ function AnalyticsPage() {
           accessText:
             "ARCUS mantiene un layer Open forte per autorevolezza e diffusione; Professional trasforma il metodo in workflow operativi, export e supporto decisionale.",
           premiumTitle:
-            "Analytics pubblici, intelligence premium",
+            "Dagli analytics pubblici all'intelligence Professional",
           premiumText:
-            "Il layer pubblico costruisce reputazione scientifica e diffusione. Il layer Professional estende lo stesso archivio verificato verso workflow tecnici, export e supporto decisionale.",
+            "Il layer pubblico rende leggibili i pattern aggregati. Il layer Professional applica lo stesso metodo a scenari, province, asset, overlay hazard e output esportabili.",
+          advancedTitle:
+            "Gli analytics avanzati richiedono contesto operativo.",
+          advancedText:
+            "Quando una lettura deve diventare ranking, report, screening asset o pacchetto GIS, ARCUS passa dal briefing pubblico al workspace Professional.",
+          outputPreviewLabel:
+            "OUTPUT SBLOCCABILI",
+          outputPreviewTitle:
+            "Le domande operative che Analytics pubblico non deve fingere di chiudere.",
+          outputPreviewText:
+            "Professional prende gli stessi dati verificati e li trasforma in risposte esportabili per tavoli tecnici, inventari asset e pianificazione.",
+          outputPreviewItems: [
+            {
+              question: "Quali province meritano priorita?",
+              output: "Ranking normalizzato",
+              detail: "Classi di attenzione, benchmark nazionale e rapporto provinciale di collasso.",
+            },
+            {
+              question: "Quali asset devo verificare prima?",
+              output: "Asset watchlist",
+              detail: "Upload inventario, eventi comparabili, hazard dominante e score operativo.",
+            },
+            {
+              question: "Cosa posso portare in riunione?",
+              output: "Report package",
+              detail: "Full PDF, one-page brief, tabelle fonti, CSV eventi, Excel e GeoJSON.",
+            },
+          ],
+          lockedTag:
+            "Layer Professional",
+          methodCta:
+            "Leggi metodologia",
           matrixTitle:
             "Cosa resta pubblico e cosa diventa prodotto",
           matrixText:
@@ -295,9 +393,18 @@ function AnalyticsPage() {
       : {
           atlas: "Atlas",
           briefingTitle:
-            "Infrastructure Intelligence Briefing",
+            "Public analytics from verified bridge-collapse evidence.",
           publicSubtitle:
-            "Public analytics from the ARCUS collapse observatory, designed to read verified infrastructure failure records as a scientific intelligence system.",
+            "This page exposes aggregate readings from the ARCUS dataset: temporal patterns, causes, territorial distribution, infrastructure profile and source traceability.",
+          heroNote:
+            "Public layer: dataset, sources, taxonomy and aggregate patterns. Operational readings remain separated so the observatory does not blur into decision support.",
+          heroPreviewTitle:
+            "Operational extension",
+          heroPreviewItems: [
+            ["Priority ranking", "Provinces and areas ordered by technical attention."],
+            ["Asset watchlist", "Bridge inventories compared with precedents and hazards."],
+            ["Export package", "PDF, CSV, Excel, GeoJSON and GIS package."],
+          ],
           validatedEvents: "validated events",
           documentedSources: "documented sources",
           temporalCoverage: "temporal coverage",
@@ -341,6 +448,8 @@ function AnalyticsPage() {
           sourceRoles: "Source Roles",
           confidenceLevel: "Confidence Level",
           openCore: "OPEN CORE MODEL",
+          advancedLabel:
+            "ADVANCED ANALYTICS",
           accessArchitecture:
             "ACCESS ARCHITECTURE",
           accessTitle:
@@ -348,9 +457,40 @@ function AnalyticsPage() {
           accessText:
             "ARCUS preserves a strong Open layer for authority and diffusion; Professional turns the method into operational workflows, exports and decision support.",
           premiumTitle:
-            "Public Analytics, Premium Intelligence",
+            "From public analytics to Professional intelligence",
           premiumText:
-            "The public layer builds scientific reputation and diffusion. The Professional layer extends the same verified archive into technical workflows, exports and decision support.",
+            "The public layer makes aggregate patterns readable. The Professional layer applies the same method to scenarios, provinces, assets, hazard overlays and exportable outputs.",
+          advancedTitle:
+            "Advanced analytics require operational context.",
+          advancedText:
+            "When a reading must become a ranking, report, asset screening or GIS package, ARCUS moves from public briefing to the Professional workspace.",
+          outputPreviewLabel:
+            "UNLOCKED OUTPUTS",
+          outputPreviewTitle:
+            "The operational questions public analytics should not pretend to close.",
+          outputPreviewText:
+            "Professional takes the same verified evidence and turns it into exportable answers for technical meetings, asset inventories and planning.",
+          outputPreviewItems: [
+            {
+              question: "Which provinces deserve priority?",
+              output: "Normalized ranking",
+              detail: "Attention classes, national benchmark and provincial collapse ratio.",
+            },
+            {
+              question: "Which assets should be reviewed first?",
+              output: "Asset watchlist",
+              detail: "Inventory upload, comparable events, dominant hazard and operational score.",
+            },
+            {
+              question: "What can I bring to a technical meeting?",
+              output: "Report package",
+              detail: "Full PDF, one-page brief, source tables, event CSV, Excel and GeoJSON.",
+            },
+          ],
+          lockedTag:
+            "Professional layer",
+          methodCta:
+            "Read methodology",
           matrixTitle:
             "What remains public and what becomes product",
           matrixText:
@@ -534,55 +674,55 @@ function AnalyticsPage() {
       ? [
           [
             "Atlante",
-            "eventi, fonti, timeline, filtri base",
-            "score, overlay hazard, scenari e workspace Professional",
+            "eventi, fonti, timeline e filtri base",
+            "mappa Professional, layer hazard, selezioni area e report",
           ],
           [
             "Analytics",
-            "statistiche aggregate e letture scientifiche",
-            "benchmark, confronti, scenari e workspace avanzati",
+            "statistiche aggregate, tassonomia e pattern scientifici",
+            "ranking normalizzati, benchmark, scenari e priority index",
           ],
           [
             "Export",
             "consultazione web",
-            "CSV, Excel, report HTML e snapshot progetto",
+            "Full PDF, One-Page Brief, CSV, Excel, GeoJSON e GIS package",
           ],
           [
             "Dati/API",
             "dataset processati e metodologia",
-            "manifest, dizionario dati, release e endpoint professionali",
+            "manifest, dizionario dati, release, model cards ed endpoint professionali",
           ],
           [
             "Decision support",
             "contesto generale",
-            "asset screening, watchlist, priorita e raccomandazioni",
+            "asset screening, watchlist, priorita, raccomandazioni e audit",
           ],
         ]
       : [
           [
             "Atlas",
-            "events, sources, timeline, base filters",
-            "scores, hazard overlays, scenarios and Professional workspaces",
+            "events, sources, timeline and base filters",
+            "Professional map, hazard layers, area selections and reports",
           ],
           [
             "Analytics",
-            "aggregate statistics and scientific readings",
-            "benchmarks, comparisons, scenarios and advanced workspaces",
+            "aggregate statistics, taxonomy and scientific patterns",
+            "normalized rankings, benchmarks, scenarios and priority index",
           ],
           [
             "Exports",
             "web consultation",
-            "CSV, Excel, HTML reports and project snapshots",
+            "Full PDF, One-Page Brief, CSV, Excel, GeoJSON and GIS package",
           ],
           [
             "Data/API",
             "processed datasets and methodology",
-            "manifest, data dictionary, releases and professional endpoints",
+            "manifest, data dictionary, releases, model cards and professional endpoints",
           ],
           [
             "Decision support",
             "general context",
-            "asset screening, watchlists, priorities and recommendations",
+            "asset screening, watchlists, priorities, recommendations and audit",
           ],
         ];
 
@@ -607,6 +747,8 @@ function AnalyticsPage() {
         <div className="analytics-hero-overlay" />
 
         <div className="analytics-container">
+          <div className="analytics-hero-layout">
+            <div className="analytics-hero-copy">
           <div className="analytics-label">
             ARCUS ANALYTICS
           </div>
@@ -618,6 +760,45 @@ function AnalyticsPage() {
           <p className="analytics-subtitle">
             {copy.publicSubtitle}
           </p>
+
+          <div className="analytics-hero-note">
+            {copy.heroNote}
+          </div>
+
+          <div className="analytics-hero-actions">
+            <Link
+              className="analytics-primary-link"
+              to="/atlas"
+            >
+              {copy.atlas}
+            </Link>
+
+            <Link
+              className="analytics-secondary-link"
+              to="/methodology"
+            >
+              {copy.methodCta}
+            </Link>
+          </div>
+
+            </div>
+
+            <aside className="analytics-hero-pro-preview">
+              <span>{copy.lockedTag}</span>
+              <h2>{copy.heroPreviewTitle}</h2>
+
+              <div>
+                {copy.heroPreviewItems.map(
+                  ([title, detail]) => (
+                    <article key={title}>
+                      <strong>{title}</strong>
+                      <p>{detail}</p>
+                    </article>
+                  )
+                )}
+              </div>
+            </aside>
+          </div>
 
           <div className="analytics-hero-stats">
             <div className="analytics-stat">
@@ -928,6 +1109,39 @@ function AnalyticsPage() {
             </p>
           </div>
 
+          <div className="analytics-pro-briefing">
+            <div>
+              <span>{copy.lockedTag}</span>
+              <h3>{copy.advancedTitle}</h3>
+              <p>{copy.advancedText}</p>
+            </div>
+
+            <Link
+              className="analytics-pro-briefing-link"
+              to="/professional"
+            >
+              {copy.openWorkspace}
+            </Link>
+          </div>
+
+          <div className="analytics-output-preview">
+            <div className="analytics-output-preview-head">
+              <span>{copy.outputPreviewLabel}</span>
+              <h3>{copy.outputPreviewTitle}</h3>
+              <p>{copy.outputPreviewText}</p>
+            </div>
+
+            <div className="analytics-output-preview-grid">
+              {copy.outputPreviewItems.map((item) => (
+                <article key={item.question}>
+                  <span>{item.output}</span>
+                  <h4>{item.question}</h4>
+                  <p>{item.detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <div className="analytics-tier-grid">
             {tiers.map((tier) => (
               <article
@@ -1004,19 +1218,36 @@ function AnalyticsPage() {
                   <strong>{capability}</strong>
                   <span>{publicValue}</span>
                   <span>{premiumValue}</span>
-                </div>
-              )
-            )}
+              </div>
+            )
+          )}
+          </div>
+
+          <div className="analytics-section-header compact">
+            <div className="analytics-section-label">
+              {copy.advancedLabel}
+            </div>
+
+            <h2 className="analytics-section-title">
+              {copy.advancedTitle}
+            </h2>
+
+            <p className="analytics-section-description">
+              {copy.advancedText}
+            </p>
           </div>
 
           <div className="analytics-premium-grid">
             {modules.map((module) => (
-              <div
+              <article
                 className="analytics-premium-card"
-                key={module}
+                key={module.title}
               >
-                {module}
-              </div>
+                <span>{module.label}</span>
+                <h3>{module.title}</h3>
+                <p>{module.text}</p>
+                <strong>{module.output}</strong>
+              </article>
             ))}
           </div>
 

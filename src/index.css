@@ -38,20 +38,23 @@
   --arcus-paper: #f1eee7;
   --arcus-paper-warm: #e5ded2;
   --arcus-paper-soft: #faf7f0;
-  --arcus-night: #0f1413;
-  --arcus-night-soft: #18201f;
-  --arcus-night-panel: #202927;
-  --arcus-bronze: #a06f38;
-  --arcus-bronze-soft: #c08b4f;
+  --arcus-night: #120f0d;
+  --arcus-night-soft: #1a1512;
+  --arcus-night-panel: #1d1e23;
+  --arcus-bronze: #c49040;
+  --arcus-bronze-soft: #d0a56f;
   --arcus-clay: #8a6045;
-  --arcus-steel: #4f6f78;
+  --arcus-steel: #6e858d;
   --arcus-risk: #9a4f36;
   --arcus-signal: #b78a45;
   --arcus-border-light: rgba(77,69,58,0.16);
-  --arcus-border-dark: rgba(241,238,231,0.13);
-  --arcus-text-on-dark: #f1eee7;
-  --arcus-text-on-dark-soft: rgba(226,221,211,0.74);
-  --arcus-focus: #c08b4f;
+  --arcus-border-dark: rgba(243,239,232,0.10);
+  --arcus-ivory: #f3efe8;
+  --arcus-ivory-dim: rgba(243,239,232,0.74);
+  --arcus-ivory-faint: rgba(243,239,232,0.50);
+  --arcus-text-on-dark: #f3efe8;
+  --arcus-text-on-dark-soft: rgba(243,239,232,0.74);
+  --arcus-focus: #d0a56f;
 }
 
 html {

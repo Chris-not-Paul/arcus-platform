@@ -13,7 +13,7 @@ function Footer() {
       description:
         "A scientific infrastructure intelligence platform dedicated to the observation, classification and analysis of bridge collapse phenomena.",
       copyright:
-        "© 2026 ARCUS — Italian Bridge Collapse Database",
+        "(c) 2026 ARCUS - Italian Bridge Collapse Database",
       evidencePeriod: "Evidence period 2000-2026",
       groups: [
         {
@@ -36,7 +36,6 @@ function Footer() {
           label: "About",
           links: [
             ["Identity", "/about"],
-            ["Plans", "/plans"],
             ["Contact", "/about"],
           ],
         },
@@ -46,7 +45,7 @@ function Footer() {
       description:
         "Una piattaforma scientifica di infrastructure intelligence dedicata all'osservazione, classificazione e analisi dei fenomeni di crollo dei ponti.",
       copyright:
-        "© 2026 ARCUS — Italian Bridge Collapse Database",
+        "(c) 2026 ARCUS - Italian Bridge Collapse Database",
       evidencePeriod: "Periodo evidenza 2000-2026",
       groups: [
         {
@@ -69,7 +68,6 @@ function Footer() {
           label: "About",
           links: [
             ["Identita", "/about"],
-            ["Piani", "/plans"],
             ["Contatto", "/about"],
           ],
         },

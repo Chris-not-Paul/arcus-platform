@@ -145,10 +145,12 @@ export default function ProfessionalPage() {
     useState(loadStoredWorkspaces);
   const [activeEntryPath, setActiveEntryPath] =
     useState(0);
+  const [
+    hasSelectedProfessionalPath,
+    setHasSelectedProfessionalPath,
+  ] = useState(false);
   const [activeWorkflowStep, setActiveWorkflowStep] =
     useState(0);
-  const [path01ReportIntent, setPath01ReportIntent] =
-    useState("new_construction");
   const [
     manualAreaBounds,
     setManualAreaBounds,
@@ -268,7 +270,7 @@ export default function ProfessionalPage() {
           atlas: "Apri Atlante",
           cta: "Vai al workspace Professional",
           description:
-            "ARCUS Professional nasce dal primo database sistematico di ponti crollati in Italia dal 2000 ad oggi e lo traduce in intelligence operativa: contesto territoriale, esposizioni, precedenti e prossime verifiche spiegabili.",
+            "ARCUS Professional trasforma evidenze verificate di collasso, hazard territoriali e inventari asset in ranking di priorita, scenari tecnici e report esportabili.",
           hazard:
             "Layer di esposizione",
           hazardText:
@@ -276,7 +278,7 @@ export default function ProfessionalPage() {
           heroLabel:
             "ARCUS PROFESSIONAL",
           heroTitle:
-            "Infrastructure intelligence fondata su evidenze storiche di collasso.",
+            "Workspace operativo per decisioni sul rischio ponte.",
           hotspot:
             "Hotspot territoriali",
           kpiEvents:
@@ -382,11 +384,11 @@ export default function ProfessionalPage() {
           integration:
             "Layer integrazione",
           integrationTitle:
-            "Endpoint JSON pronti per GIS, BI e prototipi API.",
+            "Layer dati controllato per GIS, BI e integrazioni tecniche.",
           integrationText:
-            "La pipeline ARCUS genera risorse professionali statiche: eventi arricchiti, profili territoriali, affidabilita fonti e vulnerabilita.",
+            "La pipeline ARCUS produce risorse professionali versionate per report, analisi territoriali e integrazioni autorizzate. L'accesso e contestuale al workflow Professional, non un download bulk del database live.",
           apiManifest:
-            "Manifest API",
+            "Accesso controllato",
           monitoringLayer:
             "Monitoraggio",
           monitoringTitle:
@@ -518,7 +520,7 @@ export default function ProfessionalPage() {
           atlas: "Open Atlas",
           cta: "Open Professional workspace",
           description:
-            "ARCUS Professional is built on the first systematic database of collapsed bridges in Italy from 2000 to today and translates it into operational intelligence: territorial context, exposures, precedents and explainable next checks.",
+            "ARCUS Professional converts verified collapse evidence, territorial hazards and asset inventories into priority rankings, scenario readings and exportable technical reports.",
           hazard:
             "Exposure Layers",
           hazardText:
@@ -526,7 +528,7 @@ export default function ProfessionalPage() {
           heroLabel:
             "ARCUS PROFESSIONAL",
           heroTitle:
-            "Infrastructure intelligence grounded in documented collapse evidence.",
+            "Operational workspace for bridge-risk decisions.",
           hotspot:
             "Territorial Hotspots",
           kpiEvents:
@@ -632,11 +634,11 @@ export default function ProfessionalPage() {
           integration:
             "Integration layer",
           integrationTitle:
-            "JSON endpoints ready for GIS, BI and API prototypes.",
+            "Controlled data layer for GIS, BI and technical integrations.",
           integrationText:
-            "The ARCUS pipeline generates professional static resources: enriched events, territory profiles, source reliability and vulnerability.",
+            "The ARCUS pipeline produces versioned professional resources for reports, territorial analysis and authorised integrations. Access is contextual to the Professional workflow, not a bulk download of the live database.",
           apiManifest:
-            "API manifest",
+            "Controlled access",
           monitoringLayer:
             "Monitoring",
           monitoringTitle:
@@ -1728,12 +1730,8 @@ export default function ProfessionalPage() {
             "Use CSV and GeoJSON exports for technical coordination.",
           ];
     const paragraph = it
-      ? path01ReportIntent === "new_construction"
-        ? `ARCUS reading: per nuovi interventi ${contextLabel}, il segnale ${dominantCause} non definisce una soluzione progettuale. Identifica i campi di attenzione tecnica da verificare prima di progettazione, due diligence o indagini sito-specifiche nella provincia di ${province}.`
-        : `ARCUS reading: per valutazione di ${contextLabel} o area esistente, il segnale ${dominantCause} indica cosa il patrimonio locale ha gia dimostrato di cedere e in quali condizioni. Serve a orientare ispezioni, richieste dati e verifiche tecniche sul patrimonio reale nella provincia di ${province}.`
-      : path01ReportIntent === "new_construction"
-        ? `ARCUS reading: for new ${contextLabel} interventions, the ${dominantCause} signal does not define a design solution. It identifies the technical attention fields that should be checked before design, due diligence or site-specific investigation decisions in the province of ${province}.`
-        : `ARCUS reading: for an existing ${contextLabel} or area assessment, the ${dominantCause} signal indicates what the local stock has already shown to fail and under which conditions. It frames inspections, data requests and technical checks on the real bridge stock in the province of ${province}.`;
+      ? `ARCUS reading: per la provincia di ${province}, il segnale ${dominantCause} non definisce una soluzione progettuale. Traduce evidenze storiche, hazard territoriali e pattern locali in campi di attenzione da verificare prima di progettazione, due diligence, ispezioni o pianificazione tecnica.`
+      : `ARCUS reading: for the province of ${province}, the ${dominantCause} signal does not define a design solution. It translates historical evidence, territorial hazards and local patterns into attention fields to verify before design, due diligence, inspections or technical planning.`;
 
     return {
       clusters,
@@ -1747,7 +1745,6 @@ export default function ProfessionalPage() {
     };
   }, [
     language,
-    path01ReportIntent,
     priorityMunicipalities,
     projectContext,
     selectedProvinceDrivers,
@@ -2998,12 +2995,8 @@ export default function ProfessionalPage() {
       exposurePriorityScore * 0.7 + collapseRateScore * 0.3
     );
     const reportIntentSentence = it
-      ? path01ReportIntent === "new_construction"
-        ? "Il report usa un linguaggio orientato a cosa controllare prima di progettare."
-        : "Il report usa un linguaggio orientato a cosa il patrimonio esistente ha gia dimostrato di cedere e in quali condizioni."
-      : path01ReportIntent === "new_construction"
-        ? "The report uses language focused on what to check before design."
-        : "The report uses language focused on what the existing stock has already shown to fail and under which conditions.";
+      ? "Il report usa un linguaggio orientato a screening territoriale, priorita di approfondimento e verifiche tecniche successive."
+      : "The report uses language focused on territorial screening, follow-up priorities and subsequent technical checks.";
 
     const formatKpi = ({ level, driver }) =>
       `<p><span class="kpi-class"><em>${escapeHtml(level)}</em></span><span class="kpi-driver">${escapeHtml(driver)}</span></p>`;
@@ -8842,26 +8835,17 @@ export default function ProfessionalPage() {
   const professionalPrimaryUseCases = professionalUseCases
     .map((item, index) => ({
       ...item,
+      entryHint:
+        index === 0
+          ? language === "it"
+            ? "Non hai un inventario specifico o vuoi capire prima il contesto territoriale? Parti da qui."
+            : "No specific inventory yet, or need to understand the territorial context first? Start here."
+          : language === "it"
+            ? "Hai gia una lista di ponti, asset o tratte da verificare? Caricala qui."
+            : "Already have a list of bridges, assets or routes to review? Upload it here.",
       index,
     }))
     .slice(0, 2);
-  const professionalPresetUseCases = professionalUseCases
-    .slice(2)
-    .map((item, index) => ({
-      ...item,
-      route:
-        index === 0
-          ? language === "it"
-            ? "Trigger interno a Path 01 o Path 02"
-            : "Internal trigger for Path 01 or Path 02"
-          : index === 1
-            ? language === "it"
-              ? "Configurazione di Path 01"
-              : "Path 01 configuration"
-            : language === "it"
-              ? "Vista intelligence separata"
-              : "Separate intelligence view",
-    }));
   const selectedProjectContext =
     language === "it" ? "Ponte" : "Bridge";
   const normalizeProvinceKey = (value) =>
@@ -8877,34 +8861,16 @@ export default function ProfessionalPage() {
         normalizeProvinceKey(item.province) ===
         normalizeProvinceKey(selectedProvinceProfile?.territory)
     );
-  const path01IntentOptions = [
-    {
-      id: "new_construction",
-      label:
-        language === "it"
-          ? "Nuova costruzione"
-          : "New construction",
-      text:
-        language === "it"
-          ? "Il report parla di cosa controllare prima di progettare."
-          : "The report explains what to check before design.",
-    },
-    {
-      id: "existing_assessment",
-      label:
-        language === "it"
-          ? "Asset o area esistente"
-          : "Existing asset or area",
-      text:
-        language === "it"
-          ? "Il report legge cosa ha gia dimostrato di cedere e in quali condizioni."
-          : "The report reads what has already failed and under which conditions.",
-    },
-  ];
   const selectedPath01Intent =
-    path01IntentOptions.find(
-      (item) => item.id === path01ReportIntent
-    ) || path01IntentOptions[0];
+    language === "it"
+      ? {
+          label: "Briefing territoriale",
+          text: "Lettura preliminare di evidenze storiche, hazard e priorita di approfondimento per la provincia selezionata.",
+        }
+      : {
+          label: "Territorial briefing",
+          text: "Preliminary reading of historical evidence, hazards and follow-up priorities for the selected province.",
+        };
   const selectedPath02ReadingMode =
     path02ReadingMode === "vulnerability_assessment"
       ? language === "it"
@@ -9504,6 +9470,7 @@ export default function ProfessionalPage() {
 
   const resetProfessionalPath = (index) => {
     setActiveEntryPath(index);
+    setHasSelectedProfessionalPath(true);
     setActiveWorkflowStep(0);
     setManualAreaBounds(null);
   };
@@ -9511,6 +9478,11 @@ export default function ProfessionalPage() {
   const activeWorkflowAction =
     professionalWorkflowActions[activeWorkflowStep] ||
     professionalWorkflowActions[0];
+  const professionalMapResizeSignal = [
+    hasSelectedProfessionalPath ? "open" : "locked",
+    activeEntryPath,
+    activeWorkflowStep,
+  ].join("-");
 
   const pathPacketRows =
     language === "it"
@@ -9912,26 +9884,6 @@ export default function ProfessionalPage() {
               </select>
             </label>
 
-            {activeEntryPath === 0 && (
-              <label>
-                {language === "it"
-                  ? "Contesto d'uso"
-                  : "Use context"}
-                <select
-                  onChange={(event) =>
-                    setPath01ReportIntent(event.target.value)
-                  }
-                  value={path01ReportIntent}
-                >
-                  {path01IntentOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-
             <div>
               <b>
                 {language === "it"
@@ -9999,6 +9951,7 @@ export default function ProfessionalPage() {
               }
               selectionEnabled={activeEntryPath !== 0}
               selectionLabel={manualAreaLabel}
+              resizeSignal={professionalMapResizeSignal}
               sidebarOpen={false}
               showEventMarkers
               showHeatmap
@@ -10099,8 +10052,8 @@ export default function ProfessionalPage() {
               <strong>{selectedPath01Intent.label}</strong>
               <p>
                 {language === "it"
-                  ? "ARCUS produrra una sola lettura territoriale basata su evidenza storica. Il contesto d'uso serve solo a orientare il framing del report finale."
-                  : "ARCUS will produce one evidence-based territory reading. The use context only frames the final report."}
+                  ? "ARCUS produce una sola lettura territoriale basata su evidenza storica, hazard e priorita di approfondimento."
+                  : "ARCUS produces one territorial reading based on historical evidence, hazards and follow-up priorities."}
               </p>
             </div>
 
@@ -10300,6 +10253,7 @@ export default function ProfessionalPage() {
                 selectionBounds={manualAreaBounds}
                 selectionEnabled
                 selectionLabel={manualAreaLabel}
+                resizeSignal={professionalMapResizeSignal}
                 sidebarOpen={false}
                 showEventMarkers
                 showHeatmap
@@ -10468,6 +10422,7 @@ export default function ProfessionalPage() {
               assetMarkers={professionalAssetMapMarkers}
               filteredEvents={selectedProvinceEvents}
               height="340px"
+              resizeSignal={professionalMapResizeSignal}
               sidebarOpen={false}
               showAssetMarkers={professionalMapLayers.assets}
               showEventMarkers={professionalMapLayers.events}
@@ -10534,6 +10489,7 @@ export default function ProfessionalPage() {
                 publicWmsOverlays={
                   activeProfessionalWmsOverlays
                 }
+                resizeSignal={professionalMapResizeSignal}
                 selectionBounds={manualAreaBounds}
                 sidebarOpen={false}
                 showEventMarkers
@@ -11273,7 +11229,11 @@ export default function ProfessionalPage() {
 
   return (
     <main
-      className="platform-page professional-compact-mode"
+      className={`platform-page professional-compact-mode ${
+        hasSelectedProfessionalPath
+          ? "professional-path-open"
+          : "professional-path-locked"
+      }`}
       id="main-content"
     >
       <PageMeta
@@ -11283,49 +11243,64 @@ export default function ProfessionalPage() {
 
       <Navbar />
 
-      <section className="platform-hero">
+      <section className="platform-hero platform-professional-command-hero">
         <div className="platform-grid" />
 
-        <div className="platform-container">
-          <div className="platform-label">
-            {copy.heroLabel}
-          </div>
-
-          <h1>{copy.heroTitle}</h1>
-          <p>{copy.description}</p>
-
-          <div className="platform-actions">
-            <a href="#professional-workflow">
-              {language === "it"
-                ? "Scegli workflow"
-                : "Choose workflow"}
-            </a>
-            <Link to="/plans">
-              {language === "it"
-                ? "Confronta piani"
-                : "Compare plans"}
-            </Link>
-            <Link to="/atlas?mode=professional">
-              {copy.atlas}
-            </Link>
-          </div>
-
-          <div className="platform-kpis">
+        <div className="platform-container platform-guided-shell">
+          <header className="platform-guided-header">
             <div>
-              <strong>
-                {formatValue(events.length)}
-              </strong>
-              <span>{copy.kpiEvents}</span>
+              <div className="platform-label">
+                {copy.heroLabel}
+              </div>
+
+              <h1>
+                {language === "it"
+                  ? "Cosa devi decidere oggi?"
+                  : "What do you need to decide today?"}
+              </h1>
+              <p>
+                {language === "it"
+                  ? "Scegli il punto di ingresso. ARCUS apre solo il percorso coerente con la decisione che devi prendere."
+                  : "Choose your entry point. ARCUS opens only the workflow aligned with the decision you need to make."}
+              </p>
             </div>
-            <div>
-              <strong>{profiles.length}</strong>
-              <span>{copy.kpiRegions}</span>
-            </div>
-            <div>
-              <strong>
-                {formatValue(sources.length)}
-              </strong>
-              <span>{copy.kpiSources}</span>
+          </header>
+
+          <div className="platform-guided-board">
+            <div className="platform-guided-choice-grid">
+              {professionalPrimaryUseCases.map((item) => (
+                <article
+                  className={
+                    hasSelectedProfessionalPath &&
+                    activeEntryPath === item.index
+                      ? "active"
+                      : ""
+                  }
+                  key={item.label}
+                >
+                  <button
+                    onClick={() => {
+                      resetProfessionalPath(item.index);
+                      window.setTimeout(() => {
+                        document
+                          .getElementById(
+                            "professional-workflow"
+                          )
+                          ?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                      }, 80);
+                    }}
+                    type="button"
+                  >
+                    <span>{item.label}</span>
+                    <strong>{item.action}</strong>
+                    <p>{item.entryHint}</p>
+                    <em>{item.output}</em>
+                  </button>
+                </article>
+              ))}
             </div>
           </div>
         </div>
@@ -11357,182 +11332,81 @@ export default function ProfessionalPage() {
         id="professional-workflow"
       >
         <div className="platform-container">
-          <div className="platform-use-case-header">
+          <div className="platform-console-entry">
             <div>
               <div className="platform-label">
                 {language === "it"
-                  ? "CONTESTO DI SESSIONE"
-                  : "SESSION CONTEXT"}
+                  ? "CONSOLE OPERATIVA"
+                  : "OPERATIONAL CONSOLE"}
               </div>
 
               <h2>
                 {language === "it"
-                  ? "Per la v1 il contesto e fisso: ponti."
-                  : "For v1, the context is fixed: bridges."}
+                  ? `${activePath.label}: dalla domanda al pacchetto esportabile.`
+                  : `${activePath.label}: from question to exportable package.`}
               </h2>
-            </div>
 
-            <p>
-              {language === "it"
-                ? "ARCUS Professional nasce dal database dei ponti crollati: per non perdere coerenza analitica, linguaggio, attention points, dati da richiedere e output restano centrati sui ponti. La scelta d'ingresso resta binaria: hai gia un asset o no?"
-                : "ARCUS Professional is built on the collapsed-bridges database: to preserve analytical consistency, language, attention points, data requests and outputs stay bridge-centered. The entry choice remains binary: do you already have an asset?"}
-            </p>
-          </div>
-
-          <div className="platform-session-context">
-            <div>
-              <span>
-                {language === "it"
-                  ? "Contesto fisso"
-                  : "Fixed context"}
-              </span>
-              <strong>{selectedProjectContext}</strong>
               <p>
                 {language === "it"
-                  ? "Allineato al database ARCUS dei ponti crollati in Italia."
-                  : "Aligned with the ARCUS database of collapsed bridges in Italy."}
+                  ? "La scelta iniziale imposta il contesto, ma il lavoro resta nello stesso ambiente: selezioni il territorio o l'asset, leggi il profilo di rischio, controlli le evidenze e generi il pacchetto operativo."
+                  : "The initial choice sets the context, but the work stays inside one environment: select the territory or asset, read the risk profile, review the evidence and generate the operational package."}
               </p>
-            </div>
 
-            <div className="platform-fixed-context-note">
-              <span>
-                {language === "it"
-                  ? "Perche non ci sono altre voci"
-                  : "Why there are no other options"}
-              </span>
-              <p>
-                {language === "it"
-                  ? "Gli altri domini verranno valutati solo quando database e denominatore saranno coerenti. Ora il confronto corretto e ponte su ponte."
-                  : "Other domains will be evaluated only when database and denominator are coherent. For now, the correct comparison is bridge to bridge."}
-              </p>
-            </div>
-          </div>
-
-          <div className="platform-use-case-header platform-entry-header">
-            <div>
-              <div className="platform-label">
-                {language === "it"
-                  ? "SCELTA DI INGRESSO"
-                  : "ENTRY CHOICE"}
-              </div>
-              <h2>
-                {language === "it"
-                  ? "Hai gia un asset?"
-                  : "Do you already have an asset?"}
-              </h2>
-            </div>
-            <p>
-              {language === "it"
-                ? "Professional non e una mappa premium: e un workspace costruito intorno al primo database sistematico di ponti crollati in Italia dal 2000 ad oggi. Evento estremo, due diligence e ricerca sono configurazioni interne, non path."
-                : "Professional is not a premium map subscription: it is built around the first systematic database of collapsed bridges in Italy from 2000 to today. Extreme event, due diligence and research are internal configurations, not paths."}
-            </p>
-          </div>
-
-          <div className="platform-use-case-grid platform-use-case-grid-primary">
-            {professionalPrimaryUseCases.map((item) => (
-              <article
-                className={
-                  activeEntryPath === item.index
-                    ? "active"
-                    : ""
-                }
-                key={item.label}
+              <button
+                className="platform-path-change"
+                onClick={() => {
+                  setHasSelectedProfessionalPath(false);
+                  setActiveWorkflowStep(0);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+                type="button"
               >
-                <span>{item.label}</span>
-                <p>{item.lead}</p>
+                {language === "it"
+                  ? "Cambia percorso"
+                  : "Change path"}
+              </button>
+            </div>
 
-                <div>
-                  {item.steps.map((step) => (
-                    <em key={step}>{step}</em>
-                  ))}
-                </div>
-
-                <button
-                  aria-label={`${item.label}: ${
-                    language === "it"
-                      ? "seleziona path"
-                      : "select path"
-                  }`}
-                  onClick={() =>
-                    resetProfessionalPath(item.index)
-                  }
-                  type="button"
-                >
-                  {language === "it"
-                    ? "Seleziona path"
-                    : "Select path"}
-                </button>
-              </article>
-            ))}
-          </div>
-
-          <div className="platform-preset-group">
-            <span>
-              {language === "it"
-                ? "Configurazioni interne ai path"
-                : "Configurations inside the paths"}
-            </span>
-            <div className="platform-use-case-grid platform-use-case-grid-presets">
-              {professionalPresetUseCases.map((item) => (
-                <article
-                  key={item.label}
-                >
-                  <span>{item.label}</span>
-                  <p>{item.lead}</p>
-                  <strong className="platform-preset-route">
-                    {item.route}
-                  </strong>
-
-                  <div>
-                    {item.steps.map((step) => (
-                      <em key={step}>{step}</em>
-                    ))}
-                  </div>
+            <aside className="platform-console-entry-panel">
+              {[
+                [
+                  language === "it"
+                    ? "Evidence base"
+                    : "Evidence base",
+                  formatValue(events.length),
+                  language === "it"
+                    ? "eventi nel modello"
+                    : "events in model",
+                ],
+                [
+                  language === "it"
+                    ? "Contesto"
+                    : "Context",
+                  selectedProjectContext,
+                  language === "it"
+                    ? "dominio selezionato"
+                    : "selected domain",
+                ],
+                [
+                  language === "it"
+                    ? "Output"
+                    : "Output",
+                  "PDF / CSV / GIS",
+                  language === "it"
+                    ? "report e dati esportabili"
+                    : "reports and exportable data",
+                ],
+              ].map(([label, value, text]) => (
+                <article key={label}>
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                  <p>{text}</p>
                 </article>
               ))}
-            </div>
-          </div>
-
-          <div className="platform-product-decisions">
-            {[
-              [
-                language === "it"
-                  ? "Database ARCUS"
-                  : "ARCUS database",
-                language === "it"
-                  ? "Primo database sistematico di ponti crollati in Italia dal 2000 ad oggi; e il fossato competitivo, non un layer cartografico."
-                  : "First systematic database of collapsed bridges in Italy from 2000 to today; this is the product moat, not a map layer.",
-              ],
-              [
-                language === "it"
-                  ? "Collapse Rate"
-                  : "Collapse Rate",
-                language === "it"
-                  ? "Secondo layer separato dal Priority Index: casi ARCUS / ponti AINOP censiti per provincia, con nota di confidenza sulla copertura."
-                  : "Second layer kept separate from Priority Index: ARCUS cases / AINOP counted bridges by province, with a coverage confidence note.",
-              ],
-              [
-                language === "it"
-                  ? "Scala sub-provinciale"
-                  : "Sub-provincial scale",
-                language === "it"
-                  ? "La provincia resta screening minimo; comune, corridoio o sito diventano upgrade naturale per decisioni progettuali."
-                  : "Province remains the minimum screening scale; municipality, corridor or site becomes the natural upgrade for design decisions.",
-              ],
-              [
-                language === "it"
-                  ? "Aggiornamenti attivi"
-                  : "Active updates",
-                language === "it"
-                  ? "Cadenza semestrale base, anticipata in caso catastrofico, con notifiche quando cambiano le province di interesse."
-                  : "Semiannual baseline updates, accelerated after catastrophic events, with notifications when subscribed provinces change.",
-              ],
-            ].map(([title, text]) => (
-              <article key={title}>
-                <span>{title}</span>
-                <p>{text}</p>
-              </article>
-            ))}
+            </aside>
           </div>
 
           <div className="platform-path-runner">
@@ -11961,6 +11835,7 @@ export default function ProfessionalPage() {
               publicWmsOverlays={
                 activeProfessionalWmsOverlays
               }
+              resizeSignal={professionalMapResizeSignal}
               sidebarOpen={false}
               showAssetMarkers={
                 professionalMapLayers.assets
@@ -12318,13 +12193,11 @@ export default function ProfessionalPage() {
               <strong>
                 {apiManifest?.version || "0.1.0"}
               </strong>
-              <a
-                href="/data/professional/api-manifest.json"
-                target="_blank"
-                rel="noreferrer"
-              >
-                /data/professional/api-manifest.json
-              </a>
+              <em className="platform-api-access">
+                {language === "it"
+                  ? "Disponibile dentro workflow Professional autorizzati"
+                  : "Available inside authorised Professional workflows"}
+              </em>
             </div>
           </div>
 
@@ -12358,13 +12231,11 @@ export default function ProfessionalPage() {
               <article key={endpoint.resource}>
                 <span>{endpoint.resource}</span>
                 <p>{endpoint.description}</p>
-                <a
-                  href={endpoint.path}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {endpoint.path}
-                </a>
+                <em className="platform-api-access">
+                  {language === "it"
+                    ? "Accesso controllato"
+                    : "Controlled access"}
+                </em>
               </article>
             ))}
           </div>

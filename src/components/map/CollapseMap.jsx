@@ -38,6 +38,7 @@ import {
 /* ================================= */
 
 function MapResizeController({
+  resizeSignal,
   sidebarOpen,
 }) {
 
@@ -79,7 +80,7 @@ function MapResizeController({
 
     };
 
-  }, [sidebarOpen, map]);
+  }, [map, resizeSignal, sidebarOpen]);
 
   return null;
 }
@@ -390,9 +391,10 @@ function CollapseMap({
   selectionBounds = null,
   selectionEnabled = false,
   selectionLabel,
+  resizeSignal,
   sourcesByEvent,
   sidebarOpen,
-  showHeatmap,
+  showHeatmap = false,
   showEventMarkers = true,
   showAssetMarkers = false,
   showWatchlistMarkers = false,
@@ -464,6 +466,7 @@ function CollapseMap({
         {/* ================================= */}
 
         <MapResizeController
+          resizeSignal={resizeSignal}
           sidebarOpen={sidebarOpen}
         />
 
@@ -520,10 +523,6 @@ function CollapseMap({
         <ZoomControl
           position="bottomright"
         />
-
-        {/* ================================= */}
-        {/* HEATMAP */}
-        {/* ================================= */}
 
         {showHeatmap && (
           <HeatmapLayer

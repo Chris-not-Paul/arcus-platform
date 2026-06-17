@@ -20,11 +20,11 @@ const sources = [];
 /* ================================= */
 
 const eventsCsvPath = path.resolve(
-  "public/data/raw/EVENTS.csv"
+  "private-data/raw/EVENTS.csv"
 );
 
 const sourcesCsvPath = path.resolve(
-  "public/data/raw/SOURCES.csv"
+  "private-data/raw/SOURCES.csv"
 );
 
 const outputEventsPath = path.resolve(

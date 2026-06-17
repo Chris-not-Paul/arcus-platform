@@ -1,9 +1,3 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
 import { Link } from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
@@ -15,97 +9,135 @@ import "../styles/data-access-page.css";
 
 function DataAccessPage() {
   const { language } = useLanguage();
-  const [manifest, setManifest] = useState(null);
-  const [release, setRelease] = useState(null);
-  const [dictionary, setDictionary] = useState(null);
 
   const copy =
     language === "it"
       ? {
           label: "ARCUS DATA ACCESS",
           title:
-            "Dataset, release e API pensati per uso professionale.",
+            "Accesso ai dati, release pubblica e livello Professional.",
           text:
-            "Questa pagina chiarisce cosa e pubblico, cosa appartiene al livello Professional e quali risorse sono gia pronte per integrazioni GIS, BI e workflow tecnici.",
-          publicTitle: "Dati pubblici",
-          publicText:
-            "Risorse ad accesso aperto per trasparenza scientifica, consultazione e diffusione.",
-          professionalTitle: "Professional data layer",
-          professionalText:
-            "Endpoint statici versionati per score, dizionario dati, release, profili territoriali e overlay dichiarati.",
-          releaseTitle: "Release controllata",
-          dictionaryTitle: "Dizionario dati",
+            "ARCUS separa la base scientifica pubblica dalla base dati operativa aggiornata. Il layer Open consente consultazione, citazione e analisi trasparente; il livello Professional produce output tecnici controllati senza esporre il database live in bulk.",
           openAtlas: "Apri Atlante",
           openProfessional: "Apri Professional",
-          records: "record",
-          checks: "controlli",
-          fields: "campi",
-          status: "Stato",
+          publicTitle: "Layer Open",
+          publicText:
+            "Il dataset pubblico corrisponde alla release citabile collegata al paper Data in Brief. Serve a documentare metodo, copertura storica e tracciabilita delle fonti.",
+          professionalTitle: "Layer Professional",
+          professionalText:
+            "Il database ARCUS aggiornato alimenta workflow, report, screening territoriali e package GIS controllati. Non viene distribuito come copia integrale del DB.",
+          policyTitle: "Regola di accesso",
+          policyText:
+            "Open dimostra e rende verificabile la base scientifica. Professional trasforma quella base in intelligence operativa, con export contestuali legati a territorio, scenario o asset inventory.",
+          releaseTitle: "Release pubblica",
+          liveTitle: "Evidence base live",
+          outputTitle: "Output Professional",
+          publicItems: [
+            [
+              "Periodo citabile",
+              "2000-2025, coerente con la release Data in Brief.",
+            ],
+            [
+              "Campi esportabili",
+              "Identificativo evento, localizzazione amministrativa, data, classe di collasso, causa, vittime e conteggio fonti.",
+            ],
+            [
+              "Uso previsto",
+              "Ricerca, citazione, didattica, verifica metodologica e consultazione pubblica.",
+            ],
+          ],
+          professionalItems: [
+            [
+              "Screening territoriale",
+              "Brief provinciale, pattern storico, contesto hazard e priorita di attenzione.",
+            ],
+            [
+              "Asset workflow",
+              "Import inventario, confronto con evidenza storica, watchlist e ranking operativo.",
+            ],
+            [
+              "Export controllati",
+              "PDF, one-page brief, CSV contestuali, fonti collegate e pacchetti GIS riferiti allo scenario analizzato.",
+            ],
+          ],
+          policyItems: [
+            [
+              "Nessun bulk dump del live DB",
+              "La base aggiornata ARCUS resta un asset proprietario e non viene resa scaricabile integralmente dal sito pubblico.",
+            ],
+            [
+              "Estratti contestuali",
+              "Gli export Professional sono legati a una provincia, uno scenario o un set di asset, non alla replica completa del database.",
+            ],
+            [
+              "Fonti dichiarate",
+              "Le fonti pubbliche e i layer territoriali dichiarabili restano tracciabili nel metodo e nei report.",
+            ],
+          ],
         }
       : {
           label: "ARCUS DATA ACCESS",
           title:
-            "Datasets, releases and APIs designed for professional use.",
+            "Data access, public release and Professional layer.",
           text:
-            "This page clarifies what is public, what belongs to the Professional tier and which resources are already ready for GIS, BI and technical workflow integrations.",
-          publicTitle: "Public data",
-          publicText:
-            "Open-access resources for scientific transparency, consultation and diffusion.",
-          professionalTitle: "Professional data layer",
-          professionalText:
-            "Versioned static endpoints for scores, data dictionary, releases, territory profiles and declared overlays.",
-          releaseTitle: "Controlled release",
-          dictionaryTitle: "Data dictionary",
+            "ARCUS separates the public scientific baseline from the updated operational evidence base. The Open layer supports consultation, citation and transparent analysis; Professional produces controlled technical outputs without exposing the live database in bulk.",
           openAtlas: "Open Atlas",
           openProfessional: "Open Professional",
-          records: "records",
-          checks: "checks",
-          fields: "fields",
-          status: "Status",
+          publicTitle: "Open layer",
+          publicText:
+            "The public dataset corresponds to the citable release connected to the Data in Brief paper. It documents method, historical coverage and source traceability.",
+          professionalTitle: "Professional layer",
+          professionalText:
+            "The updated ARCUS database powers workflows, reports, territorial screening and controlled GIS packages. It is not distributed as a full database copy.",
+          policyTitle: "Access rule",
+          policyText:
+            "Open proves and makes the scientific base verifiable. Professional turns that base into operational intelligence, with contextual exports tied to territory, scenario or asset inventory.",
+          releaseTitle: "Public release",
+          liveTitle: "Live evidence base",
+          outputTitle: "Professional outputs",
+          publicItems: [
+            [
+              "Citable period",
+              "2000-2025, aligned with the Data in Brief release.",
+            ],
+            [
+              "Exportable fields",
+              "Event ID, administrative location, date, collapse class, cause, casualties and source count.",
+            ],
+            [
+              "Intended use",
+              "Research, citation, teaching, methodological review and public consultation.",
+            ],
+          ],
+          professionalItems: [
+            [
+              "Territorial screening",
+              "Province brief, historical pattern, hazard context and priority reading.",
+            ],
+            [
+              "Asset workflow",
+              "Inventory import, comparison with historical evidence, watchlist and operational ranking.",
+            ],
+            [
+              "Controlled exports",
+              "PDF, one-page brief, contextual CSV, linked sources and GIS packages for the analysed scenario.",
+            ],
+          ],
+          policyItems: [
+            [
+              "No live DB bulk dump",
+              "The updated ARCUS evidence base remains a proprietary asset and is not fully downloadable from the public site.",
+            ],
+            [
+              "Contextual extracts",
+              "Professional exports are tied to a province, scenario or asset set, not to a complete database replica.",
+            ],
+            [
+              "Declared sources",
+              "Public sources and declared territorial layers remain traceable in the method and reports.",
+            ],
+          ],
         };
-
-  useEffect(() => {
-    Promise.all([
-      fetch("/data/professional/api-manifest.json").then(
-        (response) => response.json()
-      ),
-      fetch("/data/professional/data-release.json").then(
-        (response) => response.json()
-      ),
-      fetch("/data/professional/data-dictionary.json").then(
-        (response) => response.json()
-      ),
-    ]).then(([apiManifest, dataRelease, dataDictionary]) => {
-      setManifest(apiManifest);
-      setRelease(dataRelease);
-      setDictionary(dataDictionary);
-    });
-  }, []);
-
-  const publicEndpoints = useMemo(
-    () => [
-      {
-        description:
-          language === "it"
-            ? "Eventi ARCUS processati e pronti per l'Atlante pubblico."
-            : "Processed ARCUS events used by the public Atlas.",
-        path: "/data/processed/events.json",
-        resource: "events",
-      },
-      {
-        description:
-          language === "it"
-            ? "Fonti documentali collegate agli eventi tramite event_id."
-            : "Documentary sources linked to events through event_id.",
-        path: "/data/processed/sources.json",
-        resource: "sources",
-      },
-    ],
-    [language]
-  );
-
-  const datasets = dictionary?.datasets || [];
-  const endpoints = manifest?.endpoints || [];
 
   return (
     <main
@@ -147,11 +179,11 @@ function DataAccessPage() {
           </div>
 
           <div className="data-access-card-list">
-            {publicEndpoints.map((endpoint) => (
-              <article key={endpoint.path}>
-                <span>{endpoint.resource}</span>
-                <strong>{endpoint.path}</strong>
-                <p>{endpoint.description}</p>
+            {copy.publicItems.map(([title, text]) => (
+              <article key={title}>
+                <span>{copy.releaseTitle}</span>
+                <strong>{title}</strong>
+                <p>{text}</p>
               </article>
             ))}
           </div>
@@ -159,31 +191,20 @@ function DataAccessPage() {
       </section>
 
       <section className="data-access-section dark">
-        <div className="data-access-container">
-          <div className="data-access-section-header">
-            <div>
-              <div className="data-access-label">
-                {copy.professionalTitle}
-              </div>
-              <h2>{copy.professionalText}</h2>
+        <div className="data-access-container data-access-split">
+          <div>
+            <div className="data-access-label">
+              {copy.professionalTitle}
             </div>
-
-            <div className="data-access-version">
-              <span>{manifest?.name || "Manifest"}</span>
-              <strong>
-                {manifest?.version
-                  ? `v${manifest.version}`
-                  : "-"}
-              </strong>
-            </div>
+            <h2>{copy.professionalText}</h2>
           </div>
 
-          <div className="data-access-endpoints">
-            {endpoints.map((endpoint) => (
-              <article key={endpoint.path}>
-                <span>{endpoint.resource}</span>
-                <strong>{endpoint.path}</strong>
-                <p>{endpoint.description}</p>
+          <div className="data-access-card-list data-access-dark-list">
+            {copy.professionalItems.map(([title, text]) => (
+              <article key={title}>
+                <span>{copy.liveTitle}</span>
+                <strong>{title}</strong>
+                <p>{text}</p>
               </article>
             ))}
           </div>
@@ -191,45 +212,23 @@ function DataAccessPage() {
       </section>
 
       <section className="data-access-section">
-        <div className="data-access-container data-access-grid">
-          <article className="data-access-release">
-            <span>{copy.releaseTitle}</span>
-            <strong>
-              {release?.version ? `v${release.version}` : "-"}
-            </strong>
-            <p>{release?.id || "-"}</p>
-
-            <div className="data-access-release-stats">
-              <div>
-                <b>{release?.counts?.events || 0}</b>
-                <em>{copy.records}</em>
-              </div>
-              <div>
-                <b>{release?.checks?.length || 0}</b>
-                <em>{copy.checks}</em>
-              </div>
+        <div className="data-access-container data-access-split">
+          <div>
+            <div className="data-access-label">
+              {copy.policyTitle}
             </div>
-          </article>
+            <h2>{copy.policyText}</h2>
+          </div>
 
-          <article className="data-access-release">
-            <span>{copy.dictionaryTitle}</span>
-            <strong>{datasets.length}</strong>
-            <p>
-              {datasets
-                .slice(0, 4)
-                .map((dataset) => dataset.label)
-                .join(", ")}
-            </p>
-
-            <div className="data-access-release-stats">
-              {datasets.slice(0, 2).map((dataset) => (
-                <div key={dataset.id}>
-                  <b>{dataset.fields?.length || 0}</b>
-                  <em>{dataset.id} {copy.fields}</em>
-                </div>
-              ))}
-            </div>
-          </article>
+          <div className="data-access-card-list">
+            {copy.policyItems.map(([title, text]) => (
+              <article key={title}>
+                <span>{copy.outputTitle}</span>
+                <strong>{title}</strong>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </main>

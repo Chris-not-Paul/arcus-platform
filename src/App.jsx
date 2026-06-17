@@ -17,7 +17,6 @@ const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
-const PlansPage = lazy(() => import("./pages/PlansPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
@@ -117,7 +116,7 @@ function App() {
 
           <Route
             path="/plans"
-            element={<PlansPage />}
+            element={<Navigate replace to="/professional" />}
           />
 
           <Route
