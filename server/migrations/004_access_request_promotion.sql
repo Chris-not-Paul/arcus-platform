@@ -1,0 +1,3 @@
+ALTER TABLE access_requests
+  ADD COLUMN IF NOT EXISTS promoted_username TEXT NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS promotion_status TEXT NOT NULL DEFAULT '';

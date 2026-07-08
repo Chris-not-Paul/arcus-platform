@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 private-data
+backups
+.env
+.env.*
+!.env.example
 *.local
 
 # Editor directories and files

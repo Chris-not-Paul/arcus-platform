@@ -4,11 +4,9 @@ import {
   useState,
 } from "react";
 
-import { Link } from "react-router-dom";
 import {
-  toPng,
-} from "html-to-image";
-import { jsPDF } from "jspdf";
+  Link,
+} from "react-router-dom";
 
 import CollapseMap from "../components/map/CollapseMap";
 import Navbar from "../components/layout/Navbar";
@@ -29,8 +27,34 @@ import {
   summarizeReliability,
   summarizeVulnerability,
 } from "../utils/analytics";
+import {
+  completeProfessionalReport,
+  openEvents,
+  openSources,
+  createProfessionalWorkspace,
+  deleteProfessionalWorkspace,
+  downloadProfessionalExport,
+  professionalWorkspaces,
+  professionalResource,
+  registerProfessionalReport,
+} from "../utils/apiClient";
 
 import "../styles/platform-levels.css";
+
+let htmlToImageModulePromise = null;
+let jsPdfModulePromise = null;
+
+async function loadToPng() {
+  htmlToImageModulePromise ||= import("html-to-image");
+
+  return (await htmlToImageModulePromise).toPng;
+}
+
+async function loadJsPDF() {
+  jsPdfModulePromise ||= import("jspdf");
+
+  return (await jsPdfModulePromise).jsPDF;
+}
 
 function cleanDisplayText(value) {
   return String(value ?? "")
@@ -72,24 +96,6 @@ function evidenceGradeFromScore(value) {
   return "D";
 }
 
-function loadStoredWorkspaces() {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  try {
-    const stored = JSON.parse(
-      window.localStorage.getItem(
-        "arcus-professional-workspaces"
-      ) || "[]"
-    );
-
-    return Array.isArray(stored) ? stored : [];
-  } catch {
-    return [];
-  }
-}
-
 export default function ProfessionalPage() {
   const { language } = useLanguage();
   const [events, setEvents] = useState([]);
@@ -129,6 +135,7 @@ export default function ProfessionalPage() {
     useState(null);
   const [isPreparingReport, setIsPreparingReport] =
     useState(false);
+  const [exportStatus, setExportStatus] = useState("");
   const [dataDictionary, setDataDictionary] =
     useState([]);
   const [dataRelease, setDataRelease] =
@@ -142,7 +149,7 @@ export default function ProfessionalPage() {
   const [workspaceName, setWorkspaceName] =
     useState("");
   const [savedWorkspaces, setSavedWorkspaces] =
-    useState(loadStoredWorkspaces);
+    useState([]);
   const [activeEntryPath, setActiveEntryPath] =
     useState(0);
   const [
@@ -160,57 +167,53 @@ export default function ProfessionalPage() {
     useState("");
 
   useEffect(() => {
-    fetch("/data/processed/events.json")
-      .then((response) => response.json())
+    professionalWorkspaces()
+      .then(setSavedWorkspaces)
+      .catch(() => setSavedWorkspaces([]));
+  }, []);
+
+  useEffect(() => {
+    openEvents()
       .then(setEvents);
 
-    fetch("/data/processed/sources.json")
-      .then((response) => response.json())
+    openSources()
       .then(setSources);
 
-    fetch("/data/professional/api-manifest.json")
-      .then((response) => response.json())
+    professionalResource("api-manifest")
       .then(setApiManifest)
       .catch(() => setApiManifest(null));
 
-    fetch("/data/professional/model-cards.json")
-      .then((response) => response.json())
+    professionalResource("model-cards")
       .then((data) =>
         setModelCards(data.models || [])
       )
       .catch(() => setModelCards([]));
 
-    fetch("/data/professional/data-quality.json")
-      .then((response) => response.json())
+    professionalResource("data-quality")
       .then(setDataQuality)
       .catch(() => setDataQuality(null));
 
-    fetch("/data/professional/data-dictionary.json")
-      .then((response) => response.json())
+    professionalResource("data-dictionary")
       .then((data) =>
         setDataDictionary(data.datasets || [])
       )
       .catch(() => setDataDictionary([]));
 
-    fetch("/data/professional/data-release.json")
-      .then((response) => response.json())
+    professionalResource("data-release")
       .then(setDataRelease)
       .catch(() => setDataRelease(null));
 
-    fetch("/data/professional/external-hazard-layers.json")
-      .then((response) => response.json())
+    professionalResource("external-hazard-layers")
       .then((data) =>
         setExternalLayers(data.layers || [])
       )
       .catch(() => setExternalLayers([]));
 
-    fetch("/data/professional/hazard-exposure-preview.json")
-      .then((response) => response.json())
+    professionalResource("hazard-exposure-preview")
       .then(setHazardExposurePreview)
       .catch(() => setHazardExposurePreview(null));
 
-    fetch("/data/professional/ainop-bridge-index.json")
-      .then((response) => response.json())
+    professionalResource("ainop-bridge-index")
       .then(setAinopBridgeIndex)
       .catch(() => setAinopBridgeIndex(null));
   }, []);
@@ -2318,6 +2321,8 @@ export default function ProfessionalPage() {
         return "";
       }
 
+      const toPng = await loadToPng();
+
       return await toPng(mapNode, {
         backgroundColor: "#f3f1ea",
         cacheBust: !localTiles,
@@ -2369,6 +2374,8 @@ export default function ProfessionalPage() {
       await new Promise((resolve) =>
         window.setTimeout(resolve, 500)
       );
+
+      const toPng = await loadToPng();
 
       return await toPng(mapNode, {
         backgroundColor: "#ffffff",
@@ -4911,8 +4918,10 @@ export default function ProfessionalPage() {
     logoImage,
     mapImage,
     mapImageSize,
+    reportReference = "",
     variant = "full",
   }) => {
+    const jsPDF = await loadJsPDF();
     const pdf = new jsPDF({
       compress: false,
       format: "a4",
@@ -5116,6 +5125,16 @@ export default function ProfessionalPage() {
         289,
         { align: "center" }
       );
+      if (reportReference) {
+        pdf.setFont("courier", "normal");
+        pdf.setFontSize(5.5);
+        pdf.text(
+          reportReference,
+          pageWidth - margin - 10,
+          289,
+          { align: "right" }
+        );
+      }
       pdf.text(String(pages), pageWidth - margin, 289, {
         align: "right",
       });
@@ -6972,6 +6991,17 @@ export default function ProfessionalPage() {
     setIsPreparingReport(true);
 
     try {
+      const reportArea =
+        activeEntryPath === 1
+          ? assetSession.fileName || "path02-asset-inventory"
+          : activeEntryPath !== 0 && manualAreaBounds
+          ? manualAreaLabel
+          : selectedProvinceProfile.territory;
+      const reportJob = await registerProfessionalReport({
+        path: `path-${activeEntryPath + 1}`,
+        territory: reportArea,
+        variant,
+      }).catch(() => null);
       let mapImage =
         activeEntryPath === 0
           ? await capturePath01ReportMapImage()
@@ -7017,12 +7047,6 @@ export default function ProfessionalPage() {
         );
       }
 
-      const reportArea =
-        activeEntryPath === 1
-          ? assetSession.fileName || "path02-asset-inventory"
-          : activeEntryPath !== 0 && manualAreaBounds
-          ? manualAreaLabel
-          : selectedProvinceProfile.territory;
       const slug =
         cleanDisplayText(reportArea || "territory")
           .toLowerCase()
@@ -7041,8 +7065,17 @@ export default function ProfessionalPage() {
         logoImage,
         mapImage,
         mapImageSize,
+        reportReference: reportJob?.reference || "",
         variant,
       });
+
+      if (reportJob?.reference) {
+        await completeProfessionalReport(reportJob.reference, {
+          filename,
+          outputType: "pdf",
+          variant,
+        }).catch(() => null);
+      }
     } finally {
       setIsPreparingReport(false);
     }
@@ -7056,80 +7089,38 @@ export default function ProfessionalPage() {
     void downloadReportPdf("brief");
   };
 
+  const downloadControlledExport = async (payload) => {
+    setExportStatus("");
+
+    try {
+      const { blob, filename } = await downloadProfessionalExport(payload);
+
+      downloadFile(filename, blob, blob.type);
+      setExportStatus(
+        language === "it"
+          ? "Output preparato dal server ARCUS."
+          : "Output prepared by the ARCUS server."
+      );
+    } catch {
+      setExportStatus(
+        language === "it"
+          ? "Non riesco a preparare questo output. Riprova tra poco."
+          : "This output could not be prepared. Please try again shortly."
+      );
+    }
+  };
+
   const exportProvinceReport = () => {
     if (!selectedProvinceProfile) {
       return;
     }
 
-    const rows = workflowEvents.map(
-      (event) => {
-        const sourceCount =
-          sourceCountByEvent[event.event_id] || 0;
-        const reliability =
-          reliabilityByEvent[event.event_id];
-        const vulnerability =
-          vulnerabilityByEvent[event.event_id];
-        const action =
-          event.collapse_severity === "TC" ||
-          Number(event.victims) > 0 ||
-          Number(event.injuries) > 0 ||
-          vulnerability?.className === "Critical"
-            ? "Immediate review"
-            : sourceCount < 3 ||
-                reliability?.grade === "D"
-              ? "Evidence enrichment"
-              : "Monitoring";
-
-        return {
-          action,
-          cause: event.specific_cause,
-          event_id: event.event_id,
-          municipality: event.municipality,
-          province: event.province,
-          region: event.region,
-          score:
-            selectedProvinceProfile.scenarioScore ||
-            selectedProvinceProfile.riskScore,
-          reliability_class:
-            reliability?.grade || "",
-          reliability_label:
-            reliability?.label || "",
-          reliability_score:
-            reliability?.score || 0,
-          severity: event.collapse_severity,
-          sources: sourceCount,
-          triggered: event.triggered,
-          vulnerability_class:
-            vulnerability?.className || "",
-          vulnerability_score:
-            vulnerability?.score || 0,
-        };
-      }
-    );
-
-    const columns = [
-      "province",
-      "score",
-      "event_id",
-      "municipality",
-      "region",
-      "severity",
-      "cause",
-      "triggered",
-      "sources",
-      "reliability_score",
-      "reliability_class",
-      "reliability_label",
-      "vulnerability_score",
-      "vulnerability_class",
-      "action",
-    ];
-
-    exportRowsAsCsv(
-      `arcus-professional-${selectedProvinceProfile.territory}.csv`,
-      columns,
-      rows
-    );
+    void downloadControlledExport({
+      scope: {
+        province: selectedProvinceProfile.territory,
+      },
+      type: "territory-brief",
+    });
   };
 
   const exportSourceTable = () => {
@@ -7148,43 +7139,15 @@ export default function ProfessionalPage() {
               }))
             )
         : workflowEvents;
-    const rows = sourceEvents.flatMap((event) =>
-      (sourcesByEventMap[event.event_id] || []).map(
-        (source) => ({
-          access_date: source.access_date,
-          asset_id: event.asset_id || "",
-          asset_name: event.asset_name || "",
-          event_id: event.event_id,
-          municipality: event.municipality,
-          publication_date: source.publication_date,
-          source_id: source.source_id,
-          source_role: source.source_role,
-          source_title: source.source_title,
-          source_type: source.source_type,
-          source_url: source.source_url,
-        })
-      )
-    );
-
-    exportRowsAsCsv(
-      `arcus-professional-sources-${manualAreaLabel
-        .toLowerCase()
-        .replaceAll(" ", "-")}.csv`,
-      [
-        "asset_id",
-        "asset_name",
-        "event_id",
-        "municipality",
-        "source_id",
-        "source_title",
-        "source_type",
-        "source_role",
-        "publication_date",
-        "access_date",
-        "source_url",
-      ],
-      rows
-    );
+    void downloadControlledExport({
+      scope: {
+        eventIds: sourceEvents
+          .map((event) => event.event_id)
+          .filter(Boolean)
+          .slice(0, 25),
+      },
+      type: "evidence-register",
+    });
   };
 
   const exportGisPackage = () => {
@@ -7250,6 +7213,16 @@ export default function ProfessionalPage() {
         ),
         "application/geo+json;charset=utf-8"
       );
+      return;
+    }
+
+    if (selectedProvinceProfile?.territory) {
+      void downloadControlledExport({
+        scope: {
+          province: selectedProvinceProfile.territory,
+        },
+        type: "gis-summary",
+      });
       return;
     }
 
@@ -7647,9 +7620,12 @@ export default function ProfessionalPage() {
     content,
     type = "text/csv;charset=utf-8"
   ) => {
-    const blob = new Blob([content], {
-      type,
-    });
+    const blob =
+      content instanceof Blob
+        ? content
+        : new Blob([content], {
+            type,
+          });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
 
@@ -8310,14 +8286,6 @@ export default function ProfessionalPage() {
     );
   };
 
-  const persistWorkspaces = (items) => {
-    setSavedWorkspaces(items);
-    window.localStorage.setItem(
-      "arcus-professional-workspaces",
-      JSON.stringify(items)
-    );
-  };
-
   const buildWorkspaceSnapshot = () => ({
     created_at: new Date().toISOString(),
     monitoring_count: monitoringSignals.length,
@@ -8358,24 +8326,36 @@ export default function ProfessionalPage() {
       return;
     }
 
-    const snapshot = {
-      ...buildWorkspaceSnapshot(),
-      id: `workspace-${Date.now()}`,
-    };
+    const snapshot = buildWorkspaceSnapshot();
 
-    persistWorkspaces([
-      snapshot,
-      ...savedWorkspaces,
-    ]);
-    setWorkspaceName("");
+    createProfessionalWorkspace(snapshot)
+      .then((workspace) => {
+        setSavedWorkspaces((items) => [workspace, ...items]);
+        setWorkspaceName("");
+      })
+      .catch(() => {
+        setExportStatus(
+          language === "it"
+            ? "Il workspace non e stato salvato. Verifica la sessione e riprova."
+            : "The workspace was not saved. Check the session and try again."
+        );
+      });
   };
 
   const deleteWorkspace = (id) => {
-    persistWorkspaces(
-      savedWorkspaces.filter(
-        (workspace) => workspace.id !== id
-      )
-    );
+    deleteProfessionalWorkspace(id)
+      .then(() => {
+        setSavedWorkspaces((items) =>
+          items.filter((workspace) => workspace.id !== id)
+        );
+      })
+      .catch(() => {
+        setExportStatus(
+          language === "it"
+            ? "Il workspace non e stato eliminato. Riprova."
+            : "The workspace was not deleted. Please try again."
+        );
+      });
   };
 
   const exportWorkspace = (workspace) => {
@@ -11242,7 +11222,6 @@ export default function ProfessionalPage() {
       />
 
       <Navbar />
-
       <section className="platform-hero platform-professional-command-hero">
         <div className="platform-grid" />
 
@@ -12206,25 +12185,21 @@ export default function ProfessionalPage() {
               {
                 description:
                   "Curated bridge-collapse events enriched with professional models.",
-                path: "/data/professional/professional-events.json",
                 resource: "professional_events",
               },
               {
                 description:
                   "Regional and provincial risk profiles.",
-                path: "/data/professional/territory-profiles.json",
                 resource: "territory_profiles",
               },
               {
                 description:
                   "Event-level evidence reliability scores.",
-                path: "/data/professional/event-reliability.json",
                 resource: "event_reliability",
               },
               {
                 description:
                   "Event-level vulnerability scores.",
-                path: "/data/professional/event-vulnerability.json",
                 resource: "event_vulnerability",
               },
             ]).map((endpoint) => (
@@ -12425,13 +12400,11 @@ export default function ProfessionalPage() {
               <p>{copy.governanceText}</p>
             </div>
 
-            <a
-              href="/data/professional/model-cards.json"
-              target="_blank"
-              rel="noreferrer"
-            >
-              /data/professional/model-cards.json
-            </a>
+            <em className="platform-api-access">
+              {language === "it"
+                ? "Accesso controllato"
+                : "Controlled access"}
+            </em>
           </div>
 
           <div className="platform-model-grid">
@@ -12486,13 +12459,11 @@ export default function ProfessionalPage() {
               <strong>
                 {dataQuality?.readiness_score || 0}
               </strong>
-              <a
-                href="/data/professional/data-quality.json"
-                target="_blank"
-                rel="noreferrer"
-              >
-                /data/professional/data-quality.json
-              </a>
+              <em className="platform-api-access">
+                {language === "it"
+                  ? "Accesso controllato"
+                  : "Controlled access"}
+              </em>
             </div>
           </div>
 
@@ -12576,13 +12547,11 @@ export default function ProfessionalPage() {
               <p>{copy.dictionaryText}</p>
             </div>
 
-            <a
-              href="/data/professional/data-dictionary.json"
-              target="_blank"
-              rel="noreferrer"
-            >
-              /data/professional/data-dictionary.json
-            </a>
+            <em className="platform-api-access">
+              {language === "it"
+                ? "Accesso controllato"
+                : "Controlled access"}
+            </em>
           </div>
 
           <div className="platform-dictionary-grid">
@@ -12640,13 +12609,11 @@ export default function ProfessionalPage() {
               <strong>
                 v{dataRelease?.version || "0.1.0"}
               </strong>
-              <a
-                href="/data/professional/data-release.json"
-                target="_blank"
-                rel="noreferrer"
-              >
-                /data/professional/data-release.json
-              </a>
+              <em className="platform-api-access">
+                {language === "it"
+                  ? "Accesso controllato"
+                  : "Controlled access"}
+              </em>
             </div>
           </div>
 
@@ -12735,13 +12702,11 @@ export default function ProfessionalPage() {
               <p>{copy.externalLayersText}</p>
             </div>
 
-            <a
-              href="/data/professional/external-hazard-layers.json"
-              target="_blank"
-              rel="noreferrer"
-            >
-              /data/professional/external-hazard-layers.json
-            </a>
+            <em className="platform-api-access">
+              {language === "it"
+                ? "Accesso controllato"
+                : "Controlled access"}
+            </em>
           </div>
 
           <div className="platform-external-grid">
@@ -12832,13 +12797,11 @@ export default function ProfessionalPage() {
                 {selectedHazardExposure?.dominant_hazard ||
                   "-"}
               </strong>
-              <a
-                href="/data/professional/hazard-exposure-preview.json"
-                target="_blank"
-                rel="noreferrer"
-              >
-                /data/professional/hazard-exposure-preview.json
-              </a>
+              <em className="platform-api-access">
+                {language === "it"
+                  ? "Accesso controllato"
+                  : "Controlled access"}
+              </em>
             </div>
           </div>
 
@@ -12943,6 +12906,15 @@ export default function ProfessionalPage() {
                 ? "Export GeoJSON"
                 : "Export GeoJSON"}
             </button>
+
+            {exportStatus && (
+              <p
+                aria-live="polite"
+                className="platform-export-status"
+              >
+                {exportStatus}
+              </p>
+            )}
           </div>
 
           <div className="platform-atlas-cta report">

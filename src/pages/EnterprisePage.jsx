@@ -10,6 +10,10 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
 import {
+  openEvents,
+  openSources,
+} from "../utils/apiClient";
+import {
   buildTerritoryProfiles,
   formatValue,
   percentage,
@@ -23,12 +27,10 @@ export default function EnterprisePage() {
   const [sources, setSources] = useState([]);
 
   useEffect(() => {
-    fetch("/data/processed/events.json")
-      .then((response) => response.json())
+    openEvents()
       .then(setEvents);
 
-    fetch("/data/processed/sources.json")
-      .then((response) => response.json())
+    openSources()
       .then(setSources);
   }, []);
 

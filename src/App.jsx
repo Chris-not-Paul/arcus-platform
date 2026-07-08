@@ -20,11 +20,16 @@ const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
+const ProfessionalLoginPage = lazy(() => import("./pages/ProfessionalLoginPage"));
+const ProfessionalAccountPage = lazy(() => import("./pages/ProfessionalAccountPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ReportMapPath01 = lazy(() => import("./pages/ReportMapPath01"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
 import IntroOverlay from "./components/layout/IntroOverlay";
+import ProfessionalGate from "./components/auth/ProfessionalGate";
 import ScrollToTop from "./components/layout/ScrollToTop";
 
 import "leaflet/dist/leaflet.css";
@@ -121,7 +126,42 @@ function App() {
 
           <Route
             path="/professional"
-            element={<ProfessionalPage />}
+            element={
+              <ProfessionalGate>
+                <ProfessionalPage />
+              </ProfessionalGate>
+            }
+          />
+
+          <Route
+            path="/professional/login"
+            element={<ProfessionalLoginPage />}
+          />
+
+          <Route
+            path="/professional/account"
+            element={
+              <ProfessionalGate>
+                <ProfessionalAccountPage />
+              </ProfessionalGate>
+            }
+          />
+
+          <Route
+            path="/account"
+            element={<AccountPage />}
+          />
+
+          <Route
+            path="/admin"
+            element={
+              <ProfessionalGate
+                label="ARCUS ADMIN"
+                permission="admin:access"
+              >
+                <AdminPage />
+              </ProfessionalGate>
+            }
           />
 
           <Route

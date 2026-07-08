@@ -19,6 +19,10 @@ import EventMarker from "../components/map/EventMarker";
 import {
   createClusterCustomIcon,
 } from "../utils/clusterFactory";
+import {
+  openEvents,
+  openSources,
+} from "../utils/apiClient";
 
 import "../styles/report-map.css";
 
@@ -227,15 +231,13 @@ export default function ReportMapPath01() {
   const useLocalTiles = queryFlag(searchParams, "localTiles", true);
 
   useEffect(() => {
-    fetch("/data/processed/events.json")
-      .then((response) => response.json())
+    openEvents()
       .then((data) =>
         setEvents(Array.isArray(data) ? data : data.events || [])
       )
       .catch(() => setEvents([]));
 
-    fetch("/data/processed/sources.json")
-      .then((response) => response.json())
+    openSources()
       .then((data) =>
         setSources(Array.isArray(data) ? data : data.sources || [])
       )

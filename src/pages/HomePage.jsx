@@ -15,6 +15,10 @@ import ScrollReveal from "../components/motion/ScrollReveal";
 import useLanguage from "../context/useLanguage";
 
 import extractYear from "../utils/extractYear";
+import {
+  openEvents,
+  openSources,
+} from "../utils/apiClient";
 
 import "../styles/home/HomePage.css";
 
@@ -422,12 +426,10 @@ export default function HomePage() {
   const [sources, setSources] = useState([]);
 
   useEffect(() => {
-    fetch("/data/processed/events.json")
-      .then((response) => response.json())
+    openEvents()
       .then(setEvents);
 
-    fetch("/data/processed/sources.json")
-      .then((response) => response.json())
+    openSources()
       .then(setSources);
 
     fetch("/data/geo/italy-provinces.geojson")

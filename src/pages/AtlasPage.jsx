@@ -17,6 +17,11 @@ import logoMark from "../assets/logo/logo-mark.svg";
 import { causeColors } from "../utils/colors";
 import extractYear from "../utils/extractYear";
 import taxonomyLabel from "../utils/taxonomyLabels";
+import {
+  openEvents,
+  openSources,
+  professionalResource,
+} from "../utils/apiClient";
 
 /* LAYOUT */
 
@@ -449,10 +454,7 @@ function AtlasPage() {
 
   useEffect(() => {
 
-    fetch("/data/processed/events.json")
-      .then((response) =>
-        response.json()
-      )
+    openEvents()
       .then((data) => {
 
         const normalizedData =
@@ -462,10 +464,7 @@ function AtlasPage() {
 
       });
 
-    fetch("/data/processed/sources.json")
-      .then((response) =>
-        response.json()
-      )
+    openSources()
       .then((data) =>
         setSources(
           data.map(normalizeSource)
@@ -480,8 +479,7 @@ function AtlasPage() {
       return;
     }
 
-    fetch("/data/professional/event-reliability.json")
-      .then((response) => response.json())
+    professionalResource("event-reliability")
       .then((data) => {
         const index = {};
 
@@ -493,8 +491,7 @@ function AtlasPage() {
       })
       .catch(() => setEventReliability({}));
 
-    fetch("/data/professional/event-vulnerability.json")
-      .then((response) => response.json())
+    professionalResource("event-vulnerability")
       .then((data) => {
         const index = {};
 
@@ -506,13 +503,11 @@ function AtlasPage() {
       })
       .catch(() => setEventVulnerability({}));
 
-    fetch("/data/professional/hazard-exposure-preview.json")
-      .then((response) => response.json())
+    professionalResource("hazard-exposure-preview")
       .then(setHazardExposurePreview)
       .catch(() => setHazardExposurePreview(null));
 
-    fetch("/data/professional/territory-profiles.json")
-      .then((response) => response.json())
+    professionalResource("territory-profiles")
       .then((data) =>
         setTerritoryProfiles(
           data.provinces || []

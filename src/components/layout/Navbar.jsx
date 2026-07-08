@@ -1,6 +1,7 @@
 import {
   Link,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import {
   useEffect,
@@ -9,17 +10,26 @@ import {
 
 import useLanguage from "../../context/useLanguage";
 import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
+import logoMark from "../../assets/logo/logo-mark.svg";
+import {
+  getSession,
+  logoutProfessional,
+} from "../../utils/apiClient";
 
 import "./Navbar.css";
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { language, setLanguage, t } =
     useLanguage();
   const [isScrolled, setIsScrolled] =
     useState(false);
   const [isMenuOpen, setIsMenuOpen] =
     useState(false);
+  const [accountOpen, setAccountOpen] =
+    useState(false);
+  const [session, setSession] = useState(null);
 
   const links = [
     {
@@ -70,6 +80,48 @@ function Navbar() {
         handleScroll
       );
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    getSession()
+      .then((nextSession) => {
+        if (active) {
+          setSession(nextSession);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setSession(null);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [location.pathname]);
+
+  const authenticated = Boolean(session?.authenticated);
+  const hasWildcard =
+    session?.permissions?.includes("*");
+  const isProfessional =
+    hasWildcard ||
+    session?.permissions?.includes("professional:read");
+  const isAdmin =
+    hasWildcard ||
+    session?.permissions?.includes("admin:access");
+  const accountBadge = isProfessional
+    ? "Professional"
+    : "Open";
+
+  const handleSignOut = () => {
+    logoutProfessional()
+      .catch(() => null)
+      .finally(() => {
+        setSession(null);
+        navigate("/");
+      });
+  };
 
   return (
     <header
@@ -148,6 +200,120 @@ function Navbar() {
         })}
       </nav>
 
+      <div className="navbar-account">
+        {authenticated ? (
+          <>
+            <button
+              aria-expanded={accountOpen}
+              aria-label={
+                language === "it"
+                  ? "Menu account"
+                  : "Account menu"
+              }
+              className="navbar-account-trigger"
+              onClick={() =>
+                setAccountOpen((current) => !current)
+              }
+              type="button"
+            >
+              <span>
+                <img src={logoMark} alt="" />
+              </span>
+              <strong>{accountBadge}</strong>
+            </button>
+            {accountOpen && (
+              <div className="navbar-account-menu">
+                <p>
+                  <span>
+                    {language === "it"
+                      ? "Accesso attivo"
+                      : "Signed in"}
+                  </span>
+                  <strong>{session.username}</strong>
+                </p>
+                <Link
+                  onClick={() => setAccountOpen(false)}
+                  to={
+                    isProfessional
+                      ? "/professional/account"
+                      : "/account"
+                  }
+                >
+                  {language === "it"
+                    ? "Account"
+                    : "Account"}
+                </Link>
+                {isProfessional ? (
+                  <Link
+                    onClick={() => setAccountOpen(false)}
+                    to="/professional"
+                  >
+                    {language === "it"
+                      ? "Console"
+                      : "Console"}
+                  </Link>
+                ) : (
+                  <Link
+                    onClick={() => setAccountOpen(false)}
+                    to="/atlas"
+                  >
+                    {language === "it"
+                      ? "Atlas Open"
+                      : "Open Atlas"}
+                  </Link>
+                )}
+                {isAdmin && (
+                  <Link
+                    onClick={() => setAccountOpen(false)}
+                    to="/admin"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button type="button" onClick={handleSignOut}>
+                  {language === "it" ? "Esci" : "Sign out"}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <button
+              aria-expanded={accountOpen}
+              className="navbar-signin-trigger"
+              onClick={() =>
+                setAccountOpen((current) => !current)
+              }
+              type="button"
+            >
+              {language === "it" ? "Accedi" : "Sign in"}
+            </button>
+            {accountOpen && (
+              <div className="navbar-account-menu signin">
+                <Link
+                  onClick={() => setAccountOpen(false)}
+                  to="/account"
+                >
+                  <span>Open</span>
+                  {language === "it"
+                    ? "Account free"
+                    : "Free account"}
+                </Link>
+                <Link
+                  onClick={() => setAccountOpen(false)}
+                  to="/professional/login"
+                >
+                  <span>Professional</span>
+                  {language === "it"
+                    ? "Accesso controllato"
+                    : "Controlled access"}
+                </Link>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
       <div className="navbar-language">
         {["en", "it"].map((code) => (
           <button
@@ -185,6 +351,44 @@ function Navbar() {
         className="navbar-mobile-panel"
         id="primary-navigation"
       >
+        {authenticated ? (
+          <Link
+            className="navbar-mobile-link account"
+            onClick={() => setIsMenuOpen(false)}
+            to={
+              isProfessional
+                ? "/professional/account"
+                : "/account"
+            }
+          >
+            <span>{accountBadge}</span>
+            {session.username}
+          </Link>
+        ) : (
+          <>
+            <Link
+              className="navbar-mobile-link account"
+              onClick={() => setIsMenuOpen(false)}
+              to="/account"
+            >
+              <span>Open</span>
+              {language === "it"
+                ? "Account free"
+                : "Free account"}
+            </Link>
+            <Link
+              className="navbar-mobile-link account"
+              onClick={() => setIsMenuOpen(false)}
+              to="/professional/login"
+            >
+              <span>Professional</span>
+              {language === "it"
+                ? "Accesso controllato"
+                : "Controlled access"}
+            </Link>
+          </>
+        )}
+
         {links.map((link) => {
           const isActive =
             location.pathname === link.path ||

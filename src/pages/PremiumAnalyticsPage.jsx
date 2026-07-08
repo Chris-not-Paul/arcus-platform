@@ -11,6 +11,10 @@ import useLanguage from "../context/useLanguage";
 
 import extractYear from "../utils/extractYear";
 import taxonomyLabel from "../utils/taxonomyLabels";
+import {
+  openEvents,
+  openSources,
+} from "../utils/apiClient";
 
 import "../styles/analytics/premium-analytics-page.css";
 
@@ -255,12 +259,10 @@ function PremiumAnalyticsPage() {
   });
 
   useEffect(() => {
-    fetch("/data/processed/events.json")
-      .then((response) => response.json())
+    openEvents()
       .then(setEvents);
 
-    fetch("/data/processed/sources.json")
-      .then((response) => response.json())
+    openSources()
       .then(setSources);
   }, []);
 

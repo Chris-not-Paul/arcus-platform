@@ -107,9 +107,9 @@ export default function ArcusLogoReveal({
         const s = performance.now();
 
         (function step(now) {
-          const raw = Math.min(
-            (now - s) / dur,
-            1
+          const raw = Math.max(
+            0,
+            Math.min((now - s) / dur, 1)
           );
           const v = from + (to - from) * fn(raw);
 
@@ -152,9 +152,9 @@ export default function ArcusLogoReveal({
         const s = performance.now();
 
         (function step(now) {
-          const raw = Math.min(
-            (now - s) / dur,
-            1
+          const raw = Math.max(
+            0,
+            Math.min((now - s) / dur, 1)
           );
           const t = fn(raw);
 
@@ -187,9 +187,9 @@ export default function ArcusLogoReveal({
         const s = performance.now();
 
         (function step(now) {
-          const raw = Math.min(
-            (now - s) / dur,
-            1
+          const raw = Math.max(
+            0,
+            Math.min((now - s) / dur, 1)
           );
           const t = easeOutExpo(raw);
           const halfW = 19.85 * t;
@@ -219,9 +219,9 @@ export default function ArcusLogoReveal({
         const s = performance.now();
 
         (function step(now) {
-          const raw = Math.min(
-            (now - s) / dur,
-            1
+          const raw = Math.max(
+            0,
+            Math.min((now - s) / dur, 1)
           );
           const t = easeOut(raw);
           const halfW = 39.7 * t;

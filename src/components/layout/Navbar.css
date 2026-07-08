@@ -7,7 +7,7 @@
   min-height: 74px;
   padding: 0 18px 0 24px;
   display: grid;
-  grid-template-columns: 184px minmax(0, 1fr) auto auto;
+  grid-template-columns: 184px minmax(0, 1fr) auto auto auto;
   gap: 18px;
   align-items: center;
   border: 1px solid var(--arcus-border-dark);
@@ -64,6 +64,7 @@
 
 .navbar-brand,
 .navbar-links,
+.navbar-account,
 .navbar-language,
 .navbar-menu-button {
   position: relative;
@@ -179,6 +180,148 @@
 .navbar-link.prominent::after {
   left: 11px;
   right: 11px;
+}
+
+/* ================================= */
+/* ACCOUNT */
+/* ================================= */
+
+.navbar-account {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.navbar-account-trigger,
+.navbar-signin-trigger {
+  min-height: 36px;
+  border: 1px solid rgba(243,239,232,0.12);
+  border-radius: 8px;
+  background: rgba(243,239,232,0.04);
+  color: var(--arcus-text-on-dark);
+  cursor: pointer;
+  font-family: var(--arcus-font-ui);
+  transition:
+    background 170ms ease,
+    border-color 170ms ease,
+    transform 170ms ease;
+}
+
+.navbar-account-trigger:hover,
+.navbar-signin-trigger:hover {
+  border-color: rgba(196,144,64,0.42);
+  background: rgba(196,144,64,0.08);
+  transform: translateY(-1px);
+}
+
+.navbar-account-trigger {
+  display: inline-grid;
+  grid-template-columns: 28px auto;
+  gap: 9px;
+  align-items: center;
+  padding: 4px 11px 4px 5px;
+}
+
+.navbar-account-trigger span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(196,144,64,0.48);
+  border-radius: 7px;
+  background: rgba(18,15,13,0.72);
+}
+
+.navbar-account-trigger span img {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+.navbar-account-trigger strong,
+.navbar-signin-trigger {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.navbar-signin-trigger {
+  padding: 0 14px;
+}
+
+.navbar-account-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 244px;
+  padding: 9px;
+  border: 1px solid var(--arcus-border-dark);
+  border-radius: 10px;
+  background: rgba(18,15,13,0.98);
+  box-shadow:
+    0 22px 54px rgba(0,0,0,0.34),
+    inset 0 1px 0 rgba(243,239,232,0.04);
+}
+
+.navbar-account-menu p {
+  margin: 0 0 7px;
+  padding: 10px 11px 12px;
+  border-bottom: 1px solid rgba(243,239,232,0.08);
+}
+
+.navbar-account-menu p span,
+.navbar-account-menu.signin a span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--arcus-steel);
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.navbar-account-menu p strong {
+  color: var(--arcus-text-on-dark);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.navbar-account-menu a,
+.navbar-account-menu button {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--arcus-text-on-dark-soft);
+  cursor: pointer;
+  font-family: var(--arcus-font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    padding-left 160ms ease;
+}
+
+.navbar-account-menu.signin a {
+  min-height: 56px;
+  display: grid;
+  align-content: center;
+}
+
+.navbar-account-menu a:hover,
+.navbar-account-menu button:hover {
+  padding-left: 15px;
+  background: rgba(196,144,64,0.08);
+  color: var(--arcus-text-on-dark);
 }
 
 /* ================================= */
@@ -302,6 +445,10 @@
   color: var(--arcus-bronze-soft);
 }
 
+.navbar-mobile-link.account {
+  color: var(--arcus-bronze-soft);
+}
+
 /* ================================= */
 /* RESPONSIVE */
 /* ================================= */
@@ -309,7 +456,7 @@
 @media (max-width: 1160px) {
   .navbar {
     width: calc(100% - 44px);
-    grid-template-columns: 158px minmax(0, 1fr) auto auto;
+    grid-template-columns: 158px minmax(0, 1fr) auto auto auto;
     gap: 12px;
     padding-left: 18px;
   }
@@ -341,6 +488,10 @@
   }
 
   .navbar-links {
+    display: none;
+  }
+
+  .navbar-account {
     display: none;
   }
 

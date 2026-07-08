@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: arcus
+      POSTGRES_PASSWORD: change-me
+      POSTGRES_USER: arcus
+    ports:
+      - "5432:5432"
+    volumes:
+      - arcus-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arcus -d arcus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  arcus-postgres-data:

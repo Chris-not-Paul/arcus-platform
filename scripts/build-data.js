@@ -28,15 +28,15 @@ const sourcesCsvPath = path.resolve(
 );
 
 const outputEventsPath = path.resolve(
-  "public/data/processed/events.json"
+  "private-data/processed/events.json"
 );
 
 const outputSourcesPath = path.resolve(
-  "public/data/processed/sources.json"
+  "private-data/processed/sources.json"
 );
 
 const professionalDataDir = path.resolve(
-  "public/data/professional"
+  "private-data/professional"
 );
 
 const professionalManifestPath = path.resolve(
@@ -374,67 +374,67 @@ function saveProfessionalApiData() {
   );
   const manifest = {
     generated_at: generatedAt,
-    name: "ARCUS Professional API Manifest",
+    name: "ARCUS Professional Data Layer Registry",
     version: "0.1.0",
     endpoints: [
       {
         description:
           "Curated bridge-collapse events enriched with reliability and vulnerability models.",
-        path: "/data/professional/professional-events.json",
+        access: "controlled_professional_workflow",
         resource: "professional_events",
       },
       {
         description:
           "Regional and provincial risk profiles generated from ARCUS event and source data.",
-        path: "/data/professional/territory-profiles.json",
+        access: "controlled_professional_workflow",
         resource: "territory_profiles",
       },
       {
         description:
           "Event-level evidence reliability scores and classes.",
-        path: "/data/professional/event-reliability.json",
+        access: "controlled_professional_workflow",
         resource: "event_reliability",
       },
       {
         description:
           "Event-level vulnerability scores and classes.",
-        path: "/data/professional/event-vulnerability.json",
+        access: "controlled_professional_workflow",
         resource: "event_vulnerability",
       },
       {
         description:
           "Versioned model cards describing ARCUS Professional scoring logic, inputs and limitations.",
-        path: "/data/professional/model-cards.json",
+        access: "controlled_professional_workflow",
         resource: "model_cards",
       },
       {
         description:
           "Dataset completeness, coverage and professional-readiness audit.",
-        path: "/data/professional/data-quality.json",
+        access: "controlled_professional_workflow",
         resource: "data_quality",
       },
       {
         description:
           "Machine-readable data dictionary describing fields, types and coverage for ARCUS datasets.",
-        path: "/data/professional/data-dictionary.json",
+        access: "controlled_professional_workflow",
         resource: "data_dictionary",
       },
       {
         description:
           "Versioned data release metadata, counts and quality checks.",
-        path: "/data/professional/data-release.json",
+        access: "controlled_professional_workflow",
         resource: "data_release",
       },
       {
         description:
           "Registry of external hazard layers planned for ARCUS Professional enrichment.",
-        path: "/data/professional/external-hazard-layers.json",
+        access: "controlled_professional_workflow",
         resource: "external_hazard_layers",
       },
       {
         description:
           "Province-level hazard exposure preview prepared for future external layer joins.",
-        path: "/data/professional/hazard-exposure-preview.json",
+        access: "controlled_professional_workflow",
         resource: "hazard_exposure_preview",
       },
     ],
