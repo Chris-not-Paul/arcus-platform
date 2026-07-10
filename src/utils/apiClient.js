@@ -160,6 +160,17 @@ export function professionalResource(resource) {
   return apiJson(`/api/professional/${resource}`);
 }
 
+export function professionalHazardExposurePoint(payload) {
+  return apiJson("/api/professional/hazard-exposure/point", {
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+      "X-ARCUS-CSRF-Token": csrfToken || "",
+    },
+    method: "POST",
+  });
+}
+
 function filenameFromDisposition(value) {
   const match = String(value || "").match(
     /filename="?([^";]+)"?/

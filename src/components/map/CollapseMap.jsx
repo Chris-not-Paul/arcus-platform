@@ -88,6 +88,7 @@ function MapResizeController({
 function MapFitController({
   assetMarkers = [],
   events = [],
+  selectedPoint = null,
   selectionBounds = null,
 }) {
   const map = useMap();
@@ -100,6 +101,16 @@ function MapFitController({
         [selectionBounds.south, selectionBounds.west],
         [selectionBounds.north, selectionBounds.east]
       );
+    }
+
+    if (
+      Number.isFinite(Number(selectedPoint?.latitude)) &&
+      Number.isFinite(Number(selectedPoint?.longitude))
+    ) {
+      points.push([
+        Number(selectedPoint.latitude),
+        Number(selectedPoint.longitude),
+      ]);
     }
 
     assetMarkers.forEach((asset) => {
@@ -140,7 +151,7 @@ function MapFitController({
     }, 120);
 
     return () => clearTimeout(timer);
-  }, [assetMarkers, events, map, selectionBounds]);
+  }, [assetMarkers, events, map, selectedPoint, selectionBounds]);
 
   return null;
 }
@@ -371,6 +382,26 @@ function AreaSelectionController({
   );
 }
 
+function PointSelectionController({
+  enabled,
+  onPointSelect,
+}) {
+  useMapEvents({
+    click(event) {
+      if (!enabled || typeof onPointSelect !== "function") {
+        return;
+      }
+
+      onPointSelect({
+        latitude: event.latlng.lat,
+        longitude: event.latlng.lng,
+      });
+    },
+  });
+
+  return null;
+}
+
 /* ================================= */
 /* MAIN MAP */
 /* ================================= */
@@ -387,7 +418,9 @@ function CollapseMap({
   mapStyle = "voyager",
   professionalMode = false,
   publicWmsOverlays = [],
+  onPointSelect,
   onSelectionBoundsChange,
+  selectedPoint = null,
   selectionBounds = null,
   selectionEnabled = false,
   selectionLabel,
@@ -475,6 +508,7 @@ function CollapseMap({
             showAssetMarkers ? assetMarkers : []
           }
           events={filteredEvents}
+          selectedPoint={selectedPoint}
           selectionBounds={selectionBounds}
         />
 
@@ -485,6 +519,11 @@ function CollapseMap({
             onSelectionBoundsChange
           }
           selectionBounds={selectionBounds}
+        />
+
+        <PointSelectionController
+          enabled={Boolean(onPointSelect)}
+          onPointSelect={onPointSelect}
         />
 
         {/* ================================= */}
@@ -528,6 +567,24 @@ function CollapseMap({
           <HeatmapLayer
             events={filteredEvents}
           />
+        )}
+
+        {selectedPoint && (
+          <CircleMarker
+            center={[
+              Number(selectedPoint.latitude),
+              Number(selectedPoint.longitude),
+            ]}
+            color="#C49040"
+            fillColor="#C49040"
+            fillOpacity={0.58}
+            radius={8}
+            weight={2}
+          >
+            <Tooltip direction="top" sticky>
+              Official exposure point
+            </Tooltip>
+          </CircleMarker>
         )}
 
         {professionalMode &&

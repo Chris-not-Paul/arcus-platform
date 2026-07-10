@@ -14,6 +14,8 @@ const professionalResources = new Map([
   ["data-quality", "data-quality.json"],
   ["data-dictionary", "data-dictionary.json"],
   ["data-release", "data-release.json"],
+  ["professional-sources", "../processed/sources.json"],
+  ["professional-events", "professional-events.json"],
   ["external-hazard-layers", "external-hazard-layers.json"],
   ["hazard-exposure-preview", "hazard-exposure-preview.json"],
   ["ainop-bridge-index", "ainop-bridge-index.json"],

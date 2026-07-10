@@ -70,6 +70,9 @@ export const openApiDocument = {
     "/api/v1/professional/data-release": {
       get: { summary: "Read the active Professional data release" },
     },
+    "/api/v1/professional/hazard-exposure/point": {
+      post: { summary: "Evaluate official point hazard exposure in shadow mode" },
+    },
     "/api/v1/professional/workspaces": {
       get: { summary: "List organization workspaces" },
       post: { summary: "Create an organization workspace" },

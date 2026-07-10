@@ -146,6 +146,29 @@ function cleanKey(key) {
     .trim();
 }
 
+function yearFromDate(value) {
+  const match = String(value || "").match(/\d{4}/);
+
+  return match ? Number(match[0]) : null;
+}
+
+function latestDateFor(rows) {
+  return rows
+    .map((row) => String(row.date || ""))
+    .filter(Boolean)
+    .sort()
+    .at(-1) || null;
+}
+
+function yearRangeFor(rows) {
+  const years = rows.map((row) => yearFromDate(row.date)).filter(Boolean);
+
+  return {
+    includedYearMax: years.length ? Math.max(...years) : null,
+    includedYearMin: years.length ? Math.min(...years) : null,
+  };
+}
+
 /* ================================= */
 /* ROW PROCESSING */
 /* ================================= */
@@ -864,11 +887,24 @@ function saveProfessionalApiData() {
   const orphanSources = sources.filter(
     (source) => !eventIds.has(source.event_id)
   );
+  const {
+    includedYearMax,
+    includedYearMin,
+  } = yearRangeFor(events);
+  const datasetVersion = `arcus-professional-${generatedAt.slice(0, 10).replaceAll("-", ".")}`;
   const release = {
+    data_cutoff_date: generatedAt,
+    dataset_scope: "professional",
+    dataset_version: datasetVersion,
     generated_at: generatedAt,
     id: `arcus-professional-${generatedAt.slice(0, 10)}`,
+    included_year_max: includedYearMax,
+    included_year_min: includedYearMin,
+    latest_event_date: latestDateFor(events),
     name: "ARCUS Professional Data Release",
-    version: "0.1.0",
+    total_events: events.length,
+    total_sources: sources.length,
+    version: generatedAt.slice(0, 10).replaceAll("-", "."),
     counts: {
       events: events.length,
       sources: sources.length,

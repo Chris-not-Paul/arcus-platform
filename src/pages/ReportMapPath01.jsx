@@ -20,8 +20,7 @@ import {
   createClusterCustomIcon,
 } from "../utils/clusterFactory";
 import {
-  openEvents,
-  openSources,
+  professionalResource,
 } from "../utils/apiClient";
 
 import "../styles/report-map.css";
@@ -231,13 +230,13 @@ export default function ReportMapPath01() {
   const useLocalTiles = queryFlag(searchParams, "localTiles", true);
 
   useEffect(() => {
-    openEvents()
+    professionalResource("professional-events")
       .then((data) =>
         setEvents(Array.isArray(data) ? data : data.events || [])
       )
       .catch(() => setEvents([]));
 
-    openSources()
+    professionalResource("professional-sources")
       .then((data) =>
         setSources(Array.isArray(data) ? data : data.sources || [])
       )

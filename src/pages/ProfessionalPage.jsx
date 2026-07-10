@@ -29,15 +29,21 @@ import {
 } from "../utils/analytics";
 import {
   completeProfessionalReport,
-  openEvents,
-  openSources,
   createProfessionalWorkspace,
   deleteProfessionalWorkspace,
   downloadProfessionalExport,
+  professionalHazardExposurePoint,
   professionalWorkspaces,
   professionalResource,
   registerProfessionalReport,
 } from "../utils/apiClient";
+import {
+  buildProvinceRegistry,
+  deriveProvinceForPoint,
+  findProvinceInRegistry,
+  normalizeProvinceKey,
+  provinceMatchesValue,
+} from "../utils/projectLocation";
 
 import "../styles/platform-levels.css";
 
@@ -162,6 +168,36 @@ export default function ProfessionalPage() {
     manualAreaBounds,
     setManualAreaBounds,
   ] = useState(null);
+  const [provinceGeoFeatures, setProvinceGeoFeatures] =
+    useState([]);
+  const [provinceGeometryStatus, setProvinceGeometryStatus] =
+    useState("loading");
+  const [projectLocation, setProjectLocation] = useState({
+    derivedProvince: "",
+    derivedProvinceCode: "",
+    derivedProvinceKey: "",
+    derivedProvinceName: "",
+    latitude: "",
+    longitude: "",
+    selectionSource: "",
+    validated: false,
+  });
+  const [
+    path01ExposureStatus,
+    setPath01ExposureStatus,
+  ] = useState("idle");
+  const [
+    path01HydraulicExposure,
+    setPath01HydraulicExposure,
+  ] = useState(null);
+  const [
+    path02ExposureStatus,
+    setPath02ExposureStatus,
+  ] = useState("idle");
+  const [
+    path02HydraulicExposure,
+    setPath02HydraulicExposure,
+  ] = useState(null);
   const projectContext = "bridge";
   const [researchQuery, setResearchQuery] =
     useState("");
@@ -173,11 +209,40 @@ export default function ProfessionalPage() {
   }, []);
 
   useEffect(() => {
-    openEvents()
-      .then(setEvents);
+    fetch("/data/geo/italy-provinces.geojson")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("province_geometry_unavailable");
+        }
 
-    openSources()
-      .then(setSources);
+        return response.json();
+      })
+      .then((geojson) => {
+        setProvinceGeoFeatures(
+          Array.isArray(geojson.features)
+            ? geojson.features
+            : []
+        );
+        setProvinceGeometryStatus("ready");
+      })
+      .catch(() => {
+        setProvinceGeoFeatures([]);
+        setProvinceGeometryStatus("error");
+      });
+  }, []);
+
+  useEffect(() => {
+    professionalResource("professional-events")
+      .then((data) =>
+        setEvents(Array.isArray(data.events) ? data.events : [])
+      )
+      .catch(() => setEvents([]));
+
+    professionalResource("professional-sources")
+      .then((data) =>
+        setSources(Array.isArray(data) ? data : data.sources || [])
+      )
+      .catch(() => setSources([]));
 
     professionalResource("api-manifest")
       .then(setApiManifest)
@@ -901,6 +966,18 @@ export default function ProfessionalPage() {
     [language, scenarioProvinceProfiles]
   );
 
+  const provinceRegistry = useMemo(
+    () =>
+      buildProvinceRegistry(provinceGeoFeatures).sort((a, b) =>
+        cleanDisplayText(a.name).localeCompare(
+          cleanDisplayText(b.name),
+          language === "it" ? "it" : "en",
+          { sensitivity: "base" }
+        )
+      ),
+    [language, provinceGeoFeatures]
+  );
+
   const scenarioMatrix = useMemo(() => {
     return scenarios
       .filter((item) => item.value !== "baseline")
@@ -949,11 +1026,74 @@ export default function ProfessionalPage() {
       });
   }, [provinceProfiles, scenarios]);
 
-  const selectedProvinceProfile =
-    scenarioProvinceProfiles.find(
-      (profile) =>
-        profile.territory === selectedProvince
-    ) || scenarioProvinceProfiles[0];
+  const selectedProvinceRegistryItem =
+    findProvinceInRegistry(
+      provinceRegistry,
+      projectLocation.validated
+        ? projectLocation.derivedProvinceCode ||
+            projectLocation.derivedProvince ||
+            projectLocation.derivedProvinceName
+        : selectedProvince
+    ) ||
+    findProvinceInRegistry(provinceRegistry, selectedProvince) ||
+    provinceRegistry[0] ||
+    null;
+
+  const selectedProvinceName =
+    selectedProvinceRegistryItem?.name ||
+    selectedProvince ||
+    "";
+  const selectedProvinceCode =
+    selectedProvinceRegistryItem?.code ||
+    projectLocation.derivedProvinceCode ||
+    "";
+
+  const matchedSelectedProvinceProfile = useMemo(
+    () =>
+      scenarioProvinceProfiles.find((profile) =>
+        selectedProvinceRegistryItem
+          ? provinceMatchesValue(
+              selectedProvinceRegistryItem,
+              profile.territory
+            )
+          : normalizeProvinceKey(profile.territory) ===
+            normalizeProvinceKey(selectedProvinceName)
+      ) || null,
+    [
+      scenarioProvinceProfiles,
+      selectedProvinceName,
+      selectedProvinceRegistryItem,
+    ]
+  );
+
+  const selectedProvinceProfile = useMemo(
+    () =>
+      matchedSelectedProvinceProfile || {
+      avgSources: 0,
+      causeCounts: {},
+      exactLocations: 0,
+      firstYear: null,
+      injuries: 0,
+      riskScore: null,
+      scenarioBoost: null,
+      scenarioEvents: 0,
+      scenarioScore: null,
+      scoreBreakdown: [],
+      sourceTotal: 0,
+      territory: selectedProvinceName,
+      topCause: "unavailable",
+      total: 0,
+      totalCollapse: 0,
+      triggered: 0,
+      victims: 0,
+      },
+    [
+      matchedSelectedProvinceProfile,
+      selectedProvinceName,
+    ]
+  );
+  const selectedProvinceHasArcusProfile =
+    Boolean(matchedSelectedProvinceProfile);
 
   const sourceCountByEvent = useMemo(
     () => buildSourceCountByEvent(sources),
@@ -1129,13 +1269,24 @@ export default function ProfessionalPage() {
     }
 
     return hazardExposurePreview?.provinces?.find(
-      (item) =>
-        item.province ===
-        selectedProvinceProfile.territory
+      (item) => {
+        if (!selectedProvinceRegistryItem) {
+          return (
+            normalizeProvinceKey(item.province) ===
+            normalizeProvinceKey(selectedProvinceProfile.territory)
+          );
+        }
+
+        return provinceMatchesValue(
+          selectedProvinceRegistryItem,
+          item.province
+        );
+      }
     );
   }, [
     hazardExposurePreview,
     selectedProvinceProfile,
+    selectedProvinceRegistryItem,
   ]);
 
   const workflowHazardExposure = useMemo(() => {
@@ -2815,10 +2966,14 @@ export default function ProfessionalPage() {
     const it = language === "it";
     const isBrief = variant === "brief";
     const isPath01 = activeEntryPath === 0;
-    const score =
-      selectedProvinceProfile.scenarioScore ||
-      selectedProvinceProfile.riskScore ||
-      0;
+    const scoreSource =
+      selectedProvinceProfile.scenarioScore ??
+      selectedProvinceProfile.riskScore ??
+      null;
+    const score = Number.isFinite(Number(scoreSource))
+      ? Number(scoreSource)
+      : null;
+    const scoreLabel = Number.isFinite(score) ? String(score) : "N/A";
     const today = new Date().toLocaleDateString("it-IT");
     const provinceContext = {
       areaLabel: selectedProvinceProfile.territory,
@@ -2846,8 +3001,18 @@ export default function ProfessionalPage() {
         ? manualAreaProvinces.join(", ") || reportAreaLabel
         : selectedProvinceProfile.territory;
 
+    const projectPointReportText =
+      isPath01 && projectLocation.validated
+        ? it
+          ? ` Punto progetto: ${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}.`
+          : ` Project point: ${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}.`
+        : "";
+    const arcusProfileCaveat =
+      isPath01 && !selectedProvinceHasArcusProfile
+        ? " No documented cases in the current ARCUS release. This does not imply absence of territorial hazard."
+        : "";
     const reportAreaDescription = isPath01
-      ? `${provinceContext.areaLabel}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}. ${it ? "Livello spaziale" : "Spatial level"}: ${provinceContext.spatialLevel}.`
+      ? `${provinceContext.areaLabel}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}. ${it ? "Livello spaziale" : "Spatial level"}: ${provinceContext.spatialLevel}.${projectPointReportText}${arcusProfileCaveat}`
       : manualAreaBounds
         ? `${manualAreaEvents.length} ${it ? "eventi ARCUS nell'area selezionata" : "ARCUS events inside the selected area"} - ${it ? "Province" : "Provinces"}: ${provinceList}. ${it ? "Coordinate" : "Bounds"}: N ${manualAreaBounds.north.toFixed(3)}, S ${manualAreaBounds.south.toFixed(3)}, E ${manualAreaBounds.east.toFixed(3)}, W ${manualAreaBounds.west.toFixed(3)}.`
         : `${selectedProvinceProfile.territory}: ${selectedProvinceProfile.total} ${it ? "eventi ARCUS" : "ARCUS events"}, ${selectedProvinceProfile.sourceTotal} ${it ? "fonti documentate" : "documented sources"}. ${it ? "Meccanismo dominante" : "Dominant mechanism"}: ${selectedProvinceProfile.topCause}.`;
@@ -2860,11 +3025,17 @@ export default function ProfessionalPage() {
       })[code] || code;
 
     const classPriority = (value) => {
-      if (value >= 75) {
+      const numericValue = Number(value);
+
+      if (!Number.isFinite(numericValue)) {
+        return it ? "Non disponibile" : "Unavailable";
+      }
+
+      if (numericValue >= 75) {
         return it ? "High attention" : "High attention";
       }
 
-      if (value >= 55) {
+      if (numericValue >= 55) {
         return it ? "Moderate attention" : "Moderate attention";
       }
 
@@ -2932,11 +3103,36 @@ export default function ProfessionalPage() {
           normalizeReportText(item.province) ===
           normalizeReportText(reportAreaLabel)
       );
+    const collapseRateNumerator =
+      selectedAinopBridgeIndex?.numerator_count ??
+      selectedAinopBridgeIndex?.arcus_cases ??
+      workflowEvents.length;
+    const collapseRateNationalReference =
+      selectedAinopBridgeIndex?.national_rate_per_100 ??
+      selectedAinopBridgeIndex?.national_rate_per_100_ainop_bridges ??
+      ainopBridgeIndex?.metadata?.national_rate_per_100_ainop_bridges ??
+      null;
+    const collapseRateDatasetVersion =
+      selectedAinopBridgeIndex?.dataset_version ??
+      ainopBridgeIndex?.metadata?.dataset_version ??
+      "N/A";
+    const collapseRateDataCutoff =
+      selectedAinopBridgeIndex?.data_cutoff_date ??
+      ainopBridgeIndex?.metadata?.data_cutoff_date ??
+      "N/A";
+    const collapseRateLatestEventDate =
+      selectedAinopBridgeIndex?.latest_event_date ??
+      ainopBridgeIndex?.metadata?.latest_event_date ??
+      "N/A";
+    const collapseRateIncludedYearMax =
+      selectedAinopBridgeIndex?.included_year_max ??
+      ainopBridgeIndex?.metadata?.included_year_max ??
+      "N/A";
     const ainopIndexText =
       selectedAinopBridgeIndex?.ainop_bridges_total
         ? it
-          ? `Collapse Rate ARCUS/AINOP: ${selectedAinopBridgeIndex.collapse_rate_per_100_ainop_bridges} casi ARCUS ogni 100 ponti AINOP; ${selectedAinopBridgeIndex.relative_to_national}x il tasso nazionale ARCUS/AINOP. Denominatore: ${selectedAinopBridgeIndex.ainop_bridges_total} ponti AINOP (${selectedAinopBridgeIndex.ainop_road_bridges} stradali, ${selectedAinopBridgeIndex.ainop_rail_bridges} ferroviari).`
-          : `ARCUS/AINOP Collapse Rate: ${selectedAinopBridgeIndex.collapse_rate_per_100_ainop_bridges} ARCUS cases per 100 AINOP bridges; ${selectedAinopBridgeIndex.relative_to_national}x the national ARCUS/AINOP rate. Denominator: ${selectedAinopBridgeIndex.ainop_bridges_total} AINOP bridges (${selectedAinopBridgeIndex.ainop_road_bridges} road, ${selectedAinopBridgeIndex.ainop_rail_bridges} rail).`
+          ? `Collapse Rate ARCUS/AINOP: ${collapseRateNumerator} casi ARCUS documentati su ${selectedAinopBridgeIndex.ainop_bridges_total} ponti AINOP; ${selectedAinopBridgeIndex.collapse_rate_per_100_ainop_bridges} casi ogni 100 ponti; ${selectedAinopBridgeIndex.relative_to_national}x il tasso nazionale ARCUS/AINOP (${collapseRateNationalReference ?? "N/A"} ogni 100). Dataset: ${collapseRateDatasetVersion}; aggiornato al ${collapseRateDataCutoff}; ultimo evento incluso ${collapseRateLatestEventDate}; anno massimo ${collapseRateIncludedYearMax}.`
+          : `ARCUS/AINOP Collapse Rate: ${collapseRateNumerator} documented ARCUS cases over ${selectedAinopBridgeIndex.ainop_bridges_total} AINOP bridges; ${selectedAinopBridgeIndex.collapse_rate_per_100_ainop_bridges} cases per 100 bridges; ${selectedAinopBridgeIndex.relative_to_national}x the national ARCUS/AINOP rate (${collapseRateNationalReference ?? "N/A"} per 100). Dataset: ${collapseRateDatasetVersion}; updated through ${collapseRateDataCutoff}; latest included event ${collapseRateLatestEventDate}; max included year ${collapseRateIncludedYearMax}.`
         : it
           ? "Collapse Rate ARCUS/AINOP non disponibile per questa provincia."
           : "ARCUS/AINOP Collapse Rate not available for this province.";
@@ -2994,13 +3190,28 @@ export default function ProfessionalPage() {
               16.67
           )
         )
-      : score;
-    const exposurePriorityScore = Math.round(
-      workflowHazardExposure?.score || score
-    );
-    const finalPriorityIndex = Math.round(
-      exposurePriorityScore * 0.7 + collapseRateScore * 0.3
-    );
+      : null;
+    const exposurePrioritySource =
+      workflowHazardExposure?.score ?? score;
+    const exposurePriorityScore = Number.isFinite(
+      Number(exposurePrioritySource)
+    )
+      ? Math.round(Number(exposurePrioritySource))
+      : null;
+    const finalPriorityIndex =
+      Number.isFinite(exposurePriorityScore) &&
+      Number.isFinite(collapseRateScore)
+        ? Math.round(
+            exposurePriorityScore * 0.7 +
+              collapseRateScore * 0.3
+          )
+        : null;
+    const finalPriorityIndexLabel = Number.isFinite(finalPriorityIndex)
+      ? String(finalPriorityIndex)
+      : "N/A";
+    const exposurePriorityScoreLabel = Number.isFinite(exposurePriorityScore)
+      ? String(exposurePriorityScore)
+      : "N/A";
     const reportIntentSentence = it
       ? "Il report usa un linguaggio orientato a screening territoriale, priorita di approfondimento e verifiche tecniche successive."
       : "The report uses language focused on territorial screening, follow-up priorities and subsequent technical checks.";
@@ -3621,7 +3832,11 @@ export default function ProfessionalPage() {
           ? `una concentrazione di casi ARCUS storici legati a ${dominantCauseLabel}`
           : `a concentration of historical ARCUS cases linked to ${dominantCauseLabel}`;
     const attentionAdjective =
-      score >= 75
+      !Number.isFinite(score)
+        ? it
+          ? "non disponibile"
+          : "unavailable"
+        : score >= 75
         ? it
           ? "alta"
           : "high"
@@ -4233,7 +4448,7 @@ export default function ProfessionalPage() {
       <section>
         ${sectionHeading("04", it ? "KEY INDICATORS" : "KEY INDICATORS")}
         <div class="kpis">
-        <div class="kpi"><span>Priority Index</span><strong>${score} / 100</strong>${formatKpi({ level: classPriority(score), driver: it ? `${workflowHazardExposure?.dominant_hazard || "hazard context"}, densita casi ARCUS, eventi innescati e affidabilita evidenze.` : `${workflowHazardExposure?.dominant_hazard || "hazard context"}, ARCUS case density, triggered-event concentration and evidence reliability.` })}</div>
+        <div class="kpi"><span>Priority Index</span><strong>${scoreLabel} / 100</strong>${formatKpi({ level: classPriority(score), driver: it ? `${workflowHazardExposure?.dominant_hazard || "hazard context"}, densita casi ARCUS, eventi innescati e affidabilita evidenze.` : `${workflowHazardExposure?.dominant_hazard || "hazard context"}, ARCUS case density, triggered-event concentration and evidence reliability.` })}</div>
         <div class="kpi"><span>${it ? "Affidabilita Evidenze" : "Evidence Reliability"}</span><strong>${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)} / 100</strong>${formatKpi({ level: reliabilityLabel, driver: it ? `${workflowSourceCount} fonti collegate e ${workflowReliability.institutionalShare}% evidenza professional-grade.` : `${workflowSourceCount} linked sources and ${workflowReliability.institutionalShare}% professional-grade evidence.` })}</div>
         <div class="kpi"><span>Failure Precedent Exposure</span><strong>${Math.round(workflowVulnerability.average)} / 100</strong>${formatKpi({ level: attentionClass(workflowVulnerability.average), driver: it ? `Pattern storico ${dominantCauseLabel}; indicatore source-backed, non certificazione strutturale.` : `Historical ${dominantCauseLabel} pattern; source-backed indicator, not structural certification.` })}</div>
         <div class="kpi"><span>${it ? "Eventi Storici" : "Historical Events"}</span><strong>${workflowEvents.length}</strong>${formatKpi({ level: `${percentage(dominantCauseCount, workflowEvents.length || 1)}% ${dominantCauseLabel}`, driver: it ? `${dominantCauseCount} occorrenze del driver dominante su ${workflowEvents.length} casi.` : `${dominantCauseCount} dominant-driver occurrences out of ${workflowEvents.length} cases.` })}</div>
@@ -4377,8 +4592,8 @@ export default function ProfessionalPage() {
             <b>${escapeHtml(collapseRateMultiplier)}</b>
             <p>${collapseRateAvailable
               ? escapeHtml(it
-                ? `${collapseRatePer100} casi ARCUS ogni 100 ponti AINOP; denominatore ${selectedAinopBridgeIndex.ainop_bridges_total} ponti censiti.`
-                : `${collapseRatePer100} ARCUS cases per 100 AINOP bridges; denominator ${selectedAinopBridgeIndex.ainop_bridges_total} counted bridges.`)
+                ? `${collapseRateNumerator} casi ARCUS documentati; denominatore ${selectedAinopBridgeIndex.ainop_bridges_total} ponti censiti; tasso provinciale ${collapseRatePer100} ogni 100; riferimento nazionale ${collapseRateNationalReference ?? "N/A"} ogni 100.`
+                : `${collapseRateNumerator} documented ARCUS cases; denominator ${selectedAinopBridgeIndex.ainop_bridges_total} counted bridges; provincial rate ${collapseRatePer100} per 100; national reference ${collapseRateNationalReference ?? "N/A"} per 100.`)
               : escapeHtml(it ? "Denominatore AINOP non disponibile." : "AINOP denominator unavailable.")}</p>
             <i class="confidence-pill">Confidence: ${escapeHtml(collapseRateConfidence)}</i>
           </article>
@@ -4386,7 +4601,7 @@ export default function ProfessionalPage() {
             <span>${it ? "Copertura AINOP" : "AINOP coverage"}</span>
             <strong>${escapeHtml(collapseRateConfidence)}</strong>
             <b>${selectedAinopBridgeIndex?.ainop_bridges_total || "N/A"}</b>
-            <p>${escapeHtml(collapseRateReason)}</p>
+            <p>${escapeHtml(`${collapseRateReason} Dataset: ${collapseRateDatasetVersion}; data cutoff: ${collapseRateDataCutoff}; latest included event: ${collapseRateLatestEventDate}; latest included year: ${collapseRateIncludedYearMax}.`)}</p>
           </article>
         </div>
         <p class="note">${escapeHtml(collapseRateInterpretation)}</p>
@@ -4426,8 +4641,8 @@ export default function ProfessionalPage() {
       <section>
         ${sectionHeading("08", it ? "PRIORITY INDEX CONCLUSIVO" : "FINAL PRIORITY INDEX")}
         <div class="kpis">
-          <div class="kpi"><span>Priority Index</span><strong>${finalPriorityIndex} / 100</strong>${formatKpi({ level: classPriority(finalPriorityIndex), driver: it ? "Sintesi finale dopo territorio, patrimonio, pattern e azioni." : "Final synthesis after territory, heritage, pattern and actions." })}</div>
-          <div class="kpi"><span>${it ? "Esposizione territoriale" : "Territorial exposure"}</span><strong>${exposurePriorityScore} / 100</strong>${formatKpi({ level: displayDriverLabel, driver: it ? "Layer idraulico, frana e sismico letti separatamente." : "Hydraulic, landslide and seismic layers read separately." })}</div>
+          <div class="kpi"><span>Priority Index</span><strong>${finalPriorityIndexLabel} / 100</strong>${formatKpi({ level: classPriority(finalPriorityIndex), driver: it ? "Sintesi finale dopo territorio, patrimonio, pattern e azioni." : "Final synthesis after territory, heritage, pattern and actions." })}</div>
+          <div class="kpi"><span>${it ? "Esposizione territoriale" : "Territorial exposure"}</span><strong>${exposurePriorityScoreLabel} / 100</strong>${formatKpi({ level: displayDriverLabel, driver: it ? "Layer idraulico, frana e sismico letti separatamente." : "Hydraulic, landslide and seismic layers read separately." })}</div>
           <div class="kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong>${formatKpi({ level: `Confidence: ${collapseRateConfidence}`, driver: it ? "Segnale ARCUS/AINOP sul patrimonio ponte." : "ARCUS/AINOP bridge-stock signal." })}</div>
           <div class="kpi"><span>${it ? "Pattern storico" : "Historical pattern"}</span><strong style="font-size:18px">${escapeHtml(historicalPatternReading.type)}</strong>${formatKpi({ level: dominantCauseLabel, driver: historicalPatternReading.temporal })}</div>
         </div>
@@ -4524,7 +4739,7 @@ export default function ProfessionalPage() {
               <strong>${escapeHtml(displayDriverLabel)} / ${escapeHtml(projectDesignFocus.contextLabel)}</strong>
               <p>${escapeHtml(signalSentence)}</p>
               <div class="brief-kpi-grid">
-                <div class="brief-kpi"><span>${it ? "Final Priority Index" : "Final Priority Index"}</span><strong>${finalPriorityIndex}</strong></div>
+                <div class="brief-kpi"><span>${it ? "Final Priority Index" : "Final Priority Index"}</span><strong>${finalPriorityIndexLabel}</strong></div>
                 <div class="brief-kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong></div>
                 <div class="brief-kpi"><span>Confidence</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
                 <div class="brief-kpi"><span>${it ? "Eventi Storici" : "Historical Events"}</span><strong>${workflowEvents.length}</strong></div>
@@ -4678,7 +4893,7 @@ export default function ProfessionalPage() {
 
       pathBody = `
       <div class="kpis">
-        <div class="kpi"><span>Priority index</span><strong>${score}</strong></div>
+        <div class="kpi"><span>Priority index</span><strong>${scoreLabel}</strong></div>
         <div class="kpi"><span>${it ? "Affidabilita evidenze" : "Evidence reliability"}</span><strong>${evidenceGradeFromScore(workflowReliability.average)} / ${Math.round(workflowReliability.average)}</strong></div>
         <div class="kpi"><span>${it ? "Cause dominanti" : "Dominant causes"}</span><strong>${selectedProvinceDrivers.causes.length}</strong></div>
         <div class="kpi"><span>${it ? "Fonti professionali" : "Professional sources"}</span><strong>${workflowReliability.institutionalShare}%</strong></div>
@@ -4698,7 +4913,7 @@ export default function ProfessionalPage() {
             <tr><td>${it ? "Events totali ARCUS" : "Total ARCUS events"}</td><td>${workflowEvents.length}</td></tr>
             <tr><td>${it ? "Hazard dominante" : "Dominant hazard"}</td><td>${escapeHtml(workflowHazardExposure?.dominant_hazard || "-")}</td></tr>
             <tr><td>${it ? "Causa dominante" : "Dominant cause"}</td><td>${escapeHtml(selectedProvinceDrivers.causes[0]?.label || "-")}</td></tr>
-            <tr><td>Priority index</td><td>${score}</td></tr>
+            <tr><td>Priority index</td><td>${scoreLabel}</td></tr>
             <tr><td>${it ? "Crolli totali (TC)" : "Total collapses (TC)"}</td><td>${tcCount}</td></tr>
             <tr><td>${it ? "Events innescati" : "Triggered events"}</td><td>${triggeredCount}</td></tr>
           </tbody>
@@ -5762,7 +5977,7 @@ export default function ProfessionalPage() {
       const coverSignalY = 146;
       const coverSignalWidth = 42;
       [
-        ["Priority", `${selectedFinalPriorityIndex}/100`],
+        ["Priority", `${selectedFinalPriorityIndexLabel}/100`],
         [
           "Collapse",
           collapseRateRankLabel
@@ -6686,7 +6901,7 @@ export default function ProfessionalPage() {
         {
           text: it ? "esposizione territoriale" : "territorial exposure",
           title: "Priority Index",
-          value: `${selectedFinalPriorityIndex}/100`,
+          value: `${selectedFinalPriorityIndexLabel}/100`,
         },
         {
           text: collapseRateRankLabel || (it ? `confidenza ${selectedCollapseRateConfidence}` : `confidence ${selectedCollapseRateConfidence}`),
@@ -6761,7 +6976,7 @@ export default function ProfessionalPage() {
       {
         text: it ? "indice di esposizione + lettura heritage" : "exposure index + heritage reading",
         title: "Priority Index",
-        value: `${selectedFinalPriorityIndex}/100`,
+        value: `${selectedFinalPriorityIndexLabel}/100`,
       },
       {
         text: selectedCollapseRateAvailable
@@ -6984,7 +7199,11 @@ export default function ProfessionalPage() {
   const downloadReportPdf = async (
     variant = "full"
   ) => {
-    if (!selectedProvinceProfile || isPreparingReport) {
+    if (
+      !selectedProvinceProfile ||
+      isPreparingReport ||
+      (activeEntryPath === 0 && !path01LocationValidated)
+    ) {
       return;
     }
 
@@ -7111,7 +7330,10 @@ export default function ProfessionalPage() {
   };
 
   const exportProvinceReport = () => {
-    if (!selectedProvinceProfile) {
+    if (
+      !selectedProvinceProfile ||
+      (activeEntryPath === 0 && !path01LocationValidated)
+    ) {
       return;
     }
 
@@ -7124,6 +7346,10 @@ export default function ProfessionalPage() {
   };
 
   const exportSourceTable = () => {
+    if (activeEntryPath === 0 && !path01LocationValidated) {
+      return;
+    }
+
     const sourceEvents =
       activeEntryPath === 1
         ? assetScreening
@@ -7151,6 +7377,10 @@ export default function ProfessionalPage() {
   };
 
   const exportGisPackage = () => {
+    if (activeEntryPath === 0 && !path01LocationValidated) {
+      return;
+    }
+
     const features = [];
 
     if (activeEntryPath === 1) {
@@ -8828,18 +9058,21 @@ export default function ProfessionalPage() {
     .slice(0, 2);
   const selectedProjectContext =
     language === "it" ? "Ponte" : "Bridge";
-  const normalizeProvinceKey = (value) =>
-    cleanDisplayText(value || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, " ")
-      .trim();
   const selectedAinopProvinceIndex =
     ainopBridgeIndex?.provinces?.find(
-      (item) =>
-        normalizeProvinceKey(item.province) ===
-        normalizeProvinceKey(selectedProvinceProfile?.territory)
+      (item) => {
+        if (!selectedProvinceRegistryItem) {
+          return (
+            normalizeProvinceKey(item.province) ===
+            normalizeProvinceKey(selectedProvinceProfile?.territory)
+          );
+        }
+
+        return provinceMatchesValue(
+          selectedProvinceRegistryItem,
+          item.province
+        );
+      }
     );
   const selectedPath01Intent =
     language === "it"
@@ -8874,6 +9107,34 @@ export default function ProfessionalPage() {
     )
       ? `${selectedAinopProvinceIndex.relative_to_national}x`
       : "N/A";
+  const selectedCollapseRatePer100 = selectedCollapseRateAvailable
+    ? selectedAinopProvinceIndex.collapse_rate_per_100_ainop_bridges
+    : "N/A";
+  const selectedCollapseRateNumerator =
+    selectedAinopProvinceIndex?.numerator_count ??
+    selectedAinopProvinceIndex?.arcus_cases ??
+    workflowEvents.length;
+  const selectedCollapseRateNationalReference =
+    selectedAinopProvinceIndex?.national_rate_per_100 ??
+    selectedAinopProvinceIndex?.national_rate_per_100_ainop_bridges ??
+    ainopBridgeIndex?.metadata?.national_rate_per_100_ainop_bridges ??
+    "N/A";
+  const selectedCollapseRateDatasetVersion =
+    selectedAinopProvinceIndex?.dataset_version ??
+    ainopBridgeIndex?.metadata?.dataset_version ??
+    "N/A";
+  const selectedCollapseRateDataCutoff =
+    selectedAinopProvinceIndex?.data_cutoff_date ??
+    ainopBridgeIndex?.metadata?.data_cutoff_date ??
+    "N/A";
+  const selectedCollapseRateLatestEventDate =
+    selectedAinopProvinceIndex?.latest_event_date ??
+    ainopBridgeIndex?.metadata?.latest_event_date ??
+    "N/A";
+  const selectedCollapseRateIncludedYearMax =
+    selectedAinopProvinceIndex?.included_year_max ??
+    ainopBridgeIndex?.metadata?.included_year_max ??
+    "N/A";
   const selectedCollapseRateConfidence = String(
     selectedAinopProvinceIndex?.collapse_rate_confidence ||
       "unavailable"
@@ -8890,19 +9151,30 @@ export default function ProfessionalPage() {
               16.67
           )
         )
-      : selectedProvinceProfile?.scenarioScore ||
-        selectedProvinceProfile?.riskScore ||
-        0;
-  const selectedExposurePriorityScore = Math.round(
-    workflowHazardExposure?.score ||
-      selectedProvinceProfile?.scenarioScore ||
-      selectedProvinceProfile?.riskScore ||
-      0
-  );
-  const selectedFinalPriorityIndex = Math.round(
-    selectedExposurePriorityScore * 0.7 +
-      selectedCollapseRateScore * 0.3
-  );
+      : null;
+  const selectedExposurePrioritySource =
+    workflowHazardExposure?.score ??
+    selectedProvinceProfile?.scenarioScore ??
+    selectedProvinceProfile?.riskScore ??
+    null;
+  const selectedExposurePriorityScore =
+    selectedExposurePrioritySource === null ||
+    selectedExposurePrioritySource === undefined
+      ? null
+      : Math.round(Number(selectedExposurePrioritySource));
+  const selectedFinalPriorityIndex =
+    Number.isFinite(selectedExposurePriorityScore) &&
+    Number.isFinite(selectedCollapseRateScore)
+      ? Math.round(
+          selectedExposurePriorityScore * 0.7 +
+            selectedCollapseRateScore * 0.3
+        )
+      : null;
+  const selectedFinalPriorityIndexLabel = Number.isFinite(
+    selectedFinalPriorityIndex
+  )
+    ? String(selectedFinalPriorityIndex)
+    : "N/A";
   const territoryReading = (() => {
     const province =
       selectedProvinceProfile?.territory ||
@@ -9051,6 +9323,214 @@ export default function ProfessionalPage() {
   const activeProfessionalWmsOverlays = professionalWmsOverlays.filter(
     (overlay) => activeProfessionalHazardLayers[overlay.layerKey]
   );
+  const formatExposureCoordinate = (value) =>
+    Number.isFinite(Number(value))
+      ? Number(value).toFixed(5)
+      : "";
+  const activePath01ExposurePoint = {
+    latitude: projectLocation.latitude,
+    longitude: projectLocation.longitude,
+  };
+  const path01LocationValidated = Boolean(projectLocation.validated);
+  const projectLocationStatusMessage = () => {
+    if (path01LocationValidated) {
+      return language === "it"
+        ? "Punto progetto validato e provincia sincronizzata."
+        : "Project point validated and province synchronized.";
+    }
+
+    if (projectLocation.error === "point_outside_italy") {
+      return language === "it"
+        ? "Il punto selezionato non ricade in una provincia italiana."
+        : "The selected point does not fall within an Italian province.";
+    }
+
+    if (projectLocation.error === "province_geometry_unavailable") {
+      return language === "it"
+        ? "Geometria provinciale non disponibile: non posso validare il punto."
+        : "Province geometry is unavailable: the point cannot be validated.";
+    }
+
+    if (projectLocation.error === "province_not_resolved") {
+      return language === "it"
+        ? "Il punto ricade in una geometria provinciale non collegata a un profilo ARCUS."
+        : "The point falls in a province geometry that is not linked to an ARCUS profile.";
+    }
+
+    if (
+      projectLocation.error === "invalid_coordinates" ||
+      projectLocation.error === "coordinates_out_of_range"
+    ) {
+      return language === "it"
+        ? "Coordinate non valide."
+        : "Invalid coordinates.";
+    }
+
+    return language === "it"
+      ? "Seleziona un punto progetto nella provincia scelta."
+      : "Select a project point within the chosen province";
+  };
+  const clearProjectLocationForProvinceChange = (province) => {
+    const registryProvince =
+      findProvinceInRegistry(provinceRegistry, province);
+
+    setSelectedProvince(registryProvince?.name || province);
+    setProjectLocation({
+      derivedProvince: "",
+      derivedProvinceCode: "",
+      derivedProvinceKey: "",
+      derivedProvinceName: "",
+      latitude: "",
+      longitude: "",
+      selectionSource: "province_change",
+      validated: false,
+    });
+    setPath01HydraulicExposure(null);
+    setPath01ExposureStatus("idle");
+  };
+  const hydraulicExposureLabel = (exposure) => {
+    if (!exposure) {
+      return language === "it"
+        ? "Punto non selezionato"
+        : "No point selected";
+    }
+
+    if (exposure.status === "available" || exposure.status === "partial") {
+      return exposure.highest_class
+        ? exposure.highest_class
+        : language === "it"
+          ? "Nessuna classe intercettata"
+          : "No class intersected";
+    }
+
+    if (exposure.status === "invalid_coordinates") {
+      return language === "it"
+        ? "Coordinate non valide"
+        : "Invalid coordinates";
+    }
+
+    return exposure.status || "unavailable";
+  };
+  const commitProjectLocation = async (
+    latitude,
+    longitude,
+    selectionSource = "manual"
+  ) => {
+    const point = {
+      latitude,
+      longitude,
+      selectionSource,
+    };
+    const derived = deriveProvinceForPoint(provinceGeoFeatures, point);
+
+    if (!derived.validated) {
+      setProjectLocation({
+        derivedProvince: "",
+        derivedProvinceCode: "",
+        derivedProvinceKey: "",
+        derivedProvinceName: "",
+        error:
+          provinceGeometryStatus === "error" ||
+          provinceGeometryStatus === "loading"
+            ? "province_geometry_unavailable"
+            : derived.error,
+        latitude: derived.latitude ?? point?.latitude ?? "",
+        longitude: derived.longitude ?? point?.longitude ?? "",
+        selectionSource: point?.selectionSource || "manual",
+        validated: false,
+      });
+      setPath01HydraulicExposure(null);
+      setPath01ExposureStatus("blocked");
+
+      return;
+    }
+
+    const registryProvince =
+      findProvinceInRegistry(
+        provinceRegistry,
+        derived.derivedProvinceCode
+      ) ||
+      findProvinceInRegistry(provinceRegistry, derived.derivedProvince);
+    const derivedProvinceName =
+      registryProvince?.name || derived.derivedProvince;
+    const derivedProvinceCode =
+      registryProvince?.code || derived.derivedProvinceCode;
+    const derivedProvinceKey =
+      registryProvince?.key || derived.derivedProvinceKey;
+
+    setProjectLocation({
+      derivedProvince: derivedProvinceName,
+      derivedProvinceCode,
+      derivedProvinceKey,
+      derivedProvinceName,
+      error: "",
+      latitude: derived.latitude,
+      longitude: derived.longitude,
+      selectionSource,
+      validated: true,
+    });
+    setSelectedProvince(derivedProvinceName);
+    setPath01HydraulicExposure(null);
+    setPath01ExposureStatus("loading");
+
+    try {
+      const result = await professionalHazardExposurePoint({
+        hazards: ["hydraulic"],
+        latitude: derived.latitude,
+        longitude: derived.longitude,
+      });
+
+      setPath01HydraulicExposure(result.hydraulic || null);
+      setPath01ExposureStatus("ready");
+    } catch {
+      setPath01HydraulicExposure({
+        confidence: "source_unavailable",
+        explanation: [
+          language === "it"
+            ? "La sorgente ufficiale non e disponibile in questa sessione."
+            : "The official source is not available in this session.",
+        ],
+        highest_class: null,
+        matched_classes: [],
+        normalized_score: null,
+        status: "service_unreachable",
+      });
+      setPath01ExposureStatus("service_unreachable");
+    }
+  };
+  const topAssetForExposure = assetScreening[0] || null;
+  const queryPath02HydraulicExposure = async () => {
+    if (!topAssetForExposure) {
+      return;
+    }
+
+    setPath02ExposureStatus("loading");
+
+    try {
+      const result = await professionalHazardExposurePoint({
+        hazards: ["hydraulic"],
+        latitude: Number(topAssetForExposure.latitude),
+        longitude: Number(topAssetForExposure.longitude),
+      });
+
+      setPath02HydraulicExposure(result.hydraulic || null);
+      setPath02ExposureStatus("ready");
+    } catch {
+      setPath02HydraulicExposure({
+        confidence: "source_unavailable",
+        explanation: [
+          language === "it"
+            ? "La sorgente ufficiale non e disponibile in questa sessione."
+            : "The official source is not available in this session.",
+        ],
+        highest_class: null,
+        matched_classes: [],
+        normalized_score: null,
+        status: "service_unreachable",
+      });
+      setPath02ExposureStatus("error");
+    }
+  };
   const professionalWorkflowActions =
     language === "it"
       ? [
@@ -9058,8 +9538,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-risk-score",
               stage: "01",
-              title: "Seleziona provincia",
-              text: "Scegli la provincia da analizzare per il contesto di nuovi ponti o pianificazione territoriale.",
+              title: "Definisci localizzazione progetto",
+              text: "Usa la provincia per navigare il contesto, poi seleziona il punto progetto che sincronizza statistiche, denominatore e report.",
             },
             {
               href: "#professional-scenarios",
@@ -9241,8 +9721,8 @@ export default function ProfessionalPage() {
             {
               href: "#professional-risk-score",
               stage: "01",
-              title: "Select province",
-              text: "Choose the province to screen for new bridge or territorial planning context.",
+              title: "Define project location",
+              text: "Use the province to navigate the context, then select the project point that synchronizes statistics, denominator and report.",
             },
             {
               href: "#professional-scenarios",
@@ -9453,11 +9933,26 @@ export default function ProfessionalPage() {
     setHasSelectedProfessionalPath(true);
     setActiveWorkflowStep(0);
     setManualAreaBounds(null);
+    setProjectLocation({
+      derivedProvince: "",
+      derivedProvinceCode: "",
+      derivedProvinceKey: "",
+      derivedProvinceName: "",
+      latitude: "",
+      longitude: "",
+      selectionSource: "",
+      validated: false,
+    });
+    setPath01HydraulicExposure(null);
+    setPath01ExposureStatus("idle");
   };
 
   const activeWorkflowAction =
     professionalWorkflowActions[activeWorkflowStep] ||
     professionalWorkflowActions[0];
+  const path01RequiresValidatedLocation = activeEntryPath === 0;
+  const path01CanProceed =
+    !path01RequiresValidatedLocation || path01LocationValidated;
   const professionalMapResizeSignal = [
     hasSelectedProfessionalPath ? "open" : "locked",
     activeEntryPath,
@@ -9475,13 +9970,25 @@ export default function ProfessionalPage() {
             activeEntryPath === 1 ? "File caricato" : "Territorio",
             activeEntryPath === 1
               ? assetSession.fileName || "-"
-              : manualAreaLabel,
+              : activeEntryPath === 0
+                ? path01LocationValidated
+                  ? projectLocation.derivedProvince
+                  : `Provincial context: ${selectedProvinceProfile?.territory || "-"}`
+                : manualAreaLabel,
           ],
           [
             activeEntryPath === 1 ? "Modalita" : "Contesto progetto",
             activeEntryPath === 1
               ? selectedPath02ReadingMode
               : selectedProjectContext,
+          ],
+          [
+            "Punto progetto",
+            activeEntryPath === 0
+              ? path01LocationValidated
+                ? `${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}`
+                : "richiesto"
+              : "-",
           ],
           [
             "Scenario",
@@ -9522,13 +10029,25 @@ export default function ProfessionalPage() {
             activeEntryPath === 1 ? "Uploaded file" : "Territory",
             activeEntryPath === 1
               ? assetSession.fileName || "-"
-              : manualAreaLabel,
+              : activeEntryPath === 0
+                ? path01LocationValidated
+                  ? projectLocation.derivedProvince
+                  : `Provincial context: ${selectedProvinceProfile?.territory || "-"}`
+                : manualAreaLabel,
           ],
           [
             activeEntryPath === 1 ? "Mode" : "Project context",
             activeEntryPath === 1
               ? selectedPath02ReadingMode
               : selectedProjectContext,
+          ],
+          [
+            "Project point",
+            activeEntryPath === 0
+              ? path01LocationValidated
+                ? `${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}`
+                : "required"
+              : "-",
           ],
           [
             "Scenario",
@@ -9846,21 +10365,35 @@ export default function ProfessionalPage() {
                   : "Working area"}
               <select
                 onChange={(event) =>
-                  setSelectedProvince(event.target.value)
+                  activeEntryPath === 0
+                    ? clearProjectLocationForProvinceChange(
+                        event.target.value
+                      )
+                    : setSelectedProvince(event.target.value)
                 }
                 value={
-                  selectedProvinceProfile?.territory ||
-                  ""
+                  activeEntryPath === 0
+                    ? selectedProvinceRegistryItem?.code || ""
+                    : selectedProvinceProfile?.territory || ""
                 }
               >
-                {alphabeticalProvinceProfiles.map((profile) => (
-                  <option
-                    key={profile.territory}
-                    value={profile.territory}
-                  >
-                    {cleanDisplayText(profile.territory)}
-                  </option>
-                ))}
+                {activeEntryPath === 0
+                  ? provinceRegistry.map((province) => (
+                      <option
+                        key={province.code}
+                        value={province.code}
+                      >
+                        {cleanDisplayText(province.name)}
+                      </option>
+                    ))
+                  : alphabeticalProvinceProfiles.map((profile) => (
+                      <option
+                        key={profile.territory}
+                        value={profile.territory}
+                      >
+                        {cleanDisplayText(profile.territory)}
+                      </option>
+                    ))}
               </select>
             </label>
 
@@ -9869,10 +10402,14 @@ export default function ProfessionalPage() {
                 {language === "it"
                   ? activeEntryPath !== 0 && manualAreaBounds
                     ? "Area manuale"
-                    : "Provincia selezionata"
+                    : path01LocationValidated
+                      ? "Provincia derivata dal punto"
+                      : "Provincial context"
                   : activeEntryPath !== 0 && manualAreaBounds
                     ? "Manual area"
-                    : "Selected province"}
+                    : path01LocationValidated
+                      ? "Point-derived province"
+                      : "Provincial context"}
               </b>
               <strong>
                 {activeEntryPath !== 0 && manualAreaBounds
@@ -9893,8 +10430,8 @@ export default function ProfessionalPage() {
             <p>
               {activeEntryPath === 0
                 ? language === "it"
-                  ? "Path 01 lavora a livello provinciale per produrre un briefing preliminare coerente e confrontabile."
-                  : "Path 01 works at province level to produce a consistent and comparable preliminary briefing."
+                  ? "La provincia qui e solo contesto preliminare. Il report si sblocca quando selezioni un punto progetto validato dentro una provincia italiana."
+                  : "The province here is preliminary context only. The report unlocks after you select a validated project point inside an Italian province."
                 : language === "it"
                   ? "Trascina il mouse sulla mappa per disegnare un'area di analisi. ARCUS usera i crolli dentro il rettangolo e, se intercetta piu province, le riportera nel report finale."
                   : "Drag on the map to draw an analysis area. ARCUS will use collapses inside the rectangle and, if it crosses multiple provinces, include them in the final report."}
@@ -9919,10 +10456,27 @@ export default function ProfessionalPage() {
                   : selectedProvinceEvents
               }
               height="300px"
+              onPointSelect={
+                activeEntryPath === 0
+                  ? (point) =>
+                      commitProjectLocation(
+                        point.latitude,
+                        point.longitude,
+                        "map"
+                      )
+                  : undefined
+              }
               onSelectionBoundsChange={
                 activeEntryPath === 0
                   ? undefined
                   : setManualAreaBounds
+              }
+              selectedPoint={
+                activeEntryPath === 0 &&
+                Number.isFinite(Number(projectLocation.latitude)) &&
+                Number.isFinite(Number(projectLocation.longitude))
+                  ? projectLocation
+                  : null
               }
               selectionBounds={
                 activeEntryPath === 0
@@ -9938,6 +10492,239 @@ export default function ProfessionalPage() {
               sourcesByEvent={sourcesByEventMap}
             />
           </div>
+
+          {activeEntryPath === 0 && (
+            <div className="platform-official-exposure">
+              <div>
+                <span>Project location</span>
+                <strong>
+                  {path01LocationValidated
+                    ? projectLocation.derivedProvince
+                    : language === "it"
+                      ? "Punto richiesto"
+                      : "Point required"}
+                </strong>
+                <p>
+                  {projectLocationStatusMessage()}
+                </p>
+              </div>
+
+              <div className="platform-coordinate-query">
+                <label>
+                  Latitude
+                  <input
+                    onChange={(event) => {
+                      setPath01HydraulicExposure(null);
+                      setPath01ExposureStatus("idle");
+                      setProjectLocation((current) => ({
+                        ...current,
+                        derivedProvince: "",
+                        derivedProvinceCode: "",
+                        derivedProvinceKey: "",
+                        derivedProvinceName: "",
+                        error: "",
+                        latitude: event.target.value,
+                        selectionSource: "manual",
+                        validated: false,
+                      }));
+                    }}
+                    placeholder="45.07030"
+                    type="number"
+                    value={formatExposureCoordinate(
+                      activePath01ExposurePoint.latitude
+                    )}
+                  />
+                </label>
+                <label>
+                  Longitude
+                  <input
+                    onChange={(event) => {
+                      setPath01HydraulicExposure(null);
+                      setPath01ExposureStatus("idle");
+                      setProjectLocation((current) => ({
+                        ...current,
+                        derivedProvince: "",
+                        derivedProvinceCode: "",
+                        derivedProvinceKey: "",
+                        derivedProvinceName: "",
+                        error: "",
+                        longitude: event.target.value,
+                        selectionSource: "manual",
+                        validated: false,
+                      }));
+                    }}
+                    placeholder="7.68690"
+                    type="number"
+                    value={formatExposureCoordinate(
+                      activePath01ExposurePoint.longitude
+                    )}
+                  />
+                </label>
+                <button
+                  disabled={
+                    path01ExposureStatus === "loading" ||
+                    provinceGeometryStatus === "loading"
+                  }
+                  onClick={() =>
+                    commitProjectLocation(
+                      activePath01ExposurePoint.latitude,
+                      activePath01ExposurePoint.longitude,
+                      "manual"
+                    )
+                  }
+                  type="button"
+                >
+                  {path01ExposureStatus === "loading"
+                    ? language === "it"
+                      ? "Interrogo ISPRA"
+                      : "Querying ISPRA"
+                    : language === "it"
+                      ? "Verifica punto"
+                      : "Check point"}
+                </button>
+              </div>
+
+              <div className="platform-project-location-grid">
+                <article>
+                  <span>Latitude</span>
+                  <strong>
+                    {formatExposureCoordinate(projectLocation.latitude) || "-"}
+                  </strong>
+                </article>
+                <article>
+                  <span>Longitude</span>
+                  <strong>
+                    {formatExposureCoordinate(projectLocation.longitude) || "-"}
+                  </strong>
+                </article>
+                <article>
+                  <span>
+                    {language === "it"
+                      ? "Provincia derivata"
+                      : "Derived province"}
+                  </span>
+                  <strong>
+                    {projectLocation.derivedProvince || "-"}
+                  </strong>
+                </article>
+                <article>
+                  <span>
+                    {language === "it"
+                      ? "Codice provincia"
+                      : "Province code"}
+                  </span>
+                  <strong>{selectedProvinceCode || "-"}</strong>
+                </article>
+                <article>
+                  <span>Municipality</span>
+                  <strong>-</strong>
+                </article>
+              </div>
+
+              <div className="platform-exposure-split">
+                <article>
+                  <span>Official geospatial exposure</span>
+                  <strong>
+                    {hydraulicExposureLabel(path01HydraulicExposure)}
+                  </strong>
+                  <p>
+                    {language === "it"
+                      ? "Dato WFS ISPRA P1/P2/P3 riferito al punto progetto. Non entra ancora nel Final Priority Index."
+                      : "ISPRA P1/P2/P3 WFS data for the project point. It is not yet used in the Final Priority Index."}
+                  </p>
+                  <div className="platform-exposure-meta">
+                    <span>
+                      Status:{" "}
+                      {path01HydraulicExposure?.status ||
+                        (language === "it"
+                          ? "punto non selezionato"
+                          : "point not selected")}
+                    </span>
+                    <span>
+                      Source:{" "}
+                      {path01HydraulicExposure?.source
+                        ? `${path01HydraulicExposure.source.provider} ${path01HydraulicExposure.source.service_type}`
+                        : "ISPRA WFS"}
+                    </span>
+                    <span>
+                      Timestamp:{" "}
+                      {path01HydraulicExposure?.source?.queried_at ||
+                        "-"}
+                    </span>
+                    <span>
+                      Classes:{" "}
+                      {path01HydraulicExposure?.matched_classes?.length
+                        ? path01HydraulicExposure.matched_classes.join(", ")
+                        : "-"}
+                    </span>
+                  </div>
+                </article>
+
+                <article>
+                  <span>
+                    {language === "it"
+                      ? "Contesto storico provinciale"
+                      : "Provincial historical context"}
+                  </span>
+                  <strong>{workflowEvents.length}</strong>
+                  <p>
+                    {language === "it"
+                      ? "Collassi ARCUS, Historical Collapse Incidence e denominatore ponti restano separati dal dato ufficiale del punto."
+                      : "ARCUS collapses, Historical Collapse Incidence and bridge denominator remain separate from the official point exposure."}
+                  </p>
+                  <div className="platform-exposure-meta">
+                    <span>
+                      ARCUS collapses: {workflowEvents.length}
+                    </span>
+                    <span>
+                      Index numerator: {selectedCollapseRateNumerator}
+                    </span>
+                    {!selectedProvinceHasArcusProfile && (
+                      <span>
+                        {language === "it"
+                          ? "No documented cases in the current ARCUS release. This does not imply absence of territorial hazard."
+                          : "No documented cases in the current ARCUS release. This does not imply absence of territorial hazard."}
+                      </span>
+                    )}
+                    <span>
+                      Historical Collapse Incidence:{" "}
+                      {selectedCollapseRateMultiplier}
+                    </span>
+                    <span>
+                      Provincial rate: {selectedCollapseRatePer100}
+                    </span>
+                    <span>
+                      National reference:{" "}
+                      {selectedCollapseRateNationalReference}
+                    </span>
+                    <span>
+                      Denominator:{" "}
+                      {selectedAinopProvinceIndex?.ainop_bridges_total ||
+                        "N/A"}
+                    </span>
+                    <span>
+                      Dataset: {selectedCollapseRateDatasetVersion}
+                    </span>
+                    <span>
+                      Data updated through:{" "}
+                      {selectedCollapseRateDataCutoff}
+                    </span>
+                    <span>
+                      Latest included event:{" "}
+                      {selectedCollapseRateLatestEventDate}
+                    </span>
+                    <span>
+                      Latest included year:{" "}
+                      {selectedCollapseRateIncludedYearMax}
+                    </span>
+                    <span>
+                      Confidence: {selectedCollapseRateConfidence}
+                    </span>
+                  </div>
+                </article>
+              </div>
+            </div>
+          )}
 
           <div className="platform-workflow-output-header">
             {language === "it" ? "ARCUS mostra" : "ARCUS shows"}
@@ -10901,12 +11688,12 @@ export default function ProfessionalPage() {
               : "Analyzed territory",
             manualAreaLabel,
           ],
-          [
-            language === "it"
-              ? "Priority Index conclusivo"
-              : "Final Priority Index",
-            String(selectedFinalPriorityIndex),
-          ],
+            [
+              language === "it"
+                ? "Priority Index conclusivo"
+                : "Final Priority Index",
+              selectedFinalPriorityIndexLabel,
+            ],
           [
             language === "it"
               ? "Hazard dominante"
@@ -11195,6 +11982,7 @@ export default function ProfessionalPage() {
             ({ label, onClick }) => (
               <button
                 key={label}
+                disabled={!path01CanProceed}
                 onClick={onClick}
                 type="button"
               >
@@ -11412,6 +12200,11 @@ export default function ProfessionalPage() {
                           ? "active"
                           : ""
                       }
+                      disabled={
+                        activeEntryPath === 0 &&
+                        index > 0 &&
+                        !path01LocationValidated
+                      }
                       key={`${action.stage}-${action.title}`}
                       onClick={() =>
                         activateWorkflowAction(
@@ -11450,7 +12243,8 @@ export default function ProfessionalPage() {
                 <button
                   disabled={
                     activeWorkflowStep >=
-                    professionalWorkflowActions.length - 1
+                      professionalWorkflowActions.length - 1 ||
+                    !path01CanProceed
                   }
                   onClick={() =>
                     setActiveWorkflowStep((current) =>
@@ -11491,6 +12285,7 @@ export default function ProfessionalPage() {
               </dl>
 
               <button
+                disabled={!path01CanProceed}
                 onClick={downloadProfessionalReport}
                 type="button"
               >
@@ -11572,7 +12367,11 @@ export default function ProfessionalPage() {
                     key={item.value}
                     onClick={() => {
                       setScenario(item.value);
-                      setSelectedProvince("");
+                      if (activeEntryPath === 0) {
+                        clearProjectLocationForProvinceChange("");
+                      } else {
+                        setSelectedProvince("");
+                      }
                     }}
                     type="button"
                   >
@@ -11595,9 +12394,13 @@ export default function ProfessionalPage() {
                     }
                     key={profile.territory}
                     onClick={() =>
-                      setSelectedProvince(
-                        profile.territory
-                      )
+                      activeEntryPath === 0
+                        ? clearProjectLocationForProvinceChange(
+                            profile.territory
+                          )
+                        : setSelectedProvince(
+                            profile.territory
+                          )
                     }
                     type="button"
                   >
@@ -12009,6 +12812,66 @@ export default function ProfessionalPage() {
                   <b>
                     {assetScreening[0].hazardScore || 0}
                   </b>
+                </div>
+
+                <div className="platform-official-exposure compact">
+                  <div>
+                    <span>Official geospatial exposure</span>
+                    <strong>
+                      {hydraulicExposureLabel(path02HydraulicExposure)}
+                    </strong>
+                    <p>
+                      {language === "it"
+                        ? "Interrogazione singolo asset in shadow mode. Il ranking Path 02 resta basato sul modello corrente."
+                        : "Single-asset query in shadow mode. Path 02 ranking remains based on the current model."}
+                    </p>
+                  </div>
+
+                  <button
+                    disabled={
+                      path02ExposureStatus === "loading" ||
+                      !Number.isFinite(
+                        Number(assetScreening[0].latitude)
+                      ) ||
+                      !Number.isFinite(
+                        Number(assetScreening[0].longitude)
+                      )
+                    }
+                    onClick={queryPath02HydraulicExposure}
+                    type="button"
+                  >
+                    {path02ExposureStatus === "loading"
+                      ? language === "it"
+                        ? "Interrogo ISPRA"
+                        : "Querying ISPRA"
+                      : language === "it"
+                        ? "Verifica asset"
+                        : "Check asset"}
+                  </button>
+
+                  <div className="platform-exposure-comparison">
+                    <span>
+                      Real hydraulic exposure:{" "}
+                      <strong>
+                        {hydraulicExposureLabel(path02HydraulicExposure)}
+                      </strong>
+                    </span>
+                    <span>
+                      Current ARCUS historical proxy:{" "}
+                      <strong>
+                        {assetScreening[0].hazardProfileLabel ||
+                          assetScreening[0].dominantHazard ||
+                          "-"}{" "}
+                        / {assetScreening[0].hazardScore || 0}
+                      </strong>
+                    </span>
+                    <span>
+                      Source status:{" "}
+                      <strong>
+                        {path02HydraulicExposure?.status || "-"}
+                      </strong>
+                    </span>
+                  </div>
                 </div>
 
                 <p>
@@ -12853,7 +13716,7 @@ export default function ProfessionalPage() {
             </div>
 
             <button
-              disabled={isPreparingReport}
+              disabled={isPreparingReport || !path01CanProceed}
               type="button"
               onClick={printProfessionalReport}
             >
@@ -12867,7 +13730,7 @@ export default function ProfessionalPage() {
             </button>
 
             <button
-              disabled={isPreparingReport}
+              disabled={isPreparingReport || !path01CanProceed}
               type="button"
               onClick={downloadOnePageBrief}
             >
@@ -12881,6 +13744,7 @@ export default function ProfessionalPage() {
             </button>
 
             <button
+              disabled={!path01CanProceed}
               type="button"
               onClick={exportProvinceReport}
             >
@@ -12890,6 +13754,7 @@ export default function ProfessionalPage() {
             </button>
 
             <button
+              disabled={!path01CanProceed}
               type="button"
               onClick={exportSourceTable}
             >
@@ -12899,6 +13764,7 @@ export default function ProfessionalPage() {
             </button>
 
             <button
+              disabled={!path01CanProceed}
               type="button"
               onClick={exportGisPackage}
             >
@@ -12945,7 +13811,7 @@ export default function ProfessionalPage() {
                   : "Final Priority Index"}
               </span>
               <strong>
-                {selectedFinalPriorityIndex}
+                {selectedFinalPriorityIndexLabel}
               </strong>
               <p>
                 {selectedProvinceProfile

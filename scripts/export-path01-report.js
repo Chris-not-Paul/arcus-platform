@@ -96,15 +96,12 @@ function loadLogoDataUri() {
 }
 
 function loadHazardExposurePreview() {
-  const filePath = path.join(
-    root,
-    "public",
-    "data",
-    "professional",
-    "hazard-exposure-preview.json"
-  );
+  const filePath = [
+    path.join(root, "public", "data", "professional", "hazard-exposure-preview.json"),
+    path.join(root, "private-data", "professional", "hazard-exposure-preview.json"),
+  ].find((candidate) => fs.existsSync(candidate));
 
-  if (!fs.existsSync(filePath)) {
+  if (!filePath) {
     return null;
   }
 
@@ -114,15 +111,12 @@ function loadHazardExposurePreview() {
 }
 
 function loadAinopBridgeIndex() {
-  const filePath = path.join(
-    root,
-    "public",
-    "data",
-    "professional",
-    "ainop-bridge-index.json"
-  );
+  const filePath = [
+    path.join(root, "public", "data", "professional", "ainop-bridge-index.json"),
+    path.join(root, "private-data", "professional", "ainop-bridge-index.json"),
+  ].find((candidate) => fs.existsSync(candidate));
 
-  if (!fs.existsSync(filePath)) {
+  if (!filePath) {
     return null;
   }
 
@@ -1180,9 +1174,34 @@ function buildFullReportHtml({
   const collapseRateAvailable =
     Number(ainopProvince?.ainop_bridges_total || 0) > 0 &&
     Number.isFinite(Number(ainopProvince?.collapse_rate_per_100_ainop_bridges));
+  const collapseRateNumerator =
+    ainopProvince?.numerator_count ??
+    ainopProvince?.arcus_cases ??
+    events.length;
   const collapseRateValue = collapseRateAvailable
     ? String(ainopProvince.collapse_rate_per_100_ainop_bridges)
     : "N/A";
+  const nationalReference =
+    ainopProvince?.national_rate_per_100 ??
+    ainopProvince?.national_rate_per_100_ainop_bridges ??
+    ainopBridgeIndex?.metadata?.national_rate_per_100_ainop_bridges ??
+    "N/A";
+  const datasetVersion =
+    ainopProvince?.dataset_version ??
+    ainopBridgeIndex?.metadata?.dataset_version ??
+    "N/A";
+  const dataCutoffDate =
+    ainopProvince?.data_cutoff_date ??
+    ainopBridgeIndex?.metadata?.data_cutoff_date ??
+    "N/A";
+  const latestEventDate =
+    ainopProvince?.latest_event_date ??
+    ainopBridgeIndex?.metadata?.latest_event_date ??
+    "N/A";
+  const includedYearMax =
+    ainopProvince?.included_year_max ??
+    ainopBridgeIndex?.metadata?.included_year_max ??
+    "N/A";
   const collapseRateMultiplier = collapseRateAvailable &&
     Number.isFinite(Number(ainopProvince?.relative_to_national))
     ? `${ainopProvince.relative_to_national}x`
@@ -1201,7 +1220,7 @@ function buildFullReportHtml({
     `Evidence package: ${sources.length} linked sources supporting the screening signal.`,
   ];
   const ainopIndexText = ainopProvince?.ainop_bridges_total
-    ? `ARCUS/AINOP Collapse Rate: ${ainopProvince.collapse_rate_per_100_ainop_bridges} ARCUS cases per 100 AINOP bridges; ${ainopProvince.relative_to_national}x the national ARCUS/AINOP rate. Denominator: ${ainopProvince.ainop_bridges_total} AINOP bridges (${ainopProvince.ainop_road_bridges} road, ${ainopProvince.ainop_rail_bridges} rail).`
+    ? `ARCUS/AINOP Collapse Rate: ${collapseRateNumerator} documented ARCUS cases over ${ainopProvince.ainop_bridges_total} AINOP bridges; ${ainopProvince.collapse_rate_per_100_ainop_bridges} cases per 100 bridges; ${ainopProvince.relative_to_national}x the national ARCUS/AINOP rate (${nationalReference} per 100). Dataset: ${datasetVersion}; data cutoff: ${dataCutoffDate}; latest included event: ${latestEventDate}; latest included year: ${includedYearMax}.`
     : "ARCUS/AINOP Collapse Rate not available for this province.";
   const indexLayerCards = `
     <div class="index-layer-grid">
@@ -1216,7 +1235,7 @@ function buildFullReportHtml({
         <strong>Collapse Rate</strong>
         <b>${escapeHtml(collapseRateMultiplier)}</b>
         <p>${collapseRateAvailable
-          ? `${escapeHtml(collapseRateValue)} ARCUS cases per 100 AINOP bridges; denominator ${escapeHtml(String(ainopProvince.ainop_bridges_total))} AINOP bridges.`
+          ? `${escapeHtml(String(collapseRateNumerator))} documented ARCUS cases; denominator ${escapeHtml(String(ainopProvince.ainop_bridges_total))} AINOP bridges; provincial rate ${escapeHtml(collapseRateValue)} per 100; national reference ${escapeHtml(String(nationalReference))} per 100; dataset ${escapeHtml(String(datasetVersion))}; data cutoff ${escapeHtml(String(dataCutoffDate))}; latest included event ${escapeHtml(String(latestEventDate))}; latest included year ${escapeHtml(String(includedYearMax))}.`
           : "No reliable AINOP bridge denominator is available for this province."}</p>
         <i class="confidence-pill">Confidence: ${escapeHtml(collapseRateConfidence)}</i>
       </article>
@@ -1398,6 +1417,31 @@ function buildBriefHtml({
   const collapseRateAvailable =
     Number(ainopProvince?.ainop_bridges_total || 0) > 0 &&
     Number.isFinite(Number(ainopProvince?.collapse_rate_per_100_ainop_bridges));
+  const briefCollapseRateNumerator =
+    ainopProvince?.numerator_count ??
+    ainopProvince?.arcus_cases ??
+    events.length;
+  const briefNationalReference =
+    ainopProvince?.national_rate_per_100 ??
+    ainopProvince?.national_rate_per_100_ainop_bridges ??
+    ainopBridgeIndex?.metadata?.national_rate_per_100_ainop_bridges ??
+    "N/A";
+  const briefDatasetVersion =
+    ainopProvince?.dataset_version ??
+    ainopBridgeIndex?.metadata?.dataset_version ??
+    "N/A";
+  const briefDataCutoffDate =
+    ainopProvince?.data_cutoff_date ??
+    ainopBridgeIndex?.metadata?.data_cutoff_date ??
+    "N/A";
+  const briefLatestEventDate =
+    ainopProvince?.latest_event_date ??
+    ainopBridgeIndex?.metadata?.latest_event_date ??
+    "N/A";
+  const briefIncludedYearMax =
+    ainopProvince?.included_year_max ??
+    ainopBridgeIndex?.metadata?.included_year_max ??
+    "N/A";
   const collapseRateMultiplier = collapseRateAvailable &&
     Number.isFinite(Number(ainopProvince?.relative_to_national))
     ? `${ainopProvince.relative_to_national}x`
@@ -1422,7 +1466,7 @@ function buildBriefHtml({
     "Asset: first systematic database of collapsed bridges in Italy from 2000 to today.",
     `Signal: ${displayDriver} ${focus.exposureScore || "-"} / 100.`,
     collapseRateAvailable
-      ? `Collapse Rate: ${collapseRateMultiplier} national ARCUS/AINOP rate, read separately from Priority Index.`
+      ? `Collapse Rate: ${briefCollapseRateNumerator} cases / ${ainopProvince.ainop_bridges_total} AINOP bridges; ${collapseRateMultiplier} national ARCUS/AINOP rate (${briefNationalReference} per 100), dataset ${briefDatasetVersion}, updated ${briefDataCutoffDate}, latest event ${briefLatestEventDate}, year max ${briefIncludedYearMax}.`
       : `Evidence window: ${evidenceYearsLabel}.`,
     `Evidence package: ${sources.length} linked sources; run site-specific checks before design decisions.`,
   ];

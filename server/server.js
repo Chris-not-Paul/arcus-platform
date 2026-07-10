@@ -109,6 +109,9 @@ import {
   consumePasswordResetToken,
   createPasswordResetToken,
 } from "./passwordResetStore.js";
+import {
+  evaluatePointHazardExposure,
+} from "./hazard/hazardExposureService.js";
 
 async function readJsonBody(request) {
   const contentType = String(request.headers["content-type"] || "");
@@ -274,6 +277,10 @@ function metricPathFor(pathname) {
     .replace(
       /^\/api\/professional\/exports\/recent$/,
       "/api/professional/exports/recent"
+    )
+    .replace(
+      /^\/api\/professional\/hazard-exposure\/point$/,
+      "/api/professional/hazard-exposure/point"
     )
     .replace(
       /^\/api\/professional\/account\/(cancel|resume)$/,
@@ -1014,6 +1021,48 @@ async function routeRequest(request, response) {
         "X-ARCUS-Export-ID": output.exportId || exportId,
       },
     });
+    return;
+  }
+
+  if (url.pathname === "/api/professional/hazard-exposure/point") {
+    if (request.method !== "POST") {
+      sendJson(request, response, 405, {
+        error: "method_not_allowed",
+      });
+      return;
+    }
+
+    const session = await getAuthorisedSession(request, "professional:read");
+
+    if (!session) {
+      sendJson(request, response, 401, {
+        error: "professional_access_required",
+      });
+      return;
+    }
+
+    if (
+      csrfRequiredFor(session) &&
+      !(await isCsrfTokenValid(request))
+    ) {
+      sendJson(request, response, 403, {
+        error: "csrf_token_required",
+      });
+      return;
+    }
+
+    const payload = await readJsonBody(request);
+    const exposure = await evaluatePointHazardExposure(payload);
+
+    await appendAuditEvent({
+      event: "professional_hazard_exposure_point_queried",
+      hazardStatus: exposure.hydraulic?.status || null,
+      organizationId: session.organizationId,
+      userId: session.userId,
+      username: session.username,
+    });
+
+    sendJson(request, response, 200, exposure);
     return;
   }
 
