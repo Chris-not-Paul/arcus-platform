@@ -6,10 +6,16 @@ import {
 } from "../normalizers/floodNormalizer.js";
 
 const DEFAULT_WFS_URL = "https://sdi.isprambiente.it/geoserver/nz1/wfs";
-const REQUEST_TIMEOUT_MS = 8000;
+const ENDPOINT_IDENTIFIER = "ispra-nz1-wfs";
+const REQUEST_TIMEOUT_MS = 15000;
 const BBOX_EPSILON_DEGREES = 0.00012;
 const DEFAULT_WFS_VERSION = "2.0.0";
 const FALLBACK_WFS_VERSION = "1.1.0";
+const REQUEST_CRS = "EPSG:4326";
+const BBOX_AXIS_ORDER = "longitude_latitude";
+const BBOX_PARAMETER_ORDER = "west_south_east_north";
+const SERVICE_TYPE = "WFS";
+const SOURCE_DATASET_VERSION = null;
 const ERROR_PREVIEW_LENGTH = 500;
 const VALID_JSON_CONTENT_TYPES = [
   "application/json",
@@ -60,16 +66,48 @@ function urlForLayer({
   url.searchParams.set("request", "GetFeature");
   url.searchParams.set(version === "2.0.0" ? "typeNames" : "typeName", layerName);
   url.searchParams.set("outputFormat", "application/json");
-  url.searchParams.set("srsName", "EPSG:4326");
-  // ISPRA GeoServer honors EPSG:4326 axis order in this WFS context:
-  // latitude,longitude. Sending longitude,latitude returns unrelated
-  // geometries and can push the request past ARCUS' timeout.
+  url.searchParams.set("srsName", REQUEST_CRS);
+  // ISPRA GeoServer returns nz1 hydraulic features for this WFS layer set
+  // when the BBOX is sent in longitude,latitude order with EPSG:4326.
   url.searchParams.set(
     "bbox",
-    `${south},${west},${north},${east},EPSG:4326`
+    `${west},${south},${east},${north},${REQUEST_CRS}`
   );
 
   return url;
+}
+
+function requestMetadata() {
+  return {
+    bbox_axis_order: BBOX_AXIS_ORDER,
+    bbox_parameter_order: BBOX_PARAMETER_ORDER,
+    endpoint_identifier: ENDPOINT_IDENTIFIER,
+    request_crs: REQUEST_CRS,
+  };
+}
+
+function sourceMetadata({
+  fallbackUsed = false,
+  queriedAt,
+  resolvedVersion,
+  serviceUrl,
+}) {
+  return {
+    bbox_axis_order: BBOX_AXIS_ORDER,
+    bbox_parameter_order: BBOX_PARAMETER_ORDER,
+    endpoint_identifier: ENDPOINT_IDENTIFIER,
+    fallback_used: fallbackUsed,
+    layers: ISPRA_FLOOD_LAYERS.map((layer) => layer.layerName),
+    provider: "ISPRA",
+    provider_version: FLOOD_PROVIDER_VERSION,
+    queried_at: queriedAt,
+    request_crs: REQUEST_CRS,
+    requested_version: DEFAULT_WFS_VERSION,
+    resolved_version: resolvedVersion,
+    service_type: SERVICE_TYPE,
+    service_url: serviceUrl,
+    source_dataset_version: SOURCE_DATASET_VERSION,
+  };
 }
 
 function pointOnSegment(point, start, end) {
@@ -246,6 +284,7 @@ function errorPayload({
     queried_at: queriedAt,
     request: {
       method: "GET",
+      ...requestMetadata(),
       requested_version: DEFAULT_WFS_VERSION,
       resolved_version: version,
       url: requestUrl ? requestUrl.toString() : null,
@@ -405,6 +444,7 @@ async function fetchLayerVersion({
       queried_at: queriedAt,
       request: {
         method: "GET",
+        ...requestMetadata(),
         requested_version: DEFAULT_WFS_VERSION,
         resolved_version: version,
         url: requestUrl.toString(),
@@ -523,15 +563,13 @@ export async function queryIspraFloodExposure(
       matched_classes: [],
       normalized_score: null,
       source: {
-        layers: ISPRA_FLOOD_LAYERS.map((layer) => layer.layerName),
-        provider: "ISPRA",
-        provider_version: FLOOD_PROVIDER_VERSION,
-        queried_at: new Date().toISOString(),
-        requested_version: DEFAULT_WFS_VERSION,
+        ...sourceMetadata({
+          queriedAt: new Date().toISOString(),
+          resolvedVersion: null,
+          serviceUrl,
+        }),
         resolved_version: null,
         fallback_used: false,
-        service_type: "WFS",
-        service_url: serviceUrl,
       },
       status: "invalid_coordinates",
     };
@@ -550,15 +588,13 @@ export async function queryIspraFloodExposure(
       matched_classes: [],
       normalized_score: null,
       source: {
-        layers: ISPRA_FLOOD_LAYERS.map((layer) => layer.layerName),
-        provider: "ISPRA",
-        provider_version: FLOOD_PROVIDER_VERSION,
-        queried_at: new Date().toISOString(),
-        requested_version: DEFAULT_WFS_VERSION,
+        ...sourceMetadata({
+          queriedAt: new Date().toISOString(),
+          resolvedVersion: null,
+          serviceUrl,
+        }),
         resolved_version: null,
         fallback_used: false,
-        service_type: "WFS",
-        service_url: serviceUrl,
       },
       status: "service_unreachable",
     };
@@ -586,6 +622,9 @@ export async function queryIspraFloodExposure(
   const resolvedVersions = [
     ...new Set(layerResults.map((item) => item.resolved_version).filter(Boolean)),
   ];
+  const resolvedVersion =
+    resolvedVersions.length === 1 ? resolvedVersions[0] : resolvedVersions;
+  const queriedAt = new Date().toISOString();
 
   return {
     confidence: sourceAvailableStatuses.includes(status)
@@ -608,15 +647,12 @@ export async function queryIspraFloodExposure(
     matched_classes: matchedClasses,
     normalized_score: null,
     source: {
-      layers: ISPRA_FLOOD_LAYERS.map((layer) => layer.layerName),
-      provider: "ISPRA",
-      provider_version: FLOOD_PROVIDER_VERSION,
-      queried_at: new Date().toISOString(),
-      service_type: "WFS",
-      service_url: serviceUrl,
-      fallback_used: fallbackUsed,
-      requested_version: DEFAULT_WFS_VERSION,
-      resolved_version: resolvedVersions.length === 1 ? resolvedVersions[0] : resolvedVersions,
+      ...sourceMetadata({
+        fallbackUsed,
+        queriedAt,
+        resolvedVersion,
+        serviceUrl,
+      }),
       wfs_version: DEFAULT_WFS_VERSION,
     },
     status,

@@ -1,4 +1,5 @@
 export const FLOOD_PROVIDER_VERSION = "ispra-flood-wfs-v2";
+export const FLOOD_CLASS_SEVERITY_ORDER = Object.freeze(["P1", "P2", "P3"]);
 
 export const ISPRA_FLOOD_LAYERS = [
   {
@@ -15,21 +16,21 @@ export const ISPRA_FLOOD_LAYERS = [
   },
 ];
 
-const floodClassRank = {
-  P1: 1,
-  P2: 2,
-  P3: 3,
-};
-
 export function normalizeFloodClass(value) {
   const normalized = String(value || "").trim().toUpperCase();
 
-  return floodClassRank[normalized] ? normalized : null;
+  return FLOOD_CLASS_SEVERITY_ORDER.includes(normalized)
+    ? normalized
+    : null;
 }
 
 export function highestFloodClass(classes) {
   return [...new Set(classes.map(normalizeFloodClass).filter(Boolean))]
-    .sort((left, right) => floodClassRank[left] - floodClassRank[right])
+    .sort(
+      (left, right) =>
+        FLOOD_CLASS_SEVERITY_ORDER.indexOf(left) -
+        FLOOD_CLASS_SEVERITY_ORDER.indexOf(right)
+    )
     .at(-1) || null;
 }
 

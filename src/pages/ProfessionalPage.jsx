@@ -4595,7 +4595,7 @@ export default function ProfessionalPage() {
                 ? `${collapseRateNumerator} casi ARCUS documentati; denominatore ${selectedAinopBridgeIndex.ainop_bridges_total} ponti censiti; tasso provinciale ${collapseRatePer100} ogni 100; riferimento nazionale ${collapseRateNationalReference ?? "N/A"} ogni 100.`
                 : `${collapseRateNumerator} documented ARCUS cases; denominator ${selectedAinopBridgeIndex.ainop_bridges_total} counted bridges; provincial rate ${collapseRatePer100} per 100; national reference ${collapseRateNationalReference ?? "N/A"} per 100.`)
               : escapeHtml(it ? "Denominatore AINOP non disponibile." : "AINOP denominator unavailable.")}</p>
-            <i class="confidence-pill">Confidence: ${escapeHtml(collapseRateConfidence)}</i>
+            <i class="confidence-pill">${it ? "Confidenza denominatore" : "Denominator confidence"}: ${escapeHtml(collapseRateConfidence)}</i>
           </article>
           <article class="index-layer-card">
             <span>${it ? "Copertura AINOP" : "AINOP coverage"}</span>
@@ -4643,7 +4643,7 @@ export default function ProfessionalPage() {
         <div class="kpis">
           <div class="kpi"><span>Priority Index</span><strong>${finalPriorityIndexLabel} / 100</strong>${formatKpi({ level: classPriority(finalPriorityIndex), driver: it ? "Sintesi finale dopo territorio, patrimonio, pattern e azioni." : "Final synthesis after territory, heritage, pattern and actions." })}</div>
           <div class="kpi"><span>${it ? "Esposizione territoriale" : "Territorial exposure"}</span><strong>${exposurePriorityScoreLabel} / 100</strong>${formatKpi({ level: displayDriverLabel, driver: it ? "Layer idraulico, frana e sismico letti separatamente." : "Hydraulic, landslide and seismic layers read separately." })}</div>
-          <div class="kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong>${formatKpi({ level: `Confidence: ${collapseRateConfidence}`, driver: it ? "Segnale ARCUS/AINOP sul patrimonio ponte." : "ARCUS/AINOP bridge-stock signal." })}</div>
+          <div class="kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong>${formatKpi({ level: it ? `Confidenza denominatore: ${collapseRateConfidence}` : `Denominator confidence: ${collapseRateConfidence}`, driver: it ? "Segnale ARCUS/AINOP sul patrimonio ponte." : "ARCUS/AINOP bridge-stock signal." })}</div>
           <div class="kpi"><span>${it ? "Pattern storico" : "Historical pattern"}</span><strong style="font-size:18px">${escapeHtml(historicalPatternReading.type)}</strong>${formatKpi({ level: dominantCauseLabel, driver: historicalPatternReading.temporal })}</div>
         </div>
         <p class="note">${it ? "Il Priority Index aggrega esposizione idraulica, frana, sismica e Collapse Rate AINOP. Va letto come conclusione metodologica, non come sostituto dei quattro blocchi sopra." : "The Priority Index aggregates hydraulic, landslide, seismic exposure and AINOP Collapse Rate. It should be read as the methodological conclusion, not as a substitute for the four blocks above."}</p>
@@ -4707,8 +4707,8 @@ export default function ProfessionalPage() {
             ? "ARCUS non certifica sicurezza strutturale o condizione asset."
             : "ARCUS does not certify structural safety or asset condition.",
           it
-            ? `Confidenza Collapse Rate: ${collapseRateConfidence}. ${collapseRateReason}`
-            : `Collapse Rate confidence: ${collapseRateConfidence}. ${collapseRateReason}`,
+            ? `Confidenza del denominatore Collapse Rate: ${collapseRateConfidence}. ${collapseRateReason}`
+            : `Collapse Rate denominator confidence: ${collapseRateConfidence}. ${collapseRateReason}`,
         ];
 
         pathBody = `
@@ -4741,7 +4741,7 @@ export default function ProfessionalPage() {
               <div class="brief-kpi-grid">
                 <div class="brief-kpi"><span>${it ? "Final Priority Index" : "Final Priority Index"}</span><strong>${finalPriorityIndexLabel}</strong></div>
                 <div class="brief-kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong></div>
-                <div class="brief-kpi"><span>Confidence</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
+                <div class="brief-kpi"><span>${it ? "Confidenza denominatore" : "Denominator confidence"}</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
                 <div class="brief-kpi"><span>${it ? "Eventi Storici" : "Historical Events"}</span><strong>${workflowEvents.length}</strong></div>
               </div>
               ${hazardBars}
@@ -5245,11 +5245,11 @@ export default function ProfessionalPage() {
           : "";
     const collapseConfidenceNote = selectedCollapseRateAvailable
       ? it
-        ? `Confidenza Collapse Rate: ${selectedCollapseRateConfidence}. Il denominatore AINOP deve essere letto come copertura disponibile del censimento ponti, non come inventario perfetto del patrimonio.`
-        : `Collapse Rate confidence: ${selectedCollapseRateConfidence}. The AINOP denominator should be read as available bridge-census coverage, not as a perfect inventory of the bridge stock.`
+        ? `Confidenza del denominatore Collapse Rate: ${selectedCollapseRateConfidence}. Il denominatore AINOP deve essere letto come copertura disponibile del censimento ponti, non come inventario perfetto del patrimonio.`
+        : `Collapse Rate denominator confidence: ${selectedCollapseRateConfidence}. The AINOP denominator should be read as available bridge-census coverage, not as a perfect inventory of the bridge stock.`
       : it
-        ? "Confidenza Collapse Rate non disponibile per copertura AINOP insufficiente."
-        : "Collapse Rate confidence unavailable because AINOP coverage is insufficient.";
+        ? "Confidenza del denominatore Collapse Rate non disponibile per copertura AINOP insufficiente."
+        : "Collapse Rate denominator confidence unavailable because AINOP coverage is insufficient.";
     let y = margin;
 
     const setFill = (color) => pdf.setFillColor(...color);
@@ -6185,8 +6185,8 @@ export default function ProfessionalPage() {
     };
     const path02BriefConfidenceNote = selectedCollapseRateAvailable
       ? it
-        ? `Confidenza Collapse Rate: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} record caricati bloccati per campi obbligatori incompleti.`
-        : `Collapse Rate confidence: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} uploaded records were blocked for incomplete required fields.`
+        ? `Confidenza del denominatore Collapse Rate: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} record caricati bloccati per campi obbligatori incompleti.`
+        : `Collapse Rate denominator confidence: ${selectedCollapseRateConfidence}. ${assetInventoryAudit.blocked} uploaded records were blocked for incomplete required fields.`
       : it
         ? `Collapse Rate non disponibile. ${assetInventoryAudit.blocked} record caricati bloccati per campi obbligatori incompleti.`
         : `Collapse Rate unavailable. ${assetInventoryAudit.blocked} uploaded records were blocked for incomplete required fields.`;
@@ -6904,7 +6904,7 @@ export default function ProfessionalPage() {
           value: `${selectedFinalPriorityIndexLabel}/100`,
         },
         {
-          text: collapseRateRankLabel || (it ? `confidenza ${selectedCollapseRateConfidence}` : `confidence ${selectedCollapseRateConfidence}`),
+          text: collapseRateRankLabel || (it ? `confidenza denominatore ${selectedCollapseRateConfidence}` : `denominator confidence ${selectedCollapseRateConfidence}`),
           title: "Collapse Rate",
           value: selectedCollapseRateMultiplier,
         },
@@ -6981,8 +6981,8 @@ export default function ProfessionalPage() {
       {
         text: selectedCollapseRateAvailable
           ? it
-            ? `benchmark nazionale ARCUS/AINOP; confidenza ${selectedCollapseRateConfidence}`
-            : `ARCUS/AINOP national benchmark; confidence ${selectedCollapseRateConfidence}`
+            ? `benchmark nazionale ARCUS/AINOP; confidenza denominatore ${selectedCollapseRateConfidence}`
+            : `ARCUS/AINOP national benchmark; denominator confidence ${selectedCollapseRateConfidence}`
           : collapseConfidenceNote,
         title: "Collapse Rate",
         value: selectedCollapseRateMultiplier,
@@ -7110,7 +7110,7 @@ export default function ProfessionalPage() {
       text: dataRequestSummary,
     });
     fullTextBox({
-      title: it ? "Nota confidenza Collapse Rate" : "Collapse Rate confidence note",
+      title: it ? "Nota confidenza denominatore Collapse Rate" : "Collapse Rate denominator confidence note",
       text: collapseConfidenceNote,
     });
     newPage();
@@ -10718,7 +10718,8 @@ export default function ProfessionalPage() {
                       {selectedCollapseRateIncludedYearMax}
                     </span>
                     <span>
-                      Confidence: {selectedCollapseRateConfidence}
+                      Denominator confidence:{" "}
+                      {selectedCollapseRateConfidence}
                     </span>
                   </div>
                 </article>
@@ -13816,8 +13817,8 @@ export default function ProfessionalPage() {
               <p>
                 {selectedProvinceProfile
                   ? language === "it"
-                    ? `${selectedProvinceProfile.total} eventi ARCUS, Collapse Rate ${selectedCollapseRateMultiplier}, confidenza ${selectedCollapseRateConfidence}.`
-                    : `${selectedProvinceProfile.total} ARCUS events, Collapse Rate ${selectedCollapseRateMultiplier}, confidence ${selectedCollapseRateConfidence}.`
+                    ? `${selectedProvinceProfile.total} eventi ARCUS, Collapse Rate ${selectedCollapseRateMultiplier}, confidenza denominatore ${selectedCollapseRateConfidence}.`
+                    : `${selectedProvinceProfile.total} ARCUS events, Collapse Rate ${selectedCollapseRateMultiplier}, denominator confidence ${selectedCollapseRateConfidence}.`
                   : "-"}
               </p>
             </article>

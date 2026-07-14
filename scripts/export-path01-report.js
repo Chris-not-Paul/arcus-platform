@@ -1237,7 +1237,7 @@ function buildFullReportHtml({
         <p>${collapseRateAvailable
           ? `${escapeHtml(String(collapseRateNumerator))} documented ARCUS cases; denominator ${escapeHtml(String(ainopProvince.ainop_bridges_total))} AINOP bridges; provincial rate ${escapeHtml(collapseRateValue)} per 100; national reference ${escapeHtml(String(nationalReference))} per 100; dataset ${escapeHtml(String(datasetVersion))}; data cutoff ${escapeHtml(String(dataCutoffDate))}; latest included event ${escapeHtml(String(latestEventDate))}; latest included year ${escapeHtml(String(includedYearMax))}.`
           : "No reliable AINOP bridge denominator is available for this province."}</p>
-        <i class="confidence-pill">Confidence: ${escapeHtml(collapseRateConfidence)}</i>
+        <i class="confidence-pill">Denominator confidence: ${escapeHtml(collapseRateConfidence)}</i>
       </article>
     </div>`;
 
@@ -1475,7 +1475,7 @@ function buildBriefHtml({
   const shortLimitations = [
     "Province-level screening only, not design scale.",
     "ARCUS does not certify structural safety or asset condition.",
-    `Collapse Rate confidence: ${collapseRateConfidence}. ${collapseRateReason}`,
+    `Collapse Rate denominator confidence: ${collapseRateConfidence}. ${collapseRateReason}`,
   ];
 
   return `<!doctype html>
@@ -1513,7 +1513,7 @@ function buildBriefHtml({
         <div class="brief-kpi-grid">
           <div class="brief-kpi"><span>Priority Index</span><strong>${Math.round(priorityIndex)}</strong></div>
           <div class="brief-kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong></div>
-          <div class="brief-kpi"><span>Confidence</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
+          <div class="brief-kpi"><span>Denominator confidence</span><strong>${escapeHtml(collapseRateConfidence)}</strong></div>
           <div class="brief-kpi"><span>Historical Events</span><strong>${events.length}</strong></div>
         </div>
         ${hazardBars(focus, exposureProfile)}

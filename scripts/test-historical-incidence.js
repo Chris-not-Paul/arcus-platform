@@ -126,6 +126,14 @@ assert.equal(events2026.length, 1);
 assert.equal(torino.dataset_version, index.metadata.dataset_version);
 assert.equal(torino.generated_at, index.metadata.generated_at);
 assert.equal(torino.confidence, "high");
+assert.equal(torino.denominator_confidence, "high");
+assert.equal(
+  torino.denominator_confidence_reason,
+  "AINOP denominator is broad enough for provincial relative benchmarking."
+);
+assert.equal(torino.confidence_type, "denominator_sample_size");
+assert.equal(torino.numerator_evidence_confidence, "documented");
+assert.equal(torino.overall_data_confidence, null);
 validateRecord(torino);
 
 const torinoDisplayedCases = torinoEvents.length;
@@ -150,6 +158,10 @@ assert.equal(agrigento.denominator_count, 0);
 assert.equal(agrigento.provincial_rate_per_100, null);
 assert.equal(agrigento.relative_to_national, null);
 assert.equal(agrigento.confidence, "unavailable");
+assert.equal(agrigento.denominator_confidence, "unavailable");
+assert.equal(agrigento.confidence_type, "denominator_sample_size");
+assert.equal(agrigento.numerator_evidence_confidence, "documented");
+assert.equal(agrigento.overall_data_confidence, null);
 validateRecord(agrigento);
 
 const ancona = provinceRecord(index, "Ancona");
@@ -256,6 +268,8 @@ console.log(
       "zero-case-province",
       "missing-denominator-province",
       "torino-consistent-values",
+      "denominator-confidence-typed",
+      "overall-data-confidence-null",
       "incoherent-json-rejected",
       "deterministic-rebuild",
     ],

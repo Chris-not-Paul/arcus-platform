@@ -152,11 +152,65 @@ Rules:
 - WFS 2.0.0 primary;
 - controlled WFS 1.1.0 fallback;
 - WMS not used for calculation;
-- BBOX candidate retrieval;
+- BBOX candidate retrieval using `west,south,east,north,EPSG:4326`;
 - local point-in-polygon for `Polygon`, `MultiPolygon`, holes and boundary points;
 - `feature_count > 0` never implies `intersects = true`;
 - `normalized_score = null`;
 - `no_intersection` remains distinct from unavailable/error statuses.
+
+Provider metadata exposed with each result:
+
+```json
+{
+  "provider": "ISPRA",
+  "provider_version": "ispra-flood-wfs-v2",
+  "source_dataset_version": null,
+  "service_type": "WFS",
+  "endpoint_identifier": "ispra-nz1-wfs",
+  "request_crs": "EPSG:4326",
+  "bbox_axis_order": "longitude_latitude",
+  "bbox_parameter_order": "west_south_east_north"
+}
+```
+
+### Live P1/P2/P3 Positive Validation
+
+The hydraulic vertical slice has now been validated with real positive ISPRA points. Points were not chosen manually: they were selected from real WFS geometries, moved to an interior grid point away from polygon edges, then verified by the ARCUS provider and by the authenticated Professional endpoint.
+
+| Case | Coordinates | WMS | WFS matched classes | Highest class | Result |
+|------|-------------|-----|---------------------|---------------|--------|
+| P1-only, source feature `aree_peric_idraulica_p1.23565` | `38.94973151, 8.72300141` | [PNG saved](assets/hydraulic-validation/p1-only.png), visual-only WMS control | `P1` | `P1` | Professional endpoint returns `available`; P2/P3 do not intersect |
+| P1/P2, source feature `aree_peric_idraulica_p1.23553` | `38.94340710, 8.91222919` | [PNG saved](assets/hydraulic-validation/p1-p2.png), visual-only WMS control | `P1`, `P2` | `P2` | Professional endpoint returns `available`; P3 does not intersect |
+| P1/P2/P3, source feature `aree_peric_idraulica_p1.23539` | `37.67112259, 12.58006927` | [PNG saved](assets/hydraulic-validation/p1-p2-p3.png), visual-only WMS control | `P1`, `P2`, `P3` | `P3` | Professional endpoint returns `available`; all three layers intersect |
+| Torino control | `45.28970, 7.94194` | [PNG saved](assets/hydraulic-validation/torino-control.png), visual-only WMS control | none | `null` | Professional endpoint returns `no_intersection` |
+
+The WFS layers are not all globally coincident. The live sample contains P1-only, P1/P2 and P1/P2/P3 signatures. ARCUS therefore displays all matched classes and computes the highest class from the matched set; it does not force the output to match only the layer used to discover the candidate point.
+
+Current live positive endpoint result for the P1/P2/P3 point:
+
+```json
+{
+  "status": "available",
+  "matched_classes": ["P1", "P2", "P3"],
+  "highest_class": "P3",
+  "normalized_score": null,
+  "p1": {
+    "status": "available",
+    "feature_count": 1,
+    "intersects": true
+  },
+  "p2": {
+    "status": "available",
+    "feature_count": 1,
+    "intersects": true
+  },
+  "p3": {
+    "status": "available",
+    "feature_count": 1,
+    "intersects": true
+  }
+}
+```
 
 Current live Torino result:
 
@@ -166,25 +220,70 @@ Current live Torino result:
   "p1": {
     "status": "no_intersection",
     "http_status": 200,
-    "feature_count": 0,
+    "feature_count": 1,
     "intersects": false
   },
   "p2": {
     "status": "no_intersection",
     "http_status": 200,
-    "feature_count": 0,
+    "feature_count": 1,
     "intersects": false
   },
   "p3": {
     "status": "no_intersection",
     "http_status": 200,
-    "feature_count": 0,
+    "feature_count": 1,
     "intersects": false
   }
 }
 ```
 
-Live positive P1/P2/P3 validation is still pending because the last external ISPRA verification run was blocked by the execution limit. Deterministic mocked tests cover P1, P2, P3, MultiPolygon, boundary and inner-ring cases.
+This confirms the intended distinction between candidate feature retrieval and actual point intersection.
+
+### Manual UI Validation
+
+The interface was checked through the Professional login and Path 01 entry flow:
+
+- Professional login opened correctly with the local development account;
+- Path 01 opened on `Define project location`;
+- the page exposed the expected sections: `Project location`, `Official geospatial exposure`, `Provincial historical context`, working package and disabled report state before point validation;
+- the same positive coordinates were then validated through the authenticated endpoint used by the UI.
+
+Repeatable UI check:
+
+1. Sign in as `arcus` / `professional`.
+2. Open `Professional`.
+3. Choose `01 / New territory - Screen area`.
+4. Enter latitude `37.67112259` and longitude `12.58006927`.
+5. Click `Check point`.
+6. Confirm that Project Location derives `Trapani`, Official Geospatial Exposure shows `available`, matched classes show `P1`, `P2`, `P3`, highest class shows `P3`, `queried_at` is populated, Provincial Historical Context is still shown separately, and report generation remains tied to the validated project point.
+
+Deterministic mocked tests continue to cover P1, P2, P3, MultiPolygon, boundary and inner-ring cases in addition to the live ISPRA checks above.
+
+### Hydraulic Class Overlap Characterisation
+
+The live class-overlap validation used real ISPRA WFS geometries and then re-ran every candidate through the ARCUS provider. The search checked `27` internal candidate points from fetched `Polygon`/`MultiPolygon` geometries and found three distinct signatures.
+
+| Case | Coordinates | Expected signature | Actual signature | Highest | WMS check | Result |
+|------|-------------|--------------------|------------------|---------|-----------|--------|
+| P1-only | `38.94973151, 8.72300141` | `["P1"]` | `["P1"]` | `P1` | `GetMap`, `CRS:84`, 512x512 PNG returned for visual inspection | `available`; only P1 intersects |
+| P1/P2 | `38.94340710, 8.91222919` | `["P1","P2"]` | `["P1","P2"]` | `P2` | `GetMap`, `CRS:84`, 512x512 PNG returned for visual inspection | `available`; P1/P2 intersect |
+| P1/P2/P3 | `37.67112259, 12.58006927` | `["P1","P2","P3"]` | `["P1","P2","P3"]` | `P3` | `GetMap`, `CRS:84`, 512x512 PNG returned for visual inspection | `available`; all three layers intersect |
+| Torino control | `45.28970, 7.94194` | `[]` | `[]` | `null` | `GetMap`, `CRS:84`, 512x512 PNG returned for visual inspection | `no_intersection`; candidate features are not point exposure |
+
+Observed candidate-signature counts in the live run:
+
+```json
+{
+  "[\"P1\",\"P2\",\"P3\"]": 22,
+  "[\"P1\",\"P2\"]": 4,
+  "[\"P1\"]": 1
+}
+```
+
+This means the layers are not globally coincident. They behave as nested or partially overlapping geometries in the sampled regions, and ARCUS correctly preserves all matched classes before deriving `highest_class`.
+
+WMS remains a visual control only. Path 01, reports and exports must continue to treat WFS plus local point-in-polygon as the analytical source of truth.
 
 ## Report And Export Behavior
 
@@ -247,6 +346,5 @@ Validated:
 
 ## Technical Debt
 
-- Live positive P1/P2/P3 ISPRA points still need to be confirmed once external requests are available again.
 - `hazard-exposure-preview` remains a provincial ARCUS proxy and is not removed.
 - Landslide, seismic, river network and capable-fault analytical providers are not part of this milestone.

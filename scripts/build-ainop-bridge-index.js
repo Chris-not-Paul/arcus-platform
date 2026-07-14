@@ -324,10 +324,10 @@ export function buildAinopBridgeIndex({
         latest_event_date: latestEventDate,
         confidence,
         denominator_confidence: confidence,
+        denominator_confidence_reason: reason,
+        confidence_type: "denominator_sample_size",
         numerator_evidence_confidence: numeratorEvidenceConfidence,
-        overall_data_confidence: confidence === "unavailable"
-          ? "limited"
-          : confidence,
+        overall_data_confidence: null,
         collapse_rate_confidence: confidence,
         collapse_rate_confidence_reason: reason,
       };

@@ -4,6 +4,10 @@ import {
   clearHazardExposureCache,
   evaluatePointHazardExposure,
 } from "../server/hazard/hazardExposureService.js";
+import {
+  FLOOD_CLASS_SEVERITY_ORDER,
+  highestFloodClass,
+} from "../server/hazard/normalizers/floodNormalizer.js";
 
 const point = {
   latitude: 45,
@@ -165,7 +169,55 @@ function classSummary(result) {
   };
 }
 
-let result = await query(fetchWithoutFeatures());
+function firstLayer(result, className = "P1") {
+  return result.hydraulic.layer_results.find(
+    (item) => item.className === className
+  );
+}
+
+assert.deepEqual(FLOOD_CLASS_SEVERITY_ORDER, ["P1", "P2", "P3"]);
+assert.equal(highestFloodClass(["P2", "P1", "P3"]), "P3");
+
+const capturedUrls = [];
+let result = await query(async (url) => {
+  capturedUrls.push(new URL(url.toString()));
+
+  return jsonResponse(featureCollection({ empty: true }));
+});
+const p1RequestUrl = capturedUrls.find(
+  (url) => layerClassFromUrl(url) === "P1"
+);
+assert.equal(p1RequestUrl.searchParams.get("version"), "2.0.0");
+assert.equal(
+  p1RequestUrl.searchParams.get("typeNames"),
+  "nz1:aree_peric_idraulica_p1"
+);
+assert.equal(p1RequestUrl.searchParams.get("typeName"), null);
+assert.equal(p1RequestUrl.searchParams.get("srsName"), "EPSG:4326");
+assert.equal(
+  p1RequestUrl.searchParams.get("bbox"),
+  "6.99988,44.99988,7.00012,45.00012,EPSG:4326"
+);
+assert.equal(result.hydraulic.source.request_crs, "EPSG:4326");
+assert.equal(result.hydraulic.source.bbox_axis_order, "longitude_latitude");
+assert.equal(
+  result.hydraulic.source.bbox_parameter_order,
+  "west_south_east_north"
+);
+assert.equal(result.hydraulic.source.endpoint_identifier, "ispra-nz1-wfs");
+assert.equal(result.hydraulic.source.source_dataset_version, null);
+assert.notEqual(
+  result.hydraulic.source.provider_version,
+  result.hydraulic.source.source_dataset_version
+);
+assert.equal(firstLayer(result).request.request_crs, "EPSG:4326");
+assert.equal(firstLayer(result).request.bbox_axis_order, "longitude_latitude");
+assert.equal(
+  firstLayer(result).request.bbox_parameter_order,
+  "west_south_east_north"
+);
+
+result = await query(fetchWithoutFeatures());
 assert.deepEqual(classSummary(result), {
   highest: null,
   matched: [],
@@ -362,7 +414,10 @@ result = await query(async () =>
 assert.equal(result.hydraulic.status, "invalid_response");
 assert.equal(result.hydraulic.highest_class, null);
 
+const fallbackUrls = [];
 result = await query(async (url) => {
+  fallbackUrls.push(new URL(url.toString()));
+
   if (url.searchParams.get("version") === "2.0.0") {
     return textResponse({
       body: "<ows:ExceptionReport><ows:ExceptionText>typeNames unsupported</ows:ExceptionText></ows:ExceptionReport>",
@@ -378,6 +433,17 @@ assert.equal(result.hydraulic.layer_results[0].requested_version, "2.0.0");
 assert.equal(result.hydraulic.layer_results[0].resolved_version, "1.1.0");
 assert.equal(result.hydraulic.layer_results[0].fallback_used, true);
 assert.equal(result.hydraulic.layer_results[0].original_error.status, "provider_exception");
+const fallbackP1Url = fallbackUrls.find(
+  (url) =>
+    url.searchParams.get("version") === "1.1.0" &&
+    layerClassFromUrl(url) === "P1"
+);
+assert.equal(fallbackP1Url.searchParams.get("typeName"), "nz1:aree_peric_idraulica_p1");
+assert.equal(fallbackP1Url.searchParams.get("typeNames"), null);
+assert.equal(
+  fallbackP1Url.searchParams.get("bbox"),
+  "6.99988,44.99988,7.00012,45.00012,EPSG:4326"
+);
 
 result = await query(async (url) => {
   const className = layerClassFromUrl(url);
@@ -461,6 +527,8 @@ console.log(
     ok: true,
     checks: [
       "valid-geojson-without-feature",
+      "wfs-2-url-bbox-order",
+      "source-provider-metadata",
       "feature-count-without-point-intersection",
       "valid-geojson-with-feature",
       "p1-only",
@@ -479,6 +547,10 @@ console.log(
       "empty-response",
       "invalid-geojson",
       "wfs-version-fallback",
+      "wfs-11-url-bbox-order",
+      "centralized-severity-order",
+      "source-dataset-version-distinct-from-provider-version",
+      "metadata-bbox-axis-order",
       "single-layer-error-partial",
       "invalid-coordinates",
       "cache-bypass-development",

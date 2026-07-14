@@ -125,7 +125,10 @@ Torino has no additional 2026 event in the current internal dataset, so the prov
   "data_cutoff_date": "2026-07-10T14:20:00.000Z",
   "latest_event_date": "2026-04-02",
   "included_year_max": 2026,
-  "overall_data_confidence": "high"
+  "denominator_confidence": "high",
+  "confidence_type": "denominator_sample_size",
+  "numerator_evidence_confidence": "documented",
+  "overall_data_confidence": null
 }
 ```
 
@@ -174,6 +177,22 @@ Visible fields include:
 - latest included event date/year;
 - confidence and caveat.
 
+The visible confidence refers to AINOP denominator availability and sample size. It must not be presented as a collapse probability, a structural reliability statement or an overall risk confidence.
+
+Current confidence fields:
+
+```json
+{
+  "denominator_confidence": "high",
+  "confidence_type": "denominator_sample_size",
+  "numerator_evidence_confidence": "documented",
+  "overall_data_confidence": null,
+  "collapse_rate_confidence": "high"
+}
+```
+
+`overall_data_confidence` is intentionally `null` because no approved methodology currently combines denominator coverage, numerator evidence quality and source traceability into one overall confidence level for Historical Collapse Incidence.
+
 ## Tests
 
 Run:
@@ -191,6 +210,8 @@ Covered cases:
 - dataset version, data cutoff, latest event date and included year max are derived;
 - numerator, denominator, provincial rate and relative incidence are mathematically coherent;
 - UI/report/export use the same numerator field;
+- denominator confidence is explicitly typed as `denominator_sample_size`;
+- `overall_data_confidence` remains `null`;
 - zero-case and missing-denominator provinces are handled;
 - incoherent records are rejected.
 
