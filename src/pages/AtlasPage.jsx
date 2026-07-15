@@ -1041,11 +1041,11 @@ function AtlasPage() {
     activeHazardOverlays.landslide
       ? {
           attribution:
-            "ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia",
-          id: "ispra-idrogeo-frane",
-          layers: "frane",
+            "ISPRA IdroGEO - Pericolosita frane PAI v.5.0 (2024)",
+          id: "ispra-idrogeo-landslide-pai",
+          layers: "idrogeo:pericolosita_frane",
           opacity: 0.42,
-          url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/frane/ows",
+          url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/wms",
         }
       : null,
   ].filter(Boolean);

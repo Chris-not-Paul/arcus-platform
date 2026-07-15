@@ -317,6 +317,52 @@ Full Report, One-Page Brief and standalone export now use the Professional scope
 - `queried_at`;
 - `normalized_score = null`.
 
+### Official Landslide Exposure - ISPRA PAI
+
+Path 01 now also exposes official point-level landslide hazard in shadow mode through the ISPRA IdroGEO PAI WFS layer.
+
+| Element | Value |
+|---------|-------|
+| Provider | ISPRA / IdroGEO |
+| WFS endpoint | `https://idrogeo.isprambiente.it/geoserver/idrogeo/ows` |
+| WFS layer | `idrogeo:pericolosita_frane` |
+| WMS visual layer | `https://idrogeo.isprambiente.it/geoserver/idrogeo/wms`, `idrogeo:pericolosita_frane` |
+| Source version | `5.0` |
+| Reference year | `2024` |
+| Class attribute | `cod_per_it` |
+| Classes | `AA`, `P1`, `P2`, `P3`, `P4` |
+| Analysis mode | `point_intersection` |
+| Score behavior | `normalized_score = null` |
+
+The analytical chain is:
+
+```text
+project point
+-> ISPRA PAI WFS candidate retrieval
+-> ARCUS point-in-polygon
+-> matched PAI classes
+-> highest ordered class P1-P4
+-> Path 01 UI/report/export metadata
+```
+
+The `frane` WMS/IFFI inventory layer is not used as the analytical PAI hazard source. It has been replaced in the ARCUS WMS controls by the visual PAI layer `idrogeo:pericolosita_frane`.
+
+Live validation points:
+
+| Case | Coordinates | WMS | WFS matched classes | Highest class | Result |
+|------|-------------|-----|---------------------|---------------|--------|
+| AA attention area | `36.82837857, 14.72710000` | [PNG](assets/landslide-validation/aa.png) | `AA` attention area | `null` | `available` |
+| P1 moderate hazard | `43.50846429, 10.33828571` | [PNG](assets/landslide-validation/p1.png) | `P1` | `P1` | `available` |
+| P2 medium hazard | `44.40296071, 9.53897143` | [PNG](assets/landslide-validation/p2.png) | `P2` | `P2` | `available` |
+| P3 high hazard | `38.92257500, 8.78543214` | [PNG](assets/landslide-validation/p3.png) | `P3` | `P3` | `available` |
+| P4 very high hazard | `40.10005714, 16.00375000` | [PNG](assets/landslide-validation/p4.png) | `P4` | `P4` | `available` |
+| Torino control | `45.28970000, 7.94194000` | [PNG](assets/landslide-validation/torino-control.png) | none | `null` | `no_intersection` |
+
+Detailed discovery and validation are documented in:
+
+- `docs/PROFESSIONAL_LANDSLIDE_SOURCE_DISCOVERY.md`
+- `docs/PROFESSIONAL_LANDSLIDE_EXPOSURE_VALIDATION.md`
+
 Reports must not describe Professional data freshness as real-time/live. The database is a curated snapshot.
 
 ## Tests
@@ -347,4 +393,5 @@ Validated:
 ## Technical Debt
 
 - `hazard-exposure-preview` remains a provincial ARCUS proxy and is not removed.
-- Landslide, seismic, river network and capable-fault analytical providers are not part of this milestone.
+- Seismic, river network and capable-fault analytical providers are not part of this milestone.
+- Landslide PAI is implemented only for Path 01 point exposure in shadow mode; it is not yet part of Final Priority Index scoring or Path 02 ranking.

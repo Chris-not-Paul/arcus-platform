@@ -2,23 +2,47 @@
 
 Audit statico del branch corrente. Nessun file di produzione e nessuna formula sono stati modificati.
 
+## Addendum 2026-07-14 - ISPRA PAI landslide provider
+
+ARCUS Professional Path 01 ora include un provider ufficiale point-level per l'esposizione a pericolosita da frana PAI, in shadow mode:
+
+- provider: ISPRA / IdroGEO;
+- endpoint WFS analitico: `https://idrogeo.isprambiente.it/geoserver/idrogeo/ows`;
+- layer WFS analitico: `idrogeo:pericolosita_frane`;
+- endpoint WMS visuale: `https://idrogeo.isprambiente.it/geoserver/idrogeo/wms`;
+- layer WMS visuale: `idrogeo:pericolosita_frane`;
+- versione sorgente: mosaicatura PAI nazionale v.5.0, anno riferimento 2024;
+- attributo classe: `cod_per_it`;
+- mapping classi: `0 = AA`, `1 = P1`, `2 = P2`, `3 = P3`, `4 = P4`;
+- operazione: WFS candidate retrieval + point-in-polygon locale ARCUS;
+- scoring: `normalized_score = null`, nessun contributo al Final Priority Index.
+
+Il precedente layer visuale `frane`/IFFI non e la fonte analitica PAI e non deve essere usato come provider di hazard PAI. La configurazione overlay e stata allineata a `idrogeo:pericolosita_frane`.
+
+Dettagli:
+
+- `docs/PROFESSIONAL_LANDSLIDE_SOURCE_DISCOVERY.md`
+- `docs/PROFESSIONAL_LANDSLIDE_EXPOSURE_VALIDATION.md`
+
 ## Sintesi esecutiva
 
-Nel repository sono presenti due tipi distinti di informazione territoriale:
+Nel repository sono presenti tre tipi distinti di informazione territoriale:
 
-1. **Layer reali pubblici ISPRA visualizzati via WMS**: esistono due overlay remoti, uno per pericolosita idraulica P3 ISPRA SDI e uno per frane ISPRA IdroGEO. Sono layer visuali caricati come immagini WMS, non dataset interrogabili localmente.
-2. **Proxy ARCUS costruiti dal database dei collassi**: `hazard-exposure-preview.json`, `territory-profiles.json` e `ainop-bridge-index.json` producono indicatori territoriali e punteggi, ma non sono intersezioni geospaziali con layer ISPRA/INGV.
+1. **Provider WFS ufficiali Path 01 in shadow mode**: ISPRA idraulica P1/P2/P3 e ISPRA IdroGEO PAI frane `idrogeo:pericolosita_frane` sono interrogati dal backend per esposizione puntuale, con `normalized_score = null`.
+2. **Layer reali pubblici ISPRA visualizzati via WMS**: overlay remoti usati come controllo visuale, non come fonte di scoring.
+3. **Proxy ARCUS costruiti dal database dei collassi**: `hazard-exposure-preview.json`, `territory-profiles.json` e `ainop-bridge-index.json` producono indicatori territoriali e punteggi, ma non sono intersezioni geospaziali con layer ISPRA/INGV.
 
 Non risultano presenti nel repository dataset hazard locali in formato Shapefile, GeoPackage, GeoTIFF/TIFF, raster scientifici, griglie INGV MPS04, WFS o vettori ISPRA/IdroGEO scaricati. I riferimenti a INGV MPS04, ITHACA, Protezione Civile e IdroGEO completi sono attualmente **metadata/registry** o testo di interfaccia, non dati calcolabili gia ingestiti.
 
-La conclusione operativa e netta: **ARCUS Professional oggi puo mostrare alcuni layer ISPRA come contesto visuale, ma non calcola ancora esposizioni geospaziali effettive ISPRA/INGV nei Path 01 e Path 02**. I punteggi correnti sono basati su record ARCUS, fonti documentate, classificazioni interne, profili provinciali e denominatori AINOP, non su point-in-polygon, raster sampling o overlay analysis dei layer hazard pubblici.
+La conclusione operativa aggiornata e: **Path 01 calcola esposizioni puntuali ufficiali WFS per idraulica ISPRA e frane PAI ISPRA in shadow mode, ma questi risultati non contribuiscono ancora al Final Priority Index**. Path 02 e i punteggi correnti restano basati su record ARCUS, fonti documentate, classificazioni interne, profili provinciali e denominatori AINOP, non su overlay analysis completa dei layer hazard pubblici.
 
 ## Classificazione A/B/C/D
 
 ### A. Hazard reali derivati da dati ISPRA/INGV
 
-- `ISPRA SDI - Aree pericolosita idraulica P3`: presente come servizio WMS remoto visuale.
-- `ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia`: presente come servizio WMS remoto visuale.
+- `ISPRA SDI - Aree pericolosita idraulica P1/P2/P3`: presente come WFS point-level Path 01 in shadow mode e come WMS visuale.
+- `ISPRA IdroGEO - Pericolosita frane PAI`: presente come WFS point-level Path 01 in shadow mode e come WMS visuale.
+- `ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia`: non usato come provider analitico PAI.
 - `INGV MPS04 seismic hazard`: presente solo come metadata pianificato in `external-hazard-layers.json` e come label UI. Nessun layer WMS/WFS/griglia locale trovato.
 - `ISPRA ITHACA capable faults`: presente solo come metadata pianificato. Nessun dato vettoriale locale trovato.
 
@@ -109,35 +133,41 @@ La conclusione operativa e netta: **ARCUS Professional oggi puo mostrare alcuni 
 17. **Problemi**: WMS e immagine, non dato analitico. Senza WFS/GeoJSON/Shapefile/GeoPackage/raster non si possono calcolare esposizioni riproducibili offline. Possibili problemi futuri: axis order WMS 1.3.0, disponibilita servizio remoto, performance, cache, CORS, legenda.
 18. **Dati dichiarati ma assenti**: non sono presenti P1/P2, reticolo idrografico, campi di pericolosita o geometrie locali.
 
-### 3. ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia
+### 3. ISPRA IdroGEO - Pericolosita frane PAI
 
 1. **Percorsi/configurazioni**:
    - `src/pages/AtlasPage.jsx`
    - `src/pages/ProfessionalPage.jsx`
+   - `server/hazard/providers/ispraLandslideProvider.js`
+   - `server/hazard/normalizers/landslideNormalizer.js`
    - rendering in `src/components/map/CollapseMap.jsx`
-2. **Nome sorgente**: `ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia`.
-3. **Formato**: servizio remoto WMS, reso come tile `image/png` trasparente.
+2. **Nome sorgente**: `Mosaicatura della pericolosita da frana PAI`.
+3. **Formato**: servizio remoto WFS per il calcolo point-level; servizio remoto WMS per controllo visuale.
 4. **Dimensione file**: nessun file locale.
-5. **Tipo**: servizio remoto; layer visuale; non dato gia usato nei calcoli.
-6. **Tipo dato**: non determinabile dal repository. In ARCUS e immagine WMS; il dato originario IdroGEO/IFFI puo contenere geometrie, ma ARCUS non le carica.
-7. **CRS**: non dichiarato nel codice.
-8. **Estensione territoriale**: non documentata localmente.
-9. **Versione/data aggiornamento**: assente nel repo.
-10. **Campi/attributi disponibili**: nessuno disponibile in ARCUS; solo configurazione WMS.
-11. **Valori/classi presenti**: layer name `frane`. Non risultano classi PAI/IFFI o legenda nel repo.
-12. **Significato tecnico classi**: non documentato nel repository.
-13. **Valori mancanti**: geometrie, attributi IFFI, tipologia frana, stato, intensita, pericolosita, legenda, CRS, timestamp.
+5. **Tipo**: servizio remoto; dato gia utilizzato nei calcoli Path 01 in shadow mode; layer visuale WMS separato.
+6. **Tipo dato**: poligono/multipoligono.
+7. **CRS**: ARCUS richiede `EPSG:4326`; BBOX `west,south,east,north,EPSG:4326`.
+8. **Estensione territoriale**: nazionale, Italia.
+9. **Versione/data aggiornamento**: mosaicatura PAI ISPRA v.5.0, riferimento 2024.
+10. **Campi/attributi disponibili**: `id`, `geom`, `cod_per_it`.
+11. **Valori/classi presenti**: `0 = AA`, `1 = P1`, `2 = P2`, `3 = P3`, `4 = P4`.
+12. **Significato tecnico classi**: `AA` aree di attenzione; `P1` moderata; `P2` media; `P3` elevata; `P4` molto elevata.
+13. **Valori mancanti**: nessun raster/griglia locale; nessun normalized score assegnato.
 14. **Codice che carica/visualizza**:
-    - `AtlasPage`: `publicWmsOverlays` include `id: "ispra-idrogeo-frane"`, `url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/frane/ows"`, `layers: "frane"`.
-    - `ProfessionalPage`: `professionalWmsOverlays` include `id: "professional-ispra-landslides"`.
+    - `AtlasPage`: `publicWmsOverlays` include `id: "ispra-idrogeo-landslide-pai"`, `url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/wms"`, `layers: "idrogeo:pericolosita_frane"`.
+    - `ProfessionalPage`: `professionalWmsOverlays` include `id: "professional-ispra-landslide-pai"`.
+    - `hazardExposureService`: include provider `landslide`.
+    - `ispraLandslideProvider`: interroga WFS e usa point-in-polygon locale.
     - `CollapseMap`: render WMS visuale.
-15. **Contribuisce al punteggio?** No. Visuale soltanto.
+15. **Contribuisce al punteggio?** No. Produce esposizione ufficiale point-level in shadow mode; `normalized_score = null`; non contribuisce al Final Priority Index.
 16. **Operazione geospaziale necessaria**:
-    - Path 01 punto: point-in-polygon/nearest su frane o hazard polygons.
+    - Path 01 punto: WFS candidate retrieval + point-in-polygon locale.
     - Path 01 area/tracciato: overlay e percentuale area/tracciato/buffer interessata.
-    - Path 02 ponti: point-in-polygon o distanza dal fenomeno franoso piu vicino per ogni asset.
-17. **Problemi**: la configurazione usa un layer di inventario `frane`, non una classe di pericolosita esplicitamente documentata nel repo. Mancano attributi e legenda per distinguere inventario, suscettibilita, pericolosita o rischio.
-18. **Dati dichiarati ma assenti**: IFFI/PAI strutturato, classi landslide hazard, WFS, dati locali.
+    - Path 02 ponti: non implementato in questo milestone.
+17. **Problemi**: servizio remoto; possibili differenze visuali WMS/WFS per scala/generalizzazione; performance dipendente dal provider.
+18. **Dati dichiarati ma assenti**: integrazione Path 02, scoring calibrato, area/tracciato, campionamento raster.
+
+Nota: il layer `frane`/IFFI resta distinto dal layer PAI e non e usato come fonte analitica di pericolosita PAI.
 
 ### 4. INGV MPS04 seismic hazard
 

@@ -173,6 +173,83 @@ function assert(condition, message) {
   }
 }
 
+const p4Point = {
+  latitude: 40.10005714,
+  longitude: 16.00375,
+};
+
+function hazardFeatureCollection(features = []) {
+  return {
+    features,
+    type: "FeatureCollection",
+  };
+}
+
+function p4LandslideFeature() {
+  return {
+    geometry: {
+      coordinates: [
+        [
+          [15.99, 40.09],
+          [16.02, 40.09],
+          [16.02, 40.11],
+          [15.99, 40.11],
+          [15.99, 40.09],
+        ],
+      ],
+      type: "Polygon",
+    },
+    properties: {
+      cod_per_it: 4,
+      id: "mock-p4",
+    },
+    type: "Feature",
+  };
+}
+
+async function withMockedHazardFetch(callback) {
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async (url, options) => {
+    const value = new URL(url.toString());
+    const layerName =
+      value.searchParams.get("typeNames") ||
+      value.searchParams.get("typeName");
+
+    if (
+      layerName === "idrogeo:pericolosita_frane" ||
+      String(url).includes("pericolosita_frane")
+    ) {
+      return new Response(
+        JSON.stringify(hazardFeatureCollection([p4LandslideFeature()])),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          status: 200,
+        }
+      );
+    }
+
+    if (String(layerName || "").startsWith("nz1:aree_peric_idraulica")) {
+      return new Response(JSON.stringify(hazardFeatureCollection()), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        status: 200,
+      });
+    }
+
+    return originalFetch(url, options);
+  };
+
+  try {
+    return await callback();
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+}
+
 await upsertUser({
   password: "suite-admin-password",
   role: "admin",
@@ -366,6 +443,73 @@ try {
     "suite-free@example.test",
     "suite-free-password-3"
   );
+
+  await withMockedHazardFetch(async () => {
+    const landslideOnly = await json(
+      await postJson(
+        "/api/professional/hazard-exposure/point",
+        {
+          ...p4Point,
+          bypassCache: true,
+          hazards: ["landslide"],
+        },
+        resetFlowSession
+      )
+    );
+
+    assert(
+      landslideOnly.landslide.status === "available",
+      `landslide-only endpoint did not return available: ${JSON.stringify(landslideOnly.landslide)}`
+    );
+    assert(
+      landslideOnly.landslide.highest_hazard_class === "P4",
+      "landslide-only endpoint did not preserve P4"
+    );
+    assert(
+      landslideOnly.landslide.normalized_score === null,
+      "landslide-only endpoint assigned a normalized score"
+    );
+    assert(
+      typeof landslideOnly.request_id === "string" &&
+        landslideOnly.request_id.length >= 8,
+      "landslide-only endpoint did not expose request_id"
+    );
+
+    const multiHazard = await json(
+      await postJson(
+        "/api/professional/hazard-exposure/point",
+        {
+          ...p4Point,
+          bypassCache: true,
+          hazards: ["hydraulic", "landslide"],
+        },
+        resetFlowSession
+      )
+    );
+
+    assert(
+      multiHazard.hydraulic.status === "no_intersection",
+      "multi-hazard endpoint did not preserve hydraulic no_intersection"
+    );
+    assert(
+      multiHazard.landslide.status === "available",
+      "multi-hazard endpoint did not return landslide available"
+    );
+    assert(
+      multiHazard.landslide.highest_hazard_class === "P4",
+      "multi-hazard endpoint did not preserve landslide P4"
+    );
+    assert(
+      typeof multiHazard.request_id === "string" &&
+        multiHazard.query.request_id === multiHazard.request_id,
+      "multi-hazard endpoint did not preserve query request_id"
+    );
+    assert(
+      multiHazard.query.hazards.includes("hydraulic") &&
+        multiHazard.query.hazards.includes("landslide"),
+      "multi-hazard endpoint did not echo requested hazards"
+    );
+  });
 
   const exportResponse = await postDownload(
     "/api/professional/exports",
@@ -659,6 +803,7 @@ try {
         "password-change",
         "self-session-management",
         "password-reset-email",
+        "hazard-endpoint-p4",
         "controlled-export-traceability",
         "data-release-export-history",
         "api-key-machine-access",

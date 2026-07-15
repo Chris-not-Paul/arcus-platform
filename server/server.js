@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import {
   accessLogsEnabled,
   allowedOrigins,
+  appBaseUrl,
   secureSessionCookie,
   serverPort,
   validateServerConfiguration,
@@ -112,6 +113,13 @@ import {
 import {
   evaluatePointHazardExposure,
 } from "./hazard/hazardExposureService.js";
+import {
+  hazardRuntimeMetadata,
+  traceHazardStage,
+} from "./hazard/hazardTrace.js";
+import {
+  LANDSLIDE_PROVIDER_MODULE_PATH,
+} from "./hazard/providers/ispraLandslideProvider.js";
 
 async function readJsonBody(request) {
   const contentType = String(request.headers["content-type"] || "");
@@ -380,6 +388,16 @@ async function routeRequest(request, response) {
 
     sendJson(request, response, 200, {
       ...health,
+      ...(process.env.NODE_ENV !== "production"
+        ? {
+            developmentRuntime: {
+              ...hazardRuntimeMetadata,
+              api_base_url: appBaseUrl,
+              landslide_provider_module_path:
+                LANDSLIDE_PROVIDER_MODULE_PATH,
+            },
+          }
+        : {}),
       ok: true,
       service: "arcus-api",
     });
@@ -1052,7 +1070,26 @@ async function routeRequest(request, response) {
     }
 
     const payload = await readJsonBody(request);
-    const exposure = await evaluatePointHazardExposure(payload);
+    const requestHazards = Array.isArray(payload.hazards) &&
+      payload.hazards.length
+      ? payload.hazards
+      : ["hydraulic"];
+
+    requestHazards.forEach((hazard) => {
+      traceHazardStage({
+        hazard,
+        latitude: payload.latitude,
+        longitude: payload.longitude,
+        providerVersion:
+          hazardRuntimeMetadata.provider_versions[hazard] || null,
+        requestId: request.requestId,
+        stage: "endpoint_received",
+      });
+    });
+
+    const exposure = await evaluatePointHazardExposure(payload, {
+      requestId: request.requestId,
+    });
 
     await appendAuditEvent({
       event: "professional_hazard_exposure_point_queried",
@@ -1062,7 +1099,22 @@ async function routeRequest(request, response) {
       username: session.username,
     });
 
-    sendJson(request, response, 200, exposure);
+    requestHazards.forEach((hazard) => {
+      traceHazardStage({
+        hazard,
+        latitude: exposure.query?.latitude,
+        longitude: exposure.query?.longitude,
+        providerVersion:
+          hazardRuntimeMetadata.provider_versions[hazard] || null,
+        requestId: request.requestId,
+        stage: "endpoint_serialized",
+      });
+    });
+
+    sendJson(request, response, 200, {
+      ...exposure,
+      request_id: request.requestId,
+    });
     return;
   }
 

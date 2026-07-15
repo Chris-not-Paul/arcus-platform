@@ -2,27 +2,60 @@ import {
   FLOOD_PROVIDER_VERSION,
 } from "./normalizers/floodNormalizer.js";
 import {
+  LANDSLIDE_PROVIDER_VERSION,
+} from "./normalizers/landslideNormalizer.js";
+import {
   queryIspraFloodExposure,
   validateWgs84Point,
 } from "./providers/ispraFloodProvider.js";
+import {
+  queryIspraLandslideExposure,
+} from "./providers/ispraLandslideProvider.js";
+import {
+  safeError,
+  traceHazardStage,
+} from "./hazardTrace.js";
 
 const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
 const CACHE_MAX_ITEMS = 500;
 const cache = new Map();
+const PROVIDER_REGISTRY = {
+  hydraulic: {
+    datasetVersion: "source-null",
+    providerVersion: FLOOD_PROVIDER_VERSION,
+    query: queryIspraFloodExposure,
+  },
+  landslide: {
+    datasetVersion: "source-5.0-2024",
+    providerVersion: LANDSLIDE_PROVIDER_VERSION,
+    query: queryIspraLandslideExposure,
+  },
+};
 
 function normalizeCoordinate(value) {
   return Number(value).toFixed(5);
 }
 
 function cacheKeyFor({ hazards, latitude, longitude }) {
-  const requestedHazards = [...new Set(hazards)].sort().join(",");
+  const requestedHazards = [...new Set(hazards)]
+    .sort()
+    .map((hazard) => {
+      const provider = PROVIDER_REGISTRY[hazard];
+
+      return [
+        hazard,
+        provider.providerVersion,
+        provider.datasetVersion,
+        "point_intersection",
+      ].join("@");
+    })
+    .join(",");
 
   return [
     "point",
     normalizeCoordinate(latitude),
     normalizeCoordinate(longitude),
     requestedHazards,
-    FLOOD_PROVIDER_VERSION,
   ].join(":");
 }
 
@@ -67,18 +100,240 @@ function writeCache(key, value) {
   }
 }
 
+function isCacheableResult(value, hazards) {
+  const cacheableStatuses = new Set(["available", "no_intersection"]);
+
+  return hazards.every((hazard) =>
+    cacheableStatuses.has(value?.[hazard]?.status)
+  );
+}
+
 function normalizeHazards(hazards) {
   if (!Array.isArray(hazards) || hazards.length === 0) {
     return ["hydraulic"];
   }
 
   return [...new Set(hazards.map((hazard) => String(hazard).toLowerCase()))]
-    .filter((hazard) => ["hydraulic"].includes(hazard));
+    .filter((hazard) => Object.hasOwn(PROVIDER_REGISTRY, hazard));
+}
+
+function overallStatusFor(results) {
+  const statuses = Object.values(results)
+    .map((result) => result?.status)
+    .filter(Boolean);
+
+  if (!statuses.length) {
+    return "not_requested";
+  }
+
+  if (statuses.every((status) => status === "available")) {
+    return "available";
+  }
+
+  if (statuses.every((status) => status === "no_intersection")) {
+    return "no_intersection";
+  }
+
+  if (
+    statuses.every((status) =>
+      ["available", "no_intersection", "partial"].includes(status)
+    )
+  ) {
+    return statuses.includes("partial") ? "partial" : "available";
+  }
+
+  if (
+    statuses.some((status) =>
+      ["available", "no_intersection", "partial"].includes(status)
+    )
+  ) {
+    return "partial";
+  }
+
+  if (statuses.every((status) => status === "point_not_selected")) {
+    return "point_not_selected";
+  }
+
+  if (statuses.every((status) => status === "request_timeout")) {
+    return "request_timeout";
+  }
+
+  return "unavailable";
+}
+
+function pointNotSelectedResult(hazard, query) {
+  const base = {
+    confidence: "not_selected",
+    explanation: [
+      "The hazard exposure query was not executed because no validated project point was provided.",
+    ],
+    normalized_score: null,
+    status: "point_not_selected",
+  };
+
+  if (hazard === "landslide") {
+    return {
+      ...base,
+      attention_area: false,
+      highest_hazard_class: null,
+      matched_attention_classes: [],
+      matched_hazard_classes: [],
+      query,
+    };
+  }
+
+  return {
+    ...base,
+    highest_class: null,
+    matched_classes: [],
+    query,
+  };
+}
+
+function providerExceptionResult(hazard, error) {
+  const attemptedAt = new Date().toISOString();
+  const diagnosticError = safeError(error);
+  const provider = PROVIDER_REGISTRY[hazard] || {};
+  const base = {
+    attempted_at: attemptedAt,
+    confidence: "source_unavailable",
+    error: {
+      ...diagnosticError,
+      code: diagnosticError?.code ||
+        (error?.name === "AbortError"
+          ? "request_timeout"
+          : "provider_exception"),
+      http_status: diagnosticError?.http_status || null,
+      message: diagnosticError?.message ||
+        "The provider failed before returning a normalized hazard result.",
+      name: diagnosticError?.name || error?.name || "Error",
+      original_error_type: error?.name || "Error",
+      retryable: diagnosticError?.retryable ?? true,
+      stage: diagnosticError?.stage || "provider_result_returned",
+      wfs_exception_code: diagnosticError?.wfs_exception_code || null,
+      wfs_exception_text: diagnosticError?.wfs_exception_text || null,
+    },
+    explanation: [
+      "The provider failed before returning a normalized hazard result.",
+    ],
+    normalized_score: null,
+    source: {
+      provider: "ISPRA",
+      provider_version: provider.providerVersion || null,
+      queried_at: attemptedAt,
+      service_type: "WFS",
+      source_dataset_version:
+        hazard === "landslide" ? "5.0" : null,
+      source_reference_year:
+        hazard === "landslide" ? 2024 : null,
+    },
+    status: error?.name === "AbortError"
+      ? "request_timeout"
+      : "provider_exception",
+  };
+
+  if (hazard === "landslide") {
+    return {
+      ...base,
+      attention_area: false,
+      highest_hazard_class: null,
+      matched_attention_classes: [],
+      matched_hazard_classes: [],
+    };
+  }
+
+  return {
+    ...base,
+    highest_class: null,
+    matched_classes: [],
+  };
+}
+
+async function runProviders({ hazards, options, point }) {
+  const settled = await Promise.allSettled(
+    hazards.map(async (hazard) => {
+      const result = await queryRegisteredHazardProvider(hazard, point, options);
+
+      return [hazard, result];
+    })
+  );
+  const results = {};
+
+  settled.forEach((item, index) => {
+    const hazard = hazards[index];
+
+    if (item.status === "fulfilled") {
+      const [fulfilledHazard, providerResult] = item.value;
+
+      results[fulfilledHazard] = providerResult;
+    } else {
+      const provider = PROVIDER_REGISTRY[hazard];
+
+      traceHazardStage({
+        error: item.reason,
+        hazard,
+        latitude: point.latitude,
+        longitude: point.longitude,
+        providerVersion: provider.providerVersion,
+        requestId: options.requestId,
+        stage: "provider_result_returned",
+      });
+      results[hazard] = providerExceptionResult(hazard, item.reason);
+    }
+  });
+
+  return results;
+}
+
+export async function queryRegisteredHazardProvider(
+  hazard,
+  point,
+  options = {}
+) {
+  const provider = PROVIDER_REGISTRY[hazard];
+
+  if (!provider) {
+    const error = new Error(`Unknown hazard provider: ${hazard}`);
+
+    error.code = "unknown_hazard_provider";
+    error.stage = "service_dispatch_started";
+    throw error;
+  }
+
+  const startedAt = Date.now();
+
+  traceHazardStage({
+    hazard,
+    latitude: point?.latitude,
+    longitude: point?.longitude,
+    providerVersion: provider.providerVersion,
+    requestId: options.requestId,
+    stage: "service_dispatch_started",
+  });
+
+  const result = await provider.query(point, {
+    ...options,
+    providerVersion: provider.providerVersion,
+    requestId: options.requestId,
+  });
+
+  traceHazardStage({
+    durationMs: Date.now() - startedAt,
+    hazard,
+    latitude: point?.latitude,
+    longitude: point?.longitude,
+    providerVersion: provider.providerVersion,
+    requestId: options.requestId,
+    stage: "provider_result_returned",
+  });
+
+  return result;
 }
 
 export async function evaluatePointHazardExposure(payload, options = {}) {
   const validated = validateWgs84Point(payload || {});
   const hazards = normalizeHazards(payload?.hazards);
+  const requestId = options.requestId || payload?.request_id || "unknown";
   const isDevelopment = process.env.NODE_ENV !== "production";
   const bypassCache = Boolean(
     options.bypassCache || (isDevelopment && payload?.bypassCache)
@@ -87,13 +342,23 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
     crs: "EPSG:4326",
     latitude: Number(payload?.latitude),
     longitude: Number(payload?.longitude),
+    request_id: requestId,
   };
 
   if (!validated.ok) {
-    return {
-      hydraulic: await queryIspraFloodExposure(payload || {}, options),
-      query,
+    const result = {
+      query: {
+        ...query,
+        hazards,
+      },
     };
+
+    hazards.forEach((hazard) => {
+      result[hazard] = pointNotSelectedResult(hazard, result.query);
+    });
+    result.overall_status = overallStatusFor(result);
+
+    return result;
   }
 
   const key = cacheKeyFor({
@@ -116,23 +381,46 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
     },
     query: {
       crs: "EPSG:4326",
+      hazards,
+      latitude: validated.latitude,
+      longitude: validated.longitude,
+      request_id: requestId,
+    },
+    request_id: requestId,
+  };
+
+  const providerResults = await runProviders({
+    hazards,
+    options: {
+      ...options,
+      requestId,
+    },
+    point: {
       latitude: validated.latitude,
       longitude: validated.longitude,
     },
-  };
+  });
 
-  if (hazards.includes("hydraulic")) {
-    result.hydraulic = await queryIspraFloodExposure(
-      {
-        latitude: validated.latitude,
-        longitude: validated.longitude,
-      },
-      options
-    );
-  }
+  hazards.forEach((hazard) => {
+    result[hazard] = providerResults[hazard] ||
+      providerExceptionResult(hazard);
+  });
+  result.overall_status = overallStatusFor(providerResults);
+  hazards.forEach((hazard) => {
+    traceHazardStage({
+      hazard,
+      latitude: validated.latitude,
+      longitude: validated.longitude,
+      providerVersion: PROVIDER_REGISTRY[hazard]?.providerVersion || null,
+      requestId,
+      stage: "service_result_mapped",
+    });
+  });
 
   if (!bypassCache) {
-    writeCache(key, result);
+    if (isCacheableResult(result, hazards)) {
+      writeCache(key, result);
+    }
   }
 
   return result;

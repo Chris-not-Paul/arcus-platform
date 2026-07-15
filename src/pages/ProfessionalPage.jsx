@@ -1,6 +1,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -82,6 +83,31 @@ function cleanDisplayText(value) {
     .replaceAll("â€œ", '"')
     .replaceAll("â€", '"')
     .replaceAll("Caltanisetta", "Caltanissetta");
+}
+
+function traceFrontendHazardStage({
+  hazard,
+  latitude,
+  longitude,
+  requestId,
+  stage,
+}) {
+  if (!import.meta.env.DEV) {
+    return;
+  }
+
+  console.info(
+    `[arcus-hazard-trace] ${JSON.stringify({
+      duration_ms: null,
+      error: null,
+      hazard,
+      latitude: Number.isFinite(Number(latitude)) ? Number(latitude) : null,
+      longitude: Number.isFinite(Number(longitude)) ? Number(longitude) : null,
+      provider_version: null,
+      request_id: requestId || "unknown",
+      stage,
+    })}`
+  );
 }
 
 function evidenceGradeFromScore(value) {
@@ -182,6 +208,7 @@ export default function ProfessionalPage() {
     selectionSource: "",
     validated: false,
   });
+  const activeHazardRequestRef = useRef("");
   const [
     path01ExposureStatus,
     setPath01ExposureStatus,
@@ -189,6 +216,10 @@ export default function ProfessionalPage() {
   const [
     path01HydraulicExposure,
     setPath01HydraulicExposure,
+  ] = useState(null);
+  const [
+    path01LandslideExposure,
+    setPath01LandslideExposure,
   ] = useState(null);
   const [
     path02ExposureStatus,
@@ -4149,7 +4180,7 @@ export default function ProfessionalPage() {
         <tbody>
           <tr><td>${it ? "Affidabilita evidenza" : "Evidence reliability"}</td><td>${it ? "Volume fonti, ruolo fonte, confidenza ARCUS, precisione spaziale e tracciabilita temporale." : "Source volume, source role, ARCUS confidence, spatial precision and temporal traceability."}</td></tr>
           <tr><td>${it ? "Vulnerabilita" : "Vulnerability"}</td><td>${it ? "Severita, trigger, causa specifica, tipo struttura, materiale, eta, impatto umano e penalita evidenza." : "Severity, trigger, specific cause, structure type, material, age, human impact and evidence penalty."}</td></tr>
-          <tr><td>${it ? "Hazard territoriale" : "Territorial hazard"}</td><td>${it ? "Layer pubblici dichiarati e scores ufficiali per esposizione idraulica, franosa e sismica." : "Declared public overlays and official-source scores for hydraulic, landslide and seismic exposure."}</td></tr>
+          <tr><td>${it ? "Hazard territoriale" : "Territorial hazard"}</td><td>${it ? "Provider WFS pubblici dichiarati per l'esposizione puntuale idraulica e PAI frane; overlay WMS solo come controllo visuale." : "Declared public WFS providers for point-level hydraulic and PAI landslide exposure; WMS overlays remain visual checks only."}</td></tr>
           <tr><td>${it ? "Screening asset" : "Asset screening"}</td><td>${it ? "Posizione asset, eventi comparabili, corrispondenze vulnerabilita, campi tecnici e contesto territoriale." : "Asset location, comparable events, vulnerability matches, technical fields and territorial context."}</td></tr>
         </tbody>
       </table>
@@ -4164,7 +4195,7 @@ export default function ProfessionalPage() {
           <tr><td>${it ? "Evidenza storica" : "Historical evidence"}</td><td>${it ? "Record ARCUS documentati, cause, trigger e severita." : "Documented ARCUS records, causes, triggers and severity."}</td></tr>
           <tr><td>${it ? "Affidabilita fonti" : "Source reliability"}</td><td>${it ? "Numero, ruolo e qualita delle fonti disponibili." : "Number, role and quality of available sources."}</td></tr>
           <tr><td>${it ? "Rilevanza spaziale" : "Spatial relevance"}</td><td>${it ? "Provincia selezionata e confine amministrativo provinciale." : "Selected province and administrative provincial boundary."}</td></tr>
-          <tr><td>${it ? "Contesto hazard" : "Hazard context"}</td><td>${it ? "Overlay pubblici WMS idraulici/franosi e contesto sismico." : "Public hydraulic/landslide WMS overlays and seismic context."}</td></tr>
+          <tr><td>${it ? "Contesto hazard" : "Hazard context"}</td><td>${it ? "Esposizione puntuale ufficiale via WFS dove disponibile; WMS idraulici/frane solo come layer visuali di controllo." : "Official point exposure through WFS where available; hydraulic/landslide WMS only as visual control layers."}</td></tr>
           <tr><td>${it ? "Pattern storico ARCUS" : "ARCUS historical pattern"}</td><td>${it ? "Lettura del trigger dominante, della concentrazione temporale, della geomorfologia coinvolta e della qualita delle fonti. I casi singoli restano riferimento in mappa, appendice ed export." : "Reading of dominant trigger, temporal concentration, involved geomorphology and source quality. Individual cases remain references in the map, appendix and exports."}</td></tr>
         </tbody>
       </table>
@@ -4530,7 +4561,7 @@ export default function ProfessionalPage() {
           <thead><tr><th>${it ? "Elemento" : "Element"}</th><th>${it ? "Lettura operativa" : "Operational reading"}</th></tr></thead>
           <tbody>
             <tr><td>Spatial resolution</td><td>${it ? "Screening a livello provinciale basato sul confine amministrativo selezionato; non e site-specific salvo coordinate o asset forniti in workflow dedicati." : "Province-level screening based on the selected administrative boundary; not site-specific unless coordinates or assets are provided in dedicated workflows."}</td></tr>
-            <tr><td>Hazard layers</td><td>${it ? "Layer WMS pubblici usati come contesto territoriale, non come modellazione locale idraulica, geotecnica o sismica di dettaglio." : "Public WMS layers used as territorial context, not as detailed local hydraulic, geotechnical or seismic modelling."}</td></tr>
+            <tr><td>Hazard layers</td><td>${it ? "Provider WFS pubblici usati per l'esposizione puntuale ufficiale idraulica e PAI frane quando il punto e validato; WMS usato solo come riferimento visuale, non come modello locale idraulico, geotecnico o sismico di dettaglio." : "Public WFS providers used for official point-level hydraulic and PAI landslide exposure when the project point is validated; WMS is used only as a visual reference, not as detailed local hydraulic, geotechnical or seismic modelling."}</td></tr>
             <tr><td>Historical records</td><td>${it ? "Basato su eventi di collasso documentati ARCUS e fonti collegate; non rappresenta tutte le condizioni strutturali esistenti." : "Based on documented ARCUS collapse events and linked sources; it does not represent all existing structural conditions."}</td></tr>
             <tr><td>Missing data</td><td>${it ? "Alcuni eventi possono non avere attributi tecnici completi, come tipologia del ponte, materiale o anno di costruzione." : "Some events may lack complete technical attributes such as bridge type, material or construction year."}</td></tr>
             <tr><td>Professional use</td><td>${it ? "Adatto a screening preliminare e prioritizzazione; richiede verifiche tecniche successive prima di decisioni progettuali o istituzionali." : "Suitable for preliminary screening and prioritisation; follow-up technical checks are required before design or institutional decisions."}</td></tr>
@@ -4580,7 +4611,7 @@ export default function ProfessionalPage() {
       <section>
         ${sectionHeading("04", it ? "BLOCCO 1 / TERRITORIO" : "BLOCK 1 / TERRITORY")}
         <p>${escapeHtml(territoryReading)}</p>
-        <p class="note">${it ? "I layer WMS restano indicatori di esposizione separati. In questa fase non vengono fusi in un numero unico." : "WMS layers remain separate exposure indicators. At this stage they are not merged into a single number."}</p>
+        <p class="note">${it ? "Le esposizioni ufficiali WFS restano separate dai proxy storici ARCUS. In questa fase non vengono fuse in un numero unico." : "Official WFS exposures remain separate from ARCUS historical proxies. At this stage they are not merged into a single number."}</p>
         ${hazardBars}
       </section>
       <section>
@@ -9307,12 +9338,12 @@ export default function ProfessionalPage() {
     },
     {
       attribution:
-        "ISPRA IdroGEO - Inventario Fenomeni Franosi in Italia",
-      id: "professional-ispra-landslides",
+        "ISPRA IdroGEO - Pericolosita frane PAI v.5.0 (2024)",
+      id: "professional-ispra-landslide-pai",
       layerKey: "landslide",
-      layers: "frane",
-      opacity: 0.38,
-      url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/frane/ows",
+      layers: "idrogeo:pericolosita_frane",
+      opacity: 0.42,
+      url: "https://idrogeo.isprambiente.it/geoserver/idrogeo/wms",
     },
   ];
   const activeProfessionalHazardLayers = {
@@ -9374,6 +9405,7 @@ export default function ProfessionalPage() {
     const registryProvince =
       findProvinceInRegistry(provinceRegistry, province);
 
+    activeHazardRequestRef.current = "";
     setSelectedProvince(registryProvince?.name || province);
     setProjectLocation({
       derivedProvince: "",
@@ -9386,6 +9418,7 @@ export default function ProfessionalPage() {
       validated: false,
     });
     setPath01HydraulicExposure(null);
+    setPath01LandslideExposure(null);
     setPath01ExposureStatus("idle");
   };
   const hydraulicExposureLabel = (exposure) => {
@@ -9395,12 +9428,77 @@ export default function ProfessionalPage() {
         : "No point selected";
     }
 
-    if (exposure.status === "available" || exposure.status === "partial") {
+    if (exposure.status === "partial") {
+      return language === "it"
+        ? "Risultato idraulico parziale"
+        : "Partial hydraulic result";
+    }
+
+    if (exposure.status === "available") {
       return exposure.highest_class
         ? exposure.highest_class
         : language === "it"
           ? "Nessuna classe intercettata"
           : "No class intersected";
+    }
+
+    if (exposure.status === "no_intersection") {
+      return language === "it"
+        ? "Nessuna classe intercettata"
+        : "No class intersected";
+    }
+
+    if (exposure.status === "invalid_coordinates") {
+      return language === "it"
+        ? "Coordinate non valide"
+        : "Invalid coordinates";
+    }
+
+    return exposure.status || "unavailable";
+  };
+  const hydraulicPartialExplanation = (exposure) => {
+    if (exposure?.status !== "partial") {
+      return "";
+    }
+
+    return language === "it"
+      ? "Nessuna intersezione e stata trovata nei layer che hanno risposto. Uno o piu layer configurati non hanno potuto essere valutati."
+      : "No intersection was found in the layers that responded. One or more configured layers could not be evaluated.";
+  };
+  const hydraulicLayerStatusItems = (exposure) =>
+    Array.isArray(exposure?.layer_results)
+      ? exposure.layer_results.map((layer) => ({
+          className: layer.className || layer.class_name || "-",
+          failed:
+            !["available", "no_intersection"].includes(layer.status),
+          status: layer.status || "unknown",
+        }))
+      : [];
+  const landslideExposureLabel = (exposure) => {
+    if (!exposure) {
+      return language === "it"
+        ? "Punto non selezionato"
+        : "No point selected";
+    }
+
+    if (exposure.status === "available" || exposure.status === "partial") {
+      if (exposure.highest_hazard_class) {
+        return exposure.highest_hazard_class;
+      }
+
+      if (exposure.attention_area) {
+        return "AA";
+      }
+
+      return language === "it"
+        ? "Nessuna classe PAI"
+        : "No PAI class";
+    }
+
+    if (exposure.status === "no_intersection") {
+      return language === "it"
+        ? "Nessuna intersezione PAI"
+        : "No PAI intersection";
     }
 
     if (exposure.status === "invalid_coordinates") {
@@ -9440,6 +9538,7 @@ export default function ProfessionalPage() {
         validated: false,
       });
       setPath01HydraulicExposure(null);
+      setPath01LandslideExposure(null);
       setPath01ExposureStatus("blocked");
 
       return;
@@ -9470,19 +9569,84 @@ export default function ProfessionalPage() {
       validated: true,
     });
     setSelectedProvince(derivedProvinceName);
-    setPath01HydraulicExposure(null);
+    setPath01HydraulicExposure({
+      confidence: "pending",
+      highest_class: null,
+      matched_classes: [],
+      normalized_score: null,
+      status: "loading",
+    });
+    setPath01LandslideExposure({
+      attention_area: false,
+      confidence: "pending",
+      highest_hazard_class: null,
+      matched_attention_classes: [],
+      matched_hazard_classes: [],
+      normalized_score: null,
+      status: "loading",
+    });
     setPath01ExposureStatus("loading");
+    const exposureRequestToken = `${Date.now()}-${derived.latitude}-${derived.longitude}`;
+
+    activeHazardRequestRef.current = exposureRequestToken;
 
     try {
       const result = await professionalHazardExposurePoint({
-        hazards: ["hydraulic"],
+        bypassCache: false,
+        hazards: ["hydraulic", "landslide"],
         latitude: derived.latitude,
         longitude: derived.longitude,
       });
 
-      setPath01HydraulicExposure(result.hydraulic || null);
+      ["hydraulic", "landslide"].forEach((hazard) => {
+        traceFrontendHazardStage({
+          hazard,
+          latitude: derived.latitude,
+          longitude: derived.longitude,
+          requestId: result.request_id || result.query?.request_id,
+          stage: "frontend_response_received",
+        });
+      });
+
+      if (activeHazardRequestRef.current !== exposureRequestToken) {
+        return;
+      }
+
+      setPath01HydraulicExposure(
+        result.hydraulic || {
+          confidence: "source_unavailable",
+          highest_class: null,
+          matched_classes: [],
+          normalized_score: null,
+          status: "provider_exception",
+        }
+      );
+      setPath01LandslideExposure(
+        result.landslide || {
+          attention_area: false,
+          confidence: "source_unavailable",
+          highest_hazard_class: null,
+          matched_attention_classes: [],
+          matched_hazard_classes: [],
+          normalized_score: null,
+          status: "provider_exception",
+        }
+      );
       setPath01ExposureStatus("ready");
+      ["hydraulic", "landslide"].forEach((hazard) => {
+        traceFrontendHazardStage({
+          hazard,
+          latitude: derived.latitude,
+          longitude: derived.longitude,
+          requestId: result.request_id || result.query?.request_id,
+          stage: "frontend_state_updated",
+        });
+      });
     } catch {
+      if (activeHazardRequestRef.current !== exposureRequestToken) {
+        return;
+      }
+
       setPath01HydraulicExposure({
         confidence: "source_unavailable",
         explanation: [
@@ -9492,6 +9656,20 @@ export default function ProfessionalPage() {
         ],
         highest_class: null,
         matched_classes: [],
+        normalized_score: null,
+        status: "service_unreachable",
+      });
+      setPath01LandslideExposure({
+        attention_area: false,
+        confidence: "source_unavailable",
+        explanation: [
+          language === "it"
+            ? "La sorgente ufficiale PAI non e disponibile in questa sessione."
+            : "The official PAI source is not available in this session.",
+        ],
+        highest_hazard_class: null,
+        matched_attention_classes: [],
+        matched_hazard_classes: [],
         normalized_score: null,
         status: "service_unreachable",
       });
@@ -9944,6 +10122,7 @@ export default function ProfessionalPage() {
       validated: false,
     });
     setPath01HydraulicExposure(null);
+    setPath01LandslideExposure(null);
     setPath01ExposureStatus("idle");
   };
 
@@ -10515,6 +10694,7 @@ export default function ProfessionalPage() {
                   <input
                     onChange={(event) => {
                       setPath01HydraulicExposure(null);
+                      setPath01LandslideExposure(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10540,6 +10720,7 @@ export default function ProfessionalPage() {
                   <input
                     onChange={(event) => {
                       setPath01HydraulicExposure(null);
+                      setPath01LandslideExposure(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10623,14 +10804,15 @@ export default function ProfessionalPage() {
 
               <div className="platform-exposure-split">
                 <article>
-                  <span>Official geospatial exposure</span>
+                  <span>Hydraulic hazard</span>
                   <strong>
                     {hydraulicExposureLabel(path01HydraulicExposure)}
                   </strong>
                   <p>
-                    {language === "it"
-                      ? "Dato WFS ISPRA P1/P2/P3 riferito al punto progetto. Non entra ancora nel Final Priority Index."
-                      : "ISPRA P1/P2/P3 WFS data for the project point. It is not yet used in the Final Priority Index."}
+                    {hydraulicPartialExplanation(path01HydraulicExposure) ||
+                      (language === "it"
+                        ? "Dato WFS ISPRA P1/P2/P3 riferito al punto progetto. Non entra ancora nel Final Priority Index."
+                        : "ISPRA P1/P2/P3 WFS data for the project point. It is not yet used in the Final Priority Index.")}
                   </p>
                   <div className="platform-exposure-meta">
                     <span>
@@ -10649,6 +10831,7 @@ export default function ProfessionalPage() {
                     <span>
                       Timestamp:{" "}
                       {path01HydraulicExposure?.source?.queried_at ||
+                        path01HydraulicExposure?.attempted_at ||
                         "-"}
                     </span>
                     <span>
@@ -10657,6 +10840,72 @@ export default function ProfessionalPage() {
                         ? path01HydraulicExposure.matched_classes.join(", ")
                         : "-"}
                     </span>
+                    {hydraulicLayerStatusItems(path01HydraulicExposure).map(
+                      (layer) => (
+                        <span key={`${layer.className}-${layer.status}`}>
+                          {layer.className}: {layer.status}
+                          {layer.failed ? " - failed" : ""}
+                        </span>
+                      )
+                    )}
+                    <span>Normalized score: not assigned</span>
+                  </div>
+                </article>
+
+                <article>
+                  <span>Landslide hazard - ISPRA PAI</span>
+                  <strong>
+                    {landslideExposureLabel(path01LandslideExposure)}
+                  </strong>
+                  <p>
+                    {language === "it"
+                      ? "Mosaicatura PAI ISPRA v. 5.0 - 2024 al punto progetto. AA e riportata separatamente; nessun punteggio e assegnato."
+                      : "ISPRA PAI mosaic v. 5.0 - 2024 at the project point. AA is reported separately; no score is assigned."}
+                  </p>
+                  <div className="platform-exposure-meta">
+                    <span>
+                      Status:{" "}
+                      {path01LandslideExposure?.status ||
+                        (language === "it"
+                          ? "punto non selezionato"
+                          : "point not selected")}
+                    </span>
+                    <span>
+                      Source:{" "}
+                      {path01LandslideExposure?.source
+                        ? `${path01LandslideExposure.source.provider} ${path01LandslideExposure.source.service_type}`
+                        : "ISPRA PAI WFS"}
+                    </span>
+                    <span>
+                      Version:{" "}
+                      {path01LandslideExposure?.source?.source_dataset_version
+                        ? `v. ${path01LandslideExposure.source.source_dataset_version} - ${path01LandslideExposure.source.source_reference_year}`
+                        : "-"}
+                    </span>
+                    <span>
+                      Timestamp:{" "}
+                      {path01LandslideExposure?.source?.queried_at ||
+                        path01LandslideExposure?.attempted_at ||
+                        "-"}
+                    </span>
+                    <span>
+                      PAI classes:{" "}
+                      {path01LandslideExposure?.matched_hazard_classes?.length
+                        ? path01LandslideExposure.matched_hazard_classes.join(", ")
+                        : "-"}
+                    </span>
+                    <span>
+                      Attention area:{" "}
+                      {path01LandslideExposure?.attention_area
+                        ? path01LandslideExposure.matched_attention_classes?.join(", ") || "AA"
+                        : "No"}
+                    </span>
+                    <span>
+                      Analysis mode:{" "}
+                      {path01LandslideExposure?.source?.analysis_mode ||
+                        "point_intersection"}
+                    </span>
+                    <span>Normalized score: not assigned</span>
                   </div>
                 </article>
 
@@ -13882,6 +14131,52 @@ export default function ProfessionalPage() {
                   </div>
                 ))}
               </div>
+            </article>
+
+            <article>
+              <span>Official geospatial exposure</span>
+              <ul>
+                <li>
+                  <b>Hydraulic hazard</b>
+                  <em>
+                    {hydraulicExposureLabel(path01HydraulicExposure)}
+                  </em>
+                </li>
+                <li>
+                  <b>Hydraulic classes</b>
+                  <em>
+                    {path01HydraulicExposure?.matched_classes?.length
+                      ? path01HydraulicExposure.matched_classes.join(", ")
+                      : "-"}
+                  </em>
+                </li>
+                <li>
+                  <b>Official landslide hazard - ISPRA PAI</b>
+                  <em>
+                    {landslideExposureLabel(path01LandslideExposure)}
+                  </em>
+                </li>
+                <li>
+                  <b>PAI classes</b>
+                  <em>
+                    {path01LandslideExposure?.matched_hazard_classes?.length
+                      ? path01LandslideExposure.matched_hazard_classes.join(", ")
+                      : "-"}
+                  </em>
+                </li>
+                <li>
+                  <b>Attention area</b>
+                  <em>
+                    {path01LandslideExposure?.attention_area
+                      ? path01LandslideExposure.matched_attention_classes?.join(", ") || "AA"
+                      : "No"}
+                  </em>
+                </li>
+                <li>
+                  <b>Normalized score</b>
+                  <em>not assigned</em>
+                </li>
+              </ul>
             </article>
 
             <article>

@@ -1,10 +1,22 @@
 let csrfToken = null;
 
+function createRequestId() {
+  if (globalThis.crypto?.randomUUID) {
+    return `web-${globalThis.crypto.randomUUID()}`;
+  }
+
+  return `web-${Date.now().toString(36)}-${Math.random()
+    .toString(36)
+    .slice(2)}`;
+}
+
 export async function apiJson(path, options = {}) {
+  const requestId = options.headers?.["X-Request-ID"] || createRequestId();
   const response = await fetch(path, {
     credentials: "include",
     ...options,
     headers: {
+      "X-Request-ID": requestId,
       ...(options.headers || {}),
     },
   });

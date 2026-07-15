@@ -286,6 +286,12 @@ function gisSummary({
         generated_at: generatedAt,
         methodology_version: dataRelease?.methodologyVersion || "",
         output_type: "gis-summary",
+        official_hazard_sources: {
+          hydraulic:
+            "ISPRA WFS point-level hydraulic hazard P1/P2/P3; shadow mode; not merged into ARCUS scoring.",
+          landslide:
+            "ISPRA IdroGEO WFS point-level PAI landslide hazard, mosaic v.5.0 2024; shadow mode; not merged into ARCUS scoring.",
+        },
         public_boundary: dataRelease?.publicRelease || "",
         use: "Bounded territorial screening output; not cadastral or design-scale mapping.",
       },

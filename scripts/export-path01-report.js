@@ -1305,7 +1305,7 @@ function buildFullReportHtml({
     </section>
     <section class="hazard-section">
       <h2><span>05</span>Hazard / Exposure Context</h2>
-      <p>The Step 3 analysis combines public Hydraulic, Landslide and Seismic layers with ARCUS historical cases. For PDF readability, the map displays ARCUS cases only. The influence of the active hazard layers is represented through the exposure scores below.</p>
+      <p>The Step 3 analysis combines ARCUS historical cases with declared public hazard context. Official point-level hydraulic and PAI landslide exposure is evaluated through backend WFS providers when a validated project point is available; WMS remains visual control only. This standalone province export keeps the provincial screening scores separate from any point-level official exposure.</p>
       ${hazardBars(focus, exposureProfile)}
     </section>
     <section>
@@ -1458,7 +1458,7 @@ function buildBriefHtml({
     "Translate the province signal into site-specific checks.",
     "Review P1-P3 priority ARCUS cases.",
     `Check ${displayDriver} assumptions on site.`,
-    "Use WMS overlays as screening context only.",
+    "Use WFS point exposure for validated project locations; use WMS overlays as visual context only.",
     "Document limits before design decisions.",
   ];
   const briefDataToRequest = focus.dataToRequest.slice(0, 5);

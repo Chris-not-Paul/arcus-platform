@@ -1,0 +1,261 @@
+{
+  "generated_at": "2026-07-15T06:50:43.835Z",
+  "results": [
+    {
+      "expected_layer": "AA",
+      "highest_class": null,
+      "latitude": 36.82837857142857,
+      "longitude": 14.7271,
+      "matched_attention_classes": [
+        "AA"
+      ],
+      "matched_classes": [],
+      "name": "AA attention area",
+      "overall_status": "available",
+      "p1": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p2": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p3": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p4": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "province": "Ragusa",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:32.709Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 1,
+        "intersects": true,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=14.72698%2C36.82825857142857%2C14.72722%2C36.828498571428575%2CEPSG%3A4326",
+        "status": "available"
+      }
+    },
+    {
+      "expected_layer": "P1",
+      "highest_class": "P1",
+      "latitude": 43.50846428571429,
+      "longitude": 10.338285714285714,
+      "matched_attention_classes": [],
+      "matched_classes": [
+        "P1"
+      ],
+      "name": "P1 moderate hazard",
+      "overall_status": "available",
+      "p1": {
+        "feature_count": 2,
+        "intersects": true,
+        "status": "available"
+      },
+      "p2": {
+        "feature_count": 2,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p3": {
+        "feature_count": 2,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p4": {
+        "feature_count": 2,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "province": "Livorno",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:34.373Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 2,
+        "intersects": true,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=10.338165714285713%2C43.50834428571429%2C10.338405714285715%2C43.50858428571429%2CEPSG%3A4326",
+        "status": "available"
+      }
+    },
+    {
+      "expected_layer": "P2",
+      "highest_class": "P2",
+      "latitude": 44.40296071428571,
+      "longitude": 9.538971428571427,
+      "matched_attention_classes": [],
+      "matched_classes": [
+        "P2"
+      ],
+      "name": "P2 medium hazard",
+      "overall_status": "available",
+      "p1": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p2": {
+        "feature_count": 5,
+        "intersects": true,
+        "status": "available"
+      },
+      "p3": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p4": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "province": "Genova",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:39.182Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 5,
+        "intersects": true,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=9.538851428571427%2C44.40284071428571%2C9.539091428571428%2C44.403080714285714%2CEPSG%3A4326",
+        "status": "available"
+      }
+    },
+    {
+      "expected_layer": "P3",
+      "highest_class": "P3",
+      "latitude": 38.922574999999995,
+      "longitude": 8.785432142857143,
+      "matched_attention_classes": [],
+      "matched_classes": [
+        "P3"
+      ],
+      "name": "P3 high hazard",
+      "overall_status": "available",
+      "p1": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p2": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p3": {
+        "feature_count": 5,
+        "intersects": true,
+        "status": "available"
+      },
+      "p4": {
+        "feature_count": 5,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "province": "Sud Sardegna",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:40.878Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 5,
+        "intersects": true,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=8.785312142857142%2C38.92245499999999%2C8.785552142857144%2C38.922695%2CEPSG%3A4326",
+        "status": "available"
+      }
+    },
+    {
+      "expected_layer": "P4",
+      "highest_class": "P4",
+      "latitude": 40.100057142857146,
+      "longitude": 16.003749999999997,
+      "matched_attention_classes": [],
+      "matched_classes": [
+        "P4"
+      ],
+      "name": "P4 very high hazard",
+      "overall_status": "available",
+      "p1": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p2": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p3": {
+        "feature_count": 1,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p4": {
+        "feature_count": 1,
+        "intersects": true,
+        "status": "available"
+      },
+      "province": "Potenza",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:42.691Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 1,
+        "intersects": true,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=16.003629999999998%2C40.099937142857144%2C16.003869999999996%2C40.10017714285715%2CEPSG%3A4326",
+        "status": "available"
+      }
+    },
+    {
+      "expected_layer": null,
+      "highest_class": null,
+      "latitude": 45.2897,
+      "longitude": 7.94194,
+      "matched_attention_classes": [],
+      "matched_classes": [],
+      "name": "Torino no-intersection control",
+      "overall_status": "no_intersection",
+      "p1": {
+        "feature_count": 0,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p2": {
+        "feature_count": 0,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p3": {
+        "feature_count": 0,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "p4": {
+        "feature_count": 0,
+        "intersects": false,
+        "status": "no_intersection"
+      },
+      "province": "Torino",
+      "provider": "ISPRA",
+      "queried_at": "2026-07-15T06:50:43.834Z",
+      "source_dataset_version": "5.0",
+      "wfs": {
+        "feature_count": 0,
+        "intersects": false,
+        "layer": "idrogeo:pericolosita_frane",
+        "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=7.94182%2C45.28958%2C7.94206%2C45.289820000000006%2CEPSG%3A4326",
+        "status": "no_intersection"
+      }
+    }
+  ]
+}

@@ -27,3 +27,4 @@ backups
 *.njsproj
 *.sln
 *.sw?
+.tmp/ 

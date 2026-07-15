@@ -1,18 +1,32 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   clearHazardExposureCache,
   evaluatePointHazardExposure,
+  queryRegisteredHazardProvider,
 } from "../server/hazard/hazardExposureService.js";
+import {
+  queryIspraLandslideExposure,
+} from "../server/hazard/providers/ispraLandslideProvider.js";
 import {
   FLOOD_CLASS_SEVERITY_ORDER,
   highestFloodClass,
 } from "../server/hazard/normalizers/floodNormalizer.js";
+import {
+  LANDSLIDE_HAZARD_ORDER,
+  highestLandslideHazardClass,
+  normalizeLandslideClass,
+} from "../server/hazard/normalizers/landslideNormalizer.js";
 
 const point = {
   latitude: 45,
   longitude: 7,
 };
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, "..");
 
 function polygonFeature({ contains }) {
   const coordinates = contains
@@ -122,6 +136,10 @@ function layerClassFromUrl(url) {
   return className ? `P${className}` : null;
 }
 
+function layerNameFromUrl(url) {
+  return url.searchParams.get("typeNames") || url.searchParams.get("typeName");
+}
+
 function fetchForClasses(classes) {
   return async (url) => {
     const className = layerClassFromUrl(url);
@@ -161,6 +179,23 @@ async function query(fetchImpl, payload = point, options = {}) {
   );
 }
 
+async function queryHazards(fetchImpl, hazards, payload = point, options = {}) {
+  if (options.clearCache !== false) {
+    clearHazardExposureCache();
+  }
+
+  return evaluatePointHazardExposure(
+    {
+      hazards,
+      ...payload,
+    },
+    {
+      fetchImpl,
+      timeoutMs: options.timeoutMs || 50,
+    }
+  );
+}
+
 function classSummary(result) {
   return {
     highest: result.hydraulic.highest_class,
@@ -177,6 +212,10 @@ function firstLayer(result, className = "P1") {
 
 assert.deepEqual(FLOOD_CLASS_SEVERITY_ORDER, ["P1", "P2", "P3"]);
 assert.equal(highestFloodClass(["P2", "P1", "P3"]), "P3");
+assert.deepEqual(LANDSLIDE_HAZARD_ORDER, ["P1", "P2", "P3", "P4"]);
+assert.equal(highestLandslideHazardClass(["P2", "P4", "P1"]), "P4");
+assert.equal(normalizeLandslideClass(0), "AA");
+assert.equal(normalizeLandslideClass(4), "P4");
 
 const capturedUrls = [];
 let result = await query(async (url) => {
@@ -468,7 +507,7 @@ result = await query(fetchForClasses(["P1"]), {
   latitude: 120,
   longitude: 7,
 });
-assert.equal(result.hydraulic.status, "invalid_coordinates");
+assert.equal(result.hydraulic.status, "point_not_selected");
 assert.equal(result.hydraulic.highest_class, null);
 
 clearHazardExposureCache();
@@ -522,6 +561,446 @@ assert.notEqual(
   })).hydraulic.status
 );
 
+const landslideFeature = (code, contains = true) => ({
+  geometry: polygonFeature({ contains }).geometry,
+  properties: {
+    cod_per_it: code,
+    id: `landslide-${code}`,
+  },
+  type: "Feature",
+});
+
+const landslideFetch = ({
+  code = 3,
+  contains = true,
+  failHydraulic = false,
+  failLandslide = false,
+  unknownClass = false,
+} = {}) => async (url) => {
+  const layerName = layerNameFromUrl(url);
+
+  if (layerName === "idrogeo:pericolosita_frane") {
+    if (failLandslide) {
+      return textResponse({
+        body: "landslide failed",
+        contentType: "text/plain",
+        ok: false,
+        status: 500,
+        statusText: "Server Error",
+      });
+    }
+
+    return jsonResponse({
+      features: [
+        {
+          ...landslideFeature(unknownClass ? 99 : code, contains),
+        },
+      ],
+      type: "FeatureCollection",
+    });
+  }
+
+  if (failHydraulic) {
+    return textResponse({
+      body: "hydraulic failed",
+      contentType: "text/plain",
+      ok: false,
+      status: 500,
+      statusText: "Server Error",
+    });
+  }
+
+  return fetchForClasses(["P1"])(url);
+};
+
+let directLandslide = await queryIspraLandslideExposure(point, {
+  fetchImpl: landslideFetch({ code: 4 }),
+  requestId: "direct-provider-p4",
+  timeoutMs: 50,
+});
+assert.equal(directLandslide.status, "available");
+assert.deepEqual(directLandslide.matched_hazard_classes, ["P4"]);
+assert.equal(directLandslide.highest_hazard_class, "P4");
+assert.equal(directLandslide.normalized_score, null);
+
+let registeredLandslide = await queryRegisteredHazardProvider(
+  "landslide",
+  point,
+  {
+    fetchImpl: landslideFetch({ code: 4 }),
+    requestId: "registry-provider-p4",
+    timeoutMs: 50,
+  }
+);
+assert.equal(registeredLandslide.status, "available");
+assert.deepEqual(registeredLandslide.matched_hazard_classes, ["P4"]);
+assert.equal(registeredLandslide.highest_hazard_class, "P4");
+assert.equal(registeredLandslide.normalized_score, null);
+
+directLandslide = await queryIspraLandslideExposure(
+  point.latitude,
+  point.longitude
+);
+assert.equal(directLandslide.status, "invalid_coordinates");
+assert.equal(directLandslide.error.stage, "coordinates_validated");
+assert.equal(directLandslide.error.code, "signature_mismatch");
+assert.equal(directLandslide.source.provider_version, "ispra-landslide-pai-wfs-v1");
+assert.equal(Boolean(directLandslide.attempted_at), true);
+
+result = await queryHazards(landslideFetch({ code: 4 }), ["landslide"]);
+assert.equal(result.hydraulic, undefined);
+assert.equal(result.landslide.status, "available");
+assert.deepEqual(result.landslide.matched_hazard_classes, ["P4"]);
+assert.equal(result.landslide.highest_hazard_class, "P4");
+assert.equal(result.landslide.attention_area, false);
+assert.equal(result.landslide.normalized_score, null);
+assert.equal(result.landslide.source.source_dataset_version, "5.0");
+assert.equal(result.landslide.source.source_reference_year, 2024);
+assert.equal(result.landslide.source.bbox_axis_order, "longitude_latitude");
+
+result = await queryHazards(landslideFetch({ code: 0 }), ["landslide"]);
+assert.equal(result.landslide.status, "available");
+assert.deepEqual(result.landslide.matched_hazard_classes, []);
+assert.deepEqual(result.landslide.matched_attention_classes, ["AA"]);
+assert.equal(result.landslide.highest_hazard_class, null);
+assert.equal(result.landslide.attention_area, true);
+assert.equal(result.landslide.normalized_score, null);
+
+result = await queryHazards(
+  landslideFetch({ code: 3, contains: false }),
+  ["landslide"]
+);
+assert.equal(result.landslide.status, "no_intersection");
+assert.deepEqual(result.landslide.matched_hazard_classes, []);
+assert.equal(result.landslide.attention_area, false);
+
+result = await queryHazards(
+  landslideFetch({ code: 3 }),
+  ["hydraulic", "landslide"]
+);
+assert.equal(result.hydraulic.status, "available");
+assert.equal(result.landslide.status, "available");
+assert.notEqual(result.hydraulic.normalized_score, 0);
+assert.equal(result.hydraulic.normalized_score, null);
+assert.equal(result.landslide.normalized_score, null);
+assert.match(result.cache.key, /hydraulic@ispra-flood-wfs-v2@source-null/);
+assert.match(
+  result.cache.key,
+  /landslide@ispra-landslide-pai-wfs-v1@source-5\.0-2024/
+);
+
+result = await queryHazards(
+  landslideFetch({ failLandslide: true }),
+  ["hydraulic", "landslide"]
+);
+assert.equal(result.hydraulic.status, "available");
+assert.equal(result.landslide.status, "http_error");
+
+result = await queryHazards(
+  landslideFetch({ failHydraulic: true, code: 2 }),
+  ["hydraulic", "landslide"]
+);
+assert.equal(result.hydraulic.status, "http_error");
+assert.equal(result.landslide.status, "available");
+assert.deepEqual(result.landslide.matched_hazard_classes, ["P2"]);
+
+result = await queryHazards(landslideFetch({ code: 4 }), ["unknown"]);
+assert.equal(result.hydraulic, undefined);
+assert.equal(result.landslide, undefined);
+
+result = await queryHazards(landslideFetch({ unknownClass: true }), [
+  "landslide",
+]);
+assert.equal(result.landslide.status, "schema_mismatch");
+assert.equal(result.landslide.normalized_score, null);
+
+result = await queryHazards(landslideFetch({ code: 4 }), [
+  "hydraulic",
+  "landslide",
+]);
+assert.equal(result.query.latitude, point.latitude);
+assert.equal(result.query.longitude, point.longitude);
+assert.deepEqual(result.query.hazards, ["hydraulic", "landslide"]);
+assert.equal(result.overall_status, "available");
+assert.equal(Object.hasOwn(result, "hydraulic"), true);
+assert.equal(Object.hasOwn(result, "landslide"), true);
+
+result = await queryHazards(async (url, { signal }) => {
+  if (layerClassFromUrl(url)) {
+    return new Promise((resolve, reject) => {
+      signal.addEventListener("abort", () => {
+        const error = new Error("request timeout");
+
+        error.name = "AbortError";
+        reject(error);
+      });
+    });
+  }
+
+  return landslideFetch({ code: 4 })(url, { signal });
+}, ["hydraulic", "landslide"], point, {
+  timeoutMs: 5,
+});
+assert.equal(result.hydraulic.status, "request_timeout");
+assert.equal(result.landslide.status, "available");
+assert.equal(result.landslide.highest_hazard_class, "P4");
+assert.equal(result.overall_status, "partial");
+
+result = await queryHazards(async (url, { signal }) => {
+  if (layerClassFromUrl(url)) {
+    return new Promise((resolve, reject) => {
+      signal.addEventListener("abort", () => {
+        const error = new Error("request timeout");
+
+        error.name = "AbortError";
+        reject(error);
+      });
+    });
+  }
+
+  return landslideFetch({ code: 4, contains: false })(url, { signal });
+}, ["hydraulic", "landslide"], point, {
+  timeoutMs: 5,
+});
+assert.equal(result.hydraulic.status, "request_timeout");
+assert.equal(result.landslide.status, "no_intersection");
+assert.equal(result.overall_status, "partial");
+
+result = await queryHazards(async (url, { signal }) => {
+  if (layerNameFromUrl(url) === "idrogeo:pericolosita_frane") {
+    return new Promise((resolve, reject) => {
+      signal.addEventListener("abort", () => {
+        const error = new Error("request timeout");
+
+        error.name = "AbortError";
+        reject(error);
+      });
+    });
+  }
+
+  return fetchForClasses(["P2"])(url, { signal });
+}, ["hydraulic", "landslide"], point, {
+  timeoutMs: 5,
+});
+assert.equal(result.hydraulic.status, "available");
+assert.equal(result.landslide.status, "request_timeout");
+assert.equal(result.overall_status, "partial");
+
+result = await queryHazards(async (_url, { signal }) =>
+  new Promise((resolve, reject) => {
+    signal.addEventListener("abort", () => {
+      const error = new Error("request timeout");
+
+      error.name = "AbortError";
+      reject(error);
+    });
+  }), ["hydraulic", "landslide"], point, {
+  timeoutMs: 5,
+});
+assert.equal(result.hydraulic.status, "request_timeout");
+assert.equal(result.landslide.status, "request_timeout");
+assert.equal(result.overall_status, "request_timeout");
+
+result = await queryHazards(async (url, { signal }) => {
+  if (layerClassFromUrl(url)) {
+    throw new TypeError("hydraulic network failure");
+  }
+
+  return landslideFetch({ code: 3 })(url, { signal });
+}, ["hydraulic", "landslide"]);
+assert.equal(result.hydraulic.status, "service_unreachable");
+assert.equal(result.landslide.status, "available");
+assert.equal(result.overall_status, "partial");
+
+result = await queryHazards(async (url, { signal }) => {
+  if (layerNameFromUrl(url) === "idrogeo:pericolosita_frane") {
+    throw new Error("landslide provider exploded");
+  }
+
+  return fetchForClasses(["P1"])(url, { signal });
+}, ["hydraulic", "landslide"]);
+assert.equal(result.hydraulic.status, "available");
+assert.equal(result.landslide.status, "service_unreachable");
+assert.equal(result.overall_status, "partial");
+
+const observedSignals = {
+  hydraulic: new Set(),
+  landslide: new Set(),
+};
+result = await queryHazards(async (url, { signal }) => {
+  if (layerNameFromUrl(url) === "idrogeo:pericolosita_frane") {
+    observedSignals.landslide.add(signal);
+
+    return landslideFetch({ code: 2 })(url, { signal });
+  }
+
+  observedSignals.hydraulic.add(signal);
+
+  return fetchForClasses(["P1"])(url, { signal });
+}, ["hydraulic", "landslide"]);
+assert.equal(result.hydraulic.status, "available");
+assert.equal(result.landslide.status, "available");
+assert.equal(observedSignals.hydraulic.size, 3);
+assert.equal(observedSignals.landslide.size, 1);
+assert.equal(
+  observedSignals.hydraulic.has([...observedSignals.landslide][0]),
+  false
+);
+
+result = await queryHazards(landslideFetch({ code: 4 }), [
+  "hydraulic",
+  "landslide",
+], {
+  latitude: undefined,
+  longitude: undefined,
+});
+assert.equal(result.hydraulic.status, "point_not_selected");
+assert.equal(result.landslide.status, "point_not_selected");
+assert.equal(result.overall_status, "point_not_selected");
+
+clearHazardExposureCache();
+const hydraulicOnly = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic"],
+    ...point,
+  },
+  {
+    fetchImpl: fetchForClasses(["P1"]),
+    timeoutMs: 50,
+  }
+);
+const hydraulicAndLandslide = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic", "landslide"],
+    ...point,
+  },
+  {
+    fetchImpl: landslideFetch({ code: 4 }),
+    timeoutMs: 50,
+  }
+);
+assert.notEqual(hydraulicOnly.cache.key, hydraulicAndLandslide.cache.key);
+assert.equal(hydraulicAndLandslide.cache.hit, false);
+assert.equal(hydraulicAndLandslide.landslide.status, "available");
+
+clearHazardExposureCache();
+const staleErrorCandidate = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic", "landslide"],
+    ...point,
+  },
+  {
+    fetchImpl: async (url, { signal }) => {
+      if (
+        layerNameFromUrl(url) === "idrogeo:pericolosita_frane" ||
+        String(url).includes("pericolosita_frane")
+      ) {
+        throw new Error("temporary landslide failure");
+      }
+
+      return fetchForClasses(["P1"])(url, { signal });
+    },
+    timeoutMs: 50,
+  }
+);
+assert.equal(staleErrorCandidate.landslide.status, "service_unreachable");
+assert.equal(Boolean(staleErrorCandidate.landslide.source?.queried_at), true);
+
+const recoveredAfterError = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic", "landslide"],
+    ...point,
+  },
+  {
+    fetchImpl: landslideFetch({ code: 4 }),
+    timeoutMs: 50,
+  }
+);
+assert.equal(recoveredAfterError.cache.hit, false);
+assert.equal(recoveredAfterError.landslide.status, "available");
+assert.equal(recoveredAfterError.landslide.highest_hazard_class, "P4");
+
+clearHazardExposureCache();
+const stringCoordinateResult = await evaluatePointHazardExposure(
+  {
+    bypassCache: true,
+    hazards: ["landslide"],
+    latitude: "40.10005714",
+    longitude: "16.00375000",
+  },
+  {
+    fetchImpl: async (url) => {
+      if (
+        layerNameFromUrl(url) === "idrogeo:pericolosita_frane" ||
+        String(url).includes("pericolosita_frane")
+      ) {
+        return jsonResponse({
+          features: [
+            {
+              geometry: {
+                coordinates: [
+                  [
+                    [16.003, 40.099],
+                    [16.005, 40.099],
+                    [16.005, 40.101],
+                    [16.003, 40.101],
+                    [16.003, 40.099],
+                  ],
+                ],
+                type: "Polygon",
+              },
+              properties: {
+                cod_per_it: 4,
+                id: "mock-p4-string",
+              },
+              type: "Feature",
+            },
+          ],
+          type: "FeatureCollection",
+        });
+      }
+
+      return fetchForClasses([])(url);
+    },
+    timeoutMs: 50,
+  }
+);
+assert.equal(stringCoordinateResult.landslide.status, "available");
+assert.equal(stringCoordinateResult.landslide.highest_hazard_class, "P4");
+
+const professionalPageSource = fs.readFileSync(
+  path.join(root, "src", "pages", "ProfessionalPage.jsx"),
+  "utf8"
+);
+assert.match(
+  professionalPageSource,
+  /professionalHazardExposurePoint\(\{\s*bypassCache:\s*false,\s*hazards:\s*\["hydraulic",\s*"landslide"\]/s
+);
+assert.match(
+  professionalPageSource,
+  /setPath01LandslideExposure\(\s*result\.landslide\s*\|\|/s
+);
+assert.match(
+  professionalPageSource,
+  /exposure\.status === "partial"[\s\S]*?Partial hydraulic result/s
+);
+assert.match(
+  professionalPageSource,
+  /No intersection was found in the layers that responded\./s
+);
+assert.match(
+  professionalPageSource,
+  /frontend_response_received/s
+);
+assert.match(
+  professionalPageSource,
+  /setPath01HydraulicExposure\(\{\s*confidence:\s*"pending"[\s\S]*?status:\s*"loading"/
+);
+assert.match(
+  professionalPageSource,
+  /setPath01LandslideExposure\(\{\s*attention_area:\s*false[\s\S]*?status:\s*"loading"/
+);
+
 console.log(
   JSON.stringify({
     ok: true,
@@ -552,7 +1031,35 @@ console.log(
       "source-dataset-version-distinct-from-provider-version",
       "metadata-bbox-axis-order",
       "single-layer-error-partial",
-      "invalid-coordinates",
+      "multi-hazard-registry",
+      "hydraulic-only",
+      "landslide-only",
+      "landslide-direct-provider-signature",
+      "landslide-registry-provider-signature",
+      "landslide-signature-mismatch-stage",
+      "hydraulic-plus-landslide",
+      "landslide-p1-p4-order",
+      "landslide-aa-separate",
+      "landslide-no-intersection",
+      "landslide-schema-mismatch",
+      "multi-hazard-query-payload",
+      "multi-hazard-timeout-preserves-landslide",
+      "multi-hazard-timeout-preserves-no-intersection",
+      "multi-hazard-landslide-timeout-preserves-hydraulic",
+      "multi-hazard-both-timeout",
+      "multi-hazard-provider-errors-independent",
+      "separate-abort-controllers",
+      "provider-exception-attempted-at",
+      "point-not-selected-for-missing-point",
+      "cache-key-provider-versions",
+      "cache-key-hydraulic-only-distinct-from-multi-hazard",
+      "technical-errors-not-cached",
+      "string-coordinate-p4",
+      "professional-page-multi-hazard-binding",
+      "landslide-error-preserves-hydraulic",
+      "hydraulic-error-preserves-landslide",
+      "unknown-hazard-no-provider",
+      "point-not-selected",
       "cache-bypass-development",
       "deterministic-output",
       "unavailable-distinct-from-no-hazard",
