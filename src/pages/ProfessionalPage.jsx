@@ -222,6 +222,10 @@ export default function ProfessionalPage() {
     setPath01LandslideExposure,
   ] = useState(null);
   const [
+    path01SeismicExposure,
+    setPath01SeismicExposure,
+  ] = useState(null);
+  const [
     path02ExposureStatus,
     setPath02ExposureStatus,
   ] = useState("idle");
@@ -9419,6 +9423,7 @@ export default function ProfessionalPage() {
     });
     setPath01HydraulicExposure(null);
     setPath01LandslideExposure(null);
+    setPath01SeismicExposure(null);
     setPath01ExposureStatus("idle");
   };
   const hydraulicExposureLabel = (exposure) => {
@@ -9509,6 +9514,42 @@ export default function ProfessionalPage() {
 
     return exposure.status || "unavailable";
   };
+  const seismicExposureLabel = (exposure) => {
+    if (!exposure) {
+      return language === "it"
+        ? "Punto non selezionato"
+        : "No point selected";
+    }
+
+    if (exposure.status === "available" && hasSeismicPga(exposure)) {
+      return `${Number(exposure.pga_p50_g).toFixed(3)} g`;
+    }
+
+    if (exposure.status === "configuration_error") {
+      return language === "it"
+        ? "Griglia MPS04 non configurata"
+        : "MPS04 grid not configured";
+    }
+
+    if (exposure.status === "outside_coverage") {
+      return language === "it"
+        ? "Fuori copertura MPS04"
+        : "Outside MPS04 coverage";
+    }
+
+    if (exposure.status === "invalid_coordinates") {
+      return language === "it"
+        ? "Coordinate non valide"
+        : "Invalid coordinates";
+    }
+
+    return exposure.status || "unavailable";
+  };
+  const hasSeismicPga = (exposure) =>
+    exposure?.pga_p50_g !== null &&
+    exposure?.pga_p50_g !== undefined &&
+    exposure?.pga_p50_g !== "" &&
+    Number.isFinite(Number(exposure.pga_p50_g));
   const commitProjectLocation = async (
     latitude,
     longitude,
@@ -9539,6 +9580,7 @@ export default function ProfessionalPage() {
       });
       setPath01HydraulicExposure(null);
       setPath01LandslideExposure(null);
+      setPath01SeismicExposure(null);
       setPath01ExposureStatus("blocked");
 
       return;
@@ -9585,6 +9627,16 @@ export default function ProfessionalPage() {
       normalized_score: null,
       status: "loading",
     });
+    setPath01SeismicExposure({
+      confidence: "pending",
+      model: "MPS04",
+      model_role: "reference_regulatory_model",
+      nearest_node: null,
+      normalized_score: null,
+      pga_p50_g: null,
+      status: "loading",
+      unit: "g",
+    });
     setPath01ExposureStatus("loading");
     const exposureRequestToken = `${Date.now()}-${derived.latitude}-${derived.longitude}`;
 
@@ -9593,12 +9645,12 @@ export default function ProfessionalPage() {
     try {
       const result = await professionalHazardExposurePoint({
         bypassCache: false,
-        hazards: ["hydraulic", "landslide"],
+        hazards: ["hydraulic", "landslide", "seismic"],
         latitude: derived.latitude,
         longitude: derived.longitude,
       });
 
-      ["hydraulic", "landslide"].forEach((hazard) => {
+      ["hydraulic", "landslide", "seismic"].forEach((hazard) => {
         traceFrontendHazardStage({
           hazard,
           latitude: derived.latitude,
@@ -9632,8 +9684,34 @@ export default function ProfessionalPage() {
           status: "provider_exception",
         }
       );
+      setPath01SeismicExposure(
+        result.seismic || {
+          confidence: "source_unavailable",
+          error: {
+            code: "provider_not_returned",
+            message:
+              "The API response did not include the seismic provider result. Restart the ARCUS API backend if the seismic provider was added after the server started.",
+            retryable: true,
+            stage: "frontend_response_mapped",
+          },
+          model: "MPS04",
+          model_role: "reference_regulatory_model",
+          nearest_node: null,
+          normalized_score: null,
+          pga_p16_g: null,
+          pga_p50_g: null,
+          pga_p84_g: null,
+          sampling_method: "nearest_grid_node",
+          source: {
+            provider: "INGV",
+            service_type: "local_grid",
+          },
+          status: "source_unavailable",
+          unit: "g",
+        }
+      );
       setPath01ExposureStatus("ready");
-      ["hydraulic", "landslide"].forEach((hazard) => {
+      ["hydraulic", "landslide", "seismic"].forEach((hazard) => {
         traceFrontendHazardStage({
           hazard,
           latitude: derived.latitude,
@@ -9672,6 +9750,28 @@ export default function ProfessionalPage() {
         matched_hazard_classes: [],
         normalized_score: null,
         status: "service_unreachable",
+      });
+      setPath01SeismicExposure({
+        confidence: "source_unavailable",
+        explanation: [
+          language === "it"
+            ? "La griglia locale INGV MPS04 non e disponibile in questa sessione."
+            : "The local INGV MPS04 grid is not available in this session.",
+        ],
+        model: "MPS04",
+        model_role: "reference_regulatory_model",
+        nearest_node: null,
+        normalized_score: null,
+        pga_p16_g: null,
+        pga_p50_g: null,
+        pga_p84_g: null,
+        sampling_method: "nearest_grid_node",
+        source: {
+          provider: "INGV",
+          service_type: "local_grid",
+        },
+        status: "source_unavailable",
+        unit: "g",
       });
       setPath01ExposureStatus("service_unreachable");
     }
@@ -10123,6 +10223,7 @@ export default function ProfessionalPage() {
     });
     setPath01HydraulicExposure(null);
     setPath01LandslideExposure(null);
+    setPath01SeismicExposure(null);
     setPath01ExposureStatus("idle");
   };
 
@@ -10695,6 +10796,7 @@ export default function ProfessionalPage() {
                     onChange={(event) => {
                       setPath01HydraulicExposure(null);
                       setPath01LandslideExposure(null);
+                      setPath01SeismicExposure(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10721,6 +10823,7 @@ export default function ProfessionalPage() {
                     onChange={(event) => {
                       setPath01HydraulicExposure(null);
                       setPath01LandslideExposure(null);
+                      setPath01SeismicExposure(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10904,6 +11007,85 @@ export default function ProfessionalPage() {
                       Analysis mode:{" "}
                       {path01LandslideExposure?.source?.analysis_mode ||
                         "point_intersection"}
+                    </span>
+                    <span>Normalized score: not assigned</span>
+                  </div>
+                </article>
+
+                <article>
+                  <span>Seismic hazard - INGV MPS04</span>
+                  <strong>
+                    {seismicExposureLabel(path01SeismicExposure)}
+                  </strong>
+                  <p>
+                    {language === "it"
+                      ? "PGA mediana MPS04, probabilita di superamento 10% in 50 anni, su suolo di riferimento del modello. Non e probabilita di collasso e non entra nel Final Priority Index."
+                      : "MPS04 median PGA, 10% probability of exceedance in 50 years, on the model reference ground. It is not collapse probability and is not used in the Final Priority Index."}
+                  </p>
+                  <div className="platform-exposure-meta">
+                    <span>
+                      Status:{" "}
+                      {path01SeismicExposure?.status ||
+                        (language === "it"
+                          ? "punto non selezionato"
+                          : "point not selected")}
+                    </span>
+                    <span>Model: {path01SeismicExposure?.model || "MPS04"}</span>
+                    <span>
+                      Role:{" "}
+                      {path01SeismicExposure?.model_role ||
+                        "reference_regulatory_model"}
+                    </span>
+                    <span>
+                      PGA median:{" "}
+                      {hasSeismicPga(path01SeismicExposure)
+                        ? `${Number(path01SeismicExposure.pga_p50_g).toFixed(3)} g`
+                        : "-"}
+                    </span>
+                    <span>
+                      Probability:{" "}
+                      {path01SeismicExposure?.probability_of_exceedance_50_years ||
+                        10}
+                      % in 50 years
+                    </span>
+                    <span>
+                      Percentile: {path01SeismicExposure?.percentile || 50}th
+                    </span>
+                    <span>
+                      Reference ground:{" "}
+                      {path01SeismicExposure?.reference_ground_condition ||
+                        path01SeismicExposure?.source?.reference_ground_condition ||
+                        "-"}
+                    </span>
+                    <span>
+                      Sampling:{" "}
+                      {path01SeismicExposure?.sampling_method ||
+                        "nearest_grid_node"}
+                    </span>
+                    <span>
+                      Nearest node distance:{" "}
+                      {Number.isFinite(
+                        Number(path01SeismicExposure?.nearest_node?.distance_m)
+                      )
+                        ? `${Math.round(path01SeismicExposure.nearest_node.distance_m)} m`
+                        : "-"}
+                    </span>
+                    <span>
+                      Dataset:{" "}
+                      {path01SeismicExposure?.source?.source_dataset_version ||
+                        "MPS04-OPCM3519"}
+                    </span>
+                    <span>
+                      Source:{" "}
+                      {path01SeismicExposure?.source
+                        ? `${path01SeismicExposure.source.provider} ${path01SeismicExposure.source.service_type}`
+                        : "INGV local_grid"}
+                    </span>
+                    <span>
+                      Timestamp:{" "}
+                      {path01SeismicExposure?.source?.queried_at ||
+                        path01SeismicExposure?.attempted_at ||
+                        "-"}
                     </span>
                     <span>Normalized score: not assigned</span>
                   </div>
@@ -14170,6 +14352,25 @@ export default function ProfessionalPage() {
                     {path01LandslideExposure?.attention_area
                       ? path01LandslideExposure.matched_attention_classes?.join(", ") || "AA"
                       : "No"}
+                  </em>
+                </li>
+                <li>
+                  <b>Official seismic hazard - INGV MPS04</b>
+                  <em>{seismicExposureLabel(path01SeismicExposure)}</em>
+                </li>
+                <li>
+                  <b>MPS04 PGA p50</b>
+                  <em>
+                    {hasSeismicPga(path01SeismicExposure)
+                      ? `${Number(path01SeismicExposure.pga_p50_g).toFixed(3)} g`
+                      : "unavailable"}
+                  </em>
+                </li>
+                <li>
+                  <b>Seismic sampling</b>
+                  <em>
+                    {path01SeismicExposure?.sampling_method ||
+                      "nearest_grid_node"}
                   </em>
                 </li>
                 <li>

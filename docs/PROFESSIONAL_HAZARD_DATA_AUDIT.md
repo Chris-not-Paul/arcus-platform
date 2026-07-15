@@ -536,17 +536,17 @@ Il `hazardScore` non deriva dalla posizione del ponte rispetto a poligoni/raster
 ## Problemi tecnici e copertura
 
 - I WMS sono tile immagine: ottimi per contesto visuale, insufficienti per scoring robusto senza GetFeatureInfo/WFS o copia vettoriale/raster.
-- INGV MPS04 e seismic hazard sono dichiarati, ma non c'e nessun layer effettivo configurato.
-- `activeProfessionalHazardLayers.seismic` esiste in `ProfessionalPage`, ma non trova un overlay WMS corrispondente.
+- INGV MPS04 e ora implementato come provider `grid_sampling` su griglia locale processata, ma richiede setup in `private-data/professional/seismic`.
+- `activeProfessionalHazardLayers.seismic` resta un controllo visuale/concettuale; non esiste un overlay WMS sismico usato per calcolo.
 - IdroGEO `frane` e caricato come inventario visuale, ma il repo non documenta classi hazard/suscettibilita/pericolosita.
 - Il layer idraulico e solo P3; non risultano P1/P2 o classi multiple.
 - Non risultano shapefile, geopackage, geotiff/tiff hazard locali.
-- Non risultano funzioni di reproiezione, spatial index, point-in-polygon, line buffering, raster sampling o zonal statistics dedicate agli hazard esterni.
+- Per MPS04 esiste ora una conversione offline ED50 EPSG:4230 -> WGS84 EPSG:4326 con `proj4`, seguita da nearest-node grid sampling. Non sono stati introdotti raster sampling, zonal statistics o interpolazioni inventate.
 - `data-release.json` dichiara che gli external hazard layers non sono inclusi nella release.
 
 ## Dati dichiarati nell'interfaccia ma assenti o non calcolabili
 
-- `INGV MPS04 seismic hazard`: dichiarato, non caricato.
+- `INGV MPS04 seismic hazard`: sorgente ufficiale individuata e provider implementato; il dataset locale resta assente finche non si eseguono `npm run download:ingv-mps04` e `npm run build:ingv-mps04-grid`.
 - `ISPRA ITHACA capable faults`: dichiarato, non caricato.
 - `Protezione Civile meteo-hydro alerts`: dichiarato, non caricato.
 - `river network` e `hydrographic context`: citati in Methodology, non trovati come dataset.
@@ -559,6 +559,8 @@ Senza proporre nuove formule, i punti di integrazione necessari sarebbero:
 
 - `server/dataService.js`: registrare e servire risorse hazard reali o endpoint calcolo.
 - `scripts/build-data.js`: ingest/normalizzazione dataset esterni se batch/offline.
+- `scripts/download-ingv-mps04.js` e `scripts/build-ingv-mps04-grid.js`: gia introdotti per MPS04, da eseguire per produrre risorse private locali.
+- `server/hazard/providers/ingvSeismicProvider.js`: gia introdotto per Path 01 seismic MPS04.
 - `src/utils/analytics.js`: integrare risultati di esposizione reale in `buildAssetScreening` o funzioni analoghe.
 - `src/pages/ProfessionalPage.jsx`: passare coordinate/geometrie Path 01/Path 02 al motore e visualizzare risultati.
 - `src/pages/AtlasPage.jsx`: separare overlay visuali da layer analitici; aggiungere eventuale stato dati effettivi.
@@ -599,13 +601,14 @@ ARCUS oggi possiede:
 - una base dati ARCUS robusta per collassi, fonti, reliability, vulnerability e scoring interno;
 - denominatori/proxy territoriali utili per lettura provinciale;
 - due WMS ISPRA reali per visualizzazione professionale;
+- un provider MPS04 INGV locale-grid per Path 01, subordinato alla presenza dei file privati processati;
 - un registry chiaro dei layer pubblici che si intendono integrare.
 
 ARCUS oggi non possiede ancora:
 
-- hazard ISPRA/INGV locali calcolabili;
+- hazard ISPRA/INGV locali pienamente calcolabili per tutti i Path;
 - endpoint WFS o GeoJSON hazard esterni;
-- raster/Grid MPS04/PGA;
+- raster/Grid MPS04/PGA committato nel repository pubblico;
 - operazioni geospaziali di intersezione o sampling nei Path Professional.
 
-Quindi i Path 01 e Path 02 sono attualmente **Professional-ready come workflow e proxy intelligence**, ma non ancora **geospatial-exposure-ready** rispetto a ISPRA/INGV reali.
+Quindi Path 01 e ora **parzialmente geospatial-exposure-ready**: hydraulic WFS, landslide WFS e seismic MPS04 local-grid sono cablati come shadow providers. Path 02 resta basato su proxy/profili provinciali e non esegue ancora campionamenti hazard reali per ogni asset.

@@ -974,7 +974,7 @@ const professionalPageSource = fs.readFileSync(
 );
 assert.match(
   professionalPageSource,
-  /professionalHazardExposurePoint\(\{\s*bypassCache:\s*false,\s*hazards:\s*\["hydraulic",\s*"landslide"\]/s
+  /professionalHazardExposurePoint\(\{\s*bypassCache:\s*false,\s*hazards:\s*\["hydraulic",\s*"landslide",\s*"seismic"\]/s
 );
 assert.match(
   professionalPageSource,

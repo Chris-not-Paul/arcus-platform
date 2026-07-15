@@ -1305,7 +1305,7 @@ function buildFullReportHtml({
     </section>
     <section class="hazard-section">
       <h2><span>05</span>Hazard / Exposure Context</h2>
-      <p>The Step 3 analysis combines ARCUS historical cases with declared public hazard context. Official point-level hydraulic and PAI landslide exposure is evaluated through backend WFS providers when a validated project point is available; WMS remains visual control only. This standalone province export keeps the provincial screening scores separate from any point-level official exposure.</p>
+      <p>The Step 3 analysis combines ARCUS historical cases with declared public hazard context. Official point-level hydraulic and PAI landslide exposure is evaluated through backend WFS providers when a validated project point is available; INGV MPS04 seismic PGA is evaluated through the protected local grid when configured. WMS remains visual control only. This standalone province export keeps the provincial screening scores separate from any point-level official exposure.</p>
       ${hazardBars(focus, exposureProfile)}
     </section>
     <section>
@@ -1458,7 +1458,7 @@ function buildBriefHtml({
     "Translate the province signal into site-specific checks.",
     "Review P1-P3 priority ARCUS cases.",
     `Check ${displayDriver} assumptions on site.`,
-    "Use WFS point exposure for validated project locations; use WMS overlays as visual context only.",
+    "Use WFS point exposure and the configured INGV MPS04 local grid for validated project locations; use WMS overlays as visual context only.",
     "Document limits before design decisions.",
   ];
   const briefDataToRequest = focus.dataToRequest.slice(0, 5);

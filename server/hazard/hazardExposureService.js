@@ -5,12 +5,19 @@ import {
   LANDSLIDE_PROVIDER_VERSION,
 } from "./normalizers/landslideNormalizer.js";
 import {
+  SEISMIC_ANALYSIS_MODE,
+  SEISMIC_PROVIDER_VERSION,
+} from "./normalizers/seismicNormalizer.js";
+import {
   queryIspraFloodExposure,
   validateWgs84Point,
 } from "./providers/ispraFloodProvider.js";
 import {
   queryIspraLandslideExposure,
 } from "./providers/ispraLandslideProvider.js";
+import {
+  queryIngvSeismicExposure,
+} from "./providers/ingvSeismicProvider.js";
 import {
   safeError,
   traceHazardStage,
@@ -21,14 +28,22 @@ const CACHE_MAX_ITEMS = 500;
 const cache = new Map();
 const PROVIDER_REGISTRY = {
   hydraulic: {
+    analysisMode: "point_intersection",
     datasetVersion: "source-null",
     providerVersion: FLOOD_PROVIDER_VERSION,
     query: queryIspraFloodExposure,
   },
   landslide: {
+    analysisMode: "point_intersection",
     datasetVersion: "source-5.0-2024",
     providerVersion: LANDSLIDE_PROVIDER_VERSION,
     query: queryIspraLandslideExposure,
+  },
+  seismic: {
+    analysisMode: SEISMIC_ANALYSIS_MODE,
+    datasetVersion: "MPS04-OPCM3519-1B-ag-005-local-grid",
+    providerVersion: SEISMIC_PROVIDER_VERSION,
+    query: queryIngvSeismicExposure,
   },
 };
 
@@ -46,7 +61,7 @@ function cacheKeyFor({ hazards, latitude, longitude }) {
         hazard,
         provider.providerVersion,
         provider.datasetVersion,
-        "point_intersection",
+        provider.analysisMode || "point_intersection",
       ].join("@");
     })
     .join(",");
@@ -182,6 +197,35 @@ function pointNotSelectedResult(hazard, query) {
     };
   }
 
+  if (hazard === "seismic") {
+    return {
+      ...base,
+      analysis_mode: "grid_sampling",
+      interpolated: false,
+      interpolated_pga_g: null,
+      model: "MPS04",
+      model_role: "reference_regulatory_model",
+      nearest_node: null,
+      pga_p16_g: null,
+      pga_p50_g: null,
+      pga_p84_g: null,
+      probability_of_exceedance_50_years: 10,
+      reference_ground_condition: null,
+      sampling_method: "nearest_grid_node",
+      scientific_comparison: {
+        model: "MPS19",
+        model_role: "updated_scientific_model",
+        normalized_score: null,
+        reason: "MPS19 is not integrated in this Path 01 vertical slice.",
+        status: "not_integrated",
+      },
+      surrounding_nodes: [],
+      unit: "g",
+      percentile: 50,
+      shaking_parameter: "PGA",
+    };
+  }
+
   return {
     ...base,
     highest_class: null,
@@ -218,12 +262,16 @@ function providerExceptionResult(hazard, error) {
     ],
     normalized_score: null,
     source: {
-      provider: "ISPRA",
+      provider: hazard === "seismic" ? "INGV" : "ISPRA",
       provider_version: provider.providerVersion || null,
       queried_at: attemptedAt,
-      service_type: "WFS",
+      service_type: hazard === "seismic" ? "local_grid" : "WFS",
       source_dataset_version:
-        hazard === "landslide" ? "5.0" : null,
+        hazard === "landslide"
+          ? "5.0"
+          : hazard === "seismic"
+            ? provider.datasetVersion || null
+            : null,
       source_reference_year:
         hazard === "landslide" ? 2024 : null,
     },
@@ -239,6 +287,35 @@ function providerExceptionResult(hazard, error) {
       highest_hazard_class: null,
       matched_attention_classes: [],
       matched_hazard_classes: [],
+    };
+  }
+
+  if (hazard === "seismic") {
+    return {
+      ...base,
+      analysis_mode: "grid_sampling",
+      interpolated: false,
+      interpolated_pga_g: null,
+      model: "MPS04",
+      model_role: "reference_regulatory_model",
+      nearest_node: null,
+      pga_p16_g: null,
+      pga_p50_g: null,
+      pga_p84_g: null,
+      probability_of_exceedance_50_years: 10,
+      reference_ground_condition: null,
+      sampling_method: "nearest_grid_node",
+      scientific_comparison: {
+        model: "MPS19",
+        model_role: "updated_scientific_model",
+        normalized_score: null,
+        reason: "MPS19 is not integrated in this Path 01 vertical slice.",
+        status: "not_integrated",
+      },
+      surrounding_nodes: [],
+      unit: "g",
+      percentile: 50,
+      shaking_parameter: "PGA",
     };
   }
 

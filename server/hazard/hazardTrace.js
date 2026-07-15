@@ -6,6 +6,9 @@ import {
 import {
   LANDSLIDE_PROVIDER_VERSION,
 } from "./normalizers/landslideNormalizer.js";
+import {
+  SEISMIC_PROVIDER_VERSION,
+} from "./normalizers/seismicNormalizer.js";
 
 export const hazardBackendStartedAt = new Date().toISOString();
 export const hazardBuildIdentifier =
@@ -21,6 +24,7 @@ export const hazardRuntimeMetadata = Object.freeze({
   provider_versions: {
     hydraulic: FLOOD_PROVIDER_VERSION,
     landslide: LANDSLIDE_PROVIDER_VERSION,
+    seismic: SEISMIC_PROVIDER_VERSION,
   },
 });
 

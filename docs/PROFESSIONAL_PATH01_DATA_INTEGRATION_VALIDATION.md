@@ -363,6 +363,50 @@ Detailed discovery and validation are documented in:
 - `docs/PROFESSIONAL_LANDSLIDE_SOURCE_DISCOVERY.md`
 - `docs/PROFESSIONAL_LANDSLIDE_EXPOSURE_VALIDATION.md`
 
+### Official Seismic Exposure - INGV MPS04
+
+Path 01 now has the MPS04 seismic vertical slice wired as a third independent official exposure provider. It is a local-grid provider, not WMS pixel sampling and not an administrative seismic-zone lookup.
+
+| Element | Value |
+|---------|-------|
+| Provider | INGV |
+| Model | `MPS04` |
+| Role | `reference_regulatory_model` |
+| DOI | `https://doi.org/10.13127/sh/mps04/ag` |
+| Dataset page | `http://zonesismiche.mi.ingv.it/elaborazioni/download.php` |
+| Official ZIP | `http://zonesismiche.mi.ingv.it/elaborazioni/dati/OPCM3519_1B_ag_005_txt.zip` |
+| Source CRS/datum | `EPSG:4230` / ED50 |
+| Runtime CRS | `EPSG:4326` / WGS84 processed grid |
+| Parameter | PGA / `ag` |
+| Probability | 10% exceedance in 50 years |
+| Percentile | 50th, with p16/p84 preserved when available |
+| Unit | `g` |
+| Analysis mode | `grid_sampling` |
+| Sampling method | nearest grid node |
+| Score behavior | `normalized_score = null` |
+
+The analytical chain is:
+
+```text
+project point
+-> processed private INGV MPS04 grid
+-> nearest-node sampling
+-> PGA p16/p50/p84 and nearest node distance
+-> Path 01 UI/report/export metadata
+```
+
+The local processed files are required:
+
+- `private-data/professional/seismic/mps04-manifest.json`
+- `private-data/professional/seismic/mps04-grid.json`
+
+If they are absent, the provider returns `configuration_error`; missing seismic data is not converted into PGA zero.
+
+Detailed discovery and validation are documented in:
+
+- `docs/PROFESSIONAL_SEISMIC_SOURCE_DISCOVERY.md`
+- `docs/PROFESSIONAL_SEISMIC_EXPOSURE_VALIDATION.md`
+
 Reports must not describe Professional data freshness as real-time/live. The database is a curated snapshot.
 
 ## Tests
@@ -372,6 +416,8 @@ Relevant commands:
 ```text
 npm run test:historical-incidence
 npm run test:hazard
+npm run test:hazard:seismic
+npm run test:hazard:seismic:live
 npm run test:location
 npm run test:backend
 npm run lint
@@ -389,9 +435,11 @@ Validated:
 - no fixed `release end year = 2025` wording remains in Professional report/export code;
 - point/province synchronization tests still pass;
 - hazard provider keeps `no_intersection` distinct from unavailable.
+- MPS04 seismic provider keeps `configuration_error`, `outside_coverage` and PGA zero distinct.
 
 ## Technical Debt
 
 - `hazard-exposure-preview` remains a provincial ARCUS proxy and is not removed.
-- Seismic, river network and capable-fault analytical providers are not part of this milestone.
+- MPS04 seismic is wired as a local-grid shadow provider, but full live PGA validation requires the ignored private-data grid to be downloaded and built locally.
+- River network and capable-fault analytical providers are not part of this milestone.
 - Landslide PAI is implemented only for Path 01 point exposure in shadow mode; it is not yet part of Final Priority Index scoring or Path 02 ranking.

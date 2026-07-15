@@ -291,6 +291,8 @@ function gisSummary({
             "ISPRA WFS point-level hydraulic hazard P1/P2/P3; shadow mode; not merged into ARCUS scoring.",
           landslide:
             "ISPRA IdroGEO WFS point-level PAI landslide hazard, mosaic v.5.0 2024; shadow mode; not merged into ARCUS scoring.",
+          seismic:
+            "INGV MPS04 local-grid point-level PGA p50, 10% probability of exceedance in 50 years; shadow mode; not merged into ARCUS scoring.",
         },
         public_boundary: dataRelease?.publicRelease || "",
         use: "Bounded territorial screening output; not cadastral or design-scale mapping.",
