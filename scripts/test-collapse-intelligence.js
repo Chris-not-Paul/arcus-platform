@@ -13,6 +13,7 @@ import {
   causeFamilyForEvent,
   evidenceStrength,
   findAnalogues,
+  auditMatcherFeatureExclusion,
 } from "./analyze-collapse-intelligence.js";
 import {
   buildCollapseHazardSignatures,
@@ -23,6 +24,15 @@ import {
 import {
   runRedTeamValidation,
 } from "./red-team-collapse-intelligence.js";
+import {
+  BLOCKED_OUTCOME_FIELDS,
+  buildHazardGatedCollapseIntelligence,
+  highestHydraulicClass,
+  routeHazardsForSignature,
+} from "./analyze-hazard-gated-collapse-intelligence.js";
+import {
+  normalizeHydraulicIntelligence,
+} from "../src/utils/hydraulicIntelligence.js";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, ""));
@@ -68,6 +78,11 @@ const validation = validateCollapseAnalogues({
 });
 const redTeam = runRedTeamValidation({
   outputPath: path.join(tmpRoot, "collapse-intelligence-red-team-validation.json"),
+});
+const hazardGated = buildHazardGatedCollapseIntelligence({
+  analysisPath: path.join(tmpRoot, "hazard-gated-intelligence-analysis.json"),
+  expertReviewPath: path.join(tmpRoot, "expert-review-package.json"),
+  validationPath: path.join(tmpRoot, "analogue-retrieval-validation.json"),
 });
 
 check("data-audit-real-schema", () => {
@@ -127,6 +142,26 @@ check("hazard-signature-resume-cache-version-partial", () => {
 check("hazard-signature-caching", () => {
   const cacheFile = path.join(signatureOutputDir, "collapse-hazard-signatures-cache.json");
   assert.equal(fs.existsSync(cacheFile), true);
+});
+check("hazard-signature-dry-run-distinct-from-live-enrichment", () => {
+  assert.equal(firstSignatureRun.manifest.dry_run, true);
+  assert.equal(firstSignatureRun.manifest.dry_run_events, 3);
+  assert.equal(firstSignatureRun.manifest.fully_enriched, 0);
+});
+check("hazard-signature-fully-enriched-status", () => {
+  assert.equal(Object.hasOwn(firstSignatureRun.manifest, "fully_enriched"), true);
+  assert.equal(Object.hasOwn(firstSignatureRun.manifest, "hydraulic_completed"), true);
+  assert.equal(Object.hasOwn(firstSignatureRun.manifest, "landslide_completed"), true);
+  assert.equal(Object.hasOwn(firstSignatureRun.manifest, "seismic_completed"), true);
+});
+check("hazard-signature-provider-failure-not-completed", () => {
+  const route = routeHazardsForSignature({
+    hydraulic: { status: "provider_exception", matched_classes: [] },
+    landslide: { status: "no_intersection", matched_hazard_classes: [] },
+    seismic: { status: "available", pga_p50_g: 0.12 },
+  });
+
+  assert.equal(route.unavailable_tracks.some((item) => item.track === "hydraulic"), true);
 });
 check("provider-version-invalidation-ready", () => {
   assert.equal(Object.keys(secondSignatureRun.manifest.provider_versions).length, 3);
@@ -375,6 +410,183 @@ check("red-team-unresolved-geography-excluded-correctly", () => {
     true
   );
 });
+check("hazard-gated-track-activation-without-outcome", () => {
+  const route = routeHazardsForSignature({
+    hydraulic: { matched_classes: ["P2"], status: "available" },
+    landslide: { matched_hazard_classes: [], status: "no_intersection" },
+    seismic: { status: "no_intersection" },
+  });
+
+  assert.equal(route.active_tracks.some((item) => item.track === "hydraulic"), true);
+});
+check("hazard-gated-aa-separate-attention-track", () => {
+  const route = routeHazardsForSignature({
+    hydraulic: { matched_classes: [], status: "no_intersection" },
+    landslide: {
+      attention_area: true,
+      matched_attention_classes: ["AA"],
+      matched_hazard_classes: [],
+      status: "available",
+    },
+    seismic: { status: "no_intersection" },
+  });
+
+  assert.equal(route.active_tracks.some((item) => item.track === "landslide"), false);
+  assert.equal(route.attention_tracks.some((item) => item.track === "landslide_attention_area"), true);
+});
+check("hazard-gated-router-does-not-use-documented-cause", () => {
+  const route = routeHazardsForSignature({
+    documented_cause_family: "hydraulic",
+    hydraulic: { matched_classes: [], status: "no_intersection" },
+    landslide: { matched_hazard_classes: [], status: "no_intersection" },
+    seismic: { status: "no_intersection" },
+  });
+
+  assert.equal(route.active_tracks.length, 0);
+});
+check("hazard-gated-no-outcome-field-in-matching", () => {
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("specific_cause"), true);
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("description"), true);
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("collapse_severity"), true);
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("hydraulic_failure_process"), true);
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("hydraulic_intelligence"), true);
+});
+check("hydraulic-intelligence-normalization", () => {
+  const result = normalizeHydraulicIntelligence({
+    event_id: "TEST-HYD",
+    hydraulic_component_involved: "Pier foundation",
+    hydraulic_evidence_level: "Documented",
+    hydraulic_failure_process: "Scour",
+    hydraulic_trigger: "Flood",
+    specific_cause: "Hydraulic",
+  });
+
+  assert.deepEqual(result.hydraulic_intelligence, {
+    component_involved: "pier_foundation",
+    evidence_level: "documented",
+    failure_process: "scour",
+    taxonomy_version: "hydraulic-v1",
+    trigger: "flood",
+  });
+});
+check("hydraulic-intelligence-unspecified", () => {
+  const result = normalizeHydraulicIntelligence({
+    event_id: "TEST-HYD-UNSPEC",
+    hydraulic_component_involved: "Unspecified",
+    hydraulic_evidence_level: "Unspecified",
+    hydraulic_failure_process: "Unspecified",
+    hydraulic_trigger: "Flood",
+    specific_cause: "Hydraulic",
+  });
+
+  assert.equal(result.hydraulic_intelligence.failure_process, null);
+  assert.equal(result.hydraulic_intelligence.component_involved, null);
+  assert.equal(result.hydraulic_intelligence.evidence_level, "unspecified");
+});
+check("hydraulic-intelligence-non-hydraulic-null", () => {
+  const result = normalizeHydraulicIntelligence({
+    event_id: "TEST-NON-HYD",
+    hydraulic_trigger: "Flood",
+    specific_cause: "Landslide",
+  });
+
+  assert.equal(result.hydraulic_intelligence, null);
+  assert.equal(
+    result.warnings.some((warning) => warning.code === "non_hydraulic_with_hydraulic_fields"),
+    true
+  );
+});
+check("hydraulic-intelligence-professional-present", () => {
+  const professional = readJson("private-data/professional/professional-events.json");
+  const rows = Array.isArray(professional) ? professional : professional.events;
+
+  assert.equal(
+    rows.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v1"),
+    true
+  );
+});
+check("hydraulic-intelligence-open-scope-protected", () => {
+  const script = fs.readFileSync("server/dataService.js", "utf8");
+
+  assert.equal(script.includes("hydraulic_intelligence:"), false);
+  assert.equal(script.includes("hydraulic_intelligence_warnings:"), false);
+});
+check("hydraulic-intelligence-cohort-outcomes", () => {
+  const method = analysis.analog_matching_comparison.methods[0];
+
+  assert.equal(Object.hasOwn(method.outcomes, "hydraulic_cohort"), true);
+  assert.equal(Object.hasOwn(method.outcomes.hydraulic_cohort, "failure_processes"), true);
+  assert.equal(
+    method.outcomes.hydraulic_cohort.limitations.some((item) =>
+      item.includes("not site or collapse probabilities")
+    ),
+    true
+  );
+});
+check("matcher-feature-exclusion-audit", () => {
+  const auditResult = auditMatcherFeatureExclusion();
+
+  assert.equal(auditResult.leakage_detected, false);
+  assert.equal(auditResult.blocked_outcome_fields.includes("hydraulic_failure_process"), true);
+  assert.equal(auditResult.matching_features.includes("hydraulic_failure_process"), false);
+});
+check("hazard-gated-deterministic-ranking", () => {
+  const again = buildHazardGatedCollapseIntelligence({
+    analysisPath: path.join(tmpRoot, "hazard-gated-again.json"),
+    expertReviewPath: path.join(tmpRoot, "expert-review-again.json"),
+    validationPath: path.join(tmpRoot, "retrieval-again.json"),
+  });
+
+  assert.deepEqual(
+    hazardGated.analysis.support_by_track,
+    again.analysis.support_by_track
+  );
+});
+check("hazard-gated-random-baseline", () => {
+  assert.equal(
+    Object.hasOwn(hazardGated.analysis.hydraulic_intelligence_mvp.baselines, "random_within_hydraulic_family"),
+    true
+  );
+});
+check("hazard-gated-most-frequent-pattern-baseline", () => {
+  assert.equal(
+    Object.hasOwn(hazardGated.analysis.hydraulic_intelligence_mvp.baselines, "most_frequent_hydraulic_mechanism"),
+    true
+  );
+});
+check("hazard-gated-failure-pattern-hit-at-k-fields", () => {
+  const validationResult = hazardGated.retrievalValidation.hydraulic_project_informed;
+
+  assert.equal(Object.hasOwn(validationResult, "failure_pattern_hit_at_1"), true);
+  assert.equal(Object.hasOwn(validationResult, "failure_pattern_hit_at_3"), true);
+  assert.equal(Object.hasOwn(validationResult, "failure_pattern_hit_at_5"), true);
+});
+check("hazard-gated-component-hit-at-k-fields", () => {
+  const validationResult = hazardGated.retrievalValidation.hydraulic_project_informed;
+
+  assert.equal(Object.hasOwn(validationResult, "component_hit_at_3"), true);
+  assert.equal(Object.hasOwn(validationResult, "component_hit_at_5"), true);
+});
+check("hazard-gated-abstention-and-insufficient-evidence", () => {
+  const validationResult = hazardGated.retrievalValidation.hydraulic_project_informed;
+
+  assert.equal(validationResult.abstention_rate, 1);
+  assert.equal(
+    validationResult.rows.every((row) => row.abstained),
+    true
+  );
+});
+check("hazard-gated-hci-context-only", () => {
+  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_context_only"), true);
+  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_limited_tie_breaker"), true);
+  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_weighted_feature"), true);
+});
+check("hazard-gated-hydraulic-signature-helper", () => {
+  assert.equal(
+    highestHydraulicClass({ hydraulic: { matched_classes: ["P1", "P3"], status: "available" } }),
+    "P3"
+  );
+});
 check("mitigation-pattern-mapping", () => {
   assert.equal(analysis.mitigation_knowledge_model.entry_count > 0, true);
 });
@@ -396,6 +608,17 @@ check("no-automatic-design-prescription", () => {
 check("missing-external-basis", () => {
   const kb = readJson("config/collapse-intelligence/mitigation-knowledge-base.json");
   assert.deepEqual(kb.entries[0].external_engineering_basis, []);
+});
+check("hazard-gated-mitigation-external-validation-required", () => {
+  const kb = readJson("config/collapse-intelligence/mitigation-knowledge-base.json");
+
+  assert.equal(
+    kb.entries.every((entry) =>
+      entry.status === "draft" &&
+      (!entry.external_engineering_basis || entry.external_engineering_basis.length === 0)
+    ),
+    true
+  );
 });
 check("no-unsupported-recommendation", () => {
   const doc = fs.readFileSync("docs/ARCUS_MITIGATION_KNOWLEDGE_MODEL.md", "utf8");

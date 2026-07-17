@@ -8,6 +8,11 @@ Outcome features are excluded from similarity:
 
 ```text
 specific_cause
+hydraulic_trigger
+hydraulic_failure_process
+hydraulic_component_involved
+hydraulic_evidence_level
+hydraulic_intelligence
 failure_pattern
 collapse_extent
 fatalities
@@ -16,6 +21,18 @@ consequences
 ```
 
 These are analyzed only after analogue selection.
+
+Hydraulic Intelligence is therefore used only in this sequence:
+
+```text
+project/site features
+-> analogue retrieval and ranking
+-> ranked cohort fixed
+-> hydraulic_intelligence read as outcome evidence
+-> cohort process/component/evidence aggregation
+```
+
+The matcher exposes an automatic audit that verifies none of the Hydraulic Intelligence fields is present in the matching feature list.
 
 ## Methods Compared
 

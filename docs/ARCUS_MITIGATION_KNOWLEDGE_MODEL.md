@@ -37,6 +37,17 @@ Examples:
 - seismic site-response and detailing review;
 - documented case review.
 
+For Hydraulic cases, the data plumbing can now receive:
+
+```text
+event_id
+failure_process
+component_involved
+evidence_level
+```
+
+These inputs are attached only as draft evidence context. They do not approve a mitigation pathway automatically.
+
 ### B. Design Risk-Control Options
 
 These are intentionally left as future expert-reviewed options. ARCUS data alone must not prescribe design solutions.
@@ -53,6 +64,7 @@ Before production:
 - add expert review status;
 - connect analogue event IDs only where evidence is strong enough;
 - avoid unsupported recommendations.
+- keep `external_validation_required = true` unless a human-reviewed engineering basis is documented.
 
 ## Caveat
 

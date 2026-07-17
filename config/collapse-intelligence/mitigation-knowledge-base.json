@@ -4,7 +4,34 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "hydraulic_approach_or_embankment_damage",
+      "external_validation_required": true,
       "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B00.10.17",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B13.11.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B13.11.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B16.03.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        }
+      ],
       "investigation_priorities": [
         {
           "action_id": "hydraulic_modelling",
@@ -13,6 +40,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Hydraulic modelling",
           "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
           "status": "draft",
@@ -28,6 +56,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Scour and foundation-support assessment",
           "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
           "status": "draft",
@@ -52,8 +81,35 @@
     },
     {
       "external_engineering_basis": [],
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
+      "external_validation_required": true,
       "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B11.10.01",
+          "failure_process": "debris_accumulation_or_obstruction"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B11.10.06",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B18.10.06",
+          "failure_process": "debris_accumulation_or_obstruction"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B24.06.01",
+          "failure_process": "debris_flow_or_solid_transport"
+        }
+      ],
       "investigation_priorities": [
         {
           "action_id": "hydraulic_modelling",
@@ -62,6 +118,739 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_debris_obstruction_or_solid_transport"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_debris_obstruction_or_solid_transport",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "external_validation_required": true,
+      "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.19",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.20",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.37",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.07.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.07.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.07.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B03.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B03.08.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B03.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B04.12.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B05.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B05.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B06.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.05.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.12.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B09.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B10.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B10.03.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B10.06.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B10.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.03.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.03.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.03.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.10.08",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.11.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B12.11.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B12.11.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B12.11.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.03.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.11.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.11.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.11.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.11.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.12.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.05.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.08.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.11.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B14.11.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.10.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.10.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B16.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B16.11.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B16.11.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B17.06.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B17.09.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.02.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.02.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.10.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B19.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.05.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.08",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.09",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.10",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.11.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.12.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B21.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.08",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.09",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.09.10",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.12.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.05.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.05.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.05.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.05.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B23.11.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.05.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.05.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.09.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B24.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B25.04.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B25.07.01",
+          "failure_process": null
+        }
+      ],
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
           "label": "Hydraulic modelling",
           "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
           "status": "draft",
@@ -77,6 +866,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Scour and foundation-support assessment",
           "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
           "status": "draft",
@@ -101,8 +891,17 @@
     },
     {
       "external_engineering_basis": [],
-      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "failure_pattern": "hydraulic_other_documented_process",
+      "external_validation_required": true,
       "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B13.02.01",
+          "failure_process": "other_documented_hydraulic_process"
+        }
+      ],
       "investigation_priorities": [
         {
           "action_id": "hydraulic_modelling",
@@ -111,6 +910,235 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_other_documented_process"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_other_documented_process",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
+      "external_validation_required": true,
+      "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B09.04.04",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B11.11.03",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B15.09.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B16.11.02",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B17.09.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B18.10.02",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B19.12.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        }
+      ],
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_overtopping_or_hydrodynamic_action"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_overtopping_or_hydrodynamic_action",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "external_validation_required": true,
+      "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B04.10.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B12.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B13.10.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B13.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B17.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.04",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B21.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B23.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B23.05.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B23.05.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B25.04.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B26.04.01",
+          "failure_process": "scour"
+        }
+      ],
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "external_validation_required": true,
           "label": "Hydraulic modelling",
           "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
           "status": "draft",
@@ -126,6 +1154,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Scour and foundation-support assessment",
           "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
           "status": "draft",
@@ -151,7 +1180,370 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "hydraulic_unspecified",
+      "external_validation_required": true,
       "hazard_family": "hydraulic",
+      "hydraulic_intelligence_inputs": [
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.08",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.09",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.10",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.11",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.12",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.13",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.14",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.15",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.16",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.18",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.21",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.22",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.23",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.24",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.25",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.26",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.27",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.28",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.29",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.30",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.31",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.32",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.33",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.34",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.35",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.36",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.38",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.39",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.40",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.41",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.42",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.43",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.05.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.05",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B02.06.06",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B05.10.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.05.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B08.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B09.02.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B09.12.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B11.03.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B13.10.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B15.03.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B16.11.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.10.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B18.10.07",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.10.13",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.11.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.11.04",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.12.02",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B20.12.03",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B22.11.01",
+          "failure_process": null
+        }
+      ],
       "investigation_priorities": [
         {
           "action_id": "hydraulic_modelling",
@@ -160,6 +1552,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Hydraulic modelling",
           "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
           "status": "draft",
@@ -175,6 +1568,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Scour and foundation-support assessment",
           "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
           "status": "draft",
@@ -200,7 +1594,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "landslide_slope_instability",
+      "external_validation_required": true,
       "hazard_family": "landslide",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "slope_stability_investigation",
@@ -209,6 +1605,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Slope stability investigation",
           "purpose": "Assess slope movement and abutment/approach-road sensitivity.",
           "status": "draft",
@@ -234,7 +1631,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "seismic_pier_or_superstructure_damage",
+      "external_validation_required": true,
       "hazard_family": "seismic",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "seismic_site_response_review",
@@ -243,6 +1642,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Seismic site-response and detailing review",
           "purpose": "Evaluate whether seismic demand and structural detailing require specialist study.",
           "status": "draft",
@@ -268,7 +1668,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "design_or_construction_deficiency",
+      "external_validation_required": true,
       "hazard_family": "design",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -277,6 +1679,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -301,7 +1704,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "impact_road_vehicle_collision",
+      "external_validation_required": true,
       "hazard_family": "impact",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -310,6 +1715,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -334,7 +1740,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "impact_unspecified",
+      "external_validation_required": true,
       "hazard_family": "impact",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -343,6 +1751,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -367,7 +1776,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "deterioration_or_material_degradation",
+      "external_validation_required": true,
       "hazard_family": "deterioration",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -376,6 +1787,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -400,7 +1812,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "overload_or_excess_action",
+      "external_validation_required": true,
       "hazard_family": "overload",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -409,6 +1823,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -433,7 +1848,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "unspecified_partial_collapse",
+      "external_validation_required": true,
       "hazard_family": "unspecified",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -442,6 +1859,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",
@@ -466,7 +1884,9 @@
     {
       "external_engineering_basis": [],
       "failure_pattern": "unspecified_total_collapse",
+      "external_validation_required": true,
       "hazard_family": "unspecified",
+      "hydraulic_intelligence_inputs": [],
       "investigation_priorities": [
         {
           "action_id": "documented_case_review",
@@ -475,6 +1895,7 @@
             "effective_count": null,
             "event_ids": []
           },
+          "external_validation_required": true,
           "label": "Documented case review",
           "purpose": "Review analogue documentation before proposing technical actions.",
           "status": "draft",

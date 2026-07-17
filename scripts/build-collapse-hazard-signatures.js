@@ -18,6 +18,16 @@ const SIGNATURES_PATH = path.join(OUTPUT_DIR, "collapse-hazard-signatures.json")
 const MANIFEST_PATH = path.join(OUTPUT_DIR, "collapse-hazard-signatures-manifest.json");
 const ERRORS_PATH = path.join(OUTPUT_DIR, "collapse-hazard-signatures-errors.json");
 const CACHE_PATH = path.join(OUTPUT_DIR, "collapse-hazard-signatures-cache.json");
+const PROVIDER_VERSIONS = {
+  hydraulic: "ispra-flood-wfs-v2",
+  landslide: "ispra-landslide-pai-wfs-v1",
+  seismic: "ingv-mps04-local-grid-v1",
+};
+const SEMANTIC_COMPLETION_STATUSES = new Set([
+  "available",
+  "no_intersection",
+  "outside_coverage",
+]);
 
 function parseArgs(argv = process.argv.slice(2)) {
   const options = {
@@ -29,6 +39,7 @@ function parseArgs(argv = process.argv.slice(2)) {
     resume: false,
     retry: 2,
     rateLimitMs: 250,
+    concurrency: 1,
   };
 
   argv.forEach((argument) => {
@@ -44,6 +55,12 @@ function parseArgs(argv = process.argv.slice(2)) {
       options.limit = Number(argument.split("=")[1]);
     } else if (argument.startsWith("--output=")) {
       options.outputDir = path.resolve(argument.split("=").slice(1).join("="));
+    } else if (argument.startsWith("--retry=")) {
+      options.retry = Number(argument.split("=")[1]);
+    } else if (argument.startsWith("--rate-limit-ms=")) {
+      options.rateLimitMs = Number(argument.split("=")[1]);
+    } else if (argument.startsWith("--concurrency=")) {
+      options.concurrency = Number(argument.split("=")[1]);
     }
   });
 
@@ -75,6 +92,9 @@ function cacheKey(event) {
     Number(event.latitude).toFixed(5),
     Number(event.longitude).toFixed(5),
     "hydraulic-landslide-seismic",
+    PROVIDER_VERSIONS.hydraulic,
+    PROVIDER_VERSIONS.landslide,
+    PROVIDER_VERSIONS.seismic,
   ].join(":");
 }
 
@@ -88,7 +108,7 @@ function dryRunSignature(event) {
     hydraulic: {
       highest_class: null,
       matched_classes: [],
-      provider_version: "ispra-flood-wfs-v2",
+      provider_version: PROVIDER_VERSIONS.hydraulic,
       queried_at: null,
       source_dataset_version: null,
       status: "not_queried_dry_run",
@@ -97,7 +117,7 @@ function dryRunSignature(event) {
       attention_area: false,
       highest_hazard_class: null,
       matched_hazard_classes: [],
-      provider_version: "ispra-landslide-pai-wfs-v1",
+      provider_version: PROVIDER_VERSIONS.landslide,
       queried_at: null,
       source_dataset_version: "5.0",
       status: "not_queried_dry_run",
@@ -105,13 +125,75 @@ function dryRunSignature(event) {
     seismic: {
       national_percentile: null,
       pga_p50_g: null,
-      provider_version: "ingv-mps04-local-grid-v1",
+      provider_version: PROVIDER_VERSIONS.seismic,
       queried_at: null,
       sampling_method: "nearest_grid_node",
       source_dataset_version: "MPS04-OPCM3519-1B-ag-005-local-grid",
       status: "not_queried_dry_run",
     },
   };
+}
+
+function isDryRunSignature(signature) {
+  return [
+    signature?.hydraulic?.status,
+    signature?.landslide?.status,
+    signature?.seismic?.status,
+  ].some((status) => status === "not_queried_dry_run");
+}
+
+function providerCompleted(result) {
+  return SEMANTIC_COMPLETION_STATUSES.has(result?.status);
+}
+
+function enrichmentCounters({ eligibleEvents, errors, signatures }) {
+  const dryRunEvents = signatures.filter(isDryRunSignature).length;
+  const hydraulicCompleted = signatures.filter((item) => providerCompleted(item.hydraulic)).length;
+  const landslideCompleted = signatures.filter((item) => providerCompleted(item.landslide)).length;
+  const seismicCompleted = signatures.filter((item) => providerCompleted(item.seismic)).length;
+  const fullyEnriched = signatures.filter((item) =>
+    providerCompleted(item.hydraulic) &&
+    providerCompleted(item.landslide) &&
+    providerCompleted(item.seismic)
+  ).length;
+  const partiallyEnriched = signatures.filter((item) =>
+    !isDryRunSignature(item) &&
+    !(
+      providerCompleted(item.hydraulic) &&
+      providerCompleted(item.landslide) &&
+      providerCompleted(item.seismic)
+    ) &&
+    (
+      providerCompleted(item.hydraulic) ||
+      providerCompleted(item.landslide) ||
+      providerCompleted(item.seismic)
+    )
+  ).length;
+
+  return {
+    dry_run_events: dryRunEvents,
+    eligible_events: eligibleEvents,
+    failed: errors.length,
+    fully_enriched: fullyEnriched,
+    hydraulic_completed: hydraulicCompleted,
+    landslide_completed: landslideCompleted,
+    partially_enriched: partiallyEnriched,
+    pending: Math.max(eligibleEvents - fullyEnriched - partiallyEnriched - errors.length, 0),
+    seismic_completed: seismicCompleted,
+    total_events: eligibleEvents,
+  };
+}
+
+function canResumeSignature(signature, options) {
+  if (!signature) {
+    return false;
+  }
+
+  if (!options.dryRun && isDryRunSignature(signature)) {
+    return false;
+  }
+
+  return true;
 }
 
 function normalizeSignature(event, exposure) {
@@ -204,17 +286,26 @@ export async function buildCollapseHazardSignatures(options = {}) {
   const signatures = [];
   const errors = [];
 
-  for (const event of filtered) {
-    if (resolved.resume && existingById.has(event.event_id)) {
-      signatures.push(existingById.get(event.event_id));
-      continue;
+  const concurrency = Math.max(1, Number(resolved.concurrency) || 1);
+  let cursor = 0;
+
+  async function processEvent(event) {
+    const existingSignature = existingById.get(event.event_id);
+
+    if (resolved.resume && canResumeSignature(existingSignature, resolved)) {
+      return {
+        signature: existingSignature,
+      };
     }
 
     const key = cacheKey(event);
 
     if (!resolved.bypassCache && cache[key]) {
-      signatures.push(cache[key]);
-      continue;
+      if (canResumeSignature(cache[key], resolved)) {
+        return {
+          signature: cache[key],
+        };
+      }
     }
 
     try {
@@ -222,17 +313,43 @@ export async function buildCollapseHazardSignatures(options = {}) {
         ? dryRunSignature(event)
         : await queryWithRetry(event, resolved);
 
-      signatures.push(signature);
       cache[key] = signature;
       await sleep(resolved.dryRun ? 0 : resolved.rateLimitMs);
+
+      return {
+        signature,
+      };
     } catch (error) {
-      errors.push({
-        event_id: event.event_id,
-        message: error?.message || String(error),
-        name: error?.name || "Error",
-      });
+      return {
+        error: {
+          event_id: event.event_id,
+          message: error?.message || String(error),
+          name: error?.name || "Error",
+        },
+      };
     }
   }
+
+  async function worker() {
+    while (cursor < filtered.length) {
+      const event = filtered[cursor];
+
+      cursor += 1;
+      const result = await processEvent(event);
+
+      if (result.signature) {
+        signatures.push(result.signature);
+      }
+
+      if (result.error) {
+        errors.push(result.error);
+      }
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, filtered.length) }, () => worker())
+  );
 
   const output = {
     caveat: CURRENT_CONTEXT_CAVEAT,
@@ -240,14 +357,17 @@ export async function buildCollapseHazardSignatures(options = {}) {
   };
   const manifest = {
     caveat: CURRENT_CONTEXT_CAVEAT,
+    concurrency,
     dry_run: resolved.dryRun,
-    eligible_events: filtered.length,
+    ...enrichmentCounters({
+      eligibleEvents: filtered.length,
+      errors,
+      signatures,
+    }),
     errors: errors.length,
-    provider_versions: {
-      hydraulic: "ispra-flood-wfs-v2",
-      landslide: "ispra-landslide-pai-wfs-v1",
-      seismic: "ingv-mps04-local-grid-v1",
-    },
+    provider_versions: PROVIDER_VERSIONS,
+    rate_limit_ms: resolved.rateLimitMs,
+    retry: resolved.retry,
     signatures: signatures.length,
   };
 

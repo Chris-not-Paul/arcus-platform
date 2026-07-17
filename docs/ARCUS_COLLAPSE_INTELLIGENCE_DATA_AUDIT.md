@@ -102,6 +102,34 @@ Known after the event:
 
 Outcome fields must not be used to increase similarity in analogue matching.
 
+### Hydraulic Intelligence Outcome Fields
+
+`MASTER_RESEARCH.xlsx` now provides four Professional-only Hydraulic Intelligence fields for events classified as `Hydraulic`:
+
+```text
+hydraulic_trigger
+hydraulic_failure_process
+hydraulic_component_involved
+hydraulic_evidence_level
+```
+
+They are normalized into `hydraulic_intelligence` during `scripts/build-data.js`.
+
+Current audit:
+
+| Metric | Value |
+|---|---:|
+| Hydraulic events | 202 |
+| Trigger available | 202 |
+| Specific process available | 29 |
+| Specific component available | 0 |
+| Documented evidence | 9 |
+| Probable evidence | 18 |
+| Unspecified evidence | 175 |
+| Validation warnings | 4 |
+
+These fields are outcome features. They may be used for cohort interpretation after analogue retrieval, but not for retrieval, filtering, ranking, HCI, hazard signatures or route activation.
+
 ### Evidence Quality
 
 - source count;
@@ -117,6 +145,7 @@ Outcome fields must not be used to increase similarity in analogue matching.
 - `description` contains useful mechanism hints but is unstructured.
 - `construction_year` coverage is too low for primary matching.
 - component-level and failure-mechanism fields should be added as curated structured fields.
+- Hydraulic mechanism fields now exist for Hydraulic cases, but most remain unspecified and must stay outcome-only.
 
 ## Analog Matching Criticalities
 

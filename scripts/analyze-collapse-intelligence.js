@@ -6,6 +6,14 @@ import {
   buildSourceCountByEvent,
   buildSourceReliabilityByEvent,
 } from "../src/utils/analytics.js";
+import {
+  HYDRAULIC_COMPONENT_MAPPING,
+  HYDRAULIC_EVIDENCE_LEVEL_MAPPING,
+  HYDRAULIC_FAILURE_PROCESS_MAPPING,
+  HYDRAULIC_MATCHER_BLOCKED_FIELDS,
+  HYDRAULIC_TRIGGER_MAPPING,
+  summarizeHydraulicCohort,
+} from "../src/utils/hydraulicIntelligence.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -86,6 +94,8 @@ const MATCHING_FIELDS = [
 const OUTCOME_FIELDS = [
   "cause_category",
   "specific_cause",
+  "hydraulic_intelligence",
+  ...HYDRAULIC_MATCHER_BLOCKED_FIELDS,
   "triggered",
   "collapse_severity",
   "victims",
@@ -281,12 +291,36 @@ export function causeFamilyForEvent(event) {
 
 function failurePatternForEvent(event) {
   const family = causeFamilyForEvent(event);
+  const hydraulic = event.hydraulic_intelligence;
   const description = String(event.description || "").toLowerCase();
   const structure = normalizeKey(event.structural_type);
   const crossing = normalizeKey(event.bridge_crossing_type);
   const extent = event.collapse_severity === "TC" ? "total_collapse" : "partial_collapse";
 
   if (family === "hydraulic") {
+    if (hydraulic?.failure_process === "scour") {
+      return "hydraulic_scour_or_foundation_loss";
+    }
+
+    if (hydraulic?.failure_process === "bank_erosion_or_embankment_failure") {
+      return "hydraulic_approach_or_embankment_damage";
+    }
+
+    if (
+      hydraulic?.failure_process === "debris_accumulation_or_obstruction" ||
+      hydraulic?.failure_process === "debris_flow_or_solid_transport"
+    ) {
+      return "hydraulic_debris_obstruction_or_solid_transport";
+    }
+
+    if (hydraulic?.failure_process === "overtopping_or_hydrodynamic_action") {
+      return "hydraulic_overtopping_or_hydrodynamic_action";
+    }
+
+    if (hydraulic?.failure_process === "other_documented_hydraulic_process") {
+      return "hydraulic_other_documented_process";
+    }
+
     if (description.includes("scour") || description.includes("foundation")) {
       return "hydraulic_scour_or_foundation_loss";
     }
@@ -369,8 +403,57 @@ export function buildFailurePatternTaxonomy(events) {
     caveat:
       "Failure patterns are normalized from current ARCUS fields and narrative cues; unspecified remains explicit.",
     families,
+    hydraulic_intelligence_taxonomy: buildHydraulicIntelligenceTaxonomy(events),
     mapping: mappings,
     version: "failure-pattern-taxonomy-v1",
+  };
+}
+
+function buildHydraulicIntelligenceTaxonomy(events) {
+  const hydraulicEvents = events.filter((event) => event.hydraulic_intelligence);
+  const sourceValuesFor = (mapping, canonical) =>
+    Object.entries(mapping)
+      .filter(([, value]) => value === canonical)
+      .map(([source]) => source)
+      .sort();
+  const collect = (field, mapping) => {
+    const byCanonical = new Map();
+
+    hydraulicEvents.forEach((event) => {
+      const value = event.hydraulic_intelligence?.[field] || null;
+
+      if (!value) {
+        return;
+      }
+
+      const record = byCanonical.get(value) || {
+        canonical_value: value,
+        definition:
+          field === "trigger"
+            ? "Curated hydraulic trigger observed in the documented collapse record."
+            : field === "failure_process"
+              ? "Curated hydraulic failure process extracted from documented collapse evidence."
+              : field === "component_involved"
+                ? "Curated component involved in the documented hydraulic collapse evidence."
+                : "Curated evidence strength for the hydraulic process assignment.",
+        source_values: sourceValuesFor(mapping, value),
+        status: value.includes("other") ? "needs_review" : "active",
+        taxonomy_version: event.hydraulic_intelligence.taxonomy_version || "hydraulic-v1",
+      };
+
+      byCanonical.set(value, record);
+    });
+
+    return [...byCanonical.values()].sort((left, right) =>
+      left.canonical_value.localeCompare(right.canonical_value)
+    );
+  };
+
+  return {
+    components: collect("component_involved", HYDRAULIC_COMPONENT_MAPPING),
+    evidence_levels: collect("evidence_level", HYDRAULIC_EVIDENCE_LEVEL_MAPPING),
+    failure_processes: collect("failure_process", HYDRAULIC_FAILURE_PROCESS_MAPPING),
+    triggers: collect("trigger", HYDRAULIC_TRIGGER_MAPPING),
   };
 }
 
@@ -713,6 +796,18 @@ export function findAnalogues({
     .slice(0, limit);
 }
 
+export function auditMatcherFeatureExclusion() {
+  const blocked = [...new Set(OUTCOME_FIELDS)];
+  const leaked = MATCHING_FIELDS.filter((field) => blocked.includes(field));
+
+  return {
+    blocked_outcome_fields: blocked,
+    leakage_detected: leaked.length > 0,
+    leaked_fields: leaked,
+    matching_features: MATCHING_FIELDS,
+  };
+}
+
 export function cohortOutcomes({ analogues, events, reliabilityByEvent, taxonomy }) {
   const byId = Object.fromEntries(events.map((event) => [event.event_id, event]));
   const cohortEvents = analogues.map((item) => byId[item.event_id]).filter(Boolean);
@@ -756,6 +851,9 @@ export function cohortOutcomes({ analogues, events, reliabilityByEvent, taxonomy
       injuries: cohortEvents.reduce((total, event) => total + Number(event.injuries || 0), 0),
     },
     effective_evidence_count: round(effectiveCount, 2),
+    hydraulic_cohort: summarizeHydraulicCohort(
+      cohortEvents.filter((event) => causeFamilyForEvent(event) === "hydraulic")
+    ),
     evidence_limitations: [
       unspecified > 0
         ? `${unspecified} analogue outcome(s) have unspecified failure pattern.`
@@ -1027,15 +1125,33 @@ function summarizeValidation(rows) {
   };
 }
 
-export function buildMitigationKnowledgeBase(taxonomy) {
+export function buildMitigationKnowledgeBase(taxonomy, events = []) {
   const patterns = Object.values(taxonomy.families).flatMap((family) => family.patterns);
+  const eventsByPattern = events.reduce((accumulator, event) => {
+    const pattern = failurePatternForEvent(event);
+
+    accumulator[pattern] = accumulator[pattern] || [];
+    accumulator[pattern].push(event);
+
+    return accumulator;
+  }, {});
   const entries = patterns.map((pattern) => {
     const hazardFamily = pattern.split("_")[0];
+    const hydraulicInputs = (eventsByPattern[pattern] || [])
+      .filter((event) => event.hydraulic_intelligence)
+      .map((event) => ({
+        component_involved: event.hydraulic_intelligence.component_involved,
+        evidence_level: event.hydraulic_intelligence.evidence_level,
+        event_id: event.event_id,
+        failure_process: event.hydraulic_intelligence.failure_process,
+      }));
 
     return {
       external_engineering_basis: [],
       failure_pattern: pattern,
+      external_validation_required: true,
       hazard_family: hazardFamily,
+      hydraulic_intelligence_inputs: hydraulicInputs,
       investigation_priorities: investigationPrioritiesForPattern(pattern),
       limitations: [
         "Draft mapping only; engineering measures require literature, standards and expert review.",
@@ -1067,6 +1183,7 @@ function investigationPrioritiesForPattern(pattern) {
       {
         action_id: "hydraulic_modelling",
         arcus_evidence: { analogue_count: null, effective_count: null, event_ids: [] },
+        external_validation_required: true,
         label: "Hydraulic modelling",
         purpose: "Understand water levels, flow concentration and interaction with the crossing.",
         status: "draft",
@@ -1075,6 +1192,7 @@ function investigationPrioritiesForPattern(pattern) {
       {
         action_id: "scour_assessment",
         arcus_evidence: { analogue_count: null, effective_count: null, event_ids: [] },
+        external_validation_required: true,
         label: "Scour and foundation-support assessment",
         purpose: "Check whether documented analogues involve loss of foundation support or approach erosion.",
         status: "draft",
@@ -1088,6 +1206,7 @@ function investigationPrioritiesForPattern(pattern) {
       {
         action_id: "slope_stability_investigation",
         arcus_evidence: { analogue_count: null, effective_count: null, event_ids: [] },
+        external_validation_required: true,
         label: "Slope stability investigation",
         purpose: "Assess slope movement and abutment/approach-road sensitivity.",
         status: "draft",
@@ -1101,6 +1220,7 @@ function investigationPrioritiesForPattern(pattern) {
       {
         action_id: "seismic_site_response_review",
         arcus_evidence: { analogue_count: null, effective_count: null, event_ids: [] },
+        external_validation_required: true,
         label: "Seismic site-response and detailing review",
         purpose: "Evaluate whether seismic demand and structural detailing require specialist study.",
         status: "draft",
@@ -1113,6 +1233,7 @@ function investigationPrioritiesForPattern(pattern) {
     {
       action_id: "documented_case_review",
       arcus_evidence: { analogue_count: null, effective_count: null, event_ids: [] },
+      external_validation_required: true,
       label: "Documented case review",
       purpose: "Review analogue documentation before proposing technical actions.",
       status: "draft",
@@ -1165,7 +1286,7 @@ export function buildAnalysis({ limit = null, outputPath = DEFAULT_OUTPUT } = {}
   const causeSpecificIncidence = buildCauseSpecificIncidence(eventSet, ainopIndex, taxonomy);
   const analogMatchingComparison = compareAnalogMethods(eventSet, reliabilityByEvent, taxonomy);
   const validation = retrospectiveValidation(eventSet);
-  const mitigationKnowledge = buildMitigationKnowledgeBase(taxonomy);
+  const mitigationKnowledge = buildMitigationKnowledgeBase(taxonomy, eventSet);
   const enrichable = eventSet.filter(
     (event) => finite(event.latitude) && finite(event.longitude)
   ).length;

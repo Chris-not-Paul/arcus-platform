@@ -7,7 +7,10 @@
       ],
       "patterns": [
         "hydraulic_approach_or_embankment_damage",
+        "hydraulic_debris_obstruction_or_solid_transport",
         "hydraulic_flood_action_unspecified",
+        "hydraulic_other_documented_process",
+        "hydraulic_overtopping_or_hydrodynamic_action",
         "hydraulic_scour_or_foundation_loss",
         "hydraulic_unspecified"
       ]
@@ -71,6 +74,117 @@
         "unspecified_total_collapse"
       ]
     }
+  },
+  "hydraulic_intelligence_taxonomy": {
+    "components": [],
+    "evidence_levels": [
+      {
+        "canonical_value": "documented",
+        "definition": "Curated evidence strength for the hydraulic process assignment.",
+        "source_values": [
+          "Documented"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "probable",
+        "definition": "Curated evidence strength for the hydraulic process assignment.",
+        "source_values": [
+          "Probable"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "unspecified",
+        "definition": "Curated evidence strength for the hydraulic process assignment.",
+        "source_values": [
+          "Needs review",
+          "Unspecified"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      }
+    ],
+    "failure_processes": [
+      {
+        "canonical_value": "bank_erosion_or_embankment_failure",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Bank erosion / embankment failure"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "debris_accumulation_or_obstruction",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Debris accumulation",
+          "Debris accumulation / obstruction"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "debris_flow_or_solid_transport",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Debris flow / solid transport"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "other_documented_hydraulic_process",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Other documented hydraulic process"
+        ],
+        "status": "needs_review",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "overtopping_or_hydrodynamic_action",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Overtopping / hydrodynamic action"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "scour",
+        "definition": "Curated hydraulic failure process extracted from documented collapse evidence.",
+        "source_values": [
+          "Scour"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      }
+    ],
+    "triggers": [
+      {
+        "canonical_value": "flood",
+        "definition": "Curated hydraulic trigger observed in the documented collapse record.",
+        "source_values": [
+          "Flood"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      },
+      {
+        "canonical_value": "hydraulic_event_unspecified",
+        "definition": "Curated hydraulic trigger observed in the documented collapse record.",
+        "source_values": [
+          "Hydraulic event - unspecified",
+          "Hydraulic event – unspecified"
+        ],
+        "status": "active",
+        "taxonomy_version": "hydraulic-v1"
+      }
+    ]
   },
   "mapping": [
     {
@@ -212,7 +326,7 @@
     {
       "confidence": "probable",
       "event_id": "B00.10.17",
-      "failure_pattern": "hydraulic_unspecified",
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -564,7 +678,7 @@
     {
       "confidence": "probable",
       "event_id": "B04.10.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -748,7 +862,7 @@
     {
       "confidence": "probable",
       "event_id": "B09.04.04",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -852,7 +966,7 @@
     {
       "confidence": "probable",
       "event_id": "B11.10.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -892,7 +1006,7 @@
     {
       "confidence": "probable",
       "event_id": "B11.10.06",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -932,7 +1046,7 @@
     {
       "confidence": "probable",
       "event_id": "B11.11.03",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -972,7 +1086,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.02.01",
-      "failure_pattern": "hydraulic_unspecified",
+      "failure_pattern": "hydraulic_other_documented_process",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -996,7 +1110,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.10.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1020,7 +1134,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.11.02",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1028,7 +1142,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.11.03",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1068,7 +1182,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.12.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1212,7 +1326,7 @@
     {
       "confidence": "probable",
       "event_id": "B15.09.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1260,7 +1374,7 @@
     {
       "confidence": "probable",
       "event_id": "B15.11.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1300,7 +1414,7 @@
     {
       "confidence": "probable",
       "event_id": "B16.11.02",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1332,7 +1446,7 @@
     {
       "confidence": "probable",
       "event_id": "B17.01.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1364,7 +1478,7 @@
     {
       "confidence": "probable",
       "event_id": "B17.09.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1436,7 +1550,7 @@
     {
       "confidence": "probable",
       "event_id": "B18.10.02",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1468,7 +1582,7 @@
     {
       "confidence": "probable",
       "event_id": "B18.10.06",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1516,7 +1630,7 @@
     {
       "confidence": "probable",
       "event_id": "B19.12.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_overtopping_or_hydrodynamic_action",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1580,7 +1694,7 @@
     {
       "confidence": "probable",
       "event_id": "B20.10.04",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1740,7 +1854,7 @@
     {
       "confidence": "probable",
       "event_id": "B21.12.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1924,7 +2038,7 @@
     {
       "confidence": "probable",
       "event_id": "B23.05.02",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -2028,7 +2142,7 @@
     {
       "confidence": "probable",
       "event_id": "B24.06.01",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -2076,7 +2190,7 @@
     {
       "confidence": "probable",
       "event_id": "B25.04.02",
-      "failure_pattern": "hydraulic_unspecified",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
