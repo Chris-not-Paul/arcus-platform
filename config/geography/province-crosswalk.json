@@ -1,0 +1,828 @@
+[
+  {
+    "current_unit_code": "84",
+    "current_unit_name": "Agrigento",
+    "mapping_type": "exact",
+    "notes": "Matched to current Libero consorzio di comuni.",
+    "source_name": "Agrigento"
+  },
+  {
+    "current_unit_code": "6",
+    "current_unit_name": "Alessandria",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Alessandria"
+  },
+  {
+    "current_unit_code": "42",
+    "current_unit_name": "Ancona",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Ancona"
+  },
+  {
+    "current_unit_code": "7",
+    "current_unit_name": "Aosta",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Aosta"
+  },
+  {
+    "current_unit_code": "51",
+    "current_unit_name": "Arezzo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Arezzo"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Ascoli"
+  },
+  {
+    "current_unit_code": "44",
+    "current_unit_name": "Ascoli Piceno",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Ascoli Piceno"
+  },
+  {
+    "current_unit_code": "5",
+    "current_unit_name": "Asti",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Asti"
+  },
+  {
+    "current_unit_code": "64",
+    "current_unit_name": "Avellino",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Avellino"
+  },
+  {
+    "current_unit_code": "272",
+    "current_unit_name": "Bari",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Bari"
+  },
+  {
+    "current_unit_code": "110",
+    "current_unit_name": "Barletta-Andria-Trani",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Barletta-Andria-Trani"
+  },
+  {
+    "current_unit_code": "25",
+    "current_unit_name": "Belluno",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Belluno"
+  },
+  {
+    "current_unit_code": "62",
+    "current_unit_name": "Benevento",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Benevento"
+  },
+  {
+    "current_unit_code": "16",
+    "current_unit_name": "Bergamo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Bergamo"
+  },
+  {
+    "current_unit_code": "96",
+    "current_unit_name": "Biella",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Biella"
+  },
+  {
+    "current_unit_code": "237",
+    "current_unit_name": "Bologna",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Bologna"
+  },
+  {
+    "current_unit_code": "21",
+    "current_unit_name": "Bolzano",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia autonoma.",
+    "source_name": "Bolzano"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Bolzano/Bozen"
+  },
+  {
+    "current_unit_code": "17",
+    "current_unit_name": "Brescia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Brescia"
+  },
+  {
+    "current_unit_code": "74",
+    "current_unit_name": "Brindisi",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Brindisi"
+  },
+  {
+    "current_unit_code": "292",
+    "current_unit_name": "Cagliari",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Cagliari"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Caltanisetta"
+  },
+  {
+    "current_unit_code": "70",
+    "current_unit_name": "Campobasso",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Campobasso"
+  },
+  {
+    "current_unit_code": "61",
+    "current_unit_name": "Caserta",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Caserta"
+  },
+  {
+    "current_unit_code": "287",
+    "current_unit_name": "Catania",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Catania"
+  },
+  {
+    "current_unit_code": "79",
+    "current_unit_name": "Catanzaro",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Catanzaro"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Cesena"
+  },
+  {
+    "current_unit_code": "69",
+    "current_unit_name": "Chieti",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Chieti"
+  },
+  {
+    "current_unit_code": "13",
+    "current_unit_name": "Como",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Como"
+  },
+  {
+    "current_unit_code": "78",
+    "current_unit_name": "Cosenza",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Cosenza"
+  },
+  {
+    "current_unit_code": "19",
+    "current_unit_name": "Cremona",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Cremona"
+  },
+  {
+    "current_unit_code": "101",
+    "current_unit_name": "Crotone",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Crotone"
+  },
+  {
+    "current_unit_code": "4",
+    "current_unit_name": "Cuneo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Cuneo"
+  },
+  {
+    "current_unit_code": "86",
+    "current_unit_name": "Enna",
+    "mapping_type": "exact",
+    "notes": "Matched to current Libero consorzio di comuni.",
+    "source_name": "Enna"
+  },
+  {
+    "current_unit_code": "109",
+    "current_unit_name": "Fermo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Fermo"
+  },
+  {
+    "current_unit_code": "38",
+    "current_unit_name": "Ferrara",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Ferrara"
+  },
+  {
+    "current_unit_code": "248",
+    "current_unit_name": "Firenze",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Firenze"
+  },
+  {
+    "current_unit_code": "71",
+    "current_unit_name": "Foggia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Foggia"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "ForlÃ¬ Cesena"
+  },
+  {
+    "current_unit_code": "40",
+    "current_unit_name": "Forli'-Cesena",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Forlì-Cesena"
+  },
+  {
+    "current_unit_code": "60",
+    "current_unit_name": "Frosinone",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Frosinone"
+  },
+  {
+    "current_unit_code": "210",
+    "current_unit_name": "Genova",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Genova"
+  },
+  {
+    "current_unit_code": "31",
+    "current_unit_name": "Gorizia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Unità non amministrativa.",
+    "source_name": "Gorizia"
+  },
+  {
+    "current_unit_code": "53",
+    "current_unit_name": "Grosseto",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Grosseto"
+  },
+  {
+    "current_unit_code": "8",
+    "current_unit_name": "Imperia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Imperia"
+  },
+  {
+    "current_unit_code": "94",
+    "current_unit_name": "Isernia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Isernia"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Ivrea"
+  },
+  {
+    "current_unit_code": "66",
+    "current_unit_name": "L'Aquila",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "L'Aquila"
+  },
+  {
+    "current_unit_code": "11",
+    "current_unit_name": "La Spezia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "La Spezia"
+  },
+  {
+    "current_unit_code": "59",
+    "current_unit_name": "Latina",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Latina"
+  },
+  {
+    "current_unit_code": "75",
+    "current_unit_name": "Lecce",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Lecce"
+  },
+  {
+    "current_unit_code": "97",
+    "current_unit_name": "Lecco",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Lecco"
+  },
+  {
+    "current_unit_code": "49",
+    "current_unit_name": "Livorno",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Livorno"
+  },
+  {
+    "current_unit_code": "98",
+    "current_unit_name": "Lodi",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Lodi"
+  },
+  {
+    "current_unit_code": "46",
+    "current_unit_name": "Lucca",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Lucca"
+  },
+  {
+    "current_unit_code": "43",
+    "current_unit_name": "Macerata",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Macerata"
+  },
+  {
+    "current_unit_code": "20",
+    "current_unit_name": "Mantova",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Mantova"
+  },
+  {
+    "current_unit_code": "45",
+    "current_unit_name": "Massa Carrara",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Massa-Carrara"
+  },
+  {
+    "current_unit_code": "77",
+    "current_unit_name": "Matera",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Matera"
+  },
+  {
+    "current_unit_code": "283",
+    "current_unit_name": "Messina",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Messina"
+  },
+  {
+    "current_unit_code": "215",
+    "current_unit_name": "Milano",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Milano"
+  },
+  {
+    "current_unit_code": "36",
+    "current_unit_name": "Modena",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Modena"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Monza e Brianza"
+  },
+  {
+    "current_unit_code": "108",
+    "current_unit_name": "Monza e della Brianza",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Monza e della Brianza"
+  },
+  {
+    "current_unit_code": "263",
+    "current_unit_name": "Napoli",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Napoli"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Nord-Est Sardegna"
+  },
+  {
+    "current_unit_code": "3",
+    "current_unit_name": "Novara",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Novara"
+  },
+  {
+    "current_unit_code": "91",
+    "current_unit_name": "Nuoro",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Nuoro"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Olbia"
+  },
+  {
+    "current_unit_code": "95",
+    "current_unit_name": "Oristano",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Oristano"
+  },
+  {
+    "current_unit_code": "28",
+    "current_unit_name": "Padova",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Padova"
+  },
+  {
+    "current_unit_code": "282",
+    "current_unit_name": "Palermo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Palermo"
+  },
+  {
+    "current_unit_code": "34",
+    "current_unit_name": "Parma",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Parma"
+  },
+  {
+    "current_unit_code": "18",
+    "current_unit_name": "Pavia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Pavia"
+  },
+  {
+    "current_unit_code": "54",
+    "current_unit_name": "Perugia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Perugia"
+  },
+  {
+    "current_unit_code": "41",
+    "current_unit_name": "Pesaro e Urbino",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Pesaro e Urbino"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Pesaro Urbino"
+  },
+  {
+    "current_unit_code": "68",
+    "current_unit_name": "Pescara",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Pescara"
+  },
+  {
+    "current_unit_code": "33",
+    "current_unit_name": "Piacenza",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Piacenza"
+  },
+  {
+    "current_unit_code": "50",
+    "current_unit_name": "Pisa",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Pisa"
+  },
+  {
+    "current_unit_code": "47",
+    "current_unit_name": "Pistoia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Pistoia"
+  },
+  {
+    "current_unit_code": "93",
+    "current_unit_name": "Pordenone",
+    "mapping_type": "exact",
+    "notes": "Matched to current Unità non amministrativa.",
+    "source_name": "Pordenone"
+  },
+  {
+    "current_unit_code": "76",
+    "current_unit_name": "Potenza",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Potenza"
+  },
+  {
+    "current_unit_code": "100",
+    "current_unit_name": "Prato",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Prato"
+  },
+  {
+    "current_unit_code": "88",
+    "current_unit_name": "Ragusa",
+    "mapping_type": "exact",
+    "notes": "Matched to current Libero consorzio di comuni.",
+    "source_name": "Ragusa"
+  },
+  {
+    "current_unit_code": "39",
+    "current_unit_name": "Ravenna",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Ravenna"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Reggio Calabria"
+  },
+  {
+    "current_unit_code": "35",
+    "current_unit_name": "Reggio nell'Emilia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Reggio nell'Emilia"
+  },
+  {
+    "current_unit_code": "57",
+    "current_unit_name": "Rieti",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Rieti"
+  },
+  {
+    "current_unit_code": "99",
+    "current_unit_name": "Rimini",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Rimini"
+  },
+  {
+    "current_unit_code": "258",
+    "current_unit_name": "Roma",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Roma"
+  },
+  {
+    "current_unit_code": "29",
+    "current_unit_name": "Rovigo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Rovigo"
+  },
+  {
+    "current_unit_code": "65",
+    "current_unit_name": "Salerno",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Salerno"
+  },
+  {
+    "current_unit_code": "90",
+    "current_unit_name": "Sassari",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Sassari"
+  },
+  {
+    "current_unit_code": "9",
+    "current_unit_name": "Savona",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Savona"
+  },
+  {
+    "current_unit_code": "52",
+    "current_unit_name": "Siena",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Siena"
+  },
+  {
+    "current_unit_code": "89",
+    "current_unit_name": "Siracusa",
+    "mapping_type": "exact",
+    "notes": "Matched to current Libero consorzio di comuni.",
+    "source_name": "Siracusa"
+  },
+  {
+    "current_unit_code": "14",
+    "current_unit_name": "Sondrio",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Sondrio"
+  },
+  {
+    "current_unit_code": "111",
+    "current_unit_name": "Sud Sardegna",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Sud Sardegna"
+  },
+  {
+    "current_unit_code": "73",
+    "current_unit_name": "Taranto",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Taranto"
+  },
+  {
+    "current_unit_code": "67",
+    "current_unit_name": "Teramo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Teramo"
+  },
+  {
+    "current_unit_code": "55",
+    "current_unit_name": "Terni",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Terni"
+  },
+  {
+    "current_unit_code": "201",
+    "current_unit_name": "Torino",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Torino"
+  },
+  {
+    "current_unit_code": "81",
+    "current_unit_name": "Trapani",
+    "mapping_type": "exact",
+    "notes": "Matched to current Libero consorzio di comuni.",
+    "source_name": "Trapani"
+  },
+  {
+    "current_unit_code": "22",
+    "current_unit_name": "Trento",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia autonoma.",
+    "source_name": "Trento"
+  },
+  {
+    "current_unit_code": "26",
+    "current_unit_name": "Treviso",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Treviso"
+  },
+  {
+    "current_unit_code": "32",
+    "current_unit_name": "Trieste",
+    "mapping_type": "exact",
+    "notes": "Matched to current Unità non amministrativa.",
+    "source_name": "Trieste"
+  },
+  {
+    "current_unit_code": "30",
+    "current_unit_name": "Udine",
+    "mapping_type": "exact",
+    "notes": "Matched to current Unità non amministrativa.",
+    "source_name": "Udine"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Valle d'Aosta/Vallée d'Aoste"
+  },
+  {
+    "current_unit_code": "12",
+    "current_unit_name": "Varese",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Varese"
+  },
+  {
+    "current_unit_code": "227",
+    "current_unit_name": "Venezia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Città metropolitana.",
+    "source_name": "Venezia"
+  },
+  {
+    "current_unit_code": null,
+    "current_unit_name": null,
+    "mapping_type": "unresolved",
+    "notes": "No exact current province/UTS geometry match found; do not redistribute denominator silently.",
+    "source_name": "Verbania"
+  },
+  {
+    "current_unit_code": "103",
+    "current_unit_name": "Verbano-Cusio-Ossola",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Verbano-Cusio-Ossola"
+  },
+  {
+    "current_unit_code": "2",
+    "current_unit_name": "Vercelli",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Vercelli"
+  },
+  {
+    "current_unit_code": "23",
+    "current_unit_name": "Verona",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Verona"
+  },
+  {
+    "current_unit_code": "102",
+    "current_unit_name": "Vibo Valentia",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Vibo Valentia"
+  },
+  {
+    "current_unit_code": "24",
+    "current_unit_name": "Vicenza",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Vicenza"
+  },
+  {
+    "current_unit_code": "56",
+    "current_unit_name": "Viterbo",
+    "mapping_type": "exact",
+    "notes": "Matched to current Provincia.",
+    "source_name": "Viterbo"
+  }
+]

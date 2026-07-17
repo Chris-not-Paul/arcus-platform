@@ -1,0 +1,2102 @@
+{
+  "caveat": "Failure patterns are normalized from current ARCUS fields and narrative cues; unspecified remains explicit.",
+  "families": {
+    "hydraulic": {
+      "aliases": [
+        "Hydraulic"
+      ],
+      "patterns": [
+        "hydraulic_approach_or_embankment_damage",
+        "hydraulic_flood_action_unspecified",
+        "hydraulic_scour_or_foundation_loss",
+        "hydraulic_unspecified"
+      ]
+    },
+    "landslide_ground_movement": {
+      "aliases": [
+        "Landslide"
+      ],
+      "patterns": [
+        "landslide_slope_instability"
+      ]
+    },
+    "seismic": {
+      "aliases": [
+        "Earthquake"
+      ],
+      "patterns": [
+        "seismic_pier_or_superstructure_damage"
+      ]
+    },
+    "design_construction": {
+      "aliases": [
+        "Design and Construction"
+      ],
+      "patterns": [
+        "design_or_construction_deficiency"
+      ]
+    },
+    "impact": {
+      "aliases": [
+        "Impact"
+      ],
+      "patterns": [
+        "impact_road_vehicle_collision",
+        "impact_unspecified"
+      ]
+    },
+    "deterioration_maintenance": {
+      "aliases": [
+        "Material"
+      ],
+      "patterns": [
+        "deterioration_or_material_degradation"
+      ]
+    },
+    "overload": {
+      "aliases": [
+        "Overload"
+      ],
+      "patterns": [
+        "overload_or_excess_action"
+      ]
+    },
+    "unknown_unspecified": {
+      "aliases": [
+        "Unknown",
+        "Unspecified"
+      ],
+      "patterns": [
+        "unspecified_partial_collapse",
+        "unspecified_total_collapse"
+      ]
+    }
+  },
+  "mapping": [
+    {
+      "confidence": "probable",
+      "event_id": "B00.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.03",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.04",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.05",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.06",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.07",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.08",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.09",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.10",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.11",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.12",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.13",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.14",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.15",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.16",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.17",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.18",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.19",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.20",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.21",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.22",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.23",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.24",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.25",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.26",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.27",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.28",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.29",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.30",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.31",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.32",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.33",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.34",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.35",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.36",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.37",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.38",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.39",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.40",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.41",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.42",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.10.43",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B00.12.01",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B01.03.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.05.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.05",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.06.06",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.07.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.07.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.07.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B02.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B03.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B03.08.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B03.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B04.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B04.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B04.12.02",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B04.05.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B05.06.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B05.10.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B05.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B05.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B05.11.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B06.06.01",
+      "failure_pattern": "impact_unspecified",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B06.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.05.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.05.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.10.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.11.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B08.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.02.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.04.01",
+      "failure_pattern": "seismic_pier_or_superstructure_damage",
+      "primary_cause_family": "seismic",
+      "raw_specific_cause": "Earthquake",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.04.02",
+      "failure_pattern": "seismic_pier_or_superstructure_damage",
+      "primary_cause_family": "seismic",
+      "raw_specific_cause": "Earthquake",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.04.03",
+      "failure_pattern": "seismic_pier_or_superstructure_damage",
+      "primary_cause_family": "seismic",
+      "raw_specific_cause": "Earthquake",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.04.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.05.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B09.12.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B10.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B10.03.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B10.06.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B10.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.03.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.03.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.03.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.03.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.05.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.07",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.10.08",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B11.11.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B12.11.01",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B12.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B12.11.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B12.11.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.02.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.03.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.09.01",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.10.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.11.07",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.12.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B13.12.03",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.04.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.05.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.07.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.07.02",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.08.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.11.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B14.12.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.03.02",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.03.01",
+      "failure_pattern": "impact_unspecified",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.03.03",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.04.01",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.10.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.10.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B15.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.03.01",
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.10.01",
+      "failure_pattern": "overload_or_excess_action",
+      "primary_cause_family": "overload",
+      "raw_specific_cause": "Overload",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.11.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.11.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.11.04",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B16.11.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.01.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.03.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.04.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.06.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.09.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B17.12.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.01.01",
+      "failure_pattern": "unspecified_partial_collapse",
+      "primary_cause_family": "unknown_unspecified",
+      "raw_specific_cause": "Fire and Explosion",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.02.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.02.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.08.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.08.02",
+      "failure_pattern": "unspecified_total_collapse",
+      "primary_cause_family": "unknown_unspecified",
+      "raw_specific_cause": "Fire and Explosion",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.04",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.10.07",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B19.03.01",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B19.08.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B19.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B19.11.01",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B19.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.04.01",
+      "failure_pattern": "overload_or_excess_action",
+      "primary_cause_family": "overload",
+      "raw_specific_cause": "Overload",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.04.02",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.05.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.09.01",
+      "failure_pattern": "overload_or_excess_action",
+      "primary_cause_family": "overload",
+      "raw_specific_cause": "Overload",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.07",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.08",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.09",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.10",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.12",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.13",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.11.01",
+      "failure_pattern": "overload_or_excess_action",
+      "primary_cause_family": "overload",
+      "raw_specific_cause": "Overload",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.11.03",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.11.04",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.12.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.12.03",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B21.05.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B21.08.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B21.10.01",
+      "failure_pattern": "unspecified_total_collapse",
+      "primary_cause_family": "unknown_unspecified",
+      "raw_specific_cause": "Fire and Explosion",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B21.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B21.12.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.02.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.08.01",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.07",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.08",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.09",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.09.10",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.10.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.11.01",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.11.02",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.12.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.12.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.12.03",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B22.12.04",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.01.01",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.01.02",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.01",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.04",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.05",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.05.06",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.07.01",
+      "failure_pattern": "impact_road_vehicle_collision",
+      "primary_cause_family": "impact",
+      "raw_specific_cause": "Impact",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.09.01",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
+      "raw_triggered": false
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.11.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B23.11.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.05.01",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.05.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.05.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.06.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.09.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.10.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.10.02",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B24.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B25.04.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B25.04.02",
+      "failure_pattern": "hydraulic_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B25.07.01",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B26.04.01",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    }
+  ],
+  "version": "failure-pattern-taxonomy-v1"
+}

@@ -1,0 +1,502 @@
+{
+  "caveat": "This knowledge base identifies investigation and mitigation themes; it does not prescribe design solutions.",
+  "entries": [
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
+      "hazard_family": "hydraulic",
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_approach_or_embankment_damage"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_approach_or_embankment_damage",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "hazard_family": "hydraulic",
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_flood_action_unspecified"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_flood_action_unspecified",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "hazard_family": "hydraulic",
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_scour_or_foundation_loss"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_scour_or_foundation_loss",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "hydraulic_unspecified",
+      "hazard_family": "hydraulic",
+      "investigation_priorities": [
+        {
+          "action_id": "hydraulic_modelling",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Hydraulic modelling",
+          "purpose": "Understand water levels, flow concentration and interaction with the crossing.",
+          "status": "draft",
+          "trigger_conditions": [
+            "hydraulic exposure",
+            "hydraulic_unspecified"
+          ]
+        },
+        {
+          "action_id": "scour_assessment",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Scour and foundation-support assessment",
+          "purpose": "Check whether documented analogues involve loss of foundation support or approach erosion.",
+          "status": "draft",
+          "trigger_conditions": [
+            "P2/P3 hydraulic context",
+            "hydraulic analogues"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "hydraulic_unspecified",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "landslide_slope_instability",
+      "hazard_family": "landslide",
+      "investigation_priorities": [
+        {
+          "action_id": "slope_stability_investigation",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Slope stability investigation",
+          "purpose": "Assess slope movement and abutment/approach-road sensitivity.",
+          "status": "draft",
+          "trigger_conditions": [
+            "PAI landslide class",
+            "landslide_slope_instability"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "landslide_slope_instability",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "seismic_pier_or_superstructure_damage",
+      "hazard_family": "seismic",
+      "investigation_priorities": [
+        {
+          "action_id": "seismic_site_response_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Seismic site-response and detailing review",
+          "purpose": "Evaluate whether seismic demand and structural detailing require specialist study.",
+          "status": "draft",
+          "trigger_conditions": [
+            "high MPS04 PGA",
+            "seismic_pier_or_superstructure_damage"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "seismic_pier_or_superstructure_damage",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "design_or_construction_deficiency",
+      "hazard_family": "design",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "design_or_construction_deficiency"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "design_or_construction_deficiency",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "impact_road_vehicle_collision",
+      "hazard_family": "impact",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "impact_road_vehicle_collision"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "impact_road_vehicle_collision",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "impact_unspecified",
+      "hazard_family": "impact",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "impact_unspecified"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "impact_unspecified",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "deterioration_or_material_degradation",
+      "hazard_family": "deterioration",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "deterioration_or_material_degradation"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "deterioration_or_material_degradation",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "overload_or_excess_action",
+      "hazard_family": "overload",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "overload_or_excess_action"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "overload_or_excess_action",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "unspecified_partial_collapse",
+      "hazard_family": "unspecified",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "unspecified_partial_collapse"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "unspecified_partial_collapse",
+      "status": "draft"
+    },
+    {
+      "external_engineering_basis": [],
+      "failure_pattern": "unspecified_total_collapse",
+      "hazard_family": "unspecified",
+      "investigation_priorities": [
+        {
+          "action_id": "documented_case_review",
+          "arcus_evidence": {
+            "analogue_count": null,
+            "effective_count": null,
+            "event_ids": []
+          },
+          "label": "Documented case review",
+          "purpose": "Review analogue documentation before proposing technical actions.",
+          "status": "draft",
+          "trigger_conditions": [
+            "unspecified_total_collapse"
+          ]
+        }
+      ],
+      "limitations": [
+        "Draft mapping only; engineering measures require literature, standards and expert review."
+      ],
+      "mitigation_pathways": [],
+      "monitoring_considerations": [
+        {
+          "label": "Focused inspection after relevant triggering events",
+          "status": "draft"
+        }
+      ],
+      "pattern_id": "unspecified_total_collapse",
+      "status": "draft"
+    }
+  ],
+  "status": "draft",
+  "version": "mitigation-knowledge-base-v1"
+}
