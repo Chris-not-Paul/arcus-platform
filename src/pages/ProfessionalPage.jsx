@@ -34,6 +34,7 @@ import {
   deleteProfessionalWorkspace,
   downloadProfessionalExport,
   professionalHazardExposurePoint,
+  professionalMitigationIntelligence,
   professionalWorkspaces,
   professionalResource,
   registerProfessionalReport,
@@ -45,6 +46,9 @@ import {
   normalizeProvinceKey,
   provinceMatchesValue,
 } from "../utils/projectLocation";
+import {
+  buildMitigationReportSummary,
+} from "../utils/mitigationReportSummary";
 
 import "../styles/platform-levels.css";
 
@@ -224,6 +228,10 @@ export default function ProfessionalPage() {
   const [
     path01SeismicExposure,
     setPath01SeismicExposure,
+  ] = useState(null);
+  const [
+    path01MitigationIntelligence,
+    setPath01MitigationIntelligence,
   ] = useState(null);
   const [
     path02ExposureStatus,
@@ -1946,6 +1954,40 @@ export default function ProfessionalPage() {
       return [];
     }
 
+    if (activeEntryPath === 0) {
+      const strategies = path01MitigationIntelligence?.strategies || [];
+
+      if (strategies.length) {
+        return strategies.map((strategy) => {
+          const investigation =
+            strategy.investigation_priority?.[language] ||
+            strategy.investigation_priority?.en ||
+            strategy.strategy_id;
+          const purpose =
+            strategy.purpose?.[language] ||
+            strategy.purpose?.en ||
+            "";
+
+          return [investigation, purpose].filter(Boolean).join(". ");
+        });
+      }
+
+      if (
+        path01MitigationIntelligence &&
+        !["loading", "available", "limited_evidence"].includes(
+          path01MitigationIntelligence.status
+        )
+      ) {
+        return [
+          language === "it"
+            ? "Nessuna strategia automatica emessa: l'esposizione ufficiale o il supporto documentale non consentono una sintesi affidabile. E richiesta una valutazione tecnica sito-specifica."
+            : "No automated strategy was issued: official exposure or documentary support is insufficient for a reliable synthesis. A site-specific technical assessment is required.",
+        ];
+      }
+
+      return [];
+    }
+
     if (projectDesignFocus.recommendations.length) {
       return projectDesignFocus.recommendations;
     }
@@ -2029,10 +2071,12 @@ export default function ProfessionalPage() {
           : "Use this report as a source-backed package for early design meetings, documentary due diligence or technical investigation planning.",
     ];
   }, [
+    activeEntryPath,
     language,
     manualAreaBounds,
     manualAreaProvinces,
     projectDesignFocus,
+    path01MitigationIntelligence,
     selectedProvinceDrivers,
     selectedProvinceProfile,
     workflowEvents,
@@ -2096,6 +2140,27 @@ export default function ProfessionalPage() {
       ),
     [events, referenceEvent]
   );
+
+  const historicalAnalogueOutcomes = useMemo(() => {
+    const countValues = (field) => Object.entries(
+      selectedSimilarEvents.reduce((index, event) => {
+        const value = event.hydraulic_intelligence?.[field] || "unspecified";
+        index[value] = (index[value] || 0) + 1;
+        return index;
+      }, {})
+    ).sort((left, right) => right[1] - left[1]);
+
+    return {
+      analogueCount: selectedSimilarEvents.length,
+      components: countValues("component_involved"),
+      evidence: countValues("evidence_level"),
+      processes: countValues("failure_process"),
+      sourceCount: selectedSimilarEvents.reduce(
+        (total, event) => total + (sourceCountByEvent[event.event_id] || 0),
+        0
+      ),
+    };
+  }, [selectedSimilarEvents, sourceCountByEvent]);
 
   const monitoringSignals = useMemo(() => {
     return selectedProvinceEvents
@@ -3694,6 +3759,47 @@ export default function ProfessionalPage() {
     const recommendationRows = selectedRecommendations
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
+    const mitigationEvidence = path01MitigationIntelligence?.evidence_cohort;
+    const mitigationStatus = String(
+      path01MitigationIntelligence?.status || "not available"
+    ).replaceAll("_", " ");
+    const mitigationEvidenceSummary = mitigationEvidence
+      ? it
+        ? `${mitigationEvidence.event_count || 0} casi idraulici nel contesto provinciale; ${mitigationEvidence.effective_evidence_count || 0} casi effettivi pesati; ${mitigationEvidence.linked_source_count || 0} fonti collegate.`
+        : `${mitigationEvidence.event_count || 0} hydraulic cases in the provincial context; ${mitigationEvidence.effective_evidence_count || 0} effective weighted cases; ${mitigationEvidence.linked_source_count || 0} linked sources.`
+      : it
+        ? "Sintesi di evidenza non disponibile."
+        : "Evidence synthesis unavailable.";
+    const officialPointCoordinates = projectLocation.validated
+      ? `${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}`
+      : "-";
+    const officialHydraulicClasses =
+      path01HydraulicExposure?.matched_classes?.join(", ") || "-";
+    const officialLandslideClasses = [
+      ...(path01LandslideExposure?.matched_hazard_classes || []),
+      ...(path01LandslideExposure?.matched_attention_classes || []),
+    ].join(", ") || "-";
+    const officialPointExposureTable = `
+      <table>
+        <thead><tr><th>${it ? "Hazard" : "Hazard"}</th><th>Status</th><th>${it ? "Classi" : "Classes"}</th><th>${it ? "Provenienza osservazione" : "Observation provenance"}</th><th>${it ? "Ruolo" : "Role"}</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>ISPRA Hydraulic</td>
+            <td>${escapeHtml(path01HydraulicExposure?.decision_status || path01HydraulicExposure?.status || "not available")} / ${path01HydraulicExposure?.assessment_complete === false ? "incomplete" : path01HydraulicExposure ? "complete" : "-"}</td>
+            <td>${escapeHtml(officialHydraulicClasses)}</td>
+            <td>${escapeHtml(`${path01HydraulicExposure?.source?.observation_mode || "-"} / ${path01HydraulicExposure?.source?.freshness_status || "-"} / ${path01HydraulicExposure?.source?.observed_at || "-"}`)}</td>
+            <td>Shadow mode; ${it ? "non modifica il Final Priority Index" : "does not modify the Final Priority Index"}</td>
+          </tr>
+          <tr>
+            <td>ISPRA PAI Landslide</td>
+            <td>${escapeHtml(path01LandslideExposure?.decision_status || path01LandslideExposure?.status || "not available")} / ${path01LandslideExposure?.assessment_complete === false ? "incomplete" : path01LandslideExposure ? "complete" : "-"}</td>
+            <td>${escapeHtml(officialLandslideClasses)}</td>
+            <td>${escapeHtml(`${path01LandslideExposure?.source?.observation_mode || "-"} / ${path01LandslideExposure?.source?.freshness_status || "-"} / ${path01LandslideExposure?.source?.observed_at || "-"}`)}</td>
+            <td>Shadow mode; ${it ? "non modifica il Final Priority Index" : "does not modify the Final Priority Index"}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note">${escapeHtml(it ? `Punto progetto: ${officialPointCoordinates}. Le osservazioni ufficiali sono separate dai proxy storici ARCUS; una sorgente incompleta non e interpretata come assenza di hazard.` : `Project point: ${officialPointCoordinates}. Official observations remain separate from ARCUS historical proxies; an incomplete source is not interpreted as absence of hazard.`)}</p>`;
     const designFocusRows = projectDesignFocus.focusItems
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
@@ -4496,6 +4602,7 @@ export default function ProfessionalPage() {
           <thead><tr><th>Layer</th><th>Score</th><th>${it ? "Crolli correlati" : "Matched collapses"}</th><th>Share</th></tr></thead>
           <tbody>${hazardRowsSafe}</tbody>
         </table>
+        ${officialPointExposureTable}
         <p class="note">${escapeHtml(hazardInterpretation)}</p>
       </section>
       <section>
@@ -4548,8 +4655,10 @@ export default function ProfessionalPage() {
         </table>
       </section>
       <section>
-        ${sectionHeading("12", it ? "PROJECT-SPECIFIC RECOMMENDATIONS" : "PROJECT-SPECIFIC RECOMMENDATIONS")}
+        ${sectionHeading("12", it ? "MITIGATION INTELLIGENCE" : "MITIGATION INTELLIGENCE")}
+        <p><strong>Status:</strong> ${escapeHtml(mitigationStatus)}. ${escapeHtml(mitigationEvidenceSummary)}</p>
         <ol>${recommendationRows}</ol>
+        <p class="note">${it ? "Output non prescrittivo: non modifica il Final Priority Index e richiede validazione tecnica sito-specifica." : "Non-prescriptive output: it does not modify the Final Priority Index and requires site-specific technical validation."}</p>
       </section>
       <section>
         ${sectionHeading("13", it ? "NATIONAL BENCHMARK" : "NATIONAL BENCHMARK")}
@@ -4616,6 +4725,7 @@ export default function ProfessionalPage() {
         ${sectionHeading("04", it ? "BLOCCO 1 / TERRITORIO" : "BLOCK 1 / TERRITORY")}
         <p>${escapeHtml(territoryReading)}</p>
         <p class="note">${it ? "Le esposizioni ufficiali WFS restano separate dai proxy storici ARCUS. In questa fase non vengono fuse in un numero unico." : "Official WFS exposures remain separate from ARCUS historical proxies. At this stage they are not merged into a single number."}</p>
+        ${officialPointExposureTable}
         ${hazardBars}
       </section>
       <section>
@@ -4681,7 +4791,7 @@ export default function ProfessionalPage() {
           <div class="kpi"><span>Collapse Rate</span><strong>${escapeHtml(collapseRateMultiplier)}</strong>${formatKpi({ level: it ? `Confidenza denominatore: ${collapseRateConfidence}` : `Denominator confidence: ${collapseRateConfidence}`, driver: it ? "Segnale ARCUS/AINOP sul patrimonio ponte." : "ARCUS/AINOP bridge-stock signal." })}</div>
           <div class="kpi"><span>${it ? "Pattern storico" : "Historical pattern"}</span><strong style="font-size:18px">${escapeHtml(historicalPatternReading.type)}</strong>${formatKpi({ level: dominantCauseLabel, driver: historicalPatternReading.temporal })}</div>
         </div>
-        <p class="note">${it ? "Il Priority Index aggrega esposizione idraulica, frana, sismica e Collapse Rate AINOP. Va letto come conclusione metodologica, non come sostituto dei quattro blocchi sopra." : "The Priority Index aggregates hydraulic, landslide, seismic exposure and AINOP Collapse Rate. It should be read as the methodological conclusion, not as a substitute for the four blocks above."}</p>
+        <p class="note">${it ? "Il Priority Index segue la metodologia corrente documentata. Le osservazioni puntuali ufficiali WFS idraulica e PAI frane restano in shadow mode, sono riportate separatamente e non modificano il Final Priority Index." : "The Priority Index follows the current documented methodology. Official hydraulic and PAI landslide WFS point observations remain in shadow mode, are reported separately and do not modify the Final Priority Index."}</p>
       </section>
       <section>
         ${sectionHeading("09", it ? "DATA COVERAGE & LIMITATIONS" : "DATA COVERAGE & LIMITATIONS")}
@@ -5285,6 +5395,10 @@ export default function ProfessionalPage() {
       : it
         ? "Confidenza del denominatore Collapse Rate non disponibile per copertura AINOP insufficiente."
         : "Collapse Rate denominator confidence unavailable because AINOP coverage is insufficient.";
+    const mitigationReportSummary = buildMitigationReportSummary(
+      path01MitigationIntelligence,
+      { language }
+    );
     let y = margin;
 
     const setFill = (color) => pdf.setFillColor(...color);
@@ -7139,6 +7253,18 @@ export default function ProfessionalPage() {
     });
     y = patternStartY + 50;
     heading("04", it ? "Actions" : "Actions", 60);
+    if (activeEntryPath === 0) {
+      fullTextBox({
+        accent: true,
+        title: `Mitigation intelligence - ${mitigationReportSummary.status}`,
+        text: [
+          mitigationReportSummary.evidenceText,
+          mitigationReportSummary.outcomeText,
+          mitigationReportSummary.sourceText,
+          mitigationReportSummary.warningText,
+        ].join(" "),
+      });
+    }
     bulletList(pdfActionRows);
     fullTextBox({
       title: it ? "Pacchetto dati richiesto" : "Data request package",
@@ -9424,6 +9550,7 @@ export default function ProfessionalPage() {
     setPath01HydraulicExposure(null);
     setPath01LandslideExposure(null);
     setPath01SeismicExposure(null);
+    setPath01MitigationIntelligence(null);
     setPath01ExposureStatus("idle");
   };
   const hydraulicExposureLabel = (exposure) => {
@@ -9466,6 +9593,12 @@ export default function ProfessionalPage() {
       return "";
     }
 
+    if (exposure.matched_classes?.length) {
+      return language === "it"
+        ? `Intersezione osservata nei layer ${exposure.matched_classes.join(", ")}; uno o piu layer ISPRA non hanno completato la valutazione.`
+        : `Intersection observed in ${exposure.matched_classes.join(", ")}; one or more ISPRA layers did not complete the assessment.`;
+    }
+
     return language === "it"
       ? "Nessuna intersezione e stata trovata nei layer che hanno risposto. Uno o piu layer configurati non hanno potuto essere valutati."
       : "No intersection was found in the layers that responded. One or more configured layers could not be evaluated.";
@@ -9479,6 +9612,31 @@ export default function ProfessionalPage() {
           status: layer.status || "unknown",
         }))
       : [];
+  const mitigationAbstentionMessage = (intelligence) => {
+    const reasons = intelligence?.abstention_reasons || [];
+
+    if (reasons.includes("official_hydraulic_exposure_incomplete")) {
+      return language === "it"
+        ? "ARCUS si astiene: la valutazione ISPRA e incompleta e i layer mancanti non possono essere interpretati come assenza di pericolosita. Nessuna prescrizione viene generata."
+        : "ARCUS abstains: the ISPRA assessment is incomplete and failed layers cannot be interpreted as absence of hazard. No prescription is generated.";
+    }
+
+    if (reasons.includes("official_hydraulic_exposure_unavailable")) {
+      return language === "it"
+        ? "ARCUS si astiene: l'esposizione idraulica ufficiale non e disponibile. Nessuna prescrizione viene generata."
+        : "ARCUS abstains: official hydraulic exposure is unavailable. No prescription is generated.";
+    }
+
+    if (reasons.includes("official_hydraulic_exposure_not_intersected")) {
+      return language === "it"
+        ? "ARCUS si astiene: tutti i layer ISPRA hanno risposto e il punto non intercetta una classe idraulica ufficiale. Nessuna prescrizione viene generata."
+        : "ARCUS abstains: all ISPRA layers responded and the point does not intersect an official hydraulic class. No prescription is generated.";
+    }
+
+    return language === "it"
+      ? "ARCUS si astiene: l'evidenza provinciale non supera la soglia minima di supporto. Nessuna prescrizione viene generata."
+      : "ARCUS abstains: provincial evidence does not meet the minimum support threshold. No prescription is generated.";
+  };
   const landslideExposureLabel = (exposure) => {
     if (!exposure) {
       return language === "it"
@@ -9513,6 +9671,15 @@ export default function ProfessionalPage() {
     }
 
     return exposure.status || "unavailable";
+  };
+  const landslideCompletenessExplanation = (exposure) => {
+    if (!exposure || exposure.assessment_complete !== false) {
+      return "";
+    }
+
+    return language === "it"
+      ? "Valutazione PAI incompleta: ARCUS non interpreta l'indisponibilita della sorgente come assenza di pericolosita. Un'eventuale osservazione precedente e mostrata solo come contesto."
+      : "Incomplete PAI assessment: ARCUS does not interpret source unavailability as absence of hazard. Any previous observation is shown as context only.";
   };
   const seismicExposureLabel = (exposure) => {
     if (!exposure) {
@@ -9581,6 +9748,7 @@ export default function ProfessionalPage() {
       setPath01HydraulicExposure(null);
       setPath01LandslideExposure(null);
       setPath01SeismicExposure(null);
+      setPath01MitigationIntelligence(null);
       setPath01ExposureStatus("blocked");
 
       return;
@@ -9636,6 +9804,10 @@ export default function ProfessionalPage() {
       pga_p50_g: null,
       status: "loading",
       unit: "g",
+    });
+    setPath01MitigationIntelligence({
+      status: "loading",
+      strategies: [],
     });
     setPath01ExposureStatus("loading");
     const exposureRequestToken = `${Date.now()}-${derived.latitude}-${derived.longitude}`;
@@ -9710,6 +9882,34 @@ export default function ProfessionalPage() {
           unit: "g",
         }
       );
+      try {
+        const mitigation = await professionalMitigationIntelligence({
+          official_exposure: {
+            hydraulic: result.hydraulic || null,
+            landslide: result.landslide || null,
+            seismic: result.seismic || null,
+          },
+          project_context: projectContext,
+          project_location: {
+            derived_province: derivedProvinceName,
+            latitude: derived.latitude,
+            longitude: derived.longitude,
+            validated: true,
+          },
+        });
+
+        if (activeHazardRequestRef.current === exposureRequestToken) {
+          setPath01MitigationIntelligence(mitigation);
+        }
+      } catch {
+        if (activeHazardRequestRef.current === exposureRequestToken) {
+          setPath01MitigationIntelligence({
+            error: "service_unreachable",
+            status: "unavailable",
+            strategies: [],
+          });
+        }
+      }
       setPath01ExposureStatus("ready");
       ["hydraulic", "landslide", "seismic"].forEach((hazard) => {
         traceFrontendHazardStage({
@@ -9772,6 +9972,11 @@ export default function ProfessionalPage() {
         },
         status: "source_unavailable",
         unit: "g",
+      });
+      setPath01MitigationIntelligence({
+        error: "official_exposure_unavailable",
+        status: "unavailable",
+        strategies: [],
       });
       setPath01ExposureStatus("service_unreachable");
     }
@@ -10224,6 +10429,7 @@ export default function ProfessionalPage() {
     setPath01HydraulicExposure(null);
     setPath01LandslideExposure(null);
     setPath01SeismicExposure(null);
+    setPath01MitigationIntelligence(null);
     setPath01ExposureStatus("idle");
   };
 
@@ -10797,6 +11003,7 @@ export default function ProfessionalPage() {
                       setPath01HydraulicExposure(null);
                       setPath01LandslideExposure(null);
                       setPath01SeismicExposure(null);
+                      setPath01MitigationIntelligence(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10824,6 +11031,7 @@ export default function ProfessionalPage() {
                       setPath01HydraulicExposure(null);
                       setPath01LandslideExposure(null);
                       setPath01SeismicExposure(null);
+                      setPath01MitigationIntelligence(null);
                       setPath01ExposureStatus("idle");
                       setProjectLocation((current) => ({
                         ...current,
@@ -10926,13 +11134,44 @@ export default function ProfessionalPage() {
                           : "point not selected")}
                     </span>
                     <span>
+                      Decision status:{" "}
+                      {path01HydraulicExposure?.decision_status || "-"}
+                    </span>
+                    <span>
+                      Assessment:{" "}
+                      {path01HydraulicExposure
+                        ? path01HydraulicExposure.assessment_complete === false
+                          ? "incomplete"
+                          : "complete"
+                        : "-"}
+                    </span>
+                    <span>
                       Source:{" "}
                       {path01HydraulicExposure?.source
                         ? `${path01HydraulicExposure.source.provider} ${path01HydraulicExposure.source.service_type}`
                         : "ISPRA WFS"}
                     </span>
                     <span>
-                      Timestamp:{" "}
+                      Observation mode:{" "}
+                      {path01HydraulicExposure?.source?.observation_mode ||
+                        "-"}
+                    </span>
+                    <span>
+                      Freshness:{" "}
+                      {path01HydraulicExposure?.source?.freshness_status ||
+                        "-"}
+                    </span>
+                    <span>
+                      Observed at:{" "}
+                      {path01HydraulicExposure?.source?.observed_at || "-"}
+                    </span>
+                    <span>
+                      Live provider:{" "}
+                      {path01HydraulicExposure?.source?.live_provider_status ||
+                        "-"}
+                    </span>
+                    <span>
+                      Query timestamp:{" "}
                       {path01HydraulicExposure?.source?.queried_at ||
                         path01HydraulicExposure?.attempted_at ||
                         "-"}
@@ -10951,6 +11190,19 @@ export default function ProfessionalPage() {
                         </span>
                       )
                     )}
+                    {path01HydraulicExposure?.source
+                      ?.last_known_good_layers?.length ? (
+                        <span>
+                          Last known good only:{" "}
+                          {path01HydraulicExposure.source
+                            .last_known_good_layers
+                            .map(
+                              (layer) =>
+                                `${layer.class_name} (${layer.status}, ${layer.freshness_status})`
+                            )
+                            .join(", ")}
+                        </span>
+                      ) : null}
                     <span>Normalized score: not assigned</span>
                   </div>
                 </article>
@@ -10961,9 +11213,12 @@ export default function ProfessionalPage() {
                     {landslideExposureLabel(path01LandslideExposure)}
                   </strong>
                   <p>
-                    {language === "it"
-                      ? "Mosaicatura PAI ISPRA v. 5.0 - 2024 al punto progetto. AA e riportata separatamente; nessun punteggio e assegnato."
-                      : "ISPRA PAI mosaic v. 5.0 - 2024 at the project point. AA is reported separately; no score is assigned."}
+                    {landslideCompletenessExplanation(
+                      path01LandslideExposure
+                    ) ||
+                      (language === "it"
+                        ? "Mosaicatura PAI ISPRA v. 5.0 - 2024 al punto progetto. AA e riportata separatamente; nessun punteggio e assegnato."
+                        : "ISPRA PAI mosaic v. 5.0 - 2024 at the project point. AA is reported separately; no score is assigned.")}
                   </p>
                   <div className="platform-exposure-meta">
                     <span>
@@ -10972,6 +11227,18 @@ export default function ProfessionalPage() {
                         (language === "it"
                           ? "punto non selezionato"
                           : "point not selected")}
+                    </span>
+                    <span>
+                      Decision status:{" "}
+                      {path01LandslideExposure?.decision_status || "-"}
+                    </span>
+                    <span>
+                      Assessment:{" "}
+                      {path01LandslideExposure
+                        ? path01LandslideExposure.assessment_complete === false
+                          ? "incomplete"
+                          : "complete"
+                        : "-"}
                     </span>
                     <span>
                       Source:{" "}
@@ -10986,7 +11253,26 @@ export default function ProfessionalPage() {
                         : "-"}
                     </span>
                     <span>
-                      Timestamp:{" "}
+                      Observation mode:{" "}
+                      {path01LandslideExposure?.source?.observation_mode ||
+                        "-"}
+                    </span>
+                    <span>
+                      Freshness:{" "}
+                      {path01LandslideExposure?.source?.freshness_status ||
+                        "-"}
+                    </span>
+                    <span>
+                      Observed at:{" "}
+                      {path01LandslideExposure?.source?.observed_at || "-"}
+                    </span>
+                    <span>
+                      Live provider:{" "}
+                      {path01LandslideExposure?.source
+                        ?.live_provider_status || "-"}
+                    </span>
+                    <span>
+                      Query timestamp:{" "}
                       {path01LandslideExposure?.source?.queried_at ||
                         path01LandslideExposure?.attempted_at ||
                         "-"}
@@ -11008,6 +11294,22 @@ export default function ProfessionalPage() {
                       {path01LandslideExposure?.source?.analysis_mode ||
                         "point_intersection"}
                     </span>
+                    {path01LandslideExposure?.source
+                      ?.last_known_good_layers?.length ? (
+                        <span>
+                          Last known good only:{" "}
+                          {path01LandslideExposure.source
+                            .last_known_good_layers
+                            .map(
+                              (layer) =>
+                                `${[
+                                  ...(layer.matched_hazard_classes || []),
+                                  ...(layer.matched_attention_classes || []),
+                                ].join(", ") || "no intersection"} (${layer.status}, ${layer.freshness_status})`
+                            )
+                            .join(", ")}
+                        </span>
+                      ) : null}
                     <span>Normalized score: not assigned</span>
                   </div>
                 </article>
@@ -11929,6 +12231,117 @@ export default function ProfessionalPage() {
                   ? `Il valore non e la lista dei casi: e capire se ${selectedProvinceProfile?.territory || "la provincia"} ha gia mostrato vulnerabilita concentrata in condizioni estreme o un rischio distribuito nel tempo. I casi individuali restano sulla mappa e nell'appendice del PDF.`
                   : `The value is not the case list: it is understanding whether ${selectedProvinceProfile?.territory || "the province"} has already shown concentrated vulnerability under extreme conditions or risk distributed over time. Individual cases remain on the map and in the PDF appendix.`}
               </p>
+            </div>
+
+            <div className="platform-mitigation-intelligence">
+              <header>
+                <div>
+                  <span>
+                    {language === "it"
+                      ? "Mitigation intelligence"
+                      : "Mitigation intelligence"}
+                  </span>
+                  <strong>
+                    {language === "it"
+                      ? "Dal dato documentato alle priorita di verifica"
+                      : "From documented evidence to investigation priorities"}
+                  </strong>
+                </div>
+                <em data-status={path01MitigationIntelligence?.status || "idle"}>
+                  {(path01MitigationIntelligence?.status || "not available")
+                    .replaceAll("_", " ")}
+                </em>
+              </header>
+
+              {path01MitigationIntelligence?.status === "loading" && (
+                <p>
+                  {language === "it"
+                    ? "ARCUS sta collegando esposizione ufficiale ed evidenza storica provinciale."
+                    : "ARCUS is linking official exposure and provincial historical evidence."}
+                </p>
+              )}
+
+              {path01MitigationIntelligence?.source_completeness?.hydraulic
+                ?.assessment_complete === false &&
+                (path01MitigationIntelligence?.strategies || []).length > 0 && (
+                  <p>
+                    {language === "it"
+                      ? "Strategie basate esclusivamente sui layer ISPRA che hanno risposto; i layer non completati restano una limitazione esplicita."
+                      : "Strategies are based only on the ISPRA layers that responded; incomplete layers remain an explicit limitation."}
+                  </p>
+                )}
+
+              {(path01MitigationIntelligence?.strategies || []).map(
+                (strategy) => (
+                  <article key={strategy.strategy_id}>
+                    <div>
+                      <span>
+                        {language === "it"
+                          ? `Priorita ${strategy.priority_order}`
+                          : `Priority ${strategy.priority_order}`}
+                      </span>
+                      <strong>
+                        {strategy.investigation_priority?.[language] ||
+                          strategy.investigation_priority?.en ||
+                          strategy.strategy_id}
+                      </strong>
+                      <p>
+                        {strategy.purpose?.[language] ||
+                          strategy.purpose?.en}
+                      </p>
+                    </div>
+                    <dl>
+                      <div>
+                        <dt>{language === "it" ? "Processo" : "Process"}</dt>
+                        <dd>{strategy.process.replaceAll("_", " ")}</dd>
+                      </div>
+                      <div>
+                        <dt>{language === "it" ? "Evidenza" : "Evidence"}</dt>
+                        <dd>
+                          {strategy.arcus_evidence.documented_count} {language === "it" ? "documentati" : "documented"} / {" "}
+                          {strategy.arcus_evidence.effective_evidence_count} {language === "it" ? "effettivi" : "effective"}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>{language === "it" ? "Tema di controllo" : "Risk-control theme"}</dt>
+                        <dd>
+                          {strategy.risk_control_theme?.[language] ||
+                            strategy.risk_control_theme?.en}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>{language === "it" ? "Monitoraggio" : "Monitoring"}</dt>
+                        <dd>
+                          {strategy.monitoring_consideration?.[language] ||
+                            strategy.monitoring_consideration?.en}
+                        </dd>
+                      </div>
+                    </dl>
+                  </article>
+                )
+              )}
+
+              {path01MitigationIntelligence &&
+                path01MitigationIntelligence.status !== "loading" &&
+                !(path01MitigationIntelligence.strategies || []).length && (
+                  <p>
+                    {mitigationAbstentionMessage(
+                      path01MitigationIntelligence
+                    )}
+                  </p>
+                )}
+
+              <footer>
+                <span>
+                  {path01MitigationIntelligence?.evidence_cohort
+                    ?.event_count || 0} {language === "it" ? "casi idraulici nel contesto" : "hydraulic cases in context"}
+                </span>
+                <p>
+                  {language === "it"
+                    ? "Le strategie non modificano il Final Priority Index e richiedono validazione da parte di professionisti qualificati."
+                    : "Strategies do not modify the Final Priority Index and require validation by qualified professionals."}
+                </p>
+              </footer>
             </div>
           </div>
         );
@@ -12922,6 +13335,26 @@ export default function ProfessionalPage() {
                   )
                 )}
               </div>
+            </article>
+
+            <article>
+              <span>{language === "it" ? "Outcome degli analoghi storici" : "Historical analogue outcomes"}</span>
+              <h3>{historicalAnalogueOutcomes.analogueCount} {language === "it" ? "analoghi" : "analogues"}</h3>
+              <p>
+                {language === "it" ? "Processi osservati" : "Observed processes"}: {historicalAnalogueOutcomes.processes.map(([value, count]) => `${value} (${count})`).join(", ") || "-"}
+              </p>
+              <p>
+                {language === "it" ? "Componenti coinvolte" : "Components involved"}: {historicalAnalogueOutcomes.components.map(([value, count]) => `${value} (${count})`).join(", ") || "-"}
+              </p>
+              <p>
+                {language === "it" ? "Livelli di evidenza" : "Evidence levels"}: {historicalAnalogueOutcomes.evidence.map(([value, count]) => `${value} (${count})`).join(", ") || "-"}
+              </p>
+              <p>{historicalAnalogueOutcomes.sourceCount} {language === "it" ? "fonti collegate" : "linked sources"}</p>
+              <em>
+                {language === "it"
+                  ? "Gli outcome sono letti dopo il retrieval e non modificano selezione, similarity score o ranking. Evidenza storica contestuale; validazione tecnica esterna richiesta."
+                  : "Outcomes are read after retrieval and do not change selection, similarity score or ranking. Contextual historical evidence; external technical validation required."}
+              </em>
             </article>
           </div>
         </div>
@@ -14339,12 +14772,38 @@ export default function ProfessionalPage() {
                   </em>
                 </li>
                 <li>
+                  <b>Landslide assessment status</b>
+                  <em>
+                    {path01LandslideExposure?.decision_status || "-"}
+                    {" / "}
+                    {path01LandslideExposure
+                      ? path01LandslideExposure.assessment_complete === false
+                        ? "incomplete"
+                        : "complete"
+                      : "-"}
+                  </em>
+                </li>
+                <li>
                   <b>PAI classes</b>
                   <em>
                     {path01LandslideExposure?.matched_hazard_classes?.length
                       ? path01LandslideExposure.matched_hazard_classes.join(", ")
                       : "-"}
                   </em>
+                </li>
+                <li>
+                  <b>Landslide observation provenance</b>
+                  <em>
+                    {path01LandslideExposure?.source?.observation_mode || "-"}
+                    {" / "}
+                    {path01LandslideExposure?.source?.freshness_status || "-"}
+                    {" / "}
+                    {path01LandslideExposure?.source?.observed_at || "-"}
+                  </em>
+                </li>
+                <li>
+                  <b>Landslide scoring role</b>
+                  <em>Shadow mode; does not modify Final Priority Index</em>
                 </li>
                 <li>
                   <b>Attention area</b>

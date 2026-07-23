@@ -397,9 +397,9 @@ check("red-team-top3-coherent-with-class-count", () => {
   );
 });
 check("red-team-fully-enriched-distinct-from-eligible", () => {
-  assert.equal(redTeam.enrichment_status.eligible_for_enrichment, 253);
+  assert.equal(redTeam.enrichment_status.eligible_for_enrichment, 263);
   assert.equal(redTeam.enrichment_status.fully_enriched, 0);
-  assert.equal(redTeam.enrichment_status.pending, 253);
+  assert.equal(redTeam.enrichment_status.pending, 263);
 });
 check("red-team-unresolved-geography-excluded-correctly", () => {
   assert.equal(redTeam.territorial_reconciliation.unresolved.length, 13);
@@ -465,7 +465,7 @@ check("hydraulic-intelligence-normalization", () => {
     component_involved: "pier_foundation",
     evidence_level: "documented",
     failure_process: "scour",
-    taxonomy_version: "hydraulic-v1",
+    taxonomy_version: "hydraulic-v2",
     trigger: "flood",
   });
 });
@@ -501,7 +501,7 @@ check("hydraulic-intelligence-professional-present", () => {
   const rows = Array.isArray(professional) ? professional : professional.events;
 
   assert.equal(
-    rows.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v1"),
+    rows.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"),
     true
   );
 });

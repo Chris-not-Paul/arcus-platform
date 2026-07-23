@@ -251,7 +251,7 @@ export function auditDatabase(events, sources) {
       field,
       non_null_count: nonNullCount,
       normalization_issues: issues,
-      source_file: "private-data/processed/events.json",
+      source_file: "private-data/professional/professional-events.json",
       type: fieldType(values),
       unique_values: unique,
     };
@@ -263,7 +263,7 @@ export function auditDatabase(events, sources) {
     field: "source_count",
     non_null_count: sourceCoverage,
     normalization_issues: sourceCoverage < events.length ? ["events_without_sources"] : [],
-    source_file: "private-data/processed/sources.json",
+    source_file: "private-data/professional/professional-sources.json",
     type: "number",
     unique_values: uniqueValues(Object.values(sourceCountByEvent)),
   });
@@ -438,7 +438,7 @@ function buildHydraulicIntelligenceTaxonomy(events) {
                 : "Curated evidence strength for the hydraulic process assignment.",
         source_values: sourceValuesFor(mapping, value),
         status: value.includes("other") ? "needs_review" : "active",
-        taxonomy_version: event.hydraulic_intelligence.taxonomy_version || "hydraulic-v1",
+        taxonomy_version: event.hydraulic_intelligence.taxonomy_version || "hydraulic-v2",
       };
 
       byCanonical.set(value, record);
@@ -1273,10 +1273,19 @@ export function valueAddBenchmark(analogComparison) {
 }
 
 export function buildAnalysis({ limit = null, outputPath = DEFAULT_OUTPUT } = {}) {
-  const events = readJson(path.join(ROOT, "private-data", "processed", "events.json"));
-  const sources = readJson(path.join(ROOT, "private-data", "processed", "sources.json"));
+  const professionalEventsResource = readJson(
+    path.join(ROOT, "private-data", "professional", "professional-events.json")
+  );
+  const professionalSourcesResource = readJson(
+    path.join(ROOT, "private-data", "professional", "professional-sources.json")
+  );
+  const events = Array.isArray(professionalEventsResource)
+    ? professionalEventsResource
+    : professionalEventsResource.events || [];
+  const sources = Array.isArray(professionalSourcesResource)
+    ? professionalSourcesResource
+    : professionalSourcesResource.sources || [];
   const ainopIndex = readJson(path.join(ROOT, "private-data", "professional", "ainop-bridge-index.json"));
-  const professionalEvents = readJson(path.join(ROOT, "private-data", "professional", "professional-events.json"));
   const provincesGeojson = readJson(path.join(ROOT, "public", "data", "geo", "italy-provinces.geojson"));
   const eventSet = limit ? events.slice(0, limit) : events;
   const reliabilityByEvent = buildSourceReliabilityByEvent(eventSet, sources);
@@ -1328,9 +1337,7 @@ export function buildAnalysis({ limit = null, outputPath = DEFAULT_OUTPUT } = {}
       data_cutoff_date: ainopIndex.metadata?.data_cutoff_date || null,
       dataset_version: ainopIndex.metadata?.dataset_version || null,
       event_count: eventSet.length,
-      professional_event_count: Array.isArray(professionalEvents)
-        ? professionalEvents.length
-        : professionalEvents.events?.length || null,
+      professional_event_count: events.length,
       source_count: sources.length,
       workbench_name: WORKBENCH_NAME,
     },

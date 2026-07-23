@@ -1,4 +1,4 @@
-export const LANDSLIDE_PROVIDER_VERSION = "ispra-landslide-pai-wfs-v1";
+export const LANDSLIDE_PROVIDER_VERSION = "ispra-landslide-pai-wfs-v2";
 export const LANDSLIDE_HAZARD_ORDER = Object.freeze(["P1", "P2", "P3", "P4"]);
 export const LANDSLIDE_ATTENTION_CLASS = "AA";
 

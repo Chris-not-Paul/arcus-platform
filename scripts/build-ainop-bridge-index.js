@@ -16,8 +16,8 @@ const defaultIndexPath = path.join(
 const defaultEventsPath = path.join(
   root,
   "private-data",
-  "processed",
-  "events.json"
+  "professional",
+  "professional-events.json"
 );
 const defaultReleasePath = path.join(
   root,
@@ -28,8 +28,8 @@ const defaultReleasePath = path.join(
 const defaultSourcesPath = path.join(
   root,
   "private-data",
-  "processed",
-  "sources.json"
+  "professional",
+  "professional-sources.json"
 );
 
 function parseArgs(argv) {
@@ -368,8 +368,8 @@ export function buildAinopBridgeIndex({
       total_ainop_bridges: totalDenominator,
       total_arcus_cases: totalCases,
       numerator_source: scope === "open"
-        ? "private-data/processed/events.json filtered by publicReleaseEndYear"
-        : "private-data/processed/events.json full curated Professional scope",
+        ? "versioned ARCUS Open release filtered by publicReleaseEndYear"
+        : "private-data/professional/professional-events.json live Professional scope",
       denominator_source:
         "Existing ARCUS Professional AINOP denominator fields in ainop-bridge-index.json",
       national_rate_per_100_ainop_bridges: nationalRate,
@@ -392,10 +392,16 @@ function readJson(filePath) {
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const currentIndex = readJson(args.indexPath);
-  const events = readJson(args.eventsPath);
-  const sources = fs.existsSync(args.sourcesPath)
+  const eventResource = readJson(args.eventsPath);
+  const sourceResource = fs.existsSync(args.sourcesPath)
     ? readJson(args.sourcesPath)
     : [];
+  const events = Array.isArray(eventResource)
+    ? eventResource
+    : eventResource.events || [];
+  const sources = Array.isArray(sourceResource)
+    ? sourceResource
+    : sourceResource.sources || [];
   const release = fs.existsSync(args.releasePath)
     ? readJson(args.releasePath)
     : {};

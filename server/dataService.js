@@ -3,7 +3,6 @@ import path from "node:path";
 
 import {
   privateDataDir,
-  publicReleaseEndYear,
 } from "./config.js";
 
 const jsonCache = new Map();
@@ -14,7 +13,7 @@ const professionalResources = new Map([
   ["data-quality", "data-quality.json"],
   ["data-dictionary", "data-dictionary.json"],
   ["data-release", "data-release.json"],
-  ["professional-sources", "../processed/sources.json"],
+  ["professional-sources", "professional-sources.json"],
   ["professional-events", "professional-events.json"],
   ["external-hazard-layers", "external-hazard-layers.json"],
   ["hazard-exposure-preview", "hazard-exposure-preview.json"],
@@ -23,59 +22,34 @@ const professionalResources = new Map([
   ["event-reliability", "event-reliability.json"],
   ["event-vulnerability", "event-vulnerability.json"],
   ["territory-profiles", "territory-profiles.json"],
+  ["collapse-intelligence", "collapse-intelligence/collapse-intelligence-analysis.json"],
 ]);
 
-function yearFromDate(value) {
-  const match = String(value || "").match(/\d{4}/);
+const openResources = new Map([
+  ["manifest", "manifest.json"],
+  ["events", "events.json"],
+  ["sources", "sources.json"],
+  ["taxonomy", "taxonomy.json"],
+  ["data-dictionary", "data-dictionary.json"],
+  ["changelog", "changelog.json"],
+  ["statistics", "statistics.json"],
+  ["quality-audit", "quality-audit.json"],
+  ["id-mapping", "id-mapping.json"],
+]);
 
-  return match ? Number(match[0]) : null;
-}
+const openDownloads = new Map([
+  ["csv", { contentType: "text/csv; charset=utf-8", fileName: "events.csv" }],
+  ["geojson", { contentType: "application/geo+json; charset=utf-8", fileName: "events.geojson" }],
+]);
 
-function sanitizeOpenEvent(event) {
-  return {
-    event_id: event.event_id,
-    event_slug: event.event_slug,
-    date: event.date,
-    municipality: event.municipality,
-    province: event.province,
-    region: event.region,
-    latitude: event.latitude,
-    longitude: event.longitude,
-    bridge_crossing_type: event.bridge_crossing_type,
-    bridge_crossing_name: event.bridge_crossing_name,
-    destination_use: event.destination_use,
-    collapse_severity: event.collapse_severity,
-    victims: event.victims,
-    injuries: event.injuries,
-    triggered: event.triggered,
-    cause_category: event.cause_category,
-    specific_cause: event.specific_cause,
-    source_confidence: event.source_confidence,
-    exact_location: event.exact_location,
-    bridge_name: event.bridge_name,
-    structural_type: event.structural_type,
-    material_type: event.material_type,
-    construction_year: event.construction_year,
-    curation_level: event.curation_level,
-    description: event.description,
-  };
-}
-
-function sanitizeOpenSource(source, publicEventIds) {
-  if (!publicEventIds.has(source.event_id)) {
-    return null;
-  }
+async function getOpenReleaseContext() {
+  const releaseRoot = path.join(privateDataDir, "open", "releases");
+  const current = await readJsonFromAbsolutePath(path.join(releaseRoot, "current.json"));
+  const releaseDirectory = path.join(releaseRoot, current.version);
 
   return {
-    source_id: source.source_id,
-    event_id: source.event_id,
-    source_type: source.source_type,
-    source_name: source.source_name,
-    title: source.title,
-    source_url: source.source_url,
-    publication_date: source.publication_date,
-    accessed_at: source.accessed_at,
-    language: source.language,
+    releaseDirectory,
+    version: current.version,
   };
 }
 
@@ -100,6 +74,19 @@ async function readJson(relativePath) {
   return data;
 }
 
+async function readJsonFromAbsolutePath(absolutePath) {
+  if (jsonCache.has(absolutePath)) {
+    return jsonCache.get(absolutePath);
+  }
+
+  const content = await fs.readFile(absolutePath, "utf8");
+  const data = JSON.parse(content);
+
+  jsonCache.set(absolutePath, data);
+
+  return data;
+}
+
 export async function getPrivateEvents() {
   return readJson("processed/events.json");
 }
@@ -109,29 +96,49 @@ export async function getPrivateSources() {
 }
 
 export async function getOpenEvents() {
-  const events = await getPrivateEvents();
+  const resource = await getOpenResource("events");
 
-  return events
-    .filter((event) => {
-      const year = yearFromDate(event.date);
-
-      return year && year <= publicReleaseEndYear;
-    })
-    .map(sanitizeOpenEvent);
+  return resource?.events || [];
 }
 
 export async function getOpenSources() {
-  const events = await getOpenEvents();
-  const publicEventIds = new Set(
-    events.map((event) => event.event_id)
-  );
-  const sources = await getPrivateSources();
+  const resource = await getOpenResource("sources");
 
-  return sources
-    .map((source) =>
-      sanitizeOpenSource(source, publicEventIds)
-    )
-    .filter(Boolean);
+  return resource?.sources || [];
+}
+
+export async function getOpenResource(resource) {
+  const fileName = openResources.get(resource);
+
+  if (!fileName) {
+    return null;
+  }
+
+  const context = await getOpenReleaseContext();
+
+  return readJsonFromAbsolutePath(path.join(context.releaseDirectory, fileName));
+}
+
+export async function getOpenDownload(format) {
+  const download = openDownloads.get(format);
+
+  if (!download) {
+    return null;
+  }
+
+  const context = await getOpenReleaseContext();
+  const manifest = await getOpenResource("manifest");
+
+  return {
+    content: await fs.readFile(path.join(context.releaseDirectory, download.fileName)),
+    contentType: download.contentType,
+    filename: `${context.version}-${download.fileName}`,
+    version: manifest.version,
+  };
+}
+
+export function getOpenResourceNames() {
+  return [...openResources.keys()];
 }
 
 export async function getProfessionalResource(resource) {

@@ -63,6 +63,35 @@ await fs.writeFile(
   )}\n`,
   "utf8"
 );
+await fs.mkdir(path.join(testDataDir, "professional"), {
+  recursive: true,
+});
+const mitigationFixtureEvents = [1, 2, 3].map((index) => ({
+  event_id: `B00.00.0${index}`,
+  hydraulic_intelligence: {
+    component_involved: "pier_foundation",
+    evidence_level: "documented",
+    failure_process: "scour",
+    trigger: "flood",
+  },
+  province: "Ancona",
+  specific_cause: "Hydraulic",
+}));
+const mitigationFixtureSources = mitigationFixtureEvents.map((event, index) => ({
+  event_id: event.event_id,
+  source_id: `S00.00.0${index + 1}`,
+}));
+
+await fs.writeFile(
+  path.join(testDataDir, "professional", "professional-events.json"),
+  `${JSON.stringify({ events: mitigationFixtureEvents }, null, 2)}\n`,
+  "utf8"
+);
+await fs.writeFile(
+  path.join(testDataDir, "professional", "professional-sources.json"),
+  `${JSON.stringify({ sources: mitigationFixtureSources }, null, 2)}\n`,
+  "utf8"
+);
 
 async function json(response) {
   const payload = await response.json();
@@ -312,6 +341,41 @@ try {
     promotedSession.permissions.includes("professional:report"),
     "promoted user lacks report permission"
   );
+
+  const mitigationUnauthorized = await postJson(
+    "/api/professional/mitigation-intelligence",
+    {}
+  );
+  assert(
+    mitigationUnauthorized.status === 401,
+    "mitigation endpoint allowed an unauthenticated request"
+  );
+
+  const mitigation = await json(
+    await postJson(
+      "/api/professional/mitigation-intelligence",
+      {
+        official_exposure: {
+          hydraulic: {
+            highest_class: "P2",
+            matched_classes: ["P2"],
+            status: "available",
+          },
+        },
+        project_context: "bridge",
+        project_location: {
+          derived_province: "Ancona",
+          latitude: 43.6158,
+          longitude: 13.5189,
+          validated: true,
+        },
+      },
+      promotedSession
+    )
+  );
+  assert(mitigation.status === "available", "mitigation endpoint did not return an available result");
+  assert(mitigation.strategies[0].process === "scour", "mitigation endpoint returned the wrong process");
+  assert(mitigation.evidence_cohort.event_count === 3, "mitigation endpoint used the wrong evidence cohort");
 
   const passwordChange = await json(
     await postJson(
@@ -736,6 +800,26 @@ try {
     "operational status lacks backup freshness check"
   );
   assert(
+    opsStatus.checks.some(
+      (item) => item.key === "hydraulic_observation_store"
+    ),
+    "operational status lacks hydraulic observation store check"
+  );
+  assert(
+    opsStatus.hydraulicObservationStore?.ok === true,
+    "hydraulic observation store is not reachable"
+  );
+  assert(
+    opsStatus.checks.some(
+      (item) => item.key === "landslide_observation_store"
+    ),
+    "operational status lacks landslide observation store check"
+  );
+  assert(
+    opsStatus.landslideObservationStore?.ok === true,
+    "landslide observation store is not reachable"
+  );
+  assert(
     opsStatus.backup.ok === true,
     "fresh backup was not detected"
   );
@@ -749,6 +833,14 @@ try {
   assert(
     metricsText.includes("arcus_backup_fresh"),
     "operational backup metric missing"
+  );
+  assert(
+    metricsText.includes("arcus_hydraulic_observation_count"),
+    "operational hydraulic observation metric missing"
+  );
+  assert(
+    metricsText.includes("arcus_landslide_observation_count"),
+    "operational landslide observation metric missing"
   );
 
   const passwordReset = await json(
@@ -804,6 +896,7 @@ try {
         "self-session-management",
         "password-reset-email",
         "hazard-endpoint-p4",
+        "mitigation-intelligence-endpoint",
         "controlled-export-traceability",
         "data-release-export-history",
         "api-key-machine-access",

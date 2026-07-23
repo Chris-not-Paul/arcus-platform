@@ -16,6 +16,7 @@ const AtlasPage = lazy(() => import("./pages/AtlasPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const PremiumAnalyticsPage = lazy(() => import("./pages/PremiumAnalyticsPage"));
 const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
@@ -111,7 +112,11 @@ function App() {
 
           <Route
             path="/analytics/pro"
-            element={<Navigate replace to="/professional" />}
+            element={
+              <ProfessionalGate>
+                <PremiumAnalyticsPage />
+              </ProfessionalGate>
+            }
           />
 
           <Route

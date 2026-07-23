@@ -4,6 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
+import { openDownloadUrls } from "../utils/apiClient";
 
 import "../styles/data-access-page.css";
 
@@ -22,7 +23,7 @@ function DataAccessPage() {
           openProfessional: "Apri Professional",
           publicTitle: "Layer Open",
           publicText:
-            "Il dataset pubblico corrisponde alla release citabile collegata al paper Data in Brief. Serve a documentare metodo, copertura storica e tracciabilita delle fonti.",
+            "ARCUS Open Research 2026.1 pubblica 263 eventi validati e 712 fonti consultabili senza account, con tassonomia, metodologia, audit e download completi.",
           professionalTitle: "Layer Professional",
           professionalText:
             "Il database ARCUS aggiornato alimenta workflow, report, screening territoriali e package GIS controllati. Non viene distribuito come copia integrale del DB.",
@@ -35,11 +36,11 @@ function DataAccessPage() {
           publicItems: [
             [
               "Periodo citabile",
-              "2000-2025, coerente con la release Data in Brief.",
+              "2000-2026, release versionata arcus-open-2026.1.",
             ],
             [
               "Campi esportabili",
-              "Identificativo evento, localizzazione amministrativa, data, classe di collasso, causa, vittime e conteggio fonti.",
+              "Tutti i campi scientifici pubblicabili, inclusi trigger, processo, componente, evidenza, coordinate e fonti.",
             ],
             [
               "Uso previsto",
@@ -63,7 +64,7 @@ function DataAccessPage() {
           policyItems: [
             [
               "Nessun bulk dump del live DB",
-              "La base aggiornata ARCUS resta un asset proprietario e non viene resa scaricabile integralmente dal sito pubblico.",
+              "La release Open e completa; il dataset live inter-release, gli inventari cliente e i risultati operativi restano separati.",
             ],
             [
               "Estratti contestuali",
@@ -85,7 +86,7 @@ function DataAccessPage() {
           openProfessional: "Open Professional",
           publicTitle: "Open layer",
           publicText:
-            "The public dataset corresponds to the citable release connected to the Data in Brief paper. It documents method, historical coverage and source traceability.",
+            "ARCUS Open Research 2026.1 publishes 263 validated events and 712 sources without an account, with taxonomy, methodology, audit and complete downloads.",
           professionalTitle: "Professional layer",
           professionalText:
             "The updated ARCUS database powers workflows, reports, territorial screening and controlled GIS packages. It is not distributed as a full database copy.",
@@ -98,11 +99,11 @@ function DataAccessPage() {
           publicItems: [
             [
               "Citable period",
-              "2000-2025, aligned with the Data in Brief release.",
+              "2000-2026, versioned release arcus-open-2026.1.",
             ],
             [
               "Exportable fields",
-              "Event ID, administrative location, date, collapse class, cause, casualties and source count.",
+              "All publishable scientific fields, including trigger, process, component, evidence, coordinates and sources.",
             ],
             [
               "Intended use",
@@ -126,7 +127,7 @@ function DataAccessPage() {
           policyItems: [
             [
               "No live DB bulk dump",
-              "The updated ARCUS evidence base remains a proprietary asset and is not fully downloadable from the public site.",
+              "The Open release is complete; the inter-release live dataset, client inventories and operational results remain separate.",
             ],
             [
               "Contextual extracts",
@@ -162,6 +163,8 @@ function DataAccessPage() {
 
           <div className="data-access-actions">
             <Link to="/atlas">{copy.openAtlas}</Link>
+            <a href={openDownloadUrls.csv}>CSV</a>
+            <a href={openDownloadUrls.geojson}>GeoJSON</a>
             <Link to="/professional">
               {copy.openProfessional}
             </Link>

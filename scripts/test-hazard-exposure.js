@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -20,6 +21,9 @@ import {
   highestLandslideHazardClass,
   normalizeLandslideClass,
 } from "../server/hazard/normalizers/landslideNormalizer.js";
+import {
+  queryIspraFloodExposure,
+} from "../server/hazard/providers/ispraFloodProvider.js";
 
 const point = {
   latitude: 45,
@@ -174,6 +178,9 @@ async function query(fetchImpl, payload = point, options = {}) {
     },
     {
       fetchImpl,
+      persistentCache: false,
+      retryAttempts: options.retryAttempts ?? 1,
+      retryDelayMs: options.retryDelayMs ?? 0,
       timeoutMs: options.timeoutMs || 50,
     }
   );
@@ -191,6 +198,9 @@ async function queryHazards(fetchImpl, hazards, payload = point, options = {}) {
     },
     {
       fetchImpl,
+      persistentCache: false,
+      retryAttempts: options.retryAttempts ?? 1,
+      retryDelayMs: options.retryDelayMs ?? 0,
       timeoutMs: options.timeoutMs || 50,
     }
   );
@@ -234,15 +244,16 @@ assert.equal(
 assert.equal(p1RequestUrl.searchParams.get("typeName"), null);
 assert.equal(p1RequestUrl.searchParams.get("srsName"), "EPSG:4326");
 assert.equal(
-  p1RequestUrl.searchParams.get("bbox"),
-  "6.99988,44.99988,7.00012,45.00012,EPSG:4326"
+  p1RequestUrl.searchParams.get("CQL_FILTER"),
+  "INTERSECTS(geom,SRID=4326;POINT(7 45))"
 );
+assert.equal(p1RequestUrl.searchParams.get("count"), "1");
+assert.equal(p1RequestUrl.searchParams.get("propertyName"), "scenariop1");
+assert.equal(p1RequestUrl.searchParams.get("bbox"), null);
 assert.equal(result.hydraulic.source.request_crs, "EPSG:4326");
-assert.equal(result.hydraulic.source.bbox_axis_order, "longitude_latitude");
-assert.equal(
-  result.hydraulic.source.bbox_parameter_order,
-  "west_south_east_north"
-);
+assert.equal(result.hydraulic.source.query_method, "server_side_point_intersection");
+assert.equal(result.hydraulic.source.filter_axis_order, "longitude_latitude");
+assert.equal(result.hydraulic.source.filter_crs, "EPSG:4326");
 assert.equal(result.hydraulic.source.endpoint_identifier, "ispra-nz1-wfs");
 assert.equal(result.hydraulic.source.source_dataset_version, null);
 assert.notEqual(
@@ -250,10 +261,15 @@ assert.notEqual(
   result.hydraulic.source.source_dataset_version
 );
 assert.equal(firstLayer(result).request.request_crs, "EPSG:4326");
-assert.equal(firstLayer(result).request.bbox_axis_order, "longitude_latitude");
 assert.equal(
-  firstLayer(result).request.bbox_parameter_order,
-  "west_south_east_north"
+  firstLayer(result).request.query_method,
+  "server_side_point_intersection"
+);
+assert.equal(firstLayer(result).request.filter_axis_order, "longitude_latitude");
+assert.equal(firstLayer(result).request.filter_geometry_property, "geom");
+assert.equal(
+  firstLayer(result).request.response_property,
+  "scenariop1"
 );
 
 result = await query(fetchWithoutFeatures());
@@ -263,6 +279,8 @@ assert.deepEqual(classSummary(result), {
   status: "no_intersection",
 });
 assert.equal(result.hydraulic.normalized_score, null);
+assert.equal(result.hydraulic.assessment_complete, true);
+assert.equal(result.hydraulic.decision_status, "no_intersection");
 
 result = await query(fetchForClasses([]));
 assert.deepEqual(classSummary(result), {
@@ -280,6 +298,9 @@ assert.deepEqual(classSummary(result), {
 });
 assert.equal(result.hydraulic.intersects_p1, true);
 assert.equal(result.hydraulic.intersects_p2, false);
+assert.equal(result.hydraulic.assessment_complete, true);
+assert.equal(result.hydraulic.decision_status, "available_complete");
+assert.equal(firstLayer(result, "P1").response_size_bytes > 0, true);
 
 result = await query(fetchForClasses(["P1", "P2"]));
 assert.deepEqual(classSummary(result), {
@@ -480,9 +501,12 @@ const fallbackP1Url = fallbackUrls.find(
 assert.equal(fallbackP1Url.searchParams.get("typeName"), "nz1:aree_peric_idraulica_p1");
 assert.equal(fallbackP1Url.searchParams.get("typeNames"), null);
 assert.equal(
-  fallbackP1Url.searchParams.get("bbox"),
-  "6.99988,44.99988,7.00012,45.00012,EPSG:4326"
+  fallbackP1Url.searchParams.get("CQL_FILTER"),
+  "INTERSECTS(geom,SRID=4326;POINT(7 45))"
 );
+assert.equal(fallbackP1Url.searchParams.get("maxFeatures"), "1");
+assert.equal(fallbackP1Url.searchParams.get("propertyName"), "scenariop1");
+assert.equal(fallbackP1Url.searchParams.get("bbox"), null);
 
 result = await query(async (url) => {
   const className = layerClassFromUrl(url);
@@ -502,6 +526,298 @@ result = await query(async (url) => {
 assert.equal(result.hydraulic.status, "partial");
 assert.deepEqual(result.hydraulic.matched_classes, ["P1"]);
 assert.equal(result.hydraulic.layer_results[2].status, "http_error");
+assert.equal(result.hydraulic.assessment_complete, false);
+assert.equal(result.hydraulic.decision_status, "available_partial");
+assert.deepEqual(
+  result.hydraulic.coverage.failed_layers.map((layer) => layer.class_name),
+  ["P3"]
+);
+
+const retryCalls = new Map();
+result = await query(
+  async (url) => {
+    const className = layerClassFromUrl(url);
+    const attempt = (retryCalls.get(className) || 0) + 1;
+
+    retryCalls.set(className, attempt);
+
+    if (className === "P1" && attempt === 1) {
+      throw new TypeError("transient fetch failure");
+    }
+
+    return fetchForClasses(["P1"])(url);
+  },
+  point,
+  {
+    retryAttempts: 2,
+    retryDelayMs: 0,
+  }
+);
+assert.equal(retryCalls.get("P1"), 2);
+assert.equal(firstLayer(result, "P1").attempts, 2);
+assert.equal(result.hydraulic.decision_status, "available_complete");
+
+clearHazardExposureCache();
+const layerCacheCalls = [];
+const partialFirst = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic"],
+    ...point,
+  },
+  {
+    fetchImpl: async (url) => {
+      const className = layerClassFromUrl(url);
+
+      layerCacheCalls.push(`first:${className}`);
+
+      if (className === "P3") {
+        return textResponse({
+          body: "temporary upstream failure",
+          contentType: "text/plain",
+          ok: false,
+          status: 503,
+          statusText: "Service Unavailable",
+        });
+      }
+
+      return fetchForClasses(["P1"])(url);
+    },
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  }
+);
+assert.equal(partialFirst.hydraulic.decision_status, "available_partial");
+
+const recoveryCalls = [];
+const completedFromLayerCache = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic"],
+    ...point,
+  },
+  {
+    fetchImpl: async (url) => {
+      recoveryCalls.push(layerClassFromUrl(url));
+
+      return fetchForClasses(["P1"])(url);
+    },
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  }
+);
+assert.deepEqual(recoveryCalls, ["P3"]);
+assert.equal(firstLayer(completedFromLayerCache, "P1").cache.hit, true);
+assert.equal(firstLayer(completedFromLayerCache, "P2").cache.hit, true);
+assert.equal(completedFromLayerCache.hydraulic.assessment_complete, true);
+assert.equal(
+  completedFromLayerCache.hydraulic.decision_status,
+  "available_complete"
+);
+
+clearHazardExposureCache();
+let deduplicatedFetchCalls = 0;
+const delayedFetch = async (url) => {
+  deduplicatedFetchCalls += 1;
+  await new Promise((resolve) => setTimeout(resolve, 5));
+
+  return fetchForClasses(["P2"])(url);
+};
+const concurrentResults = await Promise.all([
+  queryIspraFloodExposure(point, {
+    fetchImpl: delayedFetch,
+    persistentCache: false,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  }),
+  queryIspraFloodExposure(point, {
+    fetchImpl: delayedFetch,
+    persistentCache: false,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  }),
+]);
+assert.equal(deduplicatedFetchCalls, 3);
+assert.equal(
+  concurrentResults.some((exposure) =>
+    exposure.layer_results.every((layer) => layer.cache?.deduplicated)
+  ),
+  true
+);
+
+const persistentCacheDirectory = fs.mkdtempSync(
+  path.join(os.tmpdir(), "arcus-hydraulic-observations-")
+);
+
+try {
+  clearHazardExposureCache();
+  const persistedLive = await queryIspraFloodExposure(point, {
+    fetchImpl: fetchForClasses(["P1"]),
+    persistentCache: true,
+    persistentCacheDir: persistentCacheDirectory,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  });
+
+  assert.equal(persistedLive.decision_status, "available_complete");
+  assert.equal(
+    fs.readdirSync(persistentCacheDirectory).filter(
+      (fileName) => fileName.endsWith(".json")
+    ).length,
+    3
+  );
+
+  clearHazardExposureCache();
+  let outageFetchCalls = 0;
+  const persistedAfterRestart = await queryIspraFloodExposure(point, {
+    fetchImpl: async () => {
+      outageFetchCalls += 1;
+      throw new TypeError("offline");
+    },
+    persistentCache: true,
+    persistentCacheDir: persistentCacheDirectory,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  });
+
+  assert.equal(outageFetchCalls, 0);
+  assert.equal(persistedAfterRestart.assessment_complete, true);
+  assert.equal(
+    persistedAfterRestart.source.observation_mode,
+    "persistent_cache"
+  );
+  assert.equal(
+    persistedAfterRestart.source.layer_cache.persistent_hit_count,
+    3
+  );
+  assert.equal(
+    persistedAfterRestart.layer_results.every(
+      (layer) =>
+        layer.cache?.tier === "persistent" &&
+        layer.observation?.freshness_status === "current"
+    ),
+    true
+  );
+
+  clearHazardExposureCache();
+  const staleReferenceTime = Date.now() + 7 * 60 * 60 * 1000;
+  const staleDuringOutage = await queryIspraFloodExposure(point, {
+    fetchImpl: async () => {
+      throw new TypeError("offline");
+    },
+    nowImpl: () => staleReferenceTime,
+    persistentCache: true,
+    persistentCacheDir: persistentCacheDirectory,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  });
+
+  assert.equal(staleDuringOutage.assessment_complete, false);
+  assert.equal(staleDuringOutage.decision_status, "source_incomplete");
+  assert.equal(staleDuringOutage.source.last_known_good_layers.length, 3);
+  assert.equal(
+    staleDuringOutage.source.last_known_good_layers.every(
+      (layer) => layer.freshness_status === "stale"
+    ),
+    true
+  );
+  assert.deepEqual(staleDuringOutage.matched_classes, []);
+
+  clearHazardExposureCache();
+  let bypassFetchCalls = 0;
+  const bypassedPersistentCache = await queryIspraFloodExposure(point, {
+    bypassCache: true,
+    fetchImpl: async (url) => {
+      bypassFetchCalls += 1;
+
+      return fetchForClasses(["P2"])(url);
+    },
+    persistentCache: true,
+    persistentCacheDir: persistentCacheDirectory,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  });
+
+  assert.equal(bypassFetchCalls, 3);
+  assert.deepEqual(bypassedPersistentCache.matched_classes, ["P2"]);
+  assert.equal(bypassedPersistentCache.source.observation_mode, "live");
+} finally {
+  fs.rmSync(persistentCacheDirectory, {
+    force: true,
+    recursive: true,
+  });
+}
+
+clearHazardExposureCache();
+let circuitFetchCalls = 0;
+let circuitResult;
+
+for (let attempt = 0; attempt < 4; attempt += 1) {
+  circuitResult = await queryIspraFloodExposure(point, {
+    bypassCache: true,
+    fetchImpl: async () => {
+      circuitFetchCalls += 1;
+
+      return textResponse({
+        body: "upstream unavailable",
+        contentType: "text/plain",
+        ok: false,
+        status: 503,
+        statusText: "Service Unavailable",
+      });
+    },
+    persistentCache: false,
+    retryAttempts: 1,
+    retryDelayMs: 0,
+    timeoutMs: 50,
+  });
+}
+
+assert.equal(circuitFetchCalls, 9);
+assert.equal(
+  circuitResult.layer_results.every(
+    (layer) => layer.status === "circuit_open"
+  ),
+  true
+);
+assert.equal(circuitResult.source.circuit_breaker.open_layer_count, 3);
+assert.equal(circuitResult.decision_status, "source_incomplete");
+
+clearHazardExposureCache();
+let activeRemoteCalls = 0;
+let maximumRemoteCalls = 0;
+const concurrencyFetch = async () => {
+  activeRemoteCalls += 1;
+  maximumRemoteCalls = Math.max(maximumRemoteCalls, activeRemoteCalls);
+  await new Promise((resolve) => setTimeout(resolve, 5));
+  activeRemoteCalls -= 1;
+
+  return jsonResponse(featureCollection({ empty: true }));
+};
+
+await Promise.all(
+  [
+    point,
+    { latitude: 45.1, longitude: 7.1 },
+    { latitude: 45.2, longitude: 7.2 },
+  ].map((testPoint) =>
+    queryIspraFloodExposure(testPoint, {
+      bypassCache: true,
+      fetchImpl: concurrencyFetch,
+      persistentCache: false,
+      retryAttempts: 1,
+      retryDelayMs: 0,
+      timeoutMs: 50,
+    })
+  )
+);
+assert.equal(maximumRemoteCalls <= 6, true);
 
 result = await query(fetchForClasses(["P1"]), {
   latitude: 120,
@@ -615,6 +931,7 @@ const landslideFetch = ({
 
 let directLandslide = await queryIspraLandslideExposure(point, {
   fetchImpl: landslideFetch({ code: 4 }),
+  persistentCache: false,
   requestId: "direct-provider-p4",
   timeoutMs: 50,
 });
@@ -628,6 +945,7 @@ let registeredLandslide = await queryRegisteredHazardProvider(
   point,
   {
     fetchImpl: landslideFetch({ code: 4 }),
+    persistentCache: false,
     requestId: "registry-provider-p4",
     timeoutMs: 50,
   }
@@ -644,7 +962,7 @@ directLandslide = await queryIspraLandslideExposure(
 assert.equal(directLandslide.status, "invalid_coordinates");
 assert.equal(directLandslide.error.stage, "coordinates_validated");
 assert.equal(directLandslide.error.code, "signature_mismatch");
-assert.equal(directLandslide.source.provider_version, "ispra-landslide-pai-wfs-v1");
+assert.equal(directLandslide.source.provider_version, "ispra-landslide-pai-wfs-v2");
 assert.equal(Boolean(directLandslide.attempted_at), true);
 
 result = await queryHazards(landslideFetch({ code: 4 }), ["landslide"]);
@@ -656,7 +974,23 @@ assert.equal(result.landslide.attention_area, false);
 assert.equal(result.landslide.normalized_score, null);
 assert.equal(result.landslide.source.source_dataset_version, "5.0");
 assert.equal(result.landslide.source.source_reference_year, 2024);
-assert.equal(result.landslide.source.bbox_axis_order, "longitude_latitude");
+assert.equal(result.landslide.source.filter_axis_order, "longitude_latitude");
+assert.equal(result.landslide.assessment_complete, true);
+assert.equal(result.landslide.decision_status, "available_complete");
+const landslideRequestUrl = new URL(
+  result.landslide.layer_results[0].request.url
+);
+assert.equal(landslideRequestUrl.searchParams.get("bbox"), null);
+assert.equal(
+  landslideRequestUrl.searchParams.get("CQL_FILTER"),
+  "INTERSECTS(geom,SRID=4326;POINT(7 45))"
+);
+assert.equal(
+  landslideRequestUrl.searchParams.get("propertyName"),
+  "cod_per_it"
+);
+assert.equal(result.landslide.source.query_method, "server_side_point_intersection");
+assert.equal(result.landslide.layer_results[0].response_size_bytes > 0, true);
 
 result = await queryHazards(landslideFetch({ code: 0 }), ["landslide"]);
 assert.equal(result.landslide.status, "available");
@@ -686,7 +1020,7 @@ assert.equal(result.landslide.normalized_score, null);
 assert.match(result.cache.key, /hydraulic@ispra-flood-wfs-v2@source-null/);
 assert.match(
   result.cache.key,
-  /landslide@ispra-landslide-pai-wfs-v1@source-5\.0-2024/
+  /landslide@ispra-landslide-pai-wfs-v2@source-5\.0-2024/
 );
 
 result = await queryHazards(
@@ -713,6 +1047,213 @@ result = await queryHazards(landslideFetch({ unknownClass: true }), [
 ]);
 assert.equal(result.landslide.status, "schema_mismatch");
 assert.equal(result.landslide.normalized_score, null);
+assert.equal(result.landslide.assessment_complete, false);
+assert.equal(result.landslide.decision_status, "source_incomplete");
+assert.deepEqual(result.landslide.matched_hazard_classes, []);
+
+clearHazardExposureCache();
+let landslideRetryCalls = 0;
+const landslideRetried = await queryIspraLandslideExposure(point, {
+  fetchImpl: async (url) => {
+    landslideRetryCalls += 1;
+
+    if (landslideRetryCalls === 1) {
+      throw new TypeError("temporary landslide outage");
+    }
+
+    return landslideFetch({ code: 2 })(url);
+  },
+  persistentCache: false,
+  retryAttempts: 2,
+  retryDelayMs: 0,
+  timeoutMs: 50,
+});
+assert.equal(landslideRetryCalls, 2);
+assert.equal(landslideRetried.decision_status, "available_complete");
+assert.equal(landslideRetried.layer_results[0].attempts, 2);
+
+clearHazardExposureCache();
+let landslideDeduplicatedCalls = 0;
+const delayedLandslideFetch = async (url) => {
+  landslideDeduplicatedCalls += 1;
+  await new Promise((resolve) => setTimeout(resolve, 5));
+
+  return landslideFetch({ code: 3 })(url);
+};
+const deduplicatedLandslideResults = await Promise.all([
+  queryIspraLandslideExposure(point, {
+    fetchImpl: delayedLandslideFetch,
+    persistentCache: false,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  }),
+  queryIspraLandslideExposure(point, {
+    fetchImpl: delayedLandslideFetch,
+    persistentCache: false,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  }),
+]);
+assert.equal(landslideDeduplicatedCalls, 1);
+assert.equal(
+  deduplicatedLandslideResults.some(
+    (exposure) => exposure.layer_results[0].cache?.deduplicated
+  ),
+  true
+);
+
+const landslidePersistentDirectory = fs.mkdtempSync(
+  path.join(os.tmpdir(), "arcus-landslide-observations-")
+);
+
+try {
+  clearHazardExposureCache();
+  const persistedLandslide = await queryIspraLandslideExposure(point, {
+    fetchImpl: landslideFetch({ code: 4 }),
+    persistentCache: true,
+    persistentCacheDir: landslidePersistentDirectory,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  });
+
+  assert.equal(persistedLandslide.decision_status, "available_complete");
+  assert.equal(
+    fs.readdirSync(landslidePersistentDirectory).filter(
+      (fileName) => fileName.endsWith(".json")
+    ).length,
+    1
+  );
+
+  clearHazardExposureCache();
+  let landslideOutageCalls = 0;
+  const landslideAfterRestart = await queryIspraLandslideExposure(point, {
+    fetchImpl: async () => {
+      landslideOutageCalls += 1;
+      throw new TypeError("offline");
+    },
+    persistentCache: true,
+    persistentCacheDir: landslidePersistentDirectory,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  });
+
+  assert.equal(landslideOutageCalls, 0);
+  assert.equal(landslideAfterRestart.assessment_complete, true);
+  assert.equal(
+    landslideAfterRestart.source.observation_mode,
+    "persistent_cache"
+  );
+  assert.deepEqual(
+    landslideAfterRestart.matched_hazard_classes,
+    ["P4"]
+  );
+
+  clearHazardExposureCache();
+  const staleLandslide = await queryIspraLandslideExposure(point, {
+    fetchImpl: async () => {
+      throw new TypeError("offline");
+    },
+    nowImpl: () => Date.now() + 7 * 60 * 60 * 1000,
+    persistentCache: true,
+    persistentCacheDir: landslidePersistentDirectory,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  });
+
+  assert.equal(staleLandslide.assessment_complete, false);
+  assert.equal(staleLandslide.decision_status, "source_incomplete");
+  assert.deepEqual(staleLandslide.matched_hazard_classes, []);
+  assert.equal(
+    staleLandslide.source.last_known_good_layers[0].freshness_status,
+    "stale"
+  );
+
+  clearHazardExposureCache();
+  let landslideBypassCalls = 0;
+  const bypassedLandslide = await queryIspraLandslideExposure(point, {
+    bypassCache: true,
+    fetchImpl: async (url) => {
+      landslideBypassCalls += 1;
+      return landslideFetch({ code: 1 })(url);
+    },
+    persistentCache: true,
+    persistentCacheDir: landslidePersistentDirectory,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  });
+
+  assert.equal(landslideBypassCalls, 1);
+  assert.deepEqual(bypassedLandslide.matched_hazard_classes, ["P1"]);
+  assert.equal(bypassedLandslide.source.observation_mode, "live");
+} finally {
+  fs.rmSync(landslidePersistentDirectory, {
+    force: true,
+    recursive: true,
+  });
+}
+
+clearHazardExposureCache();
+let landslideCircuitCalls = 0;
+let landslideCircuitResult;
+
+for (let attempt = 0; attempt < 4; attempt += 1) {
+  landslideCircuitResult = await queryIspraLandslideExposure(point, {
+    bypassCache: true,
+    fetchImpl: async () => {
+      landslideCircuitCalls += 1;
+      return textResponse({
+        body: "upstream unavailable",
+        ok: false,
+        status: 503,
+        statusText: "Service Unavailable",
+      });
+    },
+    persistentCache: false,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  });
+}
+
+assert.equal(landslideCircuitCalls, 3);
+assert.equal(landslideCircuitResult.status, "circuit_open");
+assert.equal(landslideCircuitResult.decision_status, "source_incomplete");
+
+clearHazardExposureCache();
+let activeLandslideCalls = 0;
+let maximumLandslideCalls = 0;
+const concurrencyLandslideFetch = async () => {
+  activeLandslideCalls += 1;
+  maximumLandslideCalls = Math.max(
+    maximumLandslideCalls,
+    activeLandslideCalls
+  );
+  await new Promise((resolve) => setTimeout(resolve, 5));
+  activeLandslideCalls -= 1;
+
+  return jsonResponse({
+    features: [],
+    type: "FeatureCollection",
+  });
+};
+
+await Promise.all(
+  Array.from({ length: 8 }, (_, index) =>
+    queryIspraLandslideExposure(
+      {
+        latitude: 40 + index / 100,
+        longitude: 10 + index / 100,
+      },
+      {
+        bypassCache: true,
+        fetchImpl: concurrencyLandslideFetch,
+        persistentCache: false,
+        retryAttempts: 1,
+        timeoutMs: 50,
+      }
+    )
+  )
+);
+assert.equal(maximumLandslideCalls <= 6, true);
 
 result = await queryHazards(landslideFetch({ code: 4 }), [
   "hydraulic",
@@ -1000,13 +1541,21 @@ assert.match(
   professionalPageSource,
   /setPath01LandslideExposure\(\{\s*attention_area:\s*false[\s\S]*?status:\s*"loading"/
 );
+assert.match(
+  professionalPageSource,
+  /Observation provenance[\s\S]*?ISPRA PAI Landslide[\s\S]*?does not modify the Final Priority Index/
+);
+assert.match(
+  professionalPageSource,
+  /Official hydraulic and PAI landslide WFS point observations remain in shadow mode/
+);
 
 console.log(
   JSON.stringify({
     ok: true,
     checks: [
       "valid-geojson-without-feature",
-      "wfs-2-url-bbox-order",
+      "wfs-2-server-side-point-filter",
       "source-provider-metadata",
       "feature-count-without-point-intersection",
       "valid-geojson-with-feature",
@@ -1026,11 +1575,20 @@ console.log(
       "empty-response",
       "invalid-geojson",
       "wfs-version-fallback",
-      "wfs-11-url-bbox-order",
+      "wfs-11-server-side-point-filter",
       "centralized-severity-order",
       "source-dataset-version-distinct-from-provider-version",
-      "metadata-bbox-axis-order",
+      "metadata-filter-axis-order",
       "single-layer-error-partial",
+      "hydraulic-completeness-contract",
+      "hydraulic-transient-retry",
+      "hydraulic-per-layer-cache-recovery",
+      "hydraulic-in-flight-deduplication",
+      "hydraulic-persistent-cache-restart-recovery",
+      "hydraulic-stale-last-known-good-abstention",
+      "hydraulic-persistent-cache-bypass",
+      "hydraulic-circuit-breaker",
+      "hydraulic-remote-concurrency-limit",
       "multi-hazard-registry",
       "hydraulic-only",
       "landslide-only",
@@ -1042,6 +1600,15 @@ console.log(
       "landslide-aa-separate",
       "landslide-no-intersection",
       "landslide-schema-mismatch",
+      "landslide-server-side-point-filter",
+      "landslide-completeness-contract",
+      "landslide-transient-retry",
+      "landslide-in-flight-deduplication",
+      "landslide-persistent-cache-restart-recovery",
+      "landslide-stale-last-known-good-abstention",
+      "landslide-persistent-cache-bypass",
+      "landslide-circuit-breaker",
+      "landslide-remote-concurrency-limit",
       "multi-hazard-query-payload",
       "multi-hazard-timeout-preserves-landslide",
       "multi-hazard-timeout-preserves-no-intersection",

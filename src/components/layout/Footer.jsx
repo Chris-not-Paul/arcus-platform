@@ -107,7 +107,7 @@ function Footer() {
                 <span>{group.label}</span>
                 {group.links.map(([label, path]) => (
                   <Link
-                    key={`${group.label}-${path}`}
+                    key={`${group.label}-${label}-${path}`}
                     to={path}
                   >
                     {label}

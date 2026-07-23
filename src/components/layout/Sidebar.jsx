@@ -22,6 +22,7 @@ function Sidebar({
   searchQuery,
   setSearchQuery,
   uniqueCauses,
+  additionalFilters = [],
 }) {
   const { language } = useLanguage();
   const it = language === "it";
@@ -114,6 +115,7 @@ function Sidebar({
         { label: text.triggeredFalse, value: "FALSE" },
       ],
     },
+    ...additionalFilters,
   ];
 
   return (

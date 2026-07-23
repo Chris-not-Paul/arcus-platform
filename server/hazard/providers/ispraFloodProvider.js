@@ -4,16 +4,30 @@ import {
   ISPRA_FLOOD_LAYERS,
   floodExplanation,
 } from "../normalizers/floodNormalizer.js";
+import {
+  readHydraulicObservation,
+  writeHydraulicObservation,
+} from "../hydraulicObservationStore.js";
 
 const DEFAULT_WFS_URL = "https://sdi.isprambiente.it/geoserver/nz1/wfs";
 const ENDPOINT_IDENTIFIER = "ispra-nz1-wfs";
 const REQUEST_TIMEOUT_MS = 15000;
-const BBOX_EPSILON_DEGREES = 0.00012;
+const DEFAULT_RETRY_ATTEMPTS = 2;
+const DEFAULT_RETRY_DELAY_MS = 200;
+const DEFAULT_RETRY_JITTER_RATIO = 0.25;
+const REMOTE_CONCURRENCY_LIMIT = 6;
+const CIRCUIT_FAILURE_THRESHOLD = 3;
+const CIRCUIT_COOLDOWN_MS = 30_000;
+const LAYER_CACHE_TTL_MS = 1000 * 60 * 60 * 6;
+const LAYER_CACHE_MAX_ITEMS = 1500;
+const PERSISTENT_CACHE_TTL_MS = 1000 * 60 * 60 * 6;
+const LAST_KNOWN_GOOD_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 30;
 const DEFAULT_WFS_VERSION = "2.0.0";
 const FALLBACK_WFS_VERSION = "1.1.0";
 const REQUEST_CRS = "EPSG:4326";
-const BBOX_AXIS_ORDER = "longitude_latitude";
-const BBOX_PARAMETER_ORDER = "west_south_east_north";
+const FILTER_AXIS_ORDER = "longitude_latitude";
+const FILTER_CRS = "EPSG:4326";
+const QUERY_METHOD = "server_side_point_intersection";
 const SERVICE_TYPE = "WFS";
 const SOURCE_DATASET_VERSION = null;
 const ERROR_PREVIEW_LENGTH = 500;
@@ -22,6 +36,274 @@ const VALID_JSON_CONTENT_TYPES = [
   "application/geo+json",
   "application/vnd.geo+json",
 ];
+const layerCache = new Map();
+const inFlightLayerRequests = new Map();
+const circuitBreakers = new Map();
+const remoteQueue = [];
+let activeRemoteRequests = 0;
+
+function normalizedCoordinate(value) {
+  return Number(value).toFixed(5);
+}
+
+function layerCacheKey({
+  latitude,
+  layerName,
+  longitude,
+  serviceUrl,
+}) {
+  return [
+    ENDPOINT_IDENTIFIER,
+    serviceUrl,
+    layerName,
+    normalizedCoordinate(latitude),
+    normalizedCoordinate(longitude),
+  ].join(":");
+}
+
+function readLayerCache(key) {
+  const hit = layerCache.get(key);
+
+  if (!hit) {
+    return null;
+  }
+
+  const ageMs = Date.now() - hit.createdAt;
+
+  if (ageMs > LAYER_CACHE_TTL_MS) {
+    layerCache.delete(key);
+
+    return null;
+  }
+
+  layerCache.delete(key);
+  layerCache.set(key, hit);
+
+  return {
+    ...hit.value,
+    observation: {
+      ...(hit.value.observation || {}),
+      age_seconds: Math.round(ageMs / 1000),
+      origin_mode: hit.value.observation?.mode || "live",
+      mode: "memory_cache",
+      retrieved_at: new Date().toISOString(),
+    },
+    cache: {
+      age_seconds: Math.round(ageMs / 1000),
+      hit: true,
+      key,
+      tier: "memory",
+      ttl_seconds: Math.max(
+        0,
+        Math.round((LAYER_CACHE_TTL_MS - ageMs) / 1000)
+      ),
+    },
+  };
+}
+
+function freshnessStatus(ageMs) {
+  if (ageMs <= PERSISTENT_CACHE_TTL_MS) {
+    return "current";
+  }
+
+  if (ageMs <= LAST_KNOWN_GOOD_MAX_AGE_MS) {
+    return "stale";
+  }
+
+  return "expired";
+}
+
+function lastKnownGoodSummary(observation) {
+  if (
+    !observation ||
+    observation.age_ms > LAST_KNOWN_GOOD_MAX_AGE_MS
+  ) {
+    return null;
+  }
+
+  return {
+    age_seconds: Math.round(observation.age_ms / 1000),
+    available: true,
+    class_name: observation.result.className,
+    freshness_status: freshnessStatus(observation.age_ms),
+    intersects: Boolean(observation.result.intersects),
+    observed_at: observation.observed_at,
+    status: observation.result.status,
+  };
+}
+
+async function readPersistentLayerObservation({
+  directory,
+  enabled,
+  key,
+  now,
+}) {
+  if (!enabled) {
+    return null;
+  }
+
+  return readHydraulicObservation({
+    cacheKey: key,
+    directory,
+    now,
+  });
+}
+
+async function persistLayerObservation({
+  directory,
+  enabled,
+  key,
+  result,
+}) {
+  if (!enabled || !cacheableLayerResult(result)) {
+    return false;
+  }
+
+  const persistableResult = {
+    ...result,
+  };
+
+  delete persistableResult.cache;
+  delete persistableResult.last_known_good;
+
+  try {
+    return await writeHydraulicObservation({
+      cacheKey: key,
+      directory,
+      observedAt: result.queried_at,
+      result: persistableResult,
+    });
+  } catch {
+    return false;
+  }
+}
+
+function writeLayerCache(key, value) {
+  layerCache.set(key, {
+    createdAt: Date.now(),
+    value,
+  });
+
+  while (layerCache.size > LAYER_CACHE_MAX_ITEMS) {
+    const firstKey = layerCache.keys().next().value;
+
+    layerCache.delete(firstKey);
+  }
+}
+
+function cacheableLayerResult(result) {
+  return ["available", "no_intersection"].includes(result?.status);
+}
+
+export function clearIspraFloodLayerCache() {
+  layerCache.clear();
+  inFlightLayerRequests.clear();
+  circuitBreakers.clear();
+}
+
+function releaseRemoteSlot() {
+  activeRemoteRequests = Math.max(0, activeRemoteRequests - 1);
+  const next = remoteQueue.shift();
+
+  if (next) {
+    activeRemoteRequests += 1;
+    next();
+  }
+}
+
+async function withRemoteSlot(operation) {
+  if (activeRemoteRequests >= REMOTE_CONCURRENCY_LIMIT) {
+    await new Promise((resolve) => remoteQueue.push(resolve));
+  } else {
+    activeRemoteRequests += 1;
+  }
+
+  try {
+    return await operation();
+  } finally {
+    releaseRemoteSlot();
+  }
+}
+
+function circuitKey({ layer, serviceUrl }) {
+  return `${serviceUrl}:${layer.layerName}`;
+}
+
+function circuitState(key, now) {
+  const state = circuitBreakers.get(key);
+
+  if (!state) {
+    return null;
+  }
+
+  if (state.open_until > now) {
+    return state;
+  }
+
+  if (state.open_until) {
+    circuitBreakers.delete(key);
+  }
+
+  return null;
+}
+
+function circuitFailure(result) {
+  return ["request_timeout", "service_unreachable"].includes(result?.status) ||
+    (result?.status === "http_error" && Number(result.http_status) >= 500);
+}
+
+function recordCircuitResult(key, result, now) {
+  if (!circuitFailure(result)) {
+    circuitBreakers.delete(key);
+
+    return;
+  }
+
+  const previous = circuitBreakers.get(key);
+  const failures = Number(previous?.failures || 0) + 1;
+
+  circuitBreakers.set(key, {
+    failures,
+    open_until:
+      failures >= CIRCUIT_FAILURE_THRESHOLD
+        ? now + CIRCUIT_COOLDOWN_MS
+        : 0,
+  });
+}
+
+function circuitOpenResult({
+  layer,
+  now,
+  serviceUrl,
+  state,
+}) {
+  const queriedAt = new Date(now).toISOString();
+
+  return {
+    ...errorPayload({
+      className: layer.className,
+      contentType: null,
+      durationMs: 0,
+      error: "circuit_open",
+      httpStatus: null,
+      httpStatusText: null,
+      layerName: layer.layerName,
+      queriedAt,
+      requestUrl: null,
+      status: "circuit_open",
+      version: DEFAULT_WFS_VERSION,
+    }),
+    circuit_breaker: {
+      failure_count: state.failures,
+      retry_after_seconds: Math.max(
+        0,
+        Math.ceil((state.open_until - now) / 1000)
+      ),
+      status: "open",
+    },
+    service_url: serviceUrl,
+  };
+}
 
 export function validateWgs84Point({ latitude, longitude }) {
   const lat = Number(latitude);
@@ -49,6 +331,8 @@ export function validateWgs84Point({ latitude, longitude }) {
 }
 
 function urlForLayer({
+  attributeName,
+  geometryName,
   layerName,
   latitude,
   longitude,
@@ -56,10 +340,6 @@ function urlForLayer({
   version,
 }) {
   const url = new URL(serviceUrl);
-  const west = longitude - BBOX_EPSILON_DEGREES;
-  const south = latitude - BBOX_EPSILON_DEGREES;
-  const east = longitude + BBOX_EPSILON_DEGREES;
-  const north = latitude + BBOX_EPSILON_DEGREES;
 
   url.searchParams.set("service", "WFS");
   url.searchParams.set("version", version);
@@ -67,22 +347,33 @@ function urlForLayer({
   url.searchParams.set(version === "2.0.0" ? "typeNames" : "typeName", layerName);
   url.searchParams.set("outputFormat", "application/json");
   url.searchParams.set("srsName", REQUEST_CRS);
-  // ISPRA GeoServer returns nz1 hydraulic features for this WFS layer set
-  // when the BBOX is sent in longitude,latitude order with EPSG:4326.
+  url.searchParams.set(version === "2.0.0" ? "count" : "maxFeatures", "1");
+  url.searchParams.set("propertyName", attributeName);
+  // ECQL honors the explicit SRID and longitude/latitude point order.
+  // propertyName omits the very large polygon geometry from the response.
   url.searchParams.set(
-    "bbox",
-    `${west},${south},${east},${north},${REQUEST_CRS}`
+    "CQL_FILTER",
+    `INTERSECTS(${geometryName},SRID=4326;POINT(${longitude} ${latitude}))`
   );
 
   return url;
 }
 
-function requestMetadata() {
+function requestMetadata({ attributeName, geometryName, layerName } = {}) {
+  const classSuffix = String(layerName || "").match(/_p([123])$/i)?.[1];
+  const resolvedAttributeName =
+    attributeName || (classSuffix ? `scenariop${classSuffix}` : null);
+  const resolvedGeometryName =
+    geometryName || (layerName ? "geom" : null);
+
   return {
-    bbox_axis_order: BBOX_AXIS_ORDER,
-    bbox_parameter_order: BBOX_PARAMETER_ORDER,
     endpoint_identifier: ENDPOINT_IDENTIFIER,
+    filter_axis_order: FILTER_AXIS_ORDER,
+    filter_crs: FILTER_CRS,
+    filter_geometry_property: resolvedGeometryName,
+    query_method: QUERY_METHOD,
     request_crs: REQUEST_CRS,
+    response_property: resolvedAttributeName,
   };
 }
 
@@ -93,9 +384,10 @@ function sourceMetadata({
   serviceUrl,
 }) {
   return {
-    bbox_axis_order: BBOX_AXIS_ORDER,
-    bbox_parameter_order: BBOX_PARAMETER_ORDER,
     endpoint_identifier: ENDPOINT_IDENTIFIER,
+    filter_axis_order: FILTER_AXIS_ORDER,
+    filter_crs: FILTER_CRS,
+    query_method: QUERY_METHOD,
     fallback_used: fallbackUsed,
     layers: ISPRA_FLOOD_LAYERS.map((layer) => layer.layerName),
     provider: "ISPRA",
@@ -220,7 +512,23 @@ function featureCollectionIntersectsPoint(payload, point) {
     throw error;
   }
 
-  return payload.features.some((feature) =>
+  if (!payload.features.length) {
+    return false;
+  }
+
+  const featuresWithGeometry = payload.features.filter(
+    (feature) => feature?.geometry
+  );
+
+  // The production query is already spatially filtered by GeoServer and asks
+  // only for a small scenario attribute. GeoJSON therefore carries
+  // geometry:null. Retain local point-in-polygon verification whenever a test,
+  // compatible endpoint or fallback response includes geometry.
+  if (!featuresWithGeometry.length) {
+    return true;
+  }
+
+  return featuresWithGeometry.some((feature) =>
     geometryIntersectsPoint(feature.geometry, point)
   );
 }
@@ -284,12 +592,13 @@ function errorPayload({
     queried_at: queriedAt,
     request: {
       method: "GET",
-      ...requestMetadata(),
+      ...requestMetadata({ layerName }),
       requested_version: DEFAULT_WFS_VERSION,
       resolved_version: version,
       url: requestUrl ? requestUrl.toString() : null,
     },
     requested_version: DEFAULT_WFS_VERSION,
+    response_size_bytes: null,
     resolved_version: version,
     status,
   };
@@ -332,6 +641,8 @@ async function fetchLayerVersion({
 
   try {
     requestUrl = urlForLayer({
+      attributeName: layer.attributeName,
+      geometryName: layer.geometryName,
       latitude,
       layerName: layer.layerName,
       longitude,
@@ -444,12 +755,23 @@ async function fetchLayerVersion({
       queried_at: queriedAt,
       request: {
         method: "GET",
-        ...requestMetadata(),
+        ...requestMetadata({
+          attributeName: layer.attributeName,
+          geometryName: layer.geometryName,
+        }),
         requested_version: DEFAULT_WFS_VERSION,
         resolved_version: version,
         url: requestUrl.toString(),
       },
       requested_version: DEFAULT_WFS_VERSION,
+      observation: {
+        age_seconds: 0,
+        freshness_status: "current",
+        mode: "live",
+        observed_at: queriedAt,
+        retrieved_at: queriedAt,
+      },
+      response_size_bytes: new TextEncoder().encode(text).byteLength,
       resolved_version: version,
       status: intersects ? "available" : "no_intersection",
     };
@@ -480,22 +802,90 @@ async function fetchLayerVersion({
   }
 }
 
-async function fetchLayer(params) {
-  const primary = await fetchLayerVersion({
+function retryableLayerResult(result) {
+  if (["request_timeout", "service_unreachable"].includes(result?.status)) {
+    return true;
+  }
+
+  return result?.status === "http_error" &&
+    [502, 503, 504].includes(Number(result.http_status));
+}
+
+function wait(milliseconds) {
+  if (!milliseconds) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+async function fetchLayerVersionWithRetry({
+  randomImpl,
+  retryAttempts,
+  retryDelayMs,
+  retryJitterRatio,
+  ...params
+}) {
+  const attemptCount = Math.max(1, Number(retryAttempts) || 1);
+  let result;
+
+  for (let attempt = 1; attempt <= attemptCount; attempt += 1) {
+    result = await withRemoteSlot(() => fetchLayerVersion(params));
+    result = {
+      ...result,
+      attempt,
+      attempts: attempt,
+      retry_exhausted:
+        attempt === attemptCount && retryableLayerResult(result),
+    };
+
+    if (!retryableLayerResult(result) || attempt === attemptCount) {
+      return result;
+    }
+
+    const jitter = Math.max(0, Number(retryJitterRatio) || 0) *
+      Math.max(0, Number(randomImpl?.()) || 0);
+
+    await wait(Math.round(retryDelayMs * attempt * (1 + jitter)));
+  }
+
+  return result;
+}
+
+async function fetchLayer({
+  nowImpl,
+  ...params
+}) {
+  const key = circuitKey(params);
+  const now = nowImpl();
+  const openCircuit = circuitState(key, now);
+
+  if (openCircuit) {
+    return circuitOpenResult({
+      layer: params.layer,
+      now,
+      serviceUrl: params.serviceUrl,
+      state: openCircuit,
+    });
+  }
+
+  const primary = await fetchLayerVersionWithRetry({
     ...params,
     version: DEFAULT_WFS_VERSION,
   });
 
   if (!["provider_exception", "configuration_error"].includes(primary.status)) {
+    recordCircuitResult(key, primary, nowImpl());
+
     return primary;
   }
 
-  const fallback = await fetchLayerVersion({
+  const fallback = await fetchLayerVersionWithRetry({
     ...params,
     version: FALLBACK_WFS_VERSION,
   });
 
-  return {
+  const result = {
     ...fallback,
     fallback_used: true,
     original_error: {
@@ -512,6 +902,145 @@ async function fetchLayer(params) {
     requested_version: DEFAULT_WFS_VERSION,
     resolved_version: FALLBACK_WFS_VERSION,
   };
+
+  recordCircuitResult(key, result, nowImpl());
+
+  return result;
+}
+
+async function fetchLayerResilient({
+  bypassCache,
+  latitude,
+  layer,
+  longitude,
+  nowImpl,
+  persistentCache,
+  persistentCacheDir,
+  serviceUrl,
+  ...params
+}) {
+  const key = layerCacheKey({
+    latitude,
+    layerName: layer.layerName,
+    longitude,
+    serviceUrl,
+  });
+  const cached = bypassCache ? null : readLayerCache(key);
+
+  if (cached) {
+    return cached;
+  }
+
+  const persistentObservation = bypassCache
+    ? null
+    : await readPersistentLayerObservation({
+        directory: persistentCacheDir,
+        enabled: persistentCache,
+        key,
+        now: nowImpl(),
+      });
+
+  if (
+    persistentObservation &&
+    persistentObservation.age_ms <= PERSISTENT_CACHE_TTL_MS
+  ) {
+    const persistentResult = {
+      ...persistentObservation.result,
+      cache: {
+        age_seconds: Math.round(persistentObservation.age_ms / 1000),
+        hit: true,
+        key,
+        tier: "persistent",
+        ttl_seconds: Math.max(
+          0,
+          Math.round(
+            (PERSISTENT_CACHE_TTL_MS - persistentObservation.age_ms) / 1000
+          )
+        ),
+      },
+      observation: {
+        age_seconds: Math.round(persistentObservation.age_ms / 1000),
+        freshness_status: "current",
+        mode: "persistent_cache",
+        observed_at: persistentObservation.observed_at,
+        retrieved_at: new Date(nowImpl()).toISOString(),
+      },
+    };
+
+    writeLayerCache(key, persistentResult);
+
+    return persistentResult;
+  }
+
+  const lastKnownGood = lastKnownGoodSummary(persistentObservation);
+
+  if (!bypassCache && inFlightLayerRequests.has(key)) {
+    const shared = await inFlightLayerRequests.get(key);
+
+    return {
+      ...shared,
+      cache: {
+        ...(shared.cache || {}),
+        deduplicated: true,
+        hit: false,
+        key,
+        tier: "in_flight",
+      },
+    };
+  }
+
+  const request = fetchLayer({
+    latitude,
+    layer,
+    longitude,
+    nowImpl,
+    serviceUrl,
+    ...params,
+  }).then((result) => {
+    const decorated = {
+      ...result,
+      ...(cacheableLayerResult(result) || !lastKnownGood
+        ? {}
+        : {
+            last_known_good: lastKnownGood,
+          }),
+      cache: {
+        hit: false,
+        key,
+        tier: "live",
+        ttl_seconds: Math.round(LAYER_CACHE_TTL_MS / 1000),
+      },
+    };
+
+    if (!bypassCache && cacheableLayerResult(decorated)) {
+      writeLayerCache(key, decorated);
+    }
+
+    return decorated;
+  }).then(async (decorated) => {
+    if (!bypassCache) {
+      await persistLayerObservation({
+        directory: persistentCacheDir,
+        enabled: persistentCache,
+        key,
+        result: decorated,
+      });
+    }
+
+    return decorated;
+  });
+
+  if (!bypassCache) {
+    inFlightLayerRequests.set(key, request);
+  }
+
+  try {
+    return await request;
+  } finally {
+    if (!bypassCache) {
+      inFlightLayerRequests.delete(key);
+    }
+  }
 }
 
 function combinedStatus(layerResults) {
@@ -543,7 +1072,15 @@ function combinedStatus(layerResults) {
 export async function queryIspraFloodExposure(
   point,
   {
+    bypassCache = false,
     fetchImpl = globalThis.fetch,
+    nowImpl = Date.now,
+    persistentCache = true,
+    persistentCacheDir,
+    randomImpl = Math.random,
+    retryAttempts = DEFAULT_RETRY_ATTEMPTS,
+    retryDelayMs = DEFAULT_RETRY_DELAY_MS,
+    retryJitterRatio = DEFAULT_RETRY_JITTER_RATIO,
     serviceUrl = DEFAULT_WFS_URL,
     timeoutMs = REQUEST_TIMEOUT_MS,
   } = {}
@@ -553,6 +1090,8 @@ export async function queryIspraFloodExposure(
   if (!validated.ok) {
     return {
       confidence: "invalid_query",
+      assessment_complete: false,
+      decision_status: "invalid_coordinates",
       explanation: [
         "The hydraulic exposure query was not executed because the coordinates are invalid.",
       ],
@@ -578,6 +1117,8 @@ export async function queryIspraFloodExposure(
   if (typeof fetchImpl !== "function") {
     return {
       confidence: "source_unavailable",
+      assessment_complete: false,
+      decision_status: "service_unreachable",
       explanation: [
         "The hydraulic exposure service is not available in this runtime.",
       ],
@@ -602,11 +1143,19 @@ export async function queryIspraFloodExposure(
 
   const layerResults = await Promise.all(
     ISPRA_FLOOD_LAYERS.map((layer) =>
-      fetchLayer({
+      fetchLayerResilient({
+        bypassCache,
         fetchImpl,
         latitude: validated.latitude,
         layer,
         longitude: validated.longitude,
+        nowImpl,
+        persistentCache,
+        persistentCacheDir,
+        randomImpl,
+        retryAttempts,
+        retryDelayMs,
+        retryJitterRatio,
         serviceUrl,
         timeoutMs,
       })
@@ -617,6 +1166,30 @@ export async function queryIspraFloodExposure(
     .map((item) => item.className);
   const highestClass = highestFloodClass(matchedClasses);
   const status = combinedStatus(layerResults);
+  const usableLayerStatuses = new Set(["available", "no_intersection"]);
+  const failedLayers = layerResults
+    .filter((item) => !usableLayerStatuses.has(item.status))
+    .map((item) => ({
+      class_name: item.className,
+      error: item.error || item.status,
+      http_status: item.http_status || null,
+      status: item.status,
+    }));
+  const successfulLayers = layerResults
+    .filter((item) => usableLayerStatuses.has(item.status))
+    .map((item) => ({
+      class_name: item.className,
+      intersects: Boolean(item.intersects),
+      status: item.status,
+    }));
+  const assessmentComplete = failedLayers.length === 0;
+  const decisionStatus = assessmentComplete
+    ? matchedClasses.length
+      ? "available_complete"
+      : "no_intersection"
+    : matchedClasses.length
+      ? "available_partial"
+      : "source_incomplete";
   const sourceAvailableStatuses = ["available", "no_intersection", "partial"];
   const fallbackUsed = layerResults.some((item) => item.fallback_used);
   const resolvedVersions = [
@@ -625,11 +1198,43 @@ export async function queryIspraFloodExposure(
   const resolvedVersion =
     resolvedVersions.length === 1 ? resolvedVersions[0] : resolvedVersions;
   const queriedAt = new Date().toISOString();
+  const observationModes = [
+    ...new Set(
+      layerResults
+        .map((item) => item.observation?.mode)
+        .filter(Boolean)
+    ),
+  ];
+  const lastKnownGoodLayers = layerResults
+    .filter((item) => item.last_known_good)
+    .map((item) => item.last_known_good);
+  const observedAtValues = layerResults
+    .map((item) => item.observation?.observed_at)
+    .filter(Boolean)
+    .sort();
+  const aggregateFreshnessStatus = assessmentComplete
+    ? layerResults.every(
+        (item) => item.observation?.freshness_status === "current"
+      )
+      ? "current"
+      : "mixed"
+    : lastKnownGoodLayers.length
+      ? "stale_reference_available"
+      : "unavailable";
 
   return {
+    assessment_complete: assessmentComplete,
     confidence: sourceAvailableStatuses.includes(status)
       ? "source_available"
       : "source_unavailable",
+    coverage: {
+      failed_layer_count: failedLayers.length,
+      failed_layers: failedLayers,
+      requested_layer_count: ISPRA_FLOOD_LAYERS.length,
+      successful_layer_count: successfulLayers.length,
+      successful_layers: successfulLayers,
+    },
+    decision_status: decisionStatus,
     explanation: sourceAvailableStatuses.includes(status)
         ? floodExplanation({
             highestClass,
@@ -653,6 +1258,53 @@ export async function queryIspraFloodExposure(
         resolvedVersion,
         serviceUrl,
       }),
+      layer_cache: {
+        hit_count: layerResults.filter((item) => item.cache?.hit).length,
+        miss_count: layerResults.filter((item) => !item.cache?.hit).length,
+        persistent_hit_count: layerResults.filter(
+          (item) => item.cache?.tier === "persistent"
+        ).length,
+        ttl_seconds: Math.round(LAYER_CACHE_TTL_MS / 1000),
+      },
+      last_known_good_layers: lastKnownGoodLayers,
+      freshness_status: aggregateFreshnessStatus,
+      live_provider_status:
+        observationModes.every(
+          (mode) => ["memory_cache", "persistent_cache"].includes(mode)
+        )
+          ? "not_queried_cache_hit"
+          : status,
+      observation_mode:
+        observationModes.length === 1
+          ? observationModes[0]
+          : observationModes.length
+            ? "mixed"
+            : "unavailable",
+      observed_at: observedAtValues[0] || null,
+      persistent_cache: {
+        enabled: Boolean(persistentCache),
+        freshness_ttl_seconds: Math.round(PERSISTENT_CACHE_TTL_MS / 1000),
+        last_known_good_max_age_seconds: Math.round(
+          LAST_KNOWN_GOOD_MAX_AGE_MS / 1000
+        ),
+      },
+      retry: {
+        attempted_layer_count: layerResults.filter(
+          (item) => Number(item.attempts) > 1
+        ).length,
+        max_attempts_per_layer: Math.max(
+          ...layerResults.map((item) => Number(item.attempts) || 1)
+        ),
+        jitter_ratio: retryJitterRatio,
+      },
+      circuit_breaker: {
+        cooldown_seconds: Math.round(CIRCUIT_COOLDOWN_MS / 1000),
+        failure_threshold: CIRCUIT_FAILURE_THRESHOLD,
+        open_layer_count: layerResults.filter(
+          (item) => item.status === "circuit_open"
+        ).length,
+        remote_concurrency_limit: REMOTE_CONCURRENCY_LIMIT,
+      },
       wfs_version: DEFAULT_WFS_VERSION,
     },
     status,

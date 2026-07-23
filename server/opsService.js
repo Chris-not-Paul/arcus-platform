@@ -6,6 +6,12 @@ import { databaseHealth, isDatabaseEnabled } from "./database.js";
 import { getCurrentDataRelease } from "./dataReleaseService.js";
 import { emailDeliveryStatus } from "./emailService.js";
 import { requestStats } from "./observability.js";
+import {
+  hydraulicObservationStoreStatus,
+} from "./hazard/hydraulicObservationStore.js";
+import {
+  landslideObservationStoreStatus,
+} from "./hazard/landslideObservationStore.js";
 
 function aggregateStatus(checks) {
   if (checks.some((check) => check.status === "critical")) {
@@ -125,6 +131,38 @@ export async function operationalStatus() {
     )
   );
 
+  const hydraulicObservationStore =
+    await hydraulicObservationStoreStatus();
+
+  checks.push(
+    check(
+      hydraulicObservationStore.ok ? "ok" : "warning",
+      "hydraulic_observation_store",
+      hydraulicObservationStore.ok
+        ? hydraulicObservationStore.observation_count
+          ? "Hydraulic last-known-good observations are available"
+          : "Hydraulic observation store is reachable and currently empty"
+        : "Hydraulic observation store is unavailable",
+      hydraulicObservationStore
+    )
+  );
+
+  const landslideObservationStore =
+    await landslideObservationStoreStatus();
+
+  checks.push(
+    check(
+      landslideObservationStore.ok ? "ok" : "warning",
+      "landslide_observation_store",
+      landslideObservationStore.ok
+        ? landslideObservationStore.observation_count
+          ? "Landslide last-known-good observations are available"
+          : "Landslide observation store is reachable and currently empty"
+        : "Landslide observation store is unavailable",
+      landslideObservationStore
+    )
+  );
+
   const status = aggregateStatus(checks);
 
   return {
@@ -132,6 +170,8 @@ export async function operationalStatus() {
     checks,
     email,
     generatedAt: new Date().toISOString(),
+    hydraulicObservationStore,
+    landslideObservationStore,
     ok: status !== "critical",
     requestStats: requestStats(),
     status,
@@ -140,6 +180,13 @@ export async function operationalStatus() {
 }
 
 export function operationalGauges(status) {
+  const latestHydraulicObservationMs = Date.parse(
+    status.hydraulicObservationStore?.latest_observed_at || ""
+  );
+  const latestLandslideObservationMs = Date.parse(
+    status.landslideObservationStore?.latest_observed_at || ""
+  );
+
   return {
     arcus_backup_age_seconds:
       status.backup.ageHours === null
@@ -149,6 +196,24 @@ export function operationalGauges(status) {
       status.backup.ok ? 1 : 0,
     arcus_email_recent_failures:
       status.email?.failed || 0,
+    arcus_hydraulic_observation_age_seconds:
+      Number.isFinite(latestHydraulicObservationMs)
+        ? Math.max(
+            0,
+            Math.round((Date.now() - latestHydraulicObservationMs) / 1000)
+          )
+        : -1,
+    arcus_hydraulic_observation_count:
+      status.hydraulicObservationStore?.observation_count || 0,
+    arcus_landslide_observation_age_seconds:
+      Number.isFinite(latestLandslideObservationMs)
+        ? Math.max(
+            0,
+            Math.round((Date.now() - latestLandslideObservationMs) / 1000)
+          )
+        : -1,
+    arcus_landslide_observation_count:
+      status.landslideObservationStore?.observation_count || 0,
     arcus_operational_status:
       status.status === "ok" ? 1 : status.status === "warning" ? 0.5 : 0,
   };

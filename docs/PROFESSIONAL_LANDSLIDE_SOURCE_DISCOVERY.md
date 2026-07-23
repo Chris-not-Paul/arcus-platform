@@ -24,7 +24,7 @@ The analytical source selected for this milestone is:
 | CRS requested by ARCUS | `EPSG:4326` |
 | BBOX order used by ARCUS | `west,south,east,north,EPSG:4326` |
 | Class attribute | `cod_per_it` |
-| Provider version | `ispra-landslide-pai-wfs-v1` |
+| Provider version | `ispra-landslide-pai-wfs-v2` |
 | Analysis mode | `point_intersection` |
 | Score mode | Shadow mode, `normalized_score = null` |
 
@@ -50,7 +50,7 @@ P1 < P2 < P3 < P4
 
 ## Freshness Gate
 
-The IdroGEO portal metadata identifies the PAI landslide layer as national ISPRA mosaic version 5.0, reference year 2024. The source is therefore accepted for this milestone as the current official source used by ARCUS for Path 01 landslide point exposure.
+The IdroGEO portal metadata identifies the PAI landslide layer as national ISPRA mosaic version 5.0, reference year 2024. The source is therefore accepted for this milestone as the current official source used by ARCUS for Path 01 landslide point exposure. Provider v2 validates `geom` and `cod_per_it` through `DescribeFeatureType`, applies an exact point `INTERSECTS` filter on GeoServer and requests only `cod_per_it`.
 
 ARCUS records:
 

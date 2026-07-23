@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { evaluatePointHazardExposure } from "../server/hazard/hazardExposureService.js";
 import { CURRENT_CONTEXT_CAVEAT } from "./analyze-collapse-intelligence.js";
+import { readProfessionalDataset } from "./lib/professional-dataset.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -275,7 +276,7 @@ export async function buildCollapseHazardSignatures(options = {}) {
   const manifestPath = path.join(outputDir, path.basename(MANIFEST_PATH));
   const errorsPath = path.join(outputDir, path.basename(ERRORS_PATH));
   const cachePath = path.join(outputDir, path.basename(CACHE_PATH));
-  const events = readJson(path.join(ROOT, "private-data", "processed", "events.json"), []);
+  const { events } = readProfessionalDataset(ROOT);
   const existing = resolved.resume ? readJson(signaturesPath, { signatures: [] }) : { signatures: [] };
   const cache = resolved.bypassCache ? {} : readJson(cachePath, {});
   const existingById = new Map((existing.signatures || []).map((item) => [item.event_id, item]));

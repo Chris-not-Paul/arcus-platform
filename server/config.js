@@ -19,6 +19,14 @@ export const authDataDir = path.join(
   "auth"
 );
 
+export const hydraulicObservationDir = process.env.ARCUS_HYDRAULIC_OBSERVATION_DIR
+  ? path.resolve(process.env.ARCUS_HYDRAULIC_OBSERVATION_DIR)
+  : path.join(privateDataDir, "hazard", "hydraulic-observations");
+
+export const landslideObservationDir = process.env.ARCUS_LANDSLIDE_OBSERVATION_DIR
+  ? path.resolve(process.env.ARCUS_LANDSLIDE_OBSERVATION_DIR)
+  : path.join(privateDataDir, "hazard", "landslide-observations");
+
 export const usersFilePath = path.join(
   authDataDir,
   "users.json"
@@ -49,7 +57,7 @@ export const emailOutboxFilePath = path.join(
   "email-outbox.json"
 );
 
-export const publicReleaseEndYear = 2025;
+export const publicReleaseEndYear = 2026;
 
 export const serverPort = Number(
   process.env.ARCUS_API_PORT || 4174

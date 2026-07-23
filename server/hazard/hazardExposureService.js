@@ -9,10 +9,12 @@ import {
   SEISMIC_PROVIDER_VERSION,
 } from "./normalizers/seismicNormalizer.js";
 import {
+  clearIspraFloodLayerCache,
   queryIspraFloodExposure,
   validateWgs84Point,
 } from "./providers/ispraFloodProvider.js";
 import {
+  clearIspraLandslideLayerCache,
   queryIspraLandslideExposure,
 } from "./providers/ispraLandslideProvider.js";
 import {
@@ -415,6 +417,8 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
   const bypassCache = Boolean(
     options.bypassCache || (isDevelopment && payload?.bypassCache)
   );
+  const persistentCache = options.persistentCache ??
+    (!options.fetchImpl || options.fetchImpl === globalThis.fetch);
   const query = {
     crs: "EPSG:4326",
     latitude: Number(payload?.latitude),
@@ -470,6 +474,8 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
     hazards,
     options: {
       ...options,
+      bypassCache,
+      persistentCache,
       requestId,
     },
     point: {
@@ -505,4 +511,6 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
 
 export function clearHazardExposureCache() {
   cache.clear();
+  clearIspraFloodLayerCache();
+  clearIspraLandslideLayerCache();
 }

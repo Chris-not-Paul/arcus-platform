@@ -34,6 +34,33 @@ export const openApiDocument = {
   },
   openapi: "3.1.0",
   paths: {
+    "/api/v1/open/events": {
+      get: { summary: "List events from the active versioned ARCUS Open Research release" },
+    },
+    "/api/v1/open/sources": {
+      get: { summary: "List publishable sources from the active Open Research release" },
+    },
+    "/api/v1/open/manifest": {
+      get: { summary: "Read Open Research release metadata, citation and limitations" },
+    },
+    "/api/v1/open/taxonomy": {
+      get: { summary: "Read the public failure taxonomy" },
+    },
+    "/api/v1/open/data-dictionary": {
+      get: { summary: "Read the Open Research data dictionary" },
+    },
+    "/api/v1/open/changelog": {
+      get: { summary: "Read Open Research release notes and delta" },
+    },
+    "/api/v1/open/statistics": {
+      get: { summary: "Read descriptive aggregate Open Research statistics" },
+    },
+    "/api/v1/open/download/csv": {
+      get: { summary: "Download the complete Open Research event release as CSV" },
+    },
+    "/api/v1/open/download/geojson": {
+      get: { summary: "Download the complete Open Research event release as GeoJSON" },
+    },
     "/api/v1/health": {
       get: { summary: "Service health" },
     },
@@ -72,6 +99,9 @@ export const openApiDocument = {
     },
     "/api/v1/professional/hazard-exposure/point": {
       post: { summary: "Evaluate official point hazard exposure in shadow mode" },
+    },
+    "/api/v1/professional/mitigation-intelligence": {
+      post: { summary: "Generate evidence-linked mitigation intelligence for a validated project point" },
     },
     "/api/v1/professional/workspaces": {
       get: { summary: "List organization workspaces" },

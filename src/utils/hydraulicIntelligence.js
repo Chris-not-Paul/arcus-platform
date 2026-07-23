@@ -1,4 +1,4 @@
-export const HYDRAULIC_TAXONOMY_VERSION = "hydraulic-v1";
+export const HYDRAULIC_TAXONOMY_VERSION = "hydraulic-v2";
 
 const EMPTY_VALUES = new Set([
   "",
@@ -10,6 +10,10 @@ const EMPTY_VALUES = new Set([
 ]);
 
 export const HYDRAULIC_INTELLIGENCE_FIELDS = [
+  "failure_trigger",
+  "failure_process",
+  "component_involved",
+  "failure_cause_evidence",
   "hydraulic_trigger",
   "hydraulic_failure_process",
   "hydraulic_component_involved",
@@ -27,6 +31,7 @@ export const HYDRAULIC_MATCHER_BLOCKED_FIELDS = [
 
 export const HYDRAULIC_TRIGGER_MAPPING = {
   Flood: "flood",
+  "Rainfall-induced landslide": "rainfall_induced_landslide",
   "Hydraulic event - unspecified": "hydraulic_event_unspecified",
   "Hydraulic event – unspecified": "hydraulic_event_unspecified",
 };
@@ -43,7 +48,13 @@ export const HYDRAULIC_FAILURE_PROCESS_MAPPING = {
 };
 
 export const HYDRAULIC_COMPONENT_MAPPING = {
+  "Pier / foundation": "pier_foundation",
   "Pier foundation": "pier_foundation",
+  Abutment: "abutment",
+  "Approach embankment": "approach_embankment",
+  "Deck / superstructure": "deck_or_superstructure",
+  "Entire structure": "entire_structure",
+  "Multiple components": "multiple_components",
   Unspecified: null,
 };
 
@@ -51,12 +62,13 @@ export const HYDRAULIC_EVIDENCE_LEVEL_MAPPING = {
   Documented: "documented",
   Probable: "probable",
   Unspecified: "unspecified",
-  "Needs review": "unspecified",
+  "Needs review": "needs_review",
 };
 
 const EVIDENCE_WEIGHTS_EXPERIMENTAL = {
   documented: 1,
   probable: 0.5,
+  needs_review: 0,
   unspecified: 0,
 };
 
@@ -82,6 +94,12 @@ function hasHydraulicSourceValues(event) {
   return HYDRAULIC_INTELLIGENCE_FIELDS.some(
     (field) => cleanSourceValue(event?.[field]) !== null
   );
+}
+
+function firstDefined(event, ...fields) {
+  return fields
+    .map((field) => event?.[field])
+    .find((value) => cleanSourceValue(value) !== null) ?? null;
 }
 
 function mapValue({
@@ -149,21 +167,21 @@ export function normalizeHydraulicIntelligence(event = {}, options = {}) {
     field: "hydraulic_trigger",
     mapping: HYDRAULIC_TRIGGER_MAPPING,
     required: true,
-    sourceValue: event.hydraulic_trigger,
+    sourceValue: firstDefined(event, "failure_trigger", "hydraulic_trigger"),
     warnings,
   });
   const failureProcess = mapValue({
     eventId,
     field: "hydraulic_failure_process",
     mapping: HYDRAULIC_FAILURE_PROCESS_MAPPING,
-    sourceValue: event.hydraulic_failure_process,
+    sourceValue: firstDefined(event, "failure_process", "hydraulic_failure_process"),
     warnings,
   });
   const componentInvolved = mapValue({
     eventId,
     field: "hydraulic_component_involved",
     mapping: HYDRAULIC_COMPONENT_MAPPING,
-    sourceValue: event.hydraulic_component_involved,
+    sourceValue: firstDefined(event, "component_involved", "hydraulic_component_involved"),
     warnings,
   });
   let evidenceLevel = mapValue({
@@ -171,23 +189,27 @@ export function normalizeHydraulicIntelligence(event = {}, options = {}) {
     field: "hydraulic_evidence_level",
     mapping: HYDRAULIC_EVIDENCE_LEVEL_MAPPING,
     required: true,
-    sourceValue: event.hydraulic_evidence_level,
+    sourceValue: firstDefined(event, "failure_cause_evidence", "hydraulic_evidence_level"),
     warnings,
   });
-  const rawEvidence = cleanSourceValue(event.hydraulic_evidence_level);
+  const rawEvidence = cleanSourceValue(
+    firstDefined(event, "failure_cause_evidence", "hydraulic_evidence_level")
+  );
 
   if (rawEvidence === "Needs review") {
     warnings.push({
       code: "hydraulic_evidence_level_needs_review",
       event_id: eventId,
       field: "hydraulic_evidence_level",
-      normalized_as: "unspecified",
+      normalized_as: "needs_review",
       source_value: rawEvidence,
     });
   }
 
   if (!failureProcess) {
-    evidenceLevel = "unspecified";
+    if (evidenceLevel !== "needs_review") {
+      evidenceLevel = "unspecified";
+    }
 
     if (componentInvolved) {
       warnings.push({
@@ -195,7 +217,7 @@ export function normalizeHydraulicIntelligence(event = {}, options = {}) {
         event_id: eventId,
       });
     }
-  } else if (evidenceLevel === "unspecified") {
+  } else if (["unspecified", "needs_review"].includes(evidenceLevel)) {
     warnings.push({
       code: "specific_process_with_unspecified_evidence",
       event_id: eventId,
@@ -241,6 +263,7 @@ export function summarizeHydraulicCohort(events = []) {
   const components = new Map();
   let documented = 0;
   let probable = 0;
+  let needsReview = 0;
   let unspecified = 0;
   let effectiveEvidenceCount = 0;
 
@@ -252,6 +275,8 @@ export function summarizeHydraulicCohort(events = []) {
       documented += 1;
     } else if (evidence === "probable") {
       probable += 1;
+    } else if (evidence === "needs_review") {
+      needsReview += 1;
     } else {
       unspecified += 1;
     }
@@ -289,12 +314,13 @@ export function summarizeHydraulicCohort(events = []) {
     }
   });
 
-  const specificMechanismCases = hydraulicEvents.length - unspecified;
+  const specificMechanismCases = hydraulicEvents.length - unspecified - needsReview;
 
   return {
     total_cases: hydraulicEvents.length,
     mechanism_documented_cases: documented,
     mechanism_probable_cases: probable,
+    mechanism_needs_review_cases: needsReview,
     mechanism_unspecified_cases: unspecified,
     mechanism_documentation_coverage: hydraulicEvents.length
       ? Number((specificMechanismCases / hydraulicEvents.length).toFixed(4))

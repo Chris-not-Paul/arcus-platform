@@ -3,15 +3,21 @@ export const FLOOD_CLASS_SEVERITY_ORDER = Object.freeze(["P1", "P2", "P3"]);
 
 export const ISPRA_FLOOD_LAYERS = [
   {
+    attributeName: "scenariop1",
     className: "P1",
+    geometryName: "geom",
     layerName: "nz1:aree_peric_idraulica_p1",
   },
   {
+    attributeName: "scenariop2",
     className: "P2",
+    geometryName: "geom",
     layerName: "nz1:aree_peric_idraulica_p2",
   },
   {
+    attributeName: "scenariop3",
     className: "P3",
+    geometryName: "geom",
     layerName: "nz1:aree_peric_idraulica_p3",
   },
 ];

@@ -168,12 +168,36 @@ export function openSources() {
   );
 }
 
+export function openResource(resource) {
+  return apiJson(`/api/open/${resource}`);
+}
+
+export function openManifest() {
+  return openResource("manifest");
+}
+
+export const openDownloadUrls = Object.freeze({
+  csv: "/api/open/download/csv",
+  geojson: "/api/open/download/geojson",
+});
+
 export function professionalResource(resource) {
   return apiJson(`/api/professional/${resource}`);
 }
 
 export function professionalHazardExposurePoint(payload) {
   return apiJson("/api/professional/hazard-exposure/point", {
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+      "X-ARCUS-CSRF-Token": csrfToken || "",
+    },
+    method: "POST",
+  });
+}
+
+export function professionalMitigationIntelligence(payload) {
+  return apiJson("/api/professional/mitigation-intelligence", {
     body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json",

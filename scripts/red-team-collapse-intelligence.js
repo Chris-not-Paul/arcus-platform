@@ -2,6 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { readProfessionalDataset } from "./lib/professional-dataset.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
@@ -1218,8 +1220,7 @@ function abstentionPolicies(events) {
 }
 
 export function runRedTeamValidation({ outputPath = OUTPUT_PATH } = {}) {
-  const events = readJson(path.join(ROOT, "private-data", "processed", "events.json"), []);
-  const sources = readJson(path.join(ROOT, "private-data", "processed", "sources.json"), []);
+  const { events, sources } = readProfessionalDataset(ROOT);
   const ainop = readJson(path.join(ROOT, "private-data", "professional", "ainop-bridge-index.json"), { provinces: [] });
   const crosswalk = readJson(path.join(ROOT, "config", "geography", "province-crosswalk.json"), []);
   const geojson = readJson(path.join(ROOT, "public", "data", "geo", "italy-provinces.geojson"), { features: [] });

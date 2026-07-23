@@ -108,10 +108,10 @@ assert.equal(torino.denominator_count, 1285);
 assert.equal(torino.ainop_bridges_total, torino.denominator_count);
 assert.equal(torino.provincial_rate_per_100, 3.113);
 assert.equal(torino.collapse_rate_per_100_ainop_bridges, 3.113);
-assert.equal(torino.national_rate_per_100, 0.562);
-assert.equal(torino.relative_to_national, 5.54);
+assert.equal(torino.national_rate_per_100, 0.584);
+assert.equal(torino.relative_to_national, 5.33);
 assert.equal(torino.dataset_scope, "professional");
-assert.equal(torino.dataset_version, "arcus-professional-2026.07.10");
+assert.equal(torino.dataset_version, "arcus-professional-2026.07.22");
 assert.equal(torino.data_cutoff_date, "2026-07-10T14:20:00.000Z");
 assert.equal(torino.latest_event_date, "2026-04-02");
 assert.equal(torino.included_year_max, 2026);
@@ -119,10 +119,10 @@ assert.equal(torino.release_end_year, publicReleaseEndYear);
 assert.equal(index.metadata.release_end_year, publicReleaseEndYear);
 assert.equal(index.metadata.dataset_scope, "professional");
 assert.equal(index.metadata.total_arcus_cases, professionalScopedEvents.length);
-assert.equal(index.metadata.total_arcus_cases, 253);
+assert.equal(index.metadata.total_arcus_cases, 263);
 assert.equal(index.metadata.total_sources, sources.length);
-assert.equal(index.metadata.national_rate_per_100_ainop_bridges, 0.562);
-assert.equal(events2026.length, 1);
+assert.equal(index.metadata.national_rate_per_100_ainop_bridges, 0.584);
+assert.equal(events2026.length, 2);
 assert.equal(torino.dataset_version, index.metadata.dataset_version);
 assert.equal(torino.generated_at, index.metadata.generated_at);
 assert.equal(torino.confidence, "high");
@@ -183,18 +183,24 @@ const openTorino = provinceRecord(openRebuilt, "Torino");
 
 assert.equal(openRebuilt.metadata.dataset_scope, "open");
 assert.equal(openRebuilt.metadata.total_arcus_cases, openScopedEvents.length);
-assert.equal(openRebuilt.metadata.total_arcus_cases, 252);
-assert.equal(openRebuilt.metadata.included_year_max, 2025);
-assert.equal(openRebuilt.metadata.national_rate_per_100_ainop_bridges, 0.56);
-assert.equal(openTorino.relative_to_national, 5.56);
-assert.equal(campobasso.numerator_count, openCampobasso.numerator_count + 1);
-assert.equal(events2026[0].province, "Campobasso");
+assert.equal(openRebuilt.metadata.total_arcus_cases, 263);
+assert.equal(openRebuilt.metadata.included_year_max, 2026);
+assert.equal(openRebuilt.metadata.national_rate_per_100_ainop_bridges, 0.584);
+assert.equal(openTorino.relative_to_national, 5.33);
+assert.equal(campobasso.numerator_count, openCampobasso.numerator_count);
+assert.deepEqual(
+  new Set(events2026.map((event) => event.province)),
+  new Set(["Campobasso", "Pisa"])
+);
 
 const rebuilt = buildAinopBridgeIndex({
   currentIndex: index,
   events,
-  generatedAt: "2026-07-10T14:20:00.000Z",
-  release,
+  generatedAt: index.metadata.generated_at,
+  release: {
+    ...release,
+    dataset_version: index.metadata.dataset_version,
+  },
   releaseEndYear: publicReleaseEndYear,
   scope: "professional",
   sources,
@@ -253,10 +259,10 @@ console.log(
       "report-does-not-display-fixed-release-end-year",
       "denominator-same-ui-report",
       "open-scope-applies-public-release-end-year",
-      "professional-scope-includes-post-2025-events",
+      "professional-scope-includes-2026-events",
       "event-2026-included-provincial-numerator",
       "event-2026-included-national-rate",
-      "event-2026-excluded-open-scope",
+      "event-2026-included-in-current-open-scope",
       "dataset-version-coherent",
       "data-cutoff-date-present",
       "latest-event-date-derived",

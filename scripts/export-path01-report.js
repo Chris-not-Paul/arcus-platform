@@ -4,6 +4,7 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import { chromium } from "playwright";
+import { readProfessionalDataset } from "./lib/professional-dataset.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -1569,22 +1570,10 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const province = String(args.province || "Torino");
   const projectContext = String(args.context || "bridge");
-  const eventsPath = path.join(
-    root,
-    "public",
-    "data",
-    "processed",
-    "events.json"
-  );
-  const sourcesPath = path.join(
-    root,
-    "public",
-    "data",
-    "processed",
-    "sources.json"
-  );
-  const allEvents = JSON.parse(fs.readFileSync(eventsPath, "utf8"));
-  const allSources = JSON.parse(fs.readFileSync(sourcesPath, "utf8"));
+  const {
+    events: allEvents,
+    sources: allSources,
+  } = readProfessionalDataset(root);
   const hazardExposurePreview = loadHazardExposurePreview();
   const ainopBridgeIndex = loadAinopBridgeIndex();
   const events = allEvents.filter(

@@ -95,7 +95,11 @@ function parseSheetRows(zip, sheetPath, sharedStrings) {
     .map((rowMatch) => {
       const row = [];
 
-      [...rowMatch[1].matchAll(/<c[^>]*>[\s\S]*?<\/c>/g)].forEach((cellMatch) => {
+      // Excel may encode intentionally blank cells as self-closing `<c .../>`
+      // elements. Matching only paired cells can consume the following cell and
+      // shift values under the wrong header, which is especially dangerous for
+      // release generation. Cell references remain the authoritative position.
+      [...rowMatch[1].matchAll(/<c\b[^>]*\/>|<c\b[^>]*>[\s\S]*?<\/c>/g)].forEach((cellMatch) => {
         const cell = cellValue(cellMatch[0], sharedStrings);
 
         if (cell.index >= 0) {

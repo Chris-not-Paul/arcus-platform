@@ -12,8 +12,7 @@ import useLanguage from "../context/useLanguage";
 import extractYear from "../utils/extractYear";
 import taxonomyLabel from "../utils/taxonomyLabels";
 import {
-  openEvents,
-  openSources,
+  professionalResource,
 } from "../utils/apiClient";
 
 import "../styles/analytics/premium-analytics-page.css";
@@ -259,11 +258,13 @@ function PremiumAnalyticsPage() {
   });
 
   useEffect(() => {
-    openEvents()
-      .then(setEvents);
+    professionalResource("professional-events")
+      .then((data) => setEvents(Array.isArray(data) ? data : data.events || []))
+      .catch(() => setEvents([]));
 
-    openSources()
-      .then(setSources);
+    professionalResource("professional-sources")
+      .then((data) => setSources(Array.isArray(data) ? data : data.sources || []))
+      .catch(() => setSources([]));
   }, []);
 
   const sourceCountByEvent = useMemo(() => {

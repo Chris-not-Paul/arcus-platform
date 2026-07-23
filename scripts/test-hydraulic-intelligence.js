@@ -14,13 +14,18 @@ import {
   getProfessionalResource,
 } from "../server/dataService.js";
 import {
-  HYDRAULIC_INTELLIGENCE_FIELDS,
   normalizeHydraulicIntelligence,
   summarizeHydraulicCohort,
 } from "../src/utils/hydraulicIntelligence.js";
 
 const checks = [];
 const pendingChecks = [];
+const SOURCE_HEADERS = [
+  "failure_trigger",
+  "failure_process",
+  "component_involved",
+  "failure_cause_evidence",
+];
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, ""));
@@ -37,7 +42,7 @@ function check(name, fn) {
 }
 
 function requiredHeaderCheck(headers) {
-  const missing = HYDRAULIC_INTELLIGENCE_FIELDS.filter(
+  const missing = SOURCE_HEADERS.filter(
     (field) => !headers.includes(field)
   );
 
@@ -50,9 +55,9 @@ function requiredHeaderCheck(headers) {
 
 const excelPath = "private-data/raw/MASTER_RESEARCH.xlsx";
 const headers = readXlsxHeaders(excelPath, "EVENTS");
-const events = readJson("private-data/processed/events.json");
-const sources = readJson("private-data/processed/sources.json");
 const professional = readJson("private-data/professional/professional-events.json").events;
+const events = professional;
+const sources = readJson("private-data/professional/professional-sources.json").sources;
 const audit = readJson("private-data/professional/hydraulic-intelligence-audit.json");
 
 check("excel-columns-by-header", () => {
@@ -60,8 +65,8 @@ check("excel-columns-by-header", () => {
 });
 check("excel-missing-column-detected", () => {
   assert.throws(
-    () => requiredHeaderCheck(headers.filter((field) => field !== "hydraulic_failure_process")),
-    /hydraulic_failure_process/
+    () => requiredHeaderCheck(headers.filter((field) => field !== "failure_process")),
+    /failure_process/
   );
 });
 check("trim-values", () => {
@@ -170,7 +175,7 @@ check("deterministic-output", () => {
 check("canonical-structure-and-taxonomy-version", () => {
   const sample = events.find((event) => event.hydraulic_intelligence);
 
-  assert.equal(sample.hydraulic_intelligence.taxonomy_version, "hydraulic-v1");
+  assert.equal(sample.hydraulic_intelligence.taxonomy_version, "hydraulic-v2");
   assert.deepEqual(
     Object.keys(sample.hydraulic_intelligence).sort(),
     [
@@ -192,19 +197,20 @@ check("no-physical-value-invented", () => {
   assert.equal(unspecified.hydraulic_intelligence.component_involved, null);
 });
 check("event-and-source-counts", () => {
-  assert.equal(events.length, 253);
-  assert.equal(professional.length, 253);
-  assert.equal(sources.length, 688);
+  assert.equal(events.length, 263);
+  assert.equal(professional.length, 263);
+  assert.equal(sources.length, 712);
 });
 check("audit-counts", () => {
-  assert.equal(audit.hydraulic_events, 202);
-  assert.equal(audit.summary.documented, 9);
-  assert.equal(audit.summary.probable, 18);
-  assert.equal(audit.summary.unspecified, 175);
+  assert.equal(audit.hydraulic_events, 211);
+  assert.equal(audit.summary.documented, 124);
+  assert.equal(audit.summary.probable, 43);
+  assert.equal(audit.summary.needs_review, 8);
+  assert.equal(audit.summary.unspecified, 36);
 });
 check("professional-scope-includes-hydraulic-intelligence", () => {
   assert.equal(
-    professional.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v1"),
+    professional.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"),
     true
   );
 });
@@ -212,14 +218,15 @@ check("professional-resource-includes-hydraulic-intelligence", async () => {
   const resource = await getProfessionalResource("professional-events");
 
   assert.equal(
-    resource.events.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v1"),
+    resource.events.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"),
     true
   );
 });
-check("open-scope-excludes-hydraulic-intelligence", async () => {
+check("open-scope-includes-historical-hydraulic-intelligence", async () => {
   const openEvents = await getOpenEvents();
 
-  assert.equal(openEvents.some((event) => Object.hasOwn(event, "hydraulic_intelligence")), false);
+  assert.equal(openEvents.length, 263);
+  assert.equal(openEvents.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"), true);
 });
 check("matcher-feature-audit", () => {
   const result = auditMatcherFeatureExclusion();
@@ -231,12 +238,13 @@ check("matcher-feature-audit", () => {
 check("cohort-aggregation", () => {
   const cohort = summarizeHydraulicCohort(events);
 
-  assert.equal(cohort.total_cases, 202);
-  assert.equal(cohort.mechanism_documented_cases, 9);
-  assert.equal(cohort.mechanism_probable_cases, 18);
-  assert.equal(cohort.mechanism_unspecified_cases, 175);
+  assert.equal(cohort.total_cases, 211);
+  assert.equal(cohort.mechanism_documented_cases, 124);
+  assert.equal(cohort.mechanism_probable_cases, 43);
+  assert.equal(cohort.mechanism_needs_review_cases, 8);
+  assert.equal(cohort.mechanism_unspecified_cases, 36);
   assert.equal(cohort.failure_processes.some((item) => item.raw_count > 0), true);
-  assert.equal(cohort.effective_evidence_count, 18);
+  assert.equal(cohort.effective_evidence_count, 145.5);
 });
 check("mitigation-draft-and-external-validation", () => {
   const knowledge = buildMitigationKnowledgeBase(

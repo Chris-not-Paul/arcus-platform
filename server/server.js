@@ -1,5 +1,6 @@
 import http from "node:http";
 import crypto from "node:crypto";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,6 +8,7 @@ import {
   accessLogsEnabled,
   allowedOrigins,
   appBaseUrl,
+  rootDir,
   secureSessionCookie,
   serverPort,
   validateServerConfiguration,
@@ -32,6 +34,9 @@ import {
 } from "./accessRequestStore.js";
 import {
   getOpenEvents,
+  getOpenDownload,
+  getOpenResource,
+  getOpenResourceNames,
   getOpenSources,
   getProfessionalResource,
   getProfessionalResourceNames,
@@ -120,6 +125,24 @@ import {
 import {
   LANDSLIDE_PROVIDER_MODULE_PATH,
 } from "./hazard/providers/ispraLandslideProvider.js";
+import {
+  buildMitigationIntelligence,
+  synchronizeMitigationProjectLocation,
+} from "./mitigationIntelligenceService.js";
+
+let provinceGeometryFeaturesPromise = null;
+
+function getProvinceGeometryFeatures() {
+  provinceGeometryFeaturesPromise ||= fs
+    .readFile(
+      path.join(rootDir, "public", "data", "geo", "italy-provinces.geojson"),
+      "utf8"
+    )
+    .then((content) => JSON.parse(content)?.features || [])
+    .catch(() => []);
+
+  return provinceGeometryFeaturesPromise;
+}
 
 async function readJsonBody(request) {
   const contentType = String(request.headers["content-type"] || "");
@@ -289,6 +312,10 @@ function metricPathFor(pathname) {
     .replace(
       /^\/api\/professional\/hazard-exposure\/point$/,
       "/api/professional/hazard-exposure/point"
+    )
+    .replace(
+      /^\/api\/professional\/mitigation-intelligence$/,
+      "/api/professional/mitigation-intelligence"
     )
     .replace(
       /^\/api\/professional\/account\/(cancel|resume)$/,
@@ -1113,6 +1140,72 @@ async function routeRequest(request, response) {
 
     sendJson(request, response, 200, {
       ...exposure,
+      request_id: request.requestId,
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/professional/mitigation-intelligence") {
+    if (request.method !== "POST") {
+      sendJson(request, response, 405, {
+        error: "method_not_allowed",
+      });
+      return;
+    }
+
+    const session = await getAuthorisedSession(request, "professional:read");
+
+    if (!session) {
+      sendJson(request, response, 401, {
+        error: "professional_access_required",
+      });
+      return;
+    }
+
+    if (
+      csrfRequiredFor(session) &&
+      !(await isCsrfTokenValid(request))
+    ) {
+      sendJson(request, response, 403, {
+        error: "csrf_token_required",
+      });
+      return;
+    }
+
+    const payload = await readJsonBody(request);
+    const [eventResource, sourceResource] = await Promise.all([
+      getProfessionalResource("professional-events"),
+      getProfessionalResource("professional-sources"),
+    ]);
+    const events = Array.isArray(eventResource)
+      ? eventResource
+      : eventResource?.events || [];
+    const sources = Array.isArray(sourceResource)
+      ? sourceResource
+      : sourceResource?.sources || [];
+    const synchronizedPayload = synchronizeMitigationProjectLocation(
+      payload,
+      await getProvinceGeometryFeatures()
+    );
+    const intelligence = buildMitigationIntelligence({
+      events,
+      payload: synchronizedPayload,
+      sources,
+    });
+
+    await appendAuditEvent({
+      activeHazardTracks: intelligence.active_hazard_tracks.map((item) => item.track),
+      engineVersion: intelligence.engine_version,
+      event: "professional_mitigation_intelligence_generated",
+      organizationId: session.organizationId,
+      status: intelligence.status,
+      strategyCount: intelligence.strategies.length,
+      userId: session.userId,
+      username: session.username,
+    });
+
+    sendJson(request, response, 200, {
+      ...intelligence,
       request_id: request.requestId,
     });
     return;
@@ -2032,18 +2125,61 @@ async function routeRequest(request, response) {
   }
 
   if (url.pathname === "/api/open/events") {
+    const manifest = await getOpenResource("manifest");
     sendJson(request, response, 200, {
-      release: "data-in-brief-public-2000-2025",
+      release: manifest.version,
+      data_cutoff: manifest.data_cutoff,
       events: await getOpenEvents(),
     });
     return;
   }
 
   if (url.pathname === "/api/open/sources") {
+    const manifest = await getOpenResource("manifest");
     sendJson(request, response, 200, {
-      release: "data-in-brief-public-2000-2025",
+      release: manifest.version,
+      data_cutoff: manifest.data_cutoff,
       sources: await getOpenSources(),
     });
+    return;
+  }
+
+  const openDownloadMatch = url.pathname.match(
+    /^\/api\/open\/download\/(csv|geojson)$/
+  );
+
+  if (openDownloadMatch) {
+    const download = await getOpenDownload(openDownloadMatch[1]);
+
+    sendDownload(request, response, {
+      content: download.content,
+      contentType: download.contentType,
+      filename: download.filename,
+      headers: {
+        "X-ARCUS-Data-Release": download.version,
+      },
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/open/resources") {
+    sendJson(request, response, 200, {
+      resources: getOpenResourceNames(),
+    });
+    return;
+  }
+
+  const openResourceMatch = url.pathname.match(
+    /^\/api\/open\/(manifest|taxonomy|data-dictionary|changelog|statistics|quality-audit|id-mapping)$/
+  );
+
+  if (openResourceMatch) {
+    sendJson(
+      request,
+      response,
+      200,
+      await getOpenResource(openResourceMatch[1])
+    );
     return;
   }
 

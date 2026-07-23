@@ -8,27 +8,321 @@
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
         {
-          "component_involved": null,
-          "evidence_level": "probable",
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.12",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.15",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
           "event_id": "B00.10.17",
           "failure_process": "bank_erosion_or_embankment_failure"
         },
         {
-          "component_involved": null,
-          "evidence_level": "probable",
-          "event_id": "B13.11.02",
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.18",
           "failure_process": "bank_erosion_or_embankment_failure"
         },
         {
-          "component_involved": null,
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.20",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "entire_structure",
           "evidence_level": "probable",
-          "event_id": "B13.11.03",
+          "event_id": "B00.10.24",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "probable",
+          "event_id": "B00.10.26",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.27",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.29",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.32",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.33",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.34",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.36",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.38",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.39",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B00.10.40",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "needs_review",
+          "event_id": "B00.10.41",
           "failure_process": "bank_erosion_or_embankment_failure"
         },
         {
           "component_involved": null,
           "evidence_level": "documented",
+          "event_id": "B00.10.42",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B02.07.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "probable",
+          "event_id": "B05.10.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B08.05.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.03.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.10.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B11.10.04",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B11.10.07",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B12.11.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "probable",
+          "event_id": "B13.11.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B13.11.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B15.10.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
           "event_id": "B16.03.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B16.09.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B16.11.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B16.11.05",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B16.11.06",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B17.09.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B18.10.05",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B20.10.01",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B20.10.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B20.10.09",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B20.10.13",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B20.10.17",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "abutment",
+          "evidence_level": "documented",
+          "event_id": "B20.10.19",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B20.11.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B20.11.04",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B20.12.02",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.06",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.07",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.09",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.10",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B23.05.03",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B23.05.04",
+          "failure_process": "bank_erosion_or_embankment_failure"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B23.05.05",
           "failure_process": "bank_erosion_or_embankment_failure"
         }
       ],
@@ -86,25 +380,55 @@
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
         {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B02.06.02",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "probable",
+          "event_id": "B02.06.04",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
           "component_involved": null,
           "evidence_level": "documented",
           "event_id": "B11.10.01",
           "failure_process": "debris_accumulation_or_obstruction"
         },
         {
-          "component_involved": null,
+          "component_involved": "entire_structure",
           "evidence_level": "documented",
           "event_id": "B11.10.06",
           "failure_process": "debris_flow_or_solid_transport"
         },
         {
-          "component_involved": null,
+          "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B18.10.06",
           "failure_process": "debris_accumulation_or_obstruction"
         },
         {
-          "component_involved": null,
+          "component_involved": "entire_structure",
+          "evidence_level": "probable",
+          "event_id": "B20.10.14",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "probable",
+          "event_id": "B20.10.15",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "probable",
+          "event_id": "B20.10.16",
+          "failure_process": "debris_flow_or_solid_transport"
+        },
+        {
+          "component_involved": "entire_structure",
           "evidence_level": "documented",
           "event_id": "B24.06.01",
           "failure_process": "debris_flow_or_solid_transport"
@@ -172,49 +496,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B00.10.19",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.20",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.37",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B00.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.04",
           "failure_process": null
         },
         {
@@ -226,31 +508,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B02.07.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B02.07.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B03.01.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B03.08.01",
           "failure_process": null
         },
         {
@@ -268,31 +526,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B05.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B05.10.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B06.09.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B08.05.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B08.10.01",
           "failure_process": null
         },
         {
@@ -304,223 +538,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B08.12.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B09.01.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B10.01.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B10.03.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B10.06.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B10.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.01.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.03.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.03.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.03.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.07",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.10.08",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.11.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B12.11.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B12.11.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B12.11.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.03.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.11.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.11.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B13.11.06",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.11.07",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.12.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.05.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.08.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.09.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.11.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B14.11.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B15.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B15.10.02",
           "failure_process": null
         },
         {
@@ -530,249 +548,15 @@
           "failure_process": null
         },
         {
-          "component_involved": null,
+          "component_involved": "entire_structure",
           "evidence_level": "unspecified",
-          "event_id": "B15.10.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B15.10.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B16.09.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B16.11.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B16.11.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B17.06.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B17.09.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.02.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.02.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.10.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.10.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B19.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.05.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.06",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.07",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.08",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.09",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.10",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.11.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.12.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B21.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.06",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.07",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.08",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.09",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B22.09.10",
+          "event_id": "B20.10.18",
           "failure_process": null
         },
         {
           "component_involved": null,
           "evidence_level": "unspecified",
           "event_id": "B22.12.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B23.05.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B23.05.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B23.05.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B23.05.06",
           "failure_process": null
         },
         {
@@ -896,9 +680,27 @@
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
         {
-          "component_involved": null,
+          "component_involved": "approach_embankment",
+          "evidence_level": "documented",
+          "event_id": "B08.10.01",
+          "failure_process": "other_documented_hydraulic_process"
+        },
+        {
+          "component_involved": "multiple_components",
           "evidence_level": "documented",
           "event_id": "B13.02.01",
+          "failure_process": "other_documented_hydraulic_process"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B15.10.05",
+          "failure_process": "other_documented_hydraulic_process"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "documented",
+          "event_id": "B20.10.06",
           "failure_process": "other_documented_hydraulic_process"
         }
       ],
@@ -956,45 +758,195 @@
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
         {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "probable",
+          "event_id": "B00.10.05",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
           "component_involved": null,
+          "evidence_level": "probable",
+          "event_id": "B00.10.11",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B00.10.19",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B00.10.25",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B00.10.37",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B00.10.43",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "probable",
+          "event_id": "B02.06.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B02.06.03",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "documented",
+          "event_id": "B02.06.05",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B02.06.06",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "documented",
+          "event_id": "B03.08.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B05.10.02",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
           "evidence_level": "probable",
           "event_id": "B09.04.04",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.10.02",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.10.05",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
           "evidence_level": "probable",
           "event_id": "B11.11.03",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B13.11.04",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B14.10.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B14.11.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
           "evidence_level": "probable",
           "event_id": "B15.09.01",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "deck_or_superstructure",
           "evidence_level": "probable",
           "event_id": "B16.11.02",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "entire_structure",
           "evidence_level": "probable",
           "event_id": "B17.09.01",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B18.02.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
           "evidence_level": "probable",
           "event_id": "B18.10.02",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
         {
-          "component_involved": null,
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "probable",
+          "event_id": "B18.10.03",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B18.10.04",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "entire_structure",
           "evidence_level": "probable",
           "event_id": "B19.12.01",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B20.10.02",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "needs_review",
+          "event_id": "B20.10.07",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.03",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "probable",
+          "event_id": "B22.09.04",
+          "failure_process": "overtopping_or_hydrodynamic_action"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "documented",
+          "event_id": "B22.09.08",
           "failure_process": "overtopping_or_hydrodynamic_action"
         }
       ],
@@ -1052,79 +1004,445 @@
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
         {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B00.10.06",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "probable",
+          "event_id": "B00.10.13",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B00.10.14",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B00.10.21",
+          "failure_process": "scour"
+        },
+        {
           "component_involved": null,
+          "evidence_level": "needs_review",
+          "event_id": "B00.10.28",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "entire_structure",
+          "evidence_level": "documented",
+          "event_id": "B00.10.30",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.31",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B00.10.35",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B02.05.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B02.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B03.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B04.10.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B08.05.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B08.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B08.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B09.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B09.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B10.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B10.03.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B10.06.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B10.10.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.01.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.03.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B11.03.03",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.03.04",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B11.03.05",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B11.10.08",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B11.11.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B12.11.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B12.11.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B12.11.04",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B13.03.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B13.10.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B13.10.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B13.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B13.11.05",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B13.11.07",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B13.12.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
-          "evidence_level": "unspecified",
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B13.12.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B14.05.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B14.08.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B14.09.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B14.11.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B14.11.03",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B15.10.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B15.10.04",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "needs_review",
           "event_id": "B15.11.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B16.11.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B17.01.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
-          "evidence_level": "unspecified",
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B17.06.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "deck_or_superstructure",
+          "evidence_level": "probable",
+          "event_id": "B18.02.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B18.10.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B18.10.07",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B19.10.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B20.05.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "needs_review",
           "event_id": "B20.10.04",
           "failure_process": "scour"
         },
         {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B20.10.05",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B20.10.08",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B20.10.10",
+          "failure_process": "scour"
+        },
+        {
           "component_involved": null,
+          "evidence_level": "documented",
+          "event_id": "B20.11.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B20.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B21.10.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B21.12.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "probable",
+          "event_id": "B22.09.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.02",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B22.09.05",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B23.01.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B23.05.01",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
-          "evidence_level": "probable",
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
           "event_id": "B23.05.02",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B23.05.06",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
+          "event_id": "B23.05.07",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "multiple_components",
           "evidence_level": "probable",
           "event_id": "B25.04.02",
           "failure_process": "scour"
         },
         {
-          "component_involved": null,
+          "component_involved": "pier_foundation",
           "evidence_level": "probable",
           "event_id": "B26.04.01",
           "failure_process": "scour"
@@ -1185,14 +1503,8 @@
       "hydraulic_intelligence_inputs": [
         {
           "component_involved": null,
-          "evidence_level": "unspecified",
+          "evidence_level": "needs_review",
           "event_id": "B00.10.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.02",
           "failure_process": null
         },
         {
@@ -1205,18 +1517,6 @@
           "component_involved": null,
           "evidence_level": "unspecified",
           "event_id": "B00.10.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.06",
           "failure_process": null
         },
         {
@@ -1246,193 +1546,19 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B00.10.11",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.12",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.13",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.14",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.15",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B00.10.16",
           "failure_process": null
         },
         {
           "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.18",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.21",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
+          "evidence_level": "needs_review",
           "event_id": "B00.10.22",
           "failure_process": null
         },
         {
           "component_involved": null,
-          "evidence_level": "unspecified",
+          "evidence_level": "needs_review",
           "event_id": "B00.10.23",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.24",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.25",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.26",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.27",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.28",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.29",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.30",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.31",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.32",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.33",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.34",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.35",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.36",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.38",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.39",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.40",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.41",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.42",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B00.10.43",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.05.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.05",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B02.06.06",
           "failure_process": null
         },
         {
@@ -1444,19 +1570,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B08.05.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B08.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B08.11.01",
           "failure_process": null
         },
         {
@@ -1468,67 +1582,7 @@
         {
           "component_involved": null,
           "evidence_level": "unspecified",
-          "event_id": "B09.12.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B11.03.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B13.10.02",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
           "event_id": "B15.03.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B16.11.01",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.10.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B18.10.07",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.10.13",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.11.03",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.11.04",
-          "failure_process": null
-        },
-        {
-          "component_involved": null,
-          "evidence_level": "unspecified",
-          "event_id": "B20.12.02",
           "failure_process": null
         },
         {

@@ -3,6 +3,10 @@ import path from "path";
 import csv from "csv-parser";
 import { readXlsxSheet } from "./lib/xlsx-reader.js";
 import {
+  buildOpenResearchRelease,
+  normalizeResearchDataset,
+} from "./lib/open-research-release.js";
+import {
   buildSourceReliabilityByEvent,
   buildTerritoryProfiles,
   buildVulnerabilityByEvent,
@@ -75,6 +79,11 @@ const professionalEventsPath = path.resolve(
   "professional-events.json"
 );
 
+const professionalSourcesPath = path.resolve(
+  professionalDataDir,
+  "professional-sources.json"
+);
+
 const professionalModelCardsPath = path.resolve(
   professionalDataDir,
   "model-cards.json"
@@ -113,6 +122,14 @@ const professionalAinopBridgeIndexPath = path.resolve(
 const professionalHydraulicIntelligenceAuditPath = path.resolve(
   professionalDataDir,
   "hydraulic-intelligence-audit.json"
+);
+
+const openReleaseRoot = path.resolve(
+  "private-data/open/releases"
+);
+
+const provinceGeoJsonPath = path.resolve(
+  "public/data/geo/italy-provinces.geojson"
 );
 
 /* ================================= */
@@ -270,7 +287,6 @@ function eventRowsToProcessed(rows) {
     [
       "event_id",
       "specific_cause",
-      ...HYDRAULIC_INTELLIGENCE_FIELDS,
     ],
     "EVENTS"
   );
@@ -297,7 +313,12 @@ function eventRowsToProcessed(rows) {
 
 function mergeHydraulicExcelFields(baseRows, excelRows) {
   const excelById = new Map(
-    excelRows.map((row) => [String(row.event_id || "").trim(), row])
+    excelRows.flatMap((row) => {
+      const researchId = String(row.event_id || "").trim();
+      const arcusId = researchId.replace(/^IT/, "B");
+
+      return [[researchId, row], [arcusId, row]];
+    })
   );
 
   return baseRows.map((row) => {
@@ -309,10 +330,14 @@ function mergeHydraulicExcelFields(baseRows, excelRows) {
 
     return {
       ...row,
-      hydraulic_trigger: excelRow.hydraulic_trigger,
-      hydraulic_failure_process: excelRow.hydraulic_failure_process,
-      hydraulic_component_involved: excelRow.hydraulic_component_involved,
-      hydraulic_evidence_level: excelRow.hydraulic_evidence_level,
+      failure_trigger: excelRow.failure_trigger,
+      failure_process: excelRow.failure_process,
+      component_involved: excelRow.component_involved,
+      failure_cause_evidence: excelRow.failure_cause_evidence,
+      hydraulic_trigger: excelRow.failure_trigger,
+      hydraulic_failure_process: excelRow.failure_process,
+      hydraulic_component_involved: excelRow.component_involved,
+      hydraulic_evidence_level: excelRow.failure_cause_evidence,
     };
   });
 }
@@ -330,7 +355,7 @@ function uniqueSorted(values) {
     );
 }
 
-function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
+function buildHydraulicIntelligenceAudit(rawRows, processedRows, normalizationWarnings = []) {
   const processedById = new Map(
     processedRows.map((event) => [event.event_id, event])
   );
@@ -340,11 +365,15 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
   const nonHydraulicRows = rawRows.filter(
     (row) => String(row.specific_cause || "").trim() !== "Hydraulic"
   );
-  const warnings = processedRows.flatMap(
-    (event) => event.hydraulic_intelligence_warnings || []
+  const warnings = normalizationWarnings.filter(
+    (warning) => ![
+      "invalid_source_url_preserved_as_reference",
+      "province_validation_warning",
+    ].includes(warning.code)
   );
+  const canonicalFields = HYDRAULIC_INTELLIGENCE_FIELDS.slice(0, 4);
   const fieldStats = Object.fromEntries(
-    HYDRAULIC_INTELLIGENCE_FIELDS.map((field) => {
+    canonicalFields.map((field) => {
       const values = rawRows.map((row) =>
         row[field] === undefined || row[field] === null
           ? null
@@ -389,7 +418,7 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
   );
   const nonHydraulicWithValues = nonHydraulicRows
     .filter((row) =>
-      HYDRAULIC_INTELLIGENCE_FIELDS.some(
+      canonicalFields.some(
         (field) =>
           row[field] !== undefined &&
           row[field] !== null &&
@@ -400,22 +429,22 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
   const hydraulicWithoutTrigger = hydraulicRows
     .filter(
       (row) =>
-        !row.hydraulic_trigger ||
-        String(row.hydraulic_trigger).trim() === ""
+        !row.failure_trigger ||
+        String(row.failure_trigger).trim() === ""
     )
     .map((row) => row.event_id);
   const processSpecificMissingEvidence = hydraulicRows
     .filter((row) => {
-      const process = String(row.hydraulic_failure_process || "").trim();
-      const evidence = String(row.hydraulic_evidence_level || "").trim();
+      const process = String(row.failure_process || "").trim();
+      const evidence = String(row.failure_cause_evidence || "").trim();
 
       return process && process !== "Unspecified" && !evidence;
     })
     .map((row) => row.event_id);
   const componentSpecificProcessUnspecified = hydraulicRows
     .filter((row) => {
-      const process = String(row.hydraulic_failure_process || "").trim();
-      const component = String(row.hydraulic_component_involved || "").trim();
+      const process = String(row.failure_process || "").trim();
+      const component = String(row.component_involved || "").trim();
 
       return component &&
         component !== "Unspecified" &&
@@ -454,6 +483,7 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
     },
     summary: {
       documented: evidenceCounts.documented || 0,
+      needs_review: evidenceCounts.needs_review || 0,
       probable: evidenceCounts.probable || 0,
       specific_component_available: processedRows.filter(
         (event) => event.hydraulic_intelligence?.component_involved
@@ -467,11 +497,15 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
       unspecified: evidenceCounts.unspecified || 0,
       validation_warnings: warnings.length,
     },
-    sample_processed_hydraulic_events: hydraulicRows.slice(0, 5).map((row) => ({
-      event_id: row.event_id,
-      hydraulic_intelligence:
-        processedById.get(row.event_id)?.hydraulic_intelligence || null,
-    })),
+    sample_processed_hydraulic_events: hydraulicRows.slice(0, 5).map((row) => {
+      const eventId = String(row.event_id || "").replace(/^IT/, "B");
+
+      return {
+        event_id: eventId,
+        hydraulic_intelligence:
+          processedById.get(eventId)?.hydraulic_intelligence || null,
+      };
+    }),
   };
 }
 
@@ -479,7 +513,7 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows) {
 /* LOAD EVENTS */
 /* ================================= */
 
-function loadEvents() {
+export function loadEvents() {
   if (fs.existsSync(masterResearchPath)) {
     const excelRows = readXlsxSheet(masterResearchPath, "EVENTS");
 
@@ -497,7 +531,7 @@ function loadEvents() {
         `Loaded ${events.length} events from EVENTS.csv with Hydraulic Intelligence from MASTER_RESEARCH.xlsx`
       );
 
-      return excelRows;
+      return rows;
     });
   }
 
@@ -518,7 +552,7 @@ function loadEvents() {
 /* LOAD SOURCES */
 /* ================================= */
 
-function loadSources() {
+export function loadSources() {
   if (fs.existsSync(masterResearchPath)) {
     readXlsxSheet(masterResearchPath, "SOURCES");
   }
@@ -603,7 +637,8 @@ function saveProfessionalApiData() {
   const hydraulicIntelligenceAudit =
     buildHydraulicIntelligenceAudit(
       saveProfessionalApiData.rawEventRows || [],
-      events
+      events,
+      saveProfessionalApiData.normalizationWarnings || []
     );
   const reliabilityByEvent =
     buildSourceReliabilityByEvent(
@@ -645,9 +680,26 @@ function saveProfessionalApiData() {
     score: profile.score,
     breakdown: profile.breakdown,
   }));
+  const warningsByEvent = (saveProfessionalApiData.normalizationWarnings || [])
+    .filter((warning) => warning.event_id)
+    .reduce((index, warning) => {
+      const eventId = String(warning.event_id).replace(/^IT/, "B");
+
+      index[eventId] = index[eventId] || [];
+      index[eventId].push({
+        ...warning,
+        event_id: eventId,
+        research_event_id: String(warning.event_id).startsWith("IT")
+          ? warning.event_id
+          : null,
+      });
+      return index;
+    }, {});
   const professionalEvents = events.map(
     (event) => ({
       ...event,
+      professional_warnings:
+        warningsByEvent[event.event_id] || [],
       reliability:
         reliabilityByEvent[event.event_id],
       vulnerability:
@@ -664,6 +716,12 @@ function saveProfessionalApiData() {
           "Curated bridge-collapse events enriched with reliability and vulnerability models.",
         access: "controlled_professional_workflow",
         resource: "professional_events",
+      },
+      {
+        description:
+          "Normalized Professional live source registry with lossless URL/reference handling.",
+        access: "controlled_professional_workflow",
+        resource: "professional_sources",
       },
       {
         description:
@@ -724,6 +782,12 @@ function saveProfessionalApiData() {
           "Audit and taxonomy coverage for curated Hydraulic Intelligence outcome features.",
         access: "controlled_professional_workflow",
         resource: "hydraulic_intelligence_audit",
+      },
+      {
+        description:
+          "Professional analogue retrieval, historical outcome summaries and mitigation evidence workbench.",
+        access: "controlled_professional_workflow",
+        resource: "collapse_intelligence",
       },
     ],
   };
@@ -1020,9 +1084,9 @@ function saveProfessionalApiData() {
     specific_cause:
       "Specific ARCUS failure mechanism classification.",
     hydraulic_intelligence:
-      "Professional-only normalized outcome features for Hydraulic events, including trigger, failure process, component and evidence level.",
+      "Normalized historical outcome features for Hydraulic events, including trigger, failure process, component and evidence level; excluded from scoring and retrieval inputs.",
     hydraulic_intelligence_warnings:
-      "Professional-only semantic validation warnings produced during hydraulic-intelligence normalization.",
+      "Internal semantic validation warnings produced during hydraulic-intelligence normalization.",
     structural_type:
       "Bridge structural typology.",
     triggered:
@@ -1121,6 +1185,11 @@ function saveProfessionalApiData() {
         professionalEvents
       ),
       buildDatasetDictionary(
+        "professional_sources",
+        "Professional normalized sources",
+        sources
+      ),
+      buildDatasetDictionary(
         "event_reliability",
         "Event reliability model output",
         reliability
@@ -1202,6 +1271,8 @@ function saveProfessionalApiData() {
       regions: regionProfiles.length,
       professional_events:
         professionalEvents.length,
+      professional_sources:
+        sources.length,
     },
     checks: [
       {
@@ -1443,6 +1514,13 @@ function saveProfessionalApiData() {
     }
   );
   writeJson(
+    professionalSourcesPath,
+    {
+      generated_at: generatedAt,
+      sources,
+    }
+  );
+  writeJson(
     professionalModelCardsPath,
     modelCards
   );
@@ -1497,10 +1575,34 @@ async function buildData() {
       "Starting ARCUS data build..."
     );
 
-    saveProfessionalApiData.rawEventRows =
-      await loadEvents();
+    const normalizedResearch = normalizeResearchDataset({
+      legacyEventsPath: outputEventsPath,
+      masterResearchPath,
+      provinceGeoJsonPath,
+    });
 
-    await loadSources();
+    events.push(...normalizedResearch.events);
+    sources.push(...normalizedResearch.sources);
+    saveProfessionalApiData.rawEventRows =
+      normalizedResearch.eventRows;
+    saveProfessionalApiData.normalizationWarnings =
+      normalizedResearch.warnings;
+
+    console.log(
+      `Loaded Professional live dataset from MASTER_RESEARCH.xlsx: ${events.length} events, ${sources.length} sources`
+    );
+
+    const openRelease = buildOpenResearchRelease({
+      legacyEventsPath: outputEventsPath,
+      masterResearchPath,
+      normalizedData: normalizedResearch,
+      outputRoot: openReleaseRoot,
+      provinceGeoJsonPath,
+    });
+
+    console.log(
+      `Open Research release ${openRelease.manifest.version}: ${openRelease.events.length} events, ${openRelease.sources.length} sources`
+    );
 
     saveJson();
 
@@ -1516,6 +1618,7 @@ async function buildData() {
       "Build failed:",
       error
     );
+    process.exitCode = 1;
   }
 }
 

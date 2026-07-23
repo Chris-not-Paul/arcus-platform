@@ -14,6 +14,11 @@ const outputPath = path.join(
   "landslide-validation",
   "live-results.json"
 );
+const describeFeatureTypeUrl =
+  "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows" +
+  "?service=WFS&version=2.0.0&request=DescribeFeatureType" +
+  "&typeNames=idrogeo%3Apericolosita_frane";
+const MAX_RESPONSE_SIZE_BYTES = 16 * 1024;
 
 const cases = [
   {
@@ -73,6 +78,8 @@ function compactResult(testCase, result) {
     matched_classes: result.matched_hazard_classes || [],
     name: testCase.name,
     overall_status: result.status,
+    assessment_complete: result.assessment_complete,
+    decision_status: result.decision_status,
     p1: {
       feature_count: layer.feature_count ?? null,
       intersects: matched.has("P1"),
@@ -102,6 +109,8 @@ function compactResult(testCase, result) {
       intersects: layer.intersects ?? null,
       layer: layer.layer || null,
       request_url: layer.request?.url || null,
+      response_size_bytes: layer.response_size_bytes ?? null,
+      duration_ms: layer.duration_ms ?? null,
       status: layer.status || null,
     },
   };
@@ -111,15 +120,35 @@ function assertCase(testCase, result) {
   assert.equal(result.normalized_score, null);
   assert.equal(result.source?.source_dataset_version, "5.0");
   assert.equal(result.source?.source_reference_year, 2024);
+  assert.equal(result.assessment_complete, true);
+  assert.equal(
+    result.source?.query_method,
+    "server_side_point_intersection"
+  );
+  assert.equal(
+    result.layer_results?.[0]?.response_size_bytes <=
+      MAX_RESPONSE_SIZE_BYTES,
+    true
+  );
+  const requestUrl = new URL(result.layer_results?.[0]?.request?.url);
+
+  assert.equal(requestUrl.searchParams.get("bbox"), null);
+  assert.equal(requestUrl.searchParams.get("propertyName"), "cod_per_it");
+  assert.match(
+    requestUrl.searchParams.get("CQL_FILTER") || "",
+    /^INTERSECTS\(geom,SRID=4326;POINT\(/
+  );
 
   if (testCase.expected === null) {
     assert.equal(result.status, "no_intersection");
+    assert.equal(result.decision_status, "no_intersection");
     assert.equal(result.highest_hazard_class, null);
     assert.deepEqual(result.matched_hazard_classes, []);
     return;
   }
 
   assert.equal(result.status, "available");
+  assert.equal(result.decision_status, "available_complete");
 
   if (testCase.expected === "AA") {
     assert.equal(result.attention_area, true);
@@ -136,11 +165,24 @@ function assertCase(testCase, result) {
 }
 
 const results = [];
+const schemaResponse = await fetch(describeFeatureTypeUrl, {
+  headers: {
+    Accept: "application/xml, text/xml",
+  },
+});
+const schemaText = await schemaResponse.text();
+
+assert.equal(schemaResponse.ok, true);
+assert.match(schemaText, /name=["']geom["']/i);
+assert.match(schemaText, /name=["']cod_per_it["']/i);
 
 for (const testCase of cases) {
   const result = await queryIspraLandslideExposure({
     latitude: testCase.latitude,
     longitude: testCase.longitude,
+  }, {
+    bypassCache: true,
+    persistentCache: false,
   });
 
   assertCase(testCase, result);
@@ -153,6 +195,12 @@ fs.writeFileSync(
   `${JSON.stringify(
     {
       generated_at: new Date().toISOString(),
+      schema_probe: {
+        class_attribute: "cod_per_it",
+        geometry_attribute: "geom",
+        ok: true,
+        url: describeFeatureTypeUrl,
+      },
       results,
     },
     null,

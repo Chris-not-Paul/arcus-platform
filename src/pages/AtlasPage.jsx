@@ -6,6 +6,7 @@ import {
 
 import {
   Link,
+  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 
@@ -19,6 +20,8 @@ import extractYear from "../utils/extractYear";
 import taxonomyLabel from "../utils/taxonomyLabels";
 import {
   openEvents,
+  openDownloadUrls,
+  openManifest,
   openSources,
   professionalResource,
 } from "../utils/apiClient";
@@ -44,7 +47,7 @@ const hazardCauseLabels = {
   seismic: "Earthquake",
 };
 
-const PUBLIC_RELEASE_END_YEAR = 2025;
+const PUBLIC_RELEASE_END_YEAR = 2026;
 
 function enrichPublicHazardProfile(profile) {
   const publicHazards =
@@ -145,6 +148,7 @@ function downloadCsv(filename, headers, rows) {
 
 function AtlasPage() {
   const { language } = useLanguage();
+  const navigate = useNavigate();
   const [searchParams] =
     useSearchParams();
   const atlasMode =
@@ -192,11 +196,15 @@ function AtlasPage() {
     downloadCsv:
       language === "it"
         ? "CSV public release"
-        : "Public release CSV",
+         : "Public release CSV",
+    downloadGeoJson:
+      language === "it"
+        ? "GeoJSON public release"
+        : "Public release GeoJSON",
     researchCoverage:
       language === "it"
-        ? "Export limitato alla release citabile Data in Brief 2000-2025. Il database ARCUS live e gli indicatori Professional non sono esportabili in bulk dal layer Open."
-        : "Export limited to the citable Data in Brief 2000-2025 release. The ARCUS live evidence base and Professional indicators are not bulk-downloadable from the Open layer.",
+        ? "Release Open Research completa, versionata e citabile. Le frequenze descrivono il database storico e non sono probabilita di collasso."
+        : "Complete, versioned and citable Open Research release. Frequencies describe the historical database and are not collapse probabilities.",
     failureAtlas:
       language === "it"
         ? "Atlante dei cedimenti"
@@ -385,8 +393,19 @@ function AtlasPage() {
   const [sources, setSources] =
     useState([]);
 
+  const [openRelease, setOpenRelease] =
+    useState(null);
+
   const [causeFilter, setCauseFilter] =
     useState("All");
+
+  const [processFilter, setProcessFilter] = useState("All");
+  const [componentFilter, setComponentFilter] = useState("All");
+  const [evidenceFilter, setEvidenceFilter] = useState("All");
+  const [regionFilter, setRegionFilter] = useState("All");
+  const [provinceFilter, setProvinceFilter] = useState("All");
+  const [structureFilter, setStructureFilter] = useState("All");
+  const [materialFilter, setMaterialFilter] = useState("All");
 
   const [searchQuery, setSearchQuery] =
     useState("");
@@ -453,30 +472,99 @@ function AtlasPage() {
     : "voyager";
 
   useEffect(() => {
+    let cancelled = false;
 
-    openEvents()
-      .then((data) => {
+    Promise.resolve().then(() => {
+      if (!cancelled) {
+        setEvents([]);
+        setSources([]);
+        setOpenRelease(null);
+      }
+    });
 
-        const normalizedData =
-          data.map(normalizeEvent);
+    if (isEnhancedMode) {
+      professionalResource("professional-events")
+        .then((data) => {
+          if (!cancelled) {
+            setEvents((data.events || []).map(normalizeEvent));
+          }
+        })
+        .catch((error) => {
+          if (!cancelled) {
+            setEvents([]);
+          }
+          if (!cancelled && error.status === 401) {
+            navigate("/professional/login", { replace: true });
+          }
+        });
+      professionalResource("professional-sources")
+        .then((data) => {
+          if (!cancelled) {
+            setSources((Array.isArray(data) ? data : data.sources || []).map(normalizeSource));
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setSources([]);
+          }
+        });
+    } else {
+      openEvents()
+        .then((data) => {
+          if (!cancelled) {
+            setEvents(data.map(normalizeEvent));
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setEvents([]);
+          }
+        });
+      openSources()
+        .then((data) => {
+          if (!cancelled) {
+            setSources(data.map(normalizeSource));
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setSources([]);
+          }
+        });
+      openManifest()
+        .then((data) => {
+          if (!cancelled) {
+            setOpenRelease(data);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setOpenRelease(null);
+          }
+        });
+    }
 
-        setEvents(normalizedData);
-
-      });
-
-    openSources()
-      .then((data) =>
-        setSources(
-          data.map(normalizeSource)
-        )
-      );
-
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [isEnhancedMode, navigate]);
 
   useEffect(() => {
+    let cancelled = false;
 
     if (!isEnhancedMode) {
-      return;
+      Promise.resolve().then(() => {
+        if (!cancelled) {
+          setEventReliability({});
+          setEventVulnerability({});
+          setHazardExposurePreview(null);
+          setTerritoryProfiles([]);
+        }
+      });
+
+      return () => {
+        cancelled = true;
+      };
     }
 
     professionalResource("event-reliability")
@@ -487,9 +575,15 @@ function AtlasPage() {
           index[item.event_id] = item;
         });
 
-        setEventReliability(index);
+        if (!cancelled) {
+          setEventReliability(index);
+        }
       })
-      .catch(() => setEventReliability({}));
+      .catch(() => {
+        if (!cancelled) {
+          setEventReliability({});
+        }
+      });
 
     professionalResource("event-vulnerability")
       .then((data) => {
@@ -499,22 +593,43 @@ function AtlasPage() {
           index[item.event_id] = item;
         });
 
-        setEventVulnerability(index);
+        if (!cancelled) {
+          setEventVulnerability(index);
+        }
       })
-      .catch(() => setEventVulnerability({}));
+      .catch(() => {
+        if (!cancelled) {
+          setEventVulnerability({});
+        }
+      });
 
     professionalResource("hazard-exposure-preview")
-      .then(setHazardExposurePreview)
-      .catch(() => setHazardExposurePreview(null));
+      .then((data) => {
+        if (!cancelled) {
+          setHazardExposurePreview(data);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHazardExposurePreview(null);
+        }
+      });
 
     professionalResource("territory-profiles")
       .then((data) =>
-        setTerritoryProfiles(
+        !cancelled && setTerritoryProfiles(
           data.provinces || []
         )
       )
-      .catch(() => setTerritoryProfiles([]));
+      .catch(() => {
+        if (!cancelled) {
+          setTerritoryProfiles([]);
+        }
+      });
 
+    return () => {
+      cancelled = true;
+    };
   }, [isEnhancedMode]);
 
   /* ================================= */
@@ -522,19 +637,8 @@ function AtlasPage() {
   /* ================================= */
 
   const atlasEvents = useMemo(() => {
-    if (isEnhancedMode) {
-      return events;
-    }
-
-    return events.filter((event) => {
-      const eventYear = extractYear(event.date);
-
-      return (
-        eventYear &&
-        eventYear <= PUBLIC_RELEASE_END_YEAR
-      );
-    });
-  }, [events, isEnhancedMode]);
+    return events;
+  }, [events]);
 
   const minYear = useMemo(() => {
 
@@ -623,6 +727,19 @@ function AtlasPage() {
             event.collapse_severity ===
               severityFilter;
 
+          const processMatch = processFilter === "All" ||
+            (event.failure_process || "Unspecified") === processFilter;
+          const componentMatch = componentFilter === "All" ||
+            (event.component_involved || "Unspecified") === componentFilter;
+          const evidenceMatch = evidenceFilter === "All" ||
+            (event.failure_cause_evidence || "Unspecified") === evidenceFilter;
+          const regionMatch = regionFilter === "All" || event.region === regionFilter;
+          const provinceMatch = provinceFilter === "All" || event.province === provinceFilter;
+          const structureMatch = structureFilter === "All" ||
+            (event.structural_type || "Unspecified") === structureFilter;
+          const materialMatch = materialFilter === "All" ||
+            (event.material_type || "Unspecified") === materialFilter;
+
           const triggeredMatch =
             triggeredFilter === "All" ||
             String(event.triggered)
@@ -657,6 +774,13 @@ function AtlasPage() {
           return (
             causeMatch &&
             severityMatch &&
+            processMatch &&
+            componentMatch &&
+            evidenceMatch &&
+            regionMatch &&
+            provinceMatch &&
+            structureMatch &&
+            materialMatch &&
             triggeredMatch &&
             yearMatch &&
             searchMatch
@@ -669,6 +793,13 @@ function AtlasPage() {
       searchQuery,
       causeFilter,
       severityFilter,
+      processFilter,
+      componentFilter,
+      evidenceFilter,
+      regionFilter,
+      provinceFilter,
+      structureFilter,
+      materialFilter,
       triggeredFilter,
       activeYearFilter,
     ]);
@@ -677,6 +808,13 @@ function AtlasPage() {
     setSearchQuery("");
     setCauseFilter("All");
     setSeverityFilter("All");
+    setProcessFilter("All");
+    setComponentFilter("All");
+    setEvidenceFilter("All");
+    setRegionFilter("All");
+    setProvinceFilter("All");
+    setStructureFilter("All");
+    setMaterialFilter("All");
     setTriggeredFilter("All");
     setYearFilter(maxYear);
   };
@@ -730,14 +868,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: "Data in Brief public release 2000-2025",
+      release: openRelease?.version || "arcus-open-2026.1",
     }));
 
     downloadCsv(
-      `arcus-public-release-2000-${Math.min(
-        activeYearFilter,
-        PUBLIC_RELEASE_END_YEAR
-      )}.csv`,
+      `${openRelease?.version || "arcus-open-2026.1"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );
@@ -1005,6 +1140,34 @@ function AtlasPage() {
 
   ];
 
+  const valuesForFilter = (field) => [
+    "All",
+    ...new Set(
+      events.map((event) => event[field] || "Unspecified").sort()
+    ),
+  ];
+  const buildAdditionalFilter = (id, label, value, onChange, field) => ({
+    id,
+    label,
+    value,
+    onChange,
+    options: valuesForFilter(field).map((option) => ({
+      label: option === "All"
+        ? (language === "it" ? "Tutti" : "All")
+        : option,
+      value: option,
+    })),
+  });
+  const additionalFilters = [
+    buildAdditionalFilter("process", language === "it" ? "Processo" : "Process", processFilter, setProcessFilter, "failure_process"),
+    buildAdditionalFilter("component", language === "it" ? "Componente" : "Component", componentFilter, setComponentFilter, "component_involved"),
+    buildAdditionalFilter("evidence", language === "it" ? "Livello evidenza" : "Evidence level", evidenceFilter, setEvidenceFilter, "failure_cause_evidence"),
+    buildAdditionalFilter("region", language === "it" ? "Regione" : "Region", regionFilter, setRegionFilter, "region"),
+    buildAdditionalFilter("province", language === "it" ? "Provincia" : "Province", provinceFilter, setProvinceFilter, "province"),
+    buildAdditionalFilter("structure", language === "it" ? "Struttura" : "Structure", structureFilter, setStructureFilter, "structural_type"),
+    buildAdditionalFilter("material", language === "it" ? "Materiale" : "Material", materialFilter, setMaterialFilter, "material_type"),
+  ];
+
   const markerLegendItems =
     isEnhancedMode
       ? [
@@ -1167,6 +1330,12 @@ function AtlasPage() {
               >
                 {atlasText.downloadCsv}
               </button>
+              <a href={openDownloadUrls.csv} download>
+                {language === "it" ? "CSV completo" : "Complete CSV"}
+              </a>
+              <a href={openDownloadUrls.geojson} download>
+                {atlasText.downloadGeoJson}
+              </a>
             </div>
 
             <small>
@@ -1556,6 +1725,7 @@ function AtlasPage() {
         uniqueCauses={
           uniqueCauses
         }
+        additionalFilters={additionalFilters}
       />
 
       {/* ================================= */}

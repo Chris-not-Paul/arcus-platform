@@ -551,6 +551,22 @@ function AnalyticsPage() {
       "specific_cause"
     );
 
+    const hydraulicEvents = events.filter(
+      (event) => event.specific_cause === "Hydraulic"
+    );
+    const processes = countBy(
+      hydraulicEvents,
+      (event) => event.failure_process || "Unspecified"
+    );
+    const components = countBy(
+      hydraulicEvents,
+      (event) => event.component_involved || "Unspecified"
+    );
+    const evidenceLevels = countBy(
+      hydraulicEvents,
+      (event) => event.failure_cause_evidence || "Unspecified"
+    );
+
     const regions = countBy(
       events,
       "region"
@@ -639,6 +655,7 @@ function AnalyticsPage() {
     return {
       causes,
       confidence,
+      components,
       destinationUse,
       exactLocations,
       fatalEvents: events.filter(
@@ -652,6 +669,7 @@ function AnalyticsPage() {
       maxYear,
       minYear,
       partialCollapse,
+      processes,
       periods: Object.entries(periodMap),
       regions,
       sourceRoles,
@@ -660,6 +678,10 @@ function AnalyticsPage() {
       totalEvents,
       totalSources,
       triggeredEvents,
+      evidenceLevels,
+      hydraulicSampleSize: hydraulicEvents.length,
+      missingProcess: hydraulicEvents.filter((event) => !event.failure_process).length,
+      missingComponent: hydraulicEvents.filter((event) => !event.component_involved).length,
       victims: sumBy(
         events,
         (event) => event.victims
@@ -970,6 +992,40 @@ function AnalyticsPage() {
 
               <p>
                 {copy.severityNote}
+              </p>
+            </div>
+          </div>
+
+          <div className="analytics-panel-grid three">
+            <div className="analytics-panel">
+              <h3>{language === "it" ? "Processi osservati" : "Observed processes"}</h3>
+              <AnalyticsBarList
+                items={analytics.processes}
+                total={analytics.hydraulicSampleSize}
+                label={copy.events}
+              />
+              <p>{analytics.missingProcess} {language === "it" ? "record senza processo specifico" : "records without a specific process"}</p>
+            </div>
+            <div className="analytics-panel">
+              <h3>{language === "it" ? "Componenti coinvolte" : "Components involved"}</h3>
+              <AnalyticsBarList
+                items={analytics.components}
+                total={analytics.hydraulicSampleSize}
+                label={copy.events}
+              />
+              <p>{analytics.missingComponent} {language === "it" ? "record senza componente specifica" : "records without a specific component"}</p>
+            </div>
+            <div className="analytics-panel">
+              <h3>{language === "it" ? "Livello di evidenza" : "Evidence level"}</h3>
+              <AnalyticsBarList
+                items={analytics.evidenceLevels}
+                total={analytics.hydraulicSampleSize}
+                label={copy.events}
+              />
+              <p>
+                n={analytics.hydraulicSampleSize}. {language === "it"
+                  ? "Frequenze osservate nel database, non probabilita di collasso."
+                  : "Observed database frequencies, not collapse probabilities."}
               </p>
             </div>
           </div>

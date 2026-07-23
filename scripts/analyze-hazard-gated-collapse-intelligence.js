@@ -10,6 +10,7 @@ import {
   buildFailurePatternTaxonomy,
   causeFamilyForEvent,
 } from "./analyze-collapse-intelligence.js";
+import { readProfessionalDataset } from "./lib/professional-dataset.js";
 import {
   HYDRAULIC_MATCHER_BLOCKED_FIELDS,
 } from "../src/utils/hydraulicIntelligence.js";
@@ -1703,8 +1704,7 @@ export function buildHazardGatedCollapseIntelligence({
   expertReviewPath = EXPERT_REVIEW_PATH,
   validationPath = VALIDATION_PATH,
 } = {}) {
-  const events = readJson(path.join(ROOT, "private-data", "processed", "events.json"), []);
-  const sources = readJson(path.join(ROOT, "private-data", "processed", "sources.json"), []);
+  const { events, sources } = readProfessionalDataset(ROOT);
   const ainop = readJson(path.join(ROOT, "private-data", "professional", "ainop-bridge-index.json"), { provinces: [] });
   const signaturesPayload = readJson(path.join(OUTPUT_DIR, "collapse-hazard-signatures.json"), { signatures: [] });
   const manifest = readJson(path.join(OUTPUT_DIR, "collapse-hazard-signatures-manifest.json"), {});

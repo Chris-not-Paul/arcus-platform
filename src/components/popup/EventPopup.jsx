@@ -69,6 +69,11 @@ function EventPopup({
     eventDriven: it ? "Evento innescato" : "Event-driven",
     fatalities: it ? "Vittime" : "Fatalities",
     infrastructureUse: it ? "Uso infrastrutturale" : "Infrastructure Use",
+    trigger: it ? "Trigger storico" : "Historical trigger",
+    failureProcess: it ? "Processo osservato" : "Observed process",
+    componentInvolved: it ? "Componente coinvolta" : "Component involved",
+    evidenceLevel: it ? "Livello di evidenza" : "Evidence level",
+    locationQuality: it ? "Qualita localizzazione" : "Location quality",
     material: it ? "Materiale" : "Material",
     na: it ? "N/D" : "N/A",
     noSources: it
@@ -144,6 +149,13 @@ function EventPopup({
       label: text.crossing,
       value: event.bridge_crossing_name,
     },
+  ].filter((item) => item.value);
+  const outcomeItems = [
+    { label: text.trigger, value: event.failure_trigger || event.hydraulic_intelligence?.trigger },
+    { label: text.failureProcess, value: event.failure_process || event.hydraulic_intelligence?.failure_process },
+    { label: text.componentInvolved, value: event.component_involved || event.hydraulic_intelligence?.component_involved },
+    { label: text.evidenceLevel, value: event.failure_cause_evidence || event.hydraulic_intelligence?.evidence_level },
+    { label: text.locationQuality, value: event.province_validation_status || (event.exact_location ? "exact" : "approximate") },
   ].filter((item) => item.value);
 
   const hazardLabel =
@@ -290,6 +302,22 @@ function EventPopup({
         </section>
       )}
 
+      {outcomeItems.length > 0 && (
+        <section className="arcus-event-profile arcus-event-outcomes">
+          {outcomeItems.map((item) => (
+            <div key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+          <p>
+            {it
+              ? "Outcome storico documentato: non e una previsione per altri ponti."
+              : "Documented historical outcome: this is not a prediction for other bridges."}
+          </p>
+        </section>
+      )}
+
       <section className="arcus-event-sources">
         <div className="arcus-event-sources-label">
           <span>{text.sources}</span>
@@ -305,7 +333,7 @@ function EventPopup({
               const content = (
                 <>
                   <span className="arcus-event-source-title">
-                    {source.source_title || source.source_url}
+                    {source.source_title || source.source_reference || source.source_url}
                   </span>
                   <span className="arcus-event-source-meta">
                     <strong>{sourceHost(source)}</strong>

@@ -1,6 +1,6 @@
 # ARCUS Professional - ISPRA PAI Landslide Exposure Validation
 
-Date: 2026-07-14
+Date: 2026-07-23
 
 Scope: Professional Path 01 official landslide exposure, live ISPRA WFS validation. The provider is implemented in shadow mode and does not assign a normalized score.
 
@@ -9,8 +9,8 @@ Scope: Professional Path 01 official landslide exposure, live ISPRA WFS validati
 ```text
 Validated project point
 -> ISPRA IdroGEO WFS `idrogeo:pericolosita_frane`
--> GeoJSON candidate features
--> ARCUS local point-in-polygon
+-> exact ECQL `INTERSECTS(geom, SRID=4326;POINT(lon lat))`
+-> property-only GeoJSON response (`cod_per_it`, polygons omitted)
 -> read `cod_per_it`
 -> normalize classes AA/P1/P2/P3/P4
 -> preserve matched classes
@@ -18,7 +18,11 @@ Validated project point
 -> expose result in Path 01 UI/report/export metadata
 ```
 
-The provider version is `ispra-landslide-pai-wfs-v1`.
+The provider version is `ispra-landslide-pai-wfs-v2`.
+
+Before the canonical points are accepted, the live gate probes
+`DescribeFeatureType` and requires both `geom` and `cod_per_it`. The provider
+does not fall back to interpreting a source error as no intersection.
 
 ## Live Validation Matrix
 
@@ -41,14 +45,46 @@ docs/assets/landslide-validation/live-results.json
 
 ## Live Output Summary
 
-| Case | Status | Feature count | Intersects | Attention classes | Hazard classes | Normalized score |
-|------|--------|---------------|------------|-------------------|----------------|------------------|
-| AA | `available` | `1` | `true` | `AA` | none | `null` |
-| P1 | `available` | `2` | `true` | none | `P1` | `null` |
-| P2 | `available` | `5` | `true` | none | `P2` | `null` |
-| P3 | `available` | `5` | `true` | none | `P3` | `null` |
-| P4 | `available` | `1` | `true` | none | `P4` | `null` |
-| Torino | `no_intersection` | `0` | `false` | none | none | `null` |
+| Case | Status | Decision | Feature count | Response | Duration | Attention classes | Hazard classes |
+|------|--------|----------|---------------|----------|----------|-------------------|----------------|
+| AA | `available` | `available_complete` | `1` | `308 B` | `1509 ms` | `AA` | none |
+| P1 | `available` | `available_complete` | `1` | `309 B` | `1479 ms` | none | `P1` |
+| P2 | `available` | `available_complete` | `1` | `306 B` | `1462 ms` | none | `P2` |
+| P3 | `available` | `available_complete` | `1` | `307 B` | `1458 ms` | none | `P3` |
+| P4 | `available` | `available_complete` | `1` | `308 B` | `1385 ms` | none | `P4` |
+| Torino | `no_intersection` | `no_intersection` | `0` | `147 B` | `1418 ms` | none | none |
+
+Timings are the observations recorded by the live gate on 2026-07-23 and are
+not an SLA. All responses were below the 16 KiB guard.
+
+## Reliability And Completeness Contract
+
+Landslide v2 aligns the point provider with the reliability controls already
+validated for Hydraulic:
+
+- six-hour in-memory cache and in-flight request deduplication;
+- six-hour persistent current-observation cache, surviving backend restarts;
+- last-known-good context retained for up to 30 days;
+- stale observations never become a current hazard decision;
+- two bounded attempts with jitter for retryable transport/502/503/504 errors;
+- six-request remote concurrency bulkhead;
+- per-layer circuit breaker after three consecutive technical failures, with
+  a 30-second cooldown;
+- explicit `assessment_complete`, `decision_status` and `coverage`;
+- source provenance through `observation_mode`, `freshness_status`,
+  `observed_at`, `live_provider_status`, retry and circuit metadata.
+
+Only `available` and `no_intersection` are complete observations. A timeout,
+provider error, schema mismatch or open circuit returns
+`assessment_complete=false`, `decision_status=source_incomplete`, zero
+decision classes and, when present, a separately labelled stale
+`last_known_good` reference. This prevents missing data from being represented
+as absence of PAI hazard.
+
+Persistent observations are stored by default under
+`private-data/hazard/landslide-observations`; deployments can override this
+with `ARCUS_LANDSLIDE_OBSERVATION_DIR`. The operational status and metrics
+endpoints expose reachability, observation count and latest-observation age.
 
 ## WMS/WFS Comparison
 
@@ -71,7 +107,23 @@ Manual UI verification path:
 4. Run `Check point`.
 5. Confirm that `Project location`, derived province, `Official geospatial exposure`, matched classes, highest class, `queried_at`, Provincial Historical Context and report preview remain synchronized.
 
-The point result must be displayed as official ISPRA PAI landslide exposure and must not be merged into the current ARCUS final score.
+The point result displays completeness and observation provenance. The report
+preview carries the decision status, current/stale provenance and the explicit
+statement that the Landslide observation remains in shadow mode and does not
+modify the Final Priority Index.
+
+### Manual browser acceptance - 2026-07-23
+
+| Case | Derived province | ISPRA result | Provenance | UI/report result |
+|------|------------------|--------------|------------|------------------|
+| P4 `40.10005714, 16.00375000` | Potenza | `available`, `available_complete`, P4, complete | `live`, `current` | UI coherent; report template includes status, class, provenance and shadow-mode role |
+| Control `45.28970000, 7.94194000` | Torino | `no_intersection`, complete, zero PAI classes | `live`, `current` | UI coherent; no-intersection remains distinct from source unavailability |
+
+The browser showed no console errors after the acceptance run. A pre-existing
+duplicate React key in the shared footer (`Identity` and `Contact` both target
+`/about`) was observed during the first run and fixed minimally by including
+the link label in the key. No failed ARCUS API request was surfaced; both live
+point checks completed and populated all three hazard cards.
 
 ## Validation Command
 
@@ -79,4 +131,8 @@ The point result must be displayed as official ISPRA PAI landslide exposure and 
 npm run test:hazard:landslide:live
 ```
 
-Validated on 2026-07-14 against the live ISPRA IdroGEO WFS service.
+Validated on 2026-07-23 against the live ISPRA IdroGEO WFS service.
+
+Residual limitation: the persistent point store is not a national mirror of
+the ISPRA PAI dataset. During a total upstream outage, a previously unseen
+point remains `source_incomplete`.

@@ -2398,6 +2398,116 @@
   font-size: 14px;
 }
 
+.platform-mitigation-intelligence {
+  margin-top: 22px;
+  border-top: 1px solid rgba(243,239,232,0.10);
+}
+
+.platform-mitigation-intelligence > header,
+.platform-mitigation-intelligence > footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+}
+
+.platform-mitigation-intelligence > header span,
+.platform-mitigation-intelligence dt,
+.platform-mitigation-intelligence article span,
+.platform-mitigation-intelligence > footer span {
+  display: block;
+  color: var(--arcus-ivory-faint);
+  font-family: var(--arcus-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-mitigation-intelligence > header strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--arcus-ivory);
+  font-family: var(--arcus-font-display);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.18;
+}
+
+.platform-mitigation-intelligence > header em {
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  border: 1px solid rgba(110,133,141,0.34);
+  color: var(--arcus-steel);
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-mitigation-intelligence > header em[data-status="available"] {
+  border-color: rgba(196,144,64,0.46);
+  color: var(--arcus-bronze-soft);
+}
+
+.platform-mitigation-intelligence > header em[data-status="available_partial"],
+.platform-mitigation-intelligence > header em[data-status="limited_evidence_partial"] {
+  border-color: rgba(196,144,64,0.46);
+  color: var(--arcus-bronze-soft);
+}
+
+.platform-mitigation-intelligence > article {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.74fr) minmax(0, 1.26fr);
+  gap: 30px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(243,239,232,0.10);
+}
+
+.platform-mitigation-intelligence article strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--arcus-ivory);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.platform-mitigation-intelligence article p,
+.platform-mitigation-intelligence > p,
+.platform-mitigation-intelligence > footer p {
+  margin: 8px 0 0;
+  color: var(--arcus-ivory-dim);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.platform-mitigation-intelligence dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin: 0;
+}
+
+.platform-mitigation-intelligence dd {
+  margin: 6px 0 0;
+  color: var(--arcus-ivory-dim);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.platform-mitigation-intelligence > footer {
+  border-top: 1px solid rgba(243,239,232,0.10);
+}
+
+.platform-mitigation-intelligence > footer p {
+  max-width: 620px;
+  margin-top: 0;
+  text-align: right;
+}
+
 .platform-workflow-evidence {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -8151,6 +8261,21 @@
   .platform-map-selection-tools {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .platform-mitigation-intelligence > header,
+  .platform-mitigation-intelligence > footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .platform-mitigation-intelligence > article,
+  .platform-mitigation-intelligence dl {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-mitigation-intelligence > footer p {
+    text-align: left;
   }
 
   .platform-asset-detail,
