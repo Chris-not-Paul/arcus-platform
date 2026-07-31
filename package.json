@@ -11,6 +11,7 @@
     "build-data": "node scripts/build-data.js",
     "build:ainop-index": "node scripts/build-ainop-bridge-index.js",
     "build:collapse-hazard-signatures": "node scripts/build-collapse-hazard-signatures.js",
+    "audit:collapse-analogues": "node scripts/audit-collapse-analogue-readiness.js",
     "analyze:path01-methodology": "node scripts/analyze-path01-methodology.js",
     "analyze:collapse-intelligence": "node scripts/analyze-collapse-intelligence.js",
     "validate:collapse-intelligence": "node scripts/validate-collapse-analogues.js",

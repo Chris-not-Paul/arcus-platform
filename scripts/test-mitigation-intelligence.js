@@ -8,6 +8,9 @@ import {
   synchronizeMitigationProjectLocation,
 } from "../server/mitigationIntelligenceService.js";
 import {
+  buildNationalHazardAnalogueCohort,
+} from "../server/collapseAnalogueService.js";
+import {
   runValidation,
 } from "./validate-mitigation-intelligence.js";
 import {
@@ -91,10 +94,19 @@ const provinceFeatures = [
   },
 ];
 
-function build(payload = basePayload, fixtureEvents = events) {
+function build(
+  payload = basePayload,
+  fixtureEvents = events,
+  {
+    historicalSignatures = [],
+    signatures = [],
+  } = {}
+) {
   return buildMitigationIntelligence({
     events: fixtureEvents,
+    historicalSignatures,
     payload,
+    signatures,
     sources,
   });
 }
@@ -114,6 +126,156 @@ assert.equal(available.strategies[0].external_validation_required, true);
 assert.equal(available.forbidden_outputs.includes("final_priority_index_modification"), true);
 assert.equal(Object.hasOwn(available, "score"), false);
 assert.equal(Object.hasOwn(available, "final_priority_index"), false);
+assert.equal(
+  available.evidence_cohort.selection_mode,
+  "point_derived_province_fallback_until_national_signature_coverage_ready"
+);
+
+function currentSignature(
+  eventId,
+  {
+    hydraulicClass = "P2",
+    landslideClass = null,
+    pga = 0.145,
+  } = {}
+) {
+  return {
+    event_id: eventId,
+    hydraulic: {
+      highest_class: hydraulicClass,
+      matched_classes:
+        hydraulicClass === "P3"
+          ? ["P1", "P2", "P3"]
+          : hydraulicClass === "P2"
+            ? ["P1", "P2"]
+            : ["P1"],
+      status: "available",
+    },
+    landslide: landslideClass
+      ? {
+          attention_area: false,
+          highest_hazard_class: landslideClass,
+          matched_hazard_classes: [landslideClass],
+          status: "available",
+        }
+      : {
+          attention_area: false,
+          highest_hazard_class: null,
+          matched_hazard_classes: [],
+          status: "no_intersection",
+        },
+    seismic: {
+      pga_p50_g: pga,
+      status: "available",
+    },
+  };
+}
+
+const nationalSignatures = [
+  currentSignature("B01.01.01", { pga: 0.146 }),
+  currentSignature("B01.01.02", { pga: 0.151 }),
+  currentSignature("B01.01.03", {
+    hydraulicClass: "P1",
+    pga: 0.142,
+  }),
+  currentSignature("B01.01.04", {
+    hydraulicClass: "P3",
+    landslideClass: "P1",
+    pga: 0.19,
+  }),
+  currentSignature("B02.01.01", { pga: 0.14 }),
+];
+const historicalSignatures = [
+  {
+    event_id: "B02.01.01",
+    historical_at_event: {
+      classification_year: 2001,
+      source: {
+        title: "Authenticated historical fixture",
+      },
+      status: "available_documented",
+    },
+  },
+];
+const national = build(basePayload, events, {
+  historicalSignatures,
+  signatures: nationalSignatures,
+});
+
+assert.equal(
+  national.evidence_cohort.selection_mode,
+  "national_current_hazard_signature_fixed_before_outcome_synthesis"
+);
+assert.equal(national.evidence_cohort.analogue_retrieval.production_ready, true);
+assert.equal(
+  national.evidence_cohort.analogue_retrieval.retrieval_contract
+    .geography_filter,
+  "none_national_scope"
+);
+assert.deepEqual(
+  national.evidence_cohort.analogue_retrieval.retrieval_contract
+    .outcome_fields_used_for_selection,
+  []
+);
+assert.equal(
+  national.evidence_cohort.event_ids.includes("B02.01.01"),
+  true
+);
+assert.equal(
+  national.evidence_cohort.analogue_retrieval.analogues.find(
+    (item) => item.event.event_id === "B02.01.01"
+  ).temporal_evidence.historical_at_event.status,
+  "available_documented"
+);
+assert.equal(
+  national.evidence_cohort.analogue_retrieval.analogues.find(
+    (item) => item.event.event_id === "B01.01.01"
+  ).temporal_evidence.historical_at_event.status,
+  "not_available_not_reconstructed"
+);
+assert.equal(national.strategies[0].process, "scour");
+assert.equal(
+  national.strategies[0].applicability_conditions.some((item) =>
+    item.includes("national current-hazard analogue cohort")
+  ),
+  true
+);
+const nationalReportSummary = buildMitigationReportSummary(national);
+assert.equal(
+  nationalReportSummary.cohortText.includes("national analogues"),
+  true
+);
+assert.equal(
+  nationalReportSummary.cohortText.includes(
+    "Causes and processes are read after retrieval"
+  ),
+  true
+);
+
+const outcomeMutatedEvents = events.map((event) =>
+  event.event_id === "B02.01.01"
+    ? hydraulicEvent("B02.01.01", {
+        process: "debris_flow_or_solid_transport",
+        province: "Torino",
+      })
+    : event
+);
+const beforeOutcomeMutation = buildNationalHazardAnalogueCohort({
+  events,
+  historicalSignatures,
+  officialExposure: basePayload.official_exposure,
+  signatures: nationalSignatures,
+});
+const afterOutcomeMutation = buildNationalHazardAnalogueCohort({
+  events: outcomeMutatedEvents,
+  historicalSignatures,
+  officialExposure: basePayload.official_exposure,
+  signatures: nationalSignatures,
+});
+assert.deepEqual(
+  beforeOutcomeMutation.analogues.map((item) => item.event.event_id),
+  afterOutcomeMutation.analogues.map((item) => item.event.event_id)
+);
 
 const synchronized = synchronizeMitigationProjectLocation(
   {
@@ -293,6 +455,13 @@ assert.equal(
   limitedReportSummary.warningText.includes("do not modify the Final Priority Index"),
   true
 );
+assert.equal(
+  limitedReportSummary.cohortText.includes(
+    "controlled provincial fallback"
+  ),
+  true
+);
+assert.equal(limitedReportSummary.cohortText.includes("80%"), true);
 
 const abstainedReportSummary = buildMitigationReportSummary(noIntersection);
 assert.equal(abstainedReportSummary.status, "abstained");

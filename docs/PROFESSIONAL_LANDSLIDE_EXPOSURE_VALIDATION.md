@@ -136,3 +136,26 @@ Validated on 2026-07-23 against the live ISPRA IdroGEO WFS service.
 Residual limitation: the persistent point store is not a national mirror of
 the ISPRA PAI dataset. During a total upstream outage, a previously unseen
 point remains `source_incomplete`.
+
+### Path 01 nearby official context
+
+From 2026-07-30, when a complete point query falls outside PAI/AA polygons,
+Path 01 performs bounded WFS `DWITHIN` searches and reports the first nearby
+official PAI context with its search radius. The original point result is not
+rewritten: the nearby class is contextual evidence and is never attributed to
+the coordinate.
+
+The response records `point_intersection=false`,
+`distance_basis=within_search_radius_not_exact_distance` and
+`presentation_status=nearby_official_context`. Nearby classes remain in shadow
+mode and do not modify Mitigation Intelligence or the Final Priority Index.
+
+For the Torino control point `45.28970000, 7.94194000`, the live validation
+returned nearby P4 context within 5 km while preserving the official point
+outcome separately.
+
+The Path 01 presentation now separates the point outcome from territorial
+context. A radius of 25 km or more is labelled as wide-area context, while
+closer results are labelled nearby. Raw provider status and analysis mode are
+kept under collapsed technical details and the primary view explicitly states
+that the contextual PAI class is not assigned to the selected point.

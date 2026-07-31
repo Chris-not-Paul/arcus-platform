@@ -23,6 +23,9 @@ const professionalResources = new Map([
   ["event-vulnerability", "event-vulnerability.json"],
   ["territory-profiles", "territory-profiles.json"],
   ["collapse-intelligence", "collapse-intelligence/collapse-intelligence-analysis.json"],
+  ["collapse-hazard-signatures", "collapse-intelligence/collapse-hazard-signatures.json"],
+  ["collapse-analogue-readiness", "collapse-intelligence/collapse-analogue-readiness.json"],
+  ["historical-hazard-signatures", "collapse-intelligence/historical-hazard-signatures.json"],
 ]);
 
 const openResources = new Map([

@@ -92,6 +92,32 @@ await fs.writeFile(
   `${JSON.stringify({ sources: mitigationFixtureSources }, null, 2)}\n`,
   "utf8"
 );
+await fs.mkdir(
+  path.join(testDataDir, "professional", "collapse-intelligence"),
+  {
+    recursive: true,
+  }
+);
+await fs.writeFile(
+  path.join(
+    testDataDir,
+    "professional",
+    "collapse-intelligence",
+    "collapse-hazard-signatures.json"
+  ),
+  `${JSON.stringify({ signatures: [] }, null, 2)}\n`,
+  "utf8"
+);
+await fs.writeFile(
+  path.join(
+    testDataDir,
+    "professional",
+    "collapse-intelligence",
+    "historical-hazard-signatures.json"
+  ),
+  `${JSON.stringify({ signatures: [] }, null, 2)}\n`,
+  "utf8"
+);
 
 async function json(response) {
   const payload = await response.json();

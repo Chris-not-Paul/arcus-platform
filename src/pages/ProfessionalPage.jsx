@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 
 import CollapseMap from "../components/map/CollapseMap";
+import PointHazardInspector from "../components/hazard/PointHazardInspector";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
@@ -130,6 +131,121 @@ function evidenceGradeFromScore(value) {
   }
 
   return "D";
+}
+
+function hasNearbyOfficialContext(exposure) {
+  return (
+    exposure?.nearby_context?.status === "available" &&
+    Array.isArray(exposure.nearby_context.classes) &&
+    exposure.nearby_context.classes.length > 0
+  );
+}
+
+function nearbyContextScope(radiusKm, language) {
+  if (Number(radiusKm) >= 25) {
+    return language === "it" ? "di area vasta" : "wide-area";
+  }
+
+  return language === "it" ? "vicino" : "nearby";
+}
+
+function nearbyContextLabel(exposure, language) {
+  if (!hasNearbyOfficialContext(exposure)) {
+    return "";
+  }
+
+  const nearby = exposure.nearby_context;
+  const classes = nearby.classes.join(", ");
+  const scope = nearbyContextScope(nearby.search_radius_km, language);
+
+  return language === "it"
+    ? `Contesto ufficiale ${scope}: ${classes} entro ${nearby.search_radius_km} km; non attribuito al punto.`
+    : `${scope === "wide-area" ? "Wide-area" : "Nearby"} official context: ${classes} within ${nearby.search_radius_km} km; not assigned to the point.`;
+}
+
+function exposureStatusLabel(exposure, language) {
+  if (!exposure) {
+    return language === "it"
+      ? "In attesa del punto progetto"
+      : "Awaiting project point";
+  }
+
+  if (hasNearbyOfficialContext(exposure)) {
+    return language === "it"
+      ? "Interrogazione completata; contesto territoriale disponibile"
+      : "Query completed; territorial context available";
+  }
+
+  const labels =
+    language === "it"
+      ? {
+          available: "Dato ufficiale disponibile",
+          invalid_coordinates: "Coordinate non valide",
+          loading: "Interrogazione in corso",
+          no_intersection:
+            "Interrogazione completata; nessuna classe al punto",
+          partial: "Risposta ufficiale parziale",
+          provider_exception: "Errore del provider",
+          request_timeout: "Timeout del provider",
+          service_unreachable: "Provider temporaneamente non raggiungibile",
+          source_unavailable: "Sorgente temporaneamente non disponibile",
+        }
+      : {
+          available: "Official data available",
+          invalid_coordinates: "Invalid coordinates",
+          loading: "Query in progress",
+          no_intersection: "Query completed; no class at the point",
+          partial: "Partial official response",
+          provider_exception: "Provider error",
+          request_timeout: "Provider timeout",
+          service_unreachable: "Provider temporarily unreachable",
+          source_unavailable: "Source temporarily unavailable",
+        };
+
+  return labels[exposure.status] || String(exposure.status || "-").replaceAll("_", " ");
+}
+
+function assessmentStatusLabel(exposure, language) {
+  if (!exposure) {
+    return "-";
+  }
+
+  if (exposure.assessment_complete === false) {
+    return language === "it" ? "incompleta" : "incomplete";
+  }
+
+  return language === "it" ? "completa" : "complete";
+}
+
+function liveProviderStatusLabel(exposure, language) {
+  const status = exposure?.source?.live_provider_status;
+
+  if (
+    status === "no_intersection" ||
+    (hasNearbyOfficialContext(exposure) && exposure?.assessment_complete !== false)
+  ) {
+    return language === "it"
+      ? "Interrogazione completata"
+      : "Query completed";
+  }
+
+  return String(status || "-").replaceAll("_", " ");
+}
+
+function analysisModeLabel(exposure, language) {
+  if (hasNearbyOfficialContext(exposure)) {
+    return language === "it"
+      ? "Verifica puntuale + contesto territoriale"
+      : "Point check + territorial context";
+  }
+
+  if (exposure?.source?.analysis_mode === "point_intersection") {
+    return language === "it"
+      ? "Verifica puntuale dei perimetri"
+      : "Point perimeter check";
+  }
+
+  return String(exposure?.source?.analysis_mode || "-").replaceAll("_", " ");
 }
 
 export default function ProfessionalPage() {
@@ -3763,38 +3879,96 @@ export default function ProfessionalPage() {
     const mitigationStatus = String(
       path01MitigationIntelligence?.status || "not available"
     ).replaceAll("_", " ");
+    const mitigationUsesNationalAnalogues =
+      mitigationEvidence?.analogue_retrieval?.production_ready === true;
     const mitigationEvidenceSummary = mitigationEvidence
       ? it
-        ? `${mitigationEvidence.event_count || 0} casi idraulici nel contesto provinciale; ${mitigationEvidence.effective_evidence_count || 0} casi effettivi pesati; ${mitigationEvidence.linked_source_count || 0} fonti collegate.`
-        : `${mitigationEvidence.event_count || 0} hydraulic cases in the provincial context; ${mitigationEvidence.effective_evidence_count || 0} effective weighted cases; ${mitigationEvidence.linked_source_count || 0} linked sources.`
+        ? `${mitigationEvidence.event_count || 0} casi idraulici nella ${mitigationUsesNationalAnalogues ? "coorte nazionale di analoghi" : "coorte provinciale di fallback"}; ${mitigationEvidence.effective_evidence_count || 0} casi effettivi pesati; ${mitigationEvidence.linked_source_count || 0} fonti collegate.`
+        : `${mitigationEvidence.event_count || 0} hydraulic cases in the ${mitigationUsesNationalAnalogues ? "national analogue cohort" : "provincial fallback cohort"}; ${mitigationEvidence.effective_evidence_count || 0} effective weighted cases; ${mitigationEvidence.linked_source_count || 0} linked sources.`
       : it
         ? "Sintesi di evidenza non disponibile."
         : "Evidence synthesis unavailable.";
+    const mitigationAnalogueRetrieval =
+      mitigationEvidence?.analogue_retrieval;
+    const mitigationSignatureCoverage = Math.round(
+      Number(
+        mitigationAnalogueRetrieval
+          ?.hydraulic_signature_coverage_ratio || 0
+      ) * 100
+    );
+    const mitigationCohortSummary = mitigationUsesNationalAnalogues
+      ? it
+        ? `${mitigationAnalogueRetrieval?.analogues?.length || 0} analoghi selezionati sull'intero database nazionale tramite la firma hazard ufficiale attuale. La provincia derivata dal punto resta contesto territoriale e non e un filtro di retrieval.`
+        : `${mitigationAnalogueRetrieval?.analogues?.length || 0} analogues selected across the national database by current official hazard signature. The point-derived province remains territorial context and is not a retrieval filter.`
+      : it
+        ? `Fallback provinciale controllato: copertura delle firme idrauliche ufficiali attuali ${mitigationSignatureCoverage}% (soglia di attivazione nazionale 80%).`
+        : `Controlled provincial fallback: current official hydraulic-signature coverage ${mitigationSignatureCoverage}% (80% national activation threshold).`;
+    const mitigationTemporalCaveat = it
+      ? "La firma ufficiale attuale descrive comparabilita presente, non ricostruisce retroattivamente la classe all'anno del collasso e non dimostra causalita. La classe storica e mostrata solo se proviene da una fonte datata autenticata; trigger e processi sono letti soltanto dopo avere fissato la coorte."
+      : "The current official signature describes present-day comparability; it neither reconstructs the class at the collapse year nor proves causality. A historical class is shown only from an authenticated dated source; triggers and processes are read only after the cohort is fixed.";
+    const mitigationAnalogueRows =
+      mitigationUsesNationalAnalogues
+        ? (mitigationAnalogueRetrieval?.analogues || [])
+          .slice(0, 5)
+          .map((analogue) => {
+            const currentHydraulic =
+              analogue.current_official_signature?.hydraulic;
+            const historical =
+              analogue.temporal_evidence?.historical_at_event;
+            const pgaDelta =
+              analogue.retrieval_comparison?.seismic?.pga_delta_g;
+
+            return `<tr>
+              <td>${escapeHtml(analogue.retrieval_rank)}</td>
+              <td>${escapeHtml(analogue.event?.event_id || "-")}</td>
+              <td>${escapeHtml([analogue.event?.municipality, analogue.event?.province].filter(Boolean).join(", ") || "-")}</td>
+              <td>${escapeHtml(currentHydraulic?.highest_class || currentHydraulic?.matched_classes?.join(", ") || "-")}</td>
+              <td>${escapeHtml(pgaDelta === null || pgaDelta === undefined ? "-" : Number(pgaDelta).toFixed(5))}</td>
+              <td>${escapeHtml(String(historical?.status || "not_available_not_reconstructed").replaceAll("_", " "))}</td>
+            </tr>`;
+          })
+          .join("")
+        : "";
     const officialPointCoordinates = projectLocation.validated
       ? `${formatExposureCoordinate(projectLocation.latitude)}, ${formatExposureCoordinate(projectLocation.longitude)}`
       : "-";
-    const officialHydraulicClasses =
-      path01HydraulicExposure?.matched_classes?.join(", ") || "-";
-    const officialLandslideClasses = [
+    const officialHydraulicPointOutcome =
+      path01HydraulicExposure?.matched_classes?.length
+        ? `${it ? "Classi al punto" : "Classes at point"}: ${path01HydraulicExposure.matched_classes.join(", ")}`
+        : it
+          ? "Nessuna classe idraulica ISPRA interseca il punto"
+          : "No ISPRA hydraulic class intersects the point";
+    const officialHydraulicNearbyContext =
+      nearbyContextLabel(path01HydraulicExposure, language) ||
+      (it ? "Nessun contesto separato riportato" : "No separate context reported");
+    const officialLandslidePointClasses = [
       ...(path01LandslideExposure?.matched_hazard_classes || []),
       ...(path01LandslideExposure?.matched_attention_classes || []),
-    ].join(", ") || "-";
+    ].join(", ");
+    const officialLandslidePointOutcome = officialLandslidePointClasses
+      ? `${it ? "Classi al punto" : "Classes at point"}: ${officialLandslidePointClasses}`
+      : it
+        ? "Nessuna classe PAI ISPRA interseca il punto"
+        : "No ISPRA PAI class intersects the point";
+    const officialLandslideNearbyContext =
+      nearbyContextLabel(path01LandslideExposure, language) ||
+      (it ? "Nessun contesto separato riportato" : "No separate context reported");
     const officialPointExposureTable = `
       <table>
-        <thead><tr><th>${it ? "Hazard" : "Hazard"}</th><th>Status</th><th>${it ? "Classi" : "Classes"}</th><th>${it ? "Provenienza osservazione" : "Observation provenance"}</th><th>${it ? "Ruolo" : "Role"}</th></tr></thead>
+        <thead><tr><th>Hazard</th><th>${it ? "Esito puntuale" : "Point outcome"}</th><th>${it ? "Contesto territoriale" : "Territorial context"}</th><th>${it ? "Valutazione" : "Assessment"}</th><th>${it ? "Ruolo" : "Role"}</th></tr></thead>
         <tbody>
           <tr>
             <td>ISPRA Hydraulic</td>
-            <td>${escapeHtml(path01HydraulicExposure?.decision_status || path01HydraulicExposure?.status || "not available")} / ${path01HydraulicExposure?.assessment_complete === false ? "incomplete" : path01HydraulicExposure ? "complete" : "-"}</td>
-            <td>${escapeHtml(officialHydraulicClasses)}</td>
-            <td>${escapeHtml(`${path01HydraulicExposure?.source?.observation_mode || "-"} / ${path01HydraulicExposure?.source?.freshness_status || "-"} / ${path01HydraulicExposure?.source?.observed_at || "-"}`)}</td>
+            <td>${escapeHtml(officialHydraulicPointOutcome)}</td>
+            <td>${escapeHtml(officialHydraulicNearbyContext)}</td>
+            <td>${escapeHtml(`${exposureStatusLabel(path01HydraulicExposure, language)}; ${assessmentStatusLabel(path01HydraulicExposure, language)}`)}</td>
             <td>Shadow mode; ${it ? "non modifica il Final Priority Index" : "does not modify the Final Priority Index"}</td>
           </tr>
           <tr>
             <td>ISPRA PAI Landslide</td>
-            <td>${escapeHtml(path01LandslideExposure?.decision_status || path01LandslideExposure?.status || "not available")} / ${path01LandslideExposure?.assessment_complete === false ? "incomplete" : path01LandslideExposure ? "complete" : "-"}</td>
-            <td>${escapeHtml(officialLandslideClasses)}</td>
-            <td>${escapeHtml(`${path01LandslideExposure?.source?.observation_mode || "-"} / ${path01LandslideExposure?.source?.freshness_status || "-"} / ${path01LandslideExposure?.source?.observed_at || "-"}`)}</td>
+            <td>${escapeHtml(officialLandslidePointOutcome)}</td>
+            <td>${escapeHtml(officialLandslideNearbyContext)}</td>
+            <td>${escapeHtml(`${exposureStatusLabel(path01LandslideExposure, language)}; ${assessmentStatusLabel(path01LandslideExposure, language)}`)}</td>
             <td>Shadow mode; ${it ? "non modifica il Final Priority Index" : "does not modify the Final Priority Index"}</td>
           </tr>
         </tbody>
@@ -4657,7 +4831,21 @@ export default function ProfessionalPage() {
       <section>
         ${sectionHeading("12", it ? "MITIGATION INTELLIGENCE" : "MITIGATION INTELLIGENCE")}
         <p><strong>Status:</strong> ${escapeHtml(mitigationStatus)}. ${escapeHtml(mitigationEvidenceSummary)}</p>
+        <p><strong>${it ? "Base di evidenza" : "Evidence basis"}:</strong> ${escapeHtml(mitigationCohortSummary)}</p>
+        ${mitigationAnalogueRows ? `
+          <table>
+            <thead><tr>
+              <th>Rank</th>
+              <th>Event ID</th>
+              <th>${it ? "Localita" : "Location"}</th>
+              <th>${it ? "Classe idraulica attuale" : "Current hydraulic class"}</th>
+              <th>${it ? "Delta PGA (g)" : "PGA delta (g)"}</th>
+              <th>${it ? "Classe storica al collasso" : "Historical class at collapse"}</th>
+            </tr></thead>
+            <tbody>${mitigationAnalogueRows}</tbody>
+          </table>` : ""}
         <ol>${recommendationRows}</ol>
+        <p class="note">${escapeHtml(mitigationTemporalCaveat)}</p>
         <p class="note">${it ? "Output non prescrittivo: non modifica il Final Priority Index e richiede validazione tecnica sito-specifica." : "Non-prescriptive output: it does not modify the Final Priority Index and requires site-specific technical validation."}</p>
       </section>
       <section>
@@ -4673,9 +4861,9 @@ export default function ProfessionalPage() {
         <table>
           <thead><tr><th>${it ? "Elemento" : "Element"}</th><th>${it ? "Lettura operativa" : "Operational reading"}</th></tr></thead>
           <tbody>
-            <tr><td>Spatial resolution</td><td>${it ? "Screening a livello provinciale basato sul confine amministrativo selezionato; non e site-specific salvo coordinate o asset forniti in workflow dedicati." : "Province-level screening based on the selected administrative boundary; not site-specific unless coordinates or assets are provided in dedicated workflows."}</td></tr>
+            <tr><td>Spatial resolution</td><td>${it ? "L'esposizione ufficiale e valutata sul punto progetto validato; la provincia derivata dal punto descrive il contesto storico locale. Quando il gate di copertura e soddisfatto, gli analoghi sono ricercati sull'intero database nazionale senza filtro geografico." : "Official exposure is assessed at the validated project point; the point-derived province describes local historical context. When the coverage gate is met, analogues are retrieved across the national database with no geographic filter."}</td></tr>
             <tr><td>Hazard layers</td><td>${it ? "Provider WFS pubblici usati per l'esposizione puntuale ufficiale idraulica e PAI frane quando il punto e validato; WMS usato solo come riferimento visuale, non come modello locale idraulico, geotecnico o sismico di dettaglio." : "Public WFS providers used for official point-level hydraulic and PAI landslide exposure when the project point is validated; WMS is used only as a visual reference, not as detailed local hydraulic, geotechnical or seismic modelling."}</td></tr>
-            <tr><td>Historical records</td><td>${it ? "Basato su eventi di collasso documentati ARCUS e fonti collegate; non rappresenta tutte le condizioni strutturali esistenti." : "Based on documented ARCUS collapse events and linked sources; it does not represent all existing structural conditions."}</td></tr>
+            <tr><td>Historical records</td><td>${it ? "Gli esiti di collasso ARCUS sono separati dalle firme hazard ufficiali attuali. La classe all'anno del collasso e riportata solo quando supportata da una fonte storica datata; la classe attuale non viene retrodatata." : "ARCUS collapse outcomes are separated from current official hazard signatures. The class at the collapse year is reported only when supported by a dated historical source; the current class is never back-cast."}</td></tr>
             <tr><td>Missing data</td><td>${it ? "Alcuni eventi possono non avere attributi tecnici completi, come tipologia del ponte, materiale o anno di costruzione." : "Some events may lack complete technical attributes such as bridge type, material or construction year."}</td></tr>
             <tr><td>Professional use</td><td>${it ? "Adatto a screening preliminare e prioritizzazione; richiede verifiche tecniche successive prima di decisioni progettuali o istituzionali." : "Suitable for preliminary screening and prioritisation; follow-up technical checks are required before design or institutional decisions."}</td></tr>
           </tbody>
@@ -7259,6 +7447,7 @@ export default function ProfessionalPage() {
         title: `Mitigation intelligence - ${mitigationReportSummary.status}`,
         text: [
           mitigationReportSummary.evidenceText,
+          mitigationReportSummary.cohortText,
           mitigationReportSummary.outcomeText,
           mitigationReportSummary.sourceText,
           mitigationReportSummary.warningText,
@@ -9570,14 +9759,20 @@ export default function ProfessionalPage() {
       return exposure.highest_class
         ? exposure.highest_class
         : language === "it"
-          ? "Nessuna classe intercettata"
-          : "No class intersected";
+          ? "Dato ISPRA disponibile senza classe ordinata"
+          : "ISPRA data available without an ordered class";
     }
 
     if (exposure.status === "no_intersection") {
+      if (hasNearbyOfficialContext(exposure)) {
+        return language === "it"
+          ? "Nessuna classe idraulica ISPRA al punto"
+          : "No ISPRA hydraulic class at selected point";
+      }
+
       return language === "it"
-        ? "Nessuna classe intercettata"
-        : "No class intersected";
+        ? "Nessuna classe idraulica ISPRA interseca il punto"
+        : "No ISPRA hydraulic class intersects the point";
     }
 
     if (exposure.status === "invalid_coordinates") {
@@ -9628,9 +9823,17 @@ export default function ProfessionalPage() {
     }
 
     if (reasons.includes("official_hydraulic_exposure_not_intersected")) {
+      if (
+        path01HydraulicExposure?.nearby_context?.status === "available"
+      ) {
+        return language === "it"
+          ? `Il punto e fuori dai perimetri idraulici classificati. ARCUS mostra comunque il contesto ISPRA ufficiale entro ${path01HydraulicExposure.nearby_context.search_radius_km} km, ma non lo usa come se fosse una classe attribuita al punto e non genera prescrizioni automatiche.`
+          : `The point is outside classified hydraulic perimeters. ARCUS still shows official ISPRA context within ${path01HydraulicExposure.nearby_context.search_radius_km} km, but does not treat it as a class assigned to the point or generate automatic prescriptions.`;
+      }
+
       return language === "it"
-        ? "ARCUS si astiene: tutti i layer ISPRA hanno risposto e il punto non intercetta una classe idraulica ufficiale. Nessuna prescrizione viene generata."
-        : "ARCUS abstains: all ISPRA layers responded and the point does not intersect an official hydraulic class. No prescription is generated.";
+        ? "Il punto e fuori dai perimetri idraulici classificati ISPRA. Nessuna prescrizione automatica viene generata."
+        : "The point is outside ISPRA classified hydraulic perimeters. No automatic prescription is generated.";
     }
 
     return language === "it"
@@ -9659,9 +9862,15 @@ export default function ProfessionalPage() {
     }
 
     if (exposure.status === "no_intersection") {
+      if (hasNearbyOfficialContext(exposure)) {
+        return language === "it"
+          ? "Nessuna classe PAI ISPRA al punto"
+          : "No ISPRA PAI class at selected point";
+      }
+
       return language === "it"
-        ? "Nessuna intersezione PAI"
-        : "No PAI intersection";
+        ? "Nessuna classe PAI ISPRA interseca il punto"
+        : "No ISPRA PAI class intersects the point";
     }
 
     if (exposure.status === "invalid_coordinates") {
@@ -9818,6 +10027,7 @@ export default function ProfessionalPage() {
       const result = await professionalHazardExposurePoint({
         bypassCache: false,
         hazards: ["hydraulic", "landslide", "seismic"],
+        include_nearby_context: true,
         latitude: derived.latitude,
         longitude: derived.longitude,
       });
@@ -11125,86 +11335,126 @@ export default function ProfessionalPage() {
                         ? "Dato WFS ISPRA P1/P2/P3 riferito al punto progetto. Non entra ancora nel Final Priority Index."
                         : "ISPRA P1/P2/P3 WFS data for the project point. It is not yet used in the Final Priority Index.")}
                   </p>
-                  <div className="platform-exposure-meta">
+                  <div className="platform-exposure-summary">
                     <span>
-                      Status:{" "}
-                      {path01HydraulicExposure?.status ||
-                        (language === "it"
-                          ? "punto non selezionato"
-                          : "point not selected")}
+                      {language === "it" ? "Esito" : "Outcome"}:{" "}
+                      {exposureStatusLabel(
+                        path01HydraulicExposure,
+                        language
+                      )}
                     </span>
                     <span>
-                      Decision status:{" "}
-                      {path01HydraulicExposure?.decision_status || "-"}
-                    </span>
-                    <span>
-                      Assessment:{" "}
-                      {path01HydraulicExposure
-                        ? path01HydraulicExposure.assessment_complete === false
-                          ? "incomplete"
-                          : "complete"
-                        : "-"}
-                    </span>
-                    <span>
-                      Source:{" "}
-                      {path01HydraulicExposure?.source
-                        ? `${path01HydraulicExposure.source.provider} ${path01HydraulicExposure.source.service_type}`
-                        : "ISPRA WFS"}
-                    </span>
-                    <span>
-                      Observation mode:{" "}
-                      {path01HydraulicExposure?.source?.observation_mode ||
-                        "-"}
-                    </span>
-                    <span>
-                      Freshness:{" "}
-                      {path01HydraulicExposure?.source?.freshness_status ||
-                        "-"}
-                    </span>
-                    <span>
-                      Observed at:{" "}
-                      {path01HydraulicExposure?.source?.observed_at || "-"}
-                    </span>
-                    <span>
-                      Live provider:{" "}
-                      {path01HydraulicExposure?.source?.live_provider_status ||
-                        "-"}
-                    </span>
-                    <span>
-                      Query timestamp:{" "}
-                      {path01HydraulicExposure?.source?.queried_at ||
-                        path01HydraulicExposure?.attempted_at ||
-                        "-"}
-                    </span>
-                    <span>
-                      Classes:{" "}
+                      {language === "it"
+                        ? "Classi attribuite al punto"
+                        : "Classes assigned to the point"}
+                      :{" "}
                       {path01HydraulicExposure?.matched_classes?.length
                         ? path01HydraulicExposure.matched_classes.join(", ")
-                        : "-"}
+                        : path01HydraulicExposure
+                          ? language === "it"
+                            ? "nessuna"
+                            : "none"
+                          : "-"}
                     </span>
-                    {hydraulicLayerStatusItems(path01HydraulicExposure).map(
-                      (layer) => (
-                        <span key={`${layer.className}-${layer.status}`}>
-                          {layer.className}: {layer.status}
-                          {layer.failed ? " - failed" : ""}
-                        </span>
-                      )
-                    )}
-                    {path01HydraulicExposure?.source
-                      ?.last_known_good_layers?.length ? (
-                        <span>
-                          Last known good only:{" "}
-                          {path01HydraulicExposure.source
-                            .last_known_good_layers
-                            .map(
-                              (layer) =>
-                                `${layer.class_name} (${layer.status}, ${layer.freshness_status})`
-                            )
-                            .join(", ")}
-                        </span>
-                      ) : null}
-                    <span>Normalized score: not assigned</span>
+                    {hasNearbyOfficialContext(path01HydraulicExposure) ? (
+                      <span className="platform-exposure-context">
+                        {nearbyContextLabel(
+                          path01HydraulicExposure,
+                          language
+                        )}
+                      </span>
+                    ) : null}
+                    <span>
+                      {language === "it" ? "Ruolo" : "Role"}:{" "}
+                      {language === "it"
+                        ? "informativo; non modifica il Final Priority Index"
+                        : "informational; does not modify the Final Priority Index"}
+                    </span>
                   </div>
+                  <details className="platform-exposure-details">
+                    <summary>
+                      {language === "it"
+                        ? "Dettagli tecnici e provenienza"
+                        : "Technical details and provenance"}
+                    </summary>
+                    <div className="platform-exposure-meta">
+                      <span>
+                        Internal status:{" "}
+                        {path01HydraulicExposure?.presentation_status ||
+                          path01HydraulicExposure?.status ||
+                          "-"}
+                      </span>
+                      <span>
+                        Assessment:{" "}
+                        {assessmentStatusLabel(
+                          path01HydraulicExposure,
+                          language
+                        )}
+                      </span>
+                      <span>
+                        Source:{" "}
+                        {path01HydraulicExposure?.source
+                          ? `${path01HydraulicExposure.source.provider} ${path01HydraulicExposure.source.service_type}`
+                          : "ISPRA WFS"}
+                      </span>
+                      <span>
+                        Observation mode:{" "}
+                        {path01HydraulicExposure?.source?.observation_mode ||
+                          "-"}
+                      </span>
+                      <span>
+                        Freshness:{" "}
+                        {path01HydraulicExposure?.source?.freshness_status ||
+                          "-"}
+                      </span>
+                      <span>
+                        Observed at:{" "}
+                        {path01HydraulicExposure?.source?.observed_at || "-"}
+                      </span>
+                      <span>
+                        Live provider:{" "}
+                        {liveProviderStatusLabel(
+                          path01HydraulicExposure,
+                          language
+                        )}
+                      </span>
+                      <span>
+                        Query timestamp:{" "}
+                        {path01HydraulicExposure?.source?.queried_at ||
+                          path01HydraulicExposure?.attempted_at ||
+                          "-"}
+                      </span>
+                      {hasNearbyOfficialContext(path01HydraulicExposure) ? (
+                        <span>
+                          Layer query: P1, P2, P3{" "}
+                          {language === "it" ? "completata" : "completed"}
+                        </span>
+                      ) : (
+                        hydraulicLayerStatusItems(path01HydraulicExposure).map(
+                          (layer) => (
+                            <span key={`${layer.className}-${layer.status}`}>
+                              {layer.className}: {layer.status}
+                              {layer.failed ? " - failed" : ""}
+                            </span>
+                          )
+                        )
+                      )}
+                      {path01HydraulicExposure?.source
+                        ?.last_known_good_layers?.length ? (
+                          <span>
+                            Last known good only:{" "}
+                            {path01HydraulicExposure.source
+                              .last_known_good_layers
+                              .map(
+                                (layer) =>
+                                  `${layer.class_name} (${layer.status}, ${layer.freshness_status})`
+                              )
+                              .join(", ")}
+                          </span>
+                        ) : null}
+                      <span>Normalized score: not assigned</span>
+                    </div>
+                  </details>
                 </article>
 
                 <article>
@@ -11220,82 +11470,125 @@ export default function ProfessionalPage() {
                         ? "Mosaicatura PAI ISPRA v. 5.0 - 2024 al punto progetto. AA e riportata separatamente; nessun punteggio e assegnato."
                         : "ISPRA PAI mosaic v. 5.0 - 2024 at the project point. AA is reported separately; no score is assigned.")}
                   </p>
-                  <div className="platform-exposure-meta">
+                  <div className="platform-exposure-summary">
                     <span>
-                      Status:{" "}
-                      {path01LandslideExposure?.status ||
-                        (language === "it"
-                          ? "punto non selezionato"
-                          : "point not selected")}
+                      {language === "it" ? "Esito" : "Outcome"}:{" "}
+                      {exposureStatusLabel(
+                        path01LandslideExposure,
+                        language
+                      )}
                     </span>
                     <span>
-                      Decision status:{" "}
-                      {path01LandslideExposure?.decision_status || "-"}
-                    </span>
-                    <span>
-                      Assessment:{" "}
-                      {path01LandslideExposure
-                        ? path01LandslideExposure.assessment_complete === false
-                          ? "incomplete"
-                          : "complete"
-                        : "-"}
-                    </span>
-                    <span>
-                      Source:{" "}
-                      {path01LandslideExposure?.source
-                        ? `${path01LandslideExposure.source.provider} ${path01LandslideExposure.source.service_type}`
-                        : "ISPRA PAI WFS"}
-                    </span>
-                    <span>
-                      Version:{" "}
-                      {path01LandslideExposure?.source?.source_dataset_version
-                        ? `v. ${path01LandslideExposure.source.source_dataset_version} - ${path01LandslideExposure.source.source_reference_year}`
-                        : "-"}
-                    </span>
-                    <span>
-                      Observation mode:{" "}
-                      {path01LandslideExposure?.source?.observation_mode ||
-                        "-"}
-                    </span>
-                    <span>
-                      Freshness:{" "}
-                      {path01LandslideExposure?.source?.freshness_status ||
-                        "-"}
-                    </span>
-                    <span>
-                      Observed at:{" "}
-                      {path01LandslideExposure?.source?.observed_at || "-"}
-                    </span>
-                    <span>
-                      Live provider:{" "}
-                      {path01LandslideExposure?.source
-                        ?.live_provider_status || "-"}
-                    </span>
-                    <span>
-                      Query timestamp:{" "}
-                      {path01LandslideExposure?.source?.queried_at ||
-                        path01LandslideExposure?.attempted_at ||
-                        "-"}
-                    </span>
-                    <span>
-                      PAI classes:{" "}
+                      {language === "it"
+                        ? "Classi attribuite al punto"
+                        : "Classes assigned to the point"}
+                      :{" "}
                       {path01LandslideExposure?.matched_hazard_classes?.length
-                        ? path01LandslideExposure.matched_hazard_classes.join(", ")
-                        : "-"}
+                        ? path01LandslideExposure.matched_hazard_classes.join(
+                            ", "
+                          )
+                        : path01LandslideExposure?.attention_area
+                          ? path01LandslideExposure.matched_attention_classes?.join(
+                              ", "
+                            ) || "AA"
+                          : path01LandslideExposure
+                            ? language === "it"
+                              ? "nessuna"
+                              : "none"
+                            : "-"}
                     </span>
+                    {hasNearbyOfficialContext(path01LandslideExposure) ? (
+                      <span className="platform-exposure-context">
+                        {nearbyContextLabel(
+                          path01LandslideExposure,
+                          language
+                        )}
+                      </span>
+                    ) : null}
                     <span>
-                      Attention area:{" "}
-                      {path01LandslideExposure?.attention_area
-                        ? path01LandslideExposure.matched_attention_classes?.join(", ") || "AA"
-                        : "No"}
+                      {language === "it" ? "Ruolo" : "Role"}:{" "}
+                      {language === "it"
+                        ? "informativo; nessun punteggio normalizzato assegnato"
+                        : "informational; no normalized score assigned"}
                     </span>
-                    <span>
-                      Analysis mode:{" "}
-                      {path01LandslideExposure?.source?.analysis_mode ||
-                        "point_intersection"}
-                    </span>
-                    {path01LandslideExposure?.source
-                      ?.last_known_good_layers?.length ? (
+                  </div>
+                  <details className="platform-exposure-details">
+                    <summary>
+                      {language === "it"
+                        ? "Dettagli tecnici e provenienza"
+                        : "Technical details and provenance"}
+                    </summary>
+                    <div className="platform-exposure-meta">
+                      <span>
+                        Internal status:{" "}
+                        {path01LandslideExposure?.presentation_status ||
+                          path01LandslideExposure?.status ||
+                          "-"}
+                      </span>
+                      <span>
+                        Assessment:{" "}
+                        {assessmentStatusLabel(
+                          path01LandslideExposure,
+                          language
+                        )}
+                      </span>
+                      <span>
+                        Source:{" "}
+                        {path01LandslideExposure?.source
+                          ? `${path01LandslideExposure.source.provider} ${path01LandslideExposure.source.service_type}`
+                          : "ISPRA PAI WFS"}
+                      </span>
+                      <span>
+                        Version:{" "}
+                        {path01LandslideExposure?.source
+                          ?.source_dataset_version
+                          ? `v. ${path01LandslideExposure.source.source_dataset_version} - ${path01LandslideExposure.source.source_reference_year}`
+                          : "-"}
+                      </span>
+                      <span>
+                        Observation mode:{" "}
+                        {path01LandslideExposure?.source?.observation_mode ||
+                          "-"}
+                      </span>
+                      <span>
+                        Freshness:{" "}
+                        {path01LandslideExposure?.source?.freshness_status ||
+                          "-"}
+                      </span>
+                      <span>
+                        Observed at:{" "}
+                        {path01LandslideExposure?.source?.observed_at || "-"}
+                      </span>
+                      <span>
+                        Live provider:{" "}
+                        {liveProviderStatusLabel(
+                          path01LandslideExposure,
+                          language
+                        )}
+                      </span>
+                      <span>
+                        Query timestamp:{" "}
+                        {path01LandslideExposure?.source?.queried_at ||
+                          path01LandslideExposure?.attempted_at ||
+                          "-"}
+                      </span>
+                      <span>
+                        Attention area:{" "}
+                        {path01LandslideExposure?.attention_area
+                          ? path01LandslideExposure.matched_attention_classes?.join(
+                              ", "
+                            ) || "AA"
+                          : "No"}
+                      </span>
+                      <span>
+                        Analysis mode:{" "}
+                        {analysisModeLabel(
+                          path01LandslideExposure,
+                          language
+                        )}
+                      </span>
+                      {path01LandslideExposure?.source
+                        ?.last_known_good_layers?.length ? (
                         <span>
                           Last known good only:{" "}
                           {path01LandslideExposure.source
@@ -11310,8 +11603,9 @@ export default function ProfessionalPage() {
                             .join(", ")}
                         </span>
                       ) : null}
-                    <span>Normalized score: not assigned</span>
-                  </div>
+                      <span>Normalized score: not assigned</span>
+                    </div>
+                  </details>
                 </article>
 
                 <article>
@@ -12256,9 +12550,119 @@ export default function ProfessionalPage() {
               {path01MitigationIntelligence?.status === "loading" && (
                 <p>
                   {language === "it"
-                    ? "ARCUS sta collegando esposizione ufficiale ed evidenza storica provinciale."
-                    : "ARCUS is linking official exposure and provincial historical evidence."}
+                    ? "ARCUS sta confrontando la firma ufficiale del punto con i collassi documentati."
+                    : "ARCUS is comparing the official point signature with documented collapses."}
                 </p>
+              )}
+
+              {path01MitigationIntelligence?.evidence_cohort
+                ?.analogue_retrieval && (
+                <section className="platform-analogue-cohort">
+                  <div>
+                    <span>
+                      {language === "it"
+                        ? "Base dell'evidenza"
+                        : "Evidence basis"}
+                    </span>
+                    <strong>
+                      {path01MitigationIntelligence.evidence_cohort
+                        .analogue_retrieval.production_ready
+                        ? language === "it"
+                          ? "Analoghi nazionali per firma di pericolosita attuale"
+                          : "National analogues by current hazard signature"
+                        : language === "it"
+                          ? "Fallback provinciale controllato"
+                          : "Controlled provincial fallback"}
+                    </strong>
+                    <p>
+                      {path01MitigationIntelligence.evidence_cohort
+                        .analogue_retrieval.production_ready
+                        ? language === "it"
+                          ? "La provincia resta contesto locale; non limita la ricerca degli analoghi. Cause, processi e componenti vengono letti solo dopo avere fissato la coorte."
+                          : "The province remains local context and does not restrict analogue retrieval. Causes, processes and components are read only after the cohort is fixed."
+                        : language === "it"
+                          ? "Il motore nazionale resta disattivato finche le firme idrauliche ufficiali non coprono almeno l'80% del database. Nessun dato mancante viene trasformato in somiglianza."
+                          : "The national engine remains disabled until official hydraulic signatures cover at least 80% of the database. Missing data is never converted into similarity."}
+                    </p>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>
+                        {language === "it"
+                          ? "Copertura firme"
+                          : "Signature coverage"}
+                      </dt>
+                      <dd>
+                        {Math.round(
+                          Number(
+                            path01MitigationIntelligence.evidence_cohort
+                              .analogue_retrieval
+                              .hydraulic_signature_coverage_ratio || 0
+                          ) * 100
+                        )}
+                        %
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>
+                        {language === "it"
+                          ? "Contesto locale"
+                          : "Local context"}
+                      </dt>
+                      <dd>
+                        {path01MitigationIntelligence.evidence_cohort
+                          .local_context?.total_collapse_count || 0}{" "}
+                        {language === "it" ? "collassi" : "collapses"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>
+                        {language === "it"
+                          ? "Analoghi recuperati"
+                          : "Retrieved analogues"}
+                      </dt>
+                      <dd>
+                        {path01MitigationIntelligence.evidence_cohort
+                          .analogue_retrieval.analogues?.length || 0}
+                      </dd>
+                    </div>
+                  </dl>
+                  {path01MitigationIntelligence.evidence_cohort
+                    .analogue_retrieval.production_ready &&
+                  path01MitigationIntelligence.evidence_cohort
+                    .analogue_retrieval.analogues?.length ? (
+                    <ol>
+                      {path01MitigationIntelligence.evidence_cohort
+                        .analogue_retrieval.analogues.slice(0, 5)
+                        .map((analogue) => (
+                          <li key={analogue.event.event_id}>
+                            <b>
+                              #{analogue.retrieval_rank}{" "}
+                              {analogue.event.municipality || "-"},{" "}
+                              {analogue.event.province || "-"}
+                            </b>
+                            <span>
+                              {language === "it"
+                                ? "Classe idraulica attuale"
+                                : "Current hydraulic class"}
+                              :{" "}
+                              {analogue.current_official_signature
+                                ?.hydraulic?.highest_class || "-"}
+                              {" · PGA Δ "}
+                              {analogue.retrieval_comparison?.seismic
+                                ?.pga_delta_g ?? "-"}{" "}
+                              g
+                            </span>
+                          </li>
+                        ))}
+                    </ol>
+                  ) : null}
+                  <small>
+                    {language === "it"
+                      ? "La firma attuale serve alla comparabilita nazionale; non ricostruisce la pericolosita storica e non prova la causa del collasso."
+                      : "The current signature supports national comparability; it does not reconstruct historical hazard or prove collapse causation."}
+                  </small>
+                </section>
               )}
 
               {path01MitigationIntelligence?.source_completeness?.hydraulic
@@ -13479,11 +13883,26 @@ export default function ProfessionalPage() {
               filteredEvents={selectedProvinceEvents}
               height="560px"
               professionalMode
+              onPointSelect={
+                activeEntryPath === 0
+                  ? (point) =>
+                      commitProjectLocation(
+                        point.latitude,
+                        point.longitude,
+                        "map"
+                      )
+                  : undefined
+              }
               publicWmsOverlays={
                 activeProfessionalWmsOverlays
               }
               resizeSignal={professionalMapResizeSignal}
               sidebarOpen={false}
+              selectedPoint={
+                activeEntryPath === 0 && path01LocationValidated
+                  ? projectLocation
+                  : null
+              }
               showAssetMarkers={
                 professionalMapLayers.assets
               }
@@ -13499,6 +13918,26 @@ export default function ProfessionalPage() {
               sourcesByEvent={sourcesByEventMap}
               watchlistMarkers={monitoringSignals}
             />
+            {activeEntryPath === 0 && path01LocationValidated ? (
+              <PointHazardInspector
+                className="embedded"
+                exposure={{
+                  hydraulic: path01HydraulicExposure,
+                  landslide: path01LandslideExposure,
+                  seismic: path01SeismicExposure,
+                }}
+                language={language}
+                onRetry={() =>
+                  commitProjectLocation(
+                    projectLocation.latitude,
+                    projectLocation.longitude,
+                    "map_retry"
+                  )
+                }
+                point={projectLocation}
+                status={path01ExposureStatus}
+              />
+            ) : null}
           </div>
         </div>
       </section>
@@ -14758,11 +15197,30 @@ export default function ProfessionalPage() {
                   </em>
                 </li>
                 <li>
-                  <b>Hydraulic classes</b>
+                  <b>
+                    {language === "it"
+                      ? "Classi idrauliche al punto"
+                      : "Hydraulic classes at the point"}
+                  </b>
                   <em>
                     {path01HydraulicExposure?.matched_classes?.length
                       ? path01HydraulicExposure.matched_classes.join(", ")
-                      : "-"}
+                      : language === "it"
+                        ? "Nessuna classe attribuita al punto"
+                        : "No class assigned to the point"}
+                  </em>
+                </li>
+                <li>
+                  <b>
+                    {language === "it"
+                      ? "Contesto idraulico territoriale"
+                      : "Hydraulic territorial context"}
+                  </b>
+                  <em>
+                    {nearbyContextLabel(
+                      path01HydraulicExposure,
+                      language
+                    ) || "-"}
                   </em>
                 </li>
                 <li>
@@ -14774,21 +15232,42 @@ export default function ProfessionalPage() {
                 <li>
                   <b>Landslide assessment status</b>
                   <em>
-                    {path01LandslideExposure?.decision_status || "-"}
+                    {exposureStatusLabel(
+                      path01LandslideExposure,
+                      language
+                    )}
                     {" / "}
-                    {path01LandslideExposure
-                      ? path01LandslideExposure.assessment_complete === false
-                        ? "incomplete"
-                        : "complete"
-                      : "-"}
+                    {assessmentStatusLabel(
+                      path01LandslideExposure,
+                      language
+                    )}
                   </em>
                 </li>
                 <li>
-                  <b>PAI classes</b>
+                  <b>
+                    {language === "it"
+                      ? "Classi PAI al punto"
+                      : "PAI classes at the point"}
+                  </b>
                   <em>
                     {path01LandslideExposure?.matched_hazard_classes?.length
                       ? path01LandslideExposure.matched_hazard_classes.join(", ")
-                      : "-"}
+                      : language === "it"
+                        ? "Nessuna classe attribuita al punto"
+                        : "No class assigned to the point"}
+                  </em>
+                </li>
+                <li>
+                  <b>
+                    {language === "it"
+                      ? "Contesto PAI territoriale"
+                      : "PAI territorial context"}
+                  </b>
+                  <em>
+                    {nearbyContextLabel(
+                      path01LandslideExposure,
+                      language
+                    ) || "-"}
                   </em>
                 </li>
                 <li>

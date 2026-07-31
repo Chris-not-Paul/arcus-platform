@@ -8,6 +8,36 @@ The hydraulic vertical slice is deterministic, abstains under the defined condit
 
 No probability, safe/unsafe classification, normalized mitigation score or automatic design prescription is produced.
 
+## v2 national analogue foundation
+
+The implementation now includes the `arcus-mitigation-intelligence-v2`
+retrieval foundation documented in
+`ARCUS_MITIGATION_INTELLIGENCE_V2.md`. It compares the project point with
+documented collapses across Italy using current official hazard signatures,
+with no province filter and no collapse outcome field used during selection.
+Trigger, failure process and affected component are read only after the cohort
+is fixed.
+
+The production gate requires at least 80% current official hydraulic-signature
+coverage and at least three eligible analogues. The current registry contains
+263 dry-run placeholders and zero completed official signatures, so the gate is
+closed and the UI/report explicitly use the controlled point-derived provincial
+fallback. This prevents a partially enriched national sample from creating
+selection bias.
+
+The historical-at-event registry is deliberately empty. The current official
+class is never assigned to the year of collapse; a historical class is accepted
+only from an authenticated dated source. This limits retrospective
+interpretation but does not block present-day current-signature retrieval.
+
+Unit fixtures verify national cross-province retrieval, deterministic ranking,
+the absence of geography filters, `outcome_fields_used_for_selection: []`,
+post-retrieval outcome reading and the non-reconstruction of missing historical
+classes. Live population of the current-signature registry remains pending
+explicit authorisation to send the 263 collapse coordinates to the official
+ISPRA and INGV services. The overall judgement remains
+`validated_with_limitations`.
+
 ## Reproducible command
 
 ```powershell

@@ -43,12 +43,27 @@ export function buildMitigationReportSummary(
   const freshnessStatus =
     hydraulicCompleteness.freshness_status || "unavailable";
   const observedAt = hydraulicCompleteness.observed_at || null;
+  const analogueRetrieval = evidence.analogue_retrieval || {};
+  const nationalReady = analogueRetrieval.production_ready === true;
+  const signatureCoverage = Math.round(
+    Number(
+      analogueRetrieval.hydraulic_signature_coverage_ratio || 0
+    ) * 100
+  );
+  const analogueCount = (analogueRetrieval.analogues || []).length;
   const provenanceText = it
     ? `Provenienza: ${displayReason(observationMode)}; freschezza: ${displayReason(freshnessStatus)}${observedAt ? `; osservato: ${observedAt}` : ""}.`
     : `Provenance: ${displayReason(observationMode)}; freshness: ${displayReason(freshnessStatus)}${observedAt ? `; observed: ${observedAt}` : ""}.`;
 
   return {
     status,
+    cohortText: nationalReady
+      ? it
+        ? `Coorte: ${analogueCount} analoghi nazionali selezionati tramite la firma ufficiale attuale; la provincia resta contesto locale. Cause e processi sono letti dopo il retrieval.`
+        : `Cohort: ${analogueCount} national analogues selected by current official signature; the province remains local context. Causes and processes are read after retrieval.`
+      : it
+        ? `Coorte: fallback provinciale controllato; copertura delle firme idrauliche nazionali ${signatureCoverage}% (minimo operativo 80%).`
+        : `Cohort: controlled provincial fallback; national hydraulic-signature coverage ${signatureCoverage}% (80% operational minimum).`,
     evidenceText: it
       ? `Evidenza raw: ${rawEvidence}; evidenza effective: ${effectiveEvidence}.`
       : `Raw evidence: ${rawEvidence}; effective evidence: ${effectiveEvidence}.`,

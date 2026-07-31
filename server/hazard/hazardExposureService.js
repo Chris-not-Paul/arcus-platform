@@ -24,9 +24,19 @@ import {
   safeError,
   traceHazardStage,
 } from "./hazardTrace.js";
+import {
+  clearNearbyHazardContextCache,
+  enrichNoIntersectionWithNearbyContext,
+} from "./nearbyHazardContextService.js";
 
 const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
 const CACHE_MAX_ITEMS = 500;
+const DEFAULT_HAZARDS = Object.freeze([
+  "hydraulic",
+  "landslide",
+  "seismic",
+]);
+const POINT_EXPOSURE_CONTRACT = "arcus-point-hazard-exposure-v1";
 const cache = new Map();
 const PROVIDER_REGISTRY = {
   hydraulic: {
@@ -53,7 +63,12 @@ function normalizeCoordinate(value) {
   return Number(value).toFixed(5);
 }
 
-function cacheKeyFor({ hazards, latitude, longitude }) {
+function cacheKeyFor({
+  hazards,
+  includeNearbyContext,
+  latitude,
+  longitude,
+}) {
   const requestedHazards = [...new Set(hazards)]
     .sort()
     .map((hazard) => {
@@ -73,6 +88,7 @@ function cacheKeyFor({ hazards, latitude, longitude }) {
     normalizeCoordinate(latitude),
     normalizeCoordinate(longitude),
     requestedHazards,
+    includeNearbyContext ? "nearby-context" : "point-only",
   ].join(":");
 }
 
@@ -127,11 +143,44 @@ function isCacheableResult(value, hazards) {
 
 function normalizeHazards(hazards) {
   if (!Array.isArray(hazards) || hazards.length === 0) {
-    return ["hydraulic"];
+    return [...DEFAULT_HAZARDS];
   }
 
   return [...new Set(hazards.map((hazard) => String(hazard).toLowerCase()))]
     .filter((hazard) => Object.hasOwn(PROVIDER_REGISTRY, hazard));
+}
+
+function coverageFor(results, hazards) {
+  const returnedHazards = hazards.filter((hazard) =>
+    Boolean(results?.[hazard])
+  );
+  const resolvedStatuses = new Set([
+    "available",
+    "no_intersection",
+    "outside_coverage",
+  ]);
+  const resolvedHazards = returnedHazards.filter((hazard) =>
+    resolvedStatuses.has(results[hazard]?.status)
+  );
+  const partialHazards = returnedHazards.filter(
+    (hazard) => results[hazard]?.status === "partial"
+  );
+  const unresolvedHazards = hazards.filter(
+    (hazard) =>
+      !resolvedHazards.includes(hazard) &&
+      !partialHazards.includes(hazard)
+  );
+
+  return {
+    complete_response: returnedHazards.length === hazards.length,
+    official_data_complete:
+      resolvedHazards.length === hazards.length,
+    partial_hazards: partialHazards,
+    requested_hazards: hazards,
+    resolved_hazards: resolvedHazards,
+    returned_hazards: returnedHazards,
+    unresolved_hazards: unresolvedHazards,
+  };
 }
 
 function overallStatusFor(results) {
@@ -428,6 +477,7 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
 
   if (!validated.ok) {
     const result = {
+      data_contract: POINT_EXPOSURE_CONTRACT,
       query: {
         ...query,
         hazards,
@@ -438,12 +488,14 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
       result[hazard] = pointNotSelectedResult(hazard, result.query);
     });
     result.overall_status = overallStatusFor(result);
+    result.coverage = coverageFor(result, hazards);
 
     return result;
   }
 
   const key = cacheKeyFor({
     hazards,
+    includeNearbyContext: payload?.include_nearby_context === true,
     latitude: validated.latitude,
     longitude: validated.longitude,
   });
@@ -460,6 +512,7 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
       key,
       ttl_seconds: Math.round(CACHE_TTL_MS / 1000),
     },
+    data_contract: POINT_EXPOSURE_CONTRACT,
     query: {
       crs: "EPSG:4326",
       hazards,
@@ -484,11 +537,27 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
     },
   });
 
+  if (payload?.include_nearby_context === true) {
+    await enrichNoIntersectionWithNearbyContext(
+      providerResults,
+      {
+        latitude: validated.latitude,
+        longitude: validated.longitude,
+      },
+      {
+        bypassCache,
+        fetchImpl: options.fetchImpl || globalThis.fetch,
+        timeoutMs: options.timeoutMs,
+      }
+    );
+  }
+
   hazards.forEach((hazard) => {
     result[hazard] = providerResults[hazard] ||
       providerExceptionResult(hazard);
   });
   result.overall_status = overallStatusFor(providerResults);
+  result.coverage = coverageFor(providerResults, hazards);
   hazards.forEach((hazard) => {
     traceHazardStage({
       hazard,
@@ -511,6 +580,7 @@ export async function evaluatePointHazardExposure(payload, options = {}) {
 
 export function clearHazardExposureCache() {
   cache.clear();
+  clearNearbyHazardContextCache();
   clearIspraFloodLayerCache();
   clearIspraLandslideLayerCache();
 }

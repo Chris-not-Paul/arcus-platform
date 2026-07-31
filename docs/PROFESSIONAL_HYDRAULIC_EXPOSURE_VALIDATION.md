@@ -521,3 +521,30 @@ A national offline fallback requires an independently acquired, versioned and
 checksummed official dataset snapshot, plus a spatial database import and
 documented update policy. No fixture, WMS rendering or accumulated point cache
 is represented as that mirror.
+
+### Path 01 nearby official context
+
+From 2026-07-30, a complete point result outside the classified P1/P2/P3
+polygons no longer leaves an empty Hydraulic card in Path 01. ARCUS runs
+bounded WFS `DWITHIN` searches at progressively larger radii and reports the
+first official classes found as `nearby_context`, including the search radius.
+
+This context is explicitly non-intersecting:
+
+- `point_intersection=false`;
+- `distance_basis=within_search_radius_not_exact_distance`;
+- `presentation_status=nearby_official_context`;
+- the original point status remains scientifically preserved;
+- nearby classes do not activate Mitigation Intelligence, modify the Final
+  Priority Index or become a class attributed to the selected point.
+
+For the Torino control point `45.28970000, 7.94194000`, the live validation
+returned Hydraulic P1/P2/P3 context within 1 km while preserving the official
+point outcome separately.
+
+The Path 01 presentation gives priority to the point outcome. Nearby classes
+are shown in a separate contextual callout and radii of 25 km or more are
+labelled as wide-area context. Raw provider and decision codes are collapsed
+under technical details; the primary view uses human-readable query and
+assessment labels. Repeated P1/P2/P3 non-assignment rows are replaced by one
+completed-layer-query statement.

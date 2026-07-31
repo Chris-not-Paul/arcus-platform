@@ -485,7 +485,7 @@ function validateThresholdsAndInvariants() {
   assert.equal(foreignOutcomes.evidence_cohort.event_ids.includes("FOREIGN"), false);
   assert.equal(
     foreignOutcomes.evidence_cohort.selection_mode,
-    "point_derived_province_fixed_before_outcome_synthesis"
+    "point_derived_province_fallback_until_national_signature_coverage_ready"
   );
   assert.deepEqual(
     foreignOutcomes.evidence_cohort.outcome_fields_read_after_context_fixed,
@@ -537,6 +537,11 @@ function validateStaticIntegration() {
   assert.match(professionalPage, /platform-mitigation-intelligence/);
   assert.match(professionalPage, /MITIGATION INTELLIGENCE/);
   assert.match(professionalPage, /effective weighted cases/);
+  assert.match(professionalPage, /Evidence basis/);
+  assert.match(professionalPage, /national database with no geographic filter/);
+  assert.match(professionalPage, /80%/);
+  assert.match(endpointBlock, /collapse-hazard-signatures/);
+  assert.match(endpointBlock, /historical-hazard-signatures/);
 
   const path02Report = professionalPage.slice(
     professionalPage.indexOf("} else if (activeEntryPath === 1)"),
@@ -549,8 +554,10 @@ function validateStaticIntegration() {
   return {
     api_client_csrf: true,
     authenticated_professional_endpoint: true,
+    current_and_historical_signatures_loaded: true,
     endpoint_server_location_sync_before_cohort: true,
     fpi_and_path02_anti_leakage: true,
+    national_analogue_basis_disclosed: true,
     report_section: true,
     ui_path01_card: true,
   };
@@ -598,12 +605,14 @@ export function runValidation() {
     judgement: "validated_with_limitations",
     limitations: [
       "The deterministic harness replays locked signatures from previously documented live ISPRA checks; it is not a fresh network availability test.",
-      "Mitigation Intelligence v1 is hydraulic-only and province-cohort coverage is uneven.",
+      "Mitigation Intelligence v2 emits hydraulic strategies only; landslide and seismic are comparison context.",
+      "The current official signature registry contains dry-run placeholders, so national retrieval remains behind the 80% coverage gate and production uses the explicit provincial fallback.",
+      "No authenticated historical-at-event classes are registered; the engine does not back-cast current classes.",
       "An abstention or strategy is contextual decision support and cannot establish asset condition, safety, probability or a design prescription.",
     ],
     results,
     thresholds: THRESHOLDS,
-    validation_version: "arcus-mitigation-intelligence-validation-v1",
+    validation_version: "arcus-mitigation-intelligence-validation-v2",
   };
 }
 

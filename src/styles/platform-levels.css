@@ -2458,6 +2458,83 @@
   color: var(--arcus-bronze-soft);
 }
 
+.platform-analogue-cohort {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.2fr) minmax(210px, 0.8fr);
+  gap: 18px 28px;
+  padding: 18px;
+  border: 1px solid rgba(196,144,64,0.26);
+  background: rgba(196,144,64,0.07);
+}
+
+.platform-analogue-cohort > div > span,
+.platform-analogue-cohort dt {
+  display: block;
+  color: var(--arcus-ivory-faint);
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-analogue-cohort > div > strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--arcus-ivory);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.platform-analogue-cohort p,
+.platform-analogue-cohort small,
+.platform-analogue-cohort li span {
+  color: var(--arcus-ivory-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.platform-analogue-cohort p {
+  margin: 8px 0 0;
+}
+
+.platform-analogue-cohort dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.platform-analogue-cohort dd {
+  margin: 5px 0 0;
+  color: var(--arcus-bronze-soft);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.platform-analogue-cohort ol {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.platform-analogue-cohort li b,
+.platform-analogue-cohort li span {
+  display: block;
+}
+
+.platform-analogue-cohort li b {
+  color: var(--arcus-ivory);
+  font-size: 12px;
+}
+
+.platform-analogue-cohort small {
+  grid-column: 1 / -1;
+  padding-top: 10px;
+  border-top: 1px solid rgba(243,239,232,0.1);
+}
+
 .platform-mitigation-intelligence > article {
   display: grid;
   grid-template-columns: minmax(220px, 0.74fr) minmax(0, 1.26fr);
@@ -4265,6 +4342,8 @@
 }
 
 .platform-map-preview-shell {
+  position: relative;
+
   overflow: hidden;
 
   border-radius: 8px;
@@ -4797,6 +4876,53 @@
   padding-top: 12px;
 
   border-top: 1px solid rgba(110,133,141,0.18);
+}
+
+.platform-exposure-summary {
+  display: grid;
+  gap: 8px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid rgba(110,133,141,0.18);
+}
+
+.platform-exposure-summary span {
+  display: block;
+
+  color: var(--arcus-ink-muted);
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.platform-exposure-summary .platform-exposure-context {
+  padding: 9px 10px;
+
+  border-left: 3px solid var(--arcus-bronze);
+  border-radius: 4px;
+
+  background: rgba(196,144,64,0.1);
+  color: var(--arcus-ink);
+}
+
+.platform-exposure-details {
+  margin-top: 12px;
+}
+
+.platform-exposure-details summary {
+  color: var(--arcus-bronze);
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-exposure-details[open] summary {
+  margin-bottom: 10px;
 }
 
 .platform-project-location-grid,
@@ -8272,6 +8398,14 @@
   .platform-mitigation-intelligence > article,
   .platform-mitigation-intelligence dl {
     grid-template-columns: 1fr;
+  }
+
+  .platform-analogue-cohort {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-analogue-cohort dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .platform-mitigation-intelligence > footer p {

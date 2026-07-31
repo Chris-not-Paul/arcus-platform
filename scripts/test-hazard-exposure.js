@@ -24,6 +24,9 @@ import {
 import {
   queryIspraFloodExposure,
 } from "../server/hazard/providers/ispraFloodProvider.js";
+import {
+  queryNearbyOfficialHazardContext,
+} from "../server/hazard/nearbyHazardContextService.js";
 
 const point = {
   latitude: 45,
@@ -226,6 +229,129 @@ assert.deepEqual(LANDSLIDE_HAZARD_ORDER, ["P1", "P2", "P3", "P4"]);
 assert.equal(highestLandslideHazardClass(["P2", "P4", "P1"]), "P4");
 assert.equal(normalizeLandslideClass(0), "AA");
 assert.equal(normalizeLandslideClass(4), "P4");
+
+function nearbyRadiusFromUrl(url) {
+  const filter = url.searchParams.get("CQL_FILTER") || "";
+  const match = filter.match(/,(\d+),meters\)$/);
+
+  return match ? Number(match[1]) : null;
+}
+
+const nearbyContextFetch = async (url) => {
+  const layerName = layerNameFromUrl(url);
+  const radiusM = nearbyRadiusFromUrl(url);
+
+  if (!radiusM) {
+    return jsonResponse(featureCollection({ empty: true }));
+  }
+
+  if (
+    layerName === "nz1:aree_peric_idraulica_p2" &&
+    radiusM >= 5_000
+  ) {
+    return jsonResponse({
+      features: [
+        {
+          geometry: null,
+          properties: {
+            scenariop2: "Pericolosita idraulica media",
+          },
+          type: "Feature",
+        },
+      ],
+      type: "FeatureCollection",
+    });
+  }
+
+  if (
+    layerName === "idrogeo:pericolosita_frane" &&
+    radiusM >= 10_000
+  ) {
+    return jsonResponse({
+      features: [
+        {
+          geometry: null,
+          properties: {
+            cod_per_it: 2,
+          },
+          type: "Feature",
+        },
+        {
+          geometry: null,
+          properties: {
+            cod_per_it: 4,
+          },
+          type: "Feature",
+        },
+      ],
+      type: "FeatureCollection",
+    });
+  }
+
+  return jsonResponse(featureCollection({ empty: true }));
+};
+
+const nearbyHydraulic = await queryNearbyOfficialHazardContext(
+  "hydraulic",
+  point,
+  {
+    bypassCache: true,
+    fetchImpl: nearbyContextFetch,
+    timeoutMs: 50,
+  }
+);
+assert.equal(nearbyHydraulic.status, "available");
+assert.equal(nearbyHydraulic.point_intersection, false);
+assert.equal(nearbyHydraulic.search_radius_km, 5);
+assert.deepEqual(nearbyHydraulic.classes, ["P2"]);
+
+const nearbyLandslide = await queryNearbyOfficialHazardContext(
+  "landslide",
+  point,
+  {
+    bypassCache: true,
+    fetchImpl: nearbyContextFetch,
+    timeoutMs: 50,
+  }
+);
+assert.equal(nearbyLandslide.status, "available");
+assert.equal(nearbyLandslide.point_intersection, false);
+assert.equal(nearbyLandslide.search_radius_km, 10);
+assert.deepEqual(nearbyLandslide.classes, ["P2", "P4"]);
+assert.equal(nearbyLandslide.highest_hazard_class, "P4");
+
+const contextualResult = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic", "landslide"],
+    include_nearby_context: true,
+    ...point,
+  },
+  {
+    bypassCache: true,
+    fetchImpl: nearbyContextFetch,
+    persistentCache: false,
+    retryAttempts: 1,
+    timeoutMs: 50,
+  }
+);
+assert.equal(contextualResult.hydraulic.status, "no_intersection");
+assert.equal(
+  contextualResult.hydraulic.presentation_status,
+  "nearby_official_context"
+);
+assert.deepEqual(
+  contextualResult.hydraulic.nearby_context.classes,
+  ["P2"]
+);
+assert.equal(contextualResult.landslide.status, "no_intersection");
+assert.equal(
+  contextualResult.landslide.presentation_status,
+  "nearby_official_context"
+);
+assert.equal(
+  contextualResult.landslide.nearby_context.highest_hazard_class,
+  "P4"
+);
 
 const capturedUrls = [];
 let result = await query(async (url) => {
@@ -1265,6 +1391,10 @@ assert.deepEqual(result.query.hazards, ["hydraulic", "landslide"]);
 assert.equal(result.overall_status, "available");
 assert.equal(Object.hasOwn(result, "hydraulic"), true);
 assert.equal(Object.hasOwn(result, "landslide"), true);
+assert.equal(result.data_contract, "arcus-point-hazard-exposure-v1");
+assert.equal(result.coverage.complete_response, true);
+assert.equal(result.coverage.official_data_complete, true);
+assert.deepEqual(result.coverage.unresolved_hazards, []);
 
 result = await queryHazards(async (url, { signal }) => {
   if (layerClassFromUrl(url)) {
@@ -1399,6 +1529,22 @@ assert.equal(result.hydraulic.status, "point_not_selected");
 assert.equal(result.landslide.status, "point_not_selected");
 assert.equal(result.overall_status, "point_not_selected");
 
+result = await evaluatePointHazardExposure({});
+assert.deepEqual(result.query.hazards, [
+  "hydraulic",
+  "landslide",
+  "seismic",
+]);
+assert.equal(result.hydraulic.status, "point_not_selected");
+assert.equal(result.landslide.status, "point_not_selected");
+assert.equal(result.seismic.status, "point_not_selected");
+assert.equal(result.coverage.complete_response, true);
+assert.deepEqual(result.coverage.returned_hazards, [
+  "hydraulic",
+  "landslide",
+  "seismic",
+]);
+
 clearHazardExposureCache();
 const hydraulicOnly = await evaluatePointHazardExposure(
   {
@@ -1420,7 +1566,22 @@ const hydraulicAndLandslide = await evaluatePointHazardExposure(
     timeoutMs: 50,
   }
 );
+const hydraulicWithNearbyContextMode = await evaluatePointHazardExposure(
+  {
+    hazards: ["hydraulic"],
+    include_nearby_context: true,
+    ...point,
+  },
+  {
+    fetchImpl: fetchForClasses(["P1"]),
+    timeoutMs: 50,
+  }
+);
 assert.notEqual(hydraulicOnly.cache.key, hydraulicAndLandslide.cache.key);
+assert.notEqual(
+  hydraulicOnly.cache.key,
+  hydraulicWithNearbyContextMode.cache.key
+);
 assert.equal(hydraulicAndLandslide.cache.hit, false);
 assert.equal(hydraulicAndLandslide.landslide.status, "available");
 
@@ -1513,6 +1674,16 @@ const professionalPageSource = fs.readFileSync(
   path.join(root, "src", "pages", "ProfessionalPage.jsx"),
   "utf8"
 );
+const pointInspectorSource = fs.readFileSync(
+  path.join(
+    root,
+    "src",
+    "components",
+    "hazard",
+    "PointHazardInspector.jsx"
+  ),
+  "utf8"
+);
 assert.match(
   professionalPageSource,
   /professionalHazardExposurePoint\(\{\s*bypassCache:\s*false,\s*hazards:\s*\["hydraulic",\s*"landslide",\s*"seismic"\]/s
@@ -1543,7 +1714,35 @@ assert.match(
 );
 assert.match(
   professionalPageSource,
-  /Observation provenance[\s\S]*?ISPRA PAI Landslide[\s\S]*?does not modify the Final Priority Index/
+  /Point outcome[\s\S]*?Territorial context[\s\S]*?ISPRA PAI Landslide[\s\S]*?does not modify the Final Priority Index/
+);
+assert.match(
+  professionalPageSource,
+  /platform-map-preview-shell[\s\S]*?onPointSelect=\{[\s\S]*?commitProjectLocation/s
+);
+assert.match(
+  professionalPageSource,
+  /No ISPRA hydraulic class at selected point/
+);
+assert.match(
+  professionalPageSource,
+  /Wide-area[\s\S]*official context:[\s\S]*not assigned to the point/
+);
+assert.match(
+  professionalPageSource,
+  /Technical details and provenance/
+);
+assert.match(
+  professionalPageSource,
+  /Query completed; territorial context available/
+);
+assert.match(
+  pointInspectorSource,
+  /Risposte ricevute: \$\{returnedCount\}\/3/
+);
+assert.match(
+  pointInspectorSource,
+  /No ISPRA PAI class at selected point/
 );
 assert.match(
   professionalPageSource,

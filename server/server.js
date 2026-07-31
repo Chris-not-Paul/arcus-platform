@@ -1100,7 +1100,7 @@ async function routeRequest(request, response) {
     const requestHazards = Array.isArray(payload.hazards) &&
       payload.hazards.length
       ? payload.hazards
-      : ["hydraulic"];
+      : ["hydraulic", "landslide", "seismic"];
 
     requestHazards.forEach((hazard) => {
       traceHazardStage({
@@ -1173,9 +1173,16 @@ async function routeRequest(request, response) {
     }
 
     const payload = await readJsonBody(request);
-    const [eventResource, sourceResource] = await Promise.all([
+    const [
+      eventResource,
+      sourceResource,
+      signatureResource,
+      historicalSignatureResource,
+    ] = await Promise.all([
       getProfessionalResource("professional-events"),
       getProfessionalResource("professional-sources"),
+      getProfessionalResource("collapse-hazard-signatures"),
+      getProfessionalResource("historical-hazard-signatures"),
     ]);
     const events = Array.isArray(eventResource)
       ? eventResource
@@ -1183,13 +1190,23 @@ async function routeRequest(request, response) {
     const sources = Array.isArray(sourceResource)
       ? sourceResource
       : sourceResource?.sources || [];
+    const signatures = Array.isArray(signatureResource)
+      ? signatureResource
+      : signatureResource?.signatures || [];
+    const historicalSignatures = Array.isArray(
+      historicalSignatureResource
+    )
+      ? historicalSignatureResource
+      : historicalSignatureResource?.signatures || [];
     const synchronizedPayload = synchronizeMitigationProjectLocation(
       payload,
       await getProvinceGeometryFeatures()
     );
     const intelligence = buildMitigationIntelligence({
       events,
+      historicalSignatures,
       payload: synchronizedPayload,
+      signatures,
       sources,
     });
 

@@ -1,8 +1,12 @@
 import {
   deriveProvinceForPoint,
 } from "../src/utils/projectLocation.js";
+import {
+  buildNationalHazardAnalogueCohort,
+} from "./collapseAnalogueService.js";
 
-const ENGINE_VERSION = "arcus-mitigation-intelligence-v1";
+const ENGINE_VERSION = "arcus-mitigation-intelligence-v2";
+const NATIONAL_SIGNATURE_COVERAGE_THRESHOLD = 0.8;
 
 const HYDRAULIC_PROCESS_CATALOG = Object.freeze({
   bank_erosion_or_embankment_failure: {
@@ -320,7 +324,7 @@ function summarizeHydraulicEvidence(events, sources) {
   };
 }
 
-function strategyForProcess(processEvidence, index) {
+function strategyForProcess(processEvidence, index, cohortDescription) {
   const template = HYDRAULIC_PROCESS_CATALOG[processEvidence.process];
 
   if (!template) {
@@ -331,7 +335,7 @@ function strategyForProcess(processEvidence, index) {
     affected_components: template.affected_components,
     applicability_conditions: [
       "Official ISPRA hydraulic exposure intersects the project point.",
-      `The provincial evidence cohort contains at least three ${processEvidence.process} cases with an effective evidence count of at least two.`,
+      `The ${cohortDescription} contains at least three ${processEvidence.process} cases with an effective evidence count of at least two.`,
       "A qualified professional confirms that the documented mechanism is relevant to the project geometry and site conditions.",
     ],
     arcus_evidence: {
@@ -361,12 +365,12 @@ function strategyForProcess(processEvidence, index) {
   };
 }
 
-function genericHydraulicStrategy(summary) {
+function genericHydraulicStrategy(summary, cohortDescription) {
   return {
     affected_components: GENERIC_HYDRAULIC_STRATEGY.affected_components,
     applicability_conditions: [
       "Official ISPRA hydraulic exposure intersects the project point.",
-      "The provincial cohort has usable hydraulic evidence but no individual process passes the process-specific support threshold.",
+      `The ${cohortDescription} has usable hydraulic evidence but no individual process passes the process-specific support threshold.`,
     ],
     arcus_evidence: {
       documented_count: summary.processes.reduce((total, item) => total + item.documented_count, 0),
@@ -439,7 +443,9 @@ export function synchronizeMitigationProjectLocation(payload = {}, provinceFeatu
 
 export function buildMitigationIntelligence({
   events = [],
+  historicalSignatures = [],
   payload = {},
+  signatures = [],
   sources = [],
 } = {}) {
   const rawLatitude = payload?.project_location?.latitude;
@@ -463,8 +469,36 @@ export function buildMitigationIntelligence({
   const provinceEvents = locationValid
     ? events.filter((event) => normalize(event.province) === normalize(province))
     : [];
-  const hydraulicEvents = provinceEvents.filter((event) => event.hydraulic_intelligence);
+  const nationalAnalogueCohort = buildNationalHazardAnalogueCohort({
+    events,
+    historicalSignatures,
+    officialExposure: payload?.official_exposure,
+    signatures,
+  });
+  const hydraulicSignatureCoverage =
+    nationalAnalogueCohort.signature_coverage.total_events > 0
+      ? nationalAnalogueCohort.signature_coverage.hydraulic_complete /
+        nationalAnalogueCohort.signature_coverage.total_events
+      : 0;
+  const nationalAnalogueReady =
+    nationalAnalogueCohort.available &&
+    nationalAnalogueCohort.analogues.length >= 3 &&
+    hydraulicSignatureCoverage >= NATIONAL_SIGNATURE_COVERAGE_THRESHOLD;
+  const eventsById = new Map(
+    events.map((event) => [event.event_id, event])
+  );
+  const selectedCohortEvents = nationalAnalogueReady
+    ? nationalAnalogueCohort.analogues
+        .map((analogue) => eventsById.get(analogue.event.event_id))
+        .filter(Boolean)
+    : provinceEvents;
+  const hydraulicEvents = selectedCohortEvents.filter(
+    (event) => event.hydraulic_intelligence
+  );
   const evidence = summarizeHydraulicEvidence(hydraulicEvents, sources);
+  const cohortDescription = nationalAnalogueReady
+    ? "national current-hazard analogue cohort"
+    : "point-derived provincial fallback cohort";
   const abstentionReasons = [];
 
   if (!locationValid) {
@@ -491,7 +525,13 @@ export function buildMitigationIntelligence({
   );
   let strategies = hydraulic.active
     ? supportedProcesses
-        .map(strategyForProcess)
+        .map((processEvidence, index) =>
+          strategyForProcess(
+            processEvidence,
+            index,
+            cohortDescription
+          )
+        )
         .filter(Boolean)
         .slice(0, 3)
     : [];
@@ -501,7 +541,9 @@ export function buildMitigationIntelligence({
     strategies.length === 0 &&
     evidence.effective_evidence_count >= 2
   ) {
-    strategies = [genericHydraulicStrategy(evidence)];
+    strategies = [
+      genericHydraulicStrategy(evidence, cohortDescription),
+    ];
   }
 
   const baseStatus = !locationValid || !hydraulic.active
@@ -552,13 +594,32 @@ export function buildMitigationIntelligence({
     engine_version: ENGINE_VERSION,
     evidence_cohort: {
       ...evidence,
+      analogue_retrieval: {
+        ...nationalAnalogueCohort,
+        hydraulic_signature_coverage_ratio: rounded(
+          hydraulicSignatureCoverage
+        ),
+        minimum_coverage_ratio:
+          NATIONAL_SIGNATURE_COVERAGE_THRESHOLD,
+        production_ready: nationalAnalogueReady,
+      },
+      local_context: {
+        hydraulic_event_count: provinceEvents.filter(
+          (event) => event.hydraulic_intelligence
+        ).length,
+        province,
+        role: "territorial_context_not_primary_analogue_filter",
+        total_collapse_count: provinceEvents.length,
+      },
       outcome_fields_read_after_context_fixed: [
         "hydraulic_intelligence.failure_process",
         "hydraulic_intelligence.component_involved",
         "hydraulic_intelligence.evidence_level",
       ],
       province,
-      selection_mode: "point_derived_province_fixed_before_outcome_synthesis",
+      selection_mode: nationalAnalogueReady
+        ? "national_current_hazard_signature_fixed_before_outcome_synthesis"
+        : "point_derived_province_fallback_until_national_signature_coverage_ready",
     },
     forbidden_outputs: [
       "collapse_probability",
@@ -568,8 +629,16 @@ export function buildMitigationIntelligence({
     ],
     generated_at: new Date().toISOString(),
     limitations: [
-      "The first production slice supports hydraulic mitigation intelligence only.",
+      "The production mitigation slice supports hydraulic strategies only.",
       "Landslide and seismic exposure remain contextual until equivalent curated outcome evidence is validated.",
+      "Current official signatures support present-day comparability; they are not retrospective causal proof.",
+      "Historical-at-event classifications are used only when an authenticated, dated source is registered. They are never reconstructed from the current class.",
+      "Observed triggers and collapse processes are read only after the analogue cohort is fixed.",
+      ...(nationalAnalogueReady
+        ? []
+        : [
+            "National analogue retrieval is not used for mitigation until current hydraulic signatures cover at least 80% of the collapse database and at least three analogues are available. The point-derived provincial cohort remains an explicit fallback.",
+          ]),
       "No value from this engine contributes to the Final Priority Index or Path 02 ranking.",
     ],
     source_completeness: {
