@@ -48,6 +48,18 @@ evidence_level
 
 These inputs are attached only as draft evidence context. They do not approve a mitigation pathway automatically.
 
+For Landslide cases, production strategy generation remains gated by the
+readiness contract documented in:
+
+```text
+docs/ARCUS_LANDSLIDE_MITIGATION_READINESS.md
+```
+
+The current ISPRA PAI signature is territorial context, not a reconstruction
+of the class or bridge-landslide interaction at the collapse date. Until the
+historical outcomes carry a source-backed landslide taxonomy, the admissible
+Mitigation Intelligence result is explicit abstention.
+
 ### B. Design Risk-Control Options
 
 These are intentionally left as future expert-reviewed options. ARCUS data alone must not prescribe design solutions.

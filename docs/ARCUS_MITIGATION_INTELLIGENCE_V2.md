@@ -4,6 +4,10 @@ Status: implemented with a controlled production gate.
 
 Engine version: `arcus-mitigation-intelligence-v2`.
 
+This document records the v2 national analogue foundation. The active engine
+is v3; its episode-independence control and current thresholds are documented
+in `ARCUS_MITIGATION_INTELLIGENCE_V3.md`.
+
 ## Decision question
 
 The hydraulic vertical slice answers:
@@ -91,19 +95,22 @@ At the latest local audit:
 | Curated hydraulic intelligence | 211 / 263 (80.23%) |
 | Observed or curated triggers | 263 / 263 (100%) |
 | Structural material and typology | 263 / 263 (100%) |
-| Current official hydraulic signatures | 0 / 263 (0%) |
-| Current official landslide signatures | 0 / 263 (0%) |
-| Current official seismic signatures | 0 / 263 (0%) |
+| Current official hydraulic signatures | 263 / 263 (100%) |
+| Current official landslide signatures | 263 / 263 (100%) |
+| Current official seismic signatures | 263 / 263 (100%) |
 | Authenticated historical-at-event classes | 0 / 263 (0%) |
 
-The signature registry currently contains dry-run placeholders. Therefore the
-national production gate is closed and Path 01 remains on the explicit
-provincial fallback.
+The authorised enrichment completed on 2026-08-03 for all 263 coordinates with
+zero process errors. Hydraulic outcomes are 176 `available` and 87
+`no_intersection`; highest classes are P3 for 141 events, P2 for 27 and P1 for
+8. Landslide outcomes are 44 `available` and 219 `no_intersection`. Seismic
+outcomes are 248 `available` and 15 `outside_coverage` from the local MPS04
+grid.
 
-Populating current signatures requires transmitting the documented collapse
-coordinates to the official ISPRA and INGV services. This operation must be
-explicitly authorised and must not be represented as completed while the
-registry still contains dry-run values.
+The national production gate is therefore open. An individual Path 01 request
+still requires an official hydraulic intersection at the project point and at
+least three eligible analogues; otherwise the engine abstains or uses its
+explicit fallback according to the documented contract.
 
 ## Path 01 and report
 

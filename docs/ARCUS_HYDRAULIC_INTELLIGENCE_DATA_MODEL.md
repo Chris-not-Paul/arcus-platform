@@ -20,6 +20,23 @@ For Hydraulic events the canonical object is:
 }
 ```
 
+An authenticated editorial review may also assign an optional stable episode
+identifier:
+
+```json
+{
+  "hydraulic_episode_id": "hydraulic:curated:2020-10-north-west-flood"
+}
+```
+
+The legacy-compatible location
+`hydraulic_intelligence.episode_id` is accepted as an alias. A curated ID may
+merge records on different dates or keep same-date records separate. It affects
+only the independence control used after analogue retrieval; it is forbidden as
+a retrieval feature, probability, severity value or Final Priority Index input.
+Curated identifiers must follow `hydraulic:curated:<stable-id>`; the
+`hydraulic:inferred:` namespace is reserved for deterministic fallback groups.
+
 All 20 allowed values come from the workbook `TAXONOMY` sheet. `Rainfall-induced landslide` is preserved as the documented trigger chain and is not automatically reclassified. `Unspecified` produces `null` for process or component. `Needs review` remains the distinct canonical class `needs_review`.
 
 ## Release coverage
@@ -42,3 +59,5 @@ The rain/flood trigger, process, component and evidence class can support contex
 - Probable and Needs review records must not be presented as definitive mechanisms.
 - Cohort shares are database frequencies, not site probabilities.
 - ISPRA/INGV official exposure is a separate Professional input.
+- Missing curated episode IDs invoke the versioned conservative registry rule;
+  they are not silently represented as meteorologically verified events.

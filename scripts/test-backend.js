@@ -67,6 +67,7 @@ await fs.mkdir(path.join(testDataDir, "professional"), {
   recursive: true,
 });
 const mitigationFixtureEvents = [1, 2, 3].map((index) => ({
+  date: `${2018 + index * 2}-01-01`,
   event_id: `B00.00.0${index}`,
   hydraulic_intelligence: {
     component_involved: "pier_foundation",
@@ -399,9 +400,10 @@ try {
       promotedSession
     )
   );
-  assert(mitigation.status === "available", "mitigation endpoint did not return an available result");
-  assert(mitigation.strategies[0].process === "scour", "mitigation endpoint returned the wrong process");
+  assert(mitigation.status === "limited_evidence", "mitigation endpoint did not preserve the episode-aware limited result");
+  assert(mitigation.strategies[0].process === "hydraulic_process_not_resolved", "mitigation endpoint returned the wrong episode-aware fallback");
   assert(mitigation.evidence_cohort.event_count === 3, "mitigation endpoint used the wrong evidence cohort");
+  assert(mitigation.evidence_cohort.episode_count === 3, "mitigation endpoint used the wrong independent-episode count");
 
   const passwordChange = await json(
     await postJson(

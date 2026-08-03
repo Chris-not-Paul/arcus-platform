@@ -16,8 +16,17 @@ const THRESHOLDS = Object.freeze({
     probable: 0.5,
   },
   moderate: { effective_minimum: 5, raw_minimum: 8 },
-  process_qualification: { effective_minimum: 2, raw_minimum: 3 },
-  usable_cohort: { effective_minimum: 2 },
+  process_qualification: {
+    effective_minimum: 2,
+    episode_effective_minimum: 4,
+    independent_episode_minimum: 5,
+    raw_minimum: 3,
+  },
+  usable_cohort: {
+    effective_minimum: 2,
+    episode_effective_minimum: 2,
+    independent_episode_minimum: 2,
+  },
 });
 
 function readCollection(relativePath, key) {
@@ -40,6 +49,26 @@ const provinceFeatures = readCollection(
   "public/data/geo/italy-provinces.geojson",
   "features"
 );
+const currentHazardSignatures = readCollection(
+  "private-data/professional/collapse-intelligence/collapse-hazard-signatures.json",
+  "signatures"
+);
+const historicalHazardSignatures = readCollection(
+  "private-data/professional/collapse-intelligence/historical-hazard-signatures.json",
+  "signatures"
+);
+const COMPLETED_SIGNATURE_STATUSES = new Set([
+  "available",
+  "no_intersection",
+  "outside_coverage",
+  "partial",
+]);
+
+function completedSignatureCount(hazard) {
+  return currentHazardSignatures.filter((signature) =>
+    COMPLETED_SIGNATURE_STATUSES.has(signature?.[hazard]?.status)
+  ).length;
+}
 
 const OFFICIAL_HYDRAULIC_SNAPSHOTS = Object.freeze({
   p1: {
@@ -107,7 +136,7 @@ const CASES = Object.freeze([
   },
   {
     coordinates: { latitude: 45.0703, longitude: 7.6869 },
-    expected: { province: "Torino", status: "available" },
+    expected: { province: "Torino", status: "limited_evidence" },
     exposure: OFFICIAL_HYDRAULIC_SNAPSHOTS.p2,
     exposureBasis: "controlled_available_exposure_fixture",
     id: "abundant_hydraulic_evidence",
@@ -115,7 +144,7 @@ const CASES = Object.freeze([
   },
   {
     coordinates: { latitude: 44.1025, longitude: 9.8241 },
-    expected: { province: "La Spezia", status: "limited_evidence" },
+    expected: { province: "La Spezia", status: "abstained" },
     exposure: OFFICIAL_HYDRAULIC_SNAPSHOTS.p2,
     exposureBasis: "controlled_available_exposure_fixture",
     id: "limited_hydraulic_evidence",
@@ -183,7 +212,7 @@ const CASES = Object.freeze([
   },
   {
     coordinates: { latitude: 43.6158, longitude: 13.5189 },
-    expected: { province: "Ancona", status: "available" },
+    expected: { province: "Ancona", status: "limited_evidence" },
     exposure: OFFICIAL_HYDRAULIC_SNAPSHOTS.p2,
     exposureBasis: "controlled_available_exposure_fixture",
     id: "territorial_mismatch_ignored",
@@ -259,7 +288,11 @@ function summarizeCase(testCase, synchronizedPayload, intelligence) {
       (process) =>
         process.raw_count >= THRESHOLDS.process_qualification.raw_minimum &&
         process.effective_evidence_count >=
-          THRESHOLDS.process_qualification.effective_minimum
+          THRESHOLDS.process_qualification.effective_minimum &&
+        process.episode_count >=
+          THRESHOLDS.process_qualification.independent_episode_minimum &&
+        process.episode_effective_evidence_count >=
+          THRESHOLDS.process_qualification.episode_effective_minimum
     )
     .map((process) => process.process);
 
@@ -271,6 +304,8 @@ function summarizeCase(testCase, synchronizedPayload, intelligence) {
       intelligence.decision_context.project_location.derived_province,
     effective_weighted_evidence:
       intelligence.evidence_cohort.effective_evidence_count,
+    episode_effective_evidence:
+      intelligence.evidence_cohort.episode_effective_evidence_count,
     evidence_level_distribution: evidenceLevelDistribution(
       intelligence.evidence_cohort.event_ids
     ),
@@ -293,6 +328,9 @@ function summarizeCase(testCase, synchronizedPayload, intelligence) {
     process_strength_distribution: intelligence.evidence_cohort.processes.map(
       (process) => ({
         effective_evidence_count: process.effective_evidence_count,
+        episode_count: process.episode_count,
+        episode_effective_evidence_count:
+          process.episode_effective_evidence_count,
         evidence_strength: process.evidence_strength,
         process: process.process,
         raw_count: process.raw_count,
@@ -305,9 +343,16 @@ function summarizeCase(testCase, synchronizedPayload, intelligence) {
     raw_cohort: {
       event_count: intelligence.evidence_cohort.event_count,
       event_ids: intelligence.evidence_cohort.event_ids,
+      independent_episode_count:
+        intelligence.evidence_cohort.episode_count,
+      supported_episode_count:
+        intelligence.evidence_cohort.supported_episode_count,
     },
     sources,
     strategies: intelligence.strategies.map((strategy) => ({
+      episode_count: strategy.arcus_evidence.episode_count,
+      episode_effective_evidence_count:
+        strategy.arcus_evidence.episode_effective_evidence_count,
       event_ids: strategy.arcus_evidence.event_ids,
       external_validation_required: strategy.external_validation_required,
       process: strategy.process,
@@ -356,11 +401,19 @@ function validateCase(testCase) {
 }
 
 function syntheticEvent(eventId, {
+  date = undefined,
   evidence = "documented",
   process = "scour",
   province = "Test Province",
+  region = "Test Region",
 } = {}) {
+  const number = Number(String(eventId).match(/\d+/)?.[0] || 1);
+  const fixtureMonth = Math.floor((number - 1) / 7) + 1;
+  const fixtureDay = ((number - 1) % 7) * 4 + 1;
+  const fixtureDate = `2000-${String(fixtureMonth).padStart(2, "0")}-${String(fixtureDay).padStart(2, "0")}`;
+
   return {
+    date: date === undefined ? fixtureDate : date,
     event_id: eventId,
     hydraulic_intelligence: {
       component_involved: "pier_foundation",
@@ -368,6 +421,7 @@ function syntheticEvent(eventId, {
       failure_process: process,
     },
     province,
+    region,
   };
 }
 
@@ -391,15 +445,56 @@ function syntheticBuild(events) {
 
 function validateThresholdsAndInvariants() {
   const exactThreshold = syntheticBuild([
+    syntheticEvent("T05"),
+    syntheticEvent("T04"),
     syntheticEvent("T03"),
     syntheticEvent("T01", { evidence: "probable" }),
     syntheticEvent("T02", { evidence: "probable" }),
   ]);
   assert.equal(exactThreshold.status, "available");
-  assert.equal(exactThreshold.strategies[0].arcus_evidence.raw_count, 3);
+  assert.equal(exactThreshold.strategies[0].arcus_evidence.raw_count, 5);
   assert.equal(
     exactThreshold.strategies[0].arcus_evidence.effective_evidence_count,
-    2
+    4
+  );
+  assert.equal(
+    exactThreshold.strategies[0].arcus_evidence.episode_count,
+    5
+  );
+
+  const singleEpisodeReplication = syntheticBuild([
+    syntheticEvent("E01", { date: "2020-10-03" }),
+    syntheticEvent("E02", { date: "2020-10-03" }),
+    syntheticEvent("E03", { date: "2020-10-03" }),
+    syntheticEvent("E04", { date: "2020-10-03" }),
+  ]);
+  assert.equal(singleEpisodeReplication.status, "abstained");
+  assert.equal(singleEpisodeReplication.strategies.length, 0);
+  assert.equal(singleEpisodeReplication.evidence_cohort.episode_count, 1);
+  assert.equal(
+    singleEpisodeReplication.evidence_cohort
+      .episode_effective_evidence_count,
+    1
+  );
+  assert.equal(
+    singleEpisodeReplication.abstention_reasons.includes(
+      "insufficient_independent_hydraulic_episode_evidence"
+    ),
+    true
+  );
+
+  const independentEpisodeSupport = syntheticBuild([
+    syntheticEvent("I01", { date: "2018-01-01" }),
+    syntheticEvent("I02", { date: "2020-01-01" }),
+    syntheticEvent("I03", { date: "2022-01-01" }),
+    syntheticEvent("I04", { date: "2024-01-01" }),
+    syntheticEvent("I05", { date: "2026-01-01" }),
+  ]);
+  assert.equal(independentEpisodeSupport.status, "available");
+  assert.equal(
+    independentEpisodeSupport.strategies[0].arcus_evidence
+      .episode_count,
+    5
   );
 
   const belowEffectiveThreshold = syntheticBuild([
@@ -439,13 +534,21 @@ function validateThresholdsAndInvariants() {
   const underRawThreshold = syntheticBuild([
     syntheticEvent("R01", { process: "scour" }),
     syntheticEvent("R02", { process: "scour" }),
-    syntheticEvent("R03", {
-      process: "bank_erosion_or_embankment_failure",
-    }),
-    syntheticEvent("R04", {
-      process: "bank_erosion_or_embankment_failure",
-    }),
+    syntheticEvent("R03", { process: "scour" }),
+    syntheticEvent("R04", { process: "scour" }),
     syntheticEvent("R05", {
+      process: "bank_erosion_or_embankment_failure",
+    }),
+    syntheticEvent("R06", {
+      process: "bank_erosion_or_embankment_failure",
+    }),
+    syntheticEvent("R07", {
+      process: "bank_erosion_or_embankment_failure",
+    }),
+    syntheticEvent("R08", {
+      process: "bank_erosion_or_embankment_failure",
+    }),
+    syntheticEvent("R09", {
       process: "bank_erosion_or_embankment_failure",
     }),
   ]);
@@ -502,6 +605,8 @@ function validateThresholdsAndInvariants() {
     generic_fallback_only_for_usable_cohort: true,
     needs_review_weight: 0,
     no_under_threshold_process_strategy: true,
+    repeated_bridges_do_not_inflate_episode_support: true,
+    five_independent_episodes_support_process_strategy: true,
     outcomes_read_after_cohort_fixed: true,
     probable_weight: 0.5,
     process_threshold: THRESHOLDS.process_qualification,
@@ -537,6 +642,8 @@ function validateStaticIntegration() {
   assert.match(professionalPage, /platform-mitigation-intelligence/);
   assert.match(professionalPage, /MITIGATION INTELLIGENCE/);
   assert.match(professionalPage, /effective weighted cases/);
+  assert.match(professionalPage, /Independent episodes/);
+  assert.match(professionalPage, /episode-effective evidence/);
   assert.match(professionalPage, /Evidence basis/);
   assert.match(professionalPage, /national database with no geographic filter/);
   assert.match(professionalPage, /80%/);
@@ -591,6 +698,12 @@ export function runValidation() {
     ...validateThresholdsAndInvariants(),
     ...validateStaticIntegration(),
   };
+  const hydraulicSignatureCount = completedSignatureCount("hydraulic");
+  const hydraulicSignatureCoverage = professionalEvents.length
+    ? hydraulicSignatureCount / professionalEvents.length
+    : 0;
+  const nationalRetrievalProductionReady =
+    hydraulicSignatureCoverage >= 0.8;
 
   return {
     checks,
@@ -605,14 +718,36 @@ export function runValidation() {
     judgement: "validated_with_limitations",
     limitations: [
       "The deterministic harness replays locked signatures from previously documented live ISPRA checks; it is not a fresh network availability test.",
-      "Mitigation Intelligence v2 emits hydraulic strategies only; landslide and seismic are comparison context.",
-      "The current official signature registry contains dry-run placeholders, so national retrieval remains behind the 80% coverage gate and production uses the explicit provincial fallback.",
-      "No authenticated historical-at-event classes are registered; the engine does not back-cast current classes.",
+    "Mitigation Intelligence v3 emits hydraulic strategies only; landslide and seismic are comparison context.",
+    "Hydraulic episode grouping is a conservative temporal-regional independence control, not a meteorological reanalysis or proof of common causation.",
+      ...(!nationalRetrievalProductionReady
+        ? [
+            `Current official hydraulic signatures cover ${hydraulicSignatureCount}/${professionalEvents.length} events; national retrieval remains behind the 80% production gate.`,
+          ]
+        : []),
+      ...(historicalHazardSignatures.length === 0
+        ? [
+            "No authenticated historical-at-event classes are registered; the engine does not back-cast current classes.",
+          ]
+        : []),
       "An abstention or strategy is contextual decision support and cannot establish asset condition, safety, probability or a design prescription.",
     ],
+    runtime_readiness: {
+      historical_at_event_classifications:
+        historicalHazardSignatures.length,
+      minimum_hydraulic_signature_coverage_ratio: 0.8,
+      national_retrieval_production_ready:
+        nationalRetrievalProductionReady,
+      official_current_signatures: {
+        hydraulic: completedSignatureCount("hydraulic"),
+        landslide: completedSignatureCount("landslide"),
+        seismic: completedSignatureCount("seismic"),
+        total_events: professionalEvents.length,
+      },
+    },
     results,
     thresholds: THRESHOLDS,
-    validation_version: "arcus-mitigation-intelligence-validation-v2",
+    validation_version: "arcus-mitigation-intelligence-validation-v3",
   };
 }
 

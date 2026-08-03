@@ -3881,13 +3881,34 @@ export default function ProfessionalPage() {
     ).replaceAll("_", " ");
     const mitigationUsesNationalAnalogues =
       mitigationEvidence?.analogue_retrieval?.production_ready === true;
+    const mitigationPointIntersectionRequired =
+      mitigationEvidence?.analogue_retrieval?.reason ===
+      "official_hydraulic_point_intersection_required";
     const mitigationEvidenceSummary = mitigationEvidence
       ? it
-        ? `${mitigationEvidence.event_count || 0} casi idraulici nella ${mitigationUsesNationalAnalogues ? "coorte nazionale di analoghi" : "coorte provinciale di fallback"}; ${mitigationEvidence.effective_evidence_count || 0} casi effettivi pesati; ${mitigationEvidence.linked_source_count || 0} fonti collegate.`
-        : `${mitigationEvidence.event_count || 0} hydraulic cases in the ${mitigationUsesNationalAnalogues ? "national analogue cohort" : "provincial fallback cohort"}; ${mitigationEvidence.effective_evidence_count || 0} effective weighted cases; ${mitigationEvidence.linked_source_count || 0} linked sources.`
+        ? `${mitigationEvidence.event_count || 0} casi idraulici nella ${mitigationUsesNationalAnalogues ? "coorte nazionale di analoghi" : "coorte provinciale di fallback"}; ${mitigationEvidence.episode_count || 0} episodi idraulici indipendenti; ${mitigationEvidence.effective_evidence_count || 0} casi effettivi pesati; ${mitigationEvidence.episode_effective_evidence_count || 0} evidenza episode-effective; ${mitigationEvidence.linked_source_count || 0} fonti collegate.`
+        : `${mitigationEvidence.event_count || 0} hydraulic cases in the ${mitigationUsesNationalAnalogues ? "national analogue cohort" : "provincial fallback cohort"}; ${mitigationEvidence.episode_count || 0} independent hydraulic episodes; ${mitigationEvidence.effective_evidence_count || 0} effective weighted cases; ${mitigationEvidence.episode_effective_evidence_count || 0} episode-effective evidence; ${mitigationEvidence.linked_source_count || 0} linked sources.`
       : it
         ? "Sintesi di evidenza non disponibile."
         : "Evidence synthesis unavailable.";
+    const mitigationRegistryQuality =
+      mitigationEvidence?.episode_registry_quality || {};
+    const mitigationRegistrySummary = it
+      ? `${mitigationRegistryQuality.curated_episode_count || 0} episodi con override curato; ${mitigationRegistryQuality.source_linked_episode_count || 0} supportati da fonti condivise; ${mitigationRegistryQuality.review_required_episode_count || 0} da revisionare; ${mitigationRegistryQuality.review_recommended_episode_count || 0} con revisione raccomandata.`
+      : `${mitigationRegistryQuality.curated_episode_count || 0} episodes with curated override; ${mitigationRegistryQuality.source_linked_episode_count || 0} supported by shared sources; ${mitigationRegistryQuality.review_required_episode_count || 0} requiring review; ${mitigationRegistryQuality.review_recommended_episode_count || 0} with review recommended.`;
+    const mitigationRetrievalRobustness =
+      mitigationEvidence?.retrieval_robustness;
+    const mitigationRobustnessSummary = mitigationRetrievalRobustness?.applied
+      ? it
+        ? `Consenso su finestre annidate 15/20/25; almeno ${mitigationRetrievalRobustness.minimum_supporting_windows || 2} finestre devono qualificare lo stesso processo.`
+        : `Consensus across nested 15/20/25 windows; at least ${mitigationRetrievalRobustness.minimum_supporting_windows || 2} windows must qualify the same process.`
+      : mitigationPointIntersectionRequired
+        ? it
+          ? "Controllo 15/20/25 non applicabile: senza intersezione idraulica del punto non viene attivata alcuna coorte."
+          : "The 15/20/25 control is not applicable: no cohort is activated without a point-level hydraulic intersection."
+      : it
+        ? "Controllo 15/20/25 non applicabile al fallback provinciale."
+        : "The 15/20/25 control is not applicable to the provincial fallback.";
     const mitigationAnalogueRetrieval =
       mitigationEvidence?.analogue_retrieval;
     const mitigationSignatureCoverage = Math.round(
@@ -3900,6 +3921,10 @@ export default function ProfessionalPage() {
       ? it
         ? `${mitigationAnalogueRetrieval?.analogues?.length || 0} analoghi selezionati sull'intero database nazionale tramite la firma hazard ufficiale attuale. La provincia derivata dal punto resta contesto territoriale e non e un filtro di retrieval.`
         : `${mitigationAnalogueRetrieval?.analogues?.length || 0} analogues selected across the national database by current official hazard signature. The point-derived province remains territorial context and is not a retrieval filter.`
+      : mitigationPointIntersectionRequired
+        ? it
+          ? "Nessun retrieval nazionale attivato: il punto non interseca una classe idraulica ufficiale. I casi provinciali restano esclusivamente contesto storico territoriale."
+          : "No national retrieval activated: the point does not intersect an official hydraulic class. Provincial cases remain territorial historical context only."
       : it
         ? `Fallback provinciale controllato: copertura delle firme idrauliche ufficiali attuali ${mitigationSignatureCoverage}% (soglia di attivazione nazionale 80%).`
         : `Controlled provincial fallback: current official hydraulic-signature coverage ${mitigationSignatureCoverage}% (80% national activation threshold).`;
@@ -4832,6 +4857,8 @@ export default function ProfessionalPage() {
         ${sectionHeading("12", it ? "MITIGATION INTELLIGENCE" : "MITIGATION INTELLIGENCE")}
         <p><strong>Status:</strong> ${escapeHtml(mitigationStatus)}. ${escapeHtml(mitigationEvidenceSummary)}</p>
         <p><strong>${it ? "Base di evidenza" : "Evidence basis"}:</strong> ${escapeHtml(mitigationCohortSummary)}</p>
+        <p><strong>${it ? "Registro episodi" : "Episode registry"}:</strong> ${escapeHtml(mitigationRegistrySummary)}</p>
+        <p><strong>${it ? "Robustezza retrieval" : "Retrieval robustness"}:</strong> ${escapeHtml(mitigationRobustnessSummary)}</p>
         ${mitigationAnalogueRows ? `
           <table>
             <thead><tr>
@@ -7447,6 +7474,8 @@ export default function ProfessionalPage() {
         title: `Mitigation intelligence - ${mitigationReportSummary.status}`,
         text: [
           mitigationReportSummary.evidenceText,
+          mitigationReportSummary.registryQualityText,
+          mitigationReportSummary.retrievalRobustnessText,
           mitigationReportSummary.cohortText,
           mitigationReportSummary.outcomeText,
           mitigationReportSummary.sourceText,
@@ -12570,6 +12599,12 @@ export default function ProfessionalPage() {
                         ? language === "it"
                           ? "Analoghi nazionali per firma di pericolosita attuale"
                           : "National analogues by current hazard signature"
+                        : path01MitigationIntelligence.evidence_cohort
+                            .analogue_retrieval.reason ===
+                          "official_hydraulic_point_intersection_required"
+                          ? language === "it"
+                            ? "Nessuna coorte: punto fuori dai perimetri idraulici"
+                            : "No cohort: point outside hydraulic perimeters"
                         : language === "it"
                           ? "Fallback provinciale controllato"
                           : "Controlled provincial fallback"}
@@ -12580,6 +12615,12 @@ export default function ProfessionalPage() {
                         ? language === "it"
                           ? "La provincia resta contesto locale; non limita la ricerca degli analoghi. Cause, processi e componenti vengono letti solo dopo avere fissato la coorte."
                           : "The province remains local context and does not restrict analogue retrieval. Causes, processes and components are read only after the cohort is fixed."
+                        : path01MitigationIntelligence.evidence_cohort
+                            .analogue_retrieval.reason ===
+                          "official_hydraulic_point_intersection_required"
+                          ? language === "it"
+                            ? "Il retrieval nazionale non viene attivato senza una classe idraulica assegnata al punto. I casi provinciali restano solo contesto storico; la vicinanza a perimetri ufficiali non viene trasformata in intersezione."
+                            : "National retrieval is not activated without a hydraulic class assigned to the point. Provincial cases remain historical context only; proximity to official perimeters is not converted into intersection."
                         : language === "it"
                           ? "Il motore nazionale resta disattivato finche le firme idrauliche ufficiali non coprono almeno l'80% del database. Nessun dato mancante viene trasformato in somiglianza."
                           : "The national engine remains disabled until official hydraulic signatures cover at least 80% of the database. Missing data is never converted into similarity."}
@@ -12626,6 +12667,32 @@ export default function ProfessionalPage() {
                           .analogue_retrieval.analogues?.length || 0}
                       </dd>
                     </div>
+                    <div>
+                      <dt>
+                        {language === "it"
+                          ? "Episodi indipendenti"
+                          : "Independent episodes"}
+                      </dt>
+                      <dd>
+                        {path01MitigationIntelligence.evidence_cohort
+                          .episode_count || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>
+                        {language === "it"
+                          ? "Revisione episodi"
+                          : "Episode review"}
+                      </dt>
+                      <dd>
+                        {(path01MitigationIntelligence.evidence_cohort
+                          .episode_registry_quality
+                          ?.review_required_episode_count || 0) +
+                          (path01MitigationIntelligence.evidence_cohort
+                            .episode_registry_quality
+                            ?.review_recommended_episode_count || 0)}
+                      </dd>
+                    </div>
                   </dl>
                   {path01MitigationIntelligence.evidence_cohort
                     .analogue_retrieval.production_ready &&
@@ -12662,6 +12729,19 @@ export default function ProfessionalPage() {
                       ? "La firma attuale serve alla comparabilita nazionale; non ricostruisce la pericolosita storica e non prova la causa del collasso."
                       : "The current signature supports national comparability; it does not reconstruct historical hazard or prove collapse causation."}
                   </small>
+                  <small>
+                    {language === "it"
+                      ? `${path01MitigationIntelligence.evidence_cohort.episode_registry_quality?.curated_episode_count || 0} episodi con override curato; ${path01MitigationIntelligence.evidence_cohort.episode_registry_quality?.source_linked_episode_count || 0} supportati da fonti condivise; i raggruppamenti inferiti restano esplicitamente revisionabili.`
+                      : `${path01MitigationIntelligence.evidence_cohort.episode_registry_quality?.curated_episode_count || 0} episodes with curated override; ${path01MitigationIntelligence.evidence_cohort.episode_registry_quality?.source_linked_episode_count || 0} supported by shared sources; inferred groups remain explicitly reviewable.`}
+                  </small>
+                  {path01MitigationIntelligence.evidence_cohort
+                    .retrieval_robustness?.applied && (
+                    <small>
+                      {language === "it"
+                        ? `Consenso retrieval 15/20/25: ${path01MitigationIntelligence.evidence_cohort.retrieval_robustness.process_support.filter((process) => process.consensus_reached).map((process) => `${process.process.replaceAll("_", " ")} (${process.qualifying_window_count}/${process.total_window_count})`).join(", ") || "nessun processo specifico"}.`
+                        : `Retrieval consensus 15/20/25: ${path01MitigationIntelligence.evidence_cohort.retrieval_robustness.process_support.filter((process) => process.consensus_reached).map((process) => `${process.process.replaceAll("_", " ")} (${process.qualifying_window_count}/${process.total_window_count})`).join(", ") || "no specific process"}.`}
+                    </small>
+                  )}
                 </section>
               )}
 
@@ -12702,8 +12782,12 @@ export default function ProfessionalPage() {
                       <div>
                         <dt>{language === "it" ? "Evidenza" : "Evidence"}</dt>
                         <dd>
-                          {strategy.arcus_evidence.documented_count} {language === "it" ? "documentati" : "documented"} / {" "}
-                          {strategy.arcus_evidence.effective_evidence_count} {language === "it" ? "effettivi" : "effective"}
+                          {strategy.arcus_evidence.raw_count} {language === "it" ? "casi" : "cases"} / {" "}
+                          {strategy.arcus_evidence.episode_count || 0} {language === "it" ? "episodi" : "episodes"} / {" "}
+                          {strategy.arcus_evidence.episode_effective_evidence_count || 0} {language === "it" ? "episode-effective" : "episode-effective"}
+                          {strategy.arcus_evidence.retrieval_window_support
+                            ? ` / ${strategy.arcus_evidence.retrieval_window_support.qualifying_window_count || 0}/${strategy.arcus_evidence.retrieval_window_support.total_window_count || 0} ${language === "it" ? "finestre retrieval" : "retrieval windows"}`
+                            : ""}
                         </dd>
                       </div>
                       <div>
@@ -12738,7 +12822,9 @@ export default function ProfessionalPage() {
               <footer>
                 <span>
                   {path01MitigationIntelligence?.evidence_cohort
-                    ?.event_count || 0} {language === "it" ? "casi idraulici nel contesto" : "hydraulic cases in context"}
+                    ?.event_count || 0} {language === "it" ? "casi idraulici" : "hydraulic cases"} / {" "}
+                  {path01MitigationIntelligence?.evidence_cohort
+                    ?.episode_count || 0} {language === "it" ? "episodi indipendenti" : "independent episodes"}
                 </span>
                 <p>
                   {language === "it"

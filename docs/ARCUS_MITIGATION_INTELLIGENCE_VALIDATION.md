@@ -1,12 +1,35 @@
-# ARCUS Mitigation Intelligence v1 — End-to-end validation
+# ARCUS Mitigation Intelligence v3 - End-to-end validation
 
 ## Validation judgement
 
 **`validated_with_limitations`**
 
-The hydraulic vertical slice is deterministic, abstains under the defined conditions, preserves the server-derived territorial cohort, does not leak into the Final Priority Index or Path 02, and is coherently connected to the authenticated Professional endpoint, Path 01 UI and report. Readiness is limited by uneven provincial evidence coverage and by the fact that the deterministic harness replays locked results from documented live ISPRA checks rather than depending on the availability of the remote provider on every run.
+The hydraulic vertical slice is deterministic, abstains under the defined conditions, preserves the server-derived project location, uses national current-signature analogues when the production gate is open, and does not leak into the Final Priority Index or Path 02. Version 3 also prevents multiple bridge collapses from the same inferred flood episode from being counted as independent repetitions. Readiness remains limited because episode grouping is a conservative rule-based inference and the deterministic harness replays locked results from documented live ISPRA checks rather than depending on the remote provider on every run.
 
 No probability, safe/unsafe classification, normalized mitigation score or automatic design prescription is produced.
+
+## v3 hydraulic episode independence
+
+The active `arcus-mitigation-intelligence-v3` engine is documented in
+`ARCUS_MITIGATION_INTELLIGENCE_V3.md`. Hydraulic records on the same date are
+grouped conservatively into one national episode; records no more than 48 hours
+apart in the same region are connected to the same episode. An undated record
+remains event-level evidence but cannot establish independent repetition. This is an independence control, not a meteorological
+reanalysis or causal attribution.
+
+One episode contributes at most one effective evidence unit per process. A
+process-specific strategy now requires at least five independent episodes and
+four episode-effective units, in addition to the event-level raw/effective
+basis. A usable generic fallback requires at least two supported episodes and
+two episode-effective units.
+
+The deterministic sensitivity audit removes every selected hydraulic case in
+turn. Across P1, P2 and P3 current-signature archetypes, analogue retrieval,
+final status and emitted strategies remained stable in 100% of leave-one-out
+runs. The resulting outputs are deliberately narrower: P1 produces a generic
+`limited_evidence` investigation, while P2 and P3 retain only the scour
+process-specific priority. These archetypes are not represented as fresh live
+ISPRA point observations.
 
 ## v2 national analogue foundation
 
@@ -19,11 +42,12 @@ Trigger, failure process and affected component are read only after the cohort
 is fixed.
 
 The production gate requires at least 80% current official hydraulic-signature
-coverage and at least three eligible analogues. The current registry contains
-263 dry-run placeholders and zero completed official signatures, so the gate is
-closed and the UI/report explicitly use the controlled point-derived provincial
-fallback. This prevents a partially enriched national sample from creating
-selection bias.
+coverage and at least three eligible analogues. The authorised 2026-08-03 run
+completed all 263 current hydraulic, landslide and seismic signatures with zero
+process errors, so the national coverage gate is open. The hydraulic registry
+contains 176 current intersections and 87 `no_intersection` outcomes. The
+engine continues to exclude non-intersecting hydraulic candidates rather than
+converting missing similarity into evidence.
 
 The historical-at-event registry is deliberately empty. The current official
 class is never assigned to the year of collapse; a historical class is accepted
@@ -33,10 +57,10 @@ interpretation but does not block present-day current-signature retrieval.
 Unit fixtures verify national cross-province retrieval, deterministic ranking,
 the absence of geography filters, `outcome_fields_used_for_selection: []`,
 post-retrieval outcome reading and the non-reconstruction of missing historical
-classes. Live population of the current-signature registry remains pending
-explicit authorisation to send the 263 collapse coordinates to the official
-ISPRA and INGV services. The overall judgement remains
-`validated_with_limitations`.
+classes. The current-signature registry is now populated from the authorised
+ISPRA run and the local INGV MPS04 grid. The overall judgement remains
+`validated_with_limitations` because the production strategy slice is still
+hydraulic-only and no authenticated historical-at-event classes are registered.
 
 ## Reproducible command
 
@@ -51,11 +75,11 @@ The machine-readable output includes, for every case, coordinates, client and se
 ```mermaid
 flowchart LR
   A["Validated project point"] --> B["Server point-in-polygon province"]
-  B --> C["Official ISPRA hydraulic result"]
-  C --> D["Province-fixed Professional cohort"]
+  B --> C["Official current ISPRA / INGV signature"]
+  C --> D["National analogue cohort fixed before outcomes"]
   D --> E["Read hydraulic outcomes after retrieval"]
-  E --> F["Evidence weights: 1 / 0.5 / 0"]
-  F --> G{"Process raw >= 3 and effective >= 2?"}
+  E --> F["Group independent episodes and cap same-episode support"]
+  F --> G{"Process episodes >= 5 and episode-effective >= 4?"}
   G -->|Yes| H["Process-specific strategies"]
   G -->|No; cohort effective >= 2| I["Generic investigation fallback"]
   G -->|No usable support| J["Controlled abstention"]
@@ -72,19 +96,19 @@ flowchart LR
 
 The P1, P2, P3 and Torino `no_intersection` rows replay exact coordinates and signatures previously observed against the live ISPRA WFS and documented in `PROFESSIONAL_HYDRAULIC_EXPOSURE_VALIDATION.md`. The other rows use a controlled `available` exposure fixture to isolate territorial and threshold behaviour; they are not represented as new live ISPRA observations.
 
-| Case | Coordinates | Province | ISPRA result | Raw evidence | Effective evidence | Strategies | Status | Result |
+| Case | Coordinates | Province | ISPRA result | Raw / effective | Episodes / episode-effective | Strategies | Status | Result |
 |---|---|---|---|---:|---:|---|---|---|
-| Real ISPRA P1 replay | `38.94973151, 8.72300141` | Sud Sardegna (client: Cagliari, corrected) | `available`; P1; highest P1 | 0 | 0 | none | `abstained` | PASS — insufficient provincial evidence |
-| Real ISPRA P2 replay | `38.94340710, 8.91222919` | Cagliari | `available`; P1/P2; highest P2 | 3 | 2.5 | generic hydraulic investigation | `limited_evidence` | PASS |
-| Real ISPRA P3 replay | `37.67112259, 12.58006927` | Trapani (client: Palermo, corrected) | `available`; P1/P2/P3; highest P3 | 2 | 1.5 | none | `abstained` | PASS — below effective threshold |
-| Real ISPRA no-intersection replay | `45.28970000, 7.94194000` | Torino | `no_intersection`; no class | 40 | 26 | none | `abstained` | PASS — abundant history cannot override no-intersection |
-| Abundant hydraulic evidence | `45.07030000, 7.68690000` | Torino | controlled `available`; P1/P2; highest P2 | 40 | 26 | bank/embankment, scour, overtopping/hydrodynamic | `available` | PASS |
-| Limited hydraulic evidence | `44.10250000, 9.82410000` | La Spezia | controlled `available`; P1/P2; highest P2 | 4 | 4 | generic hydraulic investigation | `limited_evidence` | PASS — no process individually qualifies |
-| Insufficient hydraulic evidence | `44.91290000, 8.61520000` | Alessandria | controlled `available`; P1/P2; highest P2 | 2 | 1.5 | none | `abstained` | PASS |
+| Real ISPRA P1 replay | `38.94973151, 8.72300141` | Sud Sardegna (client: Cagliari, corrected) | `available`; P1; highest P1 | 0 / 0 | 0 / 0 | none | `abstained` | PASS - insufficient fallback evidence |
+| Real ISPRA P2 replay | `38.94340710, 8.91222919` | Cagliari | `available`; P1/P2; highest P2 | 3 / 2.5 | 2 / 2 | generic hydraulic investigation | `limited_evidence` | PASS |
+| Real ISPRA P3 replay | `37.67112259, 12.58006927` | Trapani (client: Palermo, corrected) | `available`; P1/P2/P3; highest P3 | 2 / 1.5 | 2 / 1.5 | none | `abstained` | PASS - below effective threshold |
+| Real ISPRA no-intersection replay | `45.28970000, 7.94194000` | Torino | `no_intersection`; no class | 40 / 26 | 5 / 4 | none | `abstained` | PASS - abundant history cannot override no-intersection |
+| Abundant hydraulic evidence | `45.07030000, 7.68690000` | Torino | controlled `available`; P1/P2; highest P2 | 40 / 26 | 5 / 4 | generic hydraulic investigation | `limited_evidence` | PASS - many bridges, but no robust process-specific repetition |
+| Single-episode replication | `44.10250000, 9.82410000` | La Spezia | controlled `available`; P1/P2; highest P2 | 4 / 4 | 1 / 1 | none | `abstained` | PASS - one flood cannot establish repetition |
+| Insufficient hydraulic evidence | `44.91290000, 8.61520000` | Alessandria | controlled `available`; P1/P2; highest P2 | 2 / 1.5 | 2 / 1.5 | none | `abstained` | PASS |
 | Outside Italy | `48.85660000, 2.35220000` | none | controlled fixture ignored after location failure | 0 | 0 | none | `abstained` | PASS — `point_outside_italy` |
 | Province not associable | `41.90000000, 12.50000000` | none | controlled fixture ignored after resolver failure | 0 | 0 | none | `abstained` | PASS — `province_not_resolved` |
 | Invalid coordinates | `not-a-coordinate, 12.50000000` | none | controlled fixture ignored after validation failure | 0 | 0 | none | `abstained` | PASS — `invalid_coordinates` |
-| Territorial mismatch | `43.61580000, 13.51890000` | Ancona (client: Torino, corrected) | controlled `available`; P1/P2; highest P2 | 8 | 7.5 | bank/embankment, scour | `available` | PASS — client province ignored |
+| Territorial mismatch | `43.61580000, 13.51890000` | Ancona (client: Torino, corrected) | controlled `available`; P1/P2; highest P2 | 8 / 7.5 | 2 / 2 | generic hydraulic investigation | `limited_evidence` | PASS - client province ignored; repeated 2022 bridges form one episode |
 
 ## Evidence details
 
@@ -93,22 +117,22 @@ The P1, P2, P3 and Torino `no_intersection` rows replay exact coordinates and si
 | P1 | none | none | none | 0 |
 | P2 | documented 2; probable 1 | none | `B08.10.01`, `B18.10.01`, `B18.10.02` | 9 |
 | P3 | documented 1; probable 1 | none | `B18.02.02`, `B21.12.01` | 5 |
-| Torino no-intersection / abundant | documented 23; probable 6; needs_review 3; unspecified 8 | bank/embankment; scour; overtopping/hydrodynamic | 40 sorted IDs, from `B00.10.03` through `B24.09.01`; full list in harness output | 119 |
-| La Spezia limited | documented 4 | none | `B11.10.01`, `B11.10.05`, `B11.10.06`, `B11.10.07` | 8 |
+| Torino no-intersection / abundant | documented 23; probable 6; needs_review 3; unspecified 8 | none after episode control | 40 sorted IDs, from `B00.10.03` through `B24.09.01`; five inferred episodes, four supported | 119 |
+| La Spezia single episode | documented 4 | none | `B11.10.01`, `B11.10.05`, `B11.10.06`, `B11.10.07`; one inferred episode | 8 |
 | Alessandria insufficient | documented 1; probable 1 | none | `B02.11.01`, `B19.10.01` | 6 |
 | Invalid/outside/unresolved | none | none | none | 0 |
-| Ancona mismatch | documented 7; probable 1 | bank/embankment; scour | `B11.01.01`, `B22.09.01`, `B22.09.02`, `B22.09.03`, `B22.09.06`, `B22.09.07`, `B22.09.09`, `B22.09.10` | 23 |
+| Ancona mismatch | documented 7; probable 1 | none after episode control | `B11.01.01`, `B22.09.01`, `B22.09.02`, `B22.09.03`, `B22.09.06`, `B22.09.07`, `B22.09.09`, `B22.09.10`; two inferred episodes | 23 |
 
 Every emitted strategy has `external_validation_required: true`. Abstained cases emit no strategy, so the strategy-level field is not applicable. Complete source IDs, titles, types and URLs are emitted by the deterministic harness.
 
 ## Threshold matrix
 
-| Decision | Raw evidence | Effective evidence | Output |
-|---|---:|---:|---|
-| Moderate process strength | `>= 8` | `>= 5` | `moderate` evidence label |
-| Qualified process | `>= 3` | `>= 2` | process-specific strategy if the process exists in the hydraulic catalogue |
-| Usable cohort, no qualified process | any | `>= 2` | one generic investigation fallback; `limited_evidence` |
-| Insufficient cohort | any | `< 2` | no strategy; `abstained` |
+| Decision | Event basis | Independent-episode basis | Output |
+|---|---|---|---|
+| Moderate process strength | raw `>= 8`; effective `>= 5` | episodes `>= 5`; episode-effective `>= 4` | `moderate` evidence label |
+| Qualified process | raw `>= 3`; effective `>= 2` | episodes `>= 5`; episode-effective `>= 4` | process-specific strategy |
+| Usable cohort, no qualified process | effective `>= 2` | supported episodes `>= 2`; episode-effective `>= 2` | one generic fallback; `limited_evidence` |
+| Insufficient cohort | any | below generic basis | no strategy; `abstained` |
 | Official `no_intersection` | any | any | no strategy; `abstained` |
 | Invalid/unresolved location | any | any | no strategy; `abstained` |
 
@@ -117,7 +141,10 @@ Evidence weights are fixed and verified as `documented = 1`, `probable = 0.5`, `
 ## Invariants and anti-leakage checks
 
 - The server-derived point-in-polygon province is the sole territorial source of truth. A client mismatch is retained for traceability but cannot choose the cohort.
-- Province filtering fixes the cohort before `failure_process`, `component_involved` and `evidence_level` are read.
+- National current-signature retrieval fixes the cohort before `failure_process`, `component_involved` and `evidence_level` are read. Province remains local context when the national production gate is open.
+- Repeated bridge collapses assigned to the same inferred episode do not inflate independent process support.
+- Five independent, sufficiently weighted process episodes reach the process threshold; four do not.
+- Leave-one-out sensitivity preserves retrieval, status and strategies for every selected case in the P1/P2/P3 archetype audit.
 - Reversing event input order yields an identical response after excluding `generated_at` and `request_id`; event IDs are sorted deterministically.
 - Repeating the same request yields identical substantive output after excluding the same volatile fields.
 - A strong provincial cohort with official `no_intersection` emits no hazard-specific or generic strategy.
@@ -132,9 +159,9 @@ Controlled abstention occurs for an invalid or unresolved project point, officia
 
 ## Scientific limits and territorial coverage
 
-- The implementation is hydraulic-only. Landslide and seismic tracks remain contextual and cannot emit v1 mitigation strategies.
-- Provincial cohorts are materially uneven: the validated cases range from 0 hydraulic events in Sud Sardegna to 40 in Torino.
-- Administrative geography matters: the real P1 point resolves to Sud Sardegna, while related historical records may be classified under Cagliari. The correct response is abstention, not cross-province borrowing.
+- The implementation is hydraulic-only. Landslide and seismic tracks remain contextual and cannot emit v3 mitigation strategies.
+- National retrieval reduces provincial sparsity but does not remove outcome sparsity or dependence between bridge records from the same flood.
+- Administrative geography remains visible as local context and as a server-derived project-location fact; it no longer limits national analogue retrieval while the production gate is open.
 - Historical analogues are contextual evidence, not site probability, current-condition evidence or proof of structural safety.
 - ISPRA point exposure and ARCUS historical evidence remain separate evidence families; they are not fused into a normalized score.
 - Remote provider availability, dataset currency, administrative-boundary changes and incomplete historical outcome curation remain external limitations.
@@ -146,13 +173,13 @@ The source-level chain is complete:
 1. Project Location derives the province from the validated point.
 2. Official Geospatial Exposure supplies the ISPRA hydraulic status/classes.
 3. Provincial Historical Context remains a separately displayed evidence family.
-4. Mitigation Intelligence consumes the official result and the fixed provincial cohort.
+4. Mitigation Intelligence fixes a national current-signature analogue cohort, then reads outcomes and applies episode-independence control. Province remains separate local context.
 5. The working package uses emitted strategies only for Path 01; abstention produces an explicit no-automatic-strategy statement.
-6. The report repeats the status, raw/effective evidence summary, strategies and non-prescriptive/FPI warning.
+6. The report repeats status, raw/effective and episode/episode-effective evidence, strategies or abstention, and the non-prescriptive/FPI warning.
 
-### Manual browser run
+### Historical manual browser run (v1/v2 presentation)
 
-The local browser run confirmed:
+The earlier local browser run confirmed the pre-v3 presentation:
 
 - Professional authentication and entry into `01 / New territory`;
 - coordinate entry for the documented P2 point `38.94340710, 8.91222919`;
@@ -172,9 +199,12 @@ The run did **not** complete the requested visual comparison of `available`, `li
 
 The vertical slice is ready for controlled Professional Path 01 use with the existing warnings and external expert review requirement. It is not ready for autonomous mitigation decisions, national completeness claims, site safety conclusions or extension to other hazard tracks.
 
-The manual UI acceptance item remains open for a browser session with working ISPRA connectivity. This is the principal reason for the `validated_with_limitations` rather than unqualified `validated` judgement.
+The historical manual UI item below was open at the time of that run. It is
+superseded by the 2026-08-03 hydraulic closure pass at the end of this document.
+The judgement remains `validated_with_limitations` for scientific/editorial
+limitations rather than for a currently missing three-state UI observation.
 
-## Final manual UI acceptance
+## Historical final manual UI acceptance (pre-v3)
 
 Manual execution date: 2026-07-22. Backend and Vite frontend were run locally and the Professional Path 01 workflow was exercised through the browser without fixtures or mocks. The ISPRA observations below are the statuses actually returned by the live WFS-backed endpoint.
 
@@ -201,3 +231,108 @@ The first PDF generated from the live Cagliari case reproduced a report-only omi
 ### Final manual judgement
 
 The final manual acceptance is **not complete** because the required Torino control never returned a complete live `no_intersection` response across P1/P2/P3. The `limited_evidence` path is fully accepted, and an `available` Mitigation Intelligence path was observed with a live P3 intersection, but with partial ISPRA layer completion. The overall judgement therefore remains `validated_with_limitations`.
+
+## v3 browser recheck
+
+Execution date: 2026-08-03. The local frontend and backend were restarted so
+the browser loaded `arcus-mitigation-intelligence-v3`. The documented P2 point
+was queried through the actual authenticated Professional Path 01 workflow,
+without a mitigation fixture or mock.
+
+| Field | Observed value |
+|---|---|
+| Coordinates | `38.94340710, 8.91222919` (input display rounded to five decimals) |
+| Point-derived province | Cagliari; working package synchronized |
+| Hydraulic ISPRA | `available`; P1/P2 assigned to point; highest P2 |
+| Landslide ISPRA PAI | `available`; P1 assigned to point |
+| Seismic INGV MPS04 | `outside_coverage`; no PGA assigned |
+| Analogue basis | 20 national analogues; 100% current hydraulic-signature coverage; province shown only as local context |
+| Hydraulic evidence | 14 cases; 9 independent episodes |
+| Mitigation status | `available` |
+| Strategy | scour only; 6 raw cases, 6 episodes, 4.5 episode-effective evidence |
+| FPI separation | visible statement that strategies do not modify the Final Priority Index and require qualified validation |
+| Browser errors | no console warnings or errors |
+
+The UI initially labelled the strategy's documented-only count as generic
+"cases", producing the inconsistent string `3 cases / 6 episodes`. The minimum
+presentation fix now uses `raw_count`, and the rechecked UI shows
+`6 cases / 6 episodes / 4.5 episode-effective`. No evidence, threshold,
+strategy or Final Priority Index computation changed.
+
+The v3 Path 01 UI is therefore accepted for this live P2 case. A new PDF was
+not downloaded in this recheck; report coherence remains covered by the pure
+report-summary tests and the static/production build checks. A complete new
+three-state live ISPRA acceptance was still pending at this intermediate
+checkpoint. It is completed by the hydraulic closure pass below.
+
+## Hydraulic closure pass: registry v2 and retrieval robustness
+
+Execution date: 2026-08-03. Backend and frontend were restarted after the
+changes. The three points were queried through the authenticated Professional
+Path 01 UI with the live provider-backed endpoint; no mitigation fixture or mock
+was used.
+
+| Case | Coordinates | Province | ISPRA | Mitigation status | Strategies | UI coherent | Report coherent | Result |
+|---|---|---|---|---|---|---|---|---|
+| `available` | `38.94340710, 8.91222919` | Cagliari, derived from point and synchronized to working package | `available`; P1/P2 assigned; highest P2 | `available`; 14 hydraulic cases, 9 independent episodes | scour only; 6 cases, 6 episodes, 4.5 episode-effective; retrieval consensus 2/3 | Yes; registry quality and FPI separation visible | Yes in pure formatter/static report contract; no new PDF download in this pass | PASS |
+| `limited_evidence` | `38.94973151, 8.72300141` | Sud Sardegna, derived from point and synchronized | `available`; P1 assigned; highest P1 | `limited_evidence`; 10 hydraulic cases, 9 independent episodes | generic hydraulic/geomorphological investigation only | Yes; one reviewable episode shown and no specific process promoted | Yes in pure formatter/static report contract; no new PDF download in this pass | PASS |
+| `no_intersection / abstained` | `45.28970000, 7.94194000` | Torino, derived from point and synchronized | query completed; no P1/P2/P3 assigned to point; nearby P1/P2/P3 context within 1 km explicitly not assigned | `abstained`; provincial 40 cases/5 episodes remain context only | none | Yes after the wording fix below; explicit abstention, no cohort, zero strategies | Report generation screen unlocked; abstention/context wording covered by formatter test; no new PDF download in this pass | PASS with stated report-evidence limitation |
+
+The browser console contained no warnings or errors. All three provider calls
+returned to the UI. The Torino result is the requested complete live
+`no_intersection`, not a partial timeout: all hydraulic classes were evaluated,
+none was assigned to the point and nearby context remained separate.
+
+### Episode registry audit
+
+`arcus-hydraulic-episode-registry-v2` registers all 211 hydraulic records once.
+It contains 98 eligible episodes: 74 dated singletons and 24 multi-bridge
+episodes. Thirteen groupings are supported by shared event-specific sources.
+Five inferred same-region groups have review recommended and six inferred
+cross-region groups require review. No production record currently has a human-
+curated episode override. Each selected episode now exposes confidence,
+grouping basis, review status and source linkage through the API; compact counts
+are visible in the UI and report contract.
+
+### Retrieval robustness
+
+The stress audit identified genuine top-k sensitivity before correction: the
+P1 provisional result changed at top-25 and P2 at top-15. Production now keeps
+the top-20 evidence display but requires a process to qualify in that baseline
+and in at least two of the nested top-15/top-20/top-25 windows. Evidence weights
+and process thresholds did not change. The controlled archetypes now give:
+
+| Archetype | Final status | Strategy | Qualifying retrieval windows |
+|---|---|---|---|
+| P1 | `limited_evidence` | generic only | scour 1/3; no specific consensus |
+| P2 | `available` | scour | 2/3 |
+| P3 | `available` | scour | 3/3 |
+
+P1 and P2 remain stable under PGA `+/-0.02 g` and a landslide-context
+perturbation. P3 changes to generic under the `+0.02 g` scenario because the
+retrieved cohort materially changes (Jaccard 0.176). This remains disclosed
+input sensitivity; it is not interpreted as model noise or suppressed.
+
+### Bug found and minimum correction
+
+The live Torino UI initially labelled the no-intersection state as a
+"controlled provincial fallback" and attributed non-activation to signature
+coverage, while simultaneously showing 100% coverage. The correction now says
+that no national cohort is activated without a hydraulic class assigned to the
+point; provincial collapses are territorial historical context only. The same
+distinction is propagated to the API `selection_mode` and report formatter. No
+hazard result, evidence weight, threshold, strategy or Final Priority Index
+value changed.
+
+### Closure judgement
+
+The hydraulic software vertical slice is closed for controlled Professional
+Path 01 use: all three live states are coherent, the episode-independence basis
+is auditable, strategy selection is guarded against a single top-k boundary,
+and the FPI remains isolated. The judgement remains
+`validated_with_limitations`, not `validated`, because eleven inferred episode
+groups still require editorial review/recommendation, no authenticated
+historical-at-event hazard classes are registered, P3 shows material signature
+sensitivity, and no new PDF file was manually downloaded/rendered in this
+closure pass. These are explicit scientific/editorial or evidence-capture
+limits; they are not silent missing-data substitutions.

@@ -4,9 +4,18 @@ import {
 import {
   buildNationalHazardAnalogueCohort,
 } from "./collapseAnalogueService.js";
+import {
+  buildHydraulicEpisodeRegistry,
+} from "./collapseEpisodeService.js";
 
-const ENGINE_VERSION = "arcus-mitigation-intelligence-v2";
+const ENGINE_VERSION = "arcus-mitigation-intelligence-v3";
 const NATIONAL_SIGNATURE_COVERAGE_THRESHOLD = 0.8;
+const MINIMUM_USABLE_EPISODES = 2;
+const MINIMUM_PROCESS_EPISODES = 5;
+const MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE = 4;
+const MINIMUM_USABLE_EFFECTIVE_EPISODE_EVIDENCE = 2;
+const RETRIEVAL_ROBUSTNESS_WINDOWS = Object.freeze([15, 20, 25]);
+const MINIMUM_RETRIEVAL_WINDOW_SUPPORT = 2;
 
 const HYDRAULIC_PROCESS_CATALOG = Object.freeze({
   bank_erosion_or_embankment_failure: {
@@ -235,19 +244,49 @@ function seismicTrack(exposure = {}) {
   };
 }
 
-function evidenceStrength(rawCount, effectiveCount) {
-  if (rawCount >= 8 && effectiveCount >= 5) {
+function evidenceStrength(
+  rawCount,
+  effectiveCount,
+  episodeCount,
+  effectiveEpisodeCount
+) {
+  if (
+    rawCount >= 8 &&
+    effectiveCount >= 5 &&
+    episodeCount >= 5 &&
+    effectiveEpisodeCount >= 4
+  ) {
     return "moderate";
   }
 
-  if (rawCount >= 3 && effectiveCount >= 2) {
+  if (
+    rawCount >= 3 &&
+    effectiveCount >= 2 &&
+    episodeCount >= MINIMUM_PROCESS_EPISODES &&
+    effectiveEpisodeCount >=
+      MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE
+  ) {
     return "limited";
   }
 
   return "insufficient";
 }
 
-function summarizeHydraulicEvidence(events, sources) {
+function processPassesThreshold(item) {
+  return (
+    item.raw_count >= 3 &&
+    item.effective_evidence_count >= 2 &&
+    item.episode_count >= MINIMUM_PROCESS_EPISODES &&
+    item.episode_effective_evidence_count >=
+      MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE
+  );
+}
+
+function summarizeHydraulicEvidence(
+  events,
+  sources,
+  episodeRegistry
+) {
   const sourceCountByEvent = sources.reduce((index, source) => {
     if (source?.event_id) {
       index[source.event_id] = (index[source.event_id] || 0) + 1;
@@ -257,6 +296,14 @@ function summarizeHydraulicEvidence(events, sources) {
   }, {});
   const processes = new Map();
   const components = new Map();
+  const selectedEpisodes = new Map();
+  const registryEpisodes = new Map(
+    (episodeRegistry?.episodes || []).map((episode) => [
+      episode.episode_id,
+      episode,
+    ])
+  );
+  const undatedEventIds = [];
   let effectiveEvidenceCount = 0;
   let linkedSourceCount = 0;
 
@@ -270,9 +317,17 @@ function summarizeHydraulicEvidence(events, sources) {
     const weight = evidenceWeight(intelligence.evidence_level);
     const process = intelligence.failure_process || "unspecified";
     const component = intelligence.component_involved || "unspecified";
+    const episodeId =
+      episodeRegistry?.event_to_episode?.[event.event_id] ||
+      `hydraulic:undated:${event.event_id}`;
+    const registryEpisode = registryEpisodes.get(episodeId);
+    const episodeEligible =
+      registryEpisode?.independence_eligible === true;
     const processEntry = processes.get(process) || {
       documented_count: 0,
       effective_evidence_count: 0,
+      episode_event_ids: new Map(),
+      episode_weights: new Map(),
       event_ids: [],
       probable_count: 0,
       process,
@@ -283,6 +338,23 @@ function summarizeHydraulicEvidence(events, sources) {
     processEntry.raw_count += 1;
     processEntry.effective_evidence_count += weight;
     processEntry.event_ids.push(event.event_id);
+    if (episodeEligible) {
+      processEntry.episode_weights.set(
+        episodeId,
+        Math.max(
+          processEntry.episode_weights.get(episodeId) || 0,
+          weight
+        )
+      );
+      const processEpisodeEventIds =
+        processEntry.episode_event_ids.get(episodeId) || [];
+
+      processEpisodeEventIds.push(event.event_id);
+      processEntry.episode_event_ids.set(
+        episodeId,
+        processEpisodeEventIds
+      );
+    }
     processEntry.source_count += sourceCountByEvent[event.event_id] || 0;
 
     if (intelligence.evidence_level === "documented") {
@@ -292,35 +364,175 @@ function summarizeHydraulicEvidence(events, sources) {
     }
 
     processes.set(process, processEntry);
+    if (episodeEligible) {
+      const selectedEpisode = selectedEpisodes.get(episodeId) || {
+        effective_evidence_weight: 0,
+        episode_id: episodeId,
+        event_ids: [],
+      };
+
+      selectedEpisode.effective_evidence_weight = Math.max(
+        selectedEpisode.effective_evidence_weight,
+        weight
+      );
+      selectedEpisode.event_ids.push(event.event_id);
+      selectedEpisodes.set(episodeId, selectedEpisode);
+    } else {
+      undatedEventIds.push(event.event_id);
+    }
     components.set(component, (components.get(component) || 0) + 1);
     effectiveEvidenceCount += weight;
     linkedSourceCount += sourceCountByEvent[event.event_id] || 0;
   });
+
+  const episodes = [...selectedEpisodes.values()]
+    .map((episode) => {
+      const registryEpisode = registryEpisodes.get(episode.episode_id);
+
+      return {
+        confidence: registryEpisode?.confidence || "unknown",
+        effective_evidence_weight: rounded(
+          episode.effective_evidence_weight
+        ),
+        end_date: registryEpisode?.end_date || null,
+        episode_id: episode.episode_id,
+        event_count: episode.event_ids.length,
+        event_ids: [...episode.event_ids].sort((left, right) =>
+          String(left).localeCompare(String(right))
+        ),
+        grouping_basis: registryEpisode?.grouping_basis || [],
+        regions: registryEpisode?.regions || [],
+        review_status:
+          registryEpisode?.review_status || "not_classified",
+        source_linkage: registryEpisode?.source_linkage || null,
+        start_date: registryEpisode?.start_date || null,
+      };
+    })
+    .sort((left, right) =>
+      String(left.start_date || "9999-99-99").localeCompare(
+        String(right.start_date || "9999-99-99")
+      ) || left.episode_id.localeCompare(right.episode_id)
+    );
+  const episodeEffectiveEvidenceCount = episodes.reduce(
+    (total, episode) =>
+      total + episode.effective_evidence_weight,
+    0
+  );
+  const supportedEpisodeCount = episodes.filter(
+    (episode) => episode.effective_evidence_weight > 0
+  ).length;
+  const confidenceDistribution = episodes.reduce(
+    (distribution, episode) => {
+      distribution[episode.confidence] =
+        (distribution[episode.confidence] || 0) + 1;
+      return distribution;
+    },
+    {}
+  );
+  const reviewStatusDistribution = episodes.reduce(
+    (distribution, episode) => {
+      distribution[episode.review_status] =
+        (distribution[episode.review_status] || 0) + 1;
+      return distribution;
+    },
+    {}
+  );
 
   return {
     components: [...components.entries()]
       .map(([component, count]) => ({ component, count }))
       .sort((left, right) => right.count - left.count || left.component.localeCompare(right.component)),
     effective_evidence_count: rounded(effectiveEvidenceCount),
+    episode_count: episodes.length,
+    episode_effective_evidence_count: rounded(
+      episodeEffectiveEvidenceCount
+    ),
+    episode_methodology: episodeRegistry?.methodology || null,
+    episode_registry_quality: {
+      confidence_distribution: confidenceDistribution,
+      curated_episode_count:
+        confidenceDistribution.curated_episode_assignment || 0,
+      review_recommended_episode_count:
+        reviewStatusDistribution.rule_based_review_recommended || 0,
+      review_required_episode_count:
+        reviewStatusDistribution.review_required || 0,
+      review_status_distribution: reviewStatusDistribution,
+      source_linked_episode_count:
+        confidenceDistribution.source_linked_documentation || 0,
+    },
+    episodes,
     event_count: events.length,
     event_ids: events
       .map((event) => event.event_id)
       .sort((left, right) => String(left).localeCompare(String(right))),
     linked_source_count: linkedSourceCount,
     processes: [...processes.values()]
-      .map((item) => ({
-        ...item,
-        effective_evidence_count: rounded(item.effective_evidence_count),
-        event_ids: [...item.event_ids].sort((left, right) =>
-          String(left).localeCompare(String(right))
-        ),
-        evidence_strength: evidenceStrength(item.raw_count, item.effective_evidence_count),
-      }))
+      .map((item) => {
+        const episodeIds = [...item.episode_weights.keys()].sort(
+          (left, right) => left.localeCompare(right)
+        );
+        const episodeEffectiveCount = episodeIds.reduce(
+          (total, episodeId) =>
+            total + (item.episode_weights.get(episodeId) || 0),
+          0
+        );
+
+        return {
+          documented_count: item.documented_count,
+          effective_evidence_count: rounded(
+            item.effective_evidence_count
+          ),
+          episode_count: episodeIds.length,
+          episode_effective_evidence_count: rounded(
+            episodeEffectiveCount
+          ),
+          episode_ids: episodeIds,
+          episode_support: episodeIds.map((episodeId) => ({
+            confidence:
+              registryEpisodes.get(episodeId)?.confidence || "unknown",
+            effective_evidence_weight: rounded(
+              item.episode_weights.get(episodeId) || 0
+            ),
+            episode_id: episodeId,
+            event_ids: [...(
+              item.episode_event_ids.get(episodeId) || []
+            )].sort((left, right) =>
+              String(left).localeCompare(String(right))
+            ),
+            grouping_basis:
+              registryEpisodes.get(episodeId)?.grouping_basis || [],
+            review_status:
+              registryEpisodes.get(episodeId)?.review_status ||
+              "not_classified",
+          })),
+          event_ids: [...item.event_ids].sort((left, right) =>
+            String(left).localeCompare(String(right))
+          ),
+          evidence_strength: evidenceStrength(
+            item.raw_count,
+            item.effective_evidence_count,
+            episodeIds.length,
+            episodeEffectiveCount
+          ),
+          probable_count: item.probable_count,
+          process: item.process,
+          raw_count: item.raw_count,
+          source_count: item.source_count,
+        };
+      })
       .sort((left, right) =>
+        right.episode_effective_evidence_count -
+          left.episode_effective_evidence_count ||
+        right.episode_count - left.episode_count ||
         right.effective_evidence_count - left.effective_evidence_count ||
         right.raw_count - left.raw_count ||
         left.process.localeCompare(right.process)
       ),
+    supported_episode_count: supportedEpisodeCount,
+    undated_event_count: undatedEventIds.length,
+    undated_event_ids: undatedEventIds.sort((left, right) =>
+      String(left).localeCompare(String(right))
+    ),
   };
 }
 
@@ -335,12 +547,19 @@ function strategyForProcess(processEvidence, index, cohortDescription) {
     affected_components: template.affected_components,
     applicability_conditions: [
       "Official ISPRA hydraulic exposure intersects the project point.",
-      `The ${cohortDescription} contains at least three ${processEvidence.process} cases with an effective evidence count of at least two.`,
+      `The ${cohortDescription} contains at least five independent hydraulic episodes supporting ${processEvidence.process}, with episode-effective evidence of at least four. This includes a one-episode margin above the minimum repeatability basis.`,
       "A qualified professional confirms that the documented mechanism is relevant to the project geometry and site conditions.",
     ],
     arcus_evidence: {
       documented_count: processEvidence.documented_count,
       effective_evidence_count: processEvidence.effective_evidence_count,
+      episode_count: processEvidence.episode_count,
+      episode_effective_evidence_count:
+        processEvidence.episode_effective_evidence_count,
+      episode_ids: processEvidence.episode_ids,
+      episode_support: processEvidence.episode_support,
+      retrieval_window_support:
+        processEvidence.retrieval_window_support || null,
       event_ids: processEvidence.event_ids,
       probable_count: processEvidence.probable_count,
       raw_count: processEvidence.raw_count,
@@ -352,6 +571,7 @@ function strategyForProcess(processEvidence, index, cohortDescription) {
     investigation_priority: template.investigation,
     limitations: [
       "Historical analogue outcomes are contextual evidence, not a probability for the selected site.",
+      "Independent episodes are derived by a conservative temporal-regional rule and are not a meteorological reanalysis.",
       "ARCUS does not verify present asset condition or structural safety.",
       "The risk-control theme must be converted into site-specific checks by qualified professionals.",
     ],
@@ -370,11 +590,18 @@ function genericHydraulicStrategy(summary, cohortDescription) {
     affected_components: GENERIC_HYDRAULIC_STRATEGY.affected_components,
     applicability_conditions: [
       "Official ISPRA hydraulic exposure intersects the project point.",
-      `The ${cohortDescription} has usable hydraulic evidence but no individual process passes the process-specific support threshold.`,
+      `The ${cohortDescription} has evidence from at least two independent hydraulic episodes but no individual process passes the process-specific episode threshold.`,
     ],
     arcus_evidence: {
       documented_count: summary.processes.reduce((total, item) => total + item.documented_count, 0),
       effective_evidence_count: summary.effective_evidence_count,
+      episode_count: summary.episode_count,
+      episode_effective_evidence_count:
+        summary.episode_effective_evidence_count,
+      episode_ids: summary.episodes.map(
+        (episode) => episode.episode_id
+      ),
+      episode_support: summary.episodes,
       event_ids: summary.event_ids,
       probable_count: summary.processes.reduce((total, item) => total + item.probable_count, 0),
       raw_count: summary.event_count,
@@ -386,6 +613,7 @@ function genericHydraulicStrategy(summary, cohortDescription) {
     investigation_priority: GENERIC_HYDRAULIC_STRATEGY.investigation,
     limitations: [
       "The available evidence does not support a process-specific pathway.",
+      "Episode independence is rule-based and requires expert interpretation.",
       "Historical outcomes are contextual and do not predict project performance.",
     ],
     monitoring_consideration: GENERIC_HYDRAULIC_STRATEGY.monitoring,
@@ -484,6 +712,7 @@ export function buildMitigationIntelligence({
     nationalAnalogueCohort.available &&
     nationalAnalogueCohort.analogues.length >= 3 &&
     hydraulicSignatureCoverage >= NATIONAL_SIGNATURE_COVERAGE_THRESHOLD;
+  const episodeRegistry = buildHydraulicEpisodeRegistry(events, sources);
   const eventsById = new Map(
     events.map((event) => [event.event_id, event])
   );
@@ -495,7 +724,65 @@ export function buildMitigationIntelligence({
   const hydraulicEvents = selectedCohortEvents.filter(
     (event) => event.hydraulic_intelligence
   );
-  const evidence = summarizeHydraulicEvidence(hydraulicEvents, sources);
+  const evidence = summarizeHydraulicEvidence(
+    hydraulicEvents,
+    sources,
+    episodeRegistry
+  );
+  const robustnessWindows = nationalAnalogueReady
+    ? RETRIEVAL_ROBUSTNESS_WINDOWS.map((limit) => {
+        const retrieval = limit === 20
+          ? nationalAnalogueCohort
+          : buildNationalHazardAnalogueCohort({
+              events,
+              historicalSignatures,
+              limit,
+              officialExposure: payload?.official_exposure,
+              signatures,
+            });
+        const windowEvents = retrieval.analogues
+          .map((analogue) => eventsById.get(analogue.event.event_id))
+          .filter(Boolean)
+          .filter((event) => event.hydraulic_intelligence);
+        const windowEvidence = summarizeHydraulicEvidence(
+          windowEvents,
+          sources,
+          episodeRegistry
+        );
+
+        return {
+          analogue_count: retrieval.analogues.length,
+          episode_count: windowEvidence.episode_count,
+          episode_effective_evidence_count:
+            windowEvidence.episode_effective_evidence_count,
+          hydraulic_event_count: windowEvidence.event_count,
+          limit,
+          qualified_processes: windowEvidence.processes
+            .filter(processPassesThreshold)
+            .map((item) => item.process)
+            .sort((left, right) => left.localeCompare(right)),
+        };
+      })
+    : [];
+  const processWindowSupport = evidence.processes.map((process) => {
+    const qualifyingWindows = robustnessWindows
+      .filter((window) =>
+        window.qualified_processes.includes(process.process)
+      )
+      .map((window) => window.limit);
+
+    return {
+      consensus_reached:
+        qualifyingWindows.length >= MINIMUM_RETRIEVAL_WINDOW_SUPPORT,
+      process: process.process,
+      qualifying_window_count: qualifyingWindows.length,
+      qualifying_windows: qualifyingWindows,
+      total_window_count: robustnessWindows.length,
+    };
+  });
+  const processWindowSupportByName = new Map(
+    processWindowSupport.map((item) => [item.process, item])
+  );
   const cohortDescription = nationalAnalogueReady
     ? "national current-hazard analogue cohort"
     : "point-derived provincial fallback cohort";
@@ -516,13 +803,39 @@ export function buildMitigationIntelligence({
     );
   }
 
-  if (hydraulic.active && evidence.effective_evidence_count < 2) {
-    abstentionReasons.push("insufficient_effective_hydraulic_evidence");
+  if (
+    hydraulic.active &&
+    evidence.effective_evidence_count < 2
+  ) {
+    abstentionReasons.push(
+      "insufficient_effective_hydraulic_evidence"
+    );
+  } else if (
+    hydraulic.active &&
+    (
+      evidence.supported_episode_count < MINIMUM_USABLE_EPISODES ||
+      evidence.episode_effective_evidence_count <
+        MINIMUM_USABLE_EFFECTIVE_EPISODE_EVIDENCE
+    )
+  ) {
+    abstentionReasons.push(
+      "insufficient_independent_hydraulic_episode_evidence"
+    );
   }
 
-  const supportedProcesses = evidence.processes.filter(
-    (item) => item.raw_count >= 3 && item.effective_evidence_count >= 2
-  );
+  const supportedProcesses = evidence.processes
+    .filter(processPassesThreshold)
+    .filter(
+      (item) =>
+        !nationalAnalogueReady ||
+        processWindowSupportByName.get(item.process)
+          ?.consensus_reached === true
+    )
+    .map((item) => ({
+      ...item,
+      retrieval_window_support:
+        processWindowSupportByName.get(item.process) || null,
+    }));
   let strategies = hydraulic.active
     ? supportedProcesses
         .map((processEvidence, index) =>
@@ -539,7 +852,10 @@ export function buildMitigationIntelligence({
   if (
     hydraulic.active &&
     strategies.length === 0 &&
-    evidence.effective_evidence_count >= 2
+    evidence.effective_evidence_count >= 2 &&
+    evidence.supported_episode_count >= MINIMUM_USABLE_EPISODES &&
+    evidence.episode_effective_evidence_count >=
+      MINIMUM_USABLE_EFFECTIVE_EPISODE_EVIDENCE
   ) {
     strategies = [
       genericHydraulicStrategy(evidence, cohortDescription),
@@ -616,9 +932,33 @@ export function buildMitigationIntelligence({
         "hydraulic_intelligence.component_involved",
         "hydraulic_intelligence.evidence_level",
       ],
+      independence_control: {
+        minimum_process_episode_count: MINIMUM_PROCESS_EPISODES,
+        minimum_usable_episode_count: MINIMUM_USABLE_EPISODES,
+        minimum_process_effective_episode_evidence:
+          MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE,
+        minimum_usable_effective_episode_evidence:
+          MINIMUM_USABLE_EFFECTIVE_EPISODE_EVIDENCE,
+        process_repeatability_margin_policy:
+          "minimum_five_episodes_and_four_episode_effective_units",
+        methodology: episodeRegistry.methodology,
+      },
+      retrieval_robustness: {
+        applied: nationalAnalogueReady,
+        baseline_limit: 20,
+        caveat:
+          "Nested retrieval windows test sensitivity to the top-k boundary; they do not model hazard uncertainty or prove causal transportability.",
+        minimum_supporting_windows:
+          MINIMUM_RETRIEVAL_WINDOW_SUPPORT,
+        process_support: processWindowSupport,
+        windows: robustnessWindows,
+      },
       province,
       selection_mode: nationalAnalogueReady
         ? "national_current_hazard_signature_fixed_before_outcome_synthesis"
+        : nationalAnalogueCohort.reason ===
+            "official_hydraulic_point_intersection_required"
+          ? "point_derived_province_context_only_official_point_not_intersected"
         : "point_derived_province_fallback_until_national_signature_coverage_ready",
     },
     forbidden_outputs: [
@@ -634,11 +974,17 @@ export function buildMitigationIntelligence({
       "Current official signatures support present-day comparability; they are not retrospective causal proof.",
       "Historical-at-event classifications are used only when an authenticated, dated source is registered. They are never reconstructed from the current class.",
       "Observed triggers and collapse processes are read only after the analogue cohort is fixed.",
+      "Bridge cases from the same inferred hydraulic episode are capped to one effective evidence unit per process and do not count as independent replications.",
+      "Episode grouping uses auditable curated overrides, source-linkage provenance and a conservative temporal-regional fallback; inferred groups are not a meteorological event reconstruction.",
       ...(nationalAnalogueReady
         ? []
-        : [
+        : hydraulic.active
+          ? [
             "National analogue retrieval is not used for mitigation until current hydraulic signatures cover at least 80% of the collapse database and at least three analogues are available. The point-derived provincial cohort remains an explicit fallback.",
-          ]),
+            ]
+          : [
+              "National analogue retrieval is not activated without an official hydraulic class assigned to the project point; provincial cases remain territorial historical context only.",
+            ]),
       "No value from this engine contributes to the Final Priority Index or Path 02 ranking.",
     ],
     source_completeness: {

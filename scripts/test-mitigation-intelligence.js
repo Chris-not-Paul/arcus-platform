@@ -11,6 +11,9 @@ import {
   buildNationalHazardAnalogueCohort,
 } from "../server/collapseAnalogueService.js";
 import {
+  buildHydraulicEpisodeRegistry,
+} from "../server/collapseEpisodeService.js";
+import {
   runValidation,
 } from "./validate-mitigation-intelligence.js";
 import {
@@ -19,20 +22,38 @@ import {
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+function fixtureDate(eventId) {
+  const values = [...String(eventId).matchAll(/\d+/g)].map((match) =>
+    Number(match[0])
+  );
+  const year = 2000 + ((values[0] || 0) % 25);
+  const month = ((values[1] || 1) - 1) % 12 + 1;
+  const ordinal = values[2] || values.at(-1) || 1;
+  const day = ((ordinal - 1) * 4) % 28 + 1;
+
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
 function hydraulicEvent(eventId, {
+  date = undefined,
   evidence = "documented",
+  episodeId = null,
   process = "scour",
   province = "Alessandria",
+  region = "Piemonte",
 } = {}) {
   return {
+    date: date === undefined ? fixtureDate(eventId) : date,
     event_id: eventId,
     hydraulic_intelligence: {
       component_involved: "pier_foundation",
       evidence_level: evidence,
+      ...(episodeId ? { episode_id: episodeId } : {}),
       failure_process: process,
       trigger: "flood",
     },
     province,
+    region,
     specific_cause: "Hydraulic",
   };
 }
@@ -42,6 +63,8 @@ const events = [
   hydraulicEvent("B01.01.02"),
   hydraulicEvent("B01.01.03", { evidence: "probable" }),
   hydraulicEvent("B01.01.04", { process: "overtopping_or_hydrodynamic_action" }),
+  hydraulicEvent("B01.01.05"),
+  hydraulicEvent("B01.01.06", { evidence: "probable" }),
   hydraulicEvent("B02.01.01", { province: "Torino" }),
 ];
 const sources = events.flatMap((event) => [
@@ -117,11 +140,11 @@ assert.equal(available.status, "available");
 assert.equal(available.active_hazard_tracks[0].track, "hydraulic");
 assert.equal(available.attention_tracks.some((item) => item.track === "seismic"), true);
 assert.equal(available.evidence_cohort.province, "Alessandria");
-assert.equal(available.evidence_cohort.event_count, 4);
+assert.equal(available.evidence_cohort.event_count, 6);
 assert.equal(available.evidence_cohort.event_ids.includes("B02.01.01"), false);
 assert.equal(available.strategies[0].process, "scour");
-assert.equal(available.strategies[0].arcus_evidence.raw_count, 3);
-assert.equal(available.strategies[0].arcus_evidence.effective_evidence_count, 2.5);
+assert.equal(available.strategies[0].arcus_evidence.raw_count, 5);
+assert.equal(available.strategies[0].arcus_evidence.effective_evidence_count, 4);
 assert.equal(available.strategies[0].external_validation_required, true);
 assert.equal(available.forbidden_outputs.includes("final_priority_index_modification"), true);
 assert.equal(Object.hasOwn(available, "score"), false);
@@ -183,6 +206,8 @@ const nationalSignatures = [
     landslideClass: "P1",
     pga: 0.19,
   }),
+  currentSignature("B01.01.05", { pga: 0.147 }),
+  currentSignature("B01.01.06", { pga: 0.149 }),
   currentSignature("B02.01.01", { pga: 0.14 }),
 ];
 const historicalSignatures = [
@@ -235,6 +260,20 @@ assert.equal(
 );
 assert.equal(national.strategies[0].process, "scour");
 assert.equal(
+  national.evidence_cohort.retrieval_robustness.applied,
+  true
+);
+assert.equal(
+  national.strategies[0].arcus_evidence.retrieval_window_support
+    .consensus_reached,
+  true
+);
+assert.equal(
+  national.strategies[0].arcus_evidence.retrieval_window_support
+    .qualifying_window_count >= 2,
+  true
+);
+assert.equal(
   national.strategies[0].applicability_conditions.some((item) =>
     item.includes("national current-hazard analogue cohort")
   ),
@@ -248,6 +287,21 @@ assert.equal(
 assert.equal(
   nationalReportSummary.cohortText.includes(
     "Causes and processes are read after retrieval"
+  ),
+  true
+);
+assert.equal(
+  nationalReportSummary.registryQualityText.includes(
+    "Episode-registry quality"
+  ),
+  true
+);
+assert.equal(
+  national.strategies[0].arcus_evidence.episode_support.every(
+    (episode) =>
+      Boolean(episode.confidence) &&
+      Boolean(episode.review_status) &&
+      Array.isArray(episode.grouping_basis)
   ),
   true
 );
@@ -450,6 +504,12 @@ const limitedReportSummary = buildMitigationReportSummary(sparse);
 assert.equal(limitedReportSummary.status, "limited_evidence");
 assert.equal(limitedReportSummary.evidenceText.includes("Raw evidence: 2"), true);
 assert.equal(limitedReportSummary.evidenceText.includes("effective evidence: 2"), true);
+assert.equal(
+  limitedReportSummary.evidenceText.includes(
+    "independent hydraulic episodes: 2"
+  ),
+  true
+);
 assert.equal(limitedReportSummary.outcomeText.includes("Site-specific hydraulic"), true);
 assert.equal(
   limitedReportSummary.warningText.includes("do not modify the Final Priority Index"),
@@ -465,6 +525,22 @@ assert.equal(limitedReportSummary.cohortText.includes("80%"), true);
 
 const abstainedReportSummary = buildMitigationReportSummary(noIntersection);
 assert.equal(abstainedReportSummary.status, "abstained");
+assert.equal(
+  noIntersection.evidence_cohort.selection_mode,
+  "point_derived_province_context_only_official_point_not_intersected"
+);
+assert.equal(
+  abstainedReportSummary.cohortText.includes(
+    "national retrieval was not activated"
+  ),
+  true
+);
+assert.equal(
+  abstainedReportSummary.cohortText.includes(
+    "territorial historical context only"
+  ),
+  true
+);
 assert.equal(abstainedReportSummary.outcomeText.includes("zero strategies"), true);
 assert.equal(
   abstainedReportSummary.outcomeText.includes(
@@ -484,6 +560,152 @@ const insufficient = build(
 );
 assert.equal(insufficient.status, "abstained");
 assert.equal(insufficient.strategies.length, 0);
+
+const episodeFixture = [
+  hydraulicEvent("EP.01", { date: "2020-10-03", region: "Piemonte" }),
+  hydraulicEvent("EP.02", { date: "2020-10-03", region: "Liguria" }),
+  hydraulicEvent("EP.03", { date: "2020-10-05", region: "Piemonte" }),
+  hydraulicEvent("EP.04", { date: "2020-10-04", region: "Sicilia" }),
+  hydraulicEvent("EP.05", { date: "2021-01-01", region: "Piemonte" }),
+];
+const episodeRegistry = buildHydraulicEpisodeRegistry(episodeFixture);
+const reversedEpisodeRegistry = buildHydraulicEpisodeRegistry(
+  [...episodeFixture].reverse()
+);
+
+assert.deepEqual(episodeRegistry, reversedEpisodeRegistry);
+assert.equal(episodeRegistry.episode_count, 3);
+assert.equal(
+  episodeRegistry.event_to_episode["EP.01"],
+  episodeRegistry.event_to_episode["EP.02"]
+);
+assert.equal(
+  episodeRegistry.event_to_episode["EP.01"],
+  episodeRegistry.event_to_episode["EP.03"]
+);
+assert.notEqual(
+  episodeRegistry.event_to_episode["EP.01"],
+  episodeRegistry.event_to_episode["EP.04"]
+);
+
+const sourceLinkedRegistry = buildHydraulicEpisodeRegistry(
+  [
+    hydraulicEvent("SOURCE.01", {
+      date: "2020-10-03",
+      region: "Piemonte",
+    }),
+    hydraulicEvent("SOURCE.02", {
+      date: "2020-10-03",
+      region: "Liguria",
+    }),
+  ],
+  [
+    {
+      event_id: "SOURCE.01",
+      source_role: "Official/Technical",
+      source_title: "Shared flood report",
+      source_url: "https://example.test/flood-report",
+    },
+    {
+      event_id: "SOURCE.02",
+      source_role: "Official/Technical",
+      source_title: "Shared flood report",
+      source_url: "https://example.test/flood-report",
+    },
+  ]
+);
+
+assert.equal(
+  sourceLinkedRegistry.episodes[0].confidence,
+  "source_linked_documentation"
+);
+assert.equal(
+  sourceLinkedRegistry.episodes[0].review_status,
+  "supported_by_shared_sources"
+);
+
+const curatedSeparation = buildHydraulicEpisodeRegistry([
+  hydraulicEvent("CURATED.01", {
+    date: "2020-10-03",
+    episodeId: "hydraulic:curated:north",
+  }),
+  hydraulicEvent("CURATED.02", {
+    date: "2020-10-03",
+    episodeId: "hydraulic:curated:south",
+  }),
+]);
+
+assert.equal(curatedSeparation.episode_count, 2);
+assert.notEqual(
+  curatedSeparation.event_to_episode["CURATED.01"],
+  curatedSeparation.event_to_episode["CURATED.02"]
+);
+
+const curatedMerge = buildHydraulicEpisodeRegistry([
+  hydraulicEvent("CURATED.03", {
+    date: "2020-10-03",
+    episodeId: "hydraulic:curated:verified",
+  }),
+  hydraulicEvent("CURATED.04", {
+    date: "2020-10-10",
+    episodeId: "hydraulic:curated:verified",
+  }),
+]);
+
+assert.equal(curatedMerge.episode_count, 1);
+assert.equal(
+  curatedMerge.episodes[0].confidence,
+  "curated_episode_assignment"
+);
+assert.throws(
+  () =>
+    buildHydraulicEpisodeRegistry([
+      hydraulicEvent("CURATED.INVALID", {
+        episodeId: "hydraulic:2020-10-03",
+      }),
+    ]),
+  /Invalid curated hydraulic episode ID/
+);
+
+const repeatedBridgeEpisode = build(
+  basePayload,
+  [
+    hydraulicEvent("REPEAT.01", { date: "2020-10-03" }),
+    hydraulicEvent("REPEAT.02", { date: "2020-10-03" }),
+    hydraulicEvent("REPEAT.03", { date: "2020-10-03" }),
+    hydraulicEvent("REPEAT.04", { date: "2020-10-03" }),
+  ]
+);
+
+assert.equal(repeatedBridgeEpisode.status, "abstained");
+assert.equal(repeatedBridgeEpisode.evidence_cohort.episode_count, 1);
+assert.equal(
+  repeatedBridgeEpisode.evidence_cohort
+    .episode_effective_evidence_count,
+  1
+);
+assert.equal(
+  repeatedBridgeEpisode.abstention_reasons.includes(
+    "insufficient_independent_hydraulic_episode_evidence"
+  ),
+  true
+);
+
+const undatedEvidence = build(
+  basePayload,
+  [
+    hydraulicEvent("UNDATED.01", { date: null }),
+    hydraulicEvent("UNDATED.02", { date: null }),
+    hydraulicEvent("UNDATED.03", { date: null }),
+    hydraulicEvent("UNDATED.04", { date: null }),
+    hydraulicEvent("UNDATED.05", { date: null }),
+  ]
+);
+
+assert.equal(undatedEvidence.status, "abstained");
+assert.equal(undatedEvidence.evidence_cohort.event_count, 5);
+assert.equal(undatedEvidence.evidence_cohort.episode_count, 0);
+assert.equal(undatedEvidence.evidence_cohort.undated_event_count, 5);
 
 const professionalEventsResource = JSON.parse(
   fs.readFileSync(
