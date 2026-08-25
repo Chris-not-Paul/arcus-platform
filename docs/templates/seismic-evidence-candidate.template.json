@@ -1,0 +1,51 @@
+{
+  "bridge": {
+    "identity_reference": null,
+    "identity_status": "unverified",
+    "name": null
+  },
+  "candidate_id": null,
+  "current_reference_hazard": {
+    "model": "MPS04",
+    "note": "Optional present-day comparison only; never copy this value into historical_ground_motion."
+  },
+  "event": {
+    "date": null,
+    "earthquake_episode_id": null,
+    "episode_independence_basis": null
+  },
+  "evidence_references": [],
+  "historical_ground_motion": {
+    "status": "not_available"
+  },
+  "location": {
+    "country": null,
+    "latitude": null,
+    "longitude": null
+  },
+  "mechanism": {
+    "component_involved": null,
+    "evidence_level": null,
+    "failure_process": null,
+    "interaction_type": null,
+    "status": "insufficient",
+    "trigger": null
+  },
+  "outcome": {
+    "status": "unverified"
+  },
+  "reviews": {
+    "geotechnical_engineer": {
+      "reviewer": null,
+      "status": "not_started"
+    },
+    "registry_editor": {
+      "reviewer": null,
+      "status": "not_started"
+    },
+    "structural_engineer": {
+      "reviewer": null,
+      "status": "not_started"
+    }
+  }
+}

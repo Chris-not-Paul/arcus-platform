@@ -1,0 +1,39 @@
+{
+  "admission_target": "registry_review_only",
+  "allowed_identity_statuses": [
+    "authenticated_asset",
+    "reconciled_descriptive"
+  ],
+  "allowed_mechanism_statuses": [
+    "coherent"
+  ],
+  "allowed_outcome_statuses": [
+    "confirmed_bridge_collapse",
+    "confirmed_partial_bridge_collapse"
+  ],
+  "blocked_historical_hazard_providers": [
+    "ingv-mps04-grid-v1",
+    "MPS04"
+  ],
+  "minimum_case_specific_technical_sources": 1,
+  "required_core_fields": [
+    "trigger",
+    "failure_process",
+    "component_involved",
+    "interaction_type",
+    "evidence_level"
+  ],
+  "required_reviews": [
+    "structural_engineer",
+    "geotechnical_engineer",
+    "registry_editor"
+  ],
+  "technical_source_roles": [
+    "Official/Technical",
+    "Technical reconnaissance",
+    "Scientific reconnaissance",
+    "Peer-reviewed study",
+    "Case-specific investigation"
+  ],
+  "version": "seismic-evidence-intake-v1"
+}

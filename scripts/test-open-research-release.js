@@ -112,7 +112,16 @@ await check("shared-public-fields-match", () => {
 
   events.forEach((event) => {
     const professional = professionalByEvent.get(event.event_id);
-    Object.keys(event).forEach((field) => assert.deepEqual(professional[field], event[field]));
+    Object.keys(event).forEach((field) => {
+      if (field === "hydraulic_intelligence" && professional.hydraulic_outcome_curation) {
+        assert.deepEqual(
+          professional.hydraulic_outcome_curation.previous_hydraulic_intelligence,
+          event[field]
+        );
+        return;
+      }
+      assert.deepEqual(professional[field], event[field]);
+    });
   });
   sources.forEach((source) => {
     const professional = professionalBySource.get(source.source_id);

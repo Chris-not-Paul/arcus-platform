@@ -18,6 +18,8 @@ const professionalResources = new Map([
   ["external-hazard-layers", "external-hazard-layers.json"],
   ["hazard-exposure-preview", "hazard-exposure-preview.json"],
   ["hydraulic-intelligence-audit", "hydraulic-intelligence-audit.json"],
+  ["landslide-intelligence-audit", "landslide-intelligence-audit.json"],
+  ["seismic-intelligence-audit", "seismic-intelligence-audit.json"],
   ["ainop-bridge-index", "ainop-bridge-index.json"],
   ["event-reliability", "event-reliability.json"],
   ["event-vulnerability", "event-vulnerability.json"],

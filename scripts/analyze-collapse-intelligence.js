@@ -14,6 +14,9 @@ import {
   HYDRAULIC_TRIGGER_MAPPING,
   summarizeHydraulicCohort,
 } from "../src/utils/hydraulicIntelligence.js";
+import {
+  LANDSLIDE_MATCHER_BLOCKED_FIELDS,
+} from "../src/utils/landslideIntelligence.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -96,6 +99,7 @@ const OUTCOME_FIELDS = [
   "specific_cause",
   "hydraulic_intelligence",
   ...HYDRAULIC_MATCHER_BLOCKED_FIELDS,
+  ...LANDSLIDE_MATCHER_BLOCKED_FIELDS,
   "triggered",
   "collapse_severity",
   "victims",

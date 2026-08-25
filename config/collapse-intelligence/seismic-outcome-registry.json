@@ -1,0 +1,186 @@
+{
+  "caveat": "This registry curates historical earthquake-associated bridge outcomes. Current MPS04 PGA is a present-day reference hazard value and is never back-cast as the shaking observed at the collapse site.",
+  "cases": [
+    {
+      "bridge_name": "Ponte di Fossa",
+      "curation_status": "curated_multicausal_mechanism_disputed",
+      "episode_id": "EQ-2009-04-06-LAQUILA",
+      "event_id": "B09.04.01",
+      "evidence_references": [
+        {
+          "role": "Official/Institutional",
+          "source_id": "SRC0450",
+          "supports": ["L'Aquila earthquake episode"],
+          "title": "Dipartimento della Protezione Civile - Terremoto Abruzzo 2009",
+          "url": "https://emergenze.protezionecivile.gov.it/it/sismiche/terremoto-abruzzo-2009/"
+        },
+        {
+          "role": "Official/Technical",
+          "source_id": null,
+          "supports": ["Fossa bridge collapse", "progressive embankment ground-failure interpretation"],
+          "title": "ISPRA - Geological effects induced by the L'Aquila earthquake",
+          "url": "https://www.isprambiente.gov.it/contentfiles/00004800/4880-2009-abruzzo-earthquake-report.pdf"
+        },
+        {
+          "role": "Technical reconnaissance",
+          "source_id": null,
+          "supports": ["reinforced-concrete three-span bridge", "likely column failure", "similar bridge column-hinge damage"],
+          "title": "EERI Special Earthquake Report - The Mw 6.3 Abruzzo, Italy, Earthquake of April 6, 2009",
+          "url": "https://www.reluis.it/doc/pdf/Aquila/EERI_L_Aquila_report.pdf"
+        },
+        {
+          "role": "Technical reconnaissance",
+          "source_id": null,
+          "supports": ["support columns punching through the deck"],
+          "title": "EEFIT Mission Report - L'Aquila Earthquake",
+          "url": "https://www.istructe.org/IStructE/media/Public/Resources/report-eefit-laquila-italy-20190816.pdf"
+        }
+      ],
+      "learning_eligibility": "excluded_multicausal_mechanism",
+      "limitations": [
+        "Technical reconnaissance attributes the failure to support-column failure, while ISPRA attributes the Fossa and Onna collapses to progressive embankment ground failures.",
+        "Pre-existing degradation and reinforcement detailing are reported, but their relative causal contribution is not reconciled by a case-specific authenticated investigation in ARCUS.",
+        "The case remains useful for multicausal review but is excluded from process-specific learning."
+      ],
+      "outcome_status": "confirmed_earthquake_associated_collapse_mechanism_disputed",
+      "seismic_intelligence": {
+        "component_involved": "support_columns_and_embankment_ground_system",
+        "evidence_level": "documented_mechanism_disputed",
+        "failure_process": "column_failure_with_competing_embankment_ground_failure_interpretation",
+        "interaction_type": "structural_and_geotechnical_competing_interpretations",
+        "measurements": {},
+        "trigger": "seismic_shaking"
+      }
+    },
+    {
+      "bridge_name": "Aterno bridge near Onna",
+      "curation_status": "curated_source_backed_coordinate_reconciled",
+      "episode_id": "EQ-2009-04-06-LAQUILA",
+      "event_id": "B09.04.02",
+      "evidence_references": [
+        {
+          "role": "Official/Institutional",
+          "source_id": "SRC0453",
+          "supports": ["L'Aquila earthquake episode"],
+          "title": "Dipartimento della Protezione Civile - Terremoto Abruzzo 2009",
+          "url": "https://emergenze.protezionecivile.gov.it/it/sismiche/terremoto-abruzzo-2009/"
+        },
+        {
+          "role": "Official/Technical",
+          "source_id": null,
+          "supports": ["bridge near Onna", "progressive embankment ground failure", "earthquake-induced ground fractures"],
+          "title": "ISPRA - Geological effects induced by the L'Aquila earthquake",
+          "url": "https://www.isprambiente.gov.it/contentfiles/00004800/4880-2009-abruzzo-earthquake-report.pdf"
+        },
+        {
+          "role": "Scientific reconnaissance",
+          "source_id": null,
+          "supports": ["pier movement associated with embankment movement", "superstructure tensile cracking"],
+          "title": "Reconnaissance Investigation on the Damage of the 2009 L'Aquila Earthquake",
+          "url": "https://doi.org/10.1080/13632460903584055"
+        }
+      ],
+      "learning_eligibility": "eligible",
+      "limitations": [
+        "The ARCUS coordinate is reconciled with the technical description of the Aterno bridge near Onna; the registered bridge name remains descriptive rather than an authenticated asset identifier.",
+        "ARCUS records a partial-collapse severity while the ISPRA report uses collapse wording; this severity discrepancy remains explicit.",
+        "No authenticated site ground-motion record or historical-at-event MPS04 value is used."
+      ],
+      "outcome_status": "confirmed_earthquake_associated_bridge_collapse",
+      "seismic_intelligence": {
+        "component_involved": "embankment_pier_superstructure_system",
+        "evidence_level": "documented",
+        "failure_process": "earthquake_induced_progressive_embankment_ground_failure",
+        "interaction_type": "ground_deformation_transmitted_to_piers_and_superstructure",
+        "measurements": {},
+        "trigger": "seismic_shaking"
+      }
+    },
+    {
+      "bridge_name": "Unidentified bridge near Scoppito",
+      "curation_status": "excluded_insufficient_specific_bridge_mechanism",
+      "episode_id": null,
+      "event_id": "B09.04.03",
+      "evidence_references": [
+        {
+          "role": "Official/Institutional",
+          "source_id": "SRC0456",
+          "supports": ["L'Aquila earthquake episode and territorial context"],
+          "title": "Dipartimento della Protezione Civile - Terremoto Abruzzo 2009",
+          "url": "https://emergenze.protezionecivile.gov.it/it/sismiche/terremoto-abruzzo-2009/"
+        },
+        {
+          "role": "Scientific catalogue",
+          "source_id": "SRC0458",
+          "supports": ["ARCUS catalogue classification requiring case-specific verification"],
+          "title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+          "url": "https://doi.org/10.1080/15732479.2025.2483500"
+        }
+      ],
+      "learning_eligibility": "excluded_unverified_specific_mechanism",
+      "limitations": [
+        "The available registered sources do not authenticate the specific bridge identity and earthquake failure mechanism at the ARCUS coordinate.",
+        "No process or affected component is inferred from proximity to the 2009 epicentral area or from current MPS04 exposure.",
+        "The case can be reopened only with case-specific technical evidence."
+      ],
+      "outcome_status": "unverified_specific_bridge_seismic_mechanism",
+      "seismic_intelligence": {
+        "component_involved": null,
+        "evidence_level": "insufficient_for_specific_mechanism",
+        "failure_process": null,
+        "interaction_type": null,
+        "measurements": {},
+        "trigger": "seismic_shaking"
+      }
+    }
+  ],
+  "eligibility_contract": {
+    "eligible_outcome_status": "confirmed_earthquake_associated_bridge_collapse",
+    "minimum_fields": [
+      "trigger",
+      "failure_process",
+      "component_involved",
+      "interaction_type",
+      "evidence_level"
+    ],
+    "rule": "A case is eligible only when the bridge outcome and seismic interaction are source-backed, all core fields are populated, an independent episode_id is assigned and competing causal interpretations do not prevent a coherent process classification."
+  },
+  "production_support_contract": {
+    "activation_mode": "abstention_only",
+    "cohort_activation_minimum": {
+      "episode_effective_evidence": 4,
+      "independent_episodes": 5
+    },
+    "engineering_basis": {
+      "principles_retained": [
+        "keep reference hazard, observed historical outcome and current bridge vulnerability separate",
+        "do not treat MPS04 PGA as site amplification, recorded shaking, collapse probability or retrofit priority",
+        "consider structural detailing, bearings, restraints, unseating, foundations, abutments, ground deformation and pre-existing degradation",
+        "require case-specific professional assessment before monitoring, retrofit or design prescriptions"
+      ],
+      "status": "technical_reconnaissance_basis_not_expert_validated"
+    },
+    "evidence_weights": {
+      "documented": 1,
+      "probable": 0.5
+    },
+    "expert_validation_required": true,
+    "note": "These values are a conservative abstention barrier, not a validated seismic strategy-activation threshold.",
+    "process_activation_minimum": {
+      "episode_effective_evidence": 4,
+      "independent_episodes": 5,
+      "raw_cases": 3
+    },
+    "required_site_assessment_dimensions": [
+      "site_specific_ground_motion_and_local_amplification",
+      "structural_system_detailing_and_degradation",
+      "bearings_restraints_joints_and_unseating",
+      "foundations_abutments_and_ground_deformation",
+      "inspection_history_interventions_and_network_context"
+    ],
+    "status": "provisional_abstention_only",
+    "version": "seismic-support-contract-v1"
+  },
+  "status": "curation_closed_available_evidence",
+  "taxonomy_version": "seismic-v1"
+}

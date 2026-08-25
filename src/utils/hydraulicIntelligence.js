@@ -22,6 +22,7 @@ export const HYDRAULIC_INTELLIGENCE_FIELDS = [
 
 export const HYDRAULIC_CANONICAL_FIELDS = [
   "hydraulic_intelligence",
+  "hydraulic_outcome_curation",
 ];
 
 export const HYDRAULIC_MATCHER_BLOCKED_FIELDS = [
@@ -71,6 +72,130 @@ const EVIDENCE_WEIGHTS_EXPERIMENTAL = {
   needs_review: 0,
   unspecified: 0,
 };
+
+const HYDRAULIC_NORMALIZED_VALUES = Object.freeze({
+  component_involved: new Set(Object.values(HYDRAULIC_COMPONENT_MAPPING).filter(Boolean)),
+  evidence_level: new Set(Object.values(HYDRAULIC_EVIDENCE_LEVEL_MAPPING)),
+  failure_process: new Set(Object.values(HYDRAULIC_FAILURE_PROCESS_MAPPING).filter(Boolean)),
+  trigger: new Set(Object.values(HYDRAULIC_TRIGGER_MAPPING)),
+});
+
+const OVERRIDE_STATUS = "accepted_probable_secondary";
+const OVERRIDE_SCOPE = "professional_only";
+
+function sameHydraulicIntelligence(left = {}, right = {}) {
+  return [
+    "component_involved",
+    "evidence_level",
+    "failure_process",
+    "taxonomy_version",
+    "trigger",
+  ].every((field) => (left?.[field] ?? null) === (right?.[field] ?? null));
+}
+
+export function validateHydraulicOutcomeOverrides(registry = {}) {
+  const errors = [];
+  const overrides = Array.isArray(registry.overrides) ? registry.overrides : [];
+  const seen = new Set();
+
+  overrides.forEach((entry) => {
+    const eventId = String(entry?.event_id || "").trim();
+
+    if (!eventId) {
+      errors.push({ code: "missing_event_id" });
+      return;
+    }
+    if (seen.has(eventId)) {
+      errors.push({ code: "duplicate_event_id", event_id: eventId });
+    }
+    seen.add(eventId);
+
+    if (entry.scope !== OVERRIDE_SCOPE) {
+      errors.push({ code: "invalid_scope", event_id: eventId, value: entry.scope || null });
+    }
+    if (entry.status !== OVERRIDE_STATUS) {
+      errors.push({ code: "invalid_status", event_id: eventId, value: entry.status || null });
+    }
+    if (entry.hydraulic_intelligence?.evidence_level !== "probable") {
+      errors.push({ code: "secondary_override_must_be_probable", event_id: eventId });
+    }
+    if (entry.hydraulic_intelligence?.taxonomy_version !== HYDRAULIC_TAXONOMY_VERSION) {
+      errors.push({ code: "invalid_taxonomy_version", event_id: eventId });
+    }
+
+    Object.entries(HYDRAULIC_NORMALIZED_VALUES).forEach(([field, allowed]) => {
+      if (!allowed.has(entry.hydraulic_intelligence?.[field])) {
+        errors.push({ code: "invalid_normalized_value", event_id: eventId, field });
+      }
+    });
+
+    if (!entry.previous_hydraulic_intelligence) {
+      errors.push({ code: "missing_previous_intelligence", event_id: eventId });
+    }
+    if (!entry.provenance?.source_role || !entry.provenance?.verification_status) {
+      errors.push({ code: "missing_provenance", event_id: eventId });
+    }
+    if (!entry.rationale) {
+      errors.push({ code: "missing_rationale", event_id: eventId });
+    }
+  });
+
+  return {
+    errors,
+    ok: errors.length === 0,
+    override_count: overrides.length,
+    schema_version: registry.schema_version || null,
+  };
+}
+
+export function applyHydraulicOutcomeOverrides(events = [], registry = {}) {
+  const validation = validateHydraulicOutcomeOverrides(registry);
+
+  if (!validation.ok) {
+    throw new Error(`Invalid hydraulic outcome overrides: ${JSON.stringify(validation.errors)}`);
+  }
+
+  const eventIds = new Set(events.map((event) => event.event_id));
+  const missingEvents = registry.overrides
+    .map((entry) => entry.event_id)
+    .filter((eventId) => !eventIds.has(eventId));
+
+  if (missingEvents.length) {
+    throw new Error(`Hydraulic outcome overrides reference missing events: ${missingEvents.join(", ")}`);
+  }
+
+  const byEvent = new Map(registry.overrides.map((entry) => [entry.event_id, entry]));
+
+  return events.map((event) => {
+    const override = byEvent.get(event.event_id);
+
+    if (!override) {
+      return event;
+    }
+    if (!event.hydraulic_intelligence) {
+      throw new Error(`Hydraulic outcome override targets non-hydraulic event: ${event.event_id}`);
+    }
+    if (!sameHydraulicIntelligence(
+      event.hydraulic_intelligence,
+      override.previous_hydraulic_intelligence
+    )) {
+      throw new Error(`Hydraulic source values changed before override: ${event.event_id}`);
+    }
+
+    return {
+      ...event,
+      hydraulic_intelligence: { ...override.hydraulic_intelligence },
+      hydraulic_outcome_curation: {
+        applied: true,
+        previous_hydraulic_intelligence: { ...override.previous_hydraulic_intelligence },
+        provenance: { ...override.provenance },
+        rationale: override.rationale,
+        registry_schema_version: registry.schema_version,
+        status: override.status,
+      },
+    };
+  });
+}
 
 function normalizeCause(value) {
   return String(value || "").trim().toLowerCase();

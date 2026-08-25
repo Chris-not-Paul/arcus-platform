@@ -287,7 +287,7 @@ const results = SCENARIOS.map(analyzeScenario);
 console.log(JSON.stringify({
   caveat:
     "These are deterministic current-signature archetypes for sensitivity analysis, not new live ISPRA point observations and not a collapse-probability model.",
-  engine_version: results[0]?.baseline ? "arcus-mitigation-intelligence-v3" : null,
+  engine_version: results[0]?.baseline ? "arcus-mitigation-intelligence-v4" : null,
   final_priority_index_contribution: "none",
   results,
 }, null, 2));

@@ -688,12 +688,6 @@
         {
           "component_involved": "multiple_components",
           "evidence_level": "documented",
-          "event_id": "B13.02.01",
-          "failure_process": "other_documented_hydraulic_process"
-        },
-        {
-          "component_involved": "multiple_components",
-          "evidence_level": "documented",
           "event_id": "B15.10.05",
           "failure_process": "other_documented_hydraulic_process"
         },
@@ -1193,6 +1187,12 @@
           "component_involved": "multiple_components",
           "evidence_level": "documented",
           "event_id": "B12.11.04",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "probable",
+          "event_id": "B13.02.01",
           "failure_process": "scour"
         },
         {

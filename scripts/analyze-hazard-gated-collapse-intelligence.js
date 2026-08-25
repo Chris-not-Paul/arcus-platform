@@ -14,6 +14,9 @@ import { readProfessionalDataset } from "./lib/professional-dataset.js";
 import {
   HYDRAULIC_MATCHER_BLOCKED_FIELDS,
 } from "../src/utils/hydraulicIntelligence.js";
+import {
+  LANDSLIDE_MATCHER_BLOCKED_FIELDS,
+} from "../src/utils/landslideIntelligence.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -71,6 +74,7 @@ const BLOCKED_OUTCOME_FIELDS = [
   "cause_category",
   "specific_cause",
   ...HYDRAULIC_MATCHER_BLOCKED_FIELDS,
+  ...LANDSLIDE_MATCHER_BLOCKED_FIELDS,
   "triggered",
   "failure_mechanism",
   "failed_component",

@@ -60,6 +60,16 @@ of the class or bridge-landslide interaction at the collapse date. Until the
 historical outcomes carry a source-backed landslide taxonomy, the admissible
 Mitigation Intelligence result is explicit abstention.
 
+The first versioned curation registry is available at:
+
+```text
+config/collapse-intelligence/landslide-outcome-registry.json
+```
+
+Only entries marked `learning_eligibility = eligible` may contribute outcome
+evidence after independent cohort retrieval. Disputed and review-pending cases
+remain visible for audit but contribute zero evidence.
+
 ### B. Design Risk-Control Options
 
 These are intentionally left as future expert-reviewed options. ARCUS data alone must not prescribe design solutions.

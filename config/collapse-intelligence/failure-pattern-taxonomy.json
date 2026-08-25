@@ -237,15 +237,6 @@
         ],
         "status": "active",
         "taxonomy_version": "hydraulic-v2"
-      },
-      {
-        "canonical_value": "rainfall_induced_landslide",
-        "definition": "Curated hydraulic trigger observed in the documented collapse record.",
-        "source_values": [
-          "Rainfall-induced landslide"
-        ],
-        "status": "active",
-        "taxonomy_version": "hydraulic-v2"
       }
     ]
   },
@@ -1157,7 +1148,7 @@
     {
       "confidence": "probable",
       "event_id": "B13.02.01",
-      "failure_pattern": "hydraulic_other_documented_process",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true

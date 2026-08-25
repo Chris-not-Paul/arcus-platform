@@ -1,6 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import {
+  LANDSLIDE_CORE_FIELDS,
+  summarizeLandslideRegistry,
+  validateLandslideOutcomeRegistry,
+} from "../src/utils/landslideIntelligence.js";
+
+export { LANDSLIDE_CORE_FIELDS } from "../src/utils/landslideIntelligence.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INTELLIGENCE_DIR = path.join(
@@ -13,14 +20,6 @@ const OUTPUT_PATH = path.join(
   INTELLIGENCE_DIR,
   "landslide-mitigation-readiness.json"
 );
-
-export const LANDSLIDE_CORE_FIELDS = Object.freeze([
-  "movement_type",
-  "interaction_type",
-  "component_involved",
-  "activity_state_at_event",
-  "evidence_level",
-]);
 
 const COMPLETE_SIGNATURE_STATUSES = new Set([
   "available",
@@ -85,11 +84,30 @@ function currentPaiSummary(signature) {
 
 export function auditLandslideMitigationReadiness({
   events,
+  registry,
   signatures,
   sources,
   historicalSignatures = [],
   knowledgeBase,
 }) {
+  const registryValidation = validateLandslideOutcomeRegistry(registry);
+
+  if (!registryValidation.ok) {
+    throw new Error(
+      `Invalid landslide outcome registry: ${JSON.stringify(registryValidation.errors)}`
+    );
+  }
+
+  const eventsById = new Map(events.map((event) => [event.event_id, event]));
+  const missingRegistryEvents = (registry.cases || [])
+    .map((entry) => entry.event_id)
+    .filter((eventId) => !eventsById.has(eventId));
+
+  if (missingRegistryEvents.length) {
+    throw new Error(
+      `Landslide registry references missing Professional events: ${missingRegistryEvents.join(", ")}`
+    );
+  }
   const signaturesByEvent = new Map(
     signatures.map((signature) => [signature.event_id, signature])
   );
@@ -101,10 +119,13 @@ export function auditLandslideMitigationReadiness({
     sourcesByEvent.set(source.event_id, eventSources);
   });
 
-  const candidates = events.filter(isLandslideOutcomeCandidate);
-  const candidateRows = candidates.map((event) => {
+  const candidates = (registry.cases || []).map((entry) => ({
+    entry,
+    event: eventsById.get(entry.event_id),
+  }));
+  const candidateRows = candidates.map(({ entry, event }) => {
     const eventSources = sourcesByEvent.get(event.event_id) || [];
-    const intelligence = event.landslide_intelligence || null;
+    const intelligence = entry.landslide_intelligence || null;
     const missingFields = LANDSLIDE_CORE_FIELDS.filter(
       (field) => !hasValue(intelligence?.[field])
     );
@@ -115,9 +136,13 @@ export function auditLandslideMitigationReadiness({
       date: event.date || null,
       event_id: event.event_id,
       landslide_basis: candidateBasis(event),
+      curation_status: entry.curation_status,
+      episode_id: entry.episode_id,
+      learning_eligibility: entry.learning_eligibility,
       landslide_intelligence_status:
         missingFields.length === 0 ? "core_complete" : "not_curated",
       missing_core_fields: missingFields,
+      outcome_status: entry.outcome_status,
       province: event.province || null,
       source_roles: [...new Set(eventSources.map((source) => source.source_role))].sort(),
     };
@@ -132,11 +157,17 @@ export function auditLandslideMitigationReadiness({
   const coreComplete = candidateRows.filter(
     (row) => row.landslide_intelligence_status === "core_complete"
   );
+  const eligible = candidateRows.filter(
+    (row) => row.learning_eligibility === "eligible"
+  );
+  const eligibleEpisodes = new Set(
+    eligible.map((row) => row.episode_id).filter(Boolean)
+  );
   const officialSourced = candidateRows.filter((row) =>
     row.source_roles.includes("Official/Technical")
   );
   const historicalAvailable = historicalSignatures.filter((signature) => {
-    if (!candidates.some((event) => event.event_id === signature.event_id)) {
+    if (!candidateRows.some((row) => row.event_id === signature.event_id)) {
       return false;
     }
 
@@ -154,14 +185,14 @@ export function auditLandslideMitigationReadiness({
       landslideKnowledge?.external_engineering_basis?.length > 0
   );
   const blockers = [
-    coreComplete.length === 0
-      ? "No candidate outcome carries the minimum curated landslide mechanism and interaction fields."
-      : null,
-    historicalAvailable.length === 0
-      ? "No authenticated PAI classification at the collapse date is registered; current PAI signatures cannot be back-cast."
+    eligible.length === 0
+      ? "No candidate outcome is eligible for collapse-learned landslide analysis."
       : null,
     !knowledgeReady
       ? "The landslide knowledge-base entry is draft and has no expert-validated engineering basis."
+      : null,
+    registry.production_support_contract?.status !== "expert_validated"
+      ? "No expert-approved production support threshold exists yet for the small landslide episode cohort."
       : null,
   ].filter(Boolean);
 
@@ -172,13 +203,27 @@ export function auditLandslideMitigationReadiness({
       "A no_intersection result means no PAI/AA polygon was assigned to that coordinate; it is not evidence of no landslide susceptibility.",
       "PAI class alone does not establish bridge-landslide interaction, vulnerability, severity or a Level 2/Level 3 attention class.",
       "Outcome fields are excluded from analogue selection and may be used only after the cohort has been selected from independent project and hazard features.",
+      "Missing historical PAI classifications are retained as a limitation and do not invalidate source-backed mechanism curation.",
     ],
     coverage: {
-      candidate_cases: candidates.length,
+      candidate_cases: candidateRows.length,
       core_taxonomy_complete: coreComplete.length,
       current_pai_complete: currentComplete.length,
       current_pai_intersections: currentIntersections.length,
       historical_pai_at_event: historicalAvailable.length,
+      eligible_cases: eligible.length,
+      eligible_independent_episodes: eligibleEpisodes.size,
+      excluded_insufficient_evidence_cases: candidateRows.filter(
+        (row) => String(row.curation_status || "").startsWith("excluded_insufficient_")
+      ).length,
+      disputed_cases: candidateRows.filter((row) => row.curation_status === "disputed").length,
+      multicausal_cases: candidateRows.filter(
+        (row) => row.curation_status === "curated_multicausal"
+      ).length,
+      needs_review_cases: candidateRows.filter((row) => row.curation_status === "needs_review").length,
+      reclassified_cross_hazard_cases: candidateRows.filter(
+        (row) => row.curation_status === "reclassified_cross_hazard"
+      ).length,
       official_or_technical_source_cases: officialSourced.length,
       primary_landslide_cause_cases: candidateRows.filter(
         (row) => row.landslide_basis === "primary_cause"
@@ -212,8 +257,10 @@ export function auditLandslideMitigationReadiness({
       blockers,
     },
     generated_at: new Date().toISOString(),
+    registry_summary: summarizeLandslideRegistry(registry),
+    registry_validation: registryValidation,
     required_core_fields: LANDSLIDE_CORE_FIELDS,
-    schema_version: "arcus-landslide-mitigation-readiness-v1",
+    schema_version: "arcus-landslide-mitigation-readiness-v3",
   };
 }
 
@@ -238,11 +285,16 @@ export function loadAndAuditLandslideMitigationReadiness() {
     path.join(ROOT, "config", "collapse-intelligence", "mitigation-knowledge-base.json"),
     { entries: [] }
   );
+  const registry = readJson(
+    path.join(ROOT, "config", "collapse-intelligence", "landslide-outcome-registry.json"),
+    { cases: [] }
+  );
 
   return auditLandslideMitigationReadiness({
     events: eventPayload.events || [],
     historicalSignatures: historicalPayload.signatures || [],
     knowledgeBase,
+    registry,
     signatures: signaturePayload.signatures || [],
     sources: sourcePayload.sources || [],
   });

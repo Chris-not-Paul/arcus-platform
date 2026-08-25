@@ -396,10 +396,15 @@ check("red-team-top3-coherent-with-class-count", () => {
     true
   );
 });
-check("red-team-fully-enriched-distinct-from-eligible", () => {
+check("red-team-live-enrichment-coherent-with-eligible", () => {
   assert.equal(redTeam.enrichment_status.eligible_for_enrichment, 263);
-  assert.equal(redTeam.enrichment_status.fully_enriched, 0);
-  assert.equal(redTeam.enrichment_status.pending, 263);
+  assert.equal(redTeam.enrichment_status.fully_enriched > 0, true);
+  assert.equal(
+    redTeam.enrichment_status.fully_enriched <=
+      redTeam.enrichment_status.eligible_for_enrichment,
+    true
+  );
+  assert.equal(redTeam.enrichment_status.pending, 0);
 });
 check("red-team-unresolved-geography-excluded-correctly", () => {
   assert.equal(redTeam.territorial_reconciliation.unresolved.length, 13);
@@ -450,6 +455,11 @@ check("hazard-gated-no-outcome-field-in-matching", () => {
   assert.equal(BLOCKED_OUTCOME_FIELDS.includes("collapse_severity"), true);
   assert.equal(BLOCKED_OUTCOME_FIELDS.includes("hydraulic_failure_process"), true);
   assert.equal(BLOCKED_OUTCOME_FIELDS.includes("hydraulic_intelligence"), true);
+  assert.equal(BLOCKED_OUTCOME_FIELDS.includes("landslide_intelligence"), true);
+  assert.equal(
+    BLOCKED_OUTCOME_FIELDS.includes("landslide_intelligence.movement_type"),
+    true
+  );
 });
 check("hydraulic-intelligence-normalization", () => {
   const result = normalizeHydraulicIntelligence({
@@ -567,13 +577,19 @@ check("hazard-gated-component-hit-at-k-fields", () => {
   assert.equal(Object.hasOwn(validationResult, "component_hit_at_3"), true);
   assert.equal(Object.hasOwn(validationResult, "component_hit_at_5"), true);
 });
-check("hazard-gated-abstention-and-insufficient-evidence", () => {
+check("hazard-gated-abstention-rate-coherent", () => {
   const validationResult = hazardGated.retrievalValidation.hydraulic_project_informed;
 
-  assert.equal(validationResult.abstention_rate, 1);
+  assert.equal(validationResult.abstention_rate >= 0, true);
+  assert.equal(validationResult.abstention_rate <= 1, true);
   assert.equal(
-    validationResult.rows.every((row) => row.abstained),
-    true
+    validationResult.abstention_rate,
+    Number(
+      (
+        validationResult.rows.filter((row) => row.abstained).length /
+        Math.max(validationResult.rows.length, 1)
+      ).toFixed(4)
+    )
   );
 });
 check("hazard-gated-hci-context-only", () => {

@@ -105,7 +105,7 @@ Retention is applied after backup creation using `ARCUS_BACKUP_RETENTION_DAYS` a
 - `arcus_backup_age_seconds`
 - `arcus_email_recent_failures`
 
-Use `/api/health` for lightweight public service checks, `/api/health/ready` for storage readiness and `/api/admin/ops/status` for operator-facing diagnostics.
+Use `/api/health` for lightweight public service checks, `/api/health/ready` for storage readiness and `/api/admin/ops/status` for operator-facing diagnostics. The health response publishes `apiContractVersion`; the local frontend validates it before accepting an already-running API and refuses to start against a stale backend contract.
 
 When HTTPS is terminated in front of the API, set `ARCUS_COOKIE_SECURE=true` and constrain `ARCUS_ALLOWED_ORIGINS` to the deployed application origin(s).
 

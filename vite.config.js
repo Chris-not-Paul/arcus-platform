@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { startArcusApiServer } from './server/server.js'
+import {
+  ARCUS_API_CONTRACT_VERSION,
+  matchesArcusApiContract,
+} from './server/apiContract.js'
 
 const arcusApiOrigin = 'http://127.0.0.1:4174'
 
@@ -19,17 +23,20 @@ async function fetchWithTimeout(url, timeoutMs = 1600) {
 
 async function existingArcusApiIsCurrent() {
   try {
-    const [session, register, account] = await Promise.all([
+    const [session, register, account, health] = await Promise.all([
       fetchWithTimeout(`${arcusApiOrigin}/api/auth/session`),
       fetchWithTimeout(`${arcusApiOrigin}/api/auth/register`),
       fetchWithTimeout(`${arcusApiOrigin}/api/professional/account`),
+      fetchWithTimeout(`${arcusApiOrigin}/api/health`),
     ])
+    const healthPayload = health.ok ? await health.json() : null
 
-    return (
-      session.ok &&
-      register.status === 405 &&
-      account.status === 401
-    )
+    return matchesArcusApiContract({
+      accountStatus: account.status,
+      contractVersion: healthPayload?.apiContractVersion,
+      registerStatus: register.status,
+      sessionOk: session.ok,
+    })
   } catch {
     return false
   }
@@ -53,10 +60,10 @@ async function ensureArcusApiServer() {
     }
 
     if (error?.code === 'EADDRINUSE') {
-      console.error(
-        `ARCUS API port 4174 is already in use, but the running API does not expose the current ARCUS contract. Stop the old process and rerun npm run dev.`
+      throw new Error(
+        `ARCUS API port 4174 is already in use, but the running API does not expose ${ARCUS_API_CONTRACT_VERSION}. Stop the old process and rerun npm run dev.`,
+        { cause: error }
       )
-      return
     }
 
     console.error('ARCUS API failed to start', error)
@@ -66,7 +73,7 @@ async function ensureArcusApiServer() {
 const arcusApiPlugin = {
   name: 'arcus-api',
   configureServer() {
-    ensureArcusApiServer()
+    return ensureArcusApiServer()
   },
 }
 

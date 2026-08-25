@@ -14,8 +14,10 @@ import {
   getProfessionalResource,
 } from "../server/dataService.js";
 import {
+  applyHydraulicOutcomeOverrides,
   normalizeHydraulicIntelligence,
   summarizeHydraulicCohort,
+  validateHydraulicOutcomeOverrides,
 } from "../src/utils/hydraulicIntelligence.js";
 
 const checks = [];
@@ -59,6 +61,7 @@ const professional = readJson("private-data/professional/professional-events.jso
 const events = professional;
 const sources = readJson("private-data/professional/professional-sources.json").sources;
 const audit = readJson("private-data/professional/hydraulic-intelligence-audit.json");
+const overrides = readJson("config/collapse-intelligence/hydraulic-outcome-overrides.json");
 
 check("excel-columns-by-header", () => {
   assert.equal(requiredHeaderCheck(headers), true);
@@ -203,10 +206,37 @@ check("event-and-source-counts", () => {
 });
 check("audit-counts", () => {
   assert.equal(audit.hydraulic_events, 211);
-  assert.equal(audit.summary.documented, 124);
-  assert.equal(audit.summary.probable, 43);
+  assert.equal(audit.summary.documented, 123);
+  assert.equal(audit.summary.probable, 44);
   assert.equal(audit.summary.needs_review, 8);
   assert.equal(audit.summary.unspecified, 36);
+});
+check("verdura-professional-override-is-probable-and-auditable", () => {
+  const verdura = professional.find((event) => event.event_id === "B13.02.01");
+
+  assert.equal(validateHydraulicOutcomeOverrides(overrides).ok, true);
+  assert.equal(verdura.hydraulic_intelligence.failure_process, "scour");
+  assert.equal(verdura.hydraulic_intelligence.component_involved, "pier_foundation");
+  assert.equal(verdura.hydraulic_intelligence.evidence_level, "probable");
+  assert.equal(verdura.hydraulic_outcome_curation.status, "accepted_probable_secondary");
+  assert.equal(
+    verdura.hydraulic_outcome_curation.previous_hydraulic_intelligence.failure_process,
+    "other_documented_hydraulic_process"
+  );
+});
+check("hydraulic-override-rejects-source-drift", () => {
+  assert.throws(
+    () => applyHydraulicOutcomeOverrides([
+      {
+        event_id: "B13.02.01",
+        hydraulic_intelligence: {
+          ...overrides.overrides[0].previous_hydraulic_intelligence,
+          failure_process: "scour",
+        },
+      },
+    ], overrides),
+    /source values changed/
+  );
 });
 check("professional-scope-includes-hydraulic-intelligence", () => {
   assert.equal(
@@ -224,9 +254,12 @@ check("professional-resource-includes-hydraulic-intelligence", async () => {
 });
 check("open-scope-includes-historical-hydraulic-intelligence", async () => {
   const openEvents = await getOpenEvents();
+  const openVerdura = openEvents.find((event) => event.event_id === "B13.02.01");
 
   assert.equal(openEvents.length, 263);
   assert.equal(openEvents.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"), true);
+  assert.equal(openEvents.some((event) => event.hydraulic_outcome_curation), false);
+  assert.equal(openVerdura.hydraulic_intelligence.failure_process, "other_documented_hydraulic_process");
 });
 check("matcher-feature-audit", () => {
   const result = auditMatcherFeatureExclusion();
@@ -239,12 +272,12 @@ check("cohort-aggregation", () => {
   const cohort = summarizeHydraulicCohort(events);
 
   assert.equal(cohort.total_cases, 211);
-  assert.equal(cohort.mechanism_documented_cases, 124);
-  assert.equal(cohort.mechanism_probable_cases, 43);
+  assert.equal(cohort.mechanism_documented_cases, 123);
+  assert.equal(cohort.mechanism_probable_cases, 44);
   assert.equal(cohort.mechanism_needs_review_cases, 8);
   assert.equal(cohort.mechanism_unspecified_cases, 36);
   assert.equal(cohort.failure_processes.some((item) => item.raw_count > 0), true);
-  assert.equal(cohort.effective_evidence_count, 145.5);
+  assert.equal(cohort.effective_evidence_count, 145);
 });
 check("mitigation-draft-and-external-validation", () => {
   const knowledge = buildMitigationKnowledgeBase(

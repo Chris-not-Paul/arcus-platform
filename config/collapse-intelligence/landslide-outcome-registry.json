@@ -1,0 +1,420 @@
+{
+  "caveat": "This registry curates historical landslide outcomes for Professional Mitigation Intelligence. Unknown values remain null; current ISPRA PAI signatures are not treated as historical-at-collapse evidence.",
+  "cases": [
+    {
+      "bridge_name": "Viadotto Verdura",
+      "curation_status": "reclassified_cross_hazard",
+      "episode_id": null,
+      "event_id": "B13.02.01",
+      "evidence_references": [
+        {
+          "role": "News",
+          "source_id": "SRC0360",
+          "supports": ["collapse occurrence", "rainfall context"],
+          "title": "Ponte crollato ad Agrigento, l'Anas trova una soluzione",
+          "url": "https://palermo.repubblica.it/cronaca/2013/02/08/news/ponte_crollato_ad_agrigento_l_anas_trova_una_soluzione-52229526/"
+        },
+        {
+          "role": "Official/Institutional",
+          "source_id": null,
+          "supports": ["conflicting hydraulic interpretation"],
+          "title": "Camera dei Deputati - XVII Legislatura, seduta 244",
+          "url": "https://www.camera.it/leg17/410?idSeduta=0244&tipo=atti_indirizzo_controllo"
+        },
+        {
+          "described_source": "Court-appointed geotechnical and technical expert reports in the Sciacca proceedings",
+          "primary_document_reviewed_by_arcus": false,
+          "provided_at": "2026-08-24",
+          "role": "User-provided technical-report summary",
+          "source_id": null,
+          "supports": [
+            "prolonged flood loading",
+            "scour and erosion of granular support at pier foundations",
+            "loss of foundation stability",
+            "hydraulic rather than landslide outcome classification"
+          ],
+          "verification_status": "primary_document_not_attached"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": null,
+        "component_involved": null,
+        "evidence_level": "not_applicable_reclassified",
+        "interaction_type": null,
+        "measurements": {},
+        "movement_type": null,
+        "trigger": null
+      },
+      "learning_eligibility": "excluded_reclassified_hydraulic",
+      "limitations": [
+        "The user-provided summary attributes the collapse to hydraulic scour and erosion at pier foundations, so the event must not enter a landslide cohort.",
+        "The underlying court-appointed reports have not been attached or independently reviewed by ARCUS; their exact wording, measurements and attribution strength remain pending primary-document verification.",
+        "The cross-hazard correction is integrated into the Professional Hydraulic cohort as probable evidence with weight 0.5; the unavailable primary reports are not represented as directly reviewed evidence."
+      ],
+      "outcome_status": "reclassified_hydraulic_scour",
+      "cross_hazard_reclassification": {
+        "component_involved": "pier_foundations",
+        "evidence_basis": "user_provided_summary_of_court_expert_reports",
+        "failure_process": "scour",
+        "primary_document_status": "unavailable",
+        "professional_hydraulic_status": "accepted_probable_secondary",
+        "target_hazard_family": "hydraulic",
+        "trigger": "prolonged_flood"
+      }
+    },
+    {
+      "bridge_name": "Ponte sul torrente Serina at Rosolo",
+      "curation_status": "curated_source_backed",
+      "episode_id": "LS-2013-12-02-VALLE-SERINA",
+      "event_id": "B13.12.03",
+      "evidence_references": [
+        {
+          "role": "News",
+          "source_id": "SRC0389",
+          "supports": ["rockfall mechanism", "direct bridge impact", "approximate released volume"],
+          "title": "La Valle Serina divisa in due: ad Algua crolla sperone roccioso",
+          "url": "https://www.ecodibergamo.it/stories/Cronaca/la-valle-serina-divisa-in-due-algua-crolla-sperone-roccioso_1035641_11/"
+        },
+        {
+          "role": "News",
+          "source_id": "SRC0390",
+          "supports": ["direct bridge impact", "probable freeze-thaw trigger"],
+          "title": "Sbalzo termico, frana travolge ponte in Valle Serina",
+          "url": "https://bergamo.corriere.it/notizie/cronaca/13_dicembre_04/sbalzo-termico-frana-travolge-ponte-serina-08c70904-5cd7-11e3-a319-5493e7b80f59.shtml"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": "active",
+        "component_involved": "bridge_unspecified",
+        "evidence_level": "probable",
+        "interaction_type": "direct_impact",
+        "measurements": {
+          "released_volume_m3": {
+            "basis": "reported_approximate",
+            "value": 2000
+          }
+        },
+        "movement_type": "rockfall",
+        "trigger": "freeze_thaw_probable"
+      },
+      "learning_eligibility": "eligible",
+      "limitations": [
+        "The mechanism and impact are reported consistently, but no detailed technical investigation is registered.",
+        "The specific structural component struck is not documented."
+      ],
+      "outcome_status": "confirmed_landslide_collapse"
+    },
+    {
+      "bridge_name": "Viadotto Himera I",
+      "curation_status": "curated_source_backed",
+      "episode_id": "LS-2015-04-10-HIMERA",
+      "event_id": "B15.04.01",
+      "evidence_references": [
+        {
+          "role": "Official/Technical",
+          "source_id": "SRC0007",
+          "supports": ["official emergency recognition", "viaduct distress linked to slope movement"],
+          "title": "OCDPC n. 258 del 30 maggio 2015 - Viadotto Himera I",
+          "url": "https://www.protezionecivile.gov.it/static/d4fa6433b548527b0a2cd60928fc26c9/OCDPC_258_del_30_maggio_2015_Viadotto_Himera_I.pdf"
+        },
+        {
+          "role": "Official/Technical",
+          "source_id": "SRC0306",
+          "supports": ["multiple affected piers", "foundation investigation and reconstruction context"],
+          "title": "MIT - Dossier Himera",
+          "url": "https://www.mit.gov.it/comunicazione/news/dossier-himera"
+        },
+        {
+          "role": "Technical",
+          "source_id": null,
+          "supports": ["rotational slide evolution", "rapid debris and mud flow", "foundation displacement"],
+          "title": "Dissesto idrogeologico: emergenza perenne per le infrastrutture viarie",
+          "url": "https://www.stradeeautostrade.it/ambiente-e-territorio/dissesto-idrogeologico-emergenza-perenne-per-le-infrastrutture-viarie/"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": "active",
+        "component_involved": "multiple_piers_and_foundations",
+        "evidence_level": "documented",
+        "interaction_type": "direct_foundation_and_pier_displacement",
+        "measurements": {},
+        "movement_type": "rotational_slide_to_rapid_debris_mud_flow",
+        "trigger": "slope_instability_after_prolonged_rainfall"
+      },
+      "learning_eligibility": "eligible",
+      "limitations": [
+        "No authenticated historical PAI class at the collapse date is registered.",
+        "Movement velocity and bridge-foundation geometry remain undocumented in the current registry."
+      ],
+      "outcome_status": "confirmed_landslide_collapse"
+    },
+    {
+      "bridge_name": "Monesi road bridges",
+      "curation_status": "excluded_insufficient_bridge_outcome",
+      "episode_id": null,
+      "event_id": "B16.11.04",
+      "evidence_references": [
+        {
+          "role": "Official/Technical",
+          "source_id": "SRC0293",
+          "supports": ["extreme rainfall event", "territorial landslide damage"],
+          "title": "CNR-IRPI - Alluvione in Liguria e Piemonte novembre 2016",
+          "url": "https://polaris.irpi.cnr.it/event/alluvione-liguria-e-piemonte/"
+        },
+        {
+          "role": "Official/Technical",
+          "source_id": "SRC0294",
+          "supports": ["event hydrometeorology", "regional damage context"],
+          "title": "ARPA Piemonte - Evento alluvionale 21-25 novembre 2016",
+          "url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/evento2016.pdf"
+        },
+        {
+          "role": "Official/Institutional",
+          "source_id": null,
+          "supports": ["provincial road destroyed by the 2016 landslide", "Rio Bavera bridge restored to traffic after intervention"],
+          "title": "Regione Liguria - nuova strada Monesi di Mendatica",
+          "url": "https://www.regione.liguria.it/cgr/item/22784-strada-monesi-mendatica.html"
+        },
+        {
+          "role": "Official/Institutional",
+          "source_id": null,
+          "supports": ["Rio Bavera bridge consolidation project", "geotechnical investigation at Monesi abutment"],
+          "title": "Provincia di Imperia - professional record for Rio Bavera bridge works",
+          "url": "https://www.provincia.imperia.it/sites/default/files/allegati/incarichi-professionali/CURRICULUM%20VITAE%20EUROPEO%202025%20AGG.pdf"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": "active",
+        "component_involved": null,
+        "evidence_level": "insufficient_for_bridge_outcome",
+        "interaction_type": null,
+        "measurements": {},
+        "movement_type": "reactivated_paleolandslide_probable",
+        "trigger": "extreme_rainfall"
+      },
+      "learning_eligibility": "excluded_unverified_bridge_collapse",
+      "limitations": [
+        "Official records confirm destruction of the provincial road and bridge consolidation/reconstruction works, but do not authenticate total collapse of the specific bridge on the ARCUS event date.",
+        "The low bridge and the Rio Bavera bridge cannot be reconciled by identity and chronology from the available evidence.",
+        "The disposition is closed as excluded; it may be reopened only if a source directly authenticates the bridge identity, collapse outcome and event chronology."
+      ],
+      "outcome_status": "unverified_specific_bridge_collapse"
+    },
+    {
+      "bridge_name": "Viadotto Madonna del Monte",
+      "curation_status": "curated_source_backed",
+      "episode_id": "LS-2019-11-24-MADONNA-DEL-MONTE",
+      "event_id": "B19.11.01",
+      "evidence_references": [
+        {
+          "role": "Official/Technical",
+          "source_id": "SRC0233",
+          "supports": ["landslide occurrence", "viaduct collapse and reconstruction"],
+          "title": "Autostrada dei Fiori - Viadotto Madonna del Monte",
+          "url": "https://www.autostradadeifiori.it/autostrada-dei-fiori-viadotto-madonna-del-monte/"
+        },
+        {
+          "role": "Official/Technical",
+          "source_id": null,
+          "supports": ["geotechnical documentation", "drainage and structural reconstruction records"],
+          "title": "Regione Liguria - demolizione e ricostruzione viadotto Madonna del Monte",
+          "url": "https://www.regione.liguria.it/homepage-protezione-civile/item/27898-demolizione-viadotto-madonna-monte-a6-to-sv.html"
+        },
+        {
+          "role": "Technical/Scientific",
+          "source_id": null,
+          "supports": ["rotational-to-debris-flow mechanism", "impact velocity", "flow-front height"],
+          "title": "Monitoraggio per early warning automatico del versante A6 TO-SV",
+          "url": "https://sigea-aps.it/pubblicazione/monitoraggio-per-early-warning-automatico-del-versante-lungo-lautostrada-a6-to-sv-a-seguito-della-colata-detritica-che-ha-causato-il-crollo-del-viadotto-madonna-del-monte/"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": "active",
+        "component_involved": "pier",
+        "evidence_level": "documented",
+        "interaction_type": "direct_dynamic_impact",
+        "measurements": {
+          "flow_front_height_m": {
+            "basis": "technical_back_analysis",
+            "maximum": 4,
+            "minimum": 3.5
+          },
+          "impact_velocity_m_s": {
+            "basis": "technical_back_analysis",
+            "maximum": 10,
+            "minimum": 9
+          },
+          "released_volume_m3": {
+            "basis": "operator_reported_range",
+            "maximum": 30000,
+            "minimum": 20000
+          }
+        },
+        "movement_type": "rotational_slide_to_rapid_debris_flow",
+        "trigger": "extreme_rainfall_event"
+      },
+      "learning_eligibility": "eligible",
+      "limitations": [
+        "No authenticated historical PAI class at the collapse date is registered.",
+        "Measurements are retained with their stated back-analysis or operator basis and are not generalized to other bridges."
+      ],
+      "outcome_status": "confirmed_landslide_collapse"
+    },
+    {
+      "bridge_name": "Ponte Emilio Barsanti at Albiano Magra",
+      "curation_status": "curated_multicausal",
+      "episode_id": "LS-2020-04-08-ALBIANO",
+      "event_id": "B20.04.02",
+      "evidence_references": [
+        {
+          "role": "Official/Technical",
+          "source_id": null,
+          "supports": ["commission established to determine cause", "absence of an official landslide attribution in the registered notice"],
+          "title": "MIT - Crollo ponte: istituzione della Commissione ispettiva",
+          "url": "https://www.mit.gov.it/comunicazione/news/crollo-ponte-de-micheli-istituisce-commissione-ispettiva"
+        },
+        {
+          "role": "Scientific",
+          "source_id": "SRC0207",
+          "supports": ["published collapse survey classification requiring reconciliation"],
+          "title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+          "url": "https://doi.org/10.1080/15732479.2025.2483500"
+        },
+        {
+          "role": "Court reporting",
+          "source_id": null,
+          "supports": ["court-appointed experts reported slow ground displacement associated with an old active landslide", "multicausal structural and surveillance context"],
+          "title": "Il Tirreno - Albiano Magra first-instance judgement and court-expert findings",
+          "url": "https://www.iltirreno.it/massa/cronaca/2025/09/17/news/crollo-del-ponte-di-albiano-magra-una-condanna-1.100761990"
+        },
+        {
+          "described_authors": ["Franco Braga", "Sebastiano Rampello"],
+          "described_source": "Court-appointed technical report / incidente probatorio filed at the Tribunal of Massa",
+          "primary_document_reviewed_by_arcus": false,
+          "provided_at": "2026-08-24",
+          "role": "User-provided CTU summary",
+          "source_id": null,
+          "supports": [
+            "thrust from an ancient paleolandslide on the east abutment",
+            "historical bridge widening without adequate pier strengthening",
+            "multicausal interaction between ground movement, structural works and management deficiencies"
+          ],
+          "verification_status": "primary_document_not_attached"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": "active_ancient_paleolandslide",
+        "component_involved": "east_abutment_ground_system",
+        "evidence_level": "documented_summary_primary_pending",
+        "interaction_type": "lateral_ground_thrust_on_abutment",
+        "measurements": {},
+        "movement_type": "slow_moving_ancient_paleolandslide",
+        "trigger": null
+      },
+      "learning_eligibility": "excluded_multicausal",
+      "limitations": [
+        "The user-provided CTU summary supports a landslide contribution, but the full report has not been attached or independently reviewed by ARCUS.",
+        "The collapse is explicitly multicausal: paleolandslide thrust, structural modifications and historical management or surveillance factors must not be collapsed into a pure-landslide label.",
+        "The case can inform a future multicausal interaction model, but is excluded from the current pure-landslide learning cohort.",
+        "Exact CTU wording, quantitative ground displacement and any subsequent judicial findings remain to be verified from primary documents."
+      ],
+      "outcome_status": "confirmed_multicausal_landslide_structural_collapse"
+    },
+    {
+      "bridge_name": "Poggiolo-Spugna bridge",
+      "curation_status": "excluded_insufficient_causal_interaction",
+      "episode_id": null,
+      "event_id": "B24.05.01",
+      "evidence_references": [
+        {
+          "role": "News",
+          "source_id": "SRC0038",
+          "supports": ["bridge collapse", "previous 2023 damage", "support failure after rainfall"],
+          "title": "RaiNews - Appennino forlivese, crolla ponte gia danneggiato dall'alluvione",
+          "url": "https://www.rainews.it/tgr/emiliaromagna/articoli/2024/05/appennino-forlivese-crolla-ponte-gia-danneggiato-dallalluvione-3e984f0a-a3a1-4f3f-b4a2-d48a43f76fd3.html"
+        },
+        {
+          "role": "Official/Institutional",
+          "source_id": null,
+          "supports": ["reconstruction inventory classifies the intervention under landslide damage"],
+          "title": "Commissario straordinario ricostruzione - intervention inventory",
+          "url": "https://commissari.gov.it/media/4xcc53pr/ordinanza-n-28-completa_firmato.pdf"
+        },
+        {
+          "role": "Official/Institutional",
+          "source_id": null,
+          "supports": ["wide downslope movement at the same coordinates in May 2023", "road-shoulder collapse and drainage works"],
+          "title": "Commissario straordinario ricostruzione - Ordinanza rete viaria 13/2023",
+          "url": "https://commissari.gov.it/media/pprniyj0/ordinanza-rete-viaria-13-2023-firmata.pdf"
+        }
+      ],
+      "landslide_intelligence": {
+        "activity_state_at_event": null,
+        "component_involved": "support_unspecified",
+        "evidence_level": "insufficient_for_causal_interaction",
+        "interaction_type": null,
+        "measurements": {},
+        "movement_type": null,
+        "trigger": "prolonged_rainfall_after_prior_damage"
+      },
+      "learning_eligibility": "excluded_unverified_landslide_interaction",
+      "limitations": [
+        "Official records document a wide landslide below the road at the same coordinates in May 2023 and a linked bridge-collapse intervention in 2024, but not the direct bridge-landslide interaction mechanism.",
+        "The 2024 inventory date and the ARCUS event date cannot be reconciled from the available evidence.",
+        "The disposition is closed as excluded; it may be reopened only if a source directly documents the interaction mechanism and resolves the chronology."
+      ],
+      "outcome_status": "unverified_landslide_bridge_interaction"
+    }
+  ],
+  "eligibility_contract": {
+    "eligible_outcome_status": "confirmed_landslide_collapse",
+    "minimum_fields": [
+      "movement_type",
+      "interaction_type",
+      "component_involved",
+      "activity_state_at_event",
+      "evidence_level"
+    ],
+    "rule": "A case is eligible only when the collapse and landslide interaction are source-backed, all minimum fields are populated, an independent episode_id is assigned, and the outcome is a confirmed landslide collapse rather than a cross-hazard reclassification or an explicitly multicausal case."
+  },
+  "production_support_contract": {
+    "activation_mode": "abstention_only",
+    "cohort_activation_minimum": {
+      "episode_effective_evidence": 4,
+      "independent_episodes": 5
+    },
+    "engineering_basis": {
+      "document": "Valutazione della classe di attenzione associata al rischio frane e manuale operativo a supporto del Livello 3",
+      "local_review_status": "previously_reviewed_document_not_available_at_current_path",
+      "principles_retained": [
+        "separate territorial and local susceptibility from bridge-landslide interaction",
+        "do not infer Level 2 or Level 3 attention class from current PAI class alone",
+        "consider movement severity and velocity, interaction geometry, affected component and foundation context",
+        "require site-specific professional assessment before monitoring or mitigation prescriptions"
+      ],
+      "reviewed_organizations": ["ReLUIS", "CSLLPP"]
+    },
+    "evidence_weights": {
+      "documented": 1,
+      "probable": 0.5
+    },
+    "expert_validation_required": true,
+    "note": "These conservative thresholds are an abstention barrier, not a validated landslide strategy-activation rule. They require expert engineering and statistical review before any production strategy can be enabled.",
+    "process_activation_minimum": {
+      "episode_effective_evidence": 4,
+      "independent_episodes": 5,
+      "raw_cases": 3
+    },
+    "required_site_assessment_dimensions": [
+      "local_susceptibility_and_activity",
+      "movement_type_severity_and_velocity",
+      "bridge_landslide_interaction_geometry",
+      "affected_components_and_foundations",
+      "drainage_monitoring_and_inspection_context"
+    ],
+    "status": "provisional_abstention_only",
+    "version": "landslide-support-contract-v1"
+  },
+  "status": "curation_closed_available_evidence",
+  "taxonomy_version": "landslide-v1"
+}

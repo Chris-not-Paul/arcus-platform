@@ -7,8 +7,14 @@ import {
 import {
   buildHydraulicEpisodeRegistry,
 } from "./collapseEpisodeService.js";
+import {
+  buildLandslideMitigationSupport,
+} from "../src/utils/landslideMitigationSupport.js";
+import {
+  buildSeismicMitigationSupport,
+} from "../src/utils/seismicMitigationSupport.js";
 
-const ENGINE_VERSION = "arcus-mitigation-intelligence-v3";
+const ENGINE_VERSION = "arcus-mitigation-intelligence-v4";
 const NATIONAL_SIGNATURE_COVERAGE_THRESHOLD = 0.8;
 const MINIMUM_USABLE_EPISODES = 2;
 const MINIMUM_PROCESS_EPISODES = 5;
@@ -672,6 +678,8 @@ export function synchronizeMitigationProjectLocation(payload = {}, provinceFeatu
 export function buildMitigationIntelligence({
   events = [],
   historicalSignatures = [],
+  landslideSupportContract = {},
+  seismicSupportContract = {},
   payload = {},
   signatures = [],
   sources = [],
@@ -694,6 +702,16 @@ export function buildMitigationIntelligence({
     seismicTrack(payload?.official_exposure?.seismic),
   ];
   const hydraulic = tracks[0];
+  const landslideSupport = buildLandslideMitigationSupport({
+    contract: landslideSupportContract,
+    events,
+    exposure: payload?.official_exposure?.landslide,
+  });
+  const seismicSupport = buildSeismicMitigationSupport({
+    contract: seismicSupportContract,
+    events,
+    exposure: payload?.official_exposure?.seismic,
+  });
   const provinceEvents = locationValid
     ? events.filter((event) => normalize(event.province) === normalize(province))
     : [];
@@ -968,9 +986,12 @@ export function buildMitigationIntelligence({
       "final_priority_index_modification",
     ],
     generated_at: new Date().toISOString(),
+    landslide_support: landslideSupport,
+    seismic_support: seismicSupport,
     limitations: [
       "The production mitigation slice supports hydraulic strategies only.",
-      "Landslide and seismic exposure remain contextual until equivalent curated outcome evidence is validated.",
+      "Landslide support is emitted as an explicit abstention with zero strategies until its evidence contract and engineering basis are expert validated.",
+      "Seismic support is emitted as an explicit abstention with zero strategies; the available records belong to one historical earthquake episode and the contract is not expert validated.",
       "Current official signatures support present-day comparability; they are not retrospective causal proof.",
       "Historical-at-event classifications are used only when an authenticated, dated source is registered. They are never reconstructed from the current class.",
       "Observed triggers and collapse processes are read only after the analogue cohort is fixed.",

@@ -7474,6 +7474,8 @@ export default function ProfessionalPage() {
         title: `Mitigation intelligence - ${mitigationReportSummary.status}`,
         text: [
           mitigationReportSummary.evidenceText,
+          mitigationReportSummary.landslideSupportText,
+          mitigationReportSummary.seismicSupportText,
           mitigationReportSummary.registryQualityText,
           mitigationReportSummary.retrievalRobustnessText,
           mitigationReportSummary.cohortText,
@@ -12742,6 +12744,120 @@ export default function ProfessionalPage() {
                         : `Retrieval consensus 15/20/25: ${path01MitigationIntelligence.evidence_cohort.retrieval_robustness.process_support.filter((process) => process.consensus_reached).map((process) => `${process.process.replaceAll("_", " ")} (${process.qualifying_window_count}/${process.total_window_count})`).join(", ") || "no specific process"}.`}
                     </small>
                   )}
+                </section>
+              )}
+
+              {path01MitigationIntelligence?.landslide_support && (
+                <section className="platform-analogue-cohort">
+                  <div>
+                    <span>
+                      {language === "it"
+                        ? "Support contract frane"
+                        : "Landslide support contract"}
+                    </span>
+                    <strong>
+                      {path01MitigationIntelligence.landslide_support.status
+                        .replaceAll("_", " ")}
+                    </strong>
+                    <p>
+                      {language === "it"
+                        ? "Il motore rende esplicita l'astensione: la coorte disponibile non autorizza strategie apprese dai collassi e non assegna classi di attenzione Livello 2 o Livello 3."
+                        : "The engine makes abstention explicit: the available cohort does not support collapse-learned strategies and does not assign Level 2 or Level 3 attention classes."}
+                    </p>
+                    <small>
+                      {(path01MitigationIntelligence.landslide_support
+                        .abstention_reasons || [])
+                        .map((reason) => reason.replaceAll("_", " "))
+                        .join("; ") ||
+                        (language === "it"
+                          ? "support contract non attivo"
+                          : "support contract inactive")}
+                    </small>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>{language === "it" ? "Casi eleggibili" : "Eligible cases"}</dt>
+                      <dd>
+                        {path01MitigationIntelligence.landslide_support
+                          .evidence?.eligible_cases || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{language === "it" ? "Episodi" : "Episodes"}</dt>
+                      <dd>
+                        {path01MitigationIntelligence.landslide_support
+                          .evidence?.independent_episodes || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Episode-effective</dt>
+                      <dd>
+                        {path01MitigationIntelligence.landslide_support
+                          .evidence?.episode_effective_evidence || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{language === "it" ? "Strategie" : "Strategies"}</dt>
+                      <dd>0</dd>
+                    </div>
+                  </dl>
+                </section>
+              )}
+
+              {path01MitigationIntelligence?.seismic_support && (
+                <section className="platform-analogue-cohort">
+                  <div>
+                    <span>
+                      {language === "it"
+                        ? "Support contract sismico"
+                        : "Seismic support contract"}
+                    </span>
+                    <strong>
+                      {path01MitigationIntelligence.seismic_support.status
+                        .replaceAll("_", " ")}
+                    </strong>
+                    <p>
+                      {language === "it"
+                        ? "I tre casi ARCUS appartengono al terremoto dell'Aquila del 2009 e non costituiscono tre repliche indipendenti. Il motore mantiene quindi l'astensione e non assegna priorita automatiche di adeguamento sismico."
+                        : "The three ARCUS cases belong to the 2009 L'Aquila earthquake and are not three independent replications. The engine therefore abstains and does not assign automatic seismic retrofit priorities."}
+                    </p>
+                    <small>
+                      {(path01MitigationIntelligence.seismic_support
+                        .abstention_reasons || [])
+                        .map((reason) => reason.replaceAll("_", " "))
+                        .join("; ") ||
+                        (language === "it"
+                          ? "support contract non attivo"
+                          : "support contract inactive")}
+                    </small>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>{language === "it" ? "Casi registrati" : "Registered cases"}</dt>
+                      <dd>
+                        {path01MitigationIntelligence.seismic_support
+                          .evidence?.registered_seismic_cases || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{language === "it" ? "Casi eleggibili" : "Eligible cases"}</dt>
+                      <dd>
+                        {path01MitigationIntelligence.seismic_support
+                          .evidence?.eligible_cases || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{language === "it" ? "Episodi" : "Episodes"}</dt>
+                      <dd>
+                        {path01MitigationIntelligence.seismic_support
+                          .evidence?.independent_episodes || 0}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{language === "it" ? "Strategie" : "Strategies"}</dt>
+                      <dd>0</dd>
+                    </div>
+                  </dl>
                 </section>
               )}
 

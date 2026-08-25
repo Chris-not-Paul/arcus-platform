@@ -12,11 +12,20 @@ import {
   buildVulnerabilityByEvent,
 } from "../src/utils/analytics.js";
 import {
+  applyHydraulicOutcomeOverrides,
   HYDRAULIC_INTELLIGENCE_FIELDS,
   HYDRAULIC_TAXONOMY_VERSION,
   normalizeHydraulicIntelligence,
   stripHydraulicSourceFields,
 } from "../src/utils/hydraulicIntelligence.js";
+import {
+  enrichEventsWithLandslideIntelligence,
+  summarizeLandslideRegistry,
+} from "../src/utils/landslideIntelligence.js";
+import {
+  enrichEventsWithSeismicIntelligence,
+  summarizeSeismicRegistry,
+} from "../src/utils/seismicIntelligence.js";
 
 /* ================================= */
 /* DATA CONTAINERS */
@@ -122,6 +131,28 @@ const professionalAinopBridgeIndexPath = path.resolve(
 const professionalHydraulicIntelligenceAuditPath = path.resolve(
   professionalDataDir,
   "hydraulic-intelligence-audit.json"
+);
+
+const professionalLandslideIntelligenceAuditPath = path.resolve(
+  professionalDataDir,
+  "landslide-intelligence-audit.json"
+);
+
+const professionalSeismicIntelligenceAuditPath = path.resolve(
+  professionalDataDir,
+  "seismic-intelligence-audit.json"
+);
+
+const landslideOutcomeRegistryPath = path.resolve(
+  "config/collapse-intelligence/landslide-outcome-registry.json"
+);
+
+const seismicOutcomeRegistryPath = path.resolve(
+  "config/collapse-intelligence/seismic-outcome-registry.json"
+);
+
+const hydraulicOutcomeOverridesPath = path.resolve(
+  "config/collapse-intelligence/hydraulic-outcome-overrides.json"
 );
 
 const openReleaseRoot = path.resolve(
@@ -634,12 +665,40 @@ function saveProfessionalApiData() {
 
   const generatedAt =
     new Date().toISOString();
-  const hydraulicIntelligenceAudit =
-    buildHydraulicIntelligenceAudit(
-      saveProfessionalApiData.rawEventRows || [],
-      events,
-      saveProfessionalApiData.normalizationWarnings || []
-    );
+  const hydraulicOutcomeOverrides = readJsonIfExists(hydraulicOutcomeOverridesPath);
+
+  if (!hydraulicOutcomeOverrides) {
+    throw new Error(`Missing Hydraulic outcome overrides: ${hydraulicOutcomeOverridesPath}`);
+  }
+  const professionalHydraulicEvents = applyHydraulicOutcomeOverrides(
+    events,
+    hydraulicOutcomeOverrides
+  );
+  const hydraulicIntelligenceAudit = buildHydraulicIntelligenceAudit(
+    saveProfessionalApiData.rawEventRows || [],
+    professionalHydraulicEvents,
+    saveProfessionalApiData.normalizationWarnings || []
+  );
+  const landslideRegistry = readJsonIfExists(landslideOutcomeRegistryPath);
+
+  if (!landslideRegistry) {
+    throw new Error(`Missing Landslide outcome registry: ${landslideOutcomeRegistryPath}`);
+  }
+  const landslideIntelligenceAudit = summarizeLandslideRegistry(landslideRegistry);
+  const landslideEnrichedEvents = enrichEventsWithLandslideIntelligence(
+    professionalHydraulicEvents,
+    landslideRegistry
+  );
+  const seismicRegistry = readJsonIfExists(seismicOutcomeRegistryPath);
+
+  if (!seismicRegistry) {
+    throw new Error(`Missing Seismic outcome registry: ${seismicOutcomeRegistryPath}`);
+  }
+  const seismicIntelligenceAudit = summarizeSeismicRegistry(seismicRegistry);
+  const seismicEnrichedEvents = enrichEventsWithSeismicIntelligence(
+    landslideEnrichedEvents,
+    seismicRegistry
+  );
   const reliabilityByEvent =
     buildSourceReliabilityByEvent(
       events,
@@ -695,7 +754,7 @@ function saveProfessionalApiData() {
       });
       return index;
     }, {});
-  const professionalEvents = events.map(
+  const professionalEvents = seismicEnrichedEvents.map(
     (event) => ({
       ...event,
       professional_warnings:
@@ -782,6 +841,18 @@ function saveProfessionalApiData() {
           "Audit and taxonomy coverage for curated Hydraulic Intelligence outcome features.",
         access: "controlled_professional_workflow",
         resource: "hydraulic_intelligence_audit",
+      },
+      {
+        description:
+          "Source-backed Landslide Intelligence registry coverage, eligibility and dispute audit.",
+        access: "controlled_professional_workflow",
+        resource: "landslide_intelligence_audit",
+      },
+      {
+        description:
+          "Source-backed Seismic Intelligence registry coverage, episode independence and abstention audit.",
+        access: "controlled_professional_workflow",
+        resource: "seismic_intelligence_audit",
       },
       {
         description:
@@ -1087,6 +1158,12 @@ function saveProfessionalApiData() {
       "Normalized historical outcome features for Hydraulic events, including trigger, failure process, component and evidence level; excluded from scoring and retrieval inputs.",
     hydraulic_intelligence_warnings:
       "Internal semantic validation warnings produced during hydraulic-intelligence normalization.",
+    hydraulic_outcome_curation:
+      "Professional-only provenance and previous values for an audited historical-outcome correction; excluded from scoring and analogue retrieval inputs.",
+    landslide_intelligence:
+      "Versioned Professional-only historical landslide outcome curation, including eligibility, mechanism, interaction, component, episode and evidence references; excluded from scoring and analogue retrieval inputs.",
+    seismic_intelligence:
+      "Versioned Professional-only historical seismic outcome curation, including eligibility, mechanism, interaction, component, episode and evidence references; excluded from scoring and analogue retrieval inputs.",
     structural_type:
       "Bridge structural typology.",
     triggered:
@@ -1548,6 +1625,24 @@ function saveProfessionalApiData() {
     professionalHydraulicIntelligenceAuditPath,
     hydraulicIntelligenceAudit
   );
+  writeJson(
+    professionalLandslideIntelligenceAuditPath,
+    {
+      generated_at: generatedAt,
+      ...landslideIntelligenceAudit,
+      production_support_contract:
+        landslideRegistry.production_support_contract,
+    }
+  );
+  writeJson(
+    professionalSeismicIntelligenceAuditPath,
+    {
+      generated_at: generatedAt,
+      ...seismicIntelligenceAudit,
+      production_support_contract:
+        seismicRegistry.production_support_contract,
+    }
+  );
 
   console.log(
     "Professional API data generated"
@@ -1556,6 +1651,8 @@ function saveProfessionalApiData() {
     JSON.stringify(
       {
         hydraulic_intelligence: hydraulicIntelligenceAudit.summary,
+        landslide_intelligence: landslideIntelligenceAudit,
+        seismic_intelligence: seismicIntelligenceAudit,
       },
       null,
       2

@@ -13,6 +13,10 @@ process.env.ARCUS_PROFESSIONAL_USERNAME = "suite-pro@example.test";
 process.env.ARCUS_PROFESSIONAL_PASSWORD = "suite-professional-password";
 
 const { startArcusApiServer } = await import("../server/server.js");
+const {
+  ARCUS_API_CONTRACT_VERSION,
+  matchesArcusApiContract,
+} = await import("../server/apiContract.js");
 const { upsertUser } = await import("../server/userStore.js");
 const { createBackup } = await import("../server/backupService.js");
 
@@ -91,6 +95,50 @@ await fs.writeFile(
 await fs.writeFile(
   path.join(testDataDir, "professional", "professional-sources.json"),
   `${JSON.stringify({ sources: mitigationFixtureSources }, null, 2)}\n`,
+  "utf8"
+);
+await fs.writeFile(
+  path.join(testDataDir, "professional", "landslide-intelligence-audit.json"),
+  `${JSON.stringify({
+    production_support_contract: {
+      activation_mode: "abstention_only",
+      cohort_activation_minimum: {
+        episode_effective_evidence: 4,
+        independent_episodes: 5,
+      },
+      evidence_weights: { documented: 1, probable: 0.5 },
+      expert_validation_required: true,
+      process_activation_minimum: {
+        episode_effective_evidence: 4,
+        independent_episodes: 5,
+        raw_cases: 3,
+      },
+      status: "provisional_abstention_only",
+      version: "landslide-support-contract-v1",
+    },
+  }, null, 2)}\n`,
+  "utf8"
+);
+await fs.writeFile(
+  path.join(testDataDir, "professional", "seismic-intelligence-audit.json"),
+  `${JSON.stringify({
+    production_support_contract: {
+      activation_mode: "abstention_only",
+      cohort_activation_minimum: {
+        episode_effective_evidence: 4,
+        independent_episodes: 5,
+      },
+      evidence_weights: { documented: 1, probable: 0.5 },
+      expert_validation_required: true,
+      process_activation_minimum: {
+        episode_effective_evidence: 4,
+        independent_episodes: 5,
+        raw_cases: 3,
+      },
+      status: "provisional_abstention_only",
+      version: "seismic-support-contract-v1",
+    },
+  }, null, 2)}\n`,
   "utf8"
 );
 await fs.mkdir(
@@ -315,6 +363,31 @@ await upsertUser({
 const server = await startArcusApiServer();
 
 try {
+  const health = await json(await fetch(`${base}/api/health`));
+
+  assert(
+    health.apiContractVersion === ARCUS_API_CONTRACT_VERSION,
+    "health endpoint omitted the current API contract version"
+  );
+  assert(
+    matchesArcusApiContract({
+      accountStatus: 401,
+      contractVersion: health.apiContractVersion,
+      registerStatus: 405,
+      sessionOk: true,
+    }),
+    "current API probe was rejected"
+  );
+  assert(
+    !matchesArcusApiContract({
+      accountStatus: 401,
+      contractVersion: null,
+      registerStatus: 405,
+      sessionOk: true,
+    }),
+    "legacy API probe without a contract version was accepted"
+  );
+
   const freeRegistration = await json(
     await postJson("/api/auth/register", {
       password: "suite-free-password",
@@ -404,6 +477,10 @@ try {
   assert(mitigation.strategies[0].process === "hydraulic_process_not_resolved", "mitigation endpoint returned the wrong episode-aware fallback");
   assert(mitigation.evidence_cohort.event_count === 3, "mitigation endpoint used the wrong evidence cohort");
   assert(mitigation.evidence_cohort.episode_count === 3, "mitigation endpoint used the wrong independent-episode count");
+  assert(mitigation.landslide_support?.status === "abstained", "mitigation endpoint omitted the landslide abstention support");
+  assert(mitigation.landslide_support?.strategies?.length === 0, "landslide support emitted unsupported strategies");
+  assert(mitigation.seismic_support?.status === "abstained", "mitigation endpoint omitted the seismic abstention support");
+  assert(mitigation.seismic_support?.strategies?.length === 0, "seismic support emitted unsupported strategies");
 
   const passwordChange = await json(
     await postJson(

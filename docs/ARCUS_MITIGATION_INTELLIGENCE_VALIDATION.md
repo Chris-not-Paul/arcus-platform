@@ -1,4 +1,4 @@
-# ARCUS Mitigation Intelligence v3 - End-to-end validation
+# ARCUS Mitigation Intelligence v4 - End-to-end validation
 
 ## Validation judgement
 
@@ -8,9 +8,22 @@ The hydraulic vertical slice is deterministic, abstains under the defined condit
 
 No probability, safe/unsafe classification, normalized mitigation score or automatic design prescription is produced.
 
+## v4 multi-hazard support contract
+
+The active `arcus-mitigation-intelligence-v4` engine preserves the validated
+Hydraulic v3 behavior and adds explicit abstention-only Landslide and Seismic
+support. The Seismic registry covers all three Earthquake-classified records,
+but admits only one source-backed outcome and counts one independent historical
+episode. API, Path 01 UI and report expose the Seismic abstention, evidence
+totals, zero strategies and no Final Priority Index contribution.
+
+The v4 architecture and limits are documented in
+`ARCUS_MITIGATION_INTELLIGENCE_V4.md`; detailed seismic curation is documented
+in `ARCUS_SEISMIC_MITIGATION_READINESS.md`.
+
 ## v3 hydraulic episode independence
 
-The active `arcus-mitigation-intelligence-v3` engine is documented in
+The Hydraulic strategy core inherited from `arcus-mitigation-intelligence-v3` is documented in
 `ARCUS_MITIGATION_INTELLIGENCE_V3.md`. Hydraulic records on the same date are
 grouped conservatively into one national episode; records no more than 48 hours
 apart in the same region are connected to the same episode. An undated record
@@ -159,7 +172,7 @@ Controlled abstention occurs for an invalid or unresolved project point, officia
 
 ## Scientific limits and territorial coverage
 
-- The implementation is hydraulic-only. Landslide and seismic tracks remain contextual and cannot emit v3 mitigation strategies.
+- The strategy-producing implementation remains hydraulic-only. Landslide and seismic expose separate abstention support contracts and cannot emit mitigation strategies.
 - National retrieval reduces provincial sparsity but does not remove outcome sparsity or dependence between bridge records from the same flood.
 - Administrative geography remains visible as local context and as a server-derived project-location fact; it no longer limits national analogue retrieval while the production gate is open.
 - Historical analogues are contextual evidence, not site probability, current-condition evidence or proof of structural safety.
@@ -336,3 +349,109 @@ historical-at-event hazard classes are registered, P3 shows material signature
 sensitivity, and no new PDF file was manually downloaded/rendered in this
 closure pass. These are explicit scientific/editorial or evidence-capture
 limits; they are not silent missing-data substitutions.
+
+## Himera live Landslide support recheck
+
+Execution date: 2026-08-25. The first Palermo PDF and UI capture were produced
+while the development server started on 2026-08-03 was still running. That
+backend returned the previous Mitigation Intelligence schema, so the UI omitted
+the Landslide support block and the PDF correctly exposed the missing field as
+`Landslide support: not available`. This was a stale-process deployment issue,
+not a fallback result from the current contract. The ARCUS development process
+was restarted and the same Path 01 flow was repeated without fixtures or mocks.
+
+| Case | Coordinates | Province | ISPRA | Mitigation status | Strategies | UI coherent | Report coherent | Result |
+|---|---|---|---|---|---|---|---|---|
+| Himera live support recheck | `37.85700, 13.90600` | Palermo, derived from the point and synchronized to the working package | Hydraulic: no P1/P2/P3 assigned to the point; nearby P1/P2/P3 within 10 km remain context only. Landslide PAI: P2 assigned. Seismic MPS04: 0.145 g reference value | Hydraulic `abstained`, raw/effective 0/0. Landslide support `abstained`: 3 eligible cases, 3 independent episodes, 2.5 episode-effective evidence; contract not expert validated | 0 | Yes; hydraulic and Landslide abstentions are distinct, and FPI separation remains visible | Yes; the regenerated Actions page reports both abstentions, all evidence totals, zero strategies and the non-prescriptive/FPI warning | PASS |
+
+Recorded evidence:
+
+- [live Path 01 Landslide support panel](assets/mitigation-intelligence-validation/himera-landslide-support-live.png)
+- [regenerated report page 4](assets/mitigation-intelligence-validation/himera-landslide-support-report-page-4.png)
+
+The browser console contained no warnings or errors. The live hazard calls
+returned to the UI and the new five-page Palermo PDF downloaded successfully.
+Page 4 was extracted and rendered: the summary is readable without clipping or
+overlap. The report includes `Landslide support: abstained`, 3 eligible cases,
+3 independent episodes, 2.5 episode-effective evidence, both abstention
+reasons, zero strategies, complete/live/current ISPRA provenance and the
+explicit statement that strategies do not modify the Final Priority Index.
+
+No calculation, evidence threshold, strategy, hazard classification or Final
+Priority Index value was changed during this recheck. The overall judgement
+remains `validated_with_limitations`: the software/UI/report propagation is
+accepted, while Landslide support intentionally remains abstained until the
+minimum independent-episode evidence and expert-validation gates are met.
+
+### Stale backend contract guard
+
+The Himera recheck exposed an operational gap in the local development startup:
+the frontend previously considered any ARCUS-shaped service on port 4174
+current when three generic route checks passed. It could therefore proxy a
+backend started before a Mitigation Intelligence contract change. The health
+response now publishes `apiContractVersion: arcus-api-contract-v2`, and the
+Vite startup probe requires that exact value in addition to the existing route
+checks. A legacy or mismatched backend is rejected with an actionable startup
+error instead of being accepted silently.
+
+The backend suite covers publication of the contract identifier, acceptance of
+the current identifier and rejection of a probe with the identifier missing.
+The live process was restarted and `/api/health` returned the expected contract
+version. This guard changes no hazard data, evidence, threshold, strategy or
+Final Priority Index calculation.
+
+## Himera live Seismic support acceptance
+
+Execution date: 2026-08-25. The backend and frontend were restarted after the
+v4 contract change; `/api/health` returned
+`apiContractVersion: arcus-api-contract-v2`. The Palermo/Himera point was then
+queried through the authenticated Professional Path 01 UI without a hazard,
+mitigation or report fixture.
+
+| Case | Coordinates | Province | ISPRA | Mitigation status | Strategies | UI coherent | Report coherent | Result |
+|---|---|---|---|---|---|---|---|---|
+| Himera live Seismic support | `37.85700, 13.90600` | Palermo, derived from the point and synchronized to the working package | Hydraulic: query completed, no P1/P2/P3 class assigned; nearby P1/P2/P3 within 10 km remain context only. Landslide PAI: P2 assigned. Seismic MPS04: `available`, 0.145 g reference PGA | Hydraulic `abstained`, raw/effective 0/0. Landslide support `abstained`. Seismic support `abstained`: 3 registered cases, 1 eligible case, 1 independent episode, 1 episode-effective evidence unit; contract not expert validated | 0 Hydraulic, 0 Landslide, 0 Seismic | Yes; the Seismic block distinguishes registered cases, eligible cases and episode independence, and states that no automatic seismic retrofit priority is assigned | Yes; the five-page PDF reports the Seismic abstention, evidence totals, reasons, zero strategies and non-prescriptive/FPI warning on page 4 | PASS |
+
+Recorded evidence:
+
+- [live Path 01 Seismic support panel](assets/mitigation-intelligence-validation/himera-seismic-support-detail.png)
+- [full live Path 01 capture](assets/mitigation-intelligence-validation/himera-seismic-support-live.png)
+- [rendered report page 4](assets/mitigation-intelligence-validation/himera-seismic-support-report-page-4.png)
+
+The browser console contained no warnings or errors. All point-level hazard
+requests returned to the UI, the report downloaded successfully and page 4 was
+rendered at 1489 x 2105 pixels. The page is readable without clipping,
+overlap, broken glyphs or misplaced sections.
+
+The source audit registers the three ARCUS Earthquake records but does not
+count them as three independent replications: all belong to the 6 April 2009
+L'Aquila earthquake. The Fossa case remains excluded from process learning
+because structural-column and progressive-embankment interpretations compete;
+the Scoppito record remains excluded because a bridge-specific mechanism is
+not sufficiently established. One source-backed Onna-area outcome is eligible,
+so the effective support is one case from one episode. Current MPS04 PGA is
+kept as present-day reference exposure and is never represented as recorded
+historical shaking, collapse probability or an outcome-selection field.
+
+No evidence weight, hydraulic threshold, strategy or Final Priority Index
+calculation was changed. The v4 architecture is accepted, but the overall
+judgement remains `validated_with_limitations`: Seismic support intentionally
+abstains until further independent source-backed episodes and external
+engineering validation make a strategy-producing contract defensible.
+
+## Professional Path 01 release closure
+
+Execution date: 2026-08-25. The consolidated command
+`npm run validate:professional-path01` passed all 15 release checks, including
+location synchronization, hazard contracts, all three Mitigation Intelligence
+tracks, Open/Professional separation, backend, lint, build and whitespace
+validation. Together with the recorded Hydraulic three-state acceptance and
+the live Himera Landslide/Seismic UI and PDF evidence, this closes the software
+and presentation scope of Professional Path 01.
+
+The release judgement remains `validated_with_limitations`, rather than
+`validated`, because Landslide and Seismic are intentionally abstention-only,
+some Hydraulic episode groupings remain editorially reviewable and external
+provider availability cannot be guaranteed by a deterministic build. These
+limitations are surfaced in the product and do not authorize invented hazard
+or collapse evidence.

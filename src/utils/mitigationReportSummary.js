@@ -35,6 +35,16 @@ export function buildMitigationReportSummary(
   const abstentionReasons = (intelligence?.abstention_reasons || [])
     .map(displayReason)
     .filter(Boolean);
+  const landslideSupport = intelligence?.landslide_support || null;
+  const landslideEvidence = landslideSupport?.evidence || {};
+  const landslideReasons = (landslideSupport?.abstention_reasons || [])
+    .map(displayReason)
+    .filter(Boolean);
+  const seismicSupport = intelligence?.seismic_support || null;
+  const seismicEvidence = seismicSupport?.evidence || {};
+  const seismicReasons = (seismicSupport?.abstention_reasons || [])
+    .map(displayReason)
+    .filter(Boolean);
   const hydraulicCompleteness =
     intelligence?.source_completeness?.hydraulic || {};
   const failedLayers = (hydraulicCompleteness.failed_layers || [])
@@ -97,6 +107,20 @@ export function buildMitigationReportSummary(
     evidenceText: it
       ? `Evidenza raw: ${rawEvidence}; evidenza effective: ${effectiveEvidence}; episodi idraulici indipendenti: ${episodeCount}; evidenza episode-effective: ${episodeEffectiveEvidence}.`
       : `Raw evidence: ${rawEvidence}; effective evidence: ${effectiveEvidence}; independent hydraulic episodes: ${episodeCount}; episode-effective evidence: ${episodeEffectiveEvidence}.`,
+    landslideSupportText: landslideSupport
+      ? it
+        ? `Supporto frane: ${displayReason(landslideSupport.status)}; ${numericEvidence(landslideEvidence.eligible_cases)} casi eleggibili, ${numericEvidence(landslideEvidence.independent_episodes)} episodi indipendenti, ${numericEvidence(landslideEvidence.episode_effective_evidence)} evidenza episode-effective; motivi: ${landslideReasons.join("; ") || "support contract non attivo"}; zero strategie.`
+        : `Landslide support: ${displayReason(landslideSupport.status)}; ${numericEvidence(landslideEvidence.eligible_cases)} eligible cases, ${numericEvidence(landslideEvidence.independent_episodes)} independent episodes, ${numericEvidence(landslideEvidence.episode_effective_evidence)} episode-effective evidence; reasons: ${landslideReasons.join("; ") || "support contract inactive"}; zero strategies.`
+      : it
+        ? "Supporto frane: non disponibile."
+        : "Landslide support: not available.",
+    seismicSupportText: seismicSupport
+      ? it
+        ? `Supporto sismico: ${displayReason(seismicSupport.status)}; ${numericEvidence(seismicEvidence.registered_seismic_cases)} casi registrati, ${numericEvidence(seismicEvidence.eligible_cases)} eleggibili, ${numericEvidence(seismicEvidence.independent_episodes)} episodio indipendente, ${numericEvidence(seismicEvidence.episode_effective_evidence)} evidenza episode-effective; motivi: ${seismicReasons.join("; ") || "support contract non attivo"}; zero strategie.`
+        : `Seismic support: ${displayReason(seismicSupport.status)}; ${numericEvidence(seismicEvidence.registered_seismic_cases)} registered cases, ${numericEvidence(seismicEvidence.eligible_cases)} eligible, ${numericEvidence(seismicEvidence.independent_episodes)} independent episode, ${numericEvidence(seismicEvidence.episode_effective_evidence)} episode-effective evidence; reasons: ${seismicReasons.join("; ") || "support contract inactive"}; zero strategies.`
+      : it
+        ? "Supporto sismico: non disponibile."
+        : "Seismic support: not available.",
     registryQualityText: it
       ? `Qualita del registro episodi nella coorte: ${curatedEpisodes} assegnati con override curato; ${sourceLinkedEpisodes} supportati da fonti condivise; ${reviewRequiredEpisodes} da revisionare; ${reviewRecommendedEpisodes} con revisione raccomandata.`
       : `Episode-registry quality in the cohort: ${curatedEpisodes} assigned by curated override; ${sourceLinkedEpisodes} supported by shared sources; ${reviewRequiredEpisodes} requiring review; ${reviewRecommendedEpisodes} with review recommended.`,

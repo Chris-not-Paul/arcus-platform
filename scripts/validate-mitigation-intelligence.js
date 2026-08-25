@@ -646,6 +646,10 @@ function validateStaticIntegration() {
   assert.match(professionalPage, /episode-effective evidence/);
   assert.match(professionalPage, /Evidence basis/);
   assert.match(professionalPage, /national database with no geographic filter/);
+  assert.match(professionalPage, /Landslide support contract/);
+  assert.match(professionalPage, /landslide_support/);
+  assert.match(professionalPage, /Seismic support contract/);
+  assert.match(professionalPage, /seismic_support/);
   assert.match(professionalPage, /80%/);
   assert.match(endpointBlock, /collapse-hazard-signatures/);
   assert.match(endpointBlock, /historical-hazard-signatures/);
@@ -665,6 +669,8 @@ function validateStaticIntegration() {
     endpoint_server_location_sync_before_cohort: true,
     fpi_and_path02_anti_leakage: true,
     national_analogue_basis_disclosed: true,
+    landslide_abstention_support: true,
+    seismic_abstention_support: true,
     report_section: true,
     ui_path01_card: true,
   };
@@ -678,6 +684,18 @@ export function runValidation() {
       stripVolatile(first.intelligence),
       stripVolatile(second.intelligence),
       `${testCase.id}: deterministic repeat`
+    );
+    assert.equal(first.intelligence.landslide_support?.status, "abstained");
+    assert.equal(first.intelligence.landslide_support?.strategies?.length, 0);
+    assert.equal(
+      first.intelligence.landslide_support?.final_priority_index_contribution,
+      "none"
+    );
+    assert.equal(first.intelligence.seismic_support?.status, "abstained");
+    assert.equal(first.intelligence.seismic_support?.strategies?.length, 0);
+    assert.equal(
+      first.intelligence.seismic_support?.final_priority_index_contribution,
+      "none"
     );
 
     return summarizeCase(
@@ -718,7 +736,7 @@ export function runValidation() {
     judgement: "validated_with_limitations",
     limitations: [
       "The deterministic harness replays locked signatures from previously documented live ISPRA checks; it is not a fresh network availability test.",
-    "Mitigation Intelligence v3 emits hydraulic strategies only; landslide and seismic are comparison context.",
+    "Mitigation Intelligence v4 emits hydraulic strategies only; landslide and seismic emit explicit zero-strategy abstention support until their evidence contracts are sufficiently populated and expert validated.",
     "Hydraulic episode grouping is a conservative temporal-regional independence control, not a meteorological reanalysis or proof of common causation.",
       ...(!nationalRetrievalProductionReady
         ? [
@@ -747,7 +765,7 @@ export function runValidation() {
     },
     results,
     thresholds: THRESHOLDS,
-    validation_version: "arcus-mitigation-intelligence-validation-v3",
+    validation_version: "arcus-mitigation-intelligence-validation-v4",
   };
 }
 

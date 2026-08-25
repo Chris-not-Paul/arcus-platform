@@ -1,0 +1,33 @@
+{
+  "caveat": "Professional-only outcome corrections backed by curated evidence. These overrides do not alter official hazard exposure, the source workbook or the Open release.",
+  "overrides": [
+    {
+      "event_id": "B13.02.01",
+      "hydraulic_intelligence": {
+        "component_involved": "pier_foundation",
+        "evidence_level": "probable",
+        "failure_process": "scour",
+        "taxonomy_version": "hydraulic-v2",
+        "trigger": "flood"
+      },
+      "previous_hydraulic_intelligence": {
+        "component_involved": "multiple_components",
+        "evidence_level": "documented",
+        "failure_process": "other_documented_hydraulic_process",
+        "taxonomy_version": "hydraulic-v2",
+        "trigger": "rainfall_induced_landslide"
+      },
+      "provenance": {
+        "described_source": "Court-appointed geotechnical and technical expert reports in the Sciacca proceedings",
+        "primary_document_reviewed_by_arcus": false,
+        "provided_at": "2026-08-24",
+        "source_role": "User-provided technical-report summary",
+        "verification_status": "primary_document_unavailable"
+      },
+      "rationale": "The available technical summary attributes loss of stability to prolonged-flood scour and erosion of granular support at the pier foundations. The probable evidence class preserves this information without representing the unavailable reports as directly reviewed primary evidence.",
+      "scope": "professional_only",
+      "status": "accepted_probable_secondary"
+    }
+  ],
+  "schema_version": "arcus-hydraulic-outcome-overrides-v1"
+}

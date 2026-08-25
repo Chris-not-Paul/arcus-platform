@@ -149,6 +149,18 @@ assert.equal(available.strategies[0].external_validation_required, true);
 assert.equal(available.forbidden_outputs.includes("final_priority_index_modification"), true);
 assert.equal(Object.hasOwn(available, "score"), false);
 assert.equal(Object.hasOwn(available, "final_priority_index"), false);
+assert.equal(available.landslide_support.status, "abstained");
+assert.equal(available.landslide_support.strategies.length, 0);
+assert.equal(
+  available.landslide_support.final_priority_index_contribution,
+  "none"
+);
+assert.equal(available.seismic_support.status, "abstained");
+assert.equal(available.seismic_support.strategies.length, 0);
+assert.equal(
+  available.seismic_support.final_priority_index_contribution,
+  "none"
+);
 assert.equal(
   available.evidence_cohort.selection_mode,
   "point_derived_province_fallback_until_national_signature_coverage_ready"
@@ -280,6 +292,14 @@ assert.equal(
   true
 );
 const nationalReportSummary = buildMitigationReportSummary(national);
+assert.equal(
+  nationalReportSummary.landslideSupportText.includes("zero strategies"),
+  true
+);
+assert.equal(
+  nationalReportSummary.seismicSupportText.includes("zero strategies"),
+  true
+);
 assert.equal(
   nationalReportSummary.cohortText.includes("national analogues"),
   true

@@ -129,6 +129,7 @@ import {
   buildMitigationIntelligence,
   synchronizeMitigationProjectLocation,
 } from "./mitigationIntelligenceService.js";
+import { ARCUS_API_CONTRACT_VERSION } from "./apiContract.js";
 
 let provinceGeometryFeaturesPromise = null;
 
@@ -427,6 +428,7 @@ async function routeRequest(request, response) {
         : {}),
       ok: true,
       service: "arcus-api",
+      apiContractVersion: ARCUS_API_CONTRACT_VERSION,
     });
     return;
   }
@@ -1178,11 +1180,15 @@ async function routeRequest(request, response) {
       sourceResource,
       signatureResource,
       historicalSignatureResource,
+      landslideAuditResource,
+      seismicAuditResource,
     ] = await Promise.all([
       getProfessionalResource("professional-events"),
       getProfessionalResource("professional-sources"),
       getProfessionalResource("collapse-hazard-signatures"),
       getProfessionalResource("historical-hazard-signatures"),
+      getProfessionalResource("landslide-intelligence-audit"),
+      getProfessionalResource("seismic-intelligence-audit"),
     ]);
     const events = Array.isArray(eventResource)
       ? eventResource
@@ -1205,6 +1211,10 @@ async function routeRequest(request, response) {
     const intelligence = buildMitigationIntelligence({
       events,
       historicalSignatures,
+      landslideSupportContract:
+        landslideAuditResource?.production_support_contract || {},
+      seismicSupportContract:
+        seismicAuditResource?.production_support_contract || {},
       payload: synchronizedPayload,
       signatures,
       sources,
