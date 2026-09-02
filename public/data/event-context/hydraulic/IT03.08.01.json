@@ -1,0 +1,90 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT03.08.01",
+  "event_date": "2003-08-29",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Fella river",
+    "latitude": 46.4823,
+    "longitude": 13.3001,
+    "municipality": "Pontebba",
+    "hydrographic_context": "Fella river",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "overtopping_or_hydrodynamic_action",
+    "component_involved": "deck_or_superstructure",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "overtopping_or_hydrodynamic_action"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0514",
+      "provider": "Protezione Civile",
+      "title": "Cerimonia 10 anni alluvione Valcanale-Canal del Ferro 29 agosto 2003",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Official/Technical",
+      "url": "https://www.protezionecivile.fvg.it/it/la-protezione-civile/eventi/cerimonia-ricordare-i-dieci-anni-dallalluvione-della-valcanale-canal",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    },
+    {
+      "source_id": "SRC0513",
+      "provider": "Il Friuli",
+      "title": "L'alluvione, dieci anni dopo – ponte Pietratagliata e il Fella che portò via tutto",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "http://www.ilfriuli.it/articolo/cronaca/alluvione,-dieci-anni-dopo/2/124042",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    },
+    {
+      "source_id": "SRC0515",
+      "provider": "Messaggero Veneto",
+      "title": "L'alluvione, dieci anni dopo – ponte Fella Pietratagliata crollato agosto 2003",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://messaggeroveneto.gelocal.it/udine/cronaca/2013/08/29/news/l-alluvione-dieci-anni-dopo-foto-1-foto-2-foto-3-foto-4-1.7652830",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-21"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

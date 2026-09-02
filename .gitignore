@@ -22,9 +22,15 @@ backups
 !.vscode/extensions.json
 .idea
 .DS_Store
+desktop.ini
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 .tmp/ 
+.runtime-logs/
+.claude/
+outputs/
+tmp-pdf-*/
+tmp-homepage-upgrade*.png

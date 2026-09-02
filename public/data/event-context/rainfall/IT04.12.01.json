@@ -1,0 +1,114 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT04.12.01",
+  "event_date": "2004-12-08",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 40.3718,
+    "longitude": 9.591
+  },
+  "grid_location": {
+    "elevation_m": 17,
+    "latitude": 40.385273,
+    "longitude": 9.602005,
+    "distance_from_event_km": 1.8
+  },
+  "period": {
+    "end_date": "2004-12-08",
+    "start_date": "2004-11-25",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2004-11-25",
+      "precipitation_mm": 0.1
+    },
+    {
+      "date": "2004-11-26",
+      "precipitation_mm": 0.4
+    },
+    {
+      "date": "2004-11-27",
+      "precipitation_mm": 0.1
+    },
+    {
+      "date": "2004-11-28",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2004-11-29",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2004-11-30",
+      "precipitation_mm": 0.1
+    },
+    {
+      "date": "2004-12-01",
+      "precipitation_mm": 11.3
+    },
+    {
+      "date": "2004-12-02",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2004-12-03",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2004-12-04",
+      "precipitation_mm": 11.1
+    },
+    {
+      "date": "2004-12-05",
+      "precipitation_mm": 13
+    },
+    {
+      "date": "2004-12-06",
+      "precipitation_mm": 17.4
+    },
+    {
+      "date": "2004-12-07",
+      "precipitation_mm": 62.3
+    },
+    {
+      "date": "2004-12-08",
+      "precipitation_mm": 45
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 45,
+    "event_and_previous_2_days_mm": 124.7,
+    "event_and_previous_6_days_mm": 148.8,
+    "full_period_mm": 160.8
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:10:56.432Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2004-12-08&latitude=40.3718&longitude=9.591&models=cerra&start_date=2004-11-25&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_context_only",
+    "severity": "context",
+    "assessment_method": "dataset_role_rule",
+    "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
+    "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
+  }
+}

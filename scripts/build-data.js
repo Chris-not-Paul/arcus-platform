@@ -19,6 +19,11 @@ import {
   stripHydraulicSourceFields,
 } from "../src/utils/hydraulicIntelligence.js";
 import {
+  enrichEventsWithHydraulicGeometry,
+  HYDRAULIC_GEOMETRY_DATASET_ID,
+  HYDRAULIC_GEOMETRY_SOURCE_URL,
+} from "../src/utils/hydraulicGeometry.js";
+import {
   enrichEventsWithLandslideIntelligence,
   summarizeLandslideRegistry,
 } from "../src/utils/landslideIntelligence.js";
@@ -494,6 +499,22 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows, normalizationWa
     },
     {}
   );
+  const geometryEvents = processedRows.filter(
+    (event) => event.hydraulic_geometry
+  );
+  const geometrySourceCounts = geometryEvents.reduce((counts, event) => {
+    const sourceRecordId =
+      event.hydraulic_geometry?.provenance?.source_record_id;
+
+    if (sourceRecordId) {
+      counts[sourceRecordId] = (counts[sourceRecordId] || 0) + 1;
+    }
+
+    return counts;
+  }, {});
+  const duplicateGeometrySourceRecords = Object.entries(geometrySourceCounts)
+    .filter(([, count]) => count > 1)
+    .map(([sourceRecordId]) => sourceRecordId);
 
   return {
     generated_at: new Date().toISOString(),
@@ -527,6 +548,24 @@ function buildHydraulicIntelligenceAudit(rawRows, processedRows, normalizationWa
       ).length,
       unspecified: evidenceCounts.unspecified || 0,
       validation_warnings: warnings.length,
+    },
+    hydraulic_geometry: {
+      bridge_length_available: geometryEvents.filter(
+        (event) => event.hydraulic_geometry.bridge_length_m !== null
+      ).length,
+      dataset_id: HYDRAULIC_GEOMETRY_DATASET_ID,
+      dataset_sheet: "DATASETS",
+      duplicate_source_record_ids: duplicateGeometrySourceRecords,
+      link_sheet: "HYDRAULIC_GEOMETRY_LINKS",
+      matched_events: geometryEvents.length,
+      piers_in_active_riverbed_available: geometryEvents.filter(
+        (event) => event.hydraulic_geometry.piers_in_active_riverbed !== null
+      ).length,
+      source_record_ids_unique:
+        duplicateGeometrySourceRecords.length === 0,
+      source_url: HYDRAULIC_GEOMETRY_SOURCE_URL,
+      role:
+        "Professional evidence context only; excluded from scoring and analogue retrieval pending validation.",
     },
     sample_processed_hydraulic_events: hydraulicRows.slice(0, 5).map((row) => {
       const eventId = String(row.event_id || "").replace(/^IT/, "B");
@@ -670,8 +709,14 @@ function saveProfessionalApiData() {
   if (!hydraulicOutcomeOverrides) {
     throw new Error(`Missing Hydraulic outcome overrides: ${hydraulicOutcomeOverridesPath}`);
   }
-  const professionalHydraulicEvents = applyHydraulicOutcomeOverrides(
+  const professionalGeometryEvents = enrichEventsWithHydraulicGeometry(
     events,
+    saveProfessionalApiData.rawEventRows || [],
+    saveProfessionalApiData.hydraulicGeometryLinkRows || [],
+    saveProfessionalApiData.datasetRows || []
+  );
+  const professionalHydraulicEvents = applyHydraulicOutcomeOverrides(
+    professionalGeometryEvents,
     hydraulicOutcomeOverrides
   );
   const hydraulicIntelligenceAudit = buildHydraulicIntelligenceAudit(
@@ -1158,6 +1203,10 @@ function saveProfessionalApiData() {
       "Normalized historical outcome features for Hydraulic events, including trigger, failure process, component and evidence level; excluded from scoring and retrieval inputs.",
     hydraulic_intelligence_warnings:
       "Internal semantic validation warnings produced during hydraulic-intelligence normalization.",
+    hydraulic_geometry:
+      "Professional-only source-backed bridge length and active-riverbed pier-presence evidence from D'Angelo, Ballio & Ravazzani (2025), with record-level matching provenance; excluded from scoring and analogue retrieval pending validation.",
+    hydraulic_geometry_warnings:
+      "Internal validation warnings for source-backed hydraulic geometry; invalid records abstain instead of being inferred.",
     hydraulic_outcome_curation:
       "Professional-only provenance and previous values for an audited historical-outcome correction; excluded from scoring and analogue retrieval inputs.",
     landslide_intelligence:
@@ -1682,6 +1731,10 @@ async function buildData() {
     sources.push(...normalizedResearch.sources);
     saveProfessionalApiData.rawEventRows =
       normalizedResearch.eventRows;
+    saveProfessionalApiData.hydraulicGeometryLinkRows =
+      readXlsxSheet(masterResearchPath, "HYDRAULIC_GEOMETRY_LINKS");
+    saveProfessionalApiData.datasetRows =
+      readXlsxSheet(masterResearchPath, "DATASETS");
     saveProfessionalApiData.normalizationWarnings =
       normalizedResearch.warnings;
 

@@ -377,3 +377,76 @@
     left: min(334px, calc(100vw - 54px));
   }
 }
+
+/* Mineral Paper prototype. */
+.atlas-sidebar-toggle {
+  border-color: rgba(252,251,247,0.20);
+  border-radius: 3px;
+  background: var(--arcus-night);
+  color: var(--arcus-paper-soft);
+  box-shadow: 0 10px 28px rgba(23,63,66,0.22);
+}
+
+.atlas-sidebar-toggle span {
+  background: var(--arcus-paper-soft);
+}
+
+.atlas-filter-sidebar {
+  --arcus-border-dark: rgba(32,40,38,0.14);
+  --arcus-ivory: var(--arcus-ink);
+  --arcus-ivory-dim: var(--arcus-ink-soft);
+  --arcus-ivory-faint: var(--arcus-ink-muted);
+  --arcus-text-on-dark: var(--arcus-ink);
+  padding-top: 24px;
+  border-right-color: rgba(32,40,38,0.16);
+  background: rgba(252,251,247,0.985);
+  color: var(--arcus-ink);
+  box-shadow: 16px 0 42px rgba(32,40,38,0.12);
+}
+
+.atlas-filter-sidebar::-webkit-scrollbar-track {
+  background: rgba(32,40,38,0.035);
+}
+
+.atlas-filter-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(32,40,38,0.18);
+}
+
+.atlas-sidebar-brand h1,
+.atlas-sidebar-stat strong,
+.atlas-sidebar-section-head strong {
+  color: var(--arcus-night);
+}
+
+.atlas-sidebar-brand small,
+.atlas-sidebar-label,
+.atlas-sidebar-section-title,
+.atlas-sidebar-section-head span,
+.atlas-sidebar-field > span,
+.atlas-sidebar-stat span,
+.atlas-sidebar-range-labels {
+  color: var(--arcus-ink-muted);
+}
+
+.atlas-sidebar-input,
+.atlas-sidebar-select {
+  border-color: rgba(32,40,38,0.16);
+  border-radius: 3px;
+  background-color: rgba(32,40,38,0.035);
+  color: var(--arcus-ink);
+}
+
+.atlas-sidebar-select option {
+  background: var(--arcus-paper-soft);
+  color: var(--arcus-ink);
+}
+
+.atlas-sidebar-input::placeholder {
+  color: rgba(32,40,38,0.42);
+}
+
+.atlas-sidebar-input:focus,
+.atlas-sidebar-select:focus {
+  border-color: rgba(167,101,50,0.58);
+  background-color: rgba(167,101,50,0.04);
+}

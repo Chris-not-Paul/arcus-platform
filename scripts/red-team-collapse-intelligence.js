@@ -1335,13 +1335,14 @@ export function runRedTeamValidation({ outputPath = OUTPUT_PATH } = {}) {
       ],
     },
     metric_reproducibility: {
+      legacy_benchmark_status: "invalidated_target_outcome_leakage",
       original_metrics: original?.retrospective_validation || null,
       reproduced_metrics: summaryWithoutRows(loo),
       reproducible:
         original?.retrospective_validation?.leave_one_out?.top1_cause_family_hit_rate ===
         loo.top1_rate_evaluated,
       note:
-        "Original aggregate rates are not sufficient; red-team output reports hits, denominators, abstentions and confidence intervals.",
+        "Reproduction does not establish validity. The former cause-family temporal and geographical routines leaked the target outcome and are superseded by hazard-gated folds. Red-team output reports hits, denominators, abstentions and confidence intervals.",
     },
     mitigation_audit: mitigationAudit(kb),
     randomization,

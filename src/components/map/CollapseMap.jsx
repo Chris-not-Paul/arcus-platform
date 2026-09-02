@@ -1,7 +1,9 @@
 import {
   MapContainer,
   CircleMarker,
+  GeoJSON,
   Marker,
+  Pane,
   Popup,
   Rectangle,
   TileLayer,
@@ -23,6 +25,8 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import HeatmapLayer from "./HeatmapLayer";
 
 import EventMarker from "./EventMarker";
+import EventPopup from "../popup/EventPopup";
+import { researchEventId } from "../../utils/eventIdentity";
 
 import {
   createProfessionalAssetIcon,
@@ -33,6 +37,96 @@ import {
   createClusterCustomIcon,
 } from "../../utils/clusterFactory";
 
+// The longitude is shifted west so Italy is optically centred in the map area
+// left visible by the desktop research panel.
+const ITALY_VIEW_CENTER = [42.2, 9.3];
+
+const ITALY_VIEW_ZOOM = 6.5;
+
+const ITALY_MAX_BOUNDS = [
+  [33.8, 4.5],
+  [49.2, 20.8],
+];
+
+function ItalyFocusMask({ enabled }) {
+  const [maskData, setMaskData] = useState(null);
+  const [regionData, setRegionData] = useState(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      return undefined;
+    }
+
+    const controller = new AbortController();
+
+    const fetchGeoJson = (url) => fetch(url, {
+      signal: controller.signal,
+    }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Map geometry unavailable (${response.status})`);
+        }
+
+        return response.json();
+      });
+
+    Promise.all([
+      fetchGeoJson("/data/geo/italy-focus-mask.geojson"),
+      fetchGeoJson("/data/geo/italy-regions-simplified.geojson"),
+    ])
+      .then(([mask, regions]) => {
+        setMaskData(mask);
+        setRegionData(regions);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setMaskData(null);
+          setRegionData(null);
+        }
+      });
+
+    return () => controller.abort();
+  }, [enabled]);
+
+  if (!enabled || !maskData || !regionData) {
+    return null;
+  }
+
+  return (
+    <Pane
+      name="arcus-italy-focus-mask"
+      style={{
+        pointerEvents: "none",
+        zIndex: 280,
+      }}
+    >
+      <GeoJSON
+        data={maskData}
+        interactive={false}
+        style={{
+          color: "transparent",
+          fillColor: "#e7e4dc",
+          fillOpacity: 0.76,
+          fillRule: "evenodd",
+          stroke: false,
+        }}
+      />
+
+      <GeoJSON
+        data={regionData}
+        interactive={false}
+        style={{
+          color: "#566c6b",
+          fill: false,
+          lineCap: "round",
+          lineJoin: "round",
+          opacity: 0.42,
+          weight: 1,
+        }}
+      />
+    </Pane>
+  );
+}
+
 /* ================================= */
 /* LEAFLET RESIZE FIX */
 /* ================================= */
@@ -41,7 +135,6 @@ function MapResizeController({
   resizeSignal,
   sidebarOpen,
 }) {
-
   const map = useMap();
 
   useEffect(() => {
@@ -88,6 +181,7 @@ function MapResizeController({
 function MapFitController({
   assetMarkers = [],
   events = [],
+  focusedEvent = null,
   selectedPoint = null,
   selectionBounds = null,
 }) {
@@ -95,12 +189,23 @@ function MapFitController({
 
   useEffect(() => {
     const points = [];
+    let useItalyOverview = false;
 
     if (selectionBounds) {
       points.push(
         [selectionBounds.south, selectionBounds.west],
         [selectionBounds.north, selectionBounds.east]
       );
+    }
+
+    if (
+      Number.isFinite(Number(focusedEvent?.latitude)) &&
+      Number.isFinite(Number(focusedEvent?.longitude))
+    ) {
+      points.push([
+        Number(focusedEvent.latitude),
+        Number(focusedEvent.longitude),
+      ]);
     }
 
     if (
@@ -122,6 +227,13 @@ function MapFitController({
       }
     });
 
+    if (
+      !points.length &&
+      (events.length === 0 || events.length >= 80)
+    ) {
+      useItalyOverview = true;
+    }
+
     if (!points.length) {
       events.slice(0, 80).forEach((event) => {
         const latitude = Number(event.latitude);
@@ -133,11 +245,27 @@ function MapFitController({
       });
     }
 
-    if (!points.length) {
+    if (!points.length && !useItalyOverview) {
       return;
     }
 
     const timer = setTimeout(() => {
+      if (useItalyOverview) {
+        const mapSize = map.getSize();
+        const overviewZoom = mapSize.y >= 850
+          ? 6.25
+          : mapSize.y >= 690
+            ? 6
+            : 5.75;
+        const overviewCenter = [
+          42.1,
+          mapSize.x < 1450 ? 7.25 : 9.15,
+        ];
+
+        map.setView(overviewCenter, overviewZoom, { animate: false });
+        return;
+      }
+
       if (points.length === 1) {
         map.setView(points[0], 10, { animate: false });
         return;
@@ -151,7 +279,7 @@ function MapFitController({
     }, 120);
 
     return () => clearTimeout(timer);
-  }, [assetMarkers, events, map, selectedPoint, selectionBounds]);
+  }, [assetMarkers, events, focusedEvent, map, selectedPoint, selectionBounds]);
 
   return null;
 }
@@ -414,6 +542,7 @@ function CollapseMap({
   eventReliability = {},
   eventVulnerability = {},
   filteredEvents,
+  focusedEvent = null,
   height = "100vh",
   mapStyle = "voyager",
   professionalMode = false,
@@ -433,21 +562,32 @@ function CollapseMap({
   showWatchlistMarkers = false,
   watchlistMarkers = [],
 }) {
+  const [selectedEvent, setSelectedEvent] = useState(undefined);
+  const selectedEventCandidate =
+    selectedEvent === undefined ? focusedEvent : selectedEvent;
+  const activeSelectedEvent =
+    selectedEventCandidate &&
+    filteredEvents.some(
+      (event) => event.event_id === selectedEventCandidate.event_id
+    )
+      ? selectedEventCandidate
+      : null;
+
   const mapStyles = {
     dark: {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
+      attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
       key: "dark",
-      url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     },
     light: {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
+      attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
       key: "light",
-      url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     },
     voyager: {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
+      attribution: "Tiles &copy; Esri, HERE, Garmin, &copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, and the GIS user community",
       key: "voyager",
-      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
     },
   };
 
@@ -467,18 +607,26 @@ function CollapseMap({
 
         overflow: "hidden",
 
-        background: "#edf1f3",
+        background: "#e9e6de",
       }}
     >
       <div className="atlas-map-vignette" />
       <div className="atlas-map-grid-overlay" />
 
       <MapContainer
-        center={[42.8, 12.5]}
+        center={ITALY_VIEW_CENTER}
 
-        zoom={6.35}
+        fadeAnimation={false}
+
+        zoom={ITALY_VIEW_ZOOM}
 
         minZoom={5}
+
+        zoomSnap={0.25}
+
+        maxBounds={ITALY_MAX_BOUNDS}
+
+        maxBoundsViscosity={0.72}
 
         zoomControl={false}
 
@@ -508,6 +656,7 @@ function CollapseMap({
             showAssetMarkers ? assetMarkers : []
           }
           events={filteredEvents}
+          focusedEvent={focusedEvent}
           selectedPoint={selectedPoint}
           selectionBounds={selectionBounds}
         />
@@ -530,12 +679,35 @@ function CollapseMap({
         {/* BASEMAP */}
         {/* ================================= */}
 
-        <TileLayer
-          key={selectedMapStyle.key}
+        {selectedMapStyle.key === "voyager" ? (
+          <TileLayer
+            attribution={selectedMapStyle.attribution}
+            className="arcus-italy-detail-raster"
+            crossOrigin
+            keepBuffer={1}
+            maxNativeZoom={16}
+            maxZoom={16}
+            minZoom={5}
+            noWrap
+            updateWhenIdle
+            updateWhenZooming={false}
+            url={selectedMapStyle.url}
+          />
+        ) : (
+          <TileLayer
+            attribution={selectedMapStyle.attribution}
+            className="arcus-reference-raster"
+            crossOrigin
+            keepBuffer={1}
+            key={selectedMapStyle.key}
+            updateWhenIdle
+            updateWhenZooming={false}
+            url={selectedMapStyle.url}
+          />
+        )}
 
-          url={selectedMapStyle.url}
-
-          attribution={selectedMapStyle.attribution}
+        <ItalyFocusMask
+          enabled={selectedMapStyle.key === "voyager"}
         />
 
         {professionalMode &&
@@ -602,6 +774,7 @@ function CollapseMap({
 
         {showEventMarkers && (
           <MarkerClusterGroup
+            key={`${atlasMode}-${filteredEvents.length}-${filteredEvents[0]?.event_id || "empty"}`}
             chunkedLoading
 
             spiderfyOnMaxZoom={true}
@@ -621,40 +794,16 @@ function CollapseMap({
 
             {filteredEvents.map(
               (event) => {
-
-                const relatedSources =
-                  sourcesByEvent[
-                    event.event_id
-                  ] || [];
-
                 return (
                   <EventMarker
                     key={event.event_id}
 
                     event={event}
 
-                    atlasMode={atlasMode}
-
-                    hazardProfile={
-                      eventHazards[
-                        event.province
-                      ] || null
-                    }
-
+                    onSelect={setSelectedEvent}
                     professionalMode={
                       professionalMode
                     }
-
-                    reliability={
-                      eventReliability[
-                        event.event_id
-                      ] || null
-                    }
-
-                    relatedSources={
-                      relatedSources
-                    }
-
                     vulnerability={
                       eventVulnerability[
                         event.event_id
@@ -706,7 +855,7 @@ function CollapseMap({
                 <div className="professional-map-popup">
                   <span>{signal.level}</span>
                   <strong>
-                    {signal.event.event_id} -{" "}
+                    {researchEventId(signal.event)} -{" "}
                     {signal.event.municipality}
                   </strong>
                   <p>{signal.rules.join(" - ")}</p>
@@ -716,6 +865,28 @@ function CollapseMap({
           ))}
 
       </MapContainer>
+
+      {activeSelectedEvent && (
+        <div className="atlas-event-preview" role="region" aria-label="Scheda evento ARCUS">
+          <button
+            aria-label="Chiudi scheda evento"
+            className="atlas-event-preview-close"
+            type="button"
+            onClick={() => setSelectedEvent(null)}
+          >
+            ×
+          </button>
+          <EventPopup
+            atlasMode={atlasMode}
+            event={activeSelectedEvent}
+            hazardProfile={eventHazards[activeSelectedEvent.province] || null}
+            professionalMode={professionalMode}
+            reliability={eventReliability[activeSelectedEvent.event_id] || null}
+            relatedSources={sourcesByEvent[activeSelectedEvent.event_id] || []}
+            vulnerability={eventVulnerability[activeSelectedEvent.event_id] || null}
+          />
+        </div>
+      )}
 
     </div>
   );

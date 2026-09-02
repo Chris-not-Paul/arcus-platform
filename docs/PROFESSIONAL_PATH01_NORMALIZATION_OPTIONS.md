@@ -1,5 +1,7 @@
 # ARCUS Professional Path 01 - Normalization Options
 
+> **SUPERSEDED AUDIT RECORD.** These options are not part of the canonical ARCUS product. See `ARCUS_Product_Definition.md`.
+
 This document compares normalization families for a future Path 01 methodology. It does not approve or implement a production formula.
 
 ## Output Boundary
@@ -7,7 +9,7 @@ This document compares normalization families for a future Path 01 methodology. 
 Candidate label:
 
 ```text
-Preliminary Site Screening Priority
+Preliminary Point Screening Priority
 ```
 
 The candidate output answers a screening question: whether the selected site requires specialist studies and mitigation attention before design or realization of a new crossing infrastructure.
@@ -279,13 +281,20 @@ Mandatory treatment:
 - missing denominator is not zero incidence.
 - zero documented events is distinct from missing denominator.
 
-## Preferred Direction For Review
+## Selected Direction For Controlled Validation
 
-The workbench suggests that a future methodology should likely combine:
+The v2.1 candidate combines:
 
-- empirical or robust normalization for seismic PGA;
+- an empirical reference band for seismic PGA, kept outside the ISPRA tier;
 - non-compensatory triggers for P3 hydraulic and P4 landslide;
-- HCI as historical evidence modifier or separate band;
+- HCI as a separate historical evidence band with no effect on the site tier;
 - explicit confidence flags.
 
-This is a review direction, not an approved formula.
+The point tier itself is the maximum ISPRA Hydraulic/Landslide class. Severe
+multi-hazard signals produce an integrated-study flag and never a numerical
+`+1`.
+
+The canonical contract is documented in
+`docs/ARCUS_PATH01_SCREENING_V2.md`. It remains a controlled-validation
+candidate until specialist review and real-point UI/report acceptance are
+complete.

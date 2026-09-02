@@ -620,11 +620,11 @@ function validateStaticIntegration() {
     "utf8"
   );
   const professionalPage = fs.readFileSync(
-    path.join(ROOT, "src/pages/ProfessionalPage.jsx"),
+    path.join(ROOT, "src/pages/CollapseIntelligencePage.jsx"),
     "utf8"
   );
-  const professionalData = fs.readFileSync(
-    path.join(ROOT, "src/utils/analytics.js"),
+  const reportSource = fs.readFileSync(
+    path.join(ROOT, "src/utils/collapseIntelligenceReport.js"),
     "utf8"
   );
   const endpointBlock = server.slice(
@@ -639,40 +639,35 @@ function validateStaticIntegration() {
   );
   assert.match(apiClient, /professionalMitigationIntelligence/);
   assert.match(apiClient, /X-ARCUS-CSRF-Token/);
-  assert.match(professionalPage, /platform-mitigation-intelligence/);
-  assert.match(professionalPage, /MITIGATION INTELLIGENCE/);
-  assert.match(professionalPage, /effective weighted cases/);
+  assert.match(professionalPage, /collapse-intelligence-results/);
+  assert.match(professionalPage, /LESSONS FROM FAILURES/);
+  assert.match(professionalPage, /Effective evidence/);
   assert.match(professionalPage, /Independent episodes/);
-  assert.match(professionalPage, /episode-effective evidence/);
-  assert.match(professionalPage, /Evidence basis/);
-  assert.match(professionalPage, /national database with no geographic filter/);
-  assert.match(professionalPage, /Landslide support contract/);
+  assert.match(professionalPage, /NATIONAL COHORT/);
+  assert.match(professionalPage, /current hazard signature/);
   assert.match(professionalPage, /landslide_support/);
-  assert.match(professionalPage, /Seismic support contract/);
   assert.match(professionalPage, /seismic_support/);
-  assert.match(professionalPage, /80%/);
+  assert.match(reportSource, /ABSTAINED - ZERO STRATEGIES/);
+  assert.match(reportSource, /Raw evidence/);
+  assert.match(reportSource, /Episode-effective/);
+  assert.match(reportSource, /Analogue sources/);
+  assert.doesNotMatch(professionalPage, /Path 02/i);
+  assert.doesNotMatch(professionalPage, /Final Priority Index/i);
+  assert.doesNotMatch(professionalPage, /buildPath01ScreeningV2/);
   assert.match(endpointBlock, /collapse-hazard-signatures/);
   assert.match(endpointBlock, /historical-hazard-signatures/);
-
-  const path02Report = professionalPage.slice(
-    professionalPage.indexOf("} else if (activeEntryPath === 1)"),
-    professionalPage.indexOf("} else if (activeEntryPath === 2)")
-  );
-  assert.doesNotMatch(path02Report, /path01MitigationIntelligence/);
-  assert.doesNotMatch(professionalData, /mitigationIntelligence/);
-  assert.doesNotMatch(professionalData, /hydraulic_intelligence/);
 
   return {
     api_client_csrf: true,
     authenticated_professional_endpoint: true,
     current_and_historical_signatures_loaded: true,
     endpoint_server_location_sync_before_cohort: true,
-    fpi_and_path02_anti_leakage: true,
+    retired_scores_absent_from_active_product: true,
     national_analogue_basis_disclosed: true,
     landslide_abstention_support: true,
     seismic_abstention_support: true,
-    report_section: true,
-    ui_path01_card: true,
+    report_contract: true,
+    ui_lessons_from_failures: true,
   };
 }
 

@@ -1,12 +1,34 @@
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import { Link } from "react-router-dom";
+
+import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
+import { openManifest } from "../utils/apiClient";
 
 import "../styles/publications-page.css";
 
 function PublicationsPage() {
   const { language } = useLanguage();
+  const [manifest, setManifest] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    openManifest()
+      .then((data) => active && setManifest(data))
+      .catch(() => active && setManifest(null));
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const copy = {
     en: {
@@ -22,6 +44,11 @@ function PublicationsPage() {
         "The published dataset is the scientific base for the public Atlas, methodology, analytics and Professional workspace.",
       openPaper: "Open DOI",
       resourcesLabel: "Research Assets",
+      releaseLabel: "Current Open release",
+      releaseTitle: "A versioned and auditable research object",
+      releaseText:
+        "The current ARCUS release has its own citation, manifest, data dictionary, changelog and quality audit. A persistent release DOI will be added with the public repository deposit.",
+      releaseAction: "Open release package",
       resources: [
         ["Methodology", "Validation, classification, taxonomy and known limitations."],
         ["Public Atlas", "Geospatial reading of documented collapse events and source evidence."],
@@ -41,6 +68,11 @@ function PublicationsPage() {
         "Il dataset pubblicato e la base scientifica per Atlante pubblico, metodologia, analytics e workspace Professional.",
       openPaper: "Apri DOI",
       resourcesLabel: "Asset di ricerca",
+      releaseLabel: "Release Open corrente",
+      releaseTitle: "Un oggetto di ricerca versionato e verificabile",
+      releaseText:
+        "La release ARCUS corrente dispone di citazione, manifest, dizionario dati, changelog e audit di qualità. Il DOI persistente della release sarà aggiunto con il deposito nel repository pubblico.",
+      releaseAction: "Apri il pacchetto della release",
       resources: [
         ["Metodologia", "Validazione, classificazione, tassonomia e limiti dichiarati."],
         ["Atlante pubblico", "Lettura geospaziale degli eventi documentati e delle fonti."],
@@ -50,6 +82,11 @@ function PublicationsPage() {
   };
 
   const content = copy[language] || copy.en;
+  const releaseVersion =
+    manifest?.version || "arcus-open-2026.2";
+  const releaseCitation =
+    manifest?.citation ||
+    `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
 
   return (
     <main className="publications-page" id="main-content">
@@ -90,6 +127,25 @@ function PublicationsPage() {
         </div>
       </section>
 
+      <section className="publications-section publications-release-section">
+        <div className="publications-container publications-release-grid">
+          <article>
+            <span>{content.releaseLabel}</span>
+            <h2>{content.releaseTitle}</h2>
+            <strong>{releaseVersion}</strong>
+            <p>{content.releaseText}</p>
+            <Link to="/data-access">
+              {content.releaseAction}
+            </Link>
+          </article>
+
+          <aside>
+            <span>{language === "it" ? "Citazione" : "Citation"}</span>
+            <p>{releaseCitation}</p>
+          </aside>
+        </div>
+      </section>
+
       <section className="publications-section publications-dark">
         <div className="publications-container">
           <div className="publications-label">
@@ -105,6 +161,8 @@ function PublicationsPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

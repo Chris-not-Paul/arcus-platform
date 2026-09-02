@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import useLanguage from "../../context/useLanguage";
-import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
+import logoHorizontal from "../../assets/logo/logo-horizontal-dark.svg";
 import logoMark from "../../assets/logo/logo-mark.svg";
 import {
   getSession,
@@ -60,6 +60,15 @@ function Navbar() {
     {
       label: t("publications"),
       path: "/publications",
+      group: "research",
+    },
+
+    {
+      label:
+        language === "it"
+          ? "Dati"
+          : "Data",
+      path: "/data-access",
       group: "research",
     },
   ];

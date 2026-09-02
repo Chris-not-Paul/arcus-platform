@@ -1,0 +1,90 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT21.10.02",
+  "event_date": "2021-10-04",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Quazzola stream",
+    "latitude": 44.2998,
+    "longitude": 8.4099,
+    "municipality": "Quiliano",
+    "hydrographic_context": "Quazzola stream",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "scour",
+    "component_involved": "multiple_components",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "scour"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0144",
+      "provider": "IVG",
+      "title": "Maltempo a Quiliano, crolla ponte di via Tecci: due famiglie isolate",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ivg.it/2021/10/maltempo-a-quiliano-crolla-ponte-di-via-tezzi-due-famiglie-isolate/",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    },
+    {
+      "source_id": "SRC0145",
+      "provider": "SavonaNews",
+      "title": "Maltempo del 4 ottobre, il comune di Quiliano fa il punto della situazione",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.savonanews.it/2021/10/29/leggi-notizia/argomenti/attualit/articolo/maltempo-del-4-ottobre-il-comune-di-quiliano-fa-il-punto-della-situazione-danni-evidenti-al-patri.html",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    },
+    {
+      "source_id": "SRC0155",
+      "provider": "Fanpage",
+      "title": "Maltempo in Liguria, esondano due torrenti a Savona e crolla un ponte: scatta l'allerta rossa",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.fanpage.it/attualita/maltempo-in-liguria-esondano-due-torrenti-a-savona-e-crolla-un-ponte-scatta-lallerta-rossa/",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "high",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-20"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

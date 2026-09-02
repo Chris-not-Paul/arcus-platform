@@ -14,7 +14,7 @@ import {
   buildSeismicMitigationSupport,
 } from "../src/utils/seismicMitigationSupport.js";
 
-const ENGINE_VERSION = "arcus-mitigation-intelligence-v4";
+const ENGINE_VERSION = "arcus-mitigation-intelligence-v5";
 const NATIONAL_SIGNATURE_COVERAGE_THRESHOLD = 0.8;
 const MINIMUM_USABLE_EPISODES = 2;
 const MINIMUM_PROCESS_EPISODES = 5;
@@ -22,6 +22,8 @@ const MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE = 4;
 const MINIMUM_USABLE_EFFECTIVE_EPISODE_EVIDENCE = 2;
 const RETRIEVAL_ROBUSTNESS_WINDOWS = Object.freeze([15, 20, 25]);
 const MINIMUM_RETRIEVAL_WINDOW_SUPPORT = 2;
+const FAILURE_LEARNING_MATRIX_VERSION =
+  "arcus-failure-learning-matrix-v1";
 
 const HYDRAULIC_PROCESS_CATALOG = Object.freeze({
   bank_erosion_or_embankment_failure: {
@@ -632,6 +634,307 @@ function genericHydraulicStrategy(summary, cohortDescription) {
   };
 }
 
+function quantile(values, probability) {
+  if (!values.length) {
+    return null;
+  }
+
+  const sorted = [...values].sort((left, right) => left - right);
+  const index = (sorted.length - 1) * probability;
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+
+  if (lower === upper) {
+    return sorted[lower];
+  }
+
+  return sorted[lower] +
+    (sorted[upper] - sorted[lower]) * (index - lower);
+}
+
+function hydraulicGeometryContext(events = []) {
+  const geometryEvents = events.filter(
+    (event) => event.hydraulic_geometry
+  );
+  const lengths = geometryEvents
+    .map((event) => Number(event.hydraulic_geometry.bridge_length_m))
+    .filter((value) => Number.isFinite(value) && value > 0);
+  const pierValues = geometryEvents
+    .map((event) => event.hydraulic_geometry.piers_in_active_riverbed)
+    .filter((value) => typeof value === "boolean");
+  const piersPresent = pierValues.filter(Boolean).length;
+
+  return {
+    bridge_length_m: {
+      available_count: lengths.length,
+      median: lengths.length
+        ? rounded(quantile(lengths, 0.5))
+        : null,
+      q1: lengths.length
+        ? rounded(quantile(lengths, 0.25))
+        : null,
+      q3: lengths.length
+        ? rounded(quantile(lengths, 0.75))
+        : null,
+    },
+    geometry_event_count: geometryEvents.length,
+    interpretation:
+      "Descriptive geometry among the fixed historical cohort; not a project-risk estimate and not a retrieval or qualification input.",
+    piers_in_active_riverbed: {
+      available_count: pierValues.length,
+      false_count: pierValues.length - piersPresent,
+      true_count: piersPresent,
+      true_share: pierValues.length
+        ? rounded(piersPresent / pierValues.length)
+        : null,
+    },
+    production_validation_status: "exploratory_signal_only",
+    role: "post_retrieval_descriptive_evidence_only",
+  };
+}
+
+function processComponentEvidence(
+  events,
+  process,
+  episodeRegistry
+) {
+  const entries = new Map();
+
+  events
+    .filter(
+      (event) =>
+        (event.hydraulic_intelligence?.failure_process || "unspecified") ===
+          process
+    )
+    .forEach((event) => {
+      const intelligence = event.hydraulic_intelligence;
+      const component = intelligence?.component_involved || "unspecified";
+      const weight = evidenceWeight(intelligence?.evidence_level);
+      const episodeId = episodeRegistry?.event_to_episode?.[event.event_id];
+      const entry = entries.get(component) || {
+        component,
+        documented_count: 0,
+        effective_evidence_count: 0,
+        episode_weights: new Map(),
+        event_ids: [],
+        probable_count: 0,
+        raw_count: 0,
+      };
+
+      entry.raw_count += 1;
+      entry.effective_evidence_count += weight;
+      entry.event_ids.push(event.event_id);
+
+      if (intelligence?.evidence_level === "documented") {
+        entry.documented_count += 1;
+      } else if (intelligence?.evidence_level === "probable") {
+        entry.probable_count += 1;
+      }
+
+      if (episodeId) {
+        entry.episode_weights.set(
+          episodeId,
+          Math.max(entry.episode_weights.get(episodeId) || 0, weight)
+        );
+      }
+
+      entries.set(component, entry);
+    });
+
+  return [...entries.values()]
+    .map((entry) => ({
+      component: entry.component,
+      documented_count: entry.documented_count,
+      effective_evidence_count: rounded(
+        entry.effective_evidence_count
+      ),
+      episode_count: entry.episode_weights.size,
+      episode_effective_evidence_count: rounded(
+        [...entry.episode_weights.values()].reduce(
+          (total, value) => total + value,
+          0
+        )
+      ),
+      event_ids: entry.event_ids.sort((left, right) =>
+        String(left).localeCompare(String(right))
+      ),
+      probable_count: entry.probable_count,
+      raw_count: entry.raw_count,
+    }))
+    .sort((left, right) =>
+      right.episode_effective_evidence_count -
+        left.episode_effective_evidence_count ||
+      right.raw_count - left.raw_count ||
+      left.component.localeCompare(right.component)
+    );
+}
+
+function learningStatement(processEvidence, qualified) {
+  if (processEvidence.process === "unspecified") {
+    return {
+      en: `${processEvidence.raw_count} cohort records do not resolve a hydraulic failure process. They identify an evidence gap, not a mechanism.`,
+      it: `${processEvidence.raw_count} record della coorte non risolvono il processo di collasso idraulico. Indicano una lacuna evidenziale, non un meccanismo.`,
+    };
+  }
+
+  if (qualified) {
+    return {
+      en: `${processEvidence.process} recurs across ${processEvidence.episode_count} independent episodes with ${processEvidence.episode_effective_evidence_count} episode-effective evidence units. It supports an investigation priority, subject to project-specific confirmation.`,
+      it: `${processEvidence.process} ricorre in ${processEvidence.episode_count} episodi indipendenti con ${processEvidence.episode_effective_evidence_count} unita di evidenza episode-effective. Supporta una priorita d'indagine, da confermare sul progetto specifico.`,
+    };
+  }
+
+  return {
+    en: `${processEvidence.process} is observed in the fixed cohort, but independent-episode support or retrieval-window robustness is below the qualification threshold.`,
+    it: `${processEvidence.process} e osservato nella coorte fissata, ma il supporto per episodi indipendenti o la robustezza alle finestre di retrieval e sotto la soglia di qualificazione.`,
+  };
+}
+
+export function buildHydraulicFailureLearningMatrix({
+  abstentionReasons = [],
+  cohortEvents = [],
+  evidence = {},
+  episodeRegistry = {},
+  intelligenceStatus = "abstained",
+  selectionMode = "unavailable",
+  supportedProcesses = [],
+} = {}) {
+  const matrixStatus = String(intelligenceStatus).startsWith("available")
+    ? "available"
+    : String(intelligenceStatus).startsWith("limited_evidence")
+      ? "limited_evidence"
+      : "abstained";
+  const supportedByName = new Map(
+    supportedProcesses.map((item) => [item.process, item])
+  );
+  const rows = matrixStatus === "abstained"
+    ? []
+    : (evidence.processes || []).map((processEvidence) => {
+        const supported = supportedByName.get(processEvidence.process);
+        const qualified = Boolean(supported);
+        const template = HYDRAULIC_PROCESS_CATALOG[processEvidence.process];
+        const processEvents = cohortEvents.filter(
+          (event) =>
+            (event.hydraulic_intelligence?.failure_process ||
+              "unspecified") === processEvidence.process
+        );
+
+        return {
+          affected_components: processComponentEvidence(
+            cohortEvents,
+            processEvidence.process,
+            episodeRegistry
+          ),
+          evidence: {
+            documented_count: processEvidence.documented_count,
+            effective_evidence_count:
+              processEvidence.effective_evidence_count,
+            episode_count: processEvidence.episode_count,
+            episode_effective_evidence_count:
+              processEvidence.episode_effective_evidence_count,
+            episode_ids: processEvidence.episode_ids,
+            evidence_strength: processEvidence.evidence_strength,
+            event_ids: processEvidence.event_ids,
+            probable_count: processEvidence.probable_count,
+            raw_count: processEvidence.raw_count,
+            source_count: processEvidence.source_count,
+          },
+          geometry_context: hydraulicGeometryContext(processEvents),
+          investigation_priority: qualified
+            ? template?.investigation || null
+            : null,
+          investigation_question: template?.purpose ||
+            GENERIC_HYDRAULIC_STRATEGY.purpose,
+          learning_statement: learningStatement(
+            processEvidence,
+            qualified
+          ),
+          learning_status: processEvidence.process === "unspecified"
+            ? "mechanism_unresolved"
+            : qualified
+              ? "qualified_investigation_priority"
+              : "observed_below_qualification_threshold",
+          matrix_row_id: `hydraulic:${processEvidence.process}`,
+          monitoring_consideration: qualified
+            ? template?.monitoring || null
+            : null,
+          process: processEvidence.process,
+          qualification: {
+            independent_episode_threshold_met:
+              processEvidence.episode_count >=
+                MINIMUM_PROCESS_EPISODES,
+            episode_effective_threshold_met:
+              processEvidence.episode_effective_evidence_count >=
+                MINIMUM_PROCESS_EFFECTIVE_EPISODE_EVIDENCE,
+            qualified,
+            retrieval_window_consensus:
+              supported?.retrieval_window_support ||
+              processEvidence.retrieval_window_support || null,
+          },
+          risk_control_theme: qualified
+            ? template?.risk_control_theme || null
+            : null,
+        };
+      });
+  const orderedRows = rows.sort((left, right) => {
+    const order = {
+      qualified_investigation_priority: 0,
+      observed_below_qualification_threshold: 1,
+      mechanism_unresolved: 2,
+    };
+
+    return order[left.learning_status] - order[right.learning_status] ||
+      right.evidence.episode_effective_evidence_count -
+        left.evidence.episode_effective_evidence_count ||
+      left.process.localeCompare(right.process);
+  });
+  const qualifiedRows = orderedRows.filter(
+    (row) => row.qualification.qualified
+  );
+
+  return {
+    abstention_reasons: matrixStatus === "abstained"
+      ? abstentionReasons
+      : [],
+    caveat:
+      "Failure Learning Matrix converts fixed-cohort historical outcomes into auditable investigation questions. It does not estimate failure probability, certify safety or prescribe interventions.",
+    cohort_contract: {
+      cohort_fixed_before_outcome_read: true,
+      geometry_used_for_qualification: false,
+      outcome_fields_read_after_selection: [
+        "hydraulic_intelligence.failure_process",
+        "hydraulic_intelligence.component_involved",
+        "hydraulic_intelligence.evidence_level",
+      ],
+      selection_mode: selectionMode,
+    },
+    evidence_summary: {
+      effective_evidence_count:
+        evidence.effective_evidence_count || 0,
+      episode_count: evidence.episode_count || 0,
+      episode_effective_evidence_count:
+        evidence.episode_effective_evidence_count || 0,
+      event_count: evidence.event_count || 0,
+    },
+    forbidden_interpretations: [
+      "collapse_probability",
+      "safe_unsafe_classification",
+      "asset_ranking",
+      "automatic_design_prescription",
+      "causal_effect_of_geometry",
+    ],
+    generic_investigation_priority:
+      matrixStatus === "limited_evidence"
+        ? GENERIC_HYDRAULIC_STRATEGY.investigation
+        : null,
+    matrix_version: FAILURE_LEARNING_MATRIX_VERSION,
+    qualified_priority_count: qualifiedRows.length,
+    row_count: orderedRows.length,
+    rows: orderedRows,
+    status: matrixStatus,
+  };
+}
+
 export function synchronizeMitigationProjectLocation(payload = {}, provinceFeatures = []) {
   const requestedProvince = String(
     payload?.project_location?.derived_province || ""
@@ -719,6 +1022,7 @@ export function buildMitigationIntelligence({
     events,
     historicalSignatures,
     officialExposure: payload?.official_exposure,
+    projectBridgeProfile: payload?.project_bridge_profile,
     signatures,
   });
   const hydraulicSignatureCoverage =
@@ -756,6 +1060,7 @@ export function buildMitigationIntelligence({
               historicalSignatures,
               limit,
               officialExposure: payload?.official_exposure,
+              projectBridgeProfile: payload?.project_bridge_profile,
               signatures,
             });
         const windowEvents = retrieval.analogues
@@ -904,6 +1209,23 @@ export function buildMitigationIntelligence({
       ? ["official_hydraulic_exposure_from_persistent_cache"]
       : []),
   ];
+  const selectionMode = nationalAnalogueReady
+    ? nationalAnalogueCohort.project_bridge_profile?.match_field_count > 0
+      ? "national_current_hazard_and_declared_bridge_profile_fixed_before_outcome_synthesis"
+      : "national_current_hazard_signature_fixed_before_outcome_synthesis"
+    : nationalAnalogueCohort.reason ===
+        "official_hydraulic_point_intersection_required"
+      ? "point_derived_province_context_only_official_point_not_intersected"
+      : "point_derived_province_fallback_until_national_signature_coverage_ready";
+  const failureLearningMatrix = buildHydraulicFailureLearningMatrix({
+    abstentionReasons,
+    cohortEvents: hydraulicEvents,
+    evidence,
+    episodeRegistry,
+    intelligenceStatus: status,
+    selectionMode,
+    supportedProcesses,
+  });
 
   return {
     active_hazard_tracks: tracks.filter((track) => track.active),
@@ -972,13 +1294,9 @@ export function buildMitigationIntelligence({
         windows: robustnessWindows,
       },
       province,
-      selection_mode: nationalAnalogueReady
-        ? "national_current_hazard_signature_fixed_before_outcome_synthesis"
-        : nationalAnalogueCohort.reason ===
-            "official_hydraulic_point_intersection_required"
-          ? "point_derived_province_context_only_official_point_not_intersected"
-        : "point_derived_province_fallback_until_national_signature_coverage_ready",
+      selection_mode: selectionMode,
     },
+    failure_learning_matrix: failureLearningMatrix,
     forbidden_outputs: [
       "collapse_probability",
       "safe_unsafe_classification",
@@ -987,6 +1305,7 @@ export function buildMitigationIntelligence({
     ],
     generated_at: new Date().toISOString(),
     landslide_support: landslideSupport,
+    project_bridge_profile: nationalAnalogueCohort.project_bridge_profile,
     seismic_support: seismicSupport,
     limitations: [
       "The production mitigation slice supports hydraulic strategies only.",
@@ -995,6 +1314,8 @@ export function buildMitigationIntelligence({
       "Current official signatures support present-day comparability; they are not retrospective causal proof.",
       "Historical-at-event classifications are used only when an authenticated, dated source is registered. They are never reconstructed from the current class.",
       "Observed triggers and collapse processes are read only after the analogue cohort is fixed.",
+      "Declared bridge-profile fields act only as an unweighted tie-breaker after the official hydraulic signature; missing fields are not inferred and evidence thresholds are unchanged.",
+      "Bridge length and piers in the active riverbed remain descriptive and are not used for analogue selection or Failure Learning Matrix qualification.",
       "Bridge cases from the same inferred hydraulic episode are capped to one effective evidence unit per process and do not count as independent replications.",
       "Episode grouping uses auditable curated overrides, source-linkage provenance and a conservative temporal-regional fallback; inferred groups are not a meteorological event reconstruction.",
       ...(nationalAnalogueReady
@@ -1006,7 +1327,7 @@ export function buildMitigationIntelligence({
           : [
               "National analogue retrieval is not activated without an official hydraulic class assigned to the project point; provincial cases remain territorial historical context only.",
             ]),
-      "No value from this engine contributes to the Final Priority Index or Path 02 ranking.",
+      "This evidence package does not calculate or modify any synthetic priority score or asset ranking.",
     ],
     source_completeness: {
       hydraulic: {

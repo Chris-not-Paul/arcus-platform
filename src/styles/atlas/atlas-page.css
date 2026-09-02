@@ -240,7 +240,20 @@
   transition:
     left 0.34s ease,
     width 0.34s ease,
-    opacity 0.25s ease;
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.atlas-page:has(.arcus-event-card)
+.atlas-command-panel,
+.atlas-page:has(.arcus-event-card)
+.atlas-map-legend {
+  visibility: hidden;
+
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 .atlas-page.sidebar-closed .atlas-command-panel {
@@ -1022,6 +1035,23 @@
   opacity: 0.92;
 }
 
+.atlas-map-canvas.map-style-voyager .arcus-italy-detail-raster .leaflet-tile {
+  filter:
+    brightness(1.12)
+    contrast(0.74)
+    saturate(0.32)
+    grayscale(0.30)
+    sepia(0.04);
+
+  opacity: 0.92;
+}
+
+.atlas-map-canvas.map-style-voyager .atlas-map-vignette {
+  background:
+    linear-gradient(rgba(243,240,232,0.08), rgba(243,240,232,0.08)),
+    radial-gradient(circle at 56% 46%, transparent 55%, rgba(23,63,66,0.07) 100%);
+}
+
 .atlas-map-canvas.map-style-light .leaflet-tile {
   filter:
     brightness(0.98)
@@ -1163,4 +1193,97 @@
     display: none;
   }
 
+}
+
+/* Mineral Paper prototype: Atlas as an editorial research instrument. */
+.atlas-page {
+  background: var(--arcus-paper);
+}
+
+.atlas-page::before {
+  background:
+    linear-gradient(to bottom, rgba(23,63,66,0.08), transparent 16%, transparent 80%, rgba(23,63,66,0.06));
+}
+
+.atlas-home-link,
+.atlas-command-panel,
+.atlas-professional-panel,
+.atlas-map-legend {
+  --arcus-border-dark: rgba(32,40,38,0.16);
+  --arcus-ivory-dim: var(--arcus-ink-soft);
+  --arcus-ivory-faint: var(--arcus-ink-muted);
+  --arcus-text-on-dark: var(--arcus-ink);
+  --arcus-text-on-dark-soft: var(--arcus-ink-soft);
+  border-color: rgba(32,40,38,0.16);
+  border-radius: 3px;
+  background: rgba(252,251,247,0.95);
+  color: var(--arcus-ink);
+  box-shadow: 0 12px 32px rgba(32,40,38,0.11);
+  backdrop-filter: blur(14px);
+}
+
+.atlas-home-link::after {
+  background: var(--arcus-bronze);
+}
+
+.atlas-command-kicker,
+.atlas-map-summary > span,
+.atlas-color-legend > span,
+.atlas-command-grid span,
+.atlas-color-legend p {
+  color: var(--arcus-ink-muted);
+}
+
+.atlas-command-title,
+.atlas-command-grid strong {
+  color: var(--arcus-night);
+}
+
+.atlas-mode-switcher a,
+.atlas-research-actions a,
+.atlas-research-actions button,
+.atlas-professional-actions a,
+.atlas-professional-actions button,
+.atlas-command-reset {
+  border-color: rgba(32,40,38,0.16);
+  background: rgba(32,40,38,0.035);
+  color: var(--arcus-ink-soft);
+}
+
+.atlas-command-grid div,
+.atlas-research-actions,
+.atlas-color-legend {
+  border-color: rgba(32,40,38,0.12);
+}
+
+.atlas-color-legend li {
+  color: var(--arcus-ink-soft);
+}
+
+.atlas-color-legend p i {
+  background: var(--arcus-night);
+  border-color: rgba(167,101,50,0.64);
+}
+
+.atlas-map-vignette {
+  background:
+    radial-gradient(circle at 50% 45%, transparent 48%, rgba(23,63,66,0.10) 100%),
+    linear-gradient(to right, rgba(23,63,66,0.08), transparent 18%, transparent 82%, rgba(23,63,66,0.06));
+}
+
+.leaflet-control-zoom {
+  border-radius: 3px !important;
+  box-shadow: 0 8px 24px rgba(32,40,38,0.14);
+}
+
+.leaflet-control-zoom a {
+  border-bottom: 1px solid rgba(32,40,38,0.12) !important;
+  background: rgba(252,251,247,0.96) !important;
+  color: var(--arcus-night) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(252,251,247,0.88) !important;
+  color: var(--arcus-ink-muted) !important;
+  border-radius: 3px 0 0 0;
 }

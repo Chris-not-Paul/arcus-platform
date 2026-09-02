@@ -1,0 +1,90 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT23.05.01",
+  "event_date": "2023-05-03",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Trionto river",
+    "latitude": 39.4675,
+    "longitude": 16.6754,
+    "municipality": "Longobucco",
+    "hydrographic_context": "Trionto river",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "scour",
+    "component_involved": "pier_foundation",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "scour"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0006",
+      "provider": "Journal Paper",
+      "title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Scientific",
+      "url": "https://doi.org/10.1080/15732479.2025.2483500",
+      "reference": null,
+      "accessed_at": "2026-05-06"
+    },
+    {
+      "source_id": "SRC0004",
+      "provider": "Il Regionale",
+      "title": "Crollo del viadotto a Longobucco, Anas riapre la SS177",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ilregionale.it/2023/08/01/crollo-del-viadotto-a-longobucco-anas-riapre-la-ss-177/",
+      "reference": null,
+      "accessed_at": "2026-05-06"
+    },
+    {
+      "source_id": "SRC0005",
+      "provider": "Rai News",
+      "title": "Longobucco, crolla il viadotto Ortiano 2 sulla statale 177",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.rainews.it/tgr/calabria/video/2023/05/longobucco-viadotto-trionto-anas-ss177-maltempo-fa2b56ca-af8b-48e2-a89e-96bdc9cff09f.html",
+      "reference": null,
+      "accessed_at": "2026-05-06"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-06"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

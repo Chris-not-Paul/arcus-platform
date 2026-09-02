@@ -1,3 +1,8 @@
+import {
+  compareProjectBridgeProfile,
+  normalizeProjectBridgeProfile,
+} from "../src/utils/projectBridgeProfile.js";
+
 const SEMANTIC_COMPLETION_STATUSES = new Set([
   "available",
   "no_intersection",
@@ -167,7 +172,7 @@ function temporalEvidenceFor(event, historicalByEvent) {
   };
 }
 
-function comparisonFor(target, candidate) {
+function comparisonFor(target, candidate, projectBridgeProfile, event) {
   const targetHydraulic = target.hydraulic || {};
   const candidateHydraulic = candidate.hydraulic || {};
   const targetHighest = highestHydraulicClass(targetHydraulic);
@@ -214,6 +219,10 @@ function comparisonFor(target, candidate) {
           : null,
       target_pga_p50_g: targetPga,
     },
+    project_bridge_profile: compareProjectBridgeProfile(
+      projectBridgeProfile,
+      event
+    ),
   };
 }
 
@@ -230,6 +239,10 @@ function compareCandidates(left, right) {
       leftHydraulic.class_overlap_count ||
     (rightHydraulic.class_overlap_ratio ?? -1) -
       (leftHydraulic.class_overlap_ratio ?? -1) ||
+    right.comparison.project_bridge_profile.exact_match_count -
+      left.comparison.project_bridge_profile.exact_match_count ||
+    right.comparison.project_bridge_profile.compared_field_count -
+      left.comparison.project_bridge_profile.compared_field_count ||
     Number(right.comparison.landslide.exact) -
       Number(left.comparison.landslide.exact) ||
     (left.comparison.seismic.pga_delta_g ?? Number.POSITIVE_INFINITY) -
@@ -270,6 +283,18 @@ function retrievalExplanation(comparison) {
     missing.push("seismic_pga");
   }
 
+  Object.entries(comparison.project_bridge_profile.fields).forEach(
+    ([field, item]) => {
+      if (!item.comparable) {
+        missing.push(`project_bridge_profile.${field}`);
+      } else if (item.exact) {
+        matched.push(`project_bridge_profile.${field}`);
+      } else {
+        different.push(`project_bridge_profile.${field}`);
+      }
+    }
+  );
+
   return {
     different_features: different,
     matched_features: matched,
@@ -282,9 +307,13 @@ export function buildNationalHazardAnalogueCohort({
   historicalSignatures = [],
   limit = 20,
   officialExposure = {},
+  projectBridgeProfile = {},
   signatures = [],
 } = {}) {
   const target = currentTargetSignature(officialExposure);
+  const normalizedProjectBridgeProfile = normalizeProjectBridgeProfile(
+    projectBridgeProfile
+  );
   const signaturesByEvent = new Map(
     signatures.map((signature) => [signature.event_id, signature])
   );
@@ -323,6 +352,7 @@ export function buildNationalHazardAnalogueCohort({
           "hydraulic highest-class equality",
           "hydraulic class distance",
           "hydraulic class overlap",
+          "unweighted declared project-profile exact-match count",
           "landslide point-class equality",
           "absolute PGA difference",
           "source reliability",
@@ -331,14 +361,24 @@ export function buildNationalHazardAnalogueCohort({
           "current_official_signature.hydraulic",
           "current_official_signature.landslide",
           "current_official_signature.seismic",
+          ...normalizedProjectBridgeProfile.match_fields_provided.map(
+            (field) => `project_bridge_profile.${field}`
+          ),
         ],
+      },
+      project_bridge_profile: {
+        ...normalizedProjectBridgeProfile,
+        candidate_coverage: {
+          eligible_candidates: 0,
+          fields: {},
+        },
       },
       signature_coverage: signatureCoverage,
       target_current_official_signature: target,
     };
   }
 
-  const candidates = events
+  const eligibleCandidates = events
     .map((event) => {
       const signature = signaturesByEvent.get(event.event_id);
 
@@ -346,7 +386,12 @@ export function buildNationalHazardAnalogueCohort({
         return null;
       }
 
-      const comparison = comparisonFor(target, signature);
+      const comparison = comparisonFor(
+        target,
+        signature,
+        normalizedProjectBridgeProfile,
+        event
+      );
 
       return {
         comparison,
@@ -355,9 +400,20 @@ export function buildNationalHazardAnalogueCohort({
         reliability_score: finiteNumber(event.reliability?.score) || 0,
       };
     })
-    .filter(Boolean)
+    .filter(Boolean);
+  const candidates = eligibleCandidates
     .sort(compareCandidates)
     .slice(0, Math.max(1, Number(limit) || 20));
+  const candidateFieldCoverage = Object.fromEntries(
+    normalizedProjectBridgeProfile.match_fields_provided.map((field) => [
+      field,
+      eligibleCandidates.filter(
+        (candidate) =>
+          candidate.comparison.project_bridge_profile.fields[field]
+            ?.comparable === true
+      ).length,
+    ])
+  );
   const analogues = candidates.map((candidate, index) => ({
     current_official_signature: candidate.signature,
     event: {
@@ -403,6 +459,7 @@ export function buildNationalHazardAnalogueCohort({
         "hydraulic highest-class equality",
         "hydraulic class distance",
         "hydraulic class overlap",
+        "unweighted declared project-profile exact-match count",
         "landslide point-class equality",
         "absolute PGA difference",
         "source reliability",
@@ -411,6 +468,22 @@ export function buildNationalHazardAnalogueCohort({
         "current_official_signature.hydraulic",
         "current_official_signature.landslide",
         "current_official_signature.seismic",
+        ...normalizedProjectBridgeProfile.match_fields_provided.map(
+          (field) => `project_bridge_profile.${field}`
+        ),
+      ],
+    },
+    project_bridge_profile: {
+      ...normalizedProjectBridgeProfile,
+      candidate_coverage: {
+        eligible_candidates: eligibleCandidates.length,
+        fields: candidateFieldCoverage,
+      },
+      limitations: [
+        "Declared bridge characteristics only reorder otherwise hazard-comparable analogues; they do not exclude candidates.",
+        "All matching fields are unweighted in v1 and do not modify evidence or Failure Learning Matrix thresholds.",
+        "Bridge length and piers in the active riverbed remain descriptive and are not used for retrieval.",
+        "Missing target fields are not inferred or imputed.",
       ],
     },
     signature_coverage: signatureCoverage,

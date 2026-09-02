@@ -41,7 +41,53 @@ All 20 allowed values come from the workbook `TAXONOMY` sheet. `Rainfall-induced
 
 ## Release coverage
 
-The `arcus-open-2026.1` quality gate records 211 Hydraulic events: 172 have a specific process, 166 have a specific component, and the evidence distribution is 124 Documented, 43 Probable, 8 Needs review and 36 Unspecified.
+The `arcus-open-2026.1` quality gate records 211 Hydraulic events: 172 have a specific process, 166 have a specific component, and the current evidence distribution is 123 Documented, 44 Probable, 8 Needs review and 36 Unspecified.
+
+## Professional bridge-geometry enrichment
+
+The official supplementary damaged-bridge database S3 published with D'Angelo,
+Ballio & Ravazzani (2025), *Geomorphological risk factors for river bridges*, is
+the source for two additional historical bridge attributes:
+
+```text
+bridge_length_m
+piers_in_active_riverbed
+```
+
+The source file is
+`https://ars.els-cdn.com/content/image/1-s2.0-S2212420925004315-mmc3.xlsx`
+(DOI `10.1016/j.ijdrr.2025.105607`). The master workbook keeps the two technical
+attributes in `EVENTS`, adjacent to bridge typology, material and construction
+year. Record-level matching metadata is normalized in
+`HYDRAULIC_GEOMETRY_LINKS`, keyed by `event_id` and `dataset_id`; dataset-level
+DOI, URL, local archive and checksum are stored once in `DATASETS`. No matching
+or source-provenance columns are duplicated across `EVENTS`. The Professional
+API joins these sheets and exposes the normalized result as
+`hydraulic_geometry`; the Open Research release deliberately excludes it pending
+a separate rights and release decision.
+
+The locally archived source is
+`private-data/raw/source-material/dangelo-ballio-ravazzani-2025-s3.xlsx`
+(SHA-256 `7AC68D484FFF2402AF7DE185CAD936741FCAA1E4AF02546C624DAE272B288F71`).
+
+Current accepted coverage is 158 unique ARCUS/S3 pairs: 112 use an explicit S3
+record already cited in the ARCUS description and 46 use a unique coordinate +
+event-year match. Bridge length is available for all 158; active-riverbed pier
+presence is available for 155. Five spatially inconsistent explicit references
+and three duplicate candidate assignments abstain and remain blank.
+
+`piers_in_active_riverbed = false` is a documented negative value. A blank value
+means unavailable or rejected mapping and must never be converted to `false`.
+Neither bridge length nor pier presence currently changes retrieval, similarity,
+mitigation status or any score. Their incremental value and correlation with
+river width and basin area require validation first.
+
+The first episode-held-out value audit is documented in
+`docs/ARCUS_HYDRAULIC_GEOMETRY_VALUE_AUDIT.md`. Length and combined geometry do
+not outperform the fair majority baseline. Pier presence alone shows a small
+failure-process signal, but its paired uncertainty interval crosses zero. The
+audit status is `exploratory_signal_only` and the production status remains
+`not_authorized`; both attributes remain descriptive post-retrieval evidence.
 
 ## Scientific interpretation
 
@@ -61,3 +107,5 @@ The rain/flood trigger, process, component and evidence class can support contex
 - ISPRA/INGV official exposure is a separate Professional input.
 - Missing curated episode IDs invoke the versioned conservative registry rule;
   they are not silently represented as meteorologically verified events.
+- S3 does not provide a systematic span count or single-/multi-span field; the
+  presence of piers in the active riverbed must not be relabelled as span count.

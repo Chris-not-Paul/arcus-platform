@@ -1,0 +1,114 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT20.11.03",
+  "event_date": "2020-11-22",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 39.3237,
+    "longitude": 17.0212
+  },
+  "grid_location": {
+    "elevation_m": 135,
+    "latitude": 39.34401,
+    "longitude": 17.019928,
+    "distance_from_event_km": 2.3
+  },
+  "period": {
+    "end_date": "2020-11-22",
+    "start_date": "2020-11-09",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2020-11-09",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-10",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-11",
+      "precipitation_mm": 0.3
+    },
+    {
+      "date": "2020-11-12",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-13",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-14",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-15",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-16",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-17",
+      "precipitation_mm": 5.2
+    },
+    {
+      "date": "2020-11-18",
+      "precipitation_mm": 14.8
+    },
+    {
+      "date": "2020-11-19",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2020-11-20",
+      "precipitation_mm": 6.4
+    },
+    {
+      "date": "2020-11-21",
+      "precipitation_mm": 85.1
+    },
+    {
+      "date": "2020-11-22",
+      "precipitation_mm": 73
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 73,
+    "event_and_previous_2_days_mm": 164.5,
+    "event_and_previous_6_days_mm": 184.5,
+    "full_period_mm": 184.8
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:10:28.680Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2020-11-22&latitude=39.3237&longitude=17.0212&models=cerra&start_date=2020-11-09&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_context_only",
+    "severity": "context",
+    "assessment_method": "dataset_role_rule",
+    "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
+    "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
+  }
+}

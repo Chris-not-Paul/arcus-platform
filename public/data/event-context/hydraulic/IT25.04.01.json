@@ -1,0 +1,88 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT25.04.01",
+  "event_date": "2025-04-17",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Elvo stream",
+    "latitude": 45.5126,
+    "longitude": 8.0249,
+    "municipality": "Mongrado",
+    "hydrographic_context": "Elvo stream",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": null,
+    "component_involved": null,
+    "evidence_level": "unspecified",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [],
+  "sources": [
+    {
+      "source_id": "SRC0024",
+      "provider": "ANSA",
+      "title": "Maltempo in Piemonte, crolla ponte nel Biellese",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/piemonte/notizie/2025/04/17/maltempo-in-piemonte-crolla-un-ponte-nel-biellese_0d4f4d68-6d9b-4b73-92a0-6a4ef7a56d5d.html",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    },
+    {
+      "source_id": "SRC0025",
+      "provider": "Rai News",
+      "title": "Il Piemonte chiede lo stato di emergenza, altissimo il rischio valanghe",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.rainews.it/tgr/piemonte/maratona/2025/04/maltempo-esonda-lelvo-a-biella-cancellati-tutti-i-treni-2ba98bde-52a9-46ff-abf0-d3f23d34429f.html",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    },
+    {
+      "source_id": "SRC0026",
+      "provider": "La Stampa",
+      "title": "Maltempo, un ponte crollato sull’Elvo e trenta persone sfollate nel Biellese sotto il diluvio",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.lastampa.it/biella/2025/04/18/news/maltempo_un_ponte_crollato_sull_elvo_e_trenta_persone_sfollate_nel_biellese_sotto_il_diluvio-15107747/",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-18"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

@@ -2,26 +2,34 @@ import {
   Marker,
   Popup,
 } from "react-leaflet";
-
-import EventPopup from "../popup/EventPopup";
+import { researchEventId } from "../../utils/eventIdentity";
 
 import {
   createMarkerIcon,
 } from "../../utils/markerFactory";
 
 function EventMarker({
-  atlasMode = "open",
   event,
-  hazardProfile = null,
+  onSelect,
   professionalMode = false,
-  reliability = null,
-  relatedSources,
   vulnerability = null,
 }) {
+  const markerTitle =
+    event.bridge_name ||
+    event.bridge_crossing_name ||
+    `${event.municipality || event.province || "ARCUS"} - ${researchEventId(event) || "record"}`;
 
   return (
 
     <Marker
+      alt={markerTitle}
+      eventHandlers={{
+        click: () => onSelect?.(event),
+        popupopen: (leafletEvent) => {
+          onSelect?.(event);
+          window.setTimeout(() => leafletEvent.target.closePopup(), 0);
+        },
+      }}
       position={[
         event.latitude,
         event.longitude,
@@ -33,24 +41,11 @@ function EventMarker({
           ? vulnerability?.class
           : null
       )}
+      title={markerTitle}
     >
-
-      <Popup maxWidth={420}>
-
-        <EventPopup
-          atlasMode={atlasMode}
-          event={event}
-          hazardProfile={hazardProfile}
-          professionalMode={professionalMode}
-          reliability={reliability}
-          relatedSources={
-            relatedSources || []
-          }
-          vulnerability={vulnerability}
-        />
-
+      <Popup className="arcus-selection-proxy" closeButton={false}>
+        <span />
       </Popup>
-
     </Marker>
   );
 }

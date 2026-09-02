@@ -15,8 +15,8 @@ import {
 } from "../../src/utils/hydraulicIntelligence.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.1";
-export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v1";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.2";
+export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
   id: "CC-BY-4.0",
@@ -157,6 +157,86 @@ function arcusEventId(researchEventId) {
   }
 
   return `B${value.slice(2)}`;
+}
+
+function canonicalEventId(eventId, researchEventId = null) {
+  const value = cleanString(researchEventId) || cleanString(eventId);
+
+  if (/^IT\d{2}\.\d{2}\.\d{2}$/i.test(value || "")) {
+    return value.toUpperCase();
+  }
+
+  if (/^B\d{2}\.\d{2}\.\d{2}$/i.test(value || "")) {
+    return `IT${value.slice(1)}`.toUpperCase();
+  }
+
+  return null;
+}
+
+function projectCanonicalOpenDataset(normalized) {
+  const legacyMappingById = new Map(
+    normalized.idMapping.map((item) => [item.event_id, item])
+  );
+  const events = normalized.events.map((event) => {
+    const {
+      research_event_id: researchEventId,
+      ...publicEvent
+    } = event;
+
+    return {
+      ...publicEvent,
+      event_id: canonicalEventId(event.event_id, researchEventId),
+    };
+  });
+  const sources = normalized.sources.map((source) => {
+    const {
+      research_event_id: researchEventId,
+      ...publicSource
+    } = source;
+
+    return {
+      ...publicSource,
+      event_id: canonicalEventId(source.event_id, researchEventId),
+    };
+  });
+  const sourcesByEvent = sources.reduce((index, source) => {
+    index.set(source.event_id, (index.get(source.event_id) || 0) + 1);
+    return index;
+  }, new Map());
+  const idMapping = normalized.events.map((event) => {
+    const legacy = legacyMappingById.get(event.event_id);
+
+    return {
+      event_id: canonicalEventId(event.event_id, event.research_event_id),
+      legacy_event_id: event.event_id,
+      event_slug: event.event_slug,
+      legacy_compatible: legacy?.legacy_compatible ?? false,
+      mapping_rule:
+        "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix",
+    };
+  });
+  const warnings = normalized.warnings.map((warning) => {
+    const publicWarning = { ...warning };
+    delete publicWarning.research_event_id;
+
+    return warning.event_id
+      ? {
+          ...publicWarning,
+          event_id: canonicalEventId(
+            warning.event_id,
+            warning.research_event_id
+          ),
+        }
+      : publicWarning;
+  });
+
+  return {
+    events,
+    idMapping,
+    sources,
+    sourcesByEvent,
+    warnings,
+  };
 }
 
 function sha256File(filePath) {
@@ -394,15 +474,36 @@ function readPreviousRelease(openRoot, version) {
     .map((entry) => entry.name)
     .sort()
     .reverse();
-  const previousPath = versions.map((item) => path.join(openRoot, item, "events.json"))
-    .find((filePath) => fs.existsSync(filePath));
+  const previousVersion = versions.find((item) =>
+    fs.existsSync(path.join(openRoot, item, "events.json"))
+  );
 
-  return previousPath ? JSON.parse(fs.readFileSync(previousPath, "utf8")) : null;
+  if (!previousVersion) {
+    return null;
+  }
+
+  const previousDirectory = path.join(openRoot, previousVersion);
+  const previousEvents = JSON.parse(
+    fs.readFileSync(path.join(previousDirectory, "events.json"), "utf8")
+  );
+  const previousSourcesPath = path.join(previousDirectory, "sources.json");
+  const previousSources = fs.existsSync(previousSourcesPath)
+    ? JSON.parse(fs.readFileSync(previousSourcesPath, "utf8"))
+    : { sources: [] };
+
+  return {
+    events: previousEvents.events || [],
+    release: previousEvents.release || previousVersion,
+    sources: previousSources.sources || [],
+  };
 }
 
 function deltaAudit(events, sources, previous) {
   const previousEvents = previous?.events || [];
-  const previousEventById = new Map(previousEvents.map((event) => [event.event_id, event]));
+  const previousEventById = new Map(previousEvents.map((event) => [
+    canonicalEventId(event.event_id, event.research_event_id),
+    event,
+  ]));
   const currentIds = new Set(events.map((event) => event.event_id));
   const previousSourceIds = new Set(previous?.sources?.map((source) => source.source_id) || []);
 
@@ -413,7 +514,9 @@ function deltaAudit(events, sources, previous) {
       const old = previousEventById.get(event.event_id);
       return old && JSON.stringify(old) !== JSON.stringify(event);
     }).map((event) => event.event_id),
-    removed_events: previousEvents.filter((event) => !currentIds.has(event.event_id)).map((event) => event.event_id),
+    removed_events: previousEvents
+      .filter((event) => !currentIds.has(canonicalEventId(event.event_id, event.research_event_id)))
+      .map((event) => canonicalEventId(event.event_id, event.research_event_id)),
     new_sources: sources.filter((source) => !previousSourceIds.has(source.source_id)).map((source) => source.source_id),
     removed_sources: [],
   };
@@ -560,26 +663,24 @@ export function buildOpenResearchRelease({
     masterResearchPath,
     provinceGeoJsonPath,
   });
+  const releaseProjection = version === "arcus-open-2026.1"
+    ? normalized
+    : projectCanonicalOpenDataset(normalized);
   const {
     events,
-    fingerprint,
     idMapping,
     sources,
     sourcesByEvent,
-    taxonomy,
     warnings,
+  } = releaseProjection;
+  const {
+    fingerprint,
+    taxonomy,
   } = normalized;
   const existingManifestPath = path.join(outputRoot, version, "manifest.json");
 
   if (fs.existsSync(existingManifestPath)) {
     const existing = readExistingOpenRelease(outputRoot, version);
-    const existingManifest = existing.manifest;
-
-    if (existingManifest.source_workbook_fingerprint !== `sha256:${fingerprint}`) {
-      throw new Error(
-        `Open release ${version} already exists for a different workbook fingerprint; create a new release version.`
-      );
-    }
 
     if (
       JSON.stringify(existing.events) !== JSON.stringify(events) ||
@@ -590,6 +691,10 @@ export function buildOpenResearchRelease({
         `Open release ${version} content differs from the normalized workbook; create a new release version.`
       );
     }
+
+    // Professional-only workbook columns and formatting may evolve without
+    // changing the immutable Open projection. Content equality is therefore
+    // authoritative; the original release fingerprint remains preserved.
 
     return existing;
   }
@@ -718,10 +823,10 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Established the complete ARCUS Open Research release with 263 validated events and 712 publishable source records.",
-      "Added deterministic research_event_id (IT) to stable ARCUS event_id (B) mapping.",
-      "Published Hydraulic Intelligence as historical outcome evidence using hydraulic-v2 taxonomy.",
-      "Added province validation, lossless construction-year handling and URL/reference separation.",
+      "Promoted ITxx.xx.xx to the single canonical event_id across events, sources, CSV, GeoJSON and JSON.",
+      "Moved the former Bxx.xx.xx identifier to the migration-only id-mapping resource.",
+      "Removed the redundant research_event_id field from public event and source records.",
+      "Preserved the complete 263-event and 712-source scientific release scope.",
     ],
     delta,
   };

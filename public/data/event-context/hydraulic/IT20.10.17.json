@@ -1,0 +1,85 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT20.10.17",
+  "event_date": "2020-10-03",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "event_section": {
+    "crossing_name": "Sesia river",
+    "latitude": 45.8,
+    "longitude": 8.031,
+    "municipality": "Campertogno",
+    "hydrographic_context": "Upper Sesia basin",
+    "location_precision": "approximate"
+  },
+  "event_hydrometry": {
+    "observation_status": "observed",
+    "interpretation": "same_watercourse_local_station_context_with_approximate_bridge_position",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 5.2,
+        "unit": "m",
+        "value_type": "reported_peak",
+        "station_reference": "CAMPERTOGNO SESIA",
+        "source_id": "arpa-piemonte-flood-report-2020"
+      },
+      {
+        "parameter": "danger_level",
+        "operator": "",
+        "value": 4,
+        "unit": "m",
+        "value_type": "published_threshold",
+        "station_reference": "CAMPERTOGNO SESIA",
+        "source_id": "arpa-piemonte-flood-report-2020"
+      }
+    ]
+  },
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "CAMPERTOGNO SESIA",
+    "name": "Sesia a Campertogno",
+    "watercourse": "Sesia",
+    "location": "Campertogno, Vercelli",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "same_watercourse_local_station",
+    "observations_start_date": null,
+    "available_for_event": true,
+    "reference_section": null
+  },
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "documented_basin_processes": [
+    "record_flood_peak",
+    "bank_erosion"
+  ],
+  "sources": [
+    {
+      "source_id": "arpa-piemonte-flood-report-2020",
+      "provider": "ARPA Piemonte",
+      "title": "L'evento alluvionale del 2-3 ottobre 2020 in Piemonte",
+      "role": "event_hydrometry_and_documented_processes",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/rapporto_evento_02_ottobre_2020_.pdf"
+    }
+  ],
+  "curation_note": {
+    "it": "Il rapporto associa la stazione e il collasso al Sesia presso Campertogno, ma le coordinate del ponte sono approssimate. Il colmo descrive il contesto locale di piena; non è una misura alla sezione del manufatto.",
+    "en": "The report associates both station and collapse with the Sesia at Campertogno, but the bridge coordinates are approximate. The peak describes local flood context; it is not a bridge-section measurement."
+  },
+  "provenance": {
+    "curated_at": "2026-09-02T10:00:00.000Z",
+    "method": "Manual extraction from the official event report"
+  },
+  "caveats": [
+    "The bridge coordinates in the ARCUS master record are approximate, therefore no station-to-bridge distance is calculated.",
+    "The 5.2 m peak and 4.0 m danger threshold refer to the ARPA Piemonte Campertogno station on the Sesia.",
+    "No bridge-section discharge or hydrograph is assigned.",
+    "The hydrometric observation describes local flood severity and does not by itself prove collapse causation."
+  ]
+}

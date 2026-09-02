@@ -17,6 +17,7 @@ import logoMark from "../assets/logo/logo-mark.svg";
 
 import { causeColors } from "../utils/colors";
 import extractYear from "../utils/extractYear";
+import { researchEventId } from "../utils/eventIdentity";
 import taxonomyLabel from "../utils/taxonomyLabels";
 import {
   openEvents,
@@ -151,10 +152,12 @@ function AtlasPage() {
   const navigate = useNavigate();
   const [searchParams] =
     useSearchParams();
-  const atlasMode =
-    searchParams.get("mode") === "professional"
-      ? "professional"
-      : "open";
+  const requestedEventSlug =
+    searchParams.get("event");
+  // The Atlas is the public evidence archive. Professional starts from its
+  // dedicated point-based workflow and no longer exposes the retired Atlas
+  // scoring layers.
+  const atlasMode = "open";
   const isProfessionalMode =
     atlasMode === "professional";
   const isEnterpriseMode =
@@ -211,8 +214,8 @@ function AtlasPage() {
         : "Failure atlas",
     liveDataset:
       language === "it"
-        ? "Dataset operativo"
-        : "Operational dataset",
+        ? "Release pubblica"
+        : "Public release",
     markerColors:
       language === "it"
         ? "Colori marker"
@@ -241,10 +244,6 @@ function AtlasPage() {
       language === "it"
         ? "Reset filtri"
         : "Reset filters",
-    mode:
-      language === "it"
-        ? "Modalita"
-        : "Mode",
     openAtlas:
       language === "it"
         ? "Open"
@@ -757,6 +756,7 @@ function AtlasPage() {
             !query ||
             [
               event.event_id,
+              event.research_event_id,
               event.bridge_name,
               event.bridge_crossing_name,
               event.municipality,
@@ -804,6 +804,19 @@ function AtlasPage() {
       activeYearFilter,
     ]);
 
+  const focusedEvent = useMemo(() => {
+    if (requestedEventSlug) {
+      return atlasEvents.find(
+        (event) =>
+          event.event_slug === requestedEventSlug
+      ) || null;
+    }
+
+    return filteredEvents.length === 1
+      ? filteredEvents[0]
+      : null;
+  }, [atlasEvents, filteredEvents, requestedEventSlug]);
+
   const resetAtlasFilters = () => {
     setSearchQuery("");
     setCauseFilter("All");
@@ -850,7 +863,7 @@ function AtlasPage() {
     );
 
     const rows = publicReleaseEvents.map((event) => ({
-      event_id: event.event_id,
+      event_id: researchEventId(event),
       bridge_name:
         event.bridge_name ||
         event.bridge_crossing_name ||
@@ -868,11 +881,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.1",
+      release: openRelease?.version || "arcus-open-2026.2",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.1"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.2"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );
@@ -1014,7 +1027,7 @@ function AtlasPage() {
 
     const rows = professionalStats.priorityEvents.map(
       ({ event, reliability, vulnerability }) => ({
-        event_id: event.event_id,
+        event_id: researchEventId(event),
         municipality: event.municipality,
         province: event.province,
         region: event.region,
@@ -1265,28 +1278,6 @@ function AtlasPage() {
           {atlasModeCopy.description}
         </p>
 
-        <nav
-          className="atlas-mode-switcher"
-          aria-label={atlasText.mode}
-        >
-          <Link
-            className={
-              atlasMode === "open" ? "active" : ""
-            }
-            to="/atlas"
-          >
-            {atlasText.openAtlas}
-          </Link>
-          <Link
-            className={
-              isProfessionalMode ? "active" : ""
-            }
-            to="/atlas?mode=professional"
-          >
-            {atlasText.professionalAtlas}
-          </Link>
-        </nav>
-
         <div className="atlas-command-grid">
           <div>
             <span>{atlasText.currentView}</span>
@@ -1495,7 +1486,7 @@ function AtlasPage() {
                 >
                   <div>
                     <strong>
-                      {event.event_id}
+                      {researchEventId(event)}
                     </strong>
                     <small>
                       {event.municipality ||
@@ -1774,6 +1765,8 @@ function AtlasPage() {
           filteredEvents={
             filteredEvents
           }
+
+          focusedEvent={focusedEvent}
 
           mapStyle={mapStyle}
 

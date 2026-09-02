@@ -10,6 +10,7 @@ import {
   appBaseUrl,
   rootDir,
   secureSessionCookie,
+  serverHost,
   serverPort,
   validateServerConfiguration,
 } from "./config.js";
@@ -2346,9 +2347,9 @@ export function startArcusApiServer() {
         configurationWarnings.forEach((warning) => {
           console.warn(`ARCUS configuration warning: ${warning}`);
         });
-        server.listen(serverPort, () => {
+        server.listen(serverPort, serverHost, () => {
           console.log(
-            `ARCUS API listening on http://127.0.0.1:${serverPort}`
+            `ARCUS API listening on http://${serverHost}:${serverPort}`
           );
           resolve(server);
         });

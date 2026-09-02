@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-23T08:47:57.850Z",
+  "generated_at": "2026-08-25T09:28:11.731Z",
   "schema_probe": {
     "class_attribute": "cod_per_it",
     "geometry_attribute": "geom",
@@ -42,7 +42,7 @@
       },
       "province": "Ragusa",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:50.636Z",
+      "queried_at": "2026-08-25T09:28:04.669Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 1,
@@ -50,7 +50,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%2814.7271+36.82837857142857%29%29",
         "response_size_bytes": 308,
-        "duration_ms": 1509,
+        "duration_ms": 1402,
         "status": "available"
       }
     },
@@ -89,7 +89,7 @@
       },
       "province": "Livorno",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:52.121Z",
+      "queried_at": "2026-08-25T09:28:05.974Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 1,
@@ -97,7 +97,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%2810.338285714285714+43.50846428571429%29%29",
         "response_size_bytes": 309,
-        "duration_ms": 1479,
+        "duration_ms": 1304,
         "status": "available"
       }
     },
@@ -136,7 +136,7 @@
       },
       "province": "Genova",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:53.585Z",
+      "queried_at": "2026-08-25T09:28:07.441Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 1,
@@ -144,7 +144,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%289.538971428571427+44.40296071428571%29%29",
         "response_size_bytes": 306,
-        "duration_ms": 1462,
+        "duration_ms": 1465,
         "status": "available"
       }
     },
@@ -183,7 +183,7 @@
       },
       "province": "Sud Sardegna",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:55.044Z",
+      "queried_at": "2026-08-25T09:28:08.937Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 1,
@@ -191,7 +191,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%288.785432142857143+38.922574999999995%29%29",
         "response_size_bytes": 307,
-        "duration_ms": 1458,
+        "duration_ms": 1494,
         "status": "available"
       }
     },
@@ -230,7 +230,7 @@
       },
       "province": "Potenza",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:56.430Z",
+      "queried_at": "2026-08-25T09:28:10.274Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 1,
@@ -238,7 +238,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%2816.003749999999997+40.100057142857146%29%29",
         "response_size_bytes": 308,
-        "duration_ms": 1385,
+        "duration_ms": 1336,
         "status": "available"
       }
     },
@@ -275,7 +275,7 @@
       },
       "province": "Torino",
       "provider": "ISPRA",
-      "queried_at": "2026-07-23T08:47:57.849Z",
+      "queried_at": "2026-08-25T09:28:11.730Z",
       "source_dataset_version": "5.0",
       "wfs": {
         "feature_count": 0,
@@ -283,7 +283,7 @@
         "layer": "idrogeo:pericolosita_frane",
         "request_url": "https://idrogeo.isprambiente.it/geoserver/idrogeo/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=idrogeo%3Apericolosita_frane&outputFormat=application%2Fjson&srsName=EPSG%3A4326&propertyName=cod_per_it&CQL_FILTER=INTERSECTS%28geom%2CSRID%3D4326%3BPOINT%287.94194+45.2897%29%29",
         "response_size_bytes": 147,
-        "duration_ms": 1418,
+        "duration_ms": 1454,
         "status": "no_intersection"
       }
     }

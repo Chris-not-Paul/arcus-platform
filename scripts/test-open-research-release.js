@@ -11,6 +11,9 @@ import {
 import {
   HYDRAULIC_MATCHER_BLOCKED_FIELDS,
 } from "../src/utils/hydraulicIntelligence.js";
+import {
+  HYDRAULIC_GEOMETRY_SOURCE_URL,
+} from "../src/utils/hydraulicGeometry.js";
 
 const checks = [];
 
@@ -24,6 +27,7 @@ const sources = await getOpenSources();
 const manifest = await getOpenResource("manifest");
 const taxonomy = await getOpenResource("taxonomy");
 const audit = await getOpenResource("quality-audit");
+const idMapping = await getOpenResource("id-mapping");
 const professionalEvents = await getProfessionalResource("professional-events");
 const professionalSources = await getProfessionalResource("professional-sources");
 const professionalEventRows = Array.isArray(professionalEvents)
@@ -40,10 +44,46 @@ await check("open-counts", () => {
   assert.equal(manifest.source_count, 712);
 });
 
+await check("professional-hydraulic-geometry-is-source-backed-and-private", () => {
+  const geometryEvents = professionalEventRows.filter(
+    (event) => event.hydraulic_geometry
+  );
+  const sourceRecordIds = geometryEvents.map(
+    (event) => event.hydraulic_geometry.provenance.source_record_id
+  );
+
+  assert.equal(geometryEvents.length, 158);
+  assert.equal(
+    geometryEvents.filter(
+      (event) => event.hydraulic_geometry.bridge_length_m !== null
+    ).length,
+    158
+  );
+  assert.equal(
+    geometryEvents.filter(
+      (event) => event.hydraulic_geometry.piers_in_active_riverbed !== null
+    ).length,
+    155
+  );
+  assert.equal(new Set(sourceRecordIds).size, sourceRecordIds.length);
+  assert.equal(
+    geometryEvents.every(
+      (event) =>
+        event.hydraulic_geometry.provenance.source_url ===
+        HYDRAULIC_GEOMETRY_SOURCE_URL
+    ),
+    true
+  );
+  assert.equal(
+    events.every((event) => !Object.hasOwn(event, "hydraulic_geometry")),
+    true
+  );
+});
+
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.1");
+  assert.equal(manifest.version, "arcus-open-2026.2");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
-  assert.equal(manifest.schema_version, "arcus-open-schema-v1");
+  assert.equal(manifest.schema_version, "arcus-open-schema-v2");
 });
 
 await check("complete-source-integrity", () => {
@@ -56,8 +96,14 @@ await check("complete-source-integrity", () => {
   assert.equal(new Set(sources.map((source) => source.source_id)).size, sources.length);
 });
 
-await check("deterministic-it-to-b-mapping", () => {
-  assert.equal(events.every((event) => event.event_id === `B${event.research_event_id.slice(2)}`), true);
+await check("canonical-it-identifiers-and-legacy-mapping", () => {
+  assert.equal(events.every((event) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(event.event_id)), true);
+  assert.equal(events.every((event) => !Object.hasOwn(event, "research_event_id")), true);
+  assert.equal(sources.every((source) => !Object.hasOwn(source, "research_event_id")), true);
+  assert.equal(idMapping.mappings.length, events.length);
+  assert.equal(idMapping.mappings.every((item) =>
+    item.legacy_event_id === `B${item.event_id.slice(2)}` && item.legacy_compatible
+  ), true);
   assert.equal(audit.id_mapping.every((item) => item.legacy_compatible), true);
 });
 
@@ -102,7 +148,7 @@ await check("open-is-subset-of-professional", () => {
   const professionalEventIds = new Set(professionalEventRows.map((event) => event.event_id));
   const professionalSourceIds = new Set(professionalSourceRows.map((source) => source.source_id));
 
-  assert.equal(events.every((event) => professionalEventIds.has(event.event_id)), true);
+  assert.equal(events.every((event) => professionalEventIds.has(`B${event.event_id.slice(2)}`)), true);
   assert.equal(sources.every((source) => professionalSourceIds.has(source.source_id)), true);
 });
 
@@ -111,8 +157,11 @@ await check("shared-public-fields-match", () => {
   const professionalBySource = new Map(professionalSourceRows.map((source) => [source.source_id, source]));
 
   events.forEach((event) => {
-    const professional = professionalByEvent.get(event.event_id);
+    const professional = professionalByEvent.get(`B${event.event_id.slice(2)}`);
     Object.keys(event).forEach((field) => {
+      if (field === "event_id") {
+        return;
+      }
       if (field === "hydraulic_intelligence" && professional.hydraulic_outcome_curation) {
         assert.deepEqual(
           professional.hydraulic_outcome_curation.previous_hydraulic_intelligence,
@@ -125,7 +174,11 @@ await check("shared-public-fields-match", () => {
   });
   sources.forEach((source) => {
     const professional = professionalBySource.get(source.source_id);
-    Object.keys(source).forEach((field) => assert.deepEqual(professional[field], source[field]));
+    Object.keys(source).forEach((field) => {
+      if (field !== "event_id") {
+        assert.deepEqual(professional[field], source[field]);
+      }
+    });
   });
 });
 
@@ -146,8 +199,8 @@ await check("professional-source-integrity", () => {
 await check("professional-can-advance-without-mutating-open", () => {
   const openIdsBefore = events.map((event) => event.event_id);
   const hypotheticalLiveIds = new Set([
-    ...professionalEventRows.map((event) => event.event_id),
-    "B99.99.99",
+    ...professionalEventRows.map((event) => `IT${event.event_id.slice(1)}`),
+    "IT99.99.99",
   ]);
 
   assert.equal(openIdsBefore.every((eventId) => hypotheticalLiveIds.has(eventId)), true);
@@ -168,6 +221,8 @@ await check("hydraulic-outcomes-public-and-blocked-from-retrieval", () => {
 await check("frontend-product-boundary", () => {
   const atlas = fs.readFileSync("src/pages/AtlasPage.jsx", "utf8");
   const analytics = fs.readFileSync("src/pages/PremiumAnalyticsPage.jsx", "utf8");
+  const dataAccess = fs.readFileSync("src/pages/DataAccessPage.jsx", "utf8");
+  const home = fs.readFileSync("src/pages/HomePage.jsx", "utf8");
   const popup = fs.readFileSync("src/components/popup/EventPopup.jsx", "utf8");
   const app = fs.readFileSync("src/App.jsx", "utf8");
   assert.match(atlas, /professionalResource\("professional-events"\)/);
@@ -181,6 +236,21 @@ await check("frontend-product-boundary", () => {
   assert.match(popup, /source\.source_reference/);
   assert.doesNotMatch(popup, /href=\{source\.source_reference\}/);
   assert.match(popup, /Documented historical outcome/);
+  assert.match(atlas, /searchParams\.get\("event"\)/);
+  assert.match(atlas, /focusedEvent=\{focusedEvent\}/);
+  assert.doesNotMatch(atlas, /to="\/atlas\?mode=professional"/);
+  assert.match(home, /to="\/data-access"/);
+  [
+    "sources",
+    "manifest",
+    "dataDictionary",
+    "taxonomy",
+    "qualityAudit",
+    "statistics",
+    "changelog",
+  ].forEach((resource) => {
+    assert.match(dataAccess, new RegExp(`openResourceUrls\\.${resource}`));
+  });
 });
 
 await check("api-resource-and-auth-boundary", () => {
@@ -195,6 +265,8 @@ await check("api-resource-and-auth-boundary", () => {
 
   assert.match(dataService, /\["professional-sources", "professional-sources\.json"\]/);
   assert.doesNotMatch(dataService, /\["professional-sources", "\.\.\/processed\/sources\.json"\]/);
+  assert.match(dataService, /fs\.readFile\(currentPath, "utf8"\)/);
+  assert.doesNotMatch(dataService, /readJsonFromAbsolutePath\(path\.join\(releaseRoot, "current\.json"\)\)/);
   assert.doesNotMatch(openBlock, /isProfessionalRequestAuthorized/);
   assert.match(professionalBlock, /isProfessionalRequestAuthorized\(request, "professional:read"\)/);
 });
@@ -221,9 +293,11 @@ await check("downloads", async () => {
   const csv = await getOpenDownload("csv");
   const geojson = await getOpenDownload("geojson");
   assert.match(csv.content.toString("utf8").split("\n", 1)[0], /event_id/);
+  assert.match(csv.content.toString("utf8").split("\n")[1], /"IT\d{2}\.\d{2}\.\d{2}"/);
   const parsed = JSON.parse(geojson.content.toString("utf8"));
   assert.equal(parsed.type, "FeatureCollection");
   assert.equal(parsed.features.length, 263);
+  assert.equal(parsed.features.every((feature) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(feature.id)), true);
 });
 
 console.log(JSON.stringify({ checks, ok: true }, null, 2));

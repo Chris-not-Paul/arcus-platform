@@ -1671,7 +1671,7 @@ assert.equal(stringCoordinateResult.landslide.status, "available");
 assert.equal(stringCoordinateResult.landslide.highest_hazard_class, "P4");
 
 const professionalPageSource = fs.readFileSync(
-  path.join(root, "src", "pages", "ProfessionalPage.jsx"),
+  path.join(root, "src", "pages", "CollapseIntelligencePage.jsx"),
   "utf8"
 );
 const pointInspectorSource = fs.readFileSync(
@@ -1690,51 +1690,7 @@ assert.match(
 );
 assert.match(
   professionalPageSource,
-  /setPath01LandslideExposure\(\s*result\.landslide\s*\|\|/s
-);
-assert.match(
-  professionalPageSource,
-  /exposure\.status === "partial"[\s\S]*?Partial hydraulic result/s
-);
-assert.match(
-  professionalPageSource,
-  /No intersection was found in the layers that responded\./s
-);
-assert.match(
-  professionalPageSource,
-  /frontend_response_received/s
-);
-assert.match(
-  professionalPageSource,
-  /setPath01HydraulicExposure\(\{\s*confidence:\s*"pending"[\s\S]*?status:\s*"loading"/
-);
-assert.match(
-  professionalPageSource,
-  /setPath01LandslideExposure\(\{\s*attention_area:\s*false[\s\S]*?status:\s*"loading"/
-);
-assert.match(
-  professionalPageSource,
-  /Point outcome[\s\S]*?Territorial context[\s\S]*?ISPRA PAI Landslide[\s\S]*?does not modify the Final Priority Index/
-);
-assert.match(
-  professionalPageSource,
-  /platform-map-preview-shell[\s\S]*?onPointSelect=\{[\s\S]*?commitProjectLocation/s
-);
-assert.match(
-  professionalPageSource,
-  /No ISPRA hydraulic class at selected point/
-);
-assert.match(
-  professionalPageSource,
-  /Wide-area[\s\S]*official context:[\s\S]*not assigned to the point/
-);
-assert.match(
-  professionalPageSource,
-  /Technical details and provenance/
-);
-assert.match(
-  professionalPageSource,
-  /Query completed; territorial context available/
+  /setExposure\(officialExposure\)/
 );
 assert.match(
   pointInspectorSource,
@@ -1746,7 +1702,19 @@ assert.match(
 );
 assert.match(
   professionalPageSource,
-  /Official hydraulic and PAI landslide WFS point observations remain in shadow mode/
+  /Missing data is not converted into zero risk/
+);
+assert.match(
+  professionalPageSource,
+  /deriveProvinceForPoint\(provinceFeatures, selectedPoint\)/
+);
+assert.match(
+  professionalPageSource,
+  /professionalMitigationIntelligence\(\{/
+);
+assert.match(
+  professionalPageSource,
+  /onPointSelect=\{queryPoint\}/
 );
 
 console.log(
@@ -1821,7 +1789,7 @@ console.log(
       "cache-key-hydraulic-only-distinct-from-multi-hazard",
       "technical-errors-not-cached",
       "string-coordinate-p4",
-      "professional-page-multi-hazard-binding",
+      "collapse-intelligence-page-multi-hazard-binding",
       "landslide-error-preserves-hydraulic",
       "hydraulic-error-preserves-landslide",
       "unknown-hazard-no-provider",

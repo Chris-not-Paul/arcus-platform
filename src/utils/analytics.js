@@ -1,5 +1,7 @@
 import extractYear from "./extractYear.js";
 
+import { researchEventId } from "./eventIdentity";
+
 export function countBy(items, getter) {
   return Object.entries(
     items.reduce((accumulator, item) => {
@@ -790,7 +792,7 @@ function nearestEventSummary(event) {
     event.collapse_severity || "",
   ].filter(Boolean);
 
-  return `${event.event_id}${details.length ? ` - ${details.join("; ")}` : ""}`;
+  return `${researchEventId(event)}${details.length ? ` - ${details.join("; ")}` : ""}`;
 }
 
 function evidenceGradeWeight(grade) {

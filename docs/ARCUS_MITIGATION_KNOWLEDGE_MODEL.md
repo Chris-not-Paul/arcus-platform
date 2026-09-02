@@ -25,6 +25,21 @@ official hazard
 
 It does not create automatic design prescriptions.
 
+## Failure Learning Matrix v1
+
+The production-facing intermediate layer is now the versioned Failure Learning
+Matrix documented in:
+
+```text
+docs/ARCUS_FAILURE_LEARNING_MATRIX_V1.md
+```
+
+It keeps cohort selection separate from outcome reading, exposes qualified and
+below-threshold processes without conflating them, and converts only qualified
+repeatable evidence into non-prescriptive investigation priorities. Geometry
+remains post-retrieval descriptive evidence and is not used for selection,
+qualification or scoring.
+
 ## Levels
 
 ### A. Priority Investigations

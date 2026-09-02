@@ -1,0 +1,1410 @@
+{
+  "schema_version": "arcus-event-rainfall-index-v1",
+  "events": {
+    "IT08.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2008-10-22",
+      "file": "IT08.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.05": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.04": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.06": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.07": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.08": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.08.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT19.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2019-12-21",
+      "file": "IT19.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT19.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2019-10-22",
+      "file": "IT19.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.06": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-30",
+      "file": "IT18.10.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.07": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-30",
+      "file": "IT18.10.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.04": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-29",
+      "file": "IT18.10.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.05": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-29",
+      "file": "IT18.10.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-28",
+      "file": "IT18.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-10",
+      "file": "IT18.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.02.02": {
+      "dataset": "CERRA",
+      "event_date": "2018-02-08",
+      "file": "IT18.02.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT17.09.02": {
+      "dataset": "CERRA",
+      "event_date": "2017-09-10",
+      "file": "IT17.09.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT17.09.01": {
+      "dataset": "CERRA",
+      "event_date": "2017-09-09",
+      "file": "IT17.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT17.06.01": {
+      "dataset": "CERRA",
+      "event_date": "2017-06-15",
+      "file": "IT17.06.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT17.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2017-01-23",
+      "file": "IT17.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2016-11-24",
+      "file": "IT16.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2016-11-18",
+      "file": "IT16.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.09.01": {
+      "dataset": "CERRA",
+      "event_date": "2016-09-10",
+      "file": "IT16.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.03.01": {
+      "dataset": "CERRA",
+      "event_date": "2016-03-18",
+      "file": "IT16.03.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2015-11-01",
+      "file": "IT15.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2015-10-15",
+      "file": "IT15.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2015-10-15",
+      "file": "IT15.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2015-10-15",
+      "file": "IT15.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.10.04": {
+      "dataset": "CERRA",
+      "event_date": "2015-10-15",
+      "file": "IT15.10.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.09.01": {
+      "dataset": "CERRA",
+      "event_date": "2015-09-14",
+      "file": "IT15.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2014-11-16",
+      "file": "IT14.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2014-11-15",
+      "file": "IT14.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2014-11-10",
+      "file": "IT14.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2014-10-13",
+      "file": "IT14.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2013-12-02",
+      "file": "IT13.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.07": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-19",
+      "file": "IT13.11.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.04": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.06": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2013-10-24",
+      "file": "IT13.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2013-10-22",
+      "file": "IT13.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.03.01": {
+      "dataset": "CERRA",
+      "event_date": "2013-03-23",
+      "file": "IT13.03.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.02.01": {
+      "dataset": "CERRA",
+      "event_date": "2013-02-02",
+      "file": "IT13.02.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT12.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2012-11-12",
+      "file": "IT12.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT12.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2012-11-11",
+      "file": "IT12.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2011-11-22",
+      "file": "IT11.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2011-11-06",
+      "file": "IT11.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2011-01-31",
+      "file": "IT11.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT10.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2010-10-31",
+      "file": "IT10.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT10.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2010-01-28",
+      "file": "IT10.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT09.04.04": {
+      "dataset": "CERRA",
+      "event_date": "2009-04-30",
+      "file": "IT09.04.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2008-10-22",
+      "file": "IT08.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT05.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2005-10-23",
+      "file": "IT05.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT05.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2005-10-23",
+      "file": "IT05.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT03.08.01": {
+      "dataset": "CERRA",
+      "event_date": "2003-08-29",
+      "file": "IT03.08.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT03.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2003-01-25",
+      "file": "IT03.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2002-11-26",
+      "file": "IT02.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.07.01": {
+      "dataset": "CERRA",
+      "event_date": "2002-07-15",
+      "file": "IT02.07.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.07.02": {
+      "dataset": "CERRA",
+      "event_date": "2002-07-15",
+      "file": "IT02.07.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.01": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-05",
+      "file": "IT02.06.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.02": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-05",
+      "file": "IT02.06.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.03": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-05",
+      "file": "IT02.06.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.04": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-05",
+      "file": "IT02.06.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.04": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.05": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.06": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.07": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.08": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.08.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.09": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.09.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.10": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.10.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.11": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.11.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.12": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.12.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.13": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.13.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.14": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.14.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.15": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.15.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.16": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.16.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.17": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.17.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.18": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.18.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.19": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.19.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.20": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.20.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.21": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.21.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.22": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.22.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.23": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.23.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.24": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.24.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.25": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.25.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.26": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.26.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.27": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.27.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.28": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.28.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.29": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.29.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.30": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.30.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.31": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.31.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.32": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.32.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.33": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.33.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.34": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.34.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.35": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.35.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.36": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.36.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.37": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.37.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.38": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.38.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.39": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.39.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.40": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.40.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.41": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.41.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.42": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.42.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.10.43": {
+      "dataset": "CERRA",
+      "event_date": "2000-10-13",
+      "file": "IT00.10.43.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2020-12-06",
+      "file": "IT20.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.12.02": {
+      "dataset": "CERRA",
+      "event_date": "2020-12-06",
+      "file": "IT20.12.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.12.03": {
+      "dataset": "CERRA",
+      "event_date": "2020-12-06",
+      "file": "IT20.12.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.11.04": {
+      "dataset": "CERRA",
+      "event_date": "2020-11-28",
+      "file": "IT20.11.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2020-11-22",
+      "file": "IT20.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2020-11-22",
+      "file": "IT20.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.13": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-15",
+      "file": "IT20.10.13.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.09": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.09.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.10.10": {
+      "dataset": "CERRA",
+      "event_date": "2020-10-03",
+      "file": "IT20.10.10.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT20.05.01": {
+      "dataset": "CERRA",
+      "event_date": "2020-05-02",
+      "file": "IT20.05.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2018-10-10",
+      "file": "IT18.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT18.02.01": {
+      "dataset": "CERRA",
+      "event_date": "2018-02-02",
+      "file": "IT18.02.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.11.05": {
+      "dataset": "CERRA",
+      "event_date": "2016-11-25",
+      "file": "IT16.11.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT16.11.03": {
+      "dataset": "CERRA",
+      "event_date": "2016-11-24",
+      "file": "IT16.11.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.10.05": {
+      "dataset": "CERRA",
+      "event_date": "2015-10-19",
+      "file": "IT15.10.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT15.03.03": {
+      "dataset": "CERRA",
+      "event_date": "2015-03-28",
+      "file": "IT15.03.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.09.01": {
+      "dataset": "CERRA",
+      "event_date": "2014-09-20",
+      "file": "IT14.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.08.01": {
+      "dataset": "CERRA",
+      "event_date": "2014-08-13",
+      "file": "IT14.08.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT14.05.01": {
+      "dataset": "CERRA",
+      "event_date": "2014-05-03",
+      "file": "IT14.05.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.12.02": {
+      "dataset": "CERRA",
+      "event_date": "2013-12-02",
+      "file": "IT13.12.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT13.11.05": {
+      "dataset": "CERRA",
+      "event_date": "2013-11-18",
+      "file": "IT13.11.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT12.11.04": {
+      "dataset": "CERRA",
+      "event_date": "2012-11-28",
+      "file": "IT12.11.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT12.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2012-11-11",
+      "file": "IT12.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.11.02": {
+      "dataset": "CERRA",
+      "event_date": "2011-11-22",
+      "file": "IT11.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.03": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.04": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.05": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.06": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.07": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.10.08": {
+      "dataset": "CERRA",
+      "event_date": "2011-10-25",
+      "file": "IT11.10.08.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.03.04": {
+      "dataset": "CERRA",
+      "event_date": "2011-03-03",
+      "file": "IT11.03.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.03.01": {
+      "dataset": "CERRA",
+      "event_date": "2011-03-01",
+      "file": "IT11.03.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.03.02": {
+      "dataset": "CERRA",
+      "event_date": "2011-03-01",
+      "file": "IT11.03.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT11.03.03": {
+      "dataset": "CERRA",
+      "event_date": "2011-03-01",
+      "file": "IT11.03.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT10.06.01": {
+      "dataset": "CERRA",
+      "event_date": "2010-06-27",
+      "file": "IT10.06.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT10.03.01": {
+      "dataset": "CERRA",
+      "event_date": "2010-03-10",
+      "file": "IT10.03.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT09.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2009-12-31",
+      "file": "IT09.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT09.02.01": {
+      "dataset": "CERRA",
+      "event_date": "2009-02-01",
+      "file": "IT09.02.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT09.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2009-01-13",
+      "file": "IT09.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2008-12-12",
+      "file": "IT08.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.11.01": {
+      "dataset": "CERRA",
+      "event_date": "2008-11-30",
+      "file": "IT08.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.10.02": {
+      "dataset": "CERRA",
+      "event_date": "2008-11-27",
+      "file": "IT08.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.05.02": {
+      "dataset": "CERRA",
+      "event_date": "2008-05-29",
+      "file": "IT08.05.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT08.05.01": {
+      "dataset": "CERRA",
+      "event_date": "2008-05-28",
+      "file": "IT08.05.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT06.09.01": {
+      "dataset": "CERRA",
+      "event_date": "2006-09-15",
+      "file": "IT06.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT05.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2005-10-08",
+      "file": "IT05.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT04.12.01": {
+      "dataset": "CERRA",
+      "event_date": "2004-12-08",
+      "file": "IT04.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT04.10.01": {
+      "dataset": "CERRA",
+      "event_date": "2004-10-24",
+      "file": "IT04.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.05": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-23",
+      "file": "IT02.06.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.06.06": {
+      "dataset": "CERRA",
+      "event_date": "2002-06-23",
+      "file": "IT02.06.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT02.05.01": {
+      "dataset": "CERRA",
+      "event_date": "2002-05-03",
+      "file": "IT02.05.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT00.01.01": {
+      "dataset": "CERRA",
+      "event_date": "2000-01-25",
+      "file": "IT00.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT26.04.01": {
+      "dataset": "ERA5",
+      "event_date": "2026-04-02",
+      "file": "IT26.04.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT25.04.02": {
+      "dataset": "ERA5",
+      "event_date": "2025-04-18",
+      "file": "IT25.04.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT25.04.01": {
+      "dataset": "ERA5",
+      "event_date": "2025-04-17",
+      "file": "IT25.04.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.10.03": {
+      "dataset": "ERA5",
+      "event_date": "2024-10-27",
+      "file": "IT24.10.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.10.01": {
+      "dataset": "ERA5",
+      "event_date": "2024-10-20",
+      "file": "IT24.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.06.01": {
+      "dataset": "ERA5",
+      "event_date": "2024-06-29",
+      "file": "IT24.06.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.11.01": {
+      "dataset": "ERA5",
+      "event_date": "2023-11-04",
+      "file": "IT23.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.11.02": {
+      "dataset": "ERA5",
+      "event_date": "2023-11-04",
+      "file": "IT23.11.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.06": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-24",
+      "file": "IT23.05.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.05": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-19",
+      "file": "IT23.05.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.04": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-18",
+      "file": "IT23.05.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.02": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-17",
+      "file": "IT23.05.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.01": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-03",
+      "file": "IT23.05.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.01.01": {
+      "dataset": "ERA5",
+      "event_date": "2023-01-18",
+      "file": "IT23.01.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.12.02": {
+      "dataset": "ERA5",
+      "event_date": "2022-12-03",
+      "file": "IT22.12.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.01": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.02": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.03": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.04": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.04.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.05": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.05.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.06": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.06.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.07": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.07.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.08": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.08.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.09": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.09.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.09.10": {
+      "dataset": "ERA5",
+      "event_date": "2022-09-15",
+      "file": "IT22.09.10.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT21.12.01": {
+      "dataset": "ERA5",
+      "event_date": "2021-12-11",
+      "file": "IT21.12.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT25.07.01": {
+      "dataset": "ERA5",
+      "event_date": "2025-07-24",
+      "file": "IT25.07.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.10.02": {
+      "dataset": "ERA5",
+      "event_date": "2024-10-21",
+      "file": "IT24.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.09.01": {
+      "dataset": "ERA5",
+      "event_date": "2024-09-05",
+      "file": "IT24.09.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.05.03": {
+      "dataset": "ERA5",
+      "event_date": "2024-05-16",
+      "file": "IT24.05.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT24.05.02": {
+      "dataset": "ERA5",
+      "event_date": "2024-05-15",
+      "file": "IT24.05.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.10.01": {
+      "dataset": "ERA5",
+      "event_date": "2023-10-30",
+      "file": "IT23.10.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT23.05.03": {
+      "dataset": "ERA5",
+      "event_date": "2023-05-18",
+      "file": "IT23.05.03.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT22.11.01": {
+      "dataset": "ERA5",
+      "event_date": "2022-11-17",
+      "file": "IT22.11.01.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    },
+    "IT21.10.02": {
+      "dataset": "ERA5",
+      "event_date": "2021-10-04",
+      "file": "IT21.10.02.json",
+      "product_type": "reanalysis",
+      "status": "context_available"
+    }
+  },
+  "updated_at": "2026-09-02T10:09:15.565Z",
+  "quality_assessment": {
+    "assessed_events": 199,
+    "counts": {
+      "reanalysis_context_only": 161,
+      "reanalysis_not_representative": 2,
+      "event_chronology_review_required": 1,
+      "coarse_reanalysis_context_only": 33,
+      "lagged_catchment_response_supported": 2
+    },
+    "method": "Dataset-role rules with event-specific source and chronology overrides"
+  }
+}

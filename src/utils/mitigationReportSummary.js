@@ -68,6 +68,27 @@ export function buildMitigationReportSummary(
     ) * 100
   );
   const analogueCount = (analogueRetrieval.analogues || []).length;
+  const projectProfile = intelligence?.project_bridge_profile || {};
+  const projectProfileFields = projectProfile.match_fields_provided || [];
+  const projectProfileFieldCount = numericEvidence(
+    projectProfile.match_field_count
+  );
+  const projectProfileDescriptiveFields =
+    projectProfile.descriptive_fields_provided || [];
+  const projectProfileDescriptiveFieldCount = numericEvidence(
+    projectProfile.descriptive_field_count
+  );
+  const projectProfileSuffix = projectProfileFieldCount
+    ? it
+      ? ` Il profilo ponte dichiarato interviene solo come spareggio non pesato su ${projectProfileFieldCount} campi.`
+      : ` The declared bridge profile acts only as an unweighted tie-breaker across ${projectProfileFieldCount} fields.`
+    : projectProfileDescriptiveFieldCount
+      ? it
+        ? ` Sono stati dichiarati ${projectProfileDescriptiveFieldCount} campi solo descrittivi, non usati nel retrieval.`
+        : ` ${projectProfileDescriptiveFieldCount} descriptive-only fields were declared and are not used for retrieval.`
+    : it
+      ? " Nessuna caratteristica del ponte e stata dichiarata: il retrieval usa soltanto la firma hazard ufficiale."
+      : " No bridge characteristic was declared: retrieval uses the official hazard signature only.";
   const registryQuality = evidence.episode_registry_quality || {};
   const sourceLinkedEpisodes = numericEvidence(
     registryQuality.source_linked_episode_count
@@ -95,8 +116,8 @@ export function buildMitigationReportSummary(
     status,
     cohortText: nationalReady
       ? it
-        ? `Coorte: ${analogueCount} analoghi nazionali selezionati tramite la firma ufficiale attuale; la provincia resta contesto locale. Cause e processi sono letti dopo il retrieval.`
-        : `Cohort: ${analogueCount} national analogues selected by current official signature; the province remains local context. Causes and processes are read after retrieval.`
+        ? `Coorte: ${analogueCount} analoghi nazionali selezionati tramite la firma ufficiale attuale; la provincia resta contesto locale. Cause e processi sono letti dopo il retrieval.${projectProfileSuffix}`
+        : `Cohort: ${analogueCount} national analogues selected by current official signature; the province remains local context. Causes and processes are read after retrieval.${projectProfileSuffix}`
       : pointIntersectionRequired
         ? it
           ? "Coorte: nessun retrieval nazionale attivato, perche il punto non interseca una classe idraulica ufficiale. I casi provinciali restano solo contesto storico territoriale."
@@ -107,6 +128,17 @@ export function buildMitigationReportSummary(
     evidenceText: it
       ? `Evidenza raw: ${rawEvidence}; evidenza effective: ${effectiveEvidence}; episodi idraulici indipendenti: ${episodeCount}; evidenza episode-effective: ${episodeEffectiveEvidence}.`
       : `Raw evidence: ${rawEvidence}; effective evidence: ${effectiveEvidence}; independent hydraulic episodes: ${episodeCount}; episode-effective evidence: ${episodeEffectiveEvidence}.`,
+    projectProfileText: projectProfileFieldCount
+      ? it
+        ? `Profilo ponte v1: matching su ${projectProfileFields.map(displayReason).join(", ")}${projectProfileDescriptiveFieldCount ? `; solo descrittivi: ${projectProfileDescriptiveFields.map(displayReason).join(", ")}` : ""}; campi mancanti non imputati; soglie evidenziali invariate.`
+        : `Bridge profile v1: matching on ${projectProfileFields.map(displayReason).join(", ")}${projectProfileDescriptiveFieldCount ? `; descriptive only: ${projectProfileDescriptiveFields.map(displayReason).join(", ")}` : ""}; missing fields not imputed; evidence thresholds unchanged.`
+      : projectProfileDescriptiveFieldCount
+        ? it
+          ? `Profilo ponte v1: campi solo descrittivi ${projectProfileDescriptiveFields.map(displayReason).join(", ")}; non usati nel retrieval; nessun valore mancante imputato.`
+          : `Bridge profile v1: descriptive-only fields ${projectProfileDescriptiveFields.map(displayReason).join(", ")}; not used for retrieval; no missing value imputed.`
+      : it
+        ? "Profilo ponte v1: non fornito; nessuna caratteristica del ponte e stata inferita."
+        : "Bridge profile v1: not provided; no bridge characteristic was inferred.",
     landslideSupportText: landslideSupport
       ? it
         ? `Supporto frane: ${displayReason(landslideSupport.status)}; ${numericEvidence(landslideEvidence.eligible_cases)} casi eleggibili, ${numericEvidence(landslideEvidence.independent_episodes)} episodi indipendenti, ${numericEvidence(landslideEvidence.episode_effective_evidence)} evidenza episode-effective; motivi: ${landslideReasons.join("; ") || "support contract non attivo"}; zero strategie.`
@@ -154,7 +186,7 @@ export function buildMitigationReportSummary(
         ? `Copertura ISPRA: parziale; layer non completati: ${failedLayers.join(", ") || "non specificati"}. ${provenanceText}`
         : `ISPRA coverage: partial; incomplete layers: ${failedLayers.join(", ") || "not specified"}. ${provenanceText}`,
     warningText: it
-      ? "Output non prescrittivo: le strategie non modificano il Final Priority Index e richiedono la validazione di professionisti qualificati."
-      : "Non-prescriptive output: strategies do not modify the Final Priority Index and require validation by qualified professionals.",
+      ? "Output non prescrittivo: le strategie non stimano la probabilita di collasso, non classificano il ponte come sicuro o non sicuro, non assegnano priorita automatiche di intervento e richiedono la validazione di professionisti qualificati."
+      : "Non-prescriptive output: strategies do not estimate collapse probability, classify the bridge as safe or unsafe, assign automatic intervention priorities, and require validation by qualified professionals.",
   };
 }

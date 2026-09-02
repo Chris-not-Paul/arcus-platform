@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <title>ARCUS — Logo Orizzontale per fondi chiari</title>
+  <defs>
+    <style>
+      .wm { font-family:'Raleway','Helvetica Neue',Arial,sans-serif; fill:#202826; font-weight:300; letter-spacing:12px; font-size:30px; }
+    </style>
+  </defs>
+  <g transform="translate(40,40) scale(0.46)">
+    <polygon points="-65,68  0,-55  0,-36  -43,68" fill="#A76532"/>
+    <polygon points="0,-55  65,68  43,68  0,-36" fill="#A76532"/>
+    <rect x="-32" y="18" width="64" height="4" fill="#A76532"/>
+    <rect x="-65" y="62" width="130" height="6" rx="1" fill="#A76532"/>
+  </g>
+  <text x="86" y="49" class="wm">RCUS</text>
+</svg>

@@ -186,9 +186,11 @@ function datasetVersionFor({ generatedAt, release, releaseEndYear, scope }) {
 
 function rankedAvailableRecords(records) {
   return records
-    .filter((item) =>
-      Number.isFinite(Number(item.collapse_rate_per_100_ainop_bridges))
-    )
+    .filter((item) => {
+      const rate = item.collapse_rate_per_100_ainop_bridges;
+
+      return rate !== null && rate !== undefined && Number.isFinite(Number(rate));
+    })
     .sort((left, right) => {
       const rateDelta =
         Number(right.collapse_rate_per_100_ainop_bridges) -
@@ -205,14 +207,38 @@ function rankedAvailableRecords(records) {
 function applyRankings(records) {
   const ranked = rankedAvailableRecords(records);
   const denominator = Math.max(1, ranked.length - 1);
+  let startIndex = 0;
 
-  ranked.forEach((record, index) => {
-    record.national_rank_by_rate = index + 1;
-    record.percentile_by_rate = round(
-      ((ranked.length - index - 1) / denominator) * 100,
+  while (startIndex < ranked.length) {
+    const rate = Number(
+      ranked[startIndex].collapse_rate_per_100_ainop_bridges
+    );
+    let endIndex = startIndex;
+
+    while (
+      endIndex + 1 < ranked.length &&
+      Number(
+        ranked[endIndex + 1].collapse_rate_per_100_ainop_bridges
+      ) === rate
+    ) {
+      endIndex += 1;
+    }
+
+    const averageIndex = (startIndex + endIndex) / 2;
+    const percentile = round(
+      ((ranked.length - averageIndex - 1) / denominator) * 100,
       1
     );
-  });
+    const tieCount = endIndex - startIndex + 1;
+
+    for (let index = startIndex; index <= endIndex; index += 1) {
+      ranked[index].national_rank_by_rate = startIndex + 1;
+      ranked[index].percentile_by_rate = percentile;
+      ranked[index].rate_rank_tie_count = tieCount;
+    }
+
+    startIndex = endIndex + 1;
+  }
 }
 
 export function buildAinopBridgeIndex({
@@ -330,6 +356,9 @@ export function buildAinopBridgeIndex({
         overall_data_confidence: null,
         collapse_rate_confidence: confidence,
         collapse_rate_confidence_reason: reason,
+        national_rank_by_rate: null,
+        percentile_by_rate: null,
+        rate_rank_tie_count: null,
       };
     })
     .sort((left, right) =>

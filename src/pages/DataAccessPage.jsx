@@ -1,15 +1,38 @@
+import {
+  useEffect,
+  useState,
+} from "react";
+
 import { Link } from "react-router-dom";
 
+import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import { openDownloadUrls } from "../utils/apiClient";
+import {
+  openDownloadUrls,
+  openManifest,
+  openResourceUrls,
+} from "../utils/apiClient";
 
 import "../styles/data-access-page.css";
 
 function DataAccessPage() {
   const { language } = useLanguage();
+  const [manifest, setManifest] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    openManifest()
+      .then((data) => active && setManifest(data))
+      .catch(() => active && setManifest(null));
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const copy =
     language === "it"
@@ -23,20 +46,29 @@ function DataAccessPage() {
           openProfessional: "Apri Professional",
           publicTitle: "Layer Open",
           publicText:
-            "ARCUS Open Research 2026.1 pubblica 263 eventi validati e 712 fonti consultabili senza account, con tassonomia, metodologia, audit e download completi.",
+            "ARCUS Open Research pubblica la base scientifica validata senza account, con tassonomia, metodologia, audit e download completi.",
+          resourcesTitle: "Pacchetto scientifico della release",
+          resourcesText:
+            "Dati, fonti, schema, tassonomia e controlli di qualità sono accessibili separatamente per rendere verificabile ogni analisi.",
+          citationTitle: "Citazione della release",
+          citationNote:
+            "Citazione versionata disponibile; il DOI persistente della release ARCUS sarà aggiunto al deposito pubblico senza sostituire il DOI della pubblicazione scientifica originaria.",
+          licenseTitle: "Licenza e diritti",
+          licenseText:
+            "I metadati e le tassonomie prodotti da ARCUS sono rilasciati CC BY 4.0. I contenuti collegati di terze parti mantengono i rispettivi diritti.",
           professionalTitle: "Layer Professional",
           professionalText:
-            "Il database ARCUS aggiornato alimenta workflow, report, screening territoriali e package GIS controllati. Non viene distribuito come copia integrale del DB.",
+            "Il database ARCUS aggiornato alimenta Collapse Intelligence, retrieval di analoghi e evidence package contestuali. Non viene distribuito come copia integrale del DB.",
           policyTitle: "Regola di accesso",
           policyText:
-            "Open dimostra e rende verificabile la base scientifica. Professional trasforma quella base in intelligence operativa, con export contestuali legati a territorio, scenario o asset inventory.",
+            "Open rende verificabile la base scientifica. Professional applica quella base a un punto progetto, con export contestuali di esposizione ufficiale, analoghi, lezioni e limiti.",
           releaseTitle: "Release pubblica",
           liveTitle: "Evidence base live",
           outputTitle: "Output Professional",
           publicItems: [
             [
               "Periodo citabile",
-              "2000-2026, release versionata arcus-open-2026.1.",
+              "2000-2026, release corrente versionata.",
             ],
             [
               "Campi esportabili",
@@ -49,16 +81,16 @@ function DataAccessPage() {
           ],
           professionalItems: [
             [
-              "Screening territoriale",
-              "Brief provinciale, pattern storico, contesto hazard e priorita di attenzione.",
+              "Punto progetto verificato",
+              "Provincia derivata dal punto ed esposizione ufficiale ISPRA/INGV separata dal contesto vicino.",
             ],
             [
-              "Asset workflow",
-              "Import inventario, confronto con evidenza storica, watchlist e ranking operativo.",
+              "Lessons from Failures",
+              "Collassi comparabili, forza dell'evidenza, priorita d'indagine oppure astensione.",
             ],
             [
               "Export controllati",
-              "PDF, one-page brief, CSV contestuali, fonti collegate e pacchetti GIS riferiti allo scenario analizzato.",
+              "Evidence package contestuale con fonti, provenienza, limiti e avvertenza non prescrittiva.",
             ],
           ],
           policyItems: [
@@ -68,7 +100,7 @@ function DataAccessPage() {
             ],
             [
               "Estratti contestuali",
-              "Gli export Professional sono legati a una provincia, uno scenario o un set di asset, non alla replica completa del database.",
+              "Gli export Professional sono legati a un punto progetto e alla relativa coorte evidenziale, non alla replica completa del database.",
             ],
             [
               "Fonti dichiarate",
@@ -86,20 +118,29 @@ function DataAccessPage() {
           openProfessional: "Open Professional",
           publicTitle: "Open layer",
           publicText:
-            "ARCUS Open Research 2026.1 publishes 263 validated events and 712 sources without an account, with taxonomy, methodology, audit and complete downloads.",
+            "ARCUS Open Research publishes the validated scientific baseline without an account, with taxonomy, methodology, audit and complete downloads.",
+          resourcesTitle: "Scientific release package",
+          resourcesText:
+            "Data, sources, schema, taxonomy and quality controls are available separately so that every analysis can be verified.",
+          citationTitle: "Release citation",
+          citationNote:
+            "A versioned citation is available; the persistent DOI for the ARCUS release will be added with the public deposit without replacing the DOI of the original scientific publication.",
+          licenseTitle: "License and rights",
+          licenseText:
+            "ARCUS-authored metadata and taxonomies are released under CC BY 4.0. Linked third-party content retains its original rights.",
           professionalTitle: "Professional layer",
           professionalText:
-            "The updated ARCUS database powers workflows, reports, territorial screening and controlled GIS packages. It is not distributed as a full database copy.",
+            "The updated ARCUS database powers Collapse Intelligence, analogue retrieval and contextual evidence packages. It is not distributed as a full database copy.",
           policyTitle: "Access rule",
           policyText:
-            "Open proves and makes the scientific base verifiable. Professional turns that base into operational intelligence, with contextual exports tied to territory, scenario or asset inventory.",
+            "Open makes the scientific base verifiable. Professional applies it to a project point, with contextual exports covering official exposure, analogues, lessons and limitations.",
           releaseTitle: "Public release",
           liveTitle: "Live evidence base",
           outputTitle: "Professional outputs",
           publicItems: [
             [
               "Citable period",
-              "2000-2026, versioned release arcus-open-2026.1.",
+              "2000-2026, current versioned release.",
             ],
             [
               "Exportable fields",
@@ -112,16 +153,16 @@ function DataAccessPage() {
           ],
           professionalItems: [
             [
-              "Territorial screening",
-              "Province brief, historical pattern, hazard context and priority reading.",
+              "Verified project point",
+              "Point-derived province and official ISPRA/INGV exposure kept separate from nearby context.",
             ],
             [
-              "Asset workflow",
-              "Inventory import, comparison with historical evidence, watchlist and operational ranking.",
+              "Lessons from Failures",
+              "Comparable collapses, evidence strength, investigation priorities or abstention.",
             ],
             [
               "Controlled exports",
-              "PDF, one-page brief, contextual CSV, linked sources and GIS packages for the analysed scenario.",
+              "Contextual evidence package with sources, provenance, limits and a non-prescriptive warning.",
             ],
           ],
           policyItems: [
@@ -131,7 +172,7 @@ function DataAccessPage() {
             ],
             [
               "Contextual extracts",
-              "Professional exports are tied to a province, scenario or asset set, not to a complete database replica.",
+              "Professional exports are tied to a project point and its evidence cohort, not to a complete database replica.",
             ],
             [
               "Declared sources",
@@ -139,6 +180,38 @@ function DataAccessPage() {
             ],
           ],
         };
+
+  const releaseVersion =
+    manifest?.version || "arcus-open-2026.2";
+  const releaseCitation =
+    manifest?.citation ||
+    `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
+  const releaseEventCount = manifest?.event_count ?? 263;
+  const releaseSourceCount = manifest?.source_count ?? 712;
+  const releasePublicText = language === "it"
+    ? `${copy.publicText} La release ${releaseVersion} contiene ${releaseEventCount} eventi e ${releaseSourceCount} fonti.`
+    : `${copy.publicText} Release ${releaseVersion} contains ${releaseEventCount} events and ${releaseSourceCount} sources.`;
+  const releasePublicItems = copy.publicItems.map((item, index) =>
+    index === 0
+      ? [
+          item[0],
+          language === "it"
+            ? `2000-2026, release versionata ${releaseVersion}.`
+            : `2000-2026, versioned release ${releaseVersion}.`,
+        ]
+      : item
+  );
+  const releaseResources = [
+    [language === "it" ? "Eventi CSV" : "Events CSV", openDownloadUrls.csv],
+    [language === "it" ? "Eventi GeoJSON" : "Events GeoJSON", openDownloadUrls.geojson],
+    [language === "it" ? "Fonti JSON" : "Sources JSON", openResourceUrls.sources],
+    ["Manifest", openResourceUrls.manifest],
+    [language === "it" ? "Dizionario dati" : "Data dictionary", openResourceUrls.dataDictionary],
+    [language === "it" ? "Tassonomia" : "Taxonomy", openResourceUrls.taxonomy],
+    [language === "it" ? "Audit qualità" : "Quality audit", openResourceUrls.qualityAudit],
+    [language === "it" ? "Statistiche release" : "Release statistics", openResourceUrls.statistics],
+    ["Changelog", openResourceUrls.changelog],
+  ];
 
   return (
     <main
@@ -178,17 +251,78 @@ function DataAccessPage() {
             <div className="data-access-label">
               {copy.publicTitle}
             </div>
-            <h2>{copy.publicText}</h2>
+            <h2>{releasePublicText}</h2>
           </div>
 
           <div className="data-access-card-list">
-            {copy.publicItems.map(([title, text]) => (
+            {releasePublicItems.map(([title, text]) => (
               <article key={title}>
                 <span>{copy.releaseTitle}</span>
                 <strong>{title}</strong>
                 <p>{text}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="data-access-section">
+        <div className="data-access-container">
+          <div className="data-access-section-header">
+            <div>
+              <div className="data-access-label">
+                {releaseVersion}
+              </div>
+              <h2>{copy.resourcesTitle}</h2>
+              <p className="data-access-intro">
+                {copy.resourcesText}
+              </p>
+            </div>
+          </div>
+
+          <div className="data-access-endpoints">
+            {releaseResources.map(([label, href]) => (
+              <article key={label}>
+                <span>Open · no account</span>
+                <strong>{label}</strong>
+                <a
+                  className="data-access-resource-link"
+                  href={href}
+                >
+                  {language === "it" ? "Apri risorsa" : "Open resource"}
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <div className="data-access-grid data-access-release-grid">
+            <article className="data-access-release">
+              <span>{copy.citationTitle}</span>
+              <strong>{releaseVersion}</strong>
+              <p className="data-access-citation">
+                {releaseCitation}
+              </p>
+              <p>{copy.citationNote}</p>
+            </article>
+
+            <article className="data-access-release">
+              <span>{copy.licenseTitle}</span>
+              <strong>
+                {manifest?.license?.id || "CC BY 4.0"}
+              </strong>
+              <p>{copy.licenseText}</p>
+              <a
+                className="data-access-resource-link"
+                href={
+                  manifest?.license?.url ||
+                  "https://creativecommons.org/licenses/by/4.0/"
+                }
+                rel="noreferrer"
+                target="_blank"
+              >
+                {language === "it" ? "Leggi la licenza" : "Read license"}
+              </a>
+            </article>
           </div>
         </div>
       </section>
@@ -234,6 +368,8 @@ function DataAccessPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

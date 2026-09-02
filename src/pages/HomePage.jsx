@@ -277,7 +277,7 @@ function HeroMapBackdrop({
               onMouseEnter={() =>
                 setActiveSlug(event.event_slug)
               }
-              r="1.25"
+              r="0.72"
               role="link"
               tabIndex="0"
             />
@@ -462,14 +462,14 @@ export default function HomePage() {
   const copy = {
     en: {
       meta:
-        "ARCUS is an infrastructure risk intelligence platform for bridge-collapse evidence, territorial hazards, asset prioritisation and risk mitigation workflows.",
-      heroLabel: "Infrastructure Risk Intelligence",
+        "ARCUS is an open, versioned and source-linked research infrastructure for documented bridge collapses in Italy.",
+      heroLabel: "Italian Bridge Collapse Database",
       heroTitle:
-        "Bridge-collapse evidence for infrastructure risk decisions.",
+        "Bridge-collapse evidence, open to research.",
       heroText:
-        "ARCUS connects georeferenced bridge-collapse records, source traceability, territorial hazard context and professional outputs so technical teams can move from evidence to risk assessment, asset prioritisation and mitigation planning.",
+        "Explore georeferenced events, documentary sources and explicit classifications through a public Atlas and a complete, citable research release.",
       atlasCta: "Open Atlas",
-      professionalCta: "Open Professional",
+      dataCta: "Access the data",
       mapLabel: "Georeferenced evidence",
       mapTitle: "Italian bridge-collapse records, rendered from ARCUS data.",
       mapStatus: "Live dataset",
@@ -491,23 +491,55 @@ export default function HomePage() {
         ["Observed period", metrics.years],
         ["Total collapses", metrics.totalCollapse],
       ],
+      accessLabel: "Open research access",
+      accessTitle: "Evidence, data and method.",
+      accessText:
+        "Three public entry points to explore, reuse and verify the ARCUS evidence base.",
+      accessCards: [
+        {
+          code: "01",
+          title: "Explore the Atlas",
+          text: "Navigate georeferenced collapse events and inspect the evidence attached to each record.",
+          action: "Open Atlas",
+          path: "/atlas",
+        },
+        {
+          code: "02",
+          title: "Access research data",
+          text: "Download the versioned public release, data dictionary and citation information.",
+          action: "Access data",
+          path: "/data-access",
+        },
+        {
+          code: "03",
+          title: "Review the method",
+          text: "Read the taxonomy, evidence classes, quality controls and declared limitations.",
+          action: "Read methodology",
+          path: "/methodology",
+        },
+      ],
+      boundaryLabel: "Scientific boundary",
+      boundaryTitle: "Documented evidence, not a prediction.",
+      boundaryText:
+        "ARCUS describes historical bridge-collapse records and their documentary basis. It does not estimate the probability of collapse, certify safety or replace inspections and structural diagnosis.",
+      boundaryAction: "Method and limitations",
       definitionLabel: "Definition",
       definitionTitle:
-        "ARCUS turns collapse records into infrastructure risk intelligence.",
+        "A research infrastructure built for verification.",
       definitionText:
-        "The platform is built for technical clients who need evidence that is georeferenced, source-linked and usable in risk assessment, asset management and mitigation workflows.",
+        "ARCUS makes documented bridge-collapse evidence explorable, downloadable and auditable while keeping observations separate from interpretation.",
       definitionLabels: {
         is: "What ARCUS is",
         isNot: "What ARCUS is not",
       },
       definitionIs: [
-        "A verified evidence base of bridge-collapse events in Italy.",
-        "A territorial intelligence layer for reading hydraulic, seismic, landslide, degradation and exposure signals.",
-        "A decision-support environment for prioritisation, reporting and professional screening.",
+        "A verified, georeferenced evidence base of bridge-collapse events in Italy.",
+        "A versioned release with sources, taxonomy, data dictionary and quality audit.",
+        "A public foundation for reproducible research and learning from failures.",
       ],
       definitionIsNot: [
-        "Not a generic BI dashboard with unstructured indicators.",
-        "Not an opaque AI score detached from sources and method.",
+        "Not an estimate of collapse probability or territorial risk.",
+        "Not an asset ranking or an opaque synthetic score.",
         "Not a substitute for inspections, structural diagnosis or safety certification.",
       ],
       scenariosLabel: "Concrete Use Cases",
@@ -523,8 +555,8 @@ export default function HomePage() {
         },
         {
           label: "02",
-          title: "Infrastructure manager asset prioritisation",
-          text: "Compare an asset inventory with historical events, nearby vulnerabilities and dominant mechanisms to decide what should be reviewed first.",
+          title: "Comparable-failure investigation",
+          text: "Start from a project point, retrieve nationally comparable collapses and inspect why each case entered the evidence cohort.",
         },
         {
           label: "03",
@@ -569,16 +601,16 @@ export default function HomePage() {
           role: "Collapse density, recurrence, affected corridors and local criticality.",
         },
         {
-          code: "PRI",
-          domain: "Intervention priority",
-          role: "Evidence-based attention levels for screening, inspection planning and mitigation.",
+          code: "LES",
+          domain: "Lessons from failures",
+          role: "Source-linked investigation priorities, risk-control themes and explicit abstention when support is insufficient.",
         },
       ],
       outputsLabel: "Product Layers",
       outputsTitle:
         "Public evidence first. Professional decision support when the work becomes operational.",
       outputsText:
-        "ARCUS is structured so a client can understand the evidence publicly and then move into technical workflows when outputs, exports or asset screening are needed.",
+        "ARCUS lets a client inspect the evidence publicly and then move into a single Professional workflow for comparable failures, lessons and traceable exports.",
       outputs: [
         {
           label: "Open Layer",
@@ -595,11 +627,11 @@ export default function HomePage() {
         {
           label: "Professional Layer",
           title: "ARCUS Professional",
-          text: "The operational workspace for teams that need prioritisation, reports and exportable evidence.",
+          text: "Collapse Intelligence — Lessons from Failures: the operational workspace for traceable learning from documented collapses.",
           points: [
-            "Territorial scenarios and priority reading",
-            "Asset screening from uploaded inventories",
-            "PDF, CSV and GeoJSON outputs",
+            "Official ISPRA and INGV point exposure",
+            "National analogue retrieval with evidence limits",
+            "Supported investigation priorities or abstention",
           ],
           action: "Open Professional",
           path: "/professional",
@@ -629,20 +661,20 @@ export default function HomePage() {
         },
       ],
       finalTitle:
-        "Use collapse evidence to support infrastructure risk decisions.",
+        "Start from the evidence, inspect the sources, reproduce the analysis.",
       finalText:
-        "Explore the public Atlas or move into Professional when you need prioritisation, asset screening and exportable outputs.",
+        "Explore the Atlas or download the current ARCUS Open Research release with its citation, schema and declared limitations.",
     },
     it: {
       meta:
-        "ARCUS e una piattaforma di infrastructure risk intelligence per evidenze sui crolli dei ponti, hazard territoriali, priorita asset e workflow di mitigazione del rischio.",
-      heroLabel: "Infrastructure Risk Intelligence",
+        "ARCUS è un'infrastruttura di ricerca aperta, versionata e collegata alle fonti sui crolli documentati dei ponti in Italia.",
+      heroLabel: "Italian Bridge Collapse Database",
       heroTitle:
-        "Evidenze sui crolli per decisioni di rischio infrastrutturale.",
+        "Evidenze sui crolli dei ponti, aperte alla ricerca.",
       heroText:
-        "ARCUS connette record georeferenziati di crolli di ponti, tracciabilita delle fonti, contesto hazard territoriale e output professionali per passare dall'evidenza a risk assessment, priorita asset e pianificazione della mitigazione.",
+        "Esplora eventi georeferenziati, fonti documentali e classificazioni esplicite attraverso un Atlante pubblico e una release di ricerca completa e citabile.",
       atlasCta: "Apri l'Atlante",
-      professionalCta: "Apri Professional",
+      dataCta: "Accedi ai dati",
       mapLabel: "Evidenza georeferenziata",
       mapTitle: "Crolli dei ponti in Italia, renderizzati dai dati ARCUS.",
       mapStatus: "Dataset attivo",
@@ -664,23 +696,55 @@ export default function HomePage() {
         ["Periodo osservato", metrics.years],
         ["Collassi totali", metrics.totalCollapse],
       ],
+      accessLabel: "Accesso Open Research",
+      accessTitle: "Evidenze, dati e metodo.",
+      accessText:
+        "Tre ingressi pubblici per esplorare, riutilizzare e verificare la base di evidenza ARCUS.",
+      accessCards: [
+        {
+          code: "01",
+          title: "Esplora l'Atlante",
+          text: "Naviga gli eventi di crollo georeferenziati e consulta le evidenze associate a ogni record.",
+          action: "Apri l'Atlante",
+          path: "/atlas",
+        },
+        {
+          code: "02",
+          title: "Accedi ai dati di ricerca",
+          text: "Scarica la release pubblica versionata, il dizionario dati e le informazioni di citazione.",
+          action: "Accedi ai dati",
+          path: "/data-access",
+        },
+        {
+          code: "03",
+          title: "Verifica il metodo",
+          text: "Consulta tassonomia, classi di evidenza, controlli di qualità e limitazioni dichiarate.",
+          action: "Leggi la metodologia",
+          path: "/methodology",
+        },
+      ],
+      boundaryLabel: "Confine scientifico",
+      boundaryTitle: "Evidenza documentata, non previsione.",
+      boundaryText:
+        "ARCUS descrive eventi storici di crollo e la relativa base documentale. Non stima la probabilità di collasso, non certifica la sicurezza e non sostituisce ispezioni o diagnosi strutturali.",
+      boundaryAction: "Metodo e limitazioni",
       definitionLabel: "Definizione",
       definitionTitle:
-        "ARCUS trasforma i record di crollo in intelligence per il rischio infrastrutturale.",
+        "Un'infrastruttura di ricerca costruita per essere verificata.",
       definitionText:
-        "La piattaforma e pensata per clienti tecnici che hanno bisogno di evidenze georeferenziate, collegate alle fonti e utilizzabili in risk assessment, asset management e mitigazione.",
+        "ARCUS rende esplorabili, scaricabili e verificabili le evidenze documentate sui crolli, mantenendo separate osservazione e interpretazione.",
       definitionLabels: {
         is: "Cosa e ARCUS",
         isNot: "Cosa non e ARCUS",
       },
       definitionIs: [
         "Una base verificata di eventi di crollo dei ponti in Italia.",
-        "Un layer di intelligence territoriale per leggere segnali idraulici, sismici, frane, degrado ed esposizione.",
-        "Un ambiente di supporto decisionale per priorita, report e screening professionale.",
+        "Una release versionata con fonti, tassonomia, dizionario dati e audit di qualità.",
+        "Una base pubblica per ricerca riproducibile e apprendimento dai collassi.",
       ],
       definitionIsNot: [
-        "Non e una dashboard BI generica con indicatori non strutturati.",
-        "Non e uno score AI opaco separato da fonti e metodo.",
+        "Non stima la probabilità di collasso o il rischio territoriale.",
+        "Non classifica patrimoni e non produce score sintetici opachi.",
         "Non sostituisce ispezioni, diagnosi strutturali o certificazioni di sicurezza.",
       ],
       scenariosLabel: "Casi d'uso concreti",
@@ -696,8 +760,8 @@ export default function HomePage() {
         },
         {
           label: "02",
-          title: "Prioritizzazione asset per gestori",
-          text: "Confrontare un inventario ponti con eventi storici, vulnerabilita vicine e meccanismi dominanti per decidere cosa verificare prima.",
+          title: "Indagine sui collassi comparabili",
+          text: "Partire da un punto progetto, recuperare collassi comparabili su scala nazionale e verificare perche ogni caso entra nella coorte evidenziale.",
         },
         {
           label: "03",
@@ -742,16 +806,16 @@ export default function HomePage() {
           role: "Densita dei crolli, ricorrenza, corridoi interessati e criticita locale.",
         },
         {
-          code: "PRI",
-          domain: "Priorita di intervento",
-          role: "Livelli di attenzione evidence-based per screening, ispezioni e mitigazione.",
+          code: "LES",
+          domain: "Lessons from failures",
+          role: "Priorita d'indagine collegate alle fonti, temi di controllo e astensione esplicita quando il supporto e insufficiente.",
         },
       ],
       outputsLabel: "Layer prodotto",
       outputsTitle:
         "Prima l'evidenza pubblica. Poi il supporto decisionale quando il lavoro diventa operativo.",
       outputsText:
-        "ARCUS e strutturata per far capire pubblicamente la base di evidenza e poi passare ai workflow tecnici quando servono output, export o screening asset.",
+        "ARCUS permette di comprendere pubblicamente la base di evidenza e poi passare a un unico workflow Professional per collassi comparabili, lezioni ed export tracciabili.",
       outputs: [
         {
           label: "Open Layer",
@@ -768,11 +832,11 @@ export default function HomePage() {
         {
           label: "Professional Layer",
           title: "ARCUS Professional",
-          text: "Il workspace operativo per team che hanno bisogno di priorita, report ed evidenza esportabile.",
+          text: "Collapse Intelligence — Lessons from Failures: il workspace operativo per imparare in modo tracciabile dai collassi documentati.",
           points: [
-            "Scenari territoriali e lettura prioritaria",
-            "Screening asset da inventari caricati",
-            "Output PDF, CSV e GeoJSON",
+            "Esposizione ufficiale ISPRA e INGV al punto",
+            "Retrieval nazionale di analoghi con limiti dichiarati",
+            "Priorita d'indagine sostenute oppure astensione",
           ],
           action: "Apri Professional",
           path: "/professional",
@@ -802,9 +866,9 @@ export default function HomePage() {
         },
       ],
       finalTitle:
-        "Usa l'evidenza sui crolli per supportare decisioni di rischio infrastrutturale.",
+        "Parti dall'evidenza, verifica le fonti, riproduci l'analisi.",
       finalText:
-        "Esplora l'Atlante pubblico o passa a Professional quando servono priorita, screening asset e output esportabili.",
+        "Esplora l'Atlante oppure scarica la release ARCUS Open Research corrente con citazione, schema e limiti dichiarati.",
     },
   };
 
@@ -847,9 +911,9 @@ export default function HomePage() {
               </Link>
               <Link
                 className="home-secondary-action"
-                to="/professional"
+                to="/data-access"
               >
-                {text.professionalCta}
+                {text.dataCta}
               </Link>
             </div>
           </ScrollReveal>
@@ -857,6 +921,48 @@ export default function HomePage() {
 
         <div className="home-container home-hero-metrics">
           <Metrics items={text.metrics} />
+        </div>
+      </section>
+
+      <section className="home-access-section">
+        <div className="home-container">
+          <ScrollReveal className="home-access-heading">
+            <div>
+              <span>{text.accessLabel}</span>
+              <h2>{text.accessTitle}</h2>
+            </div>
+            <p>{text.accessText}</p>
+          </ScrollReveal>
+
+          <div className="home-access-grid">
+            {text.accessCards.map((card, index) => (
+              <ScrollReveal
+                as="article"
+                className="home-access-card"
+                delay={index * 70}
+                key={card.code}
+                variant="soft"
+              >
+                <span>{card.code}</span>
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+                <Link to={card.path}>{card.action} →</Link>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          <ScrollReveal
+            as="aside"
+            className="home-boundary"
+            variant="soft"
+          >
+            <span>{text.boundaryLabel}</span>
+            <h2>{text.boundaryTitle}</h2>
+            <p>{text.boundaryText}</p>
+            <Link to="/methodology">
+              {text.boundaryAction} →
+            </Link>
+          </ScrollReveal>
         </div>
       </section>
 

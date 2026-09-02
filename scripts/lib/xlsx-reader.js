@@ -46,9 +46,9 @@ function readEntry(zip, name) {
 }
 
 function parseSharedStrings(xml) {
-  return [...xml.matchAll(/<si>([\s\S]*?)<\/si>/g)].map((match) =>
+  return [...xml.matchAll(/<(?:[\w.-]+:)?si\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?si>/g)].map((match) =>
     decodeXml(
-      [...match[1].matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)]
+      [...match[1].matchAll(/<(?:[\w.-]+:)?t\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?t>/g)]
         .map((item) => item[1])
         .join("")
     )
@@ -58,23 +58,44 @@ function parseSharedStrings(xml) {
 function workbookSheets(zip) {
   const workbookXml = readEntry(zip, "xl/workbook.xml");
   const relsXml = readEntry(zip, "xl/_rels/workbook.xml.rels");
+  const attributes = (tag) => Object.fromEntries(
+    [...tag.matchAll(/([\w:.-]+)="([^"]*)"/g)]
+      .map((match) => [match[1], decodeXml(match[2])])
+  );
   const rels = new Map(
-    [...relsXml.matchAll(/<Relationship[^>]+Id="([^"]+)"[^>]+Target="([^"]+)"/g)]
-      .map((match) => [match[1], match[2]])
+    [...relsXml.matchAll(/<Relationship\b[^>]*\/?\s*>/g)]
+      .map((match) => attributes(match[0]))
+      .filter((item) => item.Id && item.Target)
+      .map((item) => {
+        const target = item.Target.startsWith("/")
+          ? item.Target.slice(1)
+          : item.Target.startsWith("xl/")
+            ? item.Target
+            : `xl/${item.Target}`;
+
+        return [item.Id, target];
+      })
   );
 
-  return [...workbookXml.matchAll(/<sheet[^>]+name="([^"]+)"[^>]+r:id="([^"]+)"/g)]
-    .map((match) => ({
-      name: decodeXml(match[1]),
-      path: `xl/${rels.get(match[2])}`,
+  return [...workbookXml.matchAll(/<(?:[\w.-]+:)?sheet\b[^>]*\/?\s*>/g)]
+    .map((match) => attributes(match[0]))
+    .filter((item) => item.name && item["r:id"] && rels.has(item["r:id"]))
+    .map((item) => ({
+      name: item.name,
+      path: rels.get(item["r:id"]),
     }));
 }
 
 function cellValue(cellXml, sharedStrings) {
-  const reference = cellXml.match(/<c[^>]*r="([^"]+)"/)?.[1] || "";
-  const type = cellXml.match(/<c[^>]*t="([^"]+)"/)?.[1] || null;
-  const raw = cellXml.match(/<v>([\s\S]*?)<\/v>/)?.[1] ?? null;
-  const inline = cellXml.match(/<is>[\s\S]*?<t[^>]*>([\s\S]*?)<\/t>[\s\S]*?<\/is>/)?.[1] ?? null;
+  const cellTag = cellXml.match(/<(?:[\w.-]+:)?c\b[^>]*\/?\s*>/)?.[0] || "";
+  const attributes = Object.fromEntries(
+    [...cellTag.matchAll(/([\w:.-]+)="([^"]*)"/g)]
+      .map((match) => [match[1], decodeXml(match[2])])
+  );
+  const reference = attributes.r || "";
+  const type = attributes.t || null;
+  const raw = cellXml.match(/<(?:[\w.-]+:)?v\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?v>/)?.[1] ?? null;
+  const inline = cellXml.match(/<(?:[\w.-]+:)?is\b[^>]*>[\s\S]*?<(?:[\w.-]+:)?t\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?t>[\s\S]*?<\/(?:[\w.-]+:)?is>/)?.[1] ?? null;
 
   return {
     index: columnIndex(reference),
@@ -82,6 +103,8 @@ function cellValue(cellXml, sharedStrings) {
       ? sharedStrings[Number(raw)] ?? null
       : type === "b"
         ? raw === "1"
+        : type === "str"
+          ? decodeXml(raw)
         : inline !== null
           ? decodeXml(inline)
           : raw,
@@ -91,7 +114,7 @@ function cellValue(cellXml, sharedStrings) {
 function parseSheetRows(zip, sheetPath, sharedStrings) {
   const sheetXml = readEntry(zip, sheetPath);
 
-  return [...sheetXml.matchAll(/<row[^>]*>([\s\S]*?)<\/row>/g)]
+  return [...sheetXml.matchAll(/<(?:[\w.-]+:)?row\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?row>/g)]
     .map((rowMatch) => {
       const row = [];
 
@@ -99,7 +122,7 @@ function parseSheetRows(zip, sheetPath, sharedStrings) {
       // elements. Matching only paired cells can consume the following cell and
       // shift values under the wrong header, which is especially dangerous for
       // release generation. Cell references remain the authoritative position.
-      [...rowMatch[1].matchAll(/<c\b[^>]*\/>|<c\b[^>]*>[\s\S]*?<\/c>/g)].forEach((cellMatch) => {
+      [...rowMatch[1].matchAll(/<(?:[\w.-]+:)?c\b[^>]*\/>|<(?:[\w.-]+:)?c\b[^>]*>[\s\S]*?<\/(?:[\w.-]+:)?c>/g)].forEach((cellMatch) => {
         const cell = cellValue(cellMatch[0], sharedStrings);
 
         if (cell.index >= 0) {

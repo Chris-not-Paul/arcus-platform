@@ -1,0 +1,99 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT23.05.02",
+  "event_date": "2023-05-17",
+  "status": "context_available",
+  "display_badge": "ARPAE",
+  "event_section": {
+    "crossing_name": "Idice stream",
+    "latitude": 44.5781,
+    "longitude": 11.5954,
+    "municipality": "Molinella",
+    "hydrographic_context": "Lower Idice, embanked reach at San Martino in Argine",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "observed",
+    "interpretation": "station_installed_on_event_bridge_incomplete_peak",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_lower_bound",
+        "operator": ">",
+        "value": 14.36,
+        "unit": "m s.z.i.",
+        "value_type": "validated_lower_bound_above_measurement_window",
+        "station_reference": "S. MARTINO",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      },
+      {
+        "parameter": "danger_level",
+        "operator": "",
+        "value": 11,
+        "unit": "m s.z.i.",
+        "value_type": "published_threshold_3",
+        "station_reference": "S. MARTINO",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      }
+    ],
+    "network_status": {
+      "network": "ARPAE regional tele-hydrometric network",
+      "summary_it": "Il sensore entrò nella finestra di misura durante la crescita della piena e fu poi travolto dal crollo del ponte.",
+      "summary_en": "The sensor entered its measurement window during the rising flood and was then swept away with the bridge collapse."
+    }
+  },
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "S. MARTINO",
+    "name": "Idice a S. Martino in Argine",
+    "watercourse": "Idice",
+    "location": "Ponte della Motta, SP6",
+    "latitude": 44.5781,
+    "longitude": 11.5954,
+    "distance_from_event_km": 0,
+    "relationship": "installed_on_event_bridge",
+    "observations_start_date": null,
+    "available_for_event": true,
+    "reference_section": null
+  },
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "documented_basin_processes": [
+    "record_flood_peak",
+    "rapid_flood_response",
+    "bank_erosion"
+  ],
+  "sources": [
+    {
+      "source_id": "arpae-flood-report-2023-05-16-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto idrometeorologico dell'evento 16-18 maggio 2023",
+      "role": "validated_hydrometric_values_and_station_loss",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_idro_meteo_20230516-18.pdf"
+    },
+    {
+      "source_id": "arpae-station-restoration-2024",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Ripristino della stazione idrometrica di San Martino in Argine",
+      "role": "confirmation_of_station_location_on_collapsed_bridge",
+      "url": "https://apps.arpae.it/documento/DET2024677"
+    }
+  ],
+  "curation_note": {
+    "it": "14,36 m è il limite superiore della finestra strumentale superata, non il colmo effettivo. La stazione era installata sul ponte e fu distrutta con il collasso; non viene ricostruita la parte mancante dell’idrogramma.",
+    "en": "14.36 m is the exceeded upper limit of the measurement window, not the actual peak. The station was installed on the bridge and was destroyed with the collapse; the missing hydrograph is not reconstructed."
+  },
+  "provenance": {
+    "curated_at": "2026-09-02T12:00:00.000Z",
+    "method": "Manual extraction from the official validated event report and station-restoration record"
+  },
+  "caveats": [
+    "The reported greater-than 14.36 m value is a lower bound because the actual peak exceeded the instrument measurement window.",
+    "The stage is relative to the station gauge datum and is not water depth or absolute elevation.",
+    "The station and its incomplete hydrograph were lost with the bridge collapse.",
+    "No discharge is assigned because no validated event-specific stage-discharge conversion is provided here.",
+    "The hydrometric observation documents loading context and does not alone establish the complete collapse mechanism."
+  ]
+}

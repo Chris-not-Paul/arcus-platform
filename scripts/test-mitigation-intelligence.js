@@ -35,15 +35,21 @@ function fixtureDate(eventId) {
 }
 
 function hydraulicEvent(eventId, {
+  bridgeCrossingType = "waterway",
   date = undefined,
+  destinationUse = "National",
   evidence = "documented",
   episodeId = null,
+  materialType = "Reinforced concrete",
   process = "scour",
   province = "Alessandria",
   region = "Piemonte",
+  structuralType = "Beam bridge",
 } = {}) {
   return {
+    bridge_crossing_type: bridgeCrossingType,
     date: date === undefined ? fixtureDate(eventId) : date,
+    destination_use: destinationUse,
     event_id: eventId,
     hydraulic_intelligence: {
       component_involved: "pier_foundation",
@@ -52,9 +58,11 @@ function hydraulicEvent(eventId, {
       failure_process: process,
       trigger: "flood",
     },
+    material_type: materialType,
     province,
     region,
     specific_cause: "Hydraulic",
+    structural_type: structuralType,
   };
 }
 
@@ -146,6 +154,29 @@ assert.equal(available.strategies[0].process, "scour");
 assert.equal(available.strategies[0].arcus_evidence.raw_count, 5);
 assert.equal(available.strategies[0].arcus_evidence.effective_evidence_count, 4);
 assert.equal(available.strategies[0].external_validation_required, true);
+assert.equal(
+  available.failure_learning_matrix.matrix_version,
+  "arcus-failure-learning-matrix-v1"
+);
+assert.equal(available.failure_learning_matrix.status, "available");
+assert.equal(
+  available.failure_learning_matrix.qualified_priority_count,
+  1
+);
+assert.equal(
+  available.failure_learning_matrix.rows[0].learning_status,
+  "qualified_investigation_priority"
+);
+assert.equal(
+  available.failure_learning_matrix.cohort_contract
+    .cohort_fixed_before_outcome_read,
+  true
+);
+assert.equal(
+  available.failure_learning_matrix.cohort_contract
+    .geometry_used_for_qualification,
+  false
+);
 assert.equal(available.forbidden_outputs.includes("final_priority_index_modification"), true);
 assert.equal(Object.hasOwn(available, "score"), false);
 assert.equal(Object.hasOwn(available, "final_priority_index"), false);
@@ -326,6 +357,101 @@ assert.equal(
   true
 );
 
+const profileEvents = events.map((event) =>
+  event.event_id === "B01.01.02"
+    ? {
+        ...event,
+        material_type: "Steel",
+        structural_type: "Truss",
+      }
+    : event
+);
+const profiled = build(
+  {
+    ...basePayload,
+    project_bridge_profile: {
+      bridge_crossing_type: "waterway",
+      bridge_length_m: 84.5,
+      destination_use: "National",
+      material_type: "Steel",
+      piers_in_active_riverbed: true,
+      structural_type: "Truss",
+    },
+  },
+  profileEvents,
+  {
+    historicalSignatures,
+    signatures: nationalSignatures,
+  }
+);
+assert.equal(
+  profiled.evidence_cohort.selection_mode,
+  "national_current_hazard_and_declared_bridge_profile_fixed_before_outcome_synthesis"
+);
+assert.equal(profiled.project_bridge_profile.match_field_count, 4);
+assert.equal(profiled.project_bridge_profile.descriptive_field_count, 2);
+assert.deepEqual(
+  profiled.project_bridge_profile.selection_boundary
+    .descriptive_fields_used_for_selection,
+  []
+);
+assert.equal(
+  profiled.project_bridge_profile.selection_boundary
+    .modifies_evidence_thresholds,
+  false
+);
+assert.equal(
+  profiled.evidence_cohort.analogue_retrieval.analogues[0].event.event_id,
+  "B01.01.02"
+);
+assert.equal(
+  profiled.evidence_cohort.analogue_retrieval.analogues[0]
+    .retrieval_comparison.project_bridge_profile.exact_match_count,
+  4
+);
+assert.match(profiled.project_bridge_profile.matching_mode, /tie_breaker/);
+const profiledReportSummary = buildMitigationReportSummary(profiled);
+assert.match(profiledReportSummary.projectProfileText, /matching on/i);
+assert.match(profiledReportSummary.projectProfileText, /descriptive only/i);
+
+const descriptiveOnlyReportSummary = buildMitigationReportSummary({
+  ...profiled,
+  project_bridge_profile: {
+    ...profiled.project_bridge_profile,
+    descriptive_field_count: 2,
+    descriptive_fields_provided: [
+      "bridge_length_m",
+      "piers_in_active_riverbed",
+    ],
+    match_field_count: 0,
+    match_fields_provided: [],
+  },
+});
+assert.match(descriptiveOnlyReportSummary.cohortText, /descriptive-only/i);
+assert.match(descriptiveOnlyReportSummary.projectProfileText, /not used for retrieval/i);
+assert.doesNotMatch(descriptiveOnlyReportSummary.projectProfileText, /not provided/i);
+
+const invalidProfile = build(
+  {
+    ...basePayload,
+    project_bridge_profile: {
+      bridge_length_m: -4,
+      material_type: "imaginary material",
+    },
+  },
+  events,
+  {
+    historicalSignatures,
+    signatures: nationalSignatures,
+  }
+);
+assert.equal(invalidProfile.project_bridge_profile.match_field_count, 0);
+assert.equal(invalidProfile.project_bridge_profile.invalid_fields.length, 2);
+assert.equal(
+  invalidProfile.evidence_cohort.selection_mode,
+  "national_current_hazard_signature_fixed_before_outcome_synthesis"
+);
+
 const outcomeMutatedEvents = events.map((event) =>
   event.event_id === "B02.01.01"
     ? hydraulicEvent("B02.01.01", {
@@ -400,6 +526,14 @@ const noIntersection = build({
 });
 assert.equal(noIntersection.status, "abstained");
 assert.equal(noIntersection.strategies.length, 0);
+assert.equal(noIntersection.failure_learning_matrix.status, "abstained");
+assert.equal(noIntersection.failure_learning_matrix.rows.length, 0);
+assert.equal(
+  noIntersection.failure_learning_matrix.abstention_reasons.includes(
+    "official_hydraulic_exposure_not_intersected"
+  ),
+  true
+);
 assert.equal(
   noIntersection.abstention_reasons.includes("official_hydraulic_exposure_not_intersected"),
   true
@@ -519,6 +653,18 @@ const sparse = build(
 );
 assert.equal(sparse.status, "limited_evidence");
 assert.equal(sparse.strategies[0].strategy_id, "hydraulic-generic-investigation");
+assert.equal(sparse.failure_learning_matrix.status, "limited_evidence");
+assert.equal(sparse.failure_learning_matrix.qualified_priority_count, 0);
+assert.equal(
+  Boolean(sparse.failure_learning_matrix.generic_investigation_priority?.en),
+  true
+);
+assert.equal(
+  sparse.failure_learning_matrix.rows.every(
+    (row) => row.qualification.qualified === false
+  ),
+  true
+);
 
 const limitedReportSummary = buildMitigationReportSummary(sparse);
 assert.equal(limitedReportSummary.status, "limited_evidence");
@@ -532,7 +678,11 @@ assert.equal(
 );
 assert.equal(limitedReportSummary.outcomeText.includes("Site-specific hydraulic"), true);
 assert.equal(
-  limitedReportSummary.warningText.includes("do not modify the Final Priority Index"),
+  limitedReportSummary.warningText.includes("do not estimate collapse probability"),
+  true
+);
+assert.equal(
+  limitedReportSummary.warningText.includes("assign automatic intervention priorities"),
   true
 );
 assert.equal(
@@ -750,7 +900,10 @@ assert.equal(
   endToEndValidation.checks.authenticated_professional_endpoint,
   true
 );
-assert.equal(endToEndValidation.checks.fpi_and_path02_anti_leakage, true);
+assert.equal(
+  endToEndValidation.checks.retired_scores_absent_from_active_product,
+  true
+);
 assert.equal(endToEndValidation.checks.deterministic_event_order, true);
 
 console.log(

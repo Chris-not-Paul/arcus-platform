@@ -1,0 +1,78 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT13.02.01",
+  "event_date": "2013-02-02",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Verdura river",
+    "latitude": 37.4892,
+    "longitude": 13.2275,
+    "municipality": "Ribera",
+    "hydrographic_context": "Verdura river",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "scour",
+    "component_involved": "pier_foundation",
+    "evidence_level": "probable",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [],
+  "sources": [
+    {
+      "source_id": "SRC0360",
+      "provider": "La Repubblica",
+      "title": "Ponte crollato ad Agrigento, l’Anas trova una soluzione",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://palermo.repubblica.it/cronaca/2013/02/08/news/ponte_crollato_ad_agrigento_l_anas_trova_una_soluzione-52229526/",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    },
+    {
+      "source_id": "SRC0361",
+      "provider": "Giornale di Sicilia",
+      "title": "Ponte crollato a Ribera, è corsa contro il tempo",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://agrigento.gds.it/articoli/archivio/2013/02/04/ponte-crollato-a-ribera-e-corsa-contro-il-tempo-239357-79a25050-7c12-43d4-8ade-62deb107a6c2/",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-20"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

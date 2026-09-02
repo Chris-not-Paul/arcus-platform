@@ -1,0 +1,122 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT23.05.03",
+  "event_date": "2023-05-18",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 44.3369,
+    "longitude": 12.0227
+  },
+  "grid_location": {
+    "elevation_m": 11,
+    "latitude": 44.25,
+    "longitude": 12,
+    "distance_from_event_km": 9.8
+  },
+  "period": {
+    "end_date": "2023-05-18",
+    "start_date": "2023-05-05",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2023-05-05",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2023-05-06",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2023-05-07",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2023-05-08",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2023-05-09",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2023-05-10",
+      "precipitation_mm": 27.8
+    },
+    {
+      "date": "2023-05-11",
+      "precipitation_mm": 14.4
+    },
+    {
+      "date": "2023-05-12",
+      "precipitation_mm": 10.5
+    },
+    {
+      "date": "2023-05-13",
+      "precipitation_mm": 0.6
+    },
+    {
+      "date": "2023-05-14",
+      "precipitation_mm": 25.6
+    },
+    {
+      "date": "2023-05-15",
+      "precipitation_mm": 0.2
+    },
+    {
+      "date": "2023-05-16",
+      "precipitation_mm": 68.6
+    },
+    {
+      "date": "2023-05-17",
+      "precipitation_mm": 47.1
+    },
+    {
+      "date": "2023-05-18",
+      "precipitation_mm": 0
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 0,
+    "event_and_previous_2_days_mm": 115.7,
+    "event_and_previous_6_days_mm": 152.6,
+    "full_period_mm": 194.8
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1940-present",
+    "dataset": "ERA5",
+    "licence": "CC BY 4.0",
+    "model_key": "era5",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 25,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:14:50.981Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2023-05-18&latitude=44.3369&longitude=12.0227&models=era5&start_date=2023-05-05&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "lagged_catchment_response_supported",
+    "severity": "context",
+    "rationale_it": "Lo zero del 18 maggio è compatibile con una risposta ritardata del bacino: la cella ERA5 registra 115,7 mm nei tre giorni inclusa la data dell’evento, concentrati nei giorni precedenti, e le fonti regionali documentano portate ancora elevate dopo la fase pluviometrica principale.",
+    "rationale_en": "The 18 May zero is compatible with a delayed catchment response: the ERA5 cell records 115.7 mm over three days including the event date, concentrated on preceding days, and regional sources document continued high flows after the main rainfall phase.",
+    "supporting_sources": [
+      "https://www.arpae.it/it/notizie/levento-meteo-idrogeologico-del-16-18-maggio-2023"
+    ],
+    "assessment_method": "event_specific_source_and_chronology_review",
+    "assessment_input": {
+      "event_calendar_day_mm": 0,
+      "event_and_previous_2_days_mm": 115.7,
+      "event_and_previous_6_days_mm": 152.6
+    }
+  }
+}

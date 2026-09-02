@@ -1,5 +1,10 @@
 # ARCUS Analogue Retrieval Validation
 
+> Updated 2026-08-26: the canonical results and production gates are now in
+> `ARCUS_COLLAPSE_INTELLIGENCE_VALIDATION_PLAN.md`. Earlier dry-run figures below
+> are retained as a historical audit record and must not be treated as current
+> performance.
+
 Date: 2026-07-17
 
 Output:

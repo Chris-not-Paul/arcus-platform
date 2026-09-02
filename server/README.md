@@ -47,7 +47,7 @@ This backend is the first data boundary for ARCUS.
 - `GET /api/admin/ops/status` (admin only)
 - `GET /api/admin/email-outbox` (admin only)
 
-Open endpoints return the complete active versioned Open Research release (`arcus-open-2026.1`: 263 events and 712 sources) without requiring an account. Professional endpoints require an authenticated ARCUS session cookie and expose the separate live scope, including `professional-events` and `professional-sources` resources when available.
+Open endpoints return the complete active versioned Open Research release (`arcus-open-2026.2`: 263 events and 712 sources) without requiring an account. Professional endpoints require an authenticated ARCUS session cookie and expose the separate live scope, including `professional-events` and `professional-sources` resources when available.
 
 `POST /api/auth/register` creates a free ARCUS Open account. Free users can keep an authenticated identity for Open-layer product features, but they receive no Professional permissions and cannot access Professional resources, exports or reports.
 
@@ -56,11 +56,14 @@ Open endpoints return the complete active versioned Open Research release (`arcu
 ## Local Development
 
 ```bash
-npm run api
 npm run dev
 ```
 
-The frontend dev server proxies `/api` to `http://127.0.0.1:4174`.
+The only local address intended for users is
+`http://127.0.0.1:5173`. `npm run dev` starts the ARCUS API automatically and
+proxies `/api` to the loopback-only internal service at
+`http://127.0.0.1:4174`; do not start `npm run api` separately during normal
+frontend development.
 
 ## Production persistence
 

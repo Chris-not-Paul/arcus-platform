@@ -1,0 +1,94 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT20.10.05",
+  "event_date": "2020-10-03",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "event_section": {
+    "crossing_name": "Sesia river",
+    "latitude": 45.6366,
+    "longitude": 8.3729,
+    "municipality": "Romagnano Sesia",
+    "hydrographic_context": "Middle-lower Sesia basin"
+  },
+  "event_hydrometry": {
+    "observation_status": "observed",
+    "interpretation": "upstream_basin_reference_not_bridge_section",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_above_danger_level",
+        "operator": ">",
+        "value": 4,
+        "unit": "m",
+        "value_type": "reported_threshold",
+        "station_code": "002016901",
+        "source_id": "arpa-piemonte-flood-report-2020"
+      },
+      {
+        "parameter": "discharge",
+        "operator": ">",
+        "value": 3000,
+        "unit": "m³/s",
+        "value_type": "reported_threshold",
+        "station_code": "002016901",
+        "source_id": "arpa-piemonte-flood-report-2020"
+      }
+    ]
+  },
+  "reference_station": {
+    "station_code": "002016901",
+    "name": "Sesia a Borgosesia",
+    "watercourse": "Sesia",
+    "location": "Borgosesia, Vercelli",
+    "latitude": 45.73667,
+    "longitude": 8.26056,
+    "distance_from_event_km": 14.1,
+    "relationship": "upstream_basin_reference_station",
+    "observations_start_date": "2009-06-23",
+    "available_for_event": true,
+    "reference_section": {
+      "gauge_zero_elevation_m_asl": 354.9
+    }
+  },
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "documented_basin_processes": [
+    "record_flood_peak",
+    "bed_erosion",
+    "pier_instability"
+  ],
+  "sources": [
+    {
+      "source_id": "arpa-piemonte-flood-report-2020",
+      "provider": "ARPA Piemonte",
+      "title": "L'evento alluvionale del 2-3 ottobre 2020 in Piemonte",
+      "role": "event_hydrometry_and_documented_processes",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/rapporto_evento_02_ottobre_2020_.pdf"
+    },
+    {
+      "source_id": "arpa-piemonte-borgosesia-station",
+      "provider": "ARPA Piemonte",
+      "title": "Anagrafica stazione Sesia a Borgosesia",
+      "role": "station_identity_coordinates_and_metadata",
+      "url": "https://www.arpa.piemonte.it/rischi_naturali/snippets_arpa_graphs/dettaglio_bis/?id=002016901"
+    }
+  ],
+  "curation_note": {
+    "it": "I valori idrometrici sono riferiti alla stazione di Borgosesia, circa 14,1 km a monte, e descrivono la severità della piena nel bacino. Non sono misure alla sezione del ponte né dimostrano da soli la causa del collasso.",
+    "en": "Hydrometric values refer to the Borgosesia station, approximately 14.1 km upstream, and describe flood severity in the basin. They are not bridge-section measurements and do not by themselves prove collapse causation."
+  },
+  "provenance": {
+    "curated_at": "2026-09-02T09:00:00.000Z",
+    "method": "Manual extraction from the official event report and station registry"
+  },
+  "caveats": [
+    "The reported level and discharge thresholds refer to the upstream Borgosesia station, not the collapsed bridge section.",
+    "Values preceded by greater-than signs are thresholds reported by ARPA Piemonte, not exact peak measurements.",
+    "No bridge-section stage, discharge or hydrograph is assigned.",
+    "The report describes riverbed erosion and pier failure, but the hydrometric values alone do not prove collapse causation.",
+    "The event recurrence characterization in the report is not a collapse probability."
+  ]
+}

@@ -181,6 +181,17 @@ export const openDownloadUrls = Object.freeze({
   geojson: "/api/open/download/geojson",
 });
 
+export const openResourceUrls = Object.freeze({
+  changelog: "/api/open/changelog",
+  dataDictionary: "/api/open/data-dictionary",
+  idMapping: "/api/open/id-mapping",
+  manifest: "/api/open/manifest",
+  qualityAudit: "/api/open/quality-audit",
+  sources: "/api/open/sources",
+  statistics: "/api/open/statistics",
+  taxonomy: "/api/open/taxonomy",
+});
+
 export function professionalResource(resource) {
   return apiJson(`/api/professional/${resource}`);
 }

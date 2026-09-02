@@ -128,7 +128,7 @@ export function buildSeismicMitigationSupport({
   return {
     abstention_reasons: abstentionReasons,
     caveat:
-      "This layer explains why collapse-learned seismic strategies are withheld. It does not estimate collapse probability, assign a seismic attention class, prescribe retrofit priorities or modify the Final Priority Index.",
+      "This layer explains why collapse-learned seismic strategies are withheld. It does not estimate collapse probability, assign a seismic attention class, prescribe retrofit priorities or modify v2.1 point screening.",
     contract: {
       activation_mode: contract.activation_mode || "abstention_only",
       cohort_activation_minimum: contract.cohort_activation_minimum || null,

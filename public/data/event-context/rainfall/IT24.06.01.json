@@ -1,0 +1,114 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT24.06.01",
+  "event_date": "2024-06-29",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 45.6307,
+    "longitude": 7.32
+  },
+  "grid_location": {
+    "elevation_m": 1405,
+    "latitude": 45.75,
+    "longitude": 7.25,
+    "distance_from_event_km": 14.3
+  },
+  "period": {
+    "end_date": "2024-06-29",
+    "start_date": "2024-06-16",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2024-06-16",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2024-06-17",
+      "precipitation_mm": 1.7
+    },
+    {
+      "date": "2024-06-18",
+      "precipitation_mm": 0.9
+    },
+    {
+      "date": "2024-06-19",
+      "precipitation_mm": 2.8
+    },
+    {
+      "date": "2024-06-20",
+      "precipitation_mm": 10.5
+    },
+    {
+      "date": "2024-06-21",
+      "precipitation_mm": 15.3
+    },
+    {
+      "date": "2024-06-22",
+      "precipitation_mm": 2.7
+    },
+    {
+      "date": "2024-06-23",
+      "precipitation_mm": 4
+    },
+    {
+      "date": "2024-06-24",
+      "precipitation_mm": 5.6
+    },
+    {
+      "date": "2024-06-25",
+      "precipitation_mm": 6.5
+    },
+    {
+      "date": "2024-06-26",
+      "precipitation_mm": 7.7
+    },
+    {
+      "date": "2024-06-27",
+      "precipitation_mm": 0.4
+    },
+    {
+      "date": "2024-06-28",
+      "precipitation_mm": 0.8
+    },
+    {
+      "date": "2024-06-29",
+      "precipitation_mm": 12.7
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 12.7,
+    "event_and_previous_2_days_mm": 13.9,
+    "event_and_previous_6_days_mm": 37.7,
+    "full_period_mm": 71.6
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1940-present",
+    "dataset": "ERA5",
+    "licence": "CC BY 4.0",
+    "model_key": "era5",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 25,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:14:33.641Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2024-06-29&latitude=45.6307&longitude=7.32&models=era5&start_date=2024-06-16&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "coarse_reanalysis_context_only",
+    "severity": "caution",
+    "assessment_method": "dataset_resolution_rule",
+    "rationale_it": "La rianalisi descrive la cella di modello al punto del ponte. La risoluzione non consente di rappresentare affidabilmente massimi convettivi locali o precipitazione areale a monte.",
+    "rationale_en": "The reanalysis describes the model cell at the bridge point. Its resolution cannot reliably represent local convective maxima or upstream areal precipitation."
+  }
+}

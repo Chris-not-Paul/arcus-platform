@@ -96,6 +96,14 @@
   font-size: clamp(32px, 4vw, 56px);
 }
 
+.data-access-intro {
+  max-width: 720px;
+  margin: 20px 0 0;
+  color: var(--arcus-ink-soft);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
 .data-access-card-list,
 .data-access-endpoints,
 .data-access-grid {
@@ -224,6 +232,31 @@
 
 .data-access-endpoints {
   grid-template-columns: repeat(2, 1fr);
+}
+
+.data-access-resource-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 18px;
+  color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.data-access-resource-link:hover {
+  color: var(--arcus-bronze);
+}
+
+.data-access-release-grid {
+  margin-top: 16px;
+}
+
+.data-access-citation {
+  overflow-wrap: anywhere;
 }
 
 .data-access-grid {

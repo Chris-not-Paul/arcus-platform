@@ -29,22 +29,18 @@ export function createMarkerIcon(
     ] || "#4f6b82";
 
   const markerSize =
-    vulnerabilityClass ? 22 : 18;
+    vulnerabilityClass ? 28 : 26;
 
-  const coreSize =
-    vulnerabilityClass ? 7 : 5;
+  const signalSize =
+    vulnerabilityClass ? 21 : 19;
 
   /* ================================= */
   /* SIGNAL SYSTEM */
   /* ================================= */
 
-  const halo = `${baseColor}20`;
+  const halo = `${baseColor}18`;
 
-  const ring = `${baseColor}55`;
-
-  const glow = `${baseColor}35`;
-
-  const coreShadow = `${baseColor}66`;
+  const ring = `${baseColor}66`;
 
   /* ================================= */
   /* HTML */
@@ -70,8 +66,8 @@ export function createMarkerIcon(
         style="
           position:absolute;
 
-          width:${markerSize + 8}px;
-          height:${markerSize + 8}px;
+          width:${markerSize + 6}px;
+          height:${markerSize + 6}px;
 
           border-radius:999px;
 
@@ -79,74 +75,45 @@ export function createMarkerIcon(
             radial-gradient(
               circle,
               ${halo} 0%,
-              rgba(0,0,0,0) 72%
+              rgba(0,0,0,0) 70%
             );
-
-          filter:blur(3px);
 
           pointer-events:none;
         "
       ></div>
 
-      <!-- OUTER RING -->
+      <!-- MEDIUM-SCALE SIGNAL -->
 
       <div
         style="
           position:absolute;
 
-          width:${markerSize - 6}px;
-          height:${markerSize - 6}px;
-
-          border-radius:999px;
-
-          border:
-            ${vulnerabilityClass ? "2px" : "1.2px"} solid ${ring};
-
-          background:
-            rgba(255,255,255,0.04);
-
-          backdrop-filter:
-            blur(6px);
-        "
-      ></div>
-
-      <!-- INNER GLOW -->
-
-      <div
-        style="
-          position:absolute;
-
-          width:${markerSize - 10}px;
-          height:${markerSize - 10}px;
-
-          border-radius:999px;
-
-          background:${glow};
-
-          filter:blur(3px);
-
-          opacity:0.9;
-        "
-      ></div>
-
-      <!-- COLOR CORE -->
-
-      <div
-        style="
-          position:absolute;
-
-          width:${coreSize}px;
-          height:${coreSize}px;
+          width:${signalSize}px;
+          height:${signalSize}px;
 
           border-radius:999px;
 
           background:${baseColor};
 
+          border:2px solid rgba(252,251,247,0.94);
+
           box-shadow:
-            0 0 0 1px rgba(255,255,255,0.18),
-            0 0 8px ${coreShadow};
+            0 0 0 1px ${ring},
+            0 4px 10px rgba(23,63,66,0.20);
         "
-      ></div>
+      >
+        <div
+          style="
+            position:absolute;
+            inset:50% auto auto 50%;
+            width:3px;
+            height:3px;
+            border-radius:999px;
+            background:rgba(252,251,247,0.90);
+            transform:translate(-50%,-50%);
+          "
+        ></div>
+      </div>
 
     </div>
   `;

@@ -1,4 +1,4 @@
-export const ARCUS_API_CONTRACT_VERSION = "arcus-api-contract-v2";
+export const ARCUS_API_CONTRACT_VERSION = "arcus-api-contract-v4";
 
 export function matchesArcusApiContract({
   accountStatus,

@@ -72,6 +72,10 @@ waterway as structured field
 source_quality beyond current reliability model
 ```
 
+`span_count` remains unavailable. The Professional dataset now includes a
+separate, non-equivalent hydraulic geometry object for source-backed bridge
+length and presence of piers in the active riverbed.
+
 ## Input / Outcome / Evidence Split
 
 ### Matching Features
@@ -129,6 +133,33 @@ Current audit:
 | Validation warnings | 4 |
 
 These fields are outcome features. They may be used for cohort interpretation after analogue retrieval, but not for retrieval, filtering, ranking, HCI, hazard signatures or route activation.
+
+### Hydraulic Geometry Evidence
+
+The D'Angelo, Ballio & Ravazzani (2025) S3 supplement has been matched
+conservatively to ARCUS without filling gaps by inference:
+
+| Metric | Value |
+|---|---:|
+| Accepted unique ARCUS/S3 pairs | 158 |
+| Explicit source-record matches | 112 |
+| Unique coordinate + year matches | 46 |
+| Bridge length available | 158 |
+| Piers-in-active-riverbed available | 155 |
+| Rejected spatial inconsistencies | 5 |
+| Rejected duplicate assignments | 3 |
+
+The normalized `hydraulic_geometry` object is Professional-only and includes
+record-level provenance. It is evidence context, not a vulnerability score.
+Current matching, analogue retrieval and mitigation logic do not consume these
+fields. This prevents an unvalidated feature from changing production outputs
+and avoids double counting correlated basin/river-size information.
+
+The master workbook uses a normalized structure: `EVENTS` contains only
+`bridge_length_m` and `piers_in_active_riverbed`; the 158 accepted joins are in
+`HYDRAULIC_GEOMETRY_LINKS`; the S3 citation, DOI, archive path and checksum occur
+once in `DATASETS`. This keeps the event table flat and analysis-ready without
+discarding audit provenance.
 
 ### Evidence Quality
 

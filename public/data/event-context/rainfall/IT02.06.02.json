@@ -1,0 +1,114 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT02.06.02",
+  "event_date": "2002-06-05",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 45.662,
+    "longitude": 8.002
+  },
+  "grid_location": {
+    "elevation_m": 795,
+    "latitude": 45.60221,
+    "longitude": 7.9999847,
+    "distance_from_event_km": 6.7
+  },
+  "period": {
+    "end_date": "2002-06-05",
+    "start_date": "2002-05-23",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2002-05-23",
+      "precipitation_mm": 82.1
+    },
+    {
+      "date": "2002-05-24",
+      "precipitation_mm": 10.1
+    },
+    {
+      "date": "2002-05-25",
+      "precipitation_mm": 12.7
+    },
+    {
+      "date": "2002-05-26",
+      "precipitation_mm": 1.2
+    },
+    {
+      "date": "2002-05-27",
+      "precipitation_mm": 71.9
+    },
+    {
+      "date": "2002-05-28",
+      "precipitation_mm": 6.1
+    },
+    {
+      "date": "2002-05-29",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2002-05-30",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2002-05-31",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2002-06-01",
+      "precipitation_mm": 0.5
+    },
+    {
+      "date": "2002-06-02",
+      "precipitation_mm": 14.8
+    },
+    {
+      "date": "2002-06-03",
+      "precipitation_mm": 18
+    },
+    {
+      "date": "2002-06-04",
+      "precipitation_mm": 9.1
+    },
+    {
+      "date": "2002-06-05",
+      "precipitation_mm": 116.4
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 116.4,
+    "event_and_previous_2_days_mm": 143.5,
+    "event_and_previous_6_days_mm": 158.8,
+    "full_period_mm": 342.9
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:09:55.537Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2002-06-05&latitude=45.662&longitude=8.002&models=cerra&start_date=2002-05-23&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_context_only",
+    "severity": "context",
+    "assessment_method": "dataset_role_rule",
+    "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
+    "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
+  }
+}

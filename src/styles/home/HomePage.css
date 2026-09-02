@@ -730,6 +730,141 @@
   line-height: 1.76;
 }
 
+.home-access-section {
+  padding: 92px 0 104px;
+  border-top: 1px solid rgba(32,40,38,0.13);
+  background: var(--arcus-paper);
+}
+
+.home-access-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.68fr);
+  gap: 72px;
+  align-items: end;
+}
+
+.home-access-heading span,
+.home-access-card > span,
+.home-boundary > span {
+  color: var(--arcus-bronze);
+  font-family: var(--arcus-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-access-heading h2 {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--arcus-night);
+  font-size: clamp(40px, 4.8vw, 66px);
+  line-height: 0.98;
+}
+
+.home-access-heading > p {
+  max-width: 520px;
+  margin: 0;
+  color: var(--arcus-ink-soft);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.home-access-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 48px;
+  border-top: 1px solid rgba(32,40,38,0.15);
+  border-left: 1px solid rgba(32,40,38,0.15);
+}
+
+.home-access-card {
+  min-height: 286px;
+  padding: 26px 28px 25px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(32,40,38,0.15);
+  border-bottom: 1px solid rgba(32,40,38,0.15);
+  background: rgba(252,251,247,0.52);
+  transition: background 180ms ease;
+}
+
+.home-access-card:hover {
+  background: var(--arcus-paper-soft);
+}
+
+.home-access-card h3 {
+  max-width: 300px;
+  margin: 46px 0 0;
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.home-access-card p {
+  max-width: 330px;
+  margin: 16px 0 0;
+  color: var(--arcus-ink-soft);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.home-access-card a,
+.home-boundary a {
+  width: fit-content;
+  margin-top: auto;
+  padding-top: 24px;
+  color: var(--arcus-bronze);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.home-access-card a:hover,
+.home-boundary a:hover {
+  color: var(--arcus-bronze-soft);
+}
+
+.home-boundary {
+  display: grid;
+  grid-template-columns: 150px minmax(240px, 0.75fr) minmax(320px, 1.25fr) auto;
+  gap: 28px;
+  align-items: center;
+  margin-top: 32px;
+  padding: 26px 28px;
+  border-left: 3px solid var(--arcus-bronze);
+  background: var(--arcus-night);
+  color: var(--arcus-text-on-dark);
+}
+
+.home-boundary > span {
+  color: var(--arcus-bronze-soft);
+}
+
+.home-boundary h2 {
+  margin: 0;
+  color: var(--arcus-text-on-dark);
+  font-size: 28px;
+  line-height: 1.08;
+}
+
+.home-boundary p {
+  margin: 0;
+  color: var(--arcus-text-on-dark-soft);
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+.home-boundary a {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
 @media (max-width: 1060px) {
   .home-container {
     width: calc(100% - 48px);
@@ -758,6 +893,27 @@
   .home-row p,
   .home-domain-row p {
     grid-column: 2;
+  }
+
+  .home-access-heading {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .home-access-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .home-access-card {
+    padding: 24px 22px;
+  }
+
+  .home-boundary {
+    grid-template-columns: 130px minmax(220px, 0.8fr) 1.2fr;
+  }
+
+  .home-boundary a {
+    grid-column: 2 / -1;
   }
 }
 
@@ -890,5 +1046,217 @@
   .home-definition-panel + .home-definition-panel {
     padding-left: 24px;
     border-bottom: 0;
+  }
+
+  .home-access-section {
+    padding: 72px 0 78px;
+  }
+
+  .home-access-grid {
+    grid-template-columns: 1fr;
+    margin-top: 36px;
+  }
+
+  .home-access-card {
+    min-height: 240px;
+  }
+
+  .home-access-card h3 {
+    margin-top: 32px;
+  }
+
+  .home-boundary {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .home-boundary a {
+    grid-column: auto;
+    margin-top: 6px;
+  }
+}
+
+/* Mineral Paper prototype: the evidence map replaces stock photography. */
+.home-hero {
+  min-height: 100svh;
+  background: var(--arcus-paper-soft);
+  color: var(--arcus-ink);
+}
+
+.home-hero-map {
+  inset: 120px 3vw 134px 52%;
+  overflow: hidden;
+  border: 1px solid rgba(32,40,38,0.16);
+  background: #ebe8df;
+  opacity: 1;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.home-hero-map::before {
+  background:
+    linear-gradient(rgba(32,40,38,0.052) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32,40,38,0.052) 1px, transparent 1px);
+  background-size: 72px 72px, 72px 72px;
+}
+
+.home-hero-map svg {
+  top: 0;
+  right: -18%;
+  width: 118%;
+  height: 100%;
+  transform: rotate(-1.5deg) scale(1.04);
+}
+
+.home-hero-map-grid line {
+  stroke: rgba(32,40,38,0.07);
+}
+
+.home-hero-map-boundaries path {
+  fill: rgba(23,63,66,0.065);
+  stroke: rgba(23,63,66,0.58);
+}
+
+.home-hero-map-points circle {
+  fill: rgba(167,101,50,0.74);
+  stroke: rgba(252,251,247,0.88);
+}
+
+.home-hero-map-points circle.is-partial {
+  fill: rgba(82,115,109,0.66);
+}
+
+.home-hero-map-hotspots circle {
+  fill: rgba(252,251,247,0.54);
+  stroke: rgba(167,101,50,0.92);
+  stroke-width: 0.22;
+}
+
+.home-hero-map-hotspots circle:hover,
+.home-hero-map-hotspots circle:focus,
+.home-hero-map-hotspots circle.is-active {
+  fill: rgba(167,101,50,0.26);
+  stroke: var(--arcus-bronze);
+  stroke-width: 0.30;
+  filter: drop-shadow(0 0 1px rgba(167,101,50,0.36));
+}
+
+.home-hero-map-label {
+  right: 5%;
+  top: 24%;
+  border-left-color: var(--arcus-bronze);
+  background: rgba(252,251,247,0.94);
+  color: var(--arcus-ink);
+  box-shadow: 0 14px 34px rgba(32,40,38,0.12);
+  backdrop-filter: blur(8px);
+}
+
+.home-hero-map-label span,
+.home-hero-map-label p {
+  color: var(--arcus-ink-muted);
+}
+
+.home-hero-map-label strong {
+  color: var(--arcus-night);
+}
+
+.home-hero-shade {
+  background:
+    linear-gradient(90deg, var(--arcus-paper-soft) 0%, var(--arcus-paper-soft) 47%, rgba(252,251,247,0.74) 57%, transparent 72%),
+    linear-gradient(180deg, rgba(252,251,247,0.70), transparent 24%, transparent 76%, rgba(252,251,247,0.88));
+}
+
+.home-hero-copy {
+  max-width: 600px;
+}
+
+.home-kicker {
+  border-color: rgba(32,40,38,0.16);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--arcus-bronze);
+  backdrop-filter: none;
+}
+
+.home-hero-proof {
+  border-color: rgba(167,101,50,0.30);
+  border-radius: 2px;
+  background: rgba(167,101,50,0.055);
+  color: var(--arcus-ink-soft);
+  backdrop-filter: none;
+}
+
+.home-hero h1 {
+  max-width: 650px;
+  color: var(--arcus-night);
+  font-size: clamp(50px, 5.35vw, 82px);
+  line-height: 0.98;
+}
+
+.home-hero-copy p {
+  max-width: 580px;
+  color: var(--arcus-ink-soft);
+}
+
+.home-hero .home-primary-action {
+  box-shadow: none;
+}
+
+.home-hero .home-secondary-action {
+  border-color: rgba(32,40,38,0.18);
+  background: rgba(252,251,247,0.72);
+  color: var(--arcus-ink);
+  backdrop-filter: none;
+}
+
+.home-primary-action,
+.home-secondary-action,
+.home-output a,
+.home-evidence-map {
+  border-radius: 2px;
+}
+
+.home-hero .home-metric {
+  border-top-color: rgba(32,40,38,0.18);
+}
+
+.home-hero .home-metric strong {
+  color: var(--arcus-night);
+}
+
+.home-hero .home-metric span {
+  color: var(--arcus-ink-muted);
+}
+
+@media (max-width: 1060px) {
+  .home-hero-map {
+    inset: 112px 24px 154px 56%;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-hero {
+    padding-top: 132px;
+  }
+
+  .home-hero-map {
+    inset: 96px -35% 34% 30%;
+    border: 0;
+    opacity: 0.20;
+  }
+
+  .home-hero-map svg {
+    inset: 0 -30% 0 auto;
+    width: 160%;
+    height: 100%;
+  }
+
+  .home-hero-shade {
+    background: linear-gradient(90deg, rgba(252,251,247,0.98), rgba(252,251,247,0.76));
+  }
+
+  .home-hero h1 {
+    color: var(--arcus-night);
   }
 }

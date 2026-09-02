@@ -1,6 +1,11 @@
 # ARCUS Professional Path 01 - Methodology Workbench
 
-This document describes a methodology workbench for a future Path 01 screening system. It is not a production scoring formula and does not modify ARCUS Professional outputs.
+> **SUPERSEDED AUDIT RECORD.** This workbench is retained for traceability only; it is not an active ARCUS method or product specification. See `ARCUS_Product_Definition.md`.
+
+This document records the methodology workbench used to derive the Path 01 v2.1
+candidate screening system. The candidate is now visible in ARCUS Professional
+under controlled validation; it is not a structural-risk or
+collapse-probability formula.
 
 ## Decision Question
 
@@ -9,7 +14,7 @@ This document describes a methodology workbench for a future Path 01 screening s
 Temporary candidate name:
 
 ```text
-Preliminary Site Screening Priority
+Preliminary Point Screening Priority
 ```
 
 The candidate output must not be described as:
@@ -20,17 +25,21 @@ The candidate output must not be described as:
 - NTC conformity;
 - final site suitability.
 
-## Current Production Boundary
+## Current Controlled-Validation Boundary
 
-The current production chain remains unchanged:
+The current boundary is:
 
-- `Final Priority Index` is still the current UI/report expression.
-- Current `70/30` weighting is not changed.
+- `Preliminary Point Screening v2.1` is the primary Path 01 UI/report reading;
+- the old `Final Priority Index` 70/30 calculation is preserved only in
+  internal legacy audit tooling;
 - `buildTerritoryProfiles` is not changed.
 - `buildAssetScreening` is not changed.
 - `Historical Collapse Incidence` is not changed.
 - Official ISPRA/INGV provider outputs keep `normalized_score = null`.
 - Path 02 ranking is not changed.
+
+The canonical v2.1 implementation is `src/utils/path01Priority.js`; its contract
+is documented in `docs/ARCUS_PATH01_SCREENING_V2.md`.
 
 The workbench output is saved separately in:
 
@@ -94,11 +103,12 @@ The workbench is intentionally independent from the UI state.
 
 ### A. Official Hazard Exposure
 
-Official point-level exposure includes:
+Official point-level evidence includes:
 
 - ISPRA hydraulic P1/P2/P3;
 - ISPRA PAI landslide AA/P1/P2/P3/P4;
-- INGV MPS04 PGA p50 in `g`.
+- INGV MPS04 PGA p50 in `g`, as a separate reference-grid axis that does not
+  determine the ISPRA tier.
 
 These are source observations at the selected project point. They are not currently production scores.
 
@@ -117,7 +127,7 @@ Data quality includes:
 - source freshness;
 - spatial resolution;
 - nearest MPS04 node distance;
-- denominator confidence;
+- denominator size class;
 - missing data.
 
 Confidence must remain separate from hazard. It must not silently reduce a hazard value.
@@ -129,7 +139,7 @@ The workbench derives flags such as:
 - `hydraulic_p3_major_constraint`;
 - `landslide_p4_critical_hazard`;
 - `landslide_attention_area`;
-- `multi_hazard_escalation`;
+- `multi_hazard_integrated_study_required`;
 - `incomplete_assessment`;
 - `source_unavailable_or_incomplete`;
 - `historical_denominator_missing`;
@@ -176,11 +186,13 @@ Interpretation: Historical Collapse Incidence is highly skewed. Any direct linea
 
 ## Non-Compensatory Rules Tested
 
-The workbench tests, but does not productionize:
+The workbench tests experimental alternatives alongside the canonical v2.1
+contract:
 
 - landslide `P4` forces specialist review;
 - hydraulic `P3` forces major constraint review;
-- multi-hazard severe combinations escalate;
+- multi-hazard severe combinations require integrated study without an
+  automatic tier increase;
 - unavailable/partial sources create an incomplete assessment flag;
 - AA attention area remains separate from P1-P4;
 - historical outliers do not become official hazard.

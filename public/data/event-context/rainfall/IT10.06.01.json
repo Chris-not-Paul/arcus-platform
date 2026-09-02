@@ -1,0 +1,123 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT10.06.01",
+  "event_date": "2010-06-27",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 44.5658,
+    "longitude": 7.9024
+  },
+  "grid_location": {
+    "elevation_m": 221,
+    "latitude": 44.56722,
+    "longitude": 7.9308624,
+    "distance_from_event_km": 2.3
+  },
+  "period": {
+    "end_date": "2010-06-27",
+    "start_date": "2010-06-14",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2010-06-14",
+      "precipitation_mm": 2.7
+    },
+    {
+      "date": "2010-06-15",
+      "precipitation_mm": 28.9
+    },
+    {
+      "date": "2010-06-16",
+      "precipitation_mm": 24.3
+    },
+    {
+      "date": "2010-06-17",
+      "precipitation_mm": 12.2
+    },
+    {
+      "date": "2010-06-18",
+      "precipitation_mm": 0.7
+    },
+    {
+      "date": "2010-06-19",
+      "precipitation_mm": 4.6
+    },
+    {
+      "date": "2010-06-20",
+      "precipitation_mm": 6.4
+    },
+    {
+      "date": "2010-06-21",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2010-06-22",
+      "precipitation_mm": 0.6
+    },
+    {
+      "date": "2010-06-23",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2010-06-24",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2010-06-25",
+      "precipitation_mm": 0.1
+    },
+    {
+      "date": "2010-06-26",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2010-06-27",
+      "precipitation_mm": 0
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 0,
+    "event_and_previous_2_days_mm": 0.1,
+    "event_and_previous_6_days_mm": 0.7,
+    "full_period_mm": 80.5
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:10:48.026Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2010-06-27&latitude=44.5658&longitude=7.9024&models=cerra&start_date=2010-06-14&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_not_representative",
+    "severity": "warning",
+    "rationale_it": "La piena è documentata dalle fonti dell’evento, ma la cella CERRA riporta 0 mm nel giorno registrato e 0,7 mm in sette giorni. Il valore puntuale non è considerato rappresentativo della forzante idrologica del bacino.",
+    "rationale_en": "Event sources document a flood, while the CERRA cell reports 0 mm on the recorded day and 0.7 mm over seven days. The point value is not considered representative of the catchment’s hydrological forcing.",
+    "supporting_sources": [
+      "https://www.regione.piemonte.it/web/pinforma/comunicati-stampa/monchiero-riparte-dal-ponte",
+      "https://notizie.provincia.cuneo.it/?p=7252"
+    ],
+    "assessment_method": "event_specific_source_and_chronology_review",
+    "assessment_input": {
+      "event_calendar_day_mm": 0,
+      "event_and_previous_2_days_mm": 0.1,
+      "event_and_previous_6_days_mm": 0.7
+    }
+  }
+}

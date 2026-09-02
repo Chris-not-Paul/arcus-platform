@@ -32,29 +32,29 @@
     Consolas,
     monospace;
 
-  --arcus-ink: #171a18;
-  --arcus-ink-soft: #424842;
-  --arcus-ink-muted: #6f756d;
-  --arcus-paper: #f1eee7;
-  --arcus-paper-warm: #e5ded2;
-  --arcus-paper-soft: #faf7f0;
-  --arcus-night: #120f0d;
-  --arcus-night-soft: #1a1512;
-  --arcus-night-panel: #1d1e23;
-  --arcus-bronze: #c49040;
-  --arcus-bronze-soft: #d0a56f;
-  --arcus-clay: #8a6045;
-  --arcus-steel: #6e858d;
-  --arcus-risk: #9a4f36;
-  --arcus-signal: #b78a45;
-  --arcus-border-light: rgba(77,69,58,0.16);
-  --arcus-border-dark: rgba(243,239,232,0.10);
-  --arcus-ivory: #f3efe8;
-  --arcus-ivory-dim: rgba(243,239,232,0.74);
-  --arcus-ivory-faint: rgba(243,239,232,0.50);
-  --arcus-text-on-dark: #f3efe8;
-  --arcus-text-on-dark-soft: rgba(243,239,232,0.74);
-  --arcus-focus: #d0a56f;
+  --arcus-ink: #202826;
+  --arcus-ink-soft: #4d5955;
+  --arcus-ink-muted: #6d7772;
+  --arcus-paper: #f3f0e8;
+  --arcus-paper-warm: #e8e2d6;
+  --arcus-paper-soft: #fcfbf7;
+  --arcus-night: #173f42;
+  --arcus-night-soft: #1d4a4b;
+  --arcus-night-panel: #244f50;
+  --arcus-bronze: #a76532;
+  --arcus-bronze-soft: #c58a32;
+  --arcus-clay: #8e6046;
+  --arcus-steel: #52736d;
+  --arcus-risk: #994f39;
+  --arcus-signal: #b0782f;
+  --arcus-border-light: rgba(32,40,38,0.16);
+  --arcus-border-dark: rgba(252,251,247,0.16);
+  --arcus-ivory: #fcfbf7;
+  --arcus-ivory-dim: rgba(252,251,247,0.78);
+  --arcus-ivory-faint: rgba(252,251,247,0.56);
+  --arcus-text-on-dark: #fcfbf7;
+  --arcus-text-on-dark-soft: rgba(252,251,247,0.78);
+  --arcus-focus: #c58a32;
 }
 
 html {
@@ -89,9 +89,9 @@ body {
   font-family:
     var(--arcus-font-sans);
 
-  background: var(--arcus-night);
+  background: var(--arcus-paper);
 
-  color: var(--arcus-text-on-dark);
+  color: var(--arcus-ink);
 
   overflow-x: hidden;
 

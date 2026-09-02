@@ -477,6 +477,30 @@ try {
   assert(mitigation.strategies[0].process === "hydraulic_process_not_resolved", "mitigation endpoint returned the wrong episode-aware fallback");
   assert(mitigation.evidence_cohort.event_count === 3, "mitigation endpoint used the wrong evidence cohort");
   assert(mitigation.evidence_cohort.episode_count === 3, "mitigation endpoint used the wrong independent-episode count");
+  assert(
+    mitigation.failure_learning_matrix?.matrix_version ===
+      "arcus-failure-learning-matrix-v1",
+    "mitigation endpoint omitted the versioned Failure Learning Matrix"
+  );
+  assert(
+    mitigation.failure_learning_matrix?.status === "limited_evidence",
+    "mitigation endpoint returned the wrong matrix state"
+  );
+  assert(
+    mitigation.failure_learning_matrix?.qualified_priority_count === 0,
+    "limited-evidence matrix exposed a qualified priority"
+  );
+  assert(
+    Boolean(
+      mitigation.failure_learning_matrix?.generic_investigation_priority?.en
+    ),
+    "limited-evidence matrix omitted the generic investigation priority"
+  );
+  assert(
+    mitigation.failure_learning_matrix?.cohort_contract
+      ?.geometry_used_for_qualification === false,
+    "mitigation endpoint allowed geometry to qualify the matrix"
+  );
   assert(mitigation.landslide_support?.status === "abstained", "mitigation endpoint omitted the landslide abstention support");
   assert(mitigation.landslide_support?.strategies?.length === 0, "landslide support emitted unsupported strategies");
   assert(mitigation.seismic_support?.status === "abstained", "mitigation endpoint omitted the seismic abstention support");

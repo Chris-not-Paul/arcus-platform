@@ -91,6 +91,10 @@ const index = readJson("private-data/professional/ainop-bridge-index.json");
 const events = readJson("private-data/processed/events.json");
 const sources = readJson("private-data/processed/sources.json");
 const release = readJson("private-data/professional/data-release.json");
+const professionalPageSource = fs.readFileSync(
+  "src/pages/CollapseIntelligencePage.jsx",
+  "utf8"
+);
 const openScopedEvents = events.filter(
   (event) => yearFromDate(event.date) <= publicReleaseEndYear
 );
@@ -162,6 +166,9 @@ assert.equal(agrigento.denominator_confidence, "unavailable");
 assert.equal(agrigento.confidence_type, "denominator_sample_size");
 assert.equal(agrigento.numerator_evidence_confidence, "documented");
 assert.equal(agrigento.overall_data_confidence, null);
+assert.equal(agrigento.national_rank_by_rate, null);
+assert.equal(agrigento.percentile_by_rate, null);
+assert.equal(agrigento.rate_rank_tie_count, null);
 validateRecord(agrigento);
 
 const ancona = provinceRecord(index, "Ancona");
@@ -208,6 +215,28 @@ const rebuilt = buildAinopBridgeIndex({
 const rebuiltTorino = provinceRecord(rebuilt, "Torino");
 assert.deepEqual(rebuiltTorino, torino);
 
+const zeroRateRecords = rebuilt.provinces.filter(
+  (record) =>
+    Number(record.denominator_count) > 0 &&
+    Number(record.numerator_count) === 0
+);
+const zeroRateRanks = new Set(
+  zeroRateRecords.map((record) => record.national_rank_by_rate)
+);
+const zeroRatePercentiles = new Set(
+  zeroRateRecords.map((record) => record.percentile_by_rate)
+);
+
+assert.equal(zeroRateRecords.length > 1, true);
+assert.equal(zeroRateRanks.size, 1);
+assert.equal(zeroRatePercentiles.size, 1);
+assert.equal(
+  zeroRateRecords.every(
+    (record) => record.rate_rank_tie_count === zeroRateRecords.length
+  ),
+  true
+);
+
 assert.throws(
   () =>
     assertCoherentIndexRecord({
@@ -218,33 +247,23 @@ assert.throws(
 );
 
 assert.equal(
-  fs.readFileSync("src/pages/ProfessionalPage.jsx", "utf8").includes(
-    "selectedCollapseRateNumerator"
-  ),
-  true
-);
-assert.equal(
-  fs.readFileSync("scripts/export-path01-report.js", "utf8").includes(
-    "numerator_count"
-  ),
-  true
-);
-assert.equal(
-  fs.readFileSync("src/pages/ProfessionalPage.jsx", "utf8").includes(
-    "openEvents("
-  ),
+  professionalPageSource.includes("selectedCollapseRateNumerator"),
   false
 );
 assert.equal(
-  fs.readFileSync("src/pages/ReportMapPath01.jsx", "utf8").includes(
-    "openEvents("
-  ),
+  professionalPageSource.includes("openEvents("),
   false
 );
 assert.equal(
-  fs.readFileSync("scripts/export-path01-report.js", "utf8").includes(
-    "Release:"
-  ),
+  professionalPageSource.includes("collapseRateRankEligible"),
+  false
+);
+assert.equal(
+  professionalPageSource.includes("ainop-bridge-index"),
+  false
+);
+assert.equal(
+  professionalPageSource.includes("historicalPatternReading"),
   false
 );
 
@@ -253,10 +272,9 @@ console.log(
     ok: true,
     checks: [
       "displayed-cases-equal-numerator-count",
-      "ui-report-export-share-numerator",
-      "professional-page-does-not-use-open-events",
-      "report-map-does-not-use-open-events",
-      "report-does-not-display-fixed-release-end-year",
+      "historical-incidence-data-remains-auditable",
+      "collapse-intelligence-page-does-not-use-open-events",
+      "historical-incidence-retired-from-active-product",
       "denominator-same-ui-report",
       "open-scope-applies-public-release-end-year",
       "professional-scope-includes-2026-events",
@@ -273,11 +291,16 @@ console.log(
       "no-cross-province-record-reuse",
       "zero-case-province",
       "missing-denominator-province",
+      "missing-denominator-has-no-ranking",
       "torino-consistent-values",
       "denominator-confidence-typed",
       "overall-data-confidence-null",
       "incoherent-json-rejected",
       "deterministic-rebuild",
+      "equal-rates-share-rank-and-percentile",
+      "low-size-denominator-ranking-suppressed-in-report",
+      "historical-ratio-not-labelled-stock-vulnerability",
+      "historical-cluster-wording-follows-dominant-trigger",
     ],
   })
 );

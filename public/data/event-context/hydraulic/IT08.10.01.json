@@ -1,0 +1,90 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT08.10.01",
+  "event_date": "2008-10-22",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Rio San Girolamo",
+    "latitude": 39.1529,
+    "longitude": 8.9655,
+    "municipality": "Capoterra",
+    "hydrographic_context": "Rio San Girolamo",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "other_documented_hydraulic_process",
+    "component_involved": "approach_embankment",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "other_documented_hydraulic_process"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0467",
+      "provider": "ANSA",
+      "title": "Alluvione Capoterra 2008: confermata l'assoluzione in appello per i quattro morti",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/sardegna/notizie/2020/02/03/alluvione-2008-confermata-lassoluzione_2eb4589f-f10f-4c0e-9761-26c98b25417d.html",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    },
+    {
+      "source_id": "SRC0468",
+      "provider": "ANSA",
+      "title": "Alluvione Capoterra: esperto, in 700 anni mai un evento simile – 106mm in 30 minuti",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/sardegna/notizie/2015/01/29/alluvione-capoterraespertoin-700-anni-mai-un-evento-simile_4e38bbb6-f28b-478c-8506-76d8a5ac0640.html",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    },
+    {
+      "source_id": "SRC0469",
+      "provider": "ANSA",
+      "title": "Alluvione 2008: al via demolizione e ricostruzione ponti a Capoterra",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/sardegna/notizie/2021/01/11/alluvione-2008-al-via-demolizione-e-ricostruzione-ponti-a-capoterra_3cb11d14-9cf6-4276-9bfc-f00d0c6792ab.html",
+      "reference": null,
+      "accessed_at": "2026-05-21"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-21"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

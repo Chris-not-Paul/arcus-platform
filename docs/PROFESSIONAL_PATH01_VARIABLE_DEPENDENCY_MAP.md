@@ -1,5 +1,7 @@
 # ARCUS Professional Path 01 - Variable Dependency Map
 
+> **SUPERSEDED AUDIT RECORD.** This dependency map does not describe the active Collapse Intelligence product. See `ARCUS_Product_Definition.md`.
+
 This document maps variable dependencies for a future Path 01 methodology workbench. It is designed to prevent double counting and semantic overlap.
 
 ## Top-Level Groups
@@ -91,11 +93,11 @@ Avoid double counting:
 | `hydraulic_p3_major_constraint` | hydraulic highest class P3 | Major hydraulic constraint |
 | `landslide_p4_critical_hazard` | landslide highest class P4 | Critical landslide hazard |
 | `landslide_attention_area` | AA intersects point | Attention area separate from P1-P4 |
-| `multi_hazard_escalation` | two or more severe components | Combined review needed |
+| `multi_hazard_integrated_study_required` | two or more severe signals | Integrated review required; no tier increase |
 | `incomplete_assessment` | partial source | Output incomplete |
 | `source_unavailable_or_incomplete` | provider unavailable/partial/outside coverage | Do not score as zero |
 | `historical_denominator_missing` | denominator null | HCI unavailable |
-| `detailed_study_required` | P3/P4/multi-hazard | Specialist review language |
+| `detailed_study_required` | governing ISPRA level 3 or 4 | Specialist review language |
 
 Dependencies:
 

@@ -33,6 +33,9 @@ import {
 import {
   normalizeHydraulicIntelligence,
 } from "../src/utils/hydraulicIntelligence.js";
+import {
+  buildHydraulicEpisodeRegistry,
+} from "../server/collapseEpisodeService.js";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, ""));
@@ -58,7 +61,8 @@ const productionFiles = [
   "private-data/professional/ainop-bridge-index.json",
   "private-data/professional/hazard-exposure-preview.json",
   "private-data/professional/professional-events.json",
-  "src/pages/ProfessionalPage.jsx",
+  "src/pages/CollapseIntelligencePage.jsx",
+  "src/utils/collapseIntelligenceReport.js",
   "src/utils/analytics.js",
   "server/hazard/hazardExposureService.js",
 ].map((filePath) => path.resolve(filePath));
@@ -310,22 +314,39 @@ check("leave-one-out", () => {
   assert.equal(validation.leave_one_out.total_cases > 0, true);
 });
 check("temporal-holdout", () => {
-  assert.equal(validation.temporal_holdout.cutoff_year, 2018);
+  assert.equal(validation.temporal_holdout[2018].total_cases > 0, true);
 });
 check("geographical-holdout", () => {
   assert.equal(validation.geographical_holdout.total_cases > 0, true);
 });
+check("legacy-cause-family-holdouts-invalidated", () => {
+  assert.equal(
+    analysis.retrospective_validation.temporal_holdout.status,
+    "invalidated_target_outcome_leakage"
+  );
+  assert.equal(
+    analysis.retrospective_validation.geographical_holdout.status,
+    "invalidated_target_outcome_leakage"
+  );
+  assert.equal(
+    redTeam.metric_reproducibility.legacy_benchmark_status,
+    "invalidated_target_outcome_leakage"
+  );
+});
 check("baseline-comparison", () => {
-  assert.equal(Object.hasOwn(validation.baseline_comparison, "national_most_frequent_cause"), true);
+  assert.equal(
+    validation.baseline_comparison.comparison_contract.same_eligible_denominator,
+    true
+  );
 });
 check("value-add-benchmark", () => {
   assert.equal(Object.hasOwn(analysis.value_add_benchmark, "baseline_c_arcus_collapse_intelligence"), true);
 });
 check("validation-no-leakage", () => {
-  assert.equal(validation.leakage_check.includes("excluded from similarity"), true);
+  assert.equal(validation.leakage_check.includes("excluded from routing and similarity"), true);
 });
 check("validation-insufficient-evidence", () => {
-  assert.equal(Object.hasOwn(validation.leave_one_out, "insufficient_evidence_count"), true);
+  assert.equal(Object.hasOwn(validation.leave_one_out, "abstained_cases"), true);
 });
 check("deterministic-metrics", () => {
   assert.deepEqual(validation.leave_one_out, validateCollapseAnalogues({
@@ -564,6 +585,128 @@ check("hazard-gated-most-frequent-pattern-baseline", () => {
     true
   );
 });
+check("hazard-gated-fair-baseline-denominator", () => {
+  const benchmark = hazardGated.analysis.value_add_benchmark;
+  const arcus = hazardGated.analysis.hydraulic_intelligence_mvp.evaluation
+    .hazard_project_profile_limited_territory;
+  const majority = hazardGated.analysis.hydraulic_intelligence_mvp.baselines
+    .most_frequent_hydraulic_mechanism;
+  const random = hazardGated.analysis.hydraulic_intelligence_mvp.baselines
+    .random_within_hydraulic_family;
+
+  assert.equal(benchmark.comparison_contract.same_eligible_denominator, true);
+  assert.equal(benchmark.comparison_contract.target_outcome_used_for_selection, false);
+  assert.equal(arcus.total_cases, majority.total_cases);
+  assert.equal(arcus.total_cases, random.total_cases);
+  assert.deepEqual(
+    arcus.rows.map((row) => row.event_id),
+    majority.rows.map((row) => row.event_id)
+  );
+  assert.deepEqual(
+    arcus.rows.map((row) => row.event_id),
+    random.rows.map((row) => row.event_id)
+  );
+});
+check("hazard-gated-hit3-confidence-interval", () => {
+  const interval = hazardGated.retrievalValidation.hydraulic_project_informed
+    .failure_pattern_hit_at_3_ci_95;
+
+  assert.equal(interval.method, "wilson_score");
+  assert.equal(interval.sample_size, 148);
+  assert.equal(interval.lower <= 0.473, true);
+  assert.equal(interval.upper >= 0.473, true);
+});
+check("hazard-gated-paired-baseline-uncertainty", () => {
+  const differences = hazardGated.analysis.value_add_benchmark
+    .paired_hit_at_3_difference;
+
+  assert.equal(differences.versus_random.method, "paired_deterministic_bootstrap");
+  assert.equal(differences.versus_random.sample_size, 148);
+  assert.equal(differences.versus_majority.sample_size, 148);
+});
+check("hazard-gated-feature-ablation", () => {
+  const ablation = hazardGated.analysis.feature_ablation;
+
+  assert.equal(ablation.reference_features.includes("hazard_signature"), true);
+  assert.equal(ablation.reference_features.includes("province"), true);
+  assert.equal(
+    Object.keys(ablation.leave_one_feature_out).length,
+    ablation.reference_features.length
+  );
+  assert.equal(
+    ablation.grouped.without_territory.total_cases,
+    hazardGated.retrievalValidation.hydraulic_project_informed.total_cases
+  );
+});
+check("hazard-gated-strict-geography-holdouts", () => {
+  const holdout = hazardGated.analysis.geographical_holdout;
+  const professional = readJson("private-data/professional/professional-events.json");
+  const professionalRows = Array.isArray(professional)
+    ? professional
+    : professional.events;
+  const eventsById = new Map(
+    professionalRows.map((event) => [event.event_id, event])
+  );
+
+  assert.equal(holdout.leave_province_out.total_cases, 263);
+  assert.equal(holdout.leave_region_out.total_cases, 263);
+  assert.equal(holdout.leave_region_out.name.includes("hydraulic"), true);
+  holdout.leave_region_out.rows
+    .filter((row) => !row.abstained)
+    .forEach((row) => {
+      const target = eventsById.get(row.event_id);
+
+      row.analogue_event_ids.forEach((eventId) => {
+        assert.notEqual(eventsById.get(eventId)?.region, target?.region);
+      });
+    });
+  holdout.leave_province_out.rows
+    .filter((row) => !row.abstained)
+    .forEach((row) => {
+      const target = eventsById.get(row.event_id);
+
+      row.analogue_event_ids.forEach((eventId) => {
+        assert.notEqual(eventsById.get(eventId)?.province, target?.province);
+      });
+    });
+});
+check("hazard-gated-episode-holdout", () => {
+  const episode = hazardGated.analysis.episode_holdout;
+  const professional = readJson("private-data/professional/professional-events.json");
+  const professionalRows = Array.isArray(professional)
+    ? professional
+    : professional.events;
+  const professionalSources = readJson(
+    "private-data/professional/professional-sources.json"
+  );
+  const sourceRows = Array.isArray(professionalSources)
+    ? professionalSources
+    : professionalSources.sources;
+  const registry = buildHydraulicEpisodeRegistry(
+    professionalRows,
+    sourceRows
+  );
+
+  assert.equal(episode.registry.episode_count > 0, true);
+  assert.equal(
+    episode.registry.methodology.version,
+    "arcus-hydraulic-episode-registry-v2"
+  );
+  assert.equal(episode.validation.total_cases, 263);
+  episode.validation.rows
+    .filter(
+      (row) =>
+        !row.abstained && registry.event_to_episode[row.event_id]
+    )
+    .forEach((row) => {
+      row.analogue_event_ids.forEach((eventId) => {
+        assert.notEqual(
+          registry.event_to_episode[eventId],
+          registry.event_to_episode[row.event_id]
+        );
+      });
+    });
+});
 check("hazard-gated-failure-pattern-hit-at-k-fields", () => {
   const validationResult = hazardGated.retrievalValidation.hydraulic_project_informed;
 
@@ -592,10 +735,12 @@ check("hazard-gated-abstention-rate-coherent", () => {
     )
   );
 });
-check("hazard-gated-hci-context-only", () => {
-  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_context_only"), true);
-  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_limited_tie_breaker"), true);
-  assert.equal(Object.hasOwn(hazardGated.analysis.hci_ablation, "hci_weighted_feature"), true);
+check("hazard-gated-denominator-features-retired", () => {
+  const serialized = JSON.stringify(hazardGated.analysis);
+
+  assert.equal(Object.hasOwn(hazardGated.analysis, "hci_ablation"), false);
+  assert.equal(serialized.includes("cause_specific_hci_context"), false);
+  assert.equal(serialized.toLowerCase().includes("ainop"), false);
 });
 check("hazard-gated-hydraulic-signature-helper", () => {
   assert.equal(
@@ -660,20 +805,29 @@ check("no-silent-denominator-redistribution", () => {
     true
   );
 });
-check("fpi-unchanged", () => {
-  const page = fs.readFileSync("src/pages/ProfessionalPage.jsx", "utf8");
-  assert.equal(page.includes("selectedExposurePriorityScore * 0.7"), true);
-  assert.equal(page.includes("selectedCollapseRateScore * 0.3"), true);
+check("retired-priority-model-absent-from-active-product", () => {
+  const page = fs.readFileSync("src/pages/CollapseIntelligencePage.jsx", "utf8");
+  const report = fs.readFileSync(
+    "src/utils/collapseIntelligenceReport.js",
+    "utf8"
+  );
+  assert.equal(page.includes("buildPath01PriorityIndex"), false);
+  assert.equal(page.includes("buildPath01ScreeningV2"), false);
+  assert.equal(page.includes("activeEntryPath"), false);
+  assert.equal(page.includes("assetRows"), false);
+  assert.equal(report.includes("Final Priority Index"), false);
+  assert.equal(report.includes("Infrastructure Priority Index"), false);
+  assert.equal(report.includes("ABSTAINED - ZERO STRATEGIES"), true);
 });
 check("providers-unchanged", () => {
   assert.equal(fs.existsSync("server/hazard/providers/ispraFloodProvider.js"), true);
   assert.equal(fs.existsSync("server/hazard/providers/ispraLandslideProvider.js"), true);
   assert.equal(fs.existsSync("server/hazard/providers/ingvSeismicProvider.js"), true);
 });
-check("path02-unchanged", () => {
-  const analytics = fs.readFileSync("src/utils/analytics.js", "utf8");
-  assert.equal(analytics.includes("profileScore * 0.22"), true);
-  assert.equal(analytics.includes("hazardScore * 0.16"), true);
+check("retired-asset-ranking-not-imported", () => {
+  const page = fs.readFileSync("src/pages/CollapseIntelligencePage.jsx", "utf8");
+  assert.equal(page.includes("buildAssetScreening"), false);
+  assert.equal(page.includes("Asset Priority Score"), false);
 });
 check("production-normalized-score-null", () => {
   const seismic = fs.readFileSync("server/hazard/normalizers/seismicNormalizer.js", "utf8");

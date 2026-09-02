@@ -1,0 +1,123 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT11.11.03",
+  "event_date": "2011-11-22",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 38.1691,
+    "longitude": 15.1949
+  },
+  "grid_location": {
+    "elevation_m": 5,
+    "latitude": 38.177044,
+    "longitude": 15.227463,
+    "distance_from_event_km": 3
+  },
+  "period": {
+    "end_date": "2011-11-22",
+    "start_date": "2011-11-09",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2011-11-09",
+      "precipitation_mm": 8.6
+    },
+    {
+      "date": "2011-11-10",
+      "precipitation_mm": 14.2
+    },
+    {
+      "date": "2011-11-11",
+      "precipitation_mm": 24.6
+    },
+    {
+      "date": "2011-11-12",
+      "precipitation_mm": 2.2
+    },
+    {
+      "date": "2011-11-13",
+      "precipitation_mm": 2
+    },
+    {
+      "date": "2011-11-14",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-15",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-16",
+      "precipitation_mm": 0.2
+    },
+    {
+      "date": "2011-11-17",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-18",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-19",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-20",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2011-11-21",
+      "precipitation_mm": 0.2
+    },
+    {
+      "date": "2011-11-22",
+      "precipitation_mm": 0
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 0,
+    "event_and_previous_2_days_mm": 0.2,
+    "event_and_previous_6_days_mm": 0.4,
+    "full_period_mm": 52
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:09:44.282Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2011-11-22&latitude=38.1691&longitude=15.1949&models=cerra&start_date=2011-11-09&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_not_representative",
+    "severity": "warning",
+    "rationale_it": "Le fonti documentano il nubifragio e la piena del 22 novembre 2011, ma la cella CERRA riporta 0 mm nel giorno registrato e 0,4 mm in sette giorni. La ricostruzione puntuale non rappresenta l’evento locale.",
+    "rationale_en": "Sources document the 22 November 2011 rainstorm and flood, while the CERRA cell reports 0 mm on the recorded day and 0.4 mm over seven days. The point reconstruction does not represent the local event.",
+    "supporting_sources": [
+      "https://iris.cnr.it/handle/20.500.14243/280277",
+      "https://old.comune.barcellona-pozzo-di-gotto.me.it/wp-content/uploads/schede/ambiente/PCPC-2015/Relazione_Piano%20Comunale%20di%20Protezione%20Civile.pdf"
+    ],
+    "assessment_method": "event_specific_source_and_chronology_review",
+    "assessment_input": {
+      "event_calendar_day_mm": 0,
+      "event_and_previous_2_days_mm": 0.2,
+      "event_and_previous_6_days_mm": 0.4
+    }
+  }
+}

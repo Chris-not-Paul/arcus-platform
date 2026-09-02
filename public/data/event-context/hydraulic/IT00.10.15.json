@@ -1,0 +1,90 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT00.10.15",
+  "event_date": "2000-10-13",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Orco stream",
+    "latitude": 45.3590443263878,
+    "longitude": 7.71108119476556,
+    "municipality": "Castellamonte",
+    "hydrographic_context": "Orco stream",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "bank_erosion_or_embankment_failure",
+    "component_involved": "multiple_components",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "bank_erosion_or_embankment_failure"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0593",
+      "provider": "ARPA Piemonte",
+      "title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
+      "reference": null,
+      "accessed_at": "2026-05-22"
+    },
+    {
+      "source_id": "SRC0595",
+      "provider": "Journal Paper",
+      "title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Scientific",
+      "url": "https://doi.org/10.1080/15732479.2025.2483500",
+      "reference": null,
+      "accessed_at": "2026-05-22"
+    },
+    {
+      "source_id": "SRC0594",
+      "provider": "ANSA",
+      "title": "10 anni fa alluvione Nord-Ovest, fu inferno d'acqua – Piemonte e Valle d'Aosta",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html",
+      "reference": null,
+      "accessed_at": "2026-05-22"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "standard",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-22"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

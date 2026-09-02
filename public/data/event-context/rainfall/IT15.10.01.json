@@ -1,0 +1,114 @@
+{
+  "schema_version": "arcus-event-rainfall-context-v1",
+  "event_id": "IT15.10.01",
+  "event_date": "2015-10-15",
+  "status": "context_available",
+  "requested_location": {
+    "latitude": 41.3707,
+    "longitude": 14.7882
+  },
+  "grid_location": {
+    "elevation_m": 476,
+    "latitude": 41.340446,
+    "longitude": 14.786636,
+    "distance_from_event_km": 3.4
+  },
+  "period": {
+    "end_date": "2015-10-15",
+    "start_date": "2015-10-02",
+    "timezone": "Europe/Rome"
+  },
+  "daily": [
+    {
+      "date": "2015-10-02",
+      "precipitation_mm": 2.7
+    },
+    {
+      "date": "2015-10-03",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2015-10-04",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2015-10-05",
+      "precipitation_mm": 1.3
+    },
+    {
+      "date": "2015-10-06",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2015-10-07",
+      "precipitation_mm": 4.6
+    },
+    {
+      "date": "2015-10-08",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2015-10-09",
+      "precipitation_mm": 2.9
+    },
+    {
+      "date": "2015-10-10",
+      "precipitation_mm": 50.4
+    },
+    {
+      "date": "2015-10-11",
+      "precipitation_mm": 15.5
+    },
+    {
+      "date": "2015-10-12",
+      "precipitation_mm": 0
+    },
+    {
+      "date": "2015-10-13",
+      "precipitation_mm": 0.3
+    },
+    {
+      "date": "2015-10-14",
+      "precipitation_mm": 9.9
+    },
+    {
+      "date": "2015-10-15",
+      "precipitation_mm": 75.1
+    }
+  ],
+  "aggregates": {
+    "event_calendar_day_mm": 75.1,
+    "event_and_previous_2_days_mm": 85.3,
+    "event_and_previous_6_days_mm": 154.1,
+    "full_period_mm": 162.7
+  },
+  "source": {
+    "attribution_url": "https://open-meteo.com/",
+    "coverage": "1985-01-01/2021-06-30",
+    "dataset": "CERRA",
+    "licence": "CC BY 4.0",
+    "model_key": "cerra",
+    "product_type": "reanalysis",
+    "provider": "Open-Meteo",
+    "resolution_km": 5.5,
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/"
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-02T06:09:29.945Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2015-10-15&latitude=41.3707&longitude=14.7882&models=cerra&start_date=2015-10-02&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ],
+  "quality_assessment": {
+    "status": "reanalysis_context_only",
+    "severity": "context",
+    "assessment_method": "dataset_role_rule",
+    "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
+    "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
+  }
+}

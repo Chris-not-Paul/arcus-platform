@@ -1,3 +1,4 @@
+import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
@@ -33,7 +34,7 @@ function AboutPage() {
         ],
         [
           "Operational workspace",
-          "Professional tools translate the archive into scenarios, asset screening, watchlists, reports and exports.",
+          "Professional turns the archive into comparable failures, supported lessons, explicit abstention and traceable evidence packages.",
         ],
       ],
       audiences: [
@@ -72,7 +73,7 @@ function AboutPage() {
         ],
         [
           "Workspace operativo",
-          "Gli strumenti Professional traducono l'archivio in scenari, screening asset, watchlist, report ed export.",
+          "Professional trasforma l'archivio in collassi comparabili, lezioni sostenute, astensione esplicita ed evidence package tracciabili.",
         ],
       ],
       audiences: [
@@ -155,6 +156,8 @@ function AboutPage() {
           ))}
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

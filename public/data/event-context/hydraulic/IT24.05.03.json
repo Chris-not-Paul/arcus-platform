@@ -1,0 +1,88 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT24.05.03",
+  "event_date": "2024-05-16",
+  "status": "source_review_required",
+  "display_badge": "Source review",
+  "coverage_level": "event_record_only",
+  "event_section": {
+    "crossing_name": "Orolo stream",
+    "latitude": 45.6528,
+    "longitude": 11.4121,
+    "municipality": "Malo",
+    "hydrographic_context": "Orolo stream",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_verified",
+    "reason_code": "event_specific_hydrometry_not_curated",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": null,
+    "component_involved": null,
+    "evidence_level": "unspecified",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [],
+  "sources": [
+    {
+      "source_id": "SRC0033",
+      "provider": "ANSA",
+      "title": "Maltempo: ponte spazzato via da torrente, nessun ferito",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ansa.it/sito/notizie/cronaca/2024/05/16/maltempo-ponte-spazzato-via-da-torrente-nessun-ferito_a16e6b53-226c-49d4-a1f1-5d0752a0a5ca.html",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    },
+    {
+      "source_id": "SRC0034",
+      "provider": "Rai News",
+      "title": "Malo, il maltempo fa crollare un ponte: il video del disastro e dei soccorsi",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.rainews.it/tgr/veneto/video/2024/05/malo-il-maltempo-fa-crollare-un-ponte-il-video-del-disastro---ac85807f-ccf4-4b15-b82f-ec51b1c6c58d.html",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    },
+    {
+      "source_id": "SRC0035",
+      "provider": "Il Giornale di Vicenza",
+      "title": "Malo, crollati due ponti. Situazione devastante a Castelnovo. A Villaverla cede l'argine del Timonchio",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.ilgiornaledivicenza.it/territorio-vicentino/schio/maltempo-alto-vicentino-malo-castelnovo-16-maggio-news-1.10708648",
+      "reference": null,
+      "accessed_at": "2026-05-18"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
+    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+  },
+  "review": {
+    "priority": "high",
+    "required_checks": [
+      "crossing_and_watercourse_identity",
+      "station_hydraulic_relationship",
+      "event_time_observation_coverage",
+      "event_report_hydrometric_values"
+    ]
+  },
+  "provenance": {
+    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "source_registry_accessed_through": "2026-05-18"
+  },
+  "caveats": [
+    "No event-specific hydrometric observation has been curated for this bridge.",
+    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
+    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+  ]
+}

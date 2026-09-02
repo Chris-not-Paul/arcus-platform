@@ -1,5 +1,7 @@
 # ARCUS Professional Path 01 - Validation Plan
 
+> **SUPERSEDED AUDIT RECORD.** Path 01 was retired before production calibration; this plan is retained only to document prior reasoning. See `ARCUS_Product_Definition.md`.
+
 This plan describes how to validate a future Path 01 screening methodology before any production scoring change.
 
 No current formula, report structure or provider architecture is changed by this plan.
@@ -73,6 +75,9 @@ The following already exist as live validation points and should be retained as 
 - AA must remain an attention flag and not be folded into P1-P4.
 - PGA must be normalized only from documented MPS04 distribution logic.
 - nearest-node distance must affect confidence only.
+- a missing or mismatched MPS04 dataset version must block seismic banding;
+- an official class without its matched-class provenance must make the
+  assessment incomplete;
 
 ### Historical Evidence
 
@@ -88,6 +93,9 @@ The following already exist as live validation points and should be retained as 
 - partial source is not zero;
 - outside coverage is not zero;
 - all-provider unavailable produces incomplete assessment, not reassuring score.
+- report navigation remains blocked while official queries are still loading;
+- an incomplete assessment may expose a known evidence floor, never a complete
+  or reassuring result.
 
 ### Client-Facing Language
 
@@ -147,6 +155,8 @@ Current commands to run before and after any future scoring work:
 ```bash
 npm run analyze:path01-methodology
 npm run test:path01-methodology
+npm run build:path01-calibration
+npm run test:path01-calibration
 npm run test:hazard
 npm run test:hazard:seismic
 npm run test:historical-incidence
@@ -168,3 +178,8 @@ No production scoring should be implemented until these are approved:
 - report language;
 - validation benchmark set;
 - governance owner for future methodology changes.
+
+The benchmark workflow and its provisional, fail-closed minimums are defined in
+`docs/ARCUS_PATH01_CALIBRATION_PROTOCOL.md`. The infrastructure is implemented,
+but the human approval gates remain open until the acceptance criteria are
+governance-approved and the required independent reviews are completed.

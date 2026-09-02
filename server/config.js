@@ -63,6 +63,10 @@ export const serverPort = Number(
   process.env.ARCUS_API_PORT || 4174
 );
 
+export const serverHost = String(
+  process.env.ARCUS_API_HOST || "127.0.0.1"
+).trim();
+
 export const professionalUsername =
   process.env.ARCUS_PROFESSIONAL_USERNAME ||
   "arcus";
@@ -164,6 +168,10 @@ export function validateServerConfiguration() {
 
   if (!Number.isFinite(serverPort) || serverPort <= 0) {
     errors.push("ARCUS_API_PORT must be a positive number.");
+  }
+
+  if (!serverHost) {
+    errors.push("ARCUS_API_HOST must not be empty.");
   }
 
   if (

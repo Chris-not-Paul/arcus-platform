@@ -169,12 +169,6 @@ function finite(value) {
   return Number.isFinite(Number(value));
 }
 
-function extractYear(value) {
-  const match = String(value || "").match(/\d{4}/);
-
-  return match ? Number(match[0]) : null;
-}
-
 function uniqueValues(values, limit = 30) {
   return [...new Set(values.filter((value) => value !== null && value !== undefined && value !== ""))]
     .sort((left, right) => String(left).localeCompare(String(right)))
@@ -1063,52 +1057,25 @@ export function retrospectiveValidation(events) {
 }
 
 function validationWithHoldout(events, geographyField) {
-  const evaluated = events
-    .filter((event) => event[geographyField] && event.specific_cause)
-    .slice(0, 80)
-    .map((event) => {
-      const candidates = events.filter(
-        (candidate) =>
-          candidate.event_id !== event.event_id &&
-          candidate[geographyField] !== event[geographyField]
-      );
-      const sameFamily = candidates.filter(
-        (candidate) => causeFamilyForEvent(candidate) === causeFamilyForEvent(event)
-      );
-
-      return {
-        event_id: event.event_id,
-        insufficient_evidence: sameFamily.length < 3,
-        top1_hit: sameFamily.length > 0,
-        top3_hit: sameFamily.length > 0,
-      };
-    });
-
-  return summarizeValidation(evaluated);
+  return {
+    geography_field: geographyField,
+    invalidated_reason:
+      "Legacy routine selected candidates using the target's documented cause family.",
+    replacement:
+      "Use the hazard-gated geographical holdout with geography features disabled.",
+    status: "invalidated_target_outcome_leakage",
+    total_source_events: events.length,
+  };
 }
 
 function temporalHoldout(events) {
-  const cutoff = 2018;
-  const training = events.filter((event) => extractYear(event.date) <= cutoff);
-  const validation = events.filter((event) => extractYear(event.date) > cutoff);
-  const evaluated = validation.map((event) => {
-    const sameFamily = training.filter(
-      (candidate) => causeFamilyForEvent(candidate) === causeFamilyForEvent(event)
-    );
-
-    return {
-      event_id: event.event_id,
-      insufficient_evidence: sameFamily.length < 3,
-      top1_hit: sameFamily.length > 0,
-      top3_hit: sameFamily.length > 0,
-    };
-  });
-
   return {
-    cutoff_year: cutoff,
-    training_count: training.length,
-    validation_count: validation.length,
-    ...summarizeValidation(evaluated),
+    invalidated_reason:
+      "Legacy routine selected training cases using the target's documented cause family.",
+    replacement:
+      "Use the hazard-gated temporal holdouts with target-excluded training folds.",
+    status: "invalidated_target_outcome_leakage",
+    total_source_events: events.length,
   };
 }
 

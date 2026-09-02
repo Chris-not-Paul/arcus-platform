@@ -1,8 +1,8 @@
 # ARCUS Data Quality Audit
 
-The `arcus-open-2026.1` release passed its structural gate with 263 unique events, 263 unique slugs, 712 unique sources, at least one source per event, no orphan sources, valid taxonomy values and deterministic IT-to-B mapping.
+The active `arcus-open-2026.2` release passed its structural gate with 263 unique events, 263 unique slugs, 712 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
 
-The current Professional live build contains 263 events and 712 sources. All 263 Open event IDs and all 712 Open source IDs are present in Professional, and shared public fields are byte-equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
+The current Professional live build contains 263 events and 712 sources. All 263 Open events and all 712 Open source IDs are present in Professional after explicit identifier translation, and shared public fields are equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
 
 ## Normalization rules
 
@@ -21,6 +21,6 @@ Territorial warnings include the expected `Ivrea` and `Caltanisetta` cases, admi
 
 Hydraulic coverage is 172 specific processes and 166 specific components. Evidence classes are 124 Documented, 43 Probable, 8 Needs review and 36 Unspecified. Missing values remain visible in Open statistics.
 
-The machine-readable source is `private-data/open/releases/arcus-open-2026.1/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
+The machine-readable source is `private-data/open/releases/arcus-open-2026.2/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
 
 Open immutability is checked with a complete release-directory fingerprint before and after Professional regeneration. Professional derived resources use `professional-events.json` and `professional-sources.json`; tests reject a fallback to processed legacy files. Hydraulic outcome fields remain excluded from FPI, Path 02, incidence, official exposure, territory profiles, asset screening and analogue retrieval.

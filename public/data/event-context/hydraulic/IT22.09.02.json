@@ -1,0 +1,58 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT22.09.02",
+  "event_date": "2022-09-15",
+  "status": "context_available",
+  "display_badge": "Regione Marche",
+  "event_section": {
+    "crossing_name": "Misa river",
+    "latitude": 43.5895,
+    "longitude": 13.0927,
+    "municipality": "Ostra Vetere",
+    "hydrographic_context": "Misa basin",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_available",
+    "reason_code": "monitoring_network_failed_during_flood",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null,
+    "network_status": {
+      "network": "Misa-Nevola monitoring network",
+      "summary_it": "Quasi tutti gli idrometri furono sormontati, danneggiati o asportati; Bettolelle fu l’unica eccezione indicata dal rapporto.",
+      "summary_en": "Nearly all gauges were overtopped, damaged or swept away; Bettolelle was the only exception identified by the report."
+    }
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "documented_basin_processes": [
+    "rapid_flood_response",
+    "solid_transport",
+    "local_erosion"
+  ],
+  "sources": [
+    {
+      "source_id": "regione-marche-event-report-2022",
+      "provider": "Regione Marche",
+      "title": "Rapporto di evento: maltempo 15, 16 e 17 settembre 2022",
+      "role": "monitoring_network_status_and_basin_processes",
+      "url": "https://static.regione.marche.it/portals/0/Protezione_Civile/Manuali%20e%20Studi/Rapporto_Evento_preliminare_20220915.pdf"
+    }
+  ],
+  "curation_note": {
+    "it": "Il rapporto documenta il collasso della rete di misura nel bacino, non una serie completa alla sezione del ponte sul Misa. Nessun colmo, livello o idrogramma viene assegnato al manufatto.",
+    "en": "The report documents monitoring-network failure in the basin, not a complete series at the Misa bridge section. No peak, stage or hydrograph is assigned to the asset."
+  },
+  "provenance": {
+    "curated_at": "2026-09-02T11:00:00.000Z",
+    "method": "Manual extraction from the official regional event report"
+  },
+  "caveats": [
+    "The monitoring-network failure is documented at basin scale and is not a bridge-section observation.",
+    "No observed flood peak can be assigned to the event point from the incomplete gauge record.",
+    "The surviving Bettolelle gauge is downstream of the Misa-Nevola confluence and is not substituted for the event section.",
+    "Basin processes provide event context and do not by themselves prove the bridge-collapse mechanism."
+  ]
+}

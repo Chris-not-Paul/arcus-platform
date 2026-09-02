@@ -49,7 +49,10 @@ const openDownloads = new Map([
 
 async function getOpenReleaseContext() {
   const releaseRoot = path.join(privateDataDir, "open", "releases");
-  const current = await readJsonFromAbsolutePath(path.join(releaseRoot, "current.json"));
+  // The release payloads are immutable and safe to cache. The current pointer
+  // is mutable by design, so it must be read fresh after a release promotion.
+  const currentPath = path.join(releaseRoot, "current.json");
+  const current = JSON.parse(await fs.readFile(currentPath, "utf8"));
   const releaseDirectory = path.join(releaseRoot, current.version);
 
   return {

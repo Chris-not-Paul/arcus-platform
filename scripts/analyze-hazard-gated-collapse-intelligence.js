@@ -6,7 +6,6 @@ import {
   buildSourceReliabilityByEvent,
 } from "../src/utils/analytics.js";
 import {
-  buildCauseSpecificIncidence,
   buildFailurePatternTaxonomy,
   causeFamilyForEvent,
 } from "./analyze-collapse-intelligence.js";
@@ -17,6 +16,9 @@ import {
 import {
   LANDSLIDE_MATCHER_BLOCKED_FIELDS,
 } from "../src/utils/landslideIntelligence.js";
+import {
+  buildHydraulicEpisodeRegistry,
+} from "../server/collapseEpisodeService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,7 +70,6 @@ const MATCHING_FEATURES = [
   "waterway_context",
   "province",
   "region",
-  "cause_specific_hci_context",
 ];
 const BLOCKED_OUTCOME_FIELDS = [
   "cause_category",
@@ -88,7 +89,6 @@ const BLOCKED_OUTCOME_FIELDS = [
 ];
 const FEATURE_WEIGHTS = {
   bridge_use: 8,
-  cause_specific_hci_context: 2,
   construction_age: 4,
   crossing_type: 12,
   hazard_signature: 24,
@@ -119,27 +119,6 @@ const RETRIEVAL_MODES = {
     "waterway_context",
     "province",
     "region",
-  ],
-  hci_context_only: ["cause_specific_hci_context"],
-  hci_limited_tie_breaker: [
-    "hazard_signature",
-    "bridge_use",
-    "crossing_type",
-    "material",
-    "structural_typology",
-    "waterway_context",
-    "cause_specific_hci_context",
-  ],
-  hci_weighted_feature: [
-    "hazard_signature",
-    "bridge_use",
-    "crossing_type",
-    "material",
-    "structural_typology",
-    "waterway_context",
-    "province",
-    "region",
-    "cause_specific_hci_context",
   ],
   project_profile_only: [
     "bridge_use",
@@ -504,12 +483,11 @@ function hazardSignatureForTrack(signature, track, seismicPercentiles) {
   return "unavailable";
 }
 
-function eventProfile(event, signature, track, seismicPercentiles, incidenceLookup = {}) {
+function eventProfile(event, signature, track, seismicPercentiles) {
   const year = eventYear(event);
 
   return {
     bridge_use: event.destination_use || null,
-    cause_specific_hci_context: incidenceLookup[key(event.province)]?.[causeFamilyForEvent(event)]?.numerator_evidence_strength || null,
     construction_age: year && Number(event.construction_year)
       ? String(Math.max(year - Number(event.construction_year), 0))
       : null,
@@ -528,14 +506,13 @@ function similarity({
   candidate,
   candidateSignature,
   features,
-  incidenceLookup,
   seismicPercentiles,
   target,
   targetSignature,
   track,
 }) {
-  const targetProfile = eventProfile(target, targetSignature, track, seismicPercentiles, incidenceLookup);
-  const candidateProfile = eventProfile(candidate, candidateSignature, track, seismicPercentiles, incidenceLookup);
+  const targetProfile = eventProfile(target, targetSignature, track, seismicPercentiles);
+  const candidateProfile = eventProfile(candidate, candidateSignature, track, seismicPercentiles);
   const matched = [];
   const mismatched = [];
   const missing = [];
@@ -759,10 +736,12 @@ function hydraulicMechanism(event, outcome) {
 }
 
 function rankAnalogues({
+  episodeByEvent = null,
   events,
+  excludeSameEpisode = false,
+  excludeSameGeographyField = null,
   features,
   groupMap,
-  incidenceLookup,
   limit = 8,
   seismicPercentiles,
   signaturesByEvent,
@@ -784,6 +763,23 @@ function rankAnalogues({
       return false;
     }
 
+    if (
+      excludeSameEpisode &&
+      episodeByEvent?.[target.event_id] &&
+      episodeByEvent[target.event_id] === episodeByEvent[candidate.event_id]
+    ) {
+      return false;
+    }
+
+    if (
+      excludeSameGeographyField &&
+      key(target[excludeSameGeographyField]) &&
+      key(target[excludeSameGeographyField]) ===
+        key(candidate[excludeSameGeographyField])
+    ) {
+      return false;
+    }
+
     if (temporalCutoff && eventYear(candidate) > temporalCutoff) {
       return false;
     }
@@ -800,7 +796,6 @@ function rankAnalogues({
         candidate,
         candidateSignature,
         features: usableFeatures,
-        incidenceLookup,
         seismicPercentiles,
         target,
         targetSignature,
@@ -874,7 +869,6 @@ function cohortOutput({ analogues, eventsById, reliabilityByEvent, taxonomyMap, 
 function retrieveTrackCohort({
   events,
   groupMap,
-  incidenceLookup,
   reliabilityByEvent,
   seismicPercentiles,
   signaturesByEvent,
@@ -887,7 +881,6 @@ function retrieveTrackCohort({
     events,
     features: RETRIEVAL_MODES[mode],
     groupMap,
-    incidenceLookup,
     seismicPercentiles,
     signaturesByEvent,
     target,
@@ -984,9 +977,12 @@ function dcgAtK(analogues, targetOutcome, k) {
 }
 
 function evaluateRetrieval({
+  episodeByEvent = null,
   events,
+  excludeSameEpisode = false,
+  excludeSameGeographyField = null,
+  features = null,
   groupMap,
-  incidenceLookup,
   mode,
   reliabilityByEvent,
   seismicPercentiles,
@@ -1031,14 +1027,23 @@ function evaluateRetrieval({
     const allCandidates = events.filter((candidate) =>
       candidate.event_id !== target.event_id &&
       !excludeDuplicateGroup(target, candidate, groupMap) &&
+      (!excludeSameEpisode ||
+        !episodeByEvent?.[target.event_id] ||
+        episodeByEvent[target.event_id] !== episodeByEvent[candidate.event_id]) &&
+      (!excludeSameGeographyField ||
+        !key(target[excludeSameGeographyField]) ||
+        key(target[excludeSameGeographyField]) !==
+          key(candidate[excludeSameGeographyField])) &&
       (!temporalCutoff || eventYear(candidate) <= temporalCutoff) &&
       eventTrackActive(candidate, signaturesByEvent.get(candidate.event_id), track, seismicPercentiles)
     );
     const analogues = rankAnalogues({
+      episodeByEvent,
       events,
-      features: RETRIEVAL_MODES[mode],
+      excludeSameEpisode,
+      excludeSameGeographyField,
+      features: features || RETRIEVAL_MODES[mode],
       groupMap,
-      incidenceLookup,
       limit: 8,
       seismicPercentiles,
       signaturesByEvent,
@@ -1063,6 +1068,7 @@ function evaluateRetrieval({
     rows.push({
       abstained: false,
       analogue_count: enriched.length,
+      analogue_event_ids: enriched.map((analogue) => analogue.event_id),
       component_hit_at_3: hitAtK(enriched, targetOutcome, "components_involved", 3),
       component_hit_at_5: hitAtK(enriched, targetOutcome, "components_involved", 5),
       event_id: target.event_id,
@@ -1087,6 +1093,42 @@ function mean(values) {
   const filtered = values.filter((value) => value !== null && value !== undefined && Number.isFinite(Number(value)));
 
   return filtered.length ? round(filtered.reduce((total, value) => total + Number(value), 0) / filtered.length) : null;
+}
+
+function wilsonInterval(rows, field, z = 1.96) {
+  const values = rows
+    .map((row) => row[field])
+    .filter((value) => typeof value === "boolean")
+    .map(Number);
+  const sampleSize = values.length;
+
+  if (!sampleSize) {
+    return {
+      confidence_level: 0.95,
+      lower: null,
+      method: "wilson_score",
+      sample_size: 0,
+      upper: null,
+    };
+  }
+
+  const proportion = values.reduce((total, value) => total + value, 0) /
+    sampleSize;
+  const zSquared = z ** 2;
+  const denominator = 1 + zSquared / sampleSize;
+  const center = (proportion + zSquared / (2 * sampleSize)) / denominator;
+  const margin = z * Math.sqrt(
+    (proportion * (1 - proportion) + zSquared / (4 * sampleSize)) /
+      sampleSize
+  ) / denominator;
+
+  return {
+    confidence_level: 0.95,
+    lower: round(Math.max(0, center - margin)),
+    method: "wilson_score",
+    sample_size: sampleSize,
+    upper: round(Math.min(1, center + margin)),
+  };
 }
 
 function summarizeRetrieval(rows, name) {
@@ -1115,6 +1157,10 @@ function summarizeRetrieval(rows, name) {
     evaluated_cases: evaluated.length,
     failure_pattern_hit_at_1: mean(evaluated.map((row) => Number(row.failure_pattern_hit_at_1))),
     failure_pattern_hit_at_3: mean(evaluated.map((row) => Number(row.failure_pattern_hit_at_3))),
+    failure_pattern_hit_at_3_ci_95: wilsonInterval(
+      evaluated,
+      "failure_pattern_hit_at_3"
+    ),
     failure_pattern_hit_at_5: mean(evaluated.map((row) => Number(row.failure_pattern_hit_at_5))),
     macro_failure_pattern_hit_at_3: mean(Object.values(byPattern).map((item) => item.failure_pattern_hit_at_3)),
     mean_reciprocal_rank: mean(evaluated.map((row) => row.mrr)),
@@ -1133,141 +1179,248 @@ function summarizeRetrieval(rows, name) {
   };
 }
 
+function baselineContext({
+  events,
+  groupMap,
+  seismicPercentiles,
+  signaturesByEvent,
+  target,
+  taxonomyMap,
+}) {
+  if (!eventTrackActive(
+    target,
+    signaturesByEvent.get(target.event_id),
+    "hydraulic",
+    seismicPercentiles
+  )) {
+    return {
+      abstention: {
+        abstained: true,
+        abstention_reason: "track_not_active_or_unavailable",
+        event_id: target.event_id,
+        track: "hydraulic",
+      },
+    };
+  }
+
+  const targetOutcome = outcomeForEvent(target, taxonomyMap);
+
+  if (!targetOutcome.failure_pattern || targetOutcome.failure_pattern.includes("unspecified")) {
+    return {
+      abstention: {
+        abstained: true,
+        abstention_reason: "target_failure_pattern_unspecified",
+        event_id: target.event_id,
+        track: "hydraulic",
+      },
+    };
+  }
+
+  return {
+    candidates: events.filter((candidate) =>
+      candidate.event_id !== target.event_id &&
+      !excludeDuplicateGroup(target, candidate, groupMap) &&
+      eventTrackActive(
+        candidate,
+        signaturesByEvent.get(candidate.event_id),
+        "hydraulic",
+        seismicPercentiles
+      )
+    ),
+    targetOutcome,
+  };
+}
+
+function baselineEvaluationRow({
+  candidates,
+  eventId,
+  reliabilityByEvent,
+  selected,
+  targetOutcome,
+  taxonomyMap,
+}) {
+  const analogues = selected.map((candidate) => ({
+    documented_outcomes: outcomeForEvent(candidate, taxonomyMap),
+    event_id: candidate.event_id,
+    similarity: null,
+  }));
+
+  if (analogues.length < 3) {
+    return {
+      abstained: true,
+      abstention_reason: "insufficient_analogue_support",
+      analogue_count: analogues.length,
+      event_id: eventId,
+      track: "hydraulic",
+    };
+  }
+
+  return {
+    abstained: false,
+    analogue_count: analogues.length,
+    component_hit_at_3: hitAtK(analogues, targetOutcome, "components_involved", 3),
+    component_hit_at_5: hitAtK(analogues, targetOutcome, "components_involved", 5),
+    event_id: eventId,
+    evidence_quality: reliabilityByEvent[eventId]?.grade || "D",
+    failure_pattern: targetOutcome.failure_pattern,
+    failure_pattern_hit_at_1: hitAtK(analogues, targetOutcome, "failure_pattern", 1),
+    failure_pattern_hit_at_3: hitAtK(analogues, targetOutcome, "failure_pattern", 3),
+    failure_pattern_hit_at_5: hitAtK(analogues, targetOutcome, "failure_pattern", 5),
+    mrr: reciprocalRank(analogues, targetOutcome),
+    ndcg_at_5: dcgAtK(analogues, targetOutcome, 5),
+    precision_at_3: precisionAtK(analogues, targetOutcome, 3),
+    precision_at_5: precisionAtK(analogues, targetOutcome, 5),
+    recall_at_5: recallAtK(analogues, targetOutcome, candidates, taxonomyMap, 5),
+    track: "hydraulic",
+  };
+}
+
+function deterministicCandidateOrder(candidates, targetId, salt) {
+  return [...candidates].sort((left, right) =>
+    stableIndex(`${targetId}:${salt}:${left.event_id}`, 4_294_967_291) -
+      stableIndex(`${targetId}:${salt}:${right.event_id}`, 4_294_967_291) ||
+    left.event_id.localeCompare(right.event_id)
+  );
+}
+
 function randomHydraulicBaseline({
   events,
   groupMap,
   reliabilityByEvent,
+  seismicPercentiles,
+  signaturesByEvent,
   taxonomyMap,
 }) {
-  const hydraulic = events.filter((event) => causeFamilyForEvent(event) === "hydraulic");
-  const rows = hydraulic.map((target) => {
-    const targetOutcome = outcomeForEvent(target, taxonomyMap);
-    const candidates = hydraulic.filter((candidate) =>
-      candidate.event_id !== target.event_id &&
-      !excludeDuplicateGroup(target, candidate, groupMap)
-    );
-    const selected = Array.from({ length: Math.min(5, candidates.length) }, (_, index) =>
-      candidates[stableIndex(`${target.event_id}:random:${index}`, candidates.length)]
-    );
-    const analogues = selected.map((candidate) => ({
-      documented_outcomes: outcomeForEvent(candidate, taxonomyMap),
-      event_id: candidate.event_id,
-      similarity: null,
-    }));
+  const rows = events.map((target) => {
+    const context = baselineContext({
+      events,
+      groupMap,
+      seismicPercentiles,
+      signaturesByEvent,
+      target,
+      taxonomyMap,
+    });
 
-    if (!targetOutcome.failure_pattern || targetOutcome.failure_pattern.includes("unspecified")) {
-      return {
-        abstained: true,
-        abstention_reason: "target_failure_pattern_unspecified",
-        event_id: target.event_id,
-      };
+    if (context.abstention) {
+      return context.abstention;
     }
 
-    return {
-      abstained: analogues.length < 3,
-      component_hit_at_3: hitAtK(analogues, targetOutcome, "components_involved", 3),
-      event_id: target.event_id,
-      evidence_quality: reliabilityByEvent[target.event_id]?.grade || "D",
-      failure_pattern: targetOutcome.failure_pattern,
-      failure_pattern_hit_at_1: hitAtK(analogues, targetOutcome, "failure_pattern", 1),
-      failure_pattern_hit_at_3: hitAtK(analogues, targetOutcome, "failure_pattern", 3),
-      failure_pattern_hit_at_5: hitAtK(analogues, targetOutcome, "failure_pattern", 5),
-      mrr: reciprocalRank(analogues, targetOutcome),
-      precision_at_3: precisionAtK(analogues, targetOutcome, 3),
-      precision_at_5: precisionAtK(analogues, targetOutcome, 5),
-      track: "hydraulic",
-    };
-  });
-
-  return summarizeRetrieval(rows, "hazard_gated_random_hydraulic_cohort");
-}
-
-function mostFrequentPatternBaseline({ events, taxonomyMap }) {
-  const hydraulic = events.filter((event) => causeFamilyForEvent(event) === "hydraulic");
-  const patternCounts = countBy(
-    hydraulic.map((event) => taxonomyMap.get(event.event_id)?.failure_pattern || "unspecified")
-  );
-  const mostFrequent = Object.entries(patternCounts)
-    .filter(([pattern]) => !pattern.includes("unspecified"))
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] || null;
-  const rows = hydraulic.map((target) => {
-    const targetOutcome = outcomeForEvent(target, taxonomyMap);
-
-    if (!targetOutcome.failure_pattern || targetOutcome.failure_pattern.includes("unspecified")) {
-      return {
-        abstained: true,
-        abstention_reason: "target_failure_pattern_unspecified",
-        event_id: target.event_id,
-      };
-    }
-
-    return {
-      abstained: false,
-      component_hit_at_3: null,
-      event_id: target.event_id,
-      failure_pattern: targetOutcome.failure_pattern,
-      failure_pattern_hit_at_1: mostFrequent === targetOutcome.failure_pattern,
-      failure_pattern_hit_at_3: mostFrequent === targetOutcome.failure_pattern,
-      failure_pattern_hit_at_5: mostFrequent === targetOutcome.failure_pattern,
-      mrr: mostFrequent === targetOutcome.failure_pattern ? 1 : 0,
-      precision_at_3: mostFrequent === targetOutcome.failure_pattern ? 1 : 0,
-      precision_at_5: mostFrequent === targetOutcome.failure_pattern ? 1 : 0,
-      track: "hydraulic",
-    };
+    return baselineEvaluationRow({
+      candidates: context.candidates,
+      eventId: target.event_id,
+      reliabilityByEvent,
+      selected: deterministicCandidateOrder(
+        context.candidates,
+        target.event_id,
+        "random"
+      ).slice(0, 8),
+      targetOutcome: context.targetOutcome,
+      taxonomyMap,
+    });
   });
 
   return {
+    comparison_contract: "same hydraulic-track targets, candidates and abstention denominator as ARCUS; target outcomes excluded from selection",
+    ...summarizeRetrieval(rows, "hazard_gated_random_hydraulic_cohort"),
+  };
+}
+
+function mostFrequentPatternBaseline({
+  events,
+  groupMap,
+  reliabilityByEvent,
+  seismicPercentiles,
+  signaturesByEvent,
+  taxonomyMap,
+}) {
+  const rows = events.map((target) => {
+    const context = baselineContext({
+      events,
+      groupMap,
+      seismicPercentiles,
+      signaturesByEvent,
+      target,
+      taxonomyMap,
+    });
+
+    if (context.abstention) {
+      return context.abstention;
+    }
+
+    const counts = countBy(context.candidates.map((candidate) =>
+      taxonomyMap.get(candidate.event_id)?.failure_pattern || "unspecified"
+    ));
+    const predictedPattern = Object.entries(counts)
+      .filter(([pattern]) => !pattern.includes("unspecified"))
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] || null;
+    const row = baselineEvaluationRow({
+      candidates: context.candidates,
+      eventId: target.event_id,
+      reliabilityByEvent,
+      selected: context.candidates
+        .filter((candidate) =>
+          taxonomyMap.get(candidate.event_id)?.failure_pattern === predictedPattern
+        )
+        .sort((left, right) => left.event_id.localeCompare(right.event_id))
+        .slice(0, 8),
+      targetOutcome: context.targetOutcome,
+      taxonomyMap,
+    });
+
+    return { ...row, predicted_pattern: predictedPattern };
+  });
+  const predictedCounts = countBy(
+    rows.map((row) => row.predicted_pattern).filter(Boolean)
+  );
+  const mostFrequent = Object.entries(predictedCounts)
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] || null;
+
+  return {
+    comparison_contract: "same hydraulic-track targets, candidates and abstention denominator as ARCUS; majority learned from each target-excluded candidate fold",
     most_frequent_pattern: mostFrequent,
     ...summarizeRetrieval(rows, "hazard_gated_most_frequent_hydraulic_pattern"),
   };
 }
 
-function sameFieldBaseline({ events, field, taxonomyMap }) {
-  const hydraulic = events.filter((event) => causeFamilyForEvent(event) === "hydraulic");
-  const rows = hydraulic.map((target) => {
-    const targetOutcome = outcomeForEvent(target, taxonomyMap);
-    const candidates = hydraulic.filter((candidate) =>
-      candidate.event_id !== target.event_id && key(candidate[field]) === key(target[field])
-    ).slice(0, 5);
-    const analogues = candidates.map((candidate) => ({
-      documented_outcomes: outcomeForEvent(candidate, taxonomyMap),
-      event_id: candidate.event_id,
-      similarity: null,
-    }));
+function sameFieldBaseline({
+  events,
+  field,
+  groupMap,
+  reliabilityByEvent,
+  seismicPercentiles,
+  signaturesByEvent,
+  taxonomyMap,
+}) {
+  const rows = events.map((target) => {
+    const context = baselineContext({
+      events,
+      groupMap,
+      seismicPercentiles,
+      signaturesByEvent,
+      target,
+      taxonomyMap,
+    });
 
-    if (!targetOutcome.failure_pattern || targetOutcome.failure_pattern.includes("unspecified")) {
-      return {
-        abstained: true,
-        abstention_reason: "target_failure_pattern_unspecified",
-        event_id: target.event_id,
-      };
+    if (context.abstention) {
+      return context.abstention;
     }
 
-    return {
-      abstained: analogues.length < 3,
-      abstention_reason: analogues.length < 3 ? "insufficient_analogue_support" : null,
-      component_hit_at_3: hitAtK(analogues, targetOutcome, "components_involved", 3),
-      event_id: target.event_id,
-      failure_pattern: targetOutcome.failure_pattern,
-      failure_pattern_hit_at_1: hitAtK(analogues, targetOutcome, "failure_pattern", 1),
-      failure_pattern_hit_at_3: hitAtK(analogues, targetOutcome, "failure_pattern", 3),
-      failure_pattern_hit_at_5: hitAtK(analogues, targetOutcome, "failure_pattern", 5),
-      mrr: reciprocalRank(analogues, targetOutcome),
-      precision_at_3: precisionAtK(analogues, targetOutcome, 3),
-      precision_at_5: precisionAtK(analogues, targetOutcome, 5),
-      track: "hydraulic",
-    };
+    return baselineEvaluationRow({
+      candidates: context.candidates,
+      eventId: target.event_id,
+      reliabilityByEvent,
+      selected: context.candidates.filter((candidate) =>
+        key(candidate[field]) === key(target[field])
+      ).slice(0, 8),
+      targetOutcome: context.targetOutcome,
+      taxonomyMap,
+    });
   });
 
-  return summarizeRetrieval(rows, `same_${field}_hydraulic_baseline`);
-}
-
-function buildIncidenceLookup(events, ainop, taxonomy) {
-  const incidence = buildCauseSpecificIncidence(events, ainop, taxonomy);
-
-  return Object.fromEntries(
-    incidence.by_province.map((item) => [key(item.province), item.cause_families])
-  );
+  return {
+    comparison_contract: "same hydraulic-track targets and candidates as ARCUS; one pre-event field only",
+    ...summarizeRetrieval(rows, `same_${field}_hydraulic_baseline`),
+  };
 }
 
 function hazardCauseConcordance({ events, seismicPercentiles, signaturesByEvent }) {
@@ -1369,7 +1522,6 @@ function supportByTrack({ events, seismicPercentiles, signaturesByEvent, taxonom
 function hydraulicMvp({
   events,
   groupMap,
-  incidenceLookup,
   reliabilityByEvent,
   seismicPercentiles,
   signaturesByEvent,
@@ -1382,7 +1534,6 @@ function hydraulicMvp({
   const arcus = evaluateRetrieval({
     events,
     groupMap,
-    incidenceLookup,
     mode: "hazard_project_profile_limited_territory",
     reliabilityByEvent,
     seismicPercentiles,
@@ -1394,7 +1545,6 @@ function hydraulicMvp({
     geography_only: evaluateRetrieval({
       events,
       groupMap,
-      incidenceLookup,
       mode: "geography_only",
       reliabilityByEvent,
       seismicPercentiles,
@@ -1402,15 +1552,40 @@ function hydraulicMvp({
       taxonomyMap,
       track: "hydraulic",
     }),
-    most_frequent_hydraulic_mechanism: mostFrequentPatternBaseline({ events, taxonomyMap }),
+    most_frequent_hydraulic_mechanism: mostFrequentPatternBaseline({
+      events,
+      groupMap,
+      reliabilityByEvent,
+      seismicPercentiles,
+      signaturesByEvent,
+      taxonomyMap,
+    }),
     random_within_hydraulic_family: randomHydraulicBaseline({
       events,
       groupMap,
       reliabilityByEvent,
+      seismicPercentiles,
+      signaturesByEvent,
       taxonomyMap,
     }),
-    same_material_only: sameFieldBaseline({ events, field: "material_type", taxonomyMap }),
-    same_typology_only: sameFieldBaseline({ events, field: "structural_type", taxonomyMap }),
+    same_material_only: sameFieldBaseline({
+      events,
+      field: "material_type",
+      groupMap,
+      reliabilityByEvent,
+      seismicPercentiles,
+      signaturesByEvent,
+      taxonomyMap,
+    }),
+    same_typology_only: sameFieldBaseline({
+      events,
+      field: "structural_type",
+      groupMap,
+      reliabilityByEvent,
+      seismicPercentiles,
+      signaturesByEvent,
+      taxonomyMap,
+    }),
   };
 
   return {
@@ -1422,7 +1597,6 @@ function hydraulicMvp({
       hazard_class_only: evaluateRetrieval({
         events,
         groupMap,
-        incidenceLookup,
         mode: "hazard_class_only",
         reliabilityByEvent,
         seismicPercentiles,
@@ -1433,7 +1607,6 @@ function hydraulicMvp({
       hazard_project_profile: evaluateRetrieval({
         events,
         groupMap,
-        incidenceLookup,
         mode: "hazard_project_profile",
         reliabilityByEvent,
         seismicPercentiles,
@@ -1445,7 +1618,6 @@ function hydraulicMvp({
       project_profile_only: evaluateRetrieval({
         events,
         groupMap,
-        incidenceLookup,
         mode: "project_profile_only",
         reliabilityByEvent,
         seismicPercentiles,
@@ -1455,9 +1627,12 @@ function hydraulicMvp({
       }),
     },
     outcome:
-      arcus.failure_pattern_hit_at_3 > (baselines.most_frequent_hydraulic_mechanism.failure_pattern_hit_at_3 || 0)
+      arcus.failure_pattern_hit_at_3 > Math.max(
+        baselines.most_frequent_hydraulic_mechanism.failure_pattern_hit_at_3 || 0,
+        baselines.random_within_hydraulic_family.failure_pattern_hit_at_3 || 0
+      )
         ? "candidate_for_expert_validation"
-        : "no_demonstrated_value_over_baseline",
+        : "no_demonstrated_value_over_baselines",
     support: {
       documented_hydraulic_events: hydraulicEvents.length,
       mechanisms: mechanismSupport,
@@ -1481,6 +1656,20 @@ function temporalHoldoutValidation(args) {
 
 function geographicalHoldoutValidation(args) {
   return {
+    leave_province_out: evaluateRetrieval({
+      ...args,
+      excludeSameGeographyField: "province",
+      mode: "hazard_project_profile_limited_territory",
+      track: "hydraulic",
+      withoutGeography: true,
+    }),
+    leave_region_out: evaluateRetrieval({
+      ...args,
+      excludeSameGeographyField: "region",
+      mode: "hazard_project_profile_limited_territory",
+      track: "hydraulic",
+      withoutGeography: true,
+    }),
     without_geography_features: evaluateRetrieval({
       ...args,
       mode: "hazard_project_profile_limited_territory",
@@ -1490,28 +1679,56 @@ function geographicalHoldoutValidation(args) {
   };
 }
 
-function hciAblation(args) {
+function episodeHoldoutValidation(args) {
+  return evaluateRetrieval({
+    ...args,
+    excludeSameEpisode: true,
+    mode: "hazard_project_profile_limited_territory",
+    track: "hydraulic",
+  });
+}
+
+function featureAblation(args) {
+  const referenceFeatures = [
+    ...RETRIEVAL_MODES.hazard_project_profile_limited_territory,
+  ];
+  const evaluate = (name, removedFeatures) => evaluateRetrieval({
+    ...args,
+    features: referenceFeatures.filter(
+      (feature) => !removedFeatures.includes(feature)
+    ),
+    mode: name,
+    track: "hydraulic",
+  });
+
   return {
-    hci_context_only: evaluateRetrieval({
-      ...args,
-      mode: "hci_context_only",
-      track: "hydraulic",
-    }),
-    hci_limited_tie_breaker: evaluateRetrieval({
-      ...args,
-      mode: "hci_limited_tie_breaker",
-      track: "hydraulic",
-    }),
-    hci_weighted_feature: evaluateRetrieval({
-      ...args,
-      mode: "hci_weighted_feature",
-      track: "hydraulic",
-    }),
-    without_hci: evaluateRetrieval({
-      ...args,
-      mode: "hazard_project_profile_limited_territory",
-      track: "hydraulic",
-    }),
+    grouped: {
+      without_hazard_signature: evaluate(
+        "ablation_without_hazard_signature",
+        ["hazard_signature"]
+      ),
+      without_project_profile: evaluate(
+        "ablation_without_project_profile",
+        [
+          "bridge_use",
+          "crossing_type",
+          "material",
+          "structural_typology",
+          "waterway_context",
+        ]
+      ),
+      without_territory: evaluate(
+        "ablation_without_territory",
+        ["province", "region"]
+      ),
+    },
+    leave_one_feature_out: Object.fromEntries(
+      referenceFeatures.map((feature) => [
+        feature,
+        evaluate(`ablation_without_${feature}`, [feature]),
+      ])
+    ),
+    reference_features: referenceFeatures,
   };
 }
 
@@ -1538,17 +1755,123 @@ function mitigationIntelligence({ cohort, mitigationKnowledge }) {
   });
 }
 
+function pairedBootstrapDifference(
+  candidate,
+  baseline,
+  field = "failure_pattern_hit_at_3",
+  iterations = 2000
+) {
+  const baselineRows = new Map(
+    (baseline.rows || []).map((row) => [row.event_id, row])
+  );
+  const pairs = (candidate.rows || [])
+    .map((row) => ({
+      baseline: baselineRows.get(row.event_id),
+      candidate: row,
+    }))
+    .filter(({ baseline: baselineRow, candidate: candidateRow }) =>
+      !baselineRow?.abstained &&
+      !candidateRow.abstained &&
+      typeof baselineRow[field] === "boolean" &&
+      typeof candidateRow[field] === "boolean"
+    )
+    .map(({ baseline: baselineRow, candidate: candidateRow }) =>
+      Number(candidateRow[field]) - Number(baselineRow[field])
+    );
+
+  if (!pairs.length) {
+    return {
+      confidence_level: 0.95,
+      difference: null,
+      lower: null,
+      method: "paired_deterministic_bootstrap",
+      sample_size: 0,
+      upper: null,
+    };
+  }
+
+  let state = 0x4f1bbcdc;
+  const nextIndex = () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state % pairs.length;
+  };
+  const bootstrap = [];
+
+  for (let iteration = 0; iteration < iterations; iteration += 1) {
+    let total = 0;
+
+    for (let draw = 0; draw < pairs.length; draw += 1) {
+      total += pairs[nextIndex()];
+    }
+
+    bootstrap.push(total / pairs.length);
+  }
+
+  bootstrap.sort((left, right) => left - right);
+  const quantile = (probability) =>
+    bootstrap[Math.floor((bootstrap.length - 1) * probability)];
+
+  return {
+    confidence_level: 0.95,
+    difference: round(mean(pairs)),
+    iterations,
+    lower: round(quantile(0.025)),
+    method: "paired_deterministic_bootstrap",
+    sample_size: pairs.length,
+    upper: round(quantile(0.975)),
+  };
+}
+
 function valueAddBenchmark({ arcus, baselines }) {
-  const baseline = baselines.most_frequent_hydraulic_mechanism;
+  const majorityBaseline = baselines.most_frequent_hydraulic_mechanism;
+  const randomBaseline = baselines.random_within_hydraulic_family;
+  const majorityRows = new Map(
+    (majorityBaseline.rows || []).map((row) => [row.event_id, row])
+  );
+  const randomRows = new Map(
+    (randomBaseline.rows || []).map((row) => [row.event_id, row])
+  );
+  const sameEligibleDenominator = [majorityBaseline, randomBaseline].every(
+    (baseline) =>
+      baseline.total_cases === arcus.total_cases &&
+      baseline.rows?.every((row, index) =>
+        row.event_id === arcus.rows?.[index]?.event_id
+      )
+  );
   const improved = (arcus.rows || []).filter((row) => {
     if (row.abstained) {
       return false;
     }
 
-    const baselineWouldHit = baseline.most_frequent_pattern === row.failure_pattern;
+    const majorityRow = majorityRows.get(row.event_id);
+    const randomRow = randomRows.get(row.event_id);
 
-    return row.failure_pattern_hit_at_3 && !baselineWouldHit;
+    return row.failure_pattern_hit_at_3 &&
+      !majorityRow?.failure_pattern_hit_at_3 &&
+      !randomRow?.failure_pattern_hit_at_3;
   }).length;
+  const comparisonFloor = Math.max(
+    majorityBaseline.failure_pattern_hit_at_3 || 0,
+    randomBaseline.failure_pattern_hit_at_3 || 0
+  );
+  const macroComparisonFloor = Math.max(
+    majorityBaseline.macro_failure_pattern_hit_at_3 || 0,
+    randomBaseline.macro_failure_pattern_hit_at_3 || 0
+  );
+  const differenceVsMajority = pairedBootstrapDifference(
+    arcus,
+    majorityBaseline
+  );
+  const differenceVsRandom = pairedBootstrapDifference(
+    arcus,
+    randomBaseline
+  );
+  const beatsBaselines =
+    sameEligibleDenominator &&
+    arcus.failure_pattern_hit_at_3 > comparisonFloor &&
+    arcus.macro_failure_pattern_hit_at_3 > macroComparisonFloor &&
+    differenceVsMajority.lower > 0 &&
+    differenceVsRandom.lower > 0;
 
   return {
     arcus_hazard_gated_retrieval: {
@@ -1556,52 +1879,67 @@ function valueAddBenchmark({ arcus, baselines }) {
       failure_pattern_hit_at_3: arcus.failure_pattern_hit_at_3,
       macro_failure_pattern_hit_at_3: arcus.macro_failure_pattern_hit_at_3,
     },
+    comparison_contract: {
+      candidate_pool: "officially active hydraulic track",
+      duplicate_groups_excluded: true,
+      same_eligible_denominator: sameEligibleDenominator,
+      target_outcome_used_for_selection: false,
+    },
     hazard_gated_most_frequent_pattern_baseline: {
-      failure_pattern_hit_at_3: baseline.failure_pattern_hit_at_3,
-      most_frequent_pattern: baseline.most_frequent_pattern,
+      failure_pattern_hit_at_3: majorityBaseline.failure_pattern_hit_at_3,
+      macro_failure_pattern_hit_at_3:
+        majorityBaseline.macro_failure_pattern_hit_at_3,
+      most_frequent_pattern: majorityBaseline.most_frequent_pattern,
     },
     hazard_gated_random_cohort: {
-      failure_pattern_hit_at_3: baselines.random_within_hydraulic_family.failure_pattern_hit_at_3,
+      failure_pattern_hit_at_3: randomBaseline.failure_pattern_hit_at_3,
+      macro_failure_pattern_hit_at_3:
+        randomBaseline.macro_failure_pattern_hit_at_3,
+    },
+    paired_hit_at_3_difference: {
+      versus_majority: differenceVsMajority,
+      versus_random: differenceVsRandom,
     },
     cases_arcus_improves_over_baseline: improved,
     cases_with_no_measurable_value: Math.max((arcus.evaluated_cases || 0) - improved, 0),
-    decision:
-      arcus.failure_pattern_hit_at_3 > baseline.failure_pattern_hit_at_3
-        ? "value_add_candidate_for_expert_review"
-        : "no_demonstrated_value_over_baseline",
+    decision: beatsBaselines
+      ? "value_add_candidate_for_expert_review"
+      : "no_demonstrated_value_over_fair_baselines",
   };
 }
 
 function expertReviewPackage({
-  analysis,
   events,
   groupMap,
-  incidenceLookup,
   reliabilityByEvent,
   seismicPercentiles,
   signaturesByEvent,
   taxonomyMap,
 }) {
-  const selected = [];
-  const hydraulic = events
-    .filter((event) => causeFamilyForEvent(event) === "hydraulic")
-    .slice(0, 10);
-  const landslide = events.filter((event) => causeFamilyForEvent(event) === "landslide_ground_movement");
-  const seismic = events.filter((event) => causeFamilyForEvent(event) === "seismic");
-  const multiHazard = events.filter((event) =>
-    eventTrackActive(event, signaturesByEvent.get(event.event_id), "multi_hazard", seismicPercentiles)
-  ).slice(0, 10);
-  const insufficient = analysis.retrieval_validation.hydraulic_project_informed.rows
-    .filter((row) => row.abstained)
-    .slice(0, 10)
-    .map((row) => events.find((event) => event.event_id === row.event_id))
-    .filter(Boolean);
+  const selectEvenly = (items, limit) => {
+    const ordered = [...items].sort((left, right) =>
+      left.event_id.localeCompare(right.event_id)
+    );
 
-  [...hydraulic, ...landslide, ...seismic, ...multiHazard, ...insufficient].forEach((event) => {
-    if (event && !selected.some((item) => item.event_id === event.event_id)) {
-      selected.push(event);
+    if (ordered.length <= limit) {
+      return ordered;
     }
-  });
+
+    return Array.from({ length: limit }, (_, index) =>
+      ordered[Math.round((index * (ordered.length - 1)) / (limit - 1))]
+    );
+  };
+  const selected = ["P1", "P2", "P3"].flatMap((hazardClass) =>
+    selectEvenly(
+      events.filter((event) => {
+        const hydraulic = signaturesByEvent.get(event.event_id)?.hydraulic;
+
+        return hydraulic?.status === "available" &&
+          hydraulic.highest_class === hazardClass;
+      }),
+      10
+    )
+  );
 
   return {
     caveat: "Blind review package; do not reveal which output is ARCUS retrieval before expert scoring.",
@@ -1609,21 +1947,20 @@ function expertReviewPackage({
       const arcus = retrieveTrackCohort({
         events,
         groupMap,
-        incidenceLookup,
         mode: "project_informed_retrieval",
         reliabilityByEvent,
         seismicPercentiles,
         signaturesByEvent,
         target: event,
         taxonomyMap,
-        track: eventTrackActive(event, signaturesByEvent.get(event.event_id), "hydraulic", seismicPercentiles)
-          ? "hydraulic"
-          : "landslide",
+        track: "hydraulic",
       });
       const baseline = randomBaselineCohortForEvent({
         events,
         groupMap,
         reliabilityByEvent,
+        seismicPercentiles,
+        signaturesByEvent,
         target: event,
         taxonomyMap,
       });
@@ -1632,6 +1969,9 @@ function expertReviewPackage({
       return {
         anonymized_case_id: `review_${selected.indexOf(event) + 1}`,
         event_id: event.event_id,
+        official_hydraulic_class:
+          signaturesByEvent.get(event.event_id)?.hydraulic?.highest_class ||
+          null,
         outputs: arcusFirst
           ? { A: arcus, B: baseline }
           : { A: baseline, B: arcus },
@@ -1647,12 +1987,24 @@ function expertReviewPackage({
       };
     }),
     minimum_sample_policy: [
-      "10 hydraulic cases",
-      "all sufficiently complete landslide cases",
-      "all sufficiently complete seismic cases",
-      "multi-hazard cases when active",
-      "discordant or evidence-insufficient cases where available",
+      "up to 10 outcome-blind targets per official hydraulic class P1/P2/P3",
+      "targets selected from current official hydraulic intersection only",
+      "selection does not use documented collapse cause or failure process",
+      "ARCUS and baseline cohorts are both routed through the hydraulic track",
     ],
+    review_track: "hydraulic",
+    sampling_basis:
+      "current_official_hydraulic_class_stratified_without_outcome_fields",
+    sampling_summary: Object.fromEntries(
+      ["P1", "P2", "P3"].map((hazardClass) => [
+        hazardClass,
+        selected.filter(
+          (event) =>
+            signaturesByEvent.get(event.event_id)?.hydraulic
+              ?.highest_class === hazardClass
+        ).length,
+      ])
+    ),
     simulated_expert_responses: false,
   };
 }
@@ -1661,34 +2013,50 @@ function randomBaselineCohortForEvent({
   events,
   groupMap,
   reliabilityByEvent,
+  seismicPercentiles,
+  signaturesByEvent,
   target,
   taxonomyMap,
 }) {
-  const family = causeFamilyForEvent(target);
   const eventsById = new Map(events.map((event) => [event.event_id, event]));
   const candidates = events.filter((candidate) =>
     candidate.event_id !== target.event_id &&
-    causeFamilyForEvent(candidate) === family &&
+    eventTrackActive(
+      candidate,
+      signaturesByEvent.get(candidate.event_id),
+      "hydraulic",
+      seismicPercentiles
+    ) &&
     !excludeDuplicateGroup(target, candidate, groupMap)
   );
-  const selected = Array.from({ length: Math.min(8, candidates.length) }, (_, index) =>
-    candidates[stableIndex(`${target.event_id}:review-baseline:${index}`, candidates.length)]
-  ).filter(Boolean);
+  const selected = [...candidates]
+    .sort((left, right) =>
+      stableIndex(
+        `${target.event_id}:review-baseline:${left.event_id}`,
+        1_000_003
+      ) -
+        stableIndex(
+          `${target.event_id}:review-baseline:${right.event_id}`,
+          1_000_003
+        ) ||
+      left.event_id.localeCompare(right.event_id)
+    )
+    .slice(0, Math.min(8, candidates.length));
   const analogues = selected.map((candidate) => ({
     event_id: candidate.event_id,
     evidence_quality: candidate.source_confidence || "unavailable",
     matched_features: [
       {
-        candidate_value: family,
+        candidate_value: "active",
         contribution: null,
-        feature: "hazard_gated_family_only_random_baseline",
-        target_value: family,
+        feature: "official_hydraulic_track",
+        target_value: "active",
       },
     ],
     mismatched_features: [],
     missing_features: [],
     similarity: null,
-    track: family === "landslide_ground_movement" ? "landslide" : family,
+    track: "hydraulic",
   }));
 
   return {
@@ -1697,9 +2065,9 @@ function randomBaselineCohortForEvent({
       eventsById,
       reliabilityByEvent,
       taxonomyMap,
-      track: family,
+      track: "hydraulic",
     }),
-    retrieval_mode: "hazard_gated_random_family_baseline",
+    retrieval_mode: "hazard_gated_random_hydraulic_baseline",
   };
 }
 
@@ -1709,7 +2077,6 @@ export function buildHazardGatedCollapseIntelligence({
   validationPath = VALIDATION_PATH,
 } = {}) {
   const { events, sources } = readProfessionalDataset(ROOT);
-  const ainop = readJson(path.join(ROOT, "private-data", "professional", "ainop-bridge-index.json"), { provinces: [] });
   const signaturesPayload = readJson(path.join(OUTPUT_DIR, "collapse-hazard-signatures.json"), { signatures: [] });
   const manifest = readJson(path.join(OUTPUT_DIR, "collapse-hazard-signatures-manifest.json"), {});
   const mitigationKnowledge = readJson(path.join(ROOT, "config", "collapse-intelligence", "mitigation-knowledge-base.json"), { entries: [] });
@@ -1719,13 +2086,13 @@ export function buildHazardGatedCollapseIntelligence({
   const taxonomy = buildFailurePatternTaxonomy(events);
   const taxonomyMap = new Map(taxonomy.mapping.map((item) => [item.event_id, item]));
   const reliabilityByEvent = buildSourceReliabilityByEvent(events, sources);
-  const incidenceLookup = buildIncidenceLookup(events, ainop, taxonomy);
   const duplicateAudit = duplicateGroups(events, sources);
   const groupMap = duplicateAudit.by_event;
+  const episodeRegistry = buildHydraulicEpisodeRegistry(events, sources);
   const commonArgs = {
+    episodeByEvent: episodeRegistry.event_to_episode,
     events,
     groupMap,
-    incidenceLookup,
     reliabilityByEvent,
     seismicPercentiles,
     signaturesByEvent,
@@ -1768,6 +2135,15 @@ export function buildHazardGatedCollapseIntelligence({
     decision_problem:
       "Given the official site hazard context, which documented collapses are empirically relevant, which failure patterns appear in the cohort and which investigations should be prioritised?",
     duplicate_group_holdout: duplicateAudit,
+    episode_holdout: {
+      registry: {
+        episode_count: episodeRegistry.episode_count,
+        methodology: episodeRegistry.methodology,
+        review_required_episode_count:
+          episodeRegistry.review_required_episode_count,
+      },
+      validation: episodeHoldoutValidation(commonArgs),
+    },
     enrichment_status: enrichmentStatus(signatures, manifest),
     hazard_routing: {
       leakage_guard: {
@@ -1787,7 +2163,7 @@ export function buildHazardGatedCollapseIntelligence({
       seismicPercentiles,
       signaturesByEvent,
     }),
-    hci_ablation: hciAblation(commonArgs),
+    feature_ablation: featureAblation(commonArgs),
     hydraulic_intelligence_mvp: hydraulic,
     mitigation_intelligence: mitigationIntelligence({
       cohort: sampleCohort,
@@ -1819,10 +2195,8 @@ export function buildHazardGatedCollapseIntelligence({
     }),
   };
   const expertPackage = expertReviewPackage({
-    analysis,
     events,
     groupMap,
-    incidenceLookup,
     reliabilityByEvent,
     seismicPercentiles,
     signaturesByEvent,

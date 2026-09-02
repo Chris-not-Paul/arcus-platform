@@ -20,12 +20,11 @@ const PremiumAnalyticsPage = lazy(() => import("./pages/PremiumAnalyticsPage"));
 const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const ProfessionalPage = lazy(() => import("./pages/ProfessionalPage"));
+const CollapseIntelligencePage = lazy(() => import("./pages/CollapseIntelligencePage"));
 const ProfessionalLoginPage = lazy(() => import("./pages/ProfessionalLoginPage"));
 const ProfessionalAccountPage = lazy(() => import("./pages/ProfessionalAccountPage"));
 const AccountPage = lazy(() => import("./pages/AccountPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
-const ReportMapPath01 = lazy(() => import("./pages/ReportMapPath01"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -58,23 +57,16 @@ function PageLoading() {
 function App() {
 
   const [showIntro, setShowIntro] = useState(true);
-  const isReportExportRoute =
-    typeof window !== "undefined" &&
-    (window.location.pathname.startsWith("/report-map/") ||
-      window.location.pathname.startsWith("/professional/atlas-export/"));
-
   return (
     <>
-      {!isReportExportRoute && (
-        <a
-          className="skip-link"
-          href="#main-content"
-        >
-          Skip to content
-        </a>
-      )}
+      <a
+        className="skip-link"
+        href="#main-content"
+      >
+        Skip to content
+      </a>
 
-      {!isReportExportRoute && showIntro && (
+      {showIntro && (
         <IntroOverlay
           onFinish={() => setShowIntro(false)}
         />
@@ -133,7 +125,7 @@ function App() {
             path="/professional"
             element={
               <ProfessionalGate>
-                <ProfessionalPage />
+                <CollapseIntelligencePage />
               </ProfessionalGate>
             }
           />
@@ -167,16 +159,6 @@ function App() {
                 <AdminPage />
               </ProfessionalGate>
             }
-          />
-
-          <Route
-            path="/report-map/path01"
-            element={<ReportMapPath01 />}
-          />
-
-          <Route
-            path="/professional/atlas-export/path01"
-            element={<ReportMapPath01 />}
           />
 
           {/* PUBLICATIONS */}

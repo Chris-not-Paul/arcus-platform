@@ -81,8 +81,11 @@ const arcusApiPlugin = {
 export default defineConfig({
   plugins: [react(), arcusApiPlugin],
   server: {
+    host: "127.0.0.1",
+    port: 5173,
     proxy: {
       "/api": arcusApiOrigin,
     },
+    strictPort: true,
   },
 })
