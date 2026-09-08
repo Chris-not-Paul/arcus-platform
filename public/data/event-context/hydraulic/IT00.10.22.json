@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT00.10.22",
   "event_date": "2000-10-13",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Dora Riparia river",
     "latitude": 45.1382,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "event_identity_not_confirmed_in_validated_sources",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "ARPA Piemonte 13-16 October 2000 event report and controlled event sources",
+      "summary_it": "Le fonti tecniche regionali consultate non confermano questo crollo a Bussoleno; la stima di Susa non viene associata a un evento non ancora identificato con certezza.",
+      "summary_en": "The reviewed regional technical sources do not confirm this Bussoleno collapse; the Susa estimate is not assigned to an event whose identity remains uncertain."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-flood-report-2000",
+      "provider": "ARPA Piemonte",
+      "title": "Rapporto sull'evento alluvionale del 13-16 ottobre 2000",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "reference": "Tables 7-9 and hydrological event analysis",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0614",
       "provider": "ARPA Piemonte",
@@ -63,26 +78,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "critical",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Le fonti tecniche regionali consultate non confermano questo crollo a Bussoleno; la stima di Susa non viene associata a un evento non ancora identificato con certezza.",
+    "en": "The reviewed regional technical sources do not confirm this Bussoleno collapse; the Susa estimate is not assigned to an event whose identity remains uncertain."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-22"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "Source review is complete, but no value compatible with the controlled event identity and bridge section is assigned.",
+    "A regional flood observation is not transferred across unresolved watercourse or event identities.",
     "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "Rainfall remains separate and is not converted into stage or discharge."
   ]
 }

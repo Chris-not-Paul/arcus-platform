@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT17.01.01",
   "event_date": "2017-01-23",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPACAL",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Allaro river",
     "latitude": 38.348037,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_tabulated_value_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Rapporto sull'evento meteo-pluviometrico del 22-25 gennaio 2017",
+      "summary_it": "Il rapporto ARPACAL include l'idrogramma dell'Allaro a Caulonia per l'evento, ma non tabula il colmo né fornisce i dati numerici della serie. ARCUS conserva l'esistenza della misura come contesto documentale, senza digitalizzare il grafico o attribuire falsa precisione al ponte.",
+      "summary_en": "The ARPACAL report includes the Allaro at Caulonia event hydrograph but does not tabulate the peak or provide the numerical series. ARCUS retains the measurement's existence as documentary context without digitising the plot or assigning false precision to the bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpacal-event-report-january-2017",
+      "provider": "ARPACAL",
+      "title": "Rapporto sull'evento meteo-pluviometrico del 22-25 gennaio 2017",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpacal.it/allegati/RE22_25012017.pdf",
+      "reference": "Section 4, Allaro at Caulonia hydrograph",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0264",
       "provider": "LaC News24",
@@ -53,26 +68,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPACAL include l'idrogramma dell'Allaro a Caulonia per l'evento, ma non tabula il colmo né fornisce i dati numerici della serie. ARCUS conserva l'esistenza della misura come contesto documentale, senza digitalizzare il grafico o attribuire falsa precisione al ponte.",
+    "en": "The ARPACAL report includes the Allaro at Caulonia event hydrograph but does not tabulate the peak or provide the numerical series. ARCUS retains the measurement's existence as documentary context without digitising the plot or assigning false precision to the bridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

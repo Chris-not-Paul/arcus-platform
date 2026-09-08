@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT22.12.02",
   "event_date": "2022-12-03",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Siciliana - Centro Funzionale Decentrato",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Mazzarrà stream",
     "latitude": 38.1372,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_tabulated_value_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Rapporto evento 3 dicembre 2022",
+      "summary_it": "Il rapporto regionale identifica il crollo della rampa di accesso all'attraversamento sul torrente Mazzarra durante l'evento del 3 dicembre 2022, ma non pubblica un livello o una portata alla sezione. La scheda distingue inoltre la rampa collassata dal ponte Termini citato in altre fonti.",
+      "summary_en": "The regional report identifies collapse of the access ramp to the Torrente Mazzarra crossing during the 3 December 2022 event but publishes no stage or discharge at the section. The record also distinguishes the collapsed ramp from Ponte Termini cited by other sources."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -32,57 +37,28 @@
   "documented_basin_processes": [],
   "sources": [
     {
-      "source_id": "SRC0094",
-      "provider": "ANAS",
-      "title": "In Sicilia Anas: aperto al traffico il ponte Termini a Terme Vigliatore",
-      "role": "event_identification_and_failure_process_context",
+      "source_id": "sicilia-cfd-event-report-december-2022",
+      "provider": "Regione Siciliana - Centro Funzionale Decentrato",
+      "title": "Rapporto evento 3 dicembre 2022",
+      "role": "event_identification_and_hydrometric_coverage_review",
       "source_class": "Official/Technical",
-      "url": "https://www.stradeanas.it/it/sicilia-anas-aperto-al-traffico-il-ponte-termini-terme-vigliatore-me",
-      "reference": null,
-      "accessed_at": "2026-05-19"
-    },
-    {
-      "source_id": "SRC0092",
-      "provider": "InMeteo",
-      "title": "Alluvione nel Messinese: crollato un ponte a Terme Vigliatore",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.inmeteo.net/2022/12/03/alluvione-nel-messinese-crollato-un-ponte-a-terme-vigliatore/",
-      "reference": null,
-      "accessed_at": "2026-05-19"
-    },
-    {
-      "source_id": "SRC0093",
-      "provider": "La Repubblica",
-      "title": "Maltempo, piogge nel Messinese: persone intrappolate in auto",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://palermo.repubblica.it/cronaca/2022/12/03/news/maltempo_piogge_nel_messinese_persone_intrappolate_in_auto-377372162/",
-      "reference": null,
-      "accessed_at": "2026-05-19"
+      "url": "https://beta.idrogeo.isprambiente.it/api/media/2023/09/05/eab280a2-456a-4288-bd0f-92e1876fc9cc.pdf",
+      "reference": "Terme Vigliatore access-ramp collapse over Torrente Mazzarra",
+      "accessed_at": "2026-09-04"
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto regionale identifica il crollo della rampa di accesso all'attraversamento sul torrente Mazzarra durante l'evento del 3 dicembre 2022, ma non pubblica un livello o una portata alla sezione. La scheda distingue inoltre la rampa collassata dal ponte Termini citato in altre fonti.",
+    "en": "The regional report identifies collapse of the access ramp to the Torrente Mazzarra crossing during the 3 December 2022 event but publishes no stage or discharge at the section. The record also distinguishes the collapsed ramp from Ponte Termini cited by other sources."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-19"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-04"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

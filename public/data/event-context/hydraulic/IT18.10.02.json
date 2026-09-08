@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT18.10.02",
   "event_date": "2018-10-10",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAS",
+  "coverage_level": "validated_event_report_mixed_observation_and_estimate",
   "event_section": {
     "crossing_name": "Rio Santa Lucia",
     "latitude": 39.164,
@@ -14,13 +14,45 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "upstream_subbasin_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 4.02,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_peak_limited_by_sensor_range",
+        "observed_at": "2018-10-10T11:15:00+02:00",
+        "station_reference": "UTA GUTTURU MANNU",
+        "source_id": "arpas-flood-report-october-2018"
+      },
+      {
+        "parameter": "stage_peak_estimate",
+        "operator": "≈",
+        "value": 5.36,
+        "unit": "m s.z.i.",
+        "value_type": "post_event_photographic_and_field_estimate",
+        "station_reference": "UTA GUTTURU MANNU",
+        "source_id": "arpas-flood-report-october-2018"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "UTA GUTTURU MANNU",
+    "name": "Gutturu Mannu at Uta",
+    "watercourse": "Gutturu Mannu",
+    "location": "Uta, Cagliari",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "upstream_subbasin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +63,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpas-flood-report-october-2018",
+      "provider": "ARPAS",
+      "title": "Report di evento - eventi pluviometrici e idrometrici di ottobre 2018",
+      "role": "event_hydrometry_and_monitoring_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.sardegnaambiente.it/documenti/21_393_20241104112058.pdf",
+      "reference": "Section 1.4.4 and Table 17",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0251",
       "provider": "ANSA",
@@ -63,26 +105,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Gutturu Mannu è un sottobacino del Rio Santa Lucia, non la sezione del ponte sulla SS195. ARPAS registra 4,02 m, ma segnala il limite strumentale a 4 m e stima da fotografie e sopralluogo un massimo di circa 5,36 m: ARCUS conserva separati dato misurato e stima post-evento.",
+    "en": "Gutturu Mannu is a subcatchment of the Rio Santa Lucia, not the SS195 bridge section. ARPAS records 4.02 m but reports a sensor limit near 4 m and estimates an approximately 5.36 m maximum from photographs and field inspection; ARCUS keeps the measurement and post-event estimate separate."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

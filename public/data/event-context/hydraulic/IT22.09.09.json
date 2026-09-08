@@ -2,89 +2,65 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT22.09.09",
   "event_date": "2022-09-15",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Marche",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Sanguerone stream",
     "latitude": 43.4613,
     "longitude": 12.8404,
     "municipality": "Sassoferrato",
-    "hydrographic_context": "Sanguerone stream",
+    "hydrographic_context": "Sanguerone tributary of the Sentino within the Esino basin",
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Regione Marche Sentino-Esino hydrometric network",
+      "summary_it": "Il rapporto mostra l'idrogramma del Sentino a Colleponi e altre sezioni dell'Esino, ma non una sezione idrometrica sul Sanguerone compatibile con il ponte.",
+      "summary_en": "The report shows the Sentino hydrograph at Colleponi and other Esino sections, but no Sanguerone gauge section compatible with the bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
-  "process_evidence": {
-    "failure_process": "bank_erosion_or_embankment_failure",
-    "component_involved": "multiple_components",
-    "evidence_level": "documented",
-    "taxonomy_version": "hydraulic-v2"
-  },
   "documented_basin_processes": [
-    "bank_erosion_or_embankment_failure"
+    "rapid_flood_response",
+    "bank_erosion_or_embankment_failure",
+    "solid_transport"
   ],
   "sources": [
     {
-      "source_id": "SRC0129",
-      "provider": "Protezione Civile",
-      "title": "Rapporto di evento preliminare – Alluvione Marche 15-16 settembre 2022",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "Official/Technical",
-      "url": "https://polaris.irpi.cnr.it/event/alluvione-nelle-marche/",
-      "reference": null,
-      "accessed_at": "2026-05-20"
+      "source_id": "regione-marche-event-report-2022",
+      "provider": "Regione Marche",
+      "title": "Rapporto di evento: maltempo 15, 16 e 17 settembre 2022",
+      "role": "hydrometric_network_and_basin_processes",
+      "url": "https://static.regione.marche.it/portals/0/Protezione_Civile/Manuali%20e%20Studi/Rapporto_Evento_preliminare_20220915.pdf"
     },
     {
-      "source_id": "SRC0130",
-      "provider": "ANSA",
-      "title": "Maltempo Marche: 84 cantieri del Genio Civile per la sistemazione dei ponti e delle infrastrutture",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.ansa.it/marche/notizie/2022/11/22/maltempo-marche-84-cantieri-genio-civile-per-sistemazioni_e63350e8-b7ce-47b9-b00f-39981634c388.html",
-      "reference": null,
-      "accessed_at": "2026-05-20"
-    },
-    {
-      "source_id": "SRC0131",
-      "provider": "Vigili del Fuoco",
-      "title": "Alluvione delle Marche del 2022 – Vigili del Fuoco",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.vigilfuoco.tv/storia/alluvione-delle-marche-del-2022",
-      "reference": null,
-      "accessed_at": "2026-05-20"
+      "source_id": "regione-marche-sanguerone-waterbody",
+      "provider": "ARPAM",
+      "title": "Bacino Esino - Torrente Sanguerone tratto 1",
+      "role": "watercourse_network_identity",
+      "url": "https://www.arpa.marche.it/images/acqua/fiumi/revisione_novembre%202021/08_ESINO.pdf"
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La relazione di rete tra Sanguerone, Sentino ed Esino è documentata. La misura del Sentino a Colleponi non viene però attribuita al tributario o alla sezione del ponte.",
+    "en": "The network relationship between the Sanguerone, Sentino and Esino is documented. The Sentino measurement at Colleponi is not attributed to the tributary or bridge section."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "curated_at": "2026-09-02T15:00:00.000Z",
+    "method": "Manual extraction from the official regional event report and waterbody registry"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The Colleponi hydrograph is on the receiving Sentino, not on the Sanguerone.",
+    "No stage, discharge or hydrograph is assigned to the bridge section.",
+    "The report graph is not manually digitised into a false-precision numeric peak.",
+    "Documented bank erosion remains separate from the hydrometric coverage review."
   ]
 }

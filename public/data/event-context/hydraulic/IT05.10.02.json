@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT05.10.02",
   "event_date": "2005-10-23",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Università degli Studi di Bari / Ordine dei Geologi della Puglia",
+  "coverage_level": "scientific_post_event_hydraulic_reconstruction",
   "event_section": {
     "crossing_name": "SP184",
     "latitude": 40.9103,
@@ -14,13 +14,36 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "reported_estimate",
+    "interpretation": "downstream_basin_reconstruction_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "discharge_peak_reconstruction",
+        "operator": "",
+        "value": 280.22,
+        "unit": "m³/s",
+        "value_type": "scientific_post_event_peak_discharge_reconstruction_from_flood_marks",
+        "observed_at": "2005-10-23T07:00:00Z",
+        "station_reference": "PICONE PRESSO PONTE CARBONARA-MODUGNO",
+        "source_id": "geologi-puglia-picone-flood-analysis-2005"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "PICONE PRESSO PONTE CARBONARA-MODUGNO",
+    "name": "Picone near the Carbonara-Modugno road crossing",
+    "watercourse": "Picone",
+    "location": "Carbonara-Modugno road crossing, Bari",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "downstream_basin_reconstruction_section",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -33,6 +56,16 @@
     "overtopping_or_hydrodynamic_action"
   ],
   "sources": [
+    {
+      "source_id": "geologi-puglia-picone-flood-analysis-2005",
+      "provider": "Università degli Studi di Bari / Ordine dei Geologi della Puglia",
+      "title": "Analisi dell'evento alluvionale del 22-23 ottobre 2005 nel bacino del torrente Picone",
+      "role": "scientific_post_event_hydraulic_reconstruction",
+      "source_class": "Scientific",
+      "url": "https://www.geologipuglia.it/wp-content/uploads/doc/downloads/877-analisi-dell-evento-alluvionale-del-22-23-ottobre-2005-nel-bacino-del-torrente-picone-geologi-e-territorio-n34-2008.pdf",
+      "reference": "Section 10, reconstructed peak at the Carbonara-Modugno crossing section",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0492",
       "provider": "Wikipedia IT",
@@ -55,26 +88,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Lo studio ricostruisce 280,22 m³/s alle ore 07:00 del 23 ottobre da tracce di piena e calcolo idraulico presso l'attraversamento Carbonara-Modugno. La sezione è a valle nel bacino del Picone e non coincide con il rilevato della SP184 tra Cassano e Bitetto: il valore è contesto di bacino, non portata al ponte crollato.",
+    "en": "The study reconstructs 280.22 m³/s at 07:00 on 23 October from flood marks and hydraulic calculation near the Carbonara-Modugno crossing. This section is downstream in the Picone basin and is not the SP184 embankment between Cassano and Bitetto: the value is basin context, not discharge at the collapsed bridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-21"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

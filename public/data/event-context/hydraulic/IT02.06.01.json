@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT02.06.01",
   "event_date": "2002-06-05",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Rio Ara",
     "latitude": 45.5415,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "receiving_river_station_not_transferable_to_tributary",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Evento alluvionale del 4-6 giugno 2002 nel territorio biellese",
+      "summary_it": "Il rapporto documenta la distruzione del ponte sul Rio Ara, ma la misura pubblicata è sul Cervo a Passobreve e non viene trasferita al tributario della valle Elvo.",
+      "summary_en": "The report documents destruction of the Rio Ara bridge, but the published measurement is on the Cervo at Passobreve and is not transferred to the Elvo-valley tributary."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-biellese-flood-report-2002",
+      "provider": "ARPA Piemonte",
+      "title": "Evento alluvionale del 4-6 giugno 2002 nel territorio biellese",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Q19.pdf",
+      "reference": "Cervo hydrometry at Passobreve and documented effects",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0522",
       "provider": "ARPA Piemonte",
@@ -63,26 +78,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto documenta la distruzione del ponte sul Rio Ara, ma la misura pubblicata è sul Cervo a Passobreve e non viene trasferita al tributario della valle Elvo.",
+    "en": "The report documents destruction of the Rio Ara bridge, but the published measurement is on the Cervo at Passobreve and is not transferred to the Elvo-valley tributary."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-21"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

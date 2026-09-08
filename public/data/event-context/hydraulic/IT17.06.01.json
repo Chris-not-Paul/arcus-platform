@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT17.06.01",
   "event_date": "2017-06-15",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ObiettivoNews",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Chiusella stream",
     "latitude": 45.4052,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "failure_not_tied_to_single_hydrometric_peak_in_validated_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Strambino: crollato il vecchio ponte sul Chiusella",
+      "summary_it": "La cronaca documenta erosione progressiva dell'alveo, fondazioni della pila centrale già danneggiate e chiusura preventiva del ponte prima del cedimento. Non identifica una piena evento-specifica il 15 giugno 2017 né pubblica idrometria: il degrado idraulico cumulativo resta distinto da un colmo osservato.",
+      "summary_en": "The account documents progressive channel erosion, already damaged central-pier foundations and precautionary closure before failure. It identifies neither an event-specific flood on 15 June 2017 nor hydrometry, so cumulative hydraulic degradation remains distinct from an observed peak."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -33,6 +38,16 @@
     "scour"
   ],
   "sources": [
+    {
+      "source_id": "strambino-chiusella-bridge-failure-2017",
+      "provider": "ObiettivoNews",
+      "title": "Strambino: crollato il vecchio ponte sul Chiusella",
+      "role": "failure_chronology_and_hydrometric_coverage_review",
+      "source_class": "News",
+      "url": "https://www.obiettivonews.it/2017/06/16/strambino-e-crollato-il-vecchio-ponte-sul-chiusella/",
+      "reference": "Pre-collapse closure and progressive foundation erosion",
+      "accessed_at": "2026-09-04"
+    },
     {
       "source_id": "SRC0271",
       "provider": "Journal Paper",
@@ -65,26 +80,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La cronaca documenta erosione progressiva dell'alveo, fondazioni della pila centrale già danneggiate e chiusura preventiva del ponte prima del cedimento. Non identifica una piena evento-specifica il 15 giugno 2017 né pubblica idrometria: il degrado idraulico cumulativo resta distinto da un colmo osservato.",
+    "en": "The account documents progressive channel erosion, already damaged central-pier foundations and precautionary closure before failure. It identifies neither an event-specific flood on 15 June 2017 nor hydrometry, so cumulative hydraulic degradation remains distinct from an observed peak."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-04"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

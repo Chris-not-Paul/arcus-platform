@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT13.11.07",
   "event_date": "2013-11-19",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Umbria",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Topino river",
     "latitude": 42.9842557783153,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "failure_not_tied_to_single_hydrometric_peak_in_validated_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Ponte di Scanzano, situazione non più differibile: le emergenze vanno affrontate",
+      "summary_it": "La fonte istituzionale descrive la chiusura del ponte di Scanzano dopo i danni prodotti dalle piogge dell'autunno 2013, ma non isola un singolo colmo del Topino né pubblica valori idrometrici attribuibili al 19 novembre. ARCUS conserva il carattere cumulativo della cronologia.",
+      "summary_en": "The institutional source describes closure of the Scanzano bridge after damage from autumn 2013 rainfall but identifies no single Topino peak and publishes no hydrometric value attributable to 19 November. ARCUS preserves the cumulative nature of the chronology."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -55,26 +60,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La fonte istituzionale descrive la chiusura del ponte di Scanzano dopo i danni prodotti dalle piogge dell'autunno 2013, ma non isola un singolo colmo del Topino né pubblica valori idrometrici attribuibili al 19 novembre. ARCUS conserva il carattere cumulativo della cronologia.",
+    "en": "The institutional source describes closure of the Scanzano bridge after damage from autumn 2013 rainfall but identifies no single Topino peak and publishes no hydrometric value attributable to 19 November. ARCUS preserves the cumulative nature of the chronology."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-20"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

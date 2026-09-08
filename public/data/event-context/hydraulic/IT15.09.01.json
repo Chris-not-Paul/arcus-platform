@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT15.09.01",
   "event_date": "2015-09-14",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE Emilia-Romagna",
+  "coverage_level": "validated_event_report_observation",
   "event_section": {
     "crossing_name": "Trebbia river",
     "latitude": 44.7949,
@@ -14,13 +14,36 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "upstream_same_watercourse_local_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 6.22,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_peak",
+        "observed_at": "2015-09-14T05:00:00+02:00",
+        "station_reference": "BOBBIO TREBBIA",
+        "source_id": "arpae-emilia-romagna-flood-report-2015-18"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "BOBBIO TREBBIA",
+    "name": "Trebbia at Bobbio",
+    "watercourse": "Trebbia",
+    "location": "Bobbio, Piacenza",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": 6,
+    "relationship": "upstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +54,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpae-emilia-romagna-flood-report-2015-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto dell'evento meteorologico del 13-14 settembre 2015",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto-2015-18-dellevento-del-13-e-14-settembre-2015",
+      "reference": "Trebbia flood analysis, Table 5 and documented Barberino bridge collapse",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0310",
       "provider": "Journal Paper",
@@ -63,26 +96,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La stazione di Bobbio registra 6,22 m sul Trebbia alle 05:00. Il rapporto collega la stessa piena al cedimento del ponte di Barberino, circa 6 km a valle; il livello resta una misura di riferimento a monte e non viene presentato come misura alla sezione del ponte.",
+    "en": "The Bobbio station records 6.22 m on the Trebbia at 05:00. The report links the same flood to failure of the Barberino bridge about 6 km downstream; the stage remains an upstream reference measurement and is not presented as a bridge-section measurement."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

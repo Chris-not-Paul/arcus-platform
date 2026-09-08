@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT11.03.02",
   "event_date": "2011-03-01",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Agenzia di Protezione Civile Regione Abruzzo",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Vibrata stream",
     "latitude": 42.8057,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_event_specific_value_in_validated_hydrological_annal",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Annale idrologico 2012 - Parte seconda",
+      "summary_it": "L'annale ufficiale conferma l'idrometro Vibrata ad Alba Adriatica, ma la scheda storica non pubblica un valore evento-specifico per il marzo 2011 attribuibile al ponte di Corropoli. Il massimo storico del 1976 non viene riutilizzato.",
+      "summary_en": "The official annal confirms the Vibrata at Alba Adriatica gauge, but its station history publishes no March 2011 event-specific value attributable to the Corropoli bridge. The 1976 historical maximum is not reused."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -34,6 +39,16 @@
   ],
   "sources": [
     {
+      "source_id": "abruzzo-hydrological-annal-2012-part-2",
+      "provider": "Agenzia di Protezione Civile Regione Abruzzo",
+      "title": "Annale idrologico 2012 - Parte seconda",
+      "role": "official_station_history_and_event_peak_verification",
+      "source_class": "Official/Technical",
+      "url": "https://protezionecivile.regione.abruzzo.it/agenzia/wp-content/uploads/2022/11/Annale-2012-Parte-Seconda.pdf",
+      "reference": "Station characteristics and historical maxima for Vibrata and Salinello",
+      "accessed_at": "2026-09-03"
+    },
+    {
       "source_id": "SRC0404",
       "provider": "Il Centro",
       "title": "Ecco il ponte crollato da più di 2 anni",
@@ -45,26 +60,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "L'annale ufficiale conferma l'idrometro Vibrata ad Alba Adriatica, ma la scheda storica non pubblica un valore evento-specifico per il marzo 2011 attribuibile al ponte di Corropoli. Il massimo storico del 1976 non viene riutilizzato.",
+    "en": "The official annal confirms the Vibrata at Alba Adriatica gauge, but its station history publishes no March 2011 event-specific value attributable to the Corropoli bridge. The 1976 historical maximum is not reused."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT05.10.01",
   "event_date": "2005-10-08",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Journal Paper",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Municipality of Massafra",
     "latitude": 40.6171442428624,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "crossing_watercourse_not_resolved_for_hydrometric_transfer",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+      "summary_it": "Il record identifica soltanto il territorio di Massafra e non uno specifico ponte o corso d'acqua; le fonti descrivono l'evento alluvionale dell'8 ottobre 2005 senza risolvere l'attraversamento. ARCUS non trasferisce al caso valori relativi ad altri ponti o gravine della stessa area.",
+      "summary_en": "The record identifies only the Massafra municipal area rather than a specific bridge or watercourse, and the sources describe the 8 October 2005 flood without resolving the crossing. ARCUS does not transfer values from other bridges or ravines in the area."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -53,26 +58,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il record identifica soltanto il territorio di Massafra e non uno specifico ponte o corso d'acqua; le fonti descrivono l'evento alluvionale dell'8 ottobre 2005 senza risolvere l'attraversamento. ARCUS non trasferisce al caso valori relativi ad altri ponti o gravine della stessa area.",
+    "en": "The record identifies only the Massafra municipal area rather than a specific bridge or watercourse, and the sources describe the 8 October 2005 flood without resolving the crossing. ARCUS does not transfer values from other bridges or ravines in the area."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-21"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

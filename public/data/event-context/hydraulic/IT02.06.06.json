@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT02.06.06",
   "event_date": "2002-06-23",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Autonoma Valle d'Aosta",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Maisoncle stream",
     "latitude": 45.6162,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "crossing_identity_conflict_in_validated_sources",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Eventi idrogeologici storici in Valle d'Aosta",
+      "summary_it": "La fonte regionale documenta due effetti distinti in Valsavarenche: Pont du Loup abbattuto e ponte di Mesoncles gravemente danneggiato. Il secondo record ARCUS è anch'esso classificato come crollo totale sul Maisoncle, senza una corrispondenza univoca con la cronologia ufficiale; ARCUS segnala il conflitto e non forza una misura di evento.",
+      "summary_en": "The regional source documents two distinct effects in Valsavarenche: Pont du Loup swept away and the Mesoncles bridge severely damaged. The second ARCUS record is also classified as a total collapse on the Maisoncle without an unambiguous match to the official chronology; ARCUS flags the conflict and does not force an event measurement."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "vda-historical-hydrogeological-events-2002",
+      "provider": "Regione Autonoma Valle d'Aosta",
+      "title": "Eventi idrogeologici storici in Valle d'Aosta",
+      "role": "event_identification_and_hydrometric_coverage_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.regione.vda.it/allegato.aspx?pk=55612",
+      "reference": "23 June 2002 Valsavarenche event chronology and documented bridge effects",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0537",
       "provider": "Regione Valle d'Aosta",
@@ -53,26 +68,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La fonte regionale documenta due effetti distinti in Valsavarenche: Pont du Loup abbattuto e ponte di Mesoncles gravemente danneggiato. Il secondo record ARCUS è anch'esso classificato come crollo totale sul Maisoncle, senza una corrispondenza univoca con la cronologia ufficiale; ARCUS segnala il conflitto e non forza una misura di evento.",
+    "en": "The regional source documents two distinct effects in Valsavarenche: Pont du Loup swept away and the Mesoncles bridge severely damaged. The second ARCUS record is also classified as a total collapse on the Maisoncle without an unambiguous match to the official chronology; ARCUS flags the conflict and does not force an event measurement."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-22"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

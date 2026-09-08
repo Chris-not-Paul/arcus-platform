@@ -2,25 +2,59 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT23.05.05",
   "event_date": "2023-05-19",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE",
+  "coverage_level": "observed_same_watercourse_context",
   "event_section": {
-    "crossing_name": "Marzero stream",
+    "crossing_name": "Marzeno stream",
     "latitude": 44.1707,
     "longitude": 11.8139,
     "municipality": "Modigliana",
-    "hydrographic_context": "Marzero stream",
+    "hydrographic_context": "Marzeno stream at Ca' Stronchino",
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "same_watercourse_local_context_with_event_date_caveat",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 3.07,
+        "unit": "m s.z.i.",
+        "value_type": "validated_event_peak",
+        "observed_at": "2023-05-16T15:30:00+02:00",
+        "station_code": "250500",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      },
+      {
+        "parameter": "danger_level",
+        "operator": "",
+        "value": 1,
+        "unit": "m s.z.i.",
+        "value_type": "published_threshold_3",
+        "station_code": "250500",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": "250500",
+    "station_reference": "MODIGLIANA",
+    "name": "Marzeno at Modigliana",
+    "watercourse": "Marzeno",
+    "location": "Modigliana",
+    "latitude": 44.161111,
+    "longitude": 11.795833,
+    "distance_from_event_km": 1.8,
+    "relationship": "same_watercourse_local_station",
+    "observations_start_date": null,
+    "available_for_event": true,
+    "reference_section": null
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -30,34 +64,33 @@
     "taxonomy_version": "hydraulic-v2"
   },
   "documented_basin_processes": [
-    "bank_erosion_or_embankment_failure"
+    "record_flood_peak",
+    "rapid_flood_response",
+    "bank_erosion_or_embankment_failure",
+    "debris_accumulation_or_obstruction"
   ],
   "sources": [
     {
-      "source_id": "SRC0060",
-      "provider": "Sky TG24",
-      "title": "Voci da Modigliana, il paese isolato dalle frane causate dall’alluvione",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://tg24.sky.it/cronaca/2023/05/19/frane-modigliana-alluvione",
-      "reference": null,
-      "accessed_at": "2026-05-18"
+      "source_id": "arpae-flood-report-2023-05-16-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto idrometeorologico dell'evento 16-18 maggio 2023",
+      "role": "validated_hydrometric_peak_threshold_and_basin_response",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_idro_meteo_20230516-18.pdf"
     },
     {
-      "source_id": "SRC0061",
-      "provider": "Il Piccolo",
-      "title": "Maltempo, Modigliana è in ginocchio",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://ilpiccolo.org/ilpiccolo/2023/05/modigliana-in-ginocchio-maltempo/",
-      "reference": null,
-      "accessed_at": "2026-05-18"
+      "source_id": "regione-er-ca-stronchino-2025",
+      "provider": "Regione Emilia-Romagna - Protezione Civile",
+      "title": "A Modigliana inaugurato il nuovo ponte di Ca' Stronchino",
+      "role": "official_bridge_identity_damage_and_reconstruction_context",
+      "source_class": "Official/Technical",
+      "url": "https://protezionecivile.regione.emilia-romagna.it/novita/notizie/2025/dicembre/a-modigliana-fc-inaugurato-il-nuovo-ponte-di-ca-stronchino"
     },
     {
       "source_id": "SRC0062",
       "provider": "Il Resto del Carlino",
       "title": "Alluvione Emilia Romagna, il ponte di Ca' Stronchino ancora come un anno fa",
-      "role": "event_identification_and_failure_process_context",
+      "role": "failure_process_and_event_chronology_context",
       "source_class": "News",
       "url": "https://www.ilrestodelcarlino.it/cronaca/speciale-alluvione/alluvione-emilia-romagna-ponte-ca-stronchino-modigliana-x06hwx71",
       "reference": null,
@@ -65,26 +98,18 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La stazione di Modigliana è sul Marzeno e dista circa 1,8 km dal punto ARCUS. Il rapporto validato registra 3,07 m s.z.i. il 16 maggio contro la soglia 3 di 1,00 m. La data ARCUS del 19 maggio coincide con la documentazione pubblica immediatamente successiva; la misura viene quindi mostrata come contesto della piena 16-18 maggio, non come livello alla sezione del ponte nell’istante del collasso.",
+    "en": "The Modigliana gauge is on the Marzeno about 1.8 km from the ARCUS point. The validated report records 3.07 m above the local gauge datum on 16 May against a 1.00 m threshold 3. The 19 May ARCUS date aligns with immediate post-event reporting; the measurement is therefore shown as context for the 16-18 May flood, not as the bridge-section stage at the instant of collapse."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "curated_at": "2026-09-02T00:00:00.000Z",
+    "method": "Manual extraction from the official validated event report, ARPAE station registry and official reconstruction record"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "Stage values are relative to the Modigliana gauge datum and are not water depth or absolute elevation.",
+    "The gauge is approximately 1.8 km from the ARCUS bridge point; its stage is not transferred to the bridge section.",
+    "The validated peak was recorded on 16 May within the documented 16-18 May damage window, while the controlled ARCUS record is dated 19 May.",
+    "No discharge is assigned because no validated event-specific stage-discharge conversion is used here.",
+    "Hydrometric loading context and the documented bridge failure process remain separate evidence classes."
   ]
 }

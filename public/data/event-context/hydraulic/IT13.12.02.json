@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT13.12.02",
   "event_date": "2013-12-02",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "NTR24",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Miscano river",
     "latitude": 41.1381,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "crossing_identity_conflict_in_validated_sources",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Apice, crolla un pilastro del ponte sul fiume Miscano",
+      "summary_it": "Le fonti contemporanee chiamano il corso d'acqua sia Miscano sia Ufita e collocano il ponte tra Apice e Sant'Arcangelo Trimonte; il record non consente quindi di fissare senza ambiguità l'asta idrografica. Nessuna stazione viene associata finché l'identità dell'attraversamento non è riallineata.",
+      "summary_en": "Contemporary sources name the watercourse both Miscano and Ufita and place the bridge between Apice and Sant'Arcangelo Trimonte, so the record does not unambiguously identify the river reach. No gauge is associated until the crossing identity is reconciled."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -55,26 +60,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Le fonti contemporanee chiamano il corso d'acqua sia Miscano sia Ufita e collocano il ponte tra Apice e Sant'Arcangelo Trimonte; il record non consente quindi di fissare senza ambiguità l'asta idrografica. Nessuna stazione viene associata finché l'identità dell'attraversamento non è riallineata.",
+    "en": "Contemporary sources name the watercourse both Miscano and Ufita and place the bridge between Apice and Sant'Arcangelo Trimonte, so the record does not unambiguously identify the river reach. No gauge is associated until the crossing identity is reconciled."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-20"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

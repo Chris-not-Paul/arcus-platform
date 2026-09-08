@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT23.05.04",
   "event_date": "2023-05-18",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE · reviewed gap",
+  "coverage_level": "documented_event_context_no_compatible_station",
   "event_section": {
     "crossing_name": "Fosso Ghiaia canal",
     "latitude": 44.3202,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "ARPAE regional tele-hydrometric network and validated event report",
+      "summary_it": "Il rapporto validato 16-18 maggio documenta la piena e gli effetti sul reticolo romagnolo, ma non pubblica una sezione idrometrica sul Fosso Ghiaia compatibile con questo ponte.",
+      "summary_en": "The validated 16-18 May report documents the flood and its effects on the Romagna drainage network, but publishes no gauge section on Fosso Ghiaia compatible with this bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -33,6 +38,14 @@
     "bank_erosion_or_embankment_failure"
   ],
   "sources": [
+    {
+      "source_id": "arpae-flood-report-2023-05-16-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto idrometeorologico dell'evento 16-18 maggio 2023",
+      "role": "validated_regional_flood_context_and_hydrometric_coverage_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_idro_meteo_20230516-18.pdf"
+    },
     {
       "source_id": "SRC0065",
       "provider": "Regione Emilia-Romagna",
@@ -55,26 +68,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La revisione del rapporto ufficiale conferma il contesto di piena, ma non una misura sul Fosso Ghiaia. Il dossier registra esplicitamente il limite e non usa come sostituto una stazione su un altro corso d’acqua.",
+    "en": "Review of the official report confirms the flood context, but not a measurement on Fosso Ghiaia. The dossier records the limitation explicitly and does not substitute a gauge on another watercourse."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "curated_at": "2026-09-02T00:00:00.000Z",
+    "method": "Manual extraction and coverage review of the official validated event report"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "No compatible event-specific gauge section for Fosso Ghiaia is published in the reviewed ARPAE event report.",
+    "The absence of a published compatible measurement does not imply absence of flooding at the bridge.",
+    "Hydrometric values from nearby monitored rivers are not transferred to this minor canal.",
+    "The documented process evidence remains distinct from a measured stage or discharge at the bridge."
   ]
 }

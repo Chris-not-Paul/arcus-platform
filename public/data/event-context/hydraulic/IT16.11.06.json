@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT16.11.06",
   "event_date": "2016-11-24",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Po river",
     "latitude": 44.6593,
@@ -14,11 +14,16 @@
     "location_precision": "approximate_or_unverified"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Evento alluvionale 21-25 novembre 2016 in Piemonte",
+      "summary_it": "Anche per il secondo attraversamento di Sanfront il rapporto non pubblica una sezione idrometrica locale. Le portate del Po misurate dopo l'apporto dei bacini di valle non sono rappresentative del punto selezionato.",
+      "summary_en": "For the second Sanfront crossing the report likewise publishes no local gauge section. Po discharges measured after downstream tributary contributions are not representative of the selected point."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -34,6 +39,16 @@
   ],
   "sources": [
     {
+      "source_id": "arpa-piemonte-flood-report-november-2016",
+      "provider": "ARPA Piemonte",
+      "title": "Evento alluvionale 21-25 novembre 2016 in Piemonte",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/evento2016.pdf",
+      "reference": "Hydrological analysis and Table 7 peak-flow assessment",
+      "accessed_at": "2026-09-03"
+    },
+    {
       "source_id": "SRC0707",
       "provider": "Journal Paper",
       "title": "D'Angelo, Ballio & Ravazzani (2025), 'Geomorphologic risk factors for river bridges', IJDRR, database supplementare S3",
@@ -45,26 +60,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Anche per il secondo attraversamento di Sanfront il rapporto non pubblica una sezione idrometrica locale. Le portate del Po misurate dopo l'apporto dei bacini di valle non sono rappresentative del punto selezionato.",
+    "en": "For the second Sanfront crossing the report likewise publishes no local gauge section. Po discharges measured after downstream tributary contributions are not representative of the selected point."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-07-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

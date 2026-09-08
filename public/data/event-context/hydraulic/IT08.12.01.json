@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT08.12.01",
   "event_date": "2008-12-12",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Provincia di Catanzaro",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Savuto river",
     "latitude": 39.0415,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Dopo 12 anni dal crollo la Provincia consegna i lavori di ricostruzione del Ponte sul Savuto",
+      "summary_it": "Le fonti controllate confermano il cedimento del ponte sul Savuto durante la piena tra l'11 e il 12 dicembre 2008, ma non pubblicano livello, portata, stazione o orario di colmo. La piena documentata resta quindi distinta da una misura idrometrica.",
+      "summary_en": "The reviewed sources confirm failure of the Savuto bridge during the flood between 11 and 12 December 2008 but publish no stage, discharge, station or peak time. The documented flood therefore remains distinct from a hydrometric measurement."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -65,26 +70,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Le fonti controllate confermano il cedimento del ponte sul Savuto durante la piena tra l'11 e il 12 dicembre 2008, ma non pubblicano livello, portata, stazione o orario di colmo. La piena documentata resta quindi distinta da una misura idrometrica.",
+    "en": "The reviewed sources confirm failure of the Savuto bridge during the flood between 11 and 12 December 2008 but publish no stage, discharge, station or peak time. The documented flood therefore remains distinct from a hydrometric measurement."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-21"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

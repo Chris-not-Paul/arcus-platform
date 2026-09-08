@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT13.11.02",
   "event_date": "2013-11-18",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAS",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Cedrino river",
     "latitude": 40.2956,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_tabulated_value_in_validated_model_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Modellazione idrologica del bacino del Cedrino alla diga Pedra 'e Othoni",
+      "summary_it": "Lo studio ARPAS identifica una stazione sul Cedrino a Oloè, ma calibra il modello sui deflussi alla diga Pedra 'e Othoni e non pubblica nel documento un valore numerico evento-specifico per il ponte.",
+      "summary_en": "The ARPAS study identifies a Cedrino gauge at Oloè but calibrates the model on inflow at the Pedra 'e Othoni dam and publishes no event-specific numeric value for the bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpas-cedrino-model-2013-event",
+      "provider": "ARPAS",
+      "title": "Modellazione idrologica del bacino del Cedrino alla diga Pedra 'e Othoni",
+      "role": "event_model_scope_and_monitoring_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.sardegnaambiente.it/documenti/21_393_20231218164253.pdf",
+      "reference": "Monitoring network and 18-19 November 2013 calibration",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0373",
       "provider": "CNR-IRPI",
@@ -53,26 +68,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Lo studio ARPAS identifica una stazione sul Cedrino a Oloè, ma calibra il modello sui deflussi alla diga Pedra 'e Othoni e non pubblica nel documento un valore numerico evento-specifico per il ponte.",
+    "en": "The ARPAS study identifies a Cedrino gauge at Oloè but calibrates the model on inflow at the Pedra 'e Othoni dam and publishes no event-specific numeric value for the bridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

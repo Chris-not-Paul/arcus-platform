@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT25.04.02",
   "event_date": "2025-04-18",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAV",
+  "coverage_level": "official_annual_report_event_observation",
   "event_section": {
     "crossing_name": "Agno stream",
     "latitude": 45.6321,
@@ -14,13 +14,35 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "downstream_same_watercourse_local_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 2.73,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_peak",
+        "station_reference": "PONTE BROGLIANO AGNO",
+        "source_id": "arpav-meteo-climate-annual-report-2025"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "PONTE BROGLIANO AGNO",
+    "name": "Agno at Ponte Brogliano",
+    "watercourse": "Agno",
+    "location": "Brogliano, Vicenza",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "downstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +53,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpav-meteo-climate-annual-report-2025",
+      "provider": "ARPAV",
+      "title": "Meteo e Clima 2025 - Rapporto annuale",
+      "role": "event_hydrometry_and_climate_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.veneto.it/api/temi-ambientali/meteo/documenti-meteo/rapporti-annuali/2025_report_meteoclimatico.pdf/@@download/file/2025_report_meteoclimatico.pdf",
+      "reference": "April 16-17 flood summary for the Agno-Gua system",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0019",
       "provider": "ANSA",
@@ -63,26 +95,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto annuale ARPAV qualifica la piena del 16-17 aprile come estremamente significativa e riporta 2,73 m sull'Agno a Ponte Brogliano, massimo del periodo 1997-2024. La stazione è a valle di Valdagno e non coincide con il ponte della scheda; il valore resta quindi un riferimento della stessa asta fluviale.",
+    "en": "The ARPAV annual report describes the 16-17 April flood as extremely significant and reports 2.73 m on the Agno at Ponte Brogliano, the maximum for 1997-2024. The station is downstream of Valdagno and does not coincide with the bridge record; the value therefore remains a same-river reference."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

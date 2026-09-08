@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT08.10.02",
   "event_date": "2008-11-27",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAS",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Rio Cadula e Ardali",
     "latitude": 40.020997,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Analisi agrometeorologica e climatologica della Sardegna 2008-2009",
+      "summary_it": "Il rapporto ARPAS inquadra l'evento del 27-28 novembre 2008 che interessò l'Ogliastra, ma pubblica dati pluviometrici e non un livello o una portata del Rio Cadula-Ardali. Le fonti Capoterra presenti nel record non appartengono a questo evento di Triei e non vengono usate come evidenza idraulica.",
+      "summary_en": "The ARPAS report frames the 27-28 November 2008 event affecting Ogliastra, but publishes rainfall data rather than a stage or discharge for the Rio Cadula-Ardali. The Capoterra sources attached to the record concern a different event and are not used as hydraulic evidence."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpas-hydroclimatic-report-2008-2009",
+      "provider": "ARPAS",
+      "title": "Analisi agrometeorologica e climatologica della Sardegna 2008-2009",
+      "role": "event_meteorology_and_hydrometric_coverage_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.sardegnaambiente.it/documenti/21_162_20100212112009.pdf",
+      "reference": "November 2008 Baronia and Ogliastra event chronology",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0470",
       "provider": "Journal Paper",
@@ -63,26 +78,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPAS inquadra l'evento del 27-28 novembre 2008 che interessò l'Ogliastra, ma pubblica dati pluviometrici e non un livello o una portata del Rio Cadula-Ardali. Le fonti Capoterra presenti nel record non appartengono a questo evento di Triei e non vengono usate come evidenza idraulica.",
+    "en": "The ARPAS report frames the 27-28 November 2008 event affecting Ogliastra, but publishes rainfall data rather than a stage or discharge for the Rio Cadula-Ardali. The Capoterra sources attached to the record concern a different event and are not used as hydraulic evidence."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-21"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

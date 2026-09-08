@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT11.11.02",
   "event_date": "2011-11-22",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPACAL",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Cancello stream",
     "latitude": 38.9147,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Eventi meteorologici estremi in Calabria - novembre 2011",
+      "summary_it": "La fonte tecnica ARPACAL identifica il collasso ferroviario sul Cancello, affluente dell'Amato, e ne descrive lo scalzamento, ma pubblica dati pluviometrici e non un livello o una portata evento-specifici alla sezione del ponte.",
+      "summary_en": "The ARPACAL technical source identifies the railway collapse on the Cancello, a tributary of the Amato, and describes scour, but publishes rainfall data rather than an event-specific stage or discharge at the bridge section."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -34,6 +39,16 @@
   ],
   "sources": [
     {
+      "source_id": "arpacal-calabria-events-november-2011",
+      "provider": "ARPACAL",
+      "title": "Eventi meteorologici estremi in Calabria - novembre 2011",
+      "role": "event_identification_and_monitoring_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpacal.it/allegati/posterEventiMeteo2014.pdf",
+      "reference": "Cancello bridge case study and regional rainfall observations",
+      "accessed_at": "2026-09-03"
+    },
+    {
       "source_id": "SRC0429",
       "provider": "Lamezia in strada",
       "title": "Calabria, Provincia avvia lavori vicino al ponte crollato a Marcellinara",
@@ -45,26 +60,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La fonte tecnica ARPACAL identifica il collasso ferroviario sul Cancello, affluente dell'Amato, e ne descrive lo scalzamento, ma pubblica dati pluviometrici e non un livello o una portata evento-specifici alla sezione del ponte.",
+    "en": "The ARPACAL technical source identifies the railway collapse on the Cancello, a tributary of the Amato, and describes scour, but publishes rainfall data rather than an event-specific stage or discharge at the bridge section."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

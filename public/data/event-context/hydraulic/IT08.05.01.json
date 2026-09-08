@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT08.05.01",
   "event_date": "2008-05-28",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_mixed_observation_and_assessment",
   "event_section": {
     "crossing_name": "Varaita stream",
     "latitude": 44.5709,
@@ -14,13 +14,44 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "downstream_same_watercourse_basin_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 2.51,
+        "unit": "m s.z.i.",
+        "value_type": "validated_recorded_peak",
+        "station_reference": "ROSSANA VARAITA",
+        "source_id": "arpa-piemonte-flood-report-may-2008"
+      },
+      {
+        "parameter": "discharge_peak_assessment",
+        "operator": "",
+        "value": 250,
+        "unit": "m³/s",
+        "value_type": "official_peak_discharge_assessment",
+        "station_reference": "ROSSANA VARAITA",
+        "source_id": "arpa-piemonte-flood-report-may-2008"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "ROSSANA VARAITA",
+    "name": "Varaita at Rossana",
+    "watercourse": "Varaita",
+    "location": "Rossana, Cuneo",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "downstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -33,6 +64,16 @@
     "bank_erosion_or_embankment_failure"
   ],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-flood-report-may-2008",
+      "provider": "ARPA Piemonte",
+      "title": "Rapporto sull'evento alluvionale del 28-30 maggio 2008",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-10/2008.05.28_Rapporto_finale.pdf",
+      "reference": "Hydrological assessment and comparison tables for the 27-30 May event",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0463",
       "provider": "Regione Piemonte",
@@ -65,26 +106,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ufficiale riporta per l'evento 27-30 maggio 2,51 m e 250 m³/s alla stazione Varaita di Rossana. Rossana è a valle di Frassino e non coincide con il Ponte dei Cros; inoltre la scheda di danno locale data il processo al 29 maggio mentre il record ARCUS usa il 28 maggio come data dell'evento. I valori restano pertanto contesto d'asta, non misura al ponte o all'istante del cedimento.",
+    "en": "The official report gives 2.51 m and 250 m³/s at the Varaita at Rossana station for the 27-30 May event. Rossana is downstream of Frassino and is not Ponte dei Cros; moreover, the local damage sheet dates the process to 29 May while the ARCUS record uses 28 May as the event date. The values therefore remain river-event context, not a bridge-section or collapse-time measurement."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-21"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

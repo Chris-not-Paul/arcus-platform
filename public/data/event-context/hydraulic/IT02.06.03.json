@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT02.06.03",
   "event_date": "2002-06-05",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_mixed_observation_and_estimate",
   "event_section": {
     "crossing_name": "Cervo stream",
     "latitude": 45.5753,
@@ -14,13 +14,54 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "upstream_same_watercourse_basin_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 6.46,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_peak",
+        "observed_at": "2002-06-05T16:00:00Z",
+        "station_reference": "PASSOBREVE CERVO",
+        "source_id": "arpa-piemonte-biellese-flood-report-2002"
+      },
+      {
+        "parameter": "discharge_peak_estimate_lower",
+        "operator": "",
+        "value": 400,
+        "unit": "m³/s",
+        "value_type": "official_peak_discharge_estimate_lower_bound",
+        "station_reference": "PASSOBREVE CERVO",
+        "source_id": "arpa-piemonte-biellese-flood-report-2002"
+      },
+      {
+        "parameter": "discharge_peak_estimate_upper",
+        "operator": "",
+        "value": 500,
+        "unit": "m³/s",
+        "value_type": "official_peak_discharge_estimate_upper_bound",
+        "station_reference": "PASSOBREVE CERVO",
+        "source_id": "arpa-piemonte-biellese-flood-report-2002"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "PASSOBREVE CERVO",
+    "name": "Cervo at Passobreve",
+    "watercourse": "Cervo",
+    "location": "Passobreve, Valle Cervo",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "upstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -33,6 +74,16 @@
     "overtopping_or_hydrodynamic_action"
   ],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-biellese-flood-report-2002",
+      "provider": "ARPA Piemonte",
+      "title": "Evento alluvionale del 4-6 giugno 2002 nel territorio biellese",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Q19.pdf",
+      "reference": "Cervo hydrometry at Passobreve and documented effects",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0528",
       "provider": "ARPA Piemonte",
@@ -65,26 +116,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Passobreve è a monte di Biella sullo stesso Cervo. Il rapporto registra 6,46 m alle 18:00 locali e stima il colmo in circa 400-500 m³/s; nessuno dei valori è una misura alla passerella crollata.",
+    "en": "Passobreve is upstream of Biella on the same Cervo. The report records 6.46 m at 18:00 local time and estimates peak discharge at about 400-500 m³/s; neither value is a measurement at the collapsed footbridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-22"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

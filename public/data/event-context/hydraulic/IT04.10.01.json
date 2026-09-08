@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT04.10.01",
   "event_date": "2004-10-24",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Senato della Repubblica",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Sangro river",
     "latitude": 42.2343,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Interrogazioni sul crollo del ponte sul fiume Sangro",
+      "summary_it": "La fonte parlamentare conferma il crollo iniziale del ponte SS16 sul Sangro il 24 ottobre 2004 e il successivo cedimento di altre tre campate il 3 gennaio 2005, ma non pubblica livello, portata o stazione dell'evento iniziale. Le due date non vengono fuse in un unico colmo.",
+      "summary_en": "The parliamentary source confirms the initial SS16 Sangro bridge collapse on 24 October 2004 and failure of three further spans on 3 January 2005 but publishes no stage, discharge or station for the initial event. The two dates are not merged into a single peak."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "senate-sangro-bridge-collapse-2004",
+      "provider": "Senato della Repubblica",
+      "title": "Interrogazioni sul crollo del ponte sul fiume Sangro",
+      "role": "event_identification_and_hydrometric_coverage_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.senato.it/show-doc?id=144397&idoggetto=0&leg=14&part=doc_dc-allegatob_ab-sezionetit_i-atto_302213&tipodoc=resaula",
+      "reference": "24 October 2004 initial collapse and 3 January 2005 subsequent collapse",
+      "accessed_at": "2026-09-04"
+    },
     {
       "source_id": "SRC0502",
       "provider": "Journal Paper",
@@ -63,26 +78,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La fonte parlamentare conferma il crollo iniziale del ponte SS16 sul Sangro il 24 ottobre 2004 e il successivo cedimento di altre tre campate il 3 gennaio 2005, ma non pubblica livello, portata o stazione dell'evento iniziale. Le due date non vengono fuse in un unico colmo.",
+    "en": "The parliamentary source confirms the initial SS16 Sangro bridge collapse on 24 October 2004 and failure of three further spans on 3 January 2005 but publishes no stage, discharge or station for the initial event. The two dates are not merged into a single peak."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-21"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-04"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

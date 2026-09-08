@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT00.10.10",
   "event_date": "2000-10-13",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_mixed_observation_and_estimate",
   "event_section": {
     "crossing_name": "Stura di Valgrande stream",
     "latitude": 45.3626772288527,
@@ -14,13 +14,46 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "basin_reference_station_with_instrument_failure_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_before_instrument_failure",
+        "operator": "",
+        "value": 4.37,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_value_before_instrument_failure",
+        "observed_at": "2000-10-15T02:30:00Z",
+        "station_reference": "LANZO STURA DI LANZO",
+        "source_id": "arpa-piemonte-flood-report-2000"
+      },
+      {
+        "parameter": "discharge",
+        "operator": "",
+        "value": 2000,
+        "unit": "m³/s",
+        "value_type": "official_peak_estimate_after_instrument_failure",
+        "reliability": "low",
+        "station_reference": "LANZO STURA DI LANZO",
+        "source_id": "arpa-piemonte-flood-report-2000"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "LANZO STURA DI LANZO",
+    "name": "Stura di Lanzo at Lanzo",
+    "watercourse": "Stura di Lanzo",
+    "location": "Lanzo Torinese, Torino",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +64,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-flood-report-2000",
+      "provider": "ARPA Piemonte",
+      "title": "Rapporto sull'evento alluvionale del 13-16 ottobre 2000",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "reference": "Tables 7-9 and hydrological event analysis",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0578",
       "provider": "ARPA Piemonte",
@@ -63,26 +106,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "La stazione di Lanzo documenta la risposta complessiva del bacino. Lo strumento si interruppe durante la piena: 4,37 m è l'ultimo valore significativo riportato, mentre 2.000 m³/s è una stima ufficiale del colmo a bassa affidabilità, non una misura al ponte.",
+    "en": "The Lanzo station documents the overall basin response. The gauge failed during the flood: 4.37 m is the reported significant pre-failure value, while 2,000 m³/s is an official low-reliability peak estimate, not a bridge measurement."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-22"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Reported discharge values retain the reliability class and estimation status published in the event report.",
     "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

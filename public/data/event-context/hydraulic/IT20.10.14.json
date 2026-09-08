@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT20.10.14",
   "event_date": "2020-10-03",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Pianale stream",
     "latitude": 45.828,
@@ -14,11 +14,16 @@
     "location_precision": "approximate_or_unverified"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "ARPA Piemonte Sesia tributary monitoring context",
+      "summary_it": "Il rapporto documenta l'asportazione di tre ponti sul rio Pianale, ma non pubblica un idrometro sul rio o alla sezione dei manufatti.",
+      "summary_en": "The report documents three bridges swept away on the Pianale stream but publishes no gauge on the stream or at the bridge sections."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -32,6 +37,13 @@
   "documented_basin_processes": [],
   "sources": [
     {
+      "source_id": "arpa-piemonte-flood-report-2020",
+      "provider": "ARPA Piemonte",
+      "title": "L'evento alluvionale del 2-3 ottobre 2020 in Piemonte",
+      "role": "documented_bridge_impacts_and_network_review",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/rapporto_evento_02_ottobre_2020_.pdf"
+    },
+    {
       "source_id": "SRC0695",
       "provider": "ARPA Piemonte",
       "title": "Eventi alluvionali in Piemonte – Evento del 2-3 ottobre 2020 (Dipartimento Rischi Naturali e Ambientali, rev 1.1)",
@@ -43,8 +55,8 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+    "it": "Il rapporto documenta direttamente l'asportazione di tre ponti sul rio Pianale. La revisione non individua però una sezione idrometrica sul rio: l'assenza del valore è quindi un gap verificato.",
+    "en": "The report directly documents three bridges swept away on the Pianale stream. The review identifies no gauge section on the stream, so the missing value is a verified gap."
   },
   "review": {
     "priority": "high",
@@ -56,11 +68,11 @@
     ]
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction from the official ARPA Piemonte event report",
     "source_registry_accessed_through": "2026-07-19"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
+    "The official event report was reviewed and contains no hydrometric observation compatible with the Pianale bridge section.",
     "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
     "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
     "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."

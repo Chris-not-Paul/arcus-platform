@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT11.11.01",
   "event_date": "2011-11-06",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_mixed_observation_and_assessment",
   "event_section": {
     "crossing_name": "Pellice river",
     "latitude": 44.817,
@@ -14,13 +14,54 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "downstream_same_watercourse_basin_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 2.98,
+        "unit": "m s.z.i.",
+        "value_type": "validated_recorded_peak",
+        "observed_at": "2011-11-06T07:30:00Z",
+        "station_reference": "LUSERNA S. GIOVANNI PELLICE",
+        "source_id": "arpa-piemonte-meteohydrological-report-november-2011"
+      },
+      {
+        "parameter": "discharge_peak_assessment_lower",
+        "operator": "",
+        "value": 350,
+        "unit": "m³/s",
+        "value_type": "official_peak_discharge_assessment_lower_bound",
+        "station_reference": "LUSERNA S. GIOVANNI PELLICE",
+        "source_id": "arpa-piemonte-meteohydrological-report-november-2011"
+      },
+      {
+        "parameter": "discharge_peak_assessment_upper",
+        "operator": "",
+        "value": 400,
+        "unit": "m³/s",
+        "value_type": "official_peak_discharge_assessment_upper_bound",
+        "station_reference": "LUSERNA S. GIOVANNI PELLICE",
+        "source_id": "arpa-piemonte-meteohydrological-report-november-2011"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "LUSERNA S. GIOVANNI PELLICE",
+    "name": "Pellice at Luserna San Giovanni",
+    "watercourse": "Pellice",
+    "location": "Luserna San Giovanni, Torino",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "downstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -33,6 +74,16 @@
     "scour"
   ],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-meteohydrological-report-november-2011",
+      "provider": "ARPA Piemonte",
+      "title": "Evento meteoidrologico del 4-8 novembre 2011",
+      "role": "event_hydrometry_and_peak_discharge_assessment",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-05/Rapporto%20metroidrologico%204_8%20novembre%202011.pdf",
+      "reference": "Table 8 hydrometric peaks and Table 13 peak-discharge assessment",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0427",
       "provider": "TorinoToday",
@@ -55,26 +106,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPA riporta un colmo di 2,98 m alle 07:30 UTC del 6 novembre e una portata al colmo valutata in 350-400 m³/s a Luserna San Giovanni. La stazione è a valle di Torre Pellice sulla stessa asta: descrive la piena del Pellice, non il livello alla sezione del ponte Bertenga né l'istante esatto del cedimento.",
+    "en": "The ARPA report gives a 2.98 m peak at 07:30 UTC on 6 November and an assessed peak discharge of 350-400 m³/s at Luserna San Giovanni. The station is downstream of Torre Pellice on the same river: it describes the Pellice flood, not the Bertenga bridge-section stage or the exact failure instant."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT23.10.01",
   "event_date": "2023-10-30",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE Emilia-Romagna",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Sporzana stream",
     "latitude": 44.649,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "receiving_river_station_not_transferable_to_tributary",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Rapporto degli eventi meteorologici, di piena e di frana dal 26 al 31 ottobre 2023",
+      "summary_it": "Il rapporto documenta direttamente il crollo del ponte di Ozzanello sullo Sporzana, ma la tabella idrometrica riguarda il Taro e il Ceno. Lo Sporzana è un affluente destro non strumentato nel rapporto: i livelli del Taro a Fornovo non vengono assegnati alla sezione del ponte.",
+      "summary_en": "The report directly documents collapse of the Ozzanello bridge on the Sporzana, but its hydrometric table covers the Taro and Ceno. The Sporzana is an uninstrumented right-bank tributary in the report, so Taro levels at Fornovo are not assigned to the bridge section."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpae-emilia-romagna-flood-report-october-2023",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto degli eventi meteorologici, di piena e di frana dal 26 al 31 ottobre 2023",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_meteo_idro_20231026-31",
+      "reference": "Taro hydrometry and documented Ozzanello bridge collapse on the Sporzana",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0059",
       "provider": "Protezione Civile",
@@ -63,26 +78,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto documenta direttamente il crollo del ponte di Ozzanello sullo Sporzana, ma la tabella idrometrica riguarda il Taro e il Ceno. Lo Sporzana è un affluente destro non strumentato nel rapporto: i livelli del Taro a Fornovo non vengono assegnati alla sezione del ponte.",
+    "en": "The report directly documents collapse of the Ozzanello bridge on the Sporzana, but its hydrometric table covers the Taro and Ceno. The Sporzana is an uninstrumented right-bank tributary in the report, so Taro levels at Fornovo are not assigned to the bridge section."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

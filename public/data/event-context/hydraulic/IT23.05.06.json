@@ -2,23 +2,28 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT23.05.06",
   "event_date": "2023-05-24",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE · reviewed gap",
+  "coverage_level": "documented_event_context_no_compatible_station",
   "event_section": {
     "crossing_name": "Sillaro river",
     "latitude": 44.2742,
     "longitude": 11.4589,
     "municipality": "Monterenzio",
-    "hydrographic_context": "Sillaro river",
+    "hydrographic_context": "Sillaro river at Villa Sassonero",
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "event_date_outside_validated_flood_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "ARPAE regional tele-hydrometric network and published event reports",
+      "summary_it": "Il ponte è crollato il 24 maggio durante una nuova piena locale. Il rapporto idrometrico validato disponibile copre il 16-18 maggio: i colmi allora misurati sul Sillaro non vengono riutilizzati come misura dell’evento del 24 maggio.",
+      "summary_en": "The bridge collapsed on 24 May during a new local flood. The available validated hydrometric report covers 16-18 May, so the peaks then measured on the Sillaro are not reused as a measurement of the 24 May event."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -34,47 +39,44 @@
   ],
   "sources": [
     {
+      "source_id": "arpae-flood-report-2023-05-16-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto idrometeorologico dell'evento 16-18 maggio 2023",
+      "role": "validated_antecedent_flood_context_excluded_from_event_measurement",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_idro_meteo_20230516-18.pdf"
+    },
+    {
+      "source_id": "arpae-situation-update-2023-05-23",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Alluvione, continuano gli interventi di assistenza alla popolazione",
+      "role": "official_conditions_and_forecast_before_event_date",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/notizie/maltempo-23-maggio"
+    },
+    {
       "source_id": "SRC0685",
       "provider": "Il Resto del Carlino",
       "title": "Alluvione Bologna, crolla ponte a Monterenzio: residenti isolati a Villa Sassonero",
-      "role": "event_identification_and_failure_process_context",
+      "role": "event_identification_date_and_local_flood_context",
       "source_class": "News",
       "url": "https://www.ilrestodelcarlino.it/bologna/alluvione-bologna-oggi-crolla-ponte-monterenzio-diretta-lrrsj83t",
-      "reference": null,
-      "accessed_at": "2026-05-22"
-    },
-    {
-      "source_id": "SRC0686",
-      "provider": "BolognaToday",
-      "title": "Maltempo, a Monterenzio è crollato un ponte (VIDEO)",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.bolognatoday.it/cronaca/ponte-crollato-monterenzio-maltempo.html",
       "reference": null,
       "accessed_at": "2026-05-22"
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPAE 16-18 maggio contiene colmi validati sul Sillaro, ma il collasso di Villa Sassonero è documentato il 24 maggio durante un nuovo episodio locale. Per evitare una falsa associazione temporale, ARCUS non mostra quei colmi come misura del collasso e registra il gap come esito della revisione.",
+    "en": "The ARPAE 16-18 May report contains validated peaks on the Sillaro, but the Villa Sassonero collapse is documented on 24 May during a new local episode. To avoid a false temporal association, ARCUS does not display those peaks as a measurement of the collapse and records the gap as the review outcome."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-22"
+    "curated_at": "2026-09-02T00:00:00.000Z",
+    "method": "Manual extraction: temporal-compatibility review of the official ARPAE report and event sources"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "Validated Sillaro peaks from 16-17 May are antecedent context and are not assigned to the 24 May collapse.",
+    "No compatible validated stage, discharge or hydrograph for the new local flood on 24 May is present in the curated sources.",
+    "The absence of a compatible published measurement does not imply absence or low magnitude of the local flood.",
+    "The documented scour label remains tied to the controlled event evidence and is not quantified by a hydrometric series."
   ]
 }

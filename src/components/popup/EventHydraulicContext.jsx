@@ -13,11 +13,43 @@ function formatDate(value, language) {
   );
 }
 
+function formatDateTime(value, language) {
+  if (!value) return null;
+  return new Intl.DateTimeFormat(language === "it" ? "it-IT" : "en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
 function observationLabel(observation, it) {
   const labels = {
     discharge: it ? "Portata riferita" : "Reported discharge",
     danger_level: it ? "Soglia di pericolo" : "Danger threshold",
     stage_lower_bound: it ? "Livello minimo raggiunto" : "Minimum stage reached",
+    stage_before_instrument_failure: it
+      ? "Livello prima dell’avaria"
+      : "Stage before instrument failure",
+    stage_before_collapse: it
+      ? "Livello registrato prima del collasso"
+      : "Stage recorded before collapse",
+    stage_peak_estimate_lower: it
+      ? "Limite inferiore della stima"
+      : "Estimate lower bound",
+    stage_peak_estimate_upper: it
+      ? "Limite superiore della stima"
+      : "Estimate upper bound",
+    discharge_peak_estimate_lower: it
+      ? "Portata stimata — limite inferiore"
+      : "Estimated discharge — lower bound",
+    discharge_peak_estimate_upper: it
+      ? "Portata stimata — limite superiore"
+      : "Estimated discharge — upper bound",
+    discharge_peak_estimate: it
+      ? "Portata al colmo pubblicata"
+      : "Published peak discharge",
+    stage_peak_topographic_survey: it
+      ? "Colmo da rilievo topografico"
+      : "Peak from topographic survey",
     stage_peak: it ? "Colmo idrometrico" : "Hydrometric peak",
     stage_above_danger_level: it
       ? "Superamento livello di pericolo"
@@ -72,21 +104,50 @@ function ObservationPanel({ context, language, it }) {
   const hydrometry = context.event_hydrometry;
   const observations = hydrometry.observations || [];
   const hasLowerBound = observations.some((observation) => observation.operator === ">");
-  const bridgeStation =
+  const estimateOnly = hydrometry.observation_status === "reported_estimate";
+  const hasEstimate = observations.some((observation) =>
+    String(observation.value_type || "").includes("estimate")
+  );
+  const bridgeStation = [
+    "station_installed_on_event_bridge_incomplete_peak",
+    "station_at_event_bridge_observed_peak",
+  ].includes(hydrometry.interpretation);
+  const incompleteBridgePeak =
     hydrometry.interpretation === "station_installed_on_event_bridge_incomplete_peak";
+  const localPreCollapse =
+    hydrometry.interpretation ===
+    "local_crossing_reference_before_collapse_not_collapse_peak";
 
-  if (hydrometry.observation_status !== "observed") return null;
+  if (!["observed", "reported_estimate"].includes(hydrometry.observation_status)) {
+    return null;
+  }
 
   return (
     <article className="arcus-event-hydraulic-observations">
       <div className="arcus-event-hydraulic-card-heading">
-        <span>{it ? "Evidenza osservata" : "Observed evidence"}</span>
-        <h4>{it ? "Misure riferite dalla stazione" : "Station measurements reported"}</h4>
+        <span>
+          {estimateOnly
+            ? (it ? "Stima tecnica pubblicata" : "Published technical estimate")
+            : (it ? "Evidenza idrometrica" : "Hydrometric evidence")}
+        </span>
+        <h4>
+          {hasEstimate
+            ? (it ? "Misure e stime distinte" : "Measurements and estimates separated")
+            : (it ? "Misure riferite dalla stazione" : "Station measurements reported")}
+        </h4>
         <p>
-          {hasLowerBound
+          {estimateOnly
+            ? (it
+                ? "Valore ricostruito e pubblicato nel rapporto ufficiale; non è una lettura diretta del sensore."
+                : "Value reconstructed and published in the official report; it is not a direct sensor reading.")
+            : hasLowerBound
             ? (it
                 ? "Valori pubblicati nel rapporto d’evento. Il simbolo > indica una soglia superata, non il valore di picco esatto."
                 : "Values published in the event report. The > symbol denotes an exceeded threshold, not the exact peak value.")
+            : hasEstimate
+              ? (it
+                  ? "Il rapporto combina misure registrate e stime tecniche. ARCUS conserva questa distinzione."
+                  : "The report combines recorded measurements and technical estimates. ARCUS preserves that distinction.")
             : (it
                 ? "Valori pubblicati nel rapporto ufficiale dell’evento."
                 : "Values published in the official event report.")}
@@ -105,15 +166,30 @@ function ObservationPanel({ context, language, it }) {
                 Number.isInteger(observation.value) ? 0 : 2
               )} <small>{observation.unit}</small>
             </strong>
+            {observation.observed_at && (
+              <small>{formatDateTime(observation.observed_at, language)}</small>
+            )}
           </div>
         ))}
       </div>
 
       <p className="arcus-event-hydraulic-warning">
-        {bridgeStation
+        {estimateOnly
+          ? (it
+              ? "La stima descrive la sezione ufficiale indicata; non è una misura al ponte collassato e non ne definisce il tempo di ritorno."
+              : "The estimate describes the named official section; it is not a collapsed-bridge measurement and does not define its return period.")
+          : incompleteBridgePeak
           ? (it
               ? "Il sensore era installato sul ponte. Il colmo effettivo ha superato la finestra di misura e lo strumento è stato distrutto: il valore mostrato è un limite inferiore."
               : "The sensor was installed on the bridge. The actual peak exceeded the measurement window and the instrument was destroyed: the displayed value is a lower bound.")
+          : bridgeStation
+          ? (it
+              ? "La misura proviene dall’idrometro del medesimo ponte ed è riferita allo zero idrometrico locale; non rappresenta il tirante sulla struttura."
+              : "The measurement comes from the gauge at the same bridge and is relative to its local gauge datum; it is not flow depth on the structure.")
+          : localPreCollapse
+          ? (it
+              ? "La misura appartiene al medesimo attraversamento, ma precede il cedimento: descrive il livello registrato in quell’istante, non il colmo al collasso."
+              : "The measurement belongs to the same crossing but predates failure: it describes the stage recorded at that time, not the peak at collapse.")
           : (it
               ? "La stazione descrive la piena nel bacino; i valori non sono misure alla sezione del ponte collassato."
               : "The station describes the basin flood; values were not measured at the collapsed bridge section.")}
@@ -203,6 +279,69 @@ function HydrometryGapPanel({ hydrometry, it }) {
   );
 }
 
+function ReviewedHydrometryGapPanel({ hydrometry, it }) {
+  const status = hydrometry.network_status;
+  const temporalMismatch =
+    hydrometry.reason_code === "event_date_outside_validated_flood_report";
+  const identityConflict = [
+    "crossing_identity_conflict_in_validated_sources",
+    "event_identity_not_confirmed_in_validated_sources",
+  ].includes(hydrometry.reason_code);
+  const measuredDataAbsent =
+    hydrometry.reason_code === "no_measured_data_in_validated_event_report";
+
+  return (
+    <article className="arcus-event-hydraulic-gap">
+      <div className="arcus-event-hydraulic-card-heading">
+        <span>{it ? "Copertura idrometrica verificata" : "Reviewed hydrometric coverage"}</span>
+        <h4>
+          {identityConflict
+            ? (it ? "Identità dell’evento da risolvere" : "Event identity must be resolved")
+            : measuredDataAbsent
+              ? (it ? "Il rapporto non dispone di misure" : "The report contains no measurements")
+            : temporalMismatch
+            ? (it ? "Nessuna misura compatibile con la data" : "No measurement compatible with the date")
+            : (it ? "Nessuna sezione compatibile pubblicata" : "No compatible published gauge section")}
+        </h4>
+        <p>
+          {identityConflict
+            ? (it
+                ? "Le fonti controllate non confermano in modo coerente ponte, corso d’acqua o localizzazione. ARCUS sospende ogni associazione idrometrica."
+                : "Controlled sources do not consistently confirm the bridge, watercourse or location. ARCUS suspends hydrometric assignment.")
+            : measuredDataAbsent
+              ? (it
+                  ? "La fonte ufficiale documenta la piena, ma dichiara che per questo bacino non sono disponibili dati misurati."
+                  : "The official source documents the flood but states that measured data are unavailable for this basin.")
+            : temporalMismatch
+            ? (it
+                ? "La fonte idrometrica disponibile riguarda un episodio precedente. ARCUS non trasferisce quel colmo al giorno del collasso."
+                : "The available hydrometric source concerns an earlier episode. ARCUS does not transfer that peak to the collapse date.")
+            : (it
+                ? "La fonte ufficiale è stata verificata, ma non contiene una misura riferibile a questo corso d’acqua e a questo ponte."
+                : "The official source was reviewed, but it contains no measurement attributable to this watercourse and bridge.")}
+        </p>
+      </div>
+      {status && (
+        <dl className="arcus-event-hydraulic-gap-facts">
+          <div>
+            <dt>{it ? "Fonte verificata" : "Reviewed source"}</dt>
+            <dd>{status.network}</dd>
+          </div>
+          <div>
+            <dt>{it ? "Esito" : "Outcome"}</dt>
+            <dd>{it ? status.summary_it : status.summary_en}</dd>
+          </div>
+        </dl>
+      )}
+      <p className="arcus-event-hydraulic-warning">
+        {it
+          ? "Gap documentato, non dato zero: l’assenza di una misura compatibile non descrive l’intensità della piena al ponte."
+          : "Documented gap, not a zero value: absence of a compatible measurement does not describe flood intensity at the bridge."}
+      </p>
+    </article>
+  );
+}
+
 function HydrometryReviewPanel({ context, it }) {
   const evidence = context.process_evidence || {};
 
@@ -245,6 +384,14 @@ function StationPanel({ station, referenceSection, language, it }) {
 
   const relationship = station.relationship === "upstream_basin_reference_station"
     ? (it ? "Stazione a monte nel bacino" : "Upstream basin station")
+    : station.relationship === "upstream_subbasin_reference_station"
+      ? (it ? "Stazione nel sottobacino a monte" : "Upstream subcatchment station")
+    : station.relationship === "downstream_basin_reference_station"
+      ? (it ? "Stazione a valle nel bacino" : "Downstream basin station")
+    : station.relationship === "same_watercourse_basin_reference_station"
+      ? (it ? "Stazione di bacino sullo stesso corso d’acqua" : "Same-river basin station")
+    : station.relationship === "basin_reference_station"
+      ? (it ? "Stazione di riferimento del bacino" : "Basin reference station")
     : station.relationship === "same_watercourse_local_station"
       ? (it ? "Stazione locale sul corso d’acqua" : "Local same-river station")
       : station.relationship === "installed_on_event_bridge"
@@ -319,13 +466,34 @@ function EventHydraulicContext({ context }) {
   const watercourse = context.modelled_event_watercourse;
   const referenceSection = context.modelled_reference_section;
   const observed = context.event_hydrometry.observation_status === "observed";
+  const reportedEstimate =
+    context.event_hydrometry.observation_status === "reported_estimate";
+  const hydrometricEvidence = observed || reportedEstimate;
   const networkFailure =
     context.event_hydrometry.reason_code === "monitoring_network_failed_during_flood";
+  const reviewedGap =
+    context.event_hydrometry.observation_status === "not_available" &&
+    [
+      "no_compatible_station_in_validated_event_report",
+      "event_date_outside_validated_flood_report",
+      "no_measured_data_in_validated_event_report",
+      "crossing_identity_conflict_in_validated_sources",
+      "event_identity_not_confirmed_in_validated_sources",
+      "receiving_river_station_not_transferable_to_tributary",
+      "no_tabulated_value_in_validated_model_report",
+      "model_scope_does_not_cover_event_watercourse",
+      "no_event_specific_value_in_validated_hydrological_annal",
+      "no_hydrometric_value_in_validated_event_source",
+    ].includes(context.event_hydrometry.reason_code);
   const reviewRequired =
     context.event_hydrometry.observation_status === "not_verified";
-  const bridgeStation =
+  const bridgeStation = [
+    "station_installed_on_event_bridge_incomplete_peak",
+    "station_at_event_bridge_observed_peak",
+  ].includes(context.event_hydrometry.interpretation);
+  const localPreCollapse =
     context.event_hydrometry.interpretation ===
-    "station_installed_on_event_bridge_incomplete_peak";
+    "local_crossing_reference_before_collapse_not_collapse_peak";
   const sourceBadge =
     (context.status === "source_review_required"
       ? (it ? "Da verificare" : "Source review")
@@ -343,23 +511,33 @@ function EventHydraulicContext({ context }) {
         <strong>{sourceBadge}</strong>
       </header>
 
-      <div className={`arcus-event-hydraulic-availability${observed ? " is-observed" : ""}`}>
+      <div className={`arcus-event-hydraulic-availability${hydrometricEvidence ? " is-observed" : ""}`}>
         <div>
           <span>{it ? "Idrometria dell’evento" : "Event hydrometry"}</span>
           <strong>
-            {observed
+            {reportedEstimate
+              ? (it ? "Stima tecnica del colmo nel bacino" : "Technical basin peak estimate")
+              : observed
               ? bridgeStation
                 ? (it ? "Piena osservata alla sezione del ponte" : "Flood observed at the bridge section")
+                : localPreCollapse
+                  ? (it ? "Livello locale prima del collasso" : "Local stage before collapse")
                 : (it ? "Piena osservata nel bacino" : "Flood observed in the basin")
               : networkFailure
                 ? (it ? "Colmo non registrato: rete interrotta" : "Peak not recorded: network interrupted")
+              : reviewedGap
+                ? (it ? "Nessuna misura compatibile pubblicata" : "No compatible published measurement")
               : reviewRequired
                 ? (it ? "Idrometria non ancora verificata" : "Hydrometry not yet verified")
                 : (it ? `Nessuna misura osservata nel ${context.event_date.slice(0, 4)}` : `No observed measurement in ${context.event_date.slice(0, 4)}`)}
           </strong>
         </div>
         <p>
-          {observed
+          {reportedEstimate
+            ? (it
+                ? "Il rapporto ufficiale pubblica una ricostruzione tecnica alla stazione indicata. ARCUS la mostra come stima, separata dalle letture osservate e dalla sezione del ponte."
+                : "The official report publishes a technical reconstruction at the named station. ARCUS shows it as an estimate, separate from observed readings and the bridge section.")
+            : observed
             ? bridgeStation
               ? (it
                   ? "Il sensore era installato sul manufatto e ha registrato la crescita della piena fino alla perdita della stazione."
@@ -375,6 +553,10 @@ function EventHydraulicContext({ context }) {
               ? (it
                   ? "La rete era attiva, ma l’evento ha sormontato o danneggiato i sensori del bacino. ARCUS mostra il motivo del dato mancante senza ricostruire il colmo."
                   : "The network was active, but the event overtopped or damaged basin sensors. ARCUS shows why the data are missing without reconstructing the peak.")
+              : reviewedGap
+                ? (it
+                    ? "La copertura ufficiale è stata verificata, ma non offre una misura compatibile per corso d’acqua e data. Il limite è mostrato come risultato, non come dato mancante generico."
+                    : "Official coverage was reviewed, but it offers no measurement compatible by watercourse and date. The limitation is shown as a result, not as a generic missing value.")
               : reviewRequired
                 ? (it
                     ? "Le fonti disponibili documentano il collasso, ma il collegamento con una stazione o una sezione idraulica deve ancora essere verificato."
@@ -386,12 +568,14 @@ function EventHydraulicContext({ context }) {
       </div>
 
       <div className="arcus-event-hydraulic-grid">
-        {observed ? (
+        {hydrometricEvidence ? (
           <ObservationPanel context={context} language={language} it={it} />
         ) : watercourse ? (
           <ModelledFlowPanel watercourse={watercourse} language={language} it={it} />
         ) : networkFailure ? (
           <HydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
+        ) : reviewedGap ? (
+          <ReviewedHydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
         ) : (
           <HydrometryReviewPanel context={context} it={it} />
         )}

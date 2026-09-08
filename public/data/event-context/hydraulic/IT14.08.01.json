@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT14.08.01",
   "event_date": "2014-08-13",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Journal Paper",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Aupa stream",
     "latitude": 46.4069,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+      "summary_it": "Le fonti documentano il danneggiamento del ponte per Ovedasso durante le piogge del 13 agosto 2014 e l'erosione presso la pila centrale, ma non pubblicano livello, portata o idrogramma dell'Aupa. Il processo resta documentato senza falsa precisione idrometrica.",
+      "summary_en": "The sources document damage to the Ovedasso bridge during rainfall on 13 August 2014 and erosion at the central pier but publish no Aupa stage, discharge or hydrograph. The process remains documented without false hydrometric precision."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -65,26 +70,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Le fonti documentano il danneggiamento del ponte per Ovedasso durante le piogge del 13 agosto 2014 e l'erosione presso la pila centrale, ma non pubblicano livello, portata o idrogramma dell'Aupa. Il processo resta documentato senza falsa precisione idrometrica.",
+    "en": "The sources document damage to the Ovedasso bridge during rainfall on 13 August 2014 and erosion at the central pier but publish no Aupa stage, discharge or hydrograph. The process remains documented without false hydrometric precision."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-20"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

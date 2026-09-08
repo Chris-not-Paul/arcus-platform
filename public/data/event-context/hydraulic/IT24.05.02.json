@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT24.05.02",
   "event_date": "2024-05-15",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Lombardia",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Rio della Pissanegra",
     "latitude": 45.5878,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Allagamenti e dissesti in Lombardia 13-25 maggio 2024",
+      "summary_it": "Il rapporto ARPA Lombardia analizza i principali corsi d'acqua e, nell'appendice per l'area a est di Milano, le stazioni su Seveso, Trobbia e Martesana. Non pubblica una misura sul Rio Pissanegra compatibile con il ponte di Cavenago; i livelli dei bacini vicini non vengono trasferiti al reticolo minore.",
+      "summary_en": "The ARPA Lombardia report analyses the main watercourses and, in its east-Milan appendix, gauges on the Seveso, Trobbia and Martesana. It publishes no Rio Pissanegra measurement compatible with the Cavenago bridge; nearby-basin levels are not transferred to the minor channel."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -31,6 +36,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpa-lombardia-event-report-may-2024",
+      "provider": "ARPA Lombardia",
+      "title": "Allagamenti e dissesti in Lombardia 13-25 maggio 2024",
+      "role": "event_hydrometry_and_monitoring_review",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpalombardia.it/media/rkoawfja/report-evento-13-25-maggio-2024.pdf",
+      "reference": "Section 2 and Appendix: monitored watercourses and gauges east of Milan",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0036",
       "provider": "Prima Monza",
@@ -53,26 +68,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPA Lombardia analizza i principali corsi d'acqua e, nell'appendice per l'area a est di Milano, le stazioni su Seveso, Trobbia e Martesana. Non pubblica una misura sul Rio Pissanegra compatibile con il ponte di Cavenago; i livelli dei bacini vicini non vengono trasferiti al reticolo minore.",
+    "en": "The ARPA Lombardia report analyses the main watercourses and, in its east-Milan appendix, gauges on the Seveso, Trobbia and Martesana. It publishes no Rio Pissanegra measurement compatible with the Cavenago bridge; nearby-basin levels are not transferred to the minor channel."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

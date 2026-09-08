@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT10.01.01",
   "event_date": "2010-01-28",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Journal Paper",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Corace river",
     "latitude": 39.0098,
@@ -14,11 +14,16 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_hydrometric_value_in_validated_event_source",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
+      "summary_it": "Le fonti identificano il crollo del ponte ferroviario in località Cirone nel periodo di dissesto calabrese, senza pubblicare livello, portata o stazione sul Corace compatibile con la sezione. Nessun valore regionale viene trasferito al ponte.",
+      "summary_en": "The sources identify failure of the Cirone railway bridge during the Calabria disruption period but publish no stage, discharge or Corace station compatible with the bridge section. No regional value is transferred to the bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -65,26 +70,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Le fonti identificano il crollo del ponte ferroviario in località Cirone nel periodo di dissesto calabrese, senza pubblicare livello, portata o stazione sul Corace compatibile con la sezione. Nessun valore regionale viene trasferito al ponte.",
+    "en": "The sources identify failure of the Cirone railway bridge during the Calabria disruption period but publish no stage, discharge or Corace station compatible with the bridge section. No regional value is transferred to the bridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
     "source_registry_accessed_through": "2026-05-20"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
   ]
 }

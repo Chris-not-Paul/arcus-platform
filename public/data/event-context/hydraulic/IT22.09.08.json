@@ -2,89 +2,65 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT22.09.08",
   "event_date": "2022-09-15",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Marche",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Bevano stream",
     "latitude": 43.4702,
     "longitude": 12.6271,
     "municipality": "Cantiano",
-    "hydrographic_context": "Bevano stream",
+    "hydrographic_context": "Bevano tributary within the Burano-Candigliano system",
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "Regione Marche regional hydrometric network",
+      "summary_it": "Il rapporto pubblica idrogrammi sul sistema Burano-Candigliano, incluso Pontedazzo a valle di Cantiano, ma non una sezione sul torrente Bevano compatibile con il ponte ciclopedonale.",
+      "summary_en": "The report publishes hydrographs for the Burano-Candigliano system, including Pontedazzo downstream of Cantiano, but no Bevano gauge section compatible with the cycle-pedestrian bridge."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
-  "process_evidence": {
-    "failure_process": "overtopping_or_hydrodynamic_action",
-    "component_involved": "deck_or_superstructure",
-    "evidence_level": "documented",
-    "taxonomy_version": "hydraulic-v2"
-  },
   "documented_basin_processes": [
+    "rapid_flood_response",
+    "solid_transport",
     "overtopping_or_hydrodynamic_action"
   ],
   "sources": [
     {
+      "source_id": "regione-marche-event-report-2022",
+      "provider": "Regione Marche",
+      "title": "Rapporto di evento: maltempo 15, 16 e 17 settembre 2022",
+      "role": "hydrometric_network_and_basin_processes",
+      "url": "https://static.regione.marche.it/portals/0/Protezione_Civile/Manuali%20e%20Studi/Rapporto_Evento_preliminare_20220915.pdf"
+    },
+    {
       "source_id": "SRC0126",
-      "provider": "Protezione Civile",
-      "title": "Rapporto di evento preliminare – Alluvione Marche 15-16 settembre 2022",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "Official/Technical",
-      "url": "https://polaris.irpi.cnr.it/event/alluvione-nelle-marche/",
-      "reference": null,
-      "accessed_at": "2026-05-20"
-    },
-    {
-      "source_id": "SRC0127",
-      "provider": "ANSA",
-      "title": "Maltempo Marche: 84 cantieri del Genio Civile per la sistemazione dei ponti e delle infrastrutture",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.ansa.it/marche/notizie/2022/11/22/maltempo-marche-84-cantieri-genio-civile-per-sistemazioni_e63350e8-b7ce-47b9-b00f-39981634c388.html",
-      "reference": null,
-      "accessed_at": "2026-05-20"
-    },
-    {
-      "source_id": "SRC0128",
-      "provider": "Vigili del Fuoco",
-      "title": "Alluvione delle Marche del 2022 – Vigili del Fuoco",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.vigilfuoco.tv/storia/alluvione-delle-marche-del-2022",
-      "reference": null,
-      "accessed_at": "2026-05-20"
+      "provider": "CNR-IRPI Polaris",
+      "title": "Alluvione nelle Marche, 15 settembre 2022",
+      "role": "event_and_regional_impact_context",
+      "url": "https://polaris.irpi.cnr.it/event/alluvione-nelle-marche/"
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il punto appartiene allo stesso evento e corso d'acqua del caso IT22.09.04. L'idrogramma di Pontedazzo resta contesto del sistema Burano, non misura del ponte sul Bevano.",
+    "en": "The point belongs to the same event and watercourse as IT22.09.04. The Pontedazzo hydrograph remains Burano-system context, not a measurement at the Bevano bridge."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "curated_at": "2026-09-02T15:00:00.000Z",
+    "method": "Manual extraction from the official regional event report"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The official hydrographs are published for different sections of the Burano-Candigliano system.",
+    "No stage, discharge or hydrograph is assigned to the Bevano bridge section.",
+    "The report graph is not manually digitised into a false-precision numeric peak.",
+    "Basin processes do not by themselves prove the bridge-collapse mechanism."
   ]
 }

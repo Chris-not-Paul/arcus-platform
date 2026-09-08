@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { applyEventReportCuration } from "./lib/hydraulic-event-report-curation.js";
 
 const ROOT = process.cwd();
 const EVENTS_PATH = path.join(
@@ -190,7 +191,17 @@ for (const event of events.sort((left, right) =>
   const filePath = path.join(CONTEXT_ROOT, file);
   let context = null;
 
-  if (fs.existsSync(filePath)) {
+  const reportCuratedContext = applyEventReportCuration(
+    generatedContext(event, sourcesByEvent.get(event.event_id) || [])
+  );
+
+  if (reportCuratedContext) {
+    context = reportCuratedContext;
+    fs.writeFileSync(filePath, `${JSON.stringify(context, null, 2)}\n`, "utf8");
+    curated += 1;
+  }
+
+  if (!context && fs.existsSync(filePath)) {
     const candidate = JSON.parse(fs.readFileSync(filePath, "utf8"));
     if (candidate.provenance?.method?.startsWith(CURATED_METHOD_PREFIX)) {
       context = candidate;

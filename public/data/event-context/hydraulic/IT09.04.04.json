@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT09.04.04",
   "event_date": "2009-04-30",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "Regione Emilia-Romagna",
+  "coverage_level": "official_event_report_peak_discharge_assessment",
   "event_section": {
     "crossing_name": "Po river",
     "latitude": 45.0625,
@@ -14,13 +14,36 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "reported_estimate",
+    "interpretation": "same_reach_flood_wave_reference_not_local_pier_measurement",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "discharge_during_peak_wave",
+        "operator": "approximately",
+        "value": 7000,
+        "unit": "m³/s",
+        "value_type": "official_event_discharge_assessment",
+        "observed_at": "2009-04-30",
+        "station_reference": "PIACENZA PO",
+        "source_id": "emilia-romagna-po-flood-april-2009-plan"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "PIACENZA PO",
+    "name": "Po flood wave at Piacenza",
+    "watercourse": "Po",
+    "location": "Piacenza",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "same_reach_event_reference",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +54,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "emilia-romagna-po-flood-april-2009-plan",
+      "provider": "Regione Emilia-Romagna",
+      "title": "Piano degli interventi urgenti - piena del Po dell'aprile 2009",
+      "role": "event_hydrometry_and_bridge_failure_identification",
+      "source_class": "Official/Technical",
+      "url": "https://bur.regione.emilia-romagna.it/area-bollettini/bollettino-ufficiale-18-giugno-2010-1/bollettino_view/%2B%2Bwidget%2B%2Bform.widgets.pdf_firmato/%40%40download",
+      "reference": "Po flood wave and SS9 bridge collapse at Piacenza",
+      "accessed_at": "2026-09-04"
+    },
     {
       "source_id": "SRC0460",
       "provider": "Journal Paper",
@@ -53,26 +86,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il piano regionale riporta una portata di circa 7.000 m³/s durante il transito dell'onda di piena e colloca il cedimento del ponte SS9 alle 12:30 circa. È una valutazione ufficiale della piena sul tratto di Piacenza, non una misura locale della velocità o dello scalzamento presso la pila collassata.",
+    "en": "The regional plan reports about 7,000 m³/s during passage of the flood wave and places the SS9 bridge failure at about 12:30. This is an official assessment of the Po flood at Piacenza, not a local measurement of velocity or scour at the failed pier."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-20"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-04"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

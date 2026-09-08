@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT20.10.19",
   "event_date": "2020-10-03",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Gesso della Barra stream",
     "latitude": 44.19,
@@ -14,11 +14,16 @@
     "location_precision": "approximate_or_unverified"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "not_available",
+    "reason_code": "no_compatible_station_in_validated_event_report",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "network_status": {
+      "network": "ARPA Piemonte Gesso basin monitoring context",
+      "summary_it": "Il rapporto documenta l'erosione sul Gesso della Barra e la perdita della spalla del ponte, ma la sezione di Andonno è sul Gesso riunito a valle e non viene trasferita al ramo montano.",
+      "summary_en": "The report documents erosion on the Gesso della Barra and loss of the bridge abutment, but the Andonno section is on the combined Gesso downstream and is not transferred to the mountain branch."
+    }
   },
   "reference_station": null,
   "modelled_event_watercourse": null,
@@ -34,6 +39,13 @@
   ],
   "sources": [
     {
+      "source_id": "arpa-piemonte-flood-report-2020",
+      "provider": "ARPA Piemonte",
+      "title": "L'evento alluvionale del 2-3 ottobre 2020 in Piemonte",
+      "role": "documented_bridge_impacts_and_network_review",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/rapporto_evento_02_ottobre_2020_.pdf"
+    },
+    {
       "source_id": "SRC0700",
       "provider": "ARPA Piemonte",
       "title": "Eventi alluvionali in Piemonte – Evento del 2-3 ottobre 2020 (Dipartimento Rischi Naturali e Ambientali, rev 1.1)",
@@ -45,8 +57,8 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
+    "it": "Il rapporto documenta direttamente l'erosione della spalla del ponte sul Gesso della Barra. Poiché la misura di Andonno appartiene al Gesso riunito a valle, ARCUS non la trasferisce al ramo montano.",
+    "en": "The report directly documents erosion of the bridge abutment on the Gesso della Barra. Because the Andonno measurement belongs to the combined Gesso downstream, ARCUS does not transfer it to the mountain branch."
   },
   "review": {
     "priority": "high",
@@ -58,11 +70,11 @@
     ]
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
+    "method": "Manual extraction from the official ARPA Piemonte event report",
     "source_registry_accessed_through": "2026-07-19"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
+    "The official event report was reviewed; the downstream Andonno observation is not transferred to the upper Gesso della Barra tributary.",
     "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
     "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
     "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."

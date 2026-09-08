@@ -5,8 +5,10 @@ import useLanguage from "../../context/useLanguage";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 import { researchEventId } from "../../utils/eventIdentity";
 import EventHydraulicContext from "./EventHydraulicContext";
+import EventMedia from "./EventMedia";
 import EventRainfallContext from "./EventRainfallContext";
 import useEventHydraulicContext from "./useEventHydraulicContext";
+import useEventMedia from "./useEventMedia";
 import useEventRainfallContext from "./useEventRainfallContext";
 import "./EventPopup.css";
 
@@ -271,6 +273,7 @@ function EventPopup({
   const sourceCount = relatedSources.length;
   const recordId = researchEventId(event);
   const hydraulicContext = useEventHydraulicContext(recordId);
+  const eventMedia = useEventMedia(recordId);
   const rainfallContext = useEventRainfallContext(recordId);
   const title = eventTitle(event, language);
   const descriptionText = String(
@@ -444,12 +447,26 @@ function EventPopup({
       id: "bridge",
       label: it ? "Ponte" : "Bridge",
     },
+    ...(eventMedia.length > 0
+      ? [
+          {
+            count: eventMedia.length,
+            id: "media",
+            label: it ? "Immagini" : "Media",
+          },
+        ]
+      : []),
     {
       count: sourceCount,
       id: "sources",
       label: it ? "Fonti e qualità" : "Sources and quality",
     },
   ];
+  const visibleDossierTab = dossierTabs.some(
+    (tab) => tab.id === activeDossierTab
+  )
+    ? activeDossierTab
+    : "event";
   const contextTabs = [
     ...(rainfallContext
       ? [{
@@ -685,15 +702,15 @@ function EventPopup({
               {dossierTabs.map((tab, tabIndex) => (
                 <button
                   aria-controls={`${dossierId}-panel-${tab.id}`}
-                  aria-selected={activeDossierTab === tab.id}
-                  className={activeDossierTab === tab.id ? "is-active" : ""}
+                  aria-selected={visibleDossierTab === tab.id}
+                  className={visibleDossierTab === tab.id ? "is-active" : ""}
                   id={`${dossierId}-tab-${tab.id}`}
                   key={tab.id}
                   ref={(element) => {
                     dossierTabRefs.current[tabIndex] = element;
                   }}
                   role="tab"
-                  tabIndex={activeDossierTab === tab.id ? 0 : -1}
+                  tabIndex={visibleDossierTab === tab.id ? 0 : -1}
                   type="button"
                   onClick={() => selectDossierTab(tab.id, tabIndex)}
                   onKeyDown={(event) => handleDossierTabKeyDown(event, tabIndex)}
@@ -705,13 +722,20 @@ function EventPopup({
             </nav>
 
             <div
-              aria-labelledby={`${dossierId}-tab-${activeDossierTab}`}
+              aria-labelledby={`${dossierId}-tab-${visibleDossierTab}`}
               className="arcus-event-dossier-content"
-              id={`${dossierId}-panel-${activeDossierTab}`}
+              id={`${dossierId}-panel-${visibleDossierTab}`}
               role="tabpanel"
             >
-              {activeDossierTab === "event" && (
+              {visibleDossierTab === "event" && (
                 <div className="arcus-event-tab-panel is-event">
+                  {eventMedia.length > 0 && (
+                    <EventMedia
+                      assets={eventMedia.slice(0, 1)}
+                      featured
+                      language={language}
+                    />
+                  )}
                   {event.description && (
                     <section className="arcus-event-description">
                       <span>{text.description}</span>
@@ -780,7 +804,7 @@ function EventPopup({
                 </div>
               )}
 
-              {activeDossierTab === "context" && (rainfallContext || hydraulicContext) && (
+              {visibleDossierTab === "context" && (rainfallContext || hydraulicContext) && (
                 <div className="arcus-event-tab-panel is-context">
                   {contextTabs.length > 1 && (
                     <div
@@ -811,7 +835,7 @@ function EventPopup({
                 </div>
               )}
 
-              {activeDossierTab === "bridge" && (
+              {visibleDossierTab === "bridge" && (
                 <div className="arcus-event-tab-panel is-bridge">
                   <div className="arcus-event-tab-intro">
                     <span>{it ? "Profilo dell’opera" : "Asset profile"}</span>
@@ -841,7 +865,13 @@ function EventPopup({
                 </div>
               )}
 
-              {activeDossierTab === "sources" && (
+              {visibleDossierTab === "media" && eventMedia.length > 0 && (
+                <div className="arcus-event-tab-panel is-media">
+                  <EventMedia assets={eventMedia} language={language} />
+                </div>
+              )}
+
+              {visibleDossierTab === "sources" && (
                 <div className="arcus-event-tab-panel is-sources">
                   {qualityItems.length > 0 && (
                     <section className="arcus-event-quality">

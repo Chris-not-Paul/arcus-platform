@@ -390,7 +390,10 @@ function normalizeEvent(row, context) {
     latitude: normalizeNumber(row.latitude),
     longitude: normalizeNumber(row.longitude),
     bridge_crossing_type: cleanString(row.bridge_crossing_type),
-    bridge_crossing_name: cleanString(row.bridge_crossing_name),
+    bridge_crossing_name:
+      cleanString(row.bridge_crossing_name) === "Marzero stream"
+        ? "Marzeno stream"
+        : cleanString(row.bridge_crossing_name),
     destination_use: cleanString(row.destination_use),
     collapse_severity: cleanString(row.collapse_severity),
     victims: normalizeNumber(row.victims, { integer: true }),

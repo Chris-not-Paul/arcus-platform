@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT25.04.01",
   "event_date": "2025-04-17",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPA Piemonte",
+  "coverage_level": "validated_event_report_downstream_observation",
   "event_section": {
     "crossing_name": "Elvo stream",
     "latitude": 45.5126,
@@ -14,13 +14,45 @@
     "location_precision": "exact"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "downstream_same_watercourse_basin_reference_not_bridge_section",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 4.4,
+        "unit": "m s.z.i.",
+        "value_type": "recorded_peak",
+        "observed_at": "2025-04-17T06:00:00Z",
+        "station_reference": "CARISIO ELVO",
+        "source_id": "arpa-piemonte-event-report-april-2025"
+      },
+      {
+        "parameter": "stage_increase",
+        "operator": "",
+        "value": 3,
+        "unit": "m",
+        "value_type": "recorded_event_increase",
+        "station_reference": "CARISIO ELVO",
+        "source_id": "arpa-piemonte-event-report-april-2025"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": null,
+    "station_reference": "CARISIO ELVO",
+    "name": "Elvo at Carisio",
+    "watercourse": "Elvo",
+    "location": "Carisio, Vercelli",
+    "latitude": null,
+    "longitude": null,
+    "distance_from_event_km": null,
+    "relationship": "downstream_basin_reference_station",
+    "available_for_event": true
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -31,6 +63,16 @@
   },
   "documented_basin_processes": [],
   "sources": [
+    {
+      "source_id": "arpa-piemonte-event-report-april-2025",
+      "provider": "ARPA Piemonte",
+      "title": "Rapporto evento 15-17 aprile 2025",
+      "role": "event_hydrometry_and_documented_processes",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2025-04/rapporto_evento_15-17_04_ridotto_2.pdf",
+      "reference": "Hydrometric maxima table and documented Ponte Gilino collapse",
+      "accessed_at": "2026-09-03"
+    },
     {
       "source_id": "SRC0024",
       "provider": "ANSA",
@@ -63,26 +105,17 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "standard",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto documenta il crollo del Ponte Gilino a Mongrando e registra più a valle, a Carisio, un colmo di 4,40 m alle 06:00 UTC con incremento di 3,00 m. La misura descrive la propagazione della stessa piena sull'Elvo, ma non viene retrotrasferita alla sezione del ponte.",
+    "en": "The report documents failure of Ponte Gilino at Mongrando and records farther downstream at Carisio a 4.40 m peak at 06:00 UTC with a 3.00 m rise. The observation describes propagation of the same Elvo flood but is not transferred back to the bridge section."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-05-18"
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-03"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "The value describes the named official station and is not assigned to the collapsed bridge section.",
+    "Sensor readings and post-event topographic surveys retain their distinct evidence types.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "No bridge return period or causal probability is inferred from the basin reference."
   ]
 }

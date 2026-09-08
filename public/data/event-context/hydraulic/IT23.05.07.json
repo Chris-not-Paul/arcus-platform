@@ -2,9 +2,9 @@
   "schema_version": "arcus-event-hydraulic-context-v1",
   "event_id": "IT23.05.07",
   "event_date": "2023-05-17",
-  "status": "source_review_required",
-  "display_badge": "Source review",
-  "coverage_level": "event_record_only",
+  "status": "context_available",
+  "display_badge": "ARPAE",
+  "coverage_level": "observed_same_watercourse_context_unverified_bridge_position",
   "event_section": {
     "crossing_name": "Santerno river",
     "latitude": 44.2637,
@@ -14,13 +14,47 @@
     "location_precision": "approximate_or_unverified"
   },
   "event_hydrometry": {
-    "observation_status": "not_verified",
-    "reason_code": "event_specific_hydrometry_not_curated",
+    "observation_status": "observed",
+    "interpretation": "same_watercourse_basin_context_unverified_bridge_position",
     "observed_discharge_m3s": null,
     "observed_stage_m": null,
-    "hydrograph": null
+    "hydrograph": null,
+    "observations": [
+      {
+        "parameter": "stage_peak",
+        "operator": "",
+        "value": 2.49,
+        "unit": "m s.z.i.",
+        "value_type": "validated_event_peak",
+        "observed_at": "2023-05-16T16:15:00+02:00",
+        "station_code": "278700",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      },
+      {
+        "parameter": "danger_level",
+        "operator": "",
+        "value": 2,
+        "unit": "m s.z.i.",
+        "value_type": "published_threshold_3",
+        "station_code": "278700",
+        "source_id": "arpae-flood-report-2023-05-16-18"
+      }
+    ]
   },
-  "reference_station": null,
+  "reference_station": {
+    "station_code": "278700",
+    "station_reference": "BORGO TOSSIGNANO",
+    "name": "Santerno at Borgo Tossignano",
+    "watercourse": "Santerno",
+    "location": "Borgo Tossignano",
+    "latitude": 44.274722,
+    "longitude": 11.578889,
+    "distance_from_event_km": null,
+    "relationship": "same_watercourse_basin_reference_station",
+    "observations_start_date": null,
+    "available_for_event": true,
+    "reference_section": null
+  },
   "modelled_event_watercourse": null,
   "modelled_reference_section": null,
   "process_evidence": {
@@ -30,9 +64,18 @@
     "taxonomy_version": "hydraulic-v2"
   },
   "documented_basin_processes": [
+    "rapid_flood_response",
     "scour"
   ],
   "sources": [
+    {
+      "source_id": "arpae-flood-report-2023-05-16-18",
+      "provider": "ARPAE Emilia-Romagna",
+      "title": "Rapporto idrometeorologico dell'evento 16-18 maggio 2023",
+      "role": "validated_hydrometric_peak_threshold_and_basin_response",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_idro_meteo_20230516-18.pdf"
+    },
     {
       "source_id": "SRC0706",
       "provider": "Journal Paper",
@@ -45,26 +88,18 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti identificano l’evento e, quando indicato, il processo di cedimento. Non è ancora stata verificata una stazione idrometrica compatibile per corso d’acqua, posizione e periodo dell’evento; ARCUS non assegna livelli, portate o idrogrammi.",
-    "en": "The sources identify the event and, where available, its failure process. A hydrometric station compatible by watercourse, position and event period has not yet been verified; ARCUS assigns no stage, discharge or hydrograph."
-  },
-  "review": {
-    "priority": "high",
-    "required_checks": [
-      "crossing_and_watercourse_identity",
-      "station_hydraulic_relationship",
-      "event_time_observation_coverage",
-      "event_report_hydrometric_values"
-    ]
+    "it": "Il rapporto ARPAE registra sul Santerno a Borgo Tossignano un colmo di 2,49 m s.z.i. il 16 maggio contro la soglia 3 di 2,00 m. Poiché la posizione del ponte nel database resta approssimata o non verificata, ARCUS non calcola una distanza né rappresenta la misura come livello alla sezione collassata.",
+    "en": "The ARPAE report records a 2.49 m peak above the local gauge datum on the Santerno at Borgo Tossignano on 16 May against a 2.00 m threshold 3. Because the bridge position in the database remains approximate or unverified, ARCUS neither computes a distance nor represents the measurement as the collapsed-section stage."
   },
   "provenance": {
-    "method": "Deterministic catalogue build from the ARCUS event and source registries",
-    "source_registry_accessed_through": "2026-07-20"
+    "curated_at": "2026-09-02T00:00:00.000Z",
+    "method": "Manual extraction from the official validated event report and ARPAE station registry"
   },
   "caveats": [
-    "No event-specific hydrometric observation has been curated for this bridge.",
-    "A geographically nearby station must not be treated as hydraulically representative without watercourse and network verification.",
-    "The encoded failure process retains its database evidence level and does not prove causation beyond the cited sources.",
-    "Rainfall reanalysis, when available, remains a separate meteorological context and is not converted into discharge."
+    "Stage values are relative to the Borgo Tossignano gauge datum and are not water depth or absolute elevation.",
+    "The bridge location is approximate or unverified, so no station-to-bridge distance or directional relationship is asserted.",
+    "The observation is same-watercourse basin context and is not transferred to the collapsed bridge section.",
+    "No discharge is assigned because no validated event-specific stage-discharge conversion is used here.",
+    "The scour classification remains tied to the cited database source and is not proved by the hydrometric peak alone."
   ]
 }
