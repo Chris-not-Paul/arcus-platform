@@ -159,7 +159,11 @@ function rowsToObjects(rows) {
         }
 
         const raw = row[index] ?? null;
-        item[header] = isDateField(header) && raw !== null && /^\d+(\.\d+)?$/.test(String(raw))
+        const rawText = String(raw ?? "");
+        const numericYear = /^\d{4}$/.test(rawText) ? Number(rawText) : null;
+        const isYearOnly = numericYear >= 1800 && numericYear <= 2200;
+
+        item[header] = isDateField(header) && raw !== null && /^\d+(\.\d+)?$/.test(rawText) && !isYearOnly
           ? excelDateToIso(raw)
           : raw;
       });

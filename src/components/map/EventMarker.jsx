@@ -1,7 +1,8 @@
 import {
   Marker,
-  Popup,
 } from "react-leaflet";
+import useLanguage from "../../context/useLanguage";
+import { localizedBridgeDisplayName } from "../../utils/eventDisplayLabels";
 import { researchEventId } from "../../utils/eventIdentity";
 
 import {
@@ -12,11 +13,12 @@ function EventMarker({
   event,
   onSelect,
   professionalMode = false,
+  selected = false,
   vulnerability = null,
 }) {
+  const { language } = useLanguage();
   const markerTitle =
-    event.bridge_name ||
-    event.bridge_crossing_name ||
+    localizedBridgeDisplayName(event, language) ||
     `${event.municipality || event.province || "ARCUS"} - ${researchEventId(event) || "record"}`;
 
   return (
@@ -25,10 +27,6 @@ function EventMarker({
       alt={markerTitle}
       eventHandlers={{
         click: () => onSelect?.(event),
-        popupopen: (leafletEvent) => {
-          onSelect?.(event);
-          window.setTimeout(() => leafletEvent.target.closePopup(), 0);
-        },
       }}
       position={[
         event.latitude,
@@ -39,14 +37,12 @@ function EventMarker({
         event.specific_cause,
         professionalMode
           ? vulnerability?.class
-          : null
+          : null,
+        selected
       )}
+      zIndexOffset={selected ? 1000 : 0}
       title={markerTitle}
-    >
-      <Popup className="arcus-selection-proxy" closeButton={false}>
-        <span />
-      </Popup>
-    </Marker>
+    />
   );
 }
 

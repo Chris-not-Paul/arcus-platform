@@ -10,7 +10,8 @@ import {
 
 export function createMarkerIcon(
   specificCause,
-  vulnerabilityClass = null
+  vulnerabilityClass = null,
+  selected = false
 ) {
 
   const professionalColors = {
@@ -123,7 +124,7 @@ export function createMarkerIcon(
     html,
 
     className:
-      "arcus-marker-icon",
+      `arcus-marker-icon${selected ? " is-selected" : ""}`,
 
     iconSize:
       [markerSize, markerSize],

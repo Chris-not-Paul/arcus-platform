@@ -1086,13 +1086,6 @@
       "status": "context_available",
       "coverage_level": "validated_event_report_observation"
     },
-    "IT20.10.04": {
-      "event_date": "2020-10-03",
-      "file": "IT20.10.04.json",
-      "observation_status": "not_available",
-      "status": "context_available",
-      "coverage_level": "validated_event_report_review"
-    },
     "IT20.10.05": {
       "event_date": "2020-10-03",
       "file": "IT20.10.05.json",
@@ -1236,6 +1229,13 @@
     "IT21.12.01": {
       "event_date": "2021-12-11",
       "file": "IT21.12.01.json",
+      "observation_status": "not_available",
+      "status": "context_available",
+      "coverage_level": "validated_event_report_review"
+    },
+    "IT22.02.01": {
+      "event_date": "2022-02-13",
+      "file": "IT22.02.01.json",
       "observation_status": "not_available",
       "status": "context_available",
       "coverage_level": "validated_event_report_review"
@@ -1484,5 +1484,5 @@
     "curated_hydraulic_contexts": 211,
     "source_review_records": 0
   },
-  "updated_at": "2026-09-04T00:00:00.000Z"
+  "updated_at": "2026-09-08T00:00:00.000Z"
 }

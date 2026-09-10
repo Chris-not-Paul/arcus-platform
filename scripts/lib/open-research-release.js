@@ -15,7 +15,7 @@ import {
 } from "../../src/utils/hydraulicIntelligence.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.2";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.3";
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
@@ -40,10 +40,10 @@ const EVENT_REQUIRED_FIELDS = [
 ];
 
 const TAXONOMY_FIELD_ALIASES = {
-  component_involved: "hydraulic_component_involved",
-  failure_cause_evidence: "hydraulic_evidence_level",
-  failure_process: "hydraulic_failure_process",
-  failure_trigger: "hydraulic_trigger",
+  component_involved: ["component_involved", "hydraulic_component_involved"],
+  failure_cause_evidence: ["failure_cause_evidence", "hydraulic_evidence_level"],
+  failure_process: ["failure_process", "hydraulic_failure_process"],
+  failure_trigger: ["failure_trigger", "hydraulic_trigger"],
 };
 
 function cleanString(value) {
@@ -508,6 +508,7 @@ function deltaAudit(events, sources, previous) {
     event,
   ]));
   const currentIds = new Set(events.map((event) => event.event_id));
+  const currentSourceIds = new Set(sources.map((source) => source.source_id));
   const previousSourceIds = new Set(previous?.sources?.map((source) => source.source_id) || []);
 
   return {
@@ -521,7 +522,9 @@ function deltaAudit(events, sources, previous) {
       .filter((event) => !currentIds.has(canonicalEventId(event.event_id, event.research_event_id)))
       .map((event) => canonicalEventId(event.event_id, event.research_event_id)),
     new_sources: sources.filter((source) => !previousSourceIds.has(source.source_id)).map((source) => source.source_id),
-    removed_sources: [],
+    removed_sources: (previous?.sources || [])
+      .filter((source) => !currentSourceIds.has(source.source_id))
+      .map((source) => source.source_id),
   };
 }
 
@@ -580,10 +583,11 @@ export function normalizeResearchDataset({
     }
   }));
 
-  eventRows.forEach((row) => Object.entries(TAXONOMY_FIELD_ALIASES).forEach(([sourceField, taxonomyField]) => {
+  eventRows.forEach((row) => Object.entries(TAXONOMY_FIELD_ALIASES).forEach(([sourceField, taxonomyFields]) => {
     const value = cleanString(row[sourceField]);
+    const taxonomyContainsValue = taxonomyFields.some((field) => taxonomyIndex.get(field)?.has(value));
 
-    if (value && cleanString(row.specific_cause) === "Hydraulic" && !taxonomyIndex.get(taxonomyField)?.has(value)) {
+    if (value && cleanString(row.specific_cause) === "Hydraulic" && !taxonomyContainsValue) {
       errors.push({ code: "invalid_taxonomy_value", event_id: arcusEventId(row.event_id), field: sourceField, value });
     }
   }));
@@ -826,10 +830,10 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Promoted ITxx.xx.xx to the single canonical event_id across events, sources, CSV, GeoJSON and JSON.",
-      "Moved the former Bxx.xx.xx identifier to the migration-only id-mapping resource.",
-      "Removed the redundant research_event_id field from public event and source records.",
-      "Preserved the complete 263-event and 712-source scientific release scope.",
+      "Applied the September 2026 editorial corrections from MASTER_RESEARCH.xlsx.",
+      "Excluded two records that source review determined were not bridge-collapse events.",
+      "Expanded the public source registry while preserving canonical ITxx.xx.xx identifiers.",
+      "Aligned taxonomy validation with the canonical master field names while retaining legacy alias compatibility.",
     ],
     delta,
   };

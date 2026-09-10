@@ -122,7 +122,7 @@ function AnalyticsPage() {
           heroPreviewTitle:
             "Contratto Open",
           heroPreviewItems: [
-            ["Release completa", "263 eventi e 712 fonti, senza account."],
+            ["Release completa", "261 eventi e 716 fonti, senza account."],
             ["Tracciabilità", "Manifest, schema, tassonomia e audit di qualità."],
             ["Riproducibilità", "CSV e GeoJSON associati a una versione citabile."],
           ],
@@ -244,7 +244,7 @@ function AnalyticsPage() {
           heroPreviewTitle:
             "Open contract",
           heroPreviewItems: [
-            ["Complete release", "263 events and 712 sources, without an account."],
+            ["Complete release", "261 events and 716 sources, without an account."],
             ["Traceability", "Manifest, schema, taxonomy and quality audit."],
             ["Reproducibility", "CSV and GeoJSON tied to a citable version."],
           ],

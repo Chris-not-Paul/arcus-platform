@@ -14,6 +14,14 @@ import {
 import {
   HYDRAULIC_GEOMETRY_SOURCE_URL,
 } from "../src/utils/hydraulicGeometry.js";
+import {
+  localizedBridgeDisplayName,
+  localizedCrossingName,
+} from "../src/utils/eventDisplayLabels.js";
+import {
+  buildOpenEventCitation,
+  buildOpenEventDossier,
+} from "../src/utils/openEventDossier.js";
 
 const checks = [];
 
@@ -38,10 +46,10 @@ const professionalSourceRows = Array.isArray(professionalSources)
   : professionalSources.sources || [];
 
 await check("open-counts", () => {
-  assert.equal(events.length, 263);
-  assert.equal(sources.length, 712);
-  assert.equal(manifest.event_count, 263);
-  assert.equal(manifest.source_count, 712);
+  assert.equal(events.length, 261);
+  assert.equal(sources.length, 716);
+  assert.equal(manifest.event_count, 261);
+  assert.equal(manifest.source_count, 716);
 });
 
 await check("professional-hydraulic-geometry-is-source-backed-and-private", () => {
@@ -52,18 +60,18 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
     (event) => event.hydraulic_geometry.provenance.source_record_id
   );
 
-  assert.equal(geometryEvents.length, 158);
+  assert.equal(geometryEvents.length, 157);
   assert.equal(
     geometryEvents.filter(
       (event) => event.hydraulic_geometry.bridge_length_m !== null
     ).length,
-    158
+    157
   );
   assert.equal(
     geometryEvents.filter(
       (event) => event.hydraulic_geometry.piers_in_active_riverbed !== null
     ).length,
-    155
+    154
   );
   assert.equal(new Set(sourceRecordIds).size, sourceRecordIds.length);
   assert.equal(
@@ -81,7 +89,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.2");
+  assert.equal(manifest.version, "arcus-open-2026.3");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v2");
 });
@@ -96,6 +104,31 @@ await check("complete-source-integrity", () => {
   assert.equal(new Set(sources.map((source) => source.source_id)).size, sources.length);
 });
 
+await check("latest-master-sources-linked-to-events", () => {
+  const expectedEventBySource = new Map([
+    ["SRC0714", "IT00.10.41"],
+    ["SRC0715", "IT00.10.01"],
+    ["SRC0716", "IT20.10.04"],
+    ["SRC0717", "IT20.10.07"],
+    ["SRC0718", "IT22.02.01"],
+    ["SRC0719", "IT22.02.01"],
+    ["SRC0720", "IT22.12.04"],
+    ["SRC0721", "IT20.04.02"],
+    ["SRC0722", "IT14.04.01"],
+  ]);
+  const sourcesById = new Map(
+    sources.map((source) => [source.source_id, source])
+  );
+
+  expectedEventBySource.forEach((eventId, sourceId) => {
+    const source = sourcesById.get(sourceId);
+
+    assert.ok(source, `${sourceId} must be published in the Open release`);
+    assert.equal(source.event_id, eventId);
+    assert.match(source.source_url, /^https?:\/\//);
+  });
+});
+
 await check("canonical-it-identifiers-and-legacy-mapping", () => {
   assert.equal(events.every((event) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(event.event_id)), true);
   assert.equal(events.every((event) => !Object.hasOwn(event, "research_event_id")), true);
@@ -108,10 +141,10 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 });
 
 await check("taxonomy-and-evidence-classes", () => {
-  assert.equal(taxonomy.taxonomy.length, 20);
-  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 8);
-  assert.equal(events.filter((event) => event.failure_process).length, 172);
-  assert.equal(events.filter((event) => event.component_involved).length, 166);
+  assert.equal(taxonomy.taxonomy.length, 57);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 4);
+  assert.equal(events.filter((event) => event.failure_process).length, 213);
+  assert.equal(events.filter((event) => event.component_involved).length, 211);
   assert.equal(
     events.filter((event) => event.failure_process === null)
       .every((event) => event.hydraulic_intelligence?.failure_process === null || !event.hydraulic_intelligence),
@@ -121,7 +154,14 @@ await check("taxonomy-and-evidence-classes", () => {
 
 await check("url-reference-separation", () => {
   assert.equal(sources.every((source) => !source.source_url || /^https?:\/\//.test(source.source_url)), true);
-  assert.equal(sources.filter((source) => source.source_reference).length, 8);
+  assert.equal(sources.filter((source) => source.source_reference).length, 0);
+});
+
+await check("year-only-publication-does-not-invent-date", () => {
+  const yearOnlySource = sources.find((source) => source.source_id === "SRC0719");
+
+  assert.ok(yearOnlySource);
+  assert.equal(yearOnlySource.publication_date, null);
 });
 
 await check("territorial-audit", () => {
@@ -139,8 +179,8 @@ await check("open-contains-no-private-customer-fields", () => {
 
 await check("professional-is-decoupled-live-resource", () => {
   assert.notEqual(professionalEvents.events, events);
-  assert.equal(professionalEventRows.length >= 263, true);
-  assert.equal(professionalSourceRows.length >= 712, true);
+  assert.equal(professionalEventRows.length >= 261, true);
+  assert.equal(professionalSourceRows.length >= 716, true);
   assert.equal(manifest.access, "public_read_only_no_account_required");
 });
 
@@ -216,6 +256,73 @@ await check("hydraulic-outcomes-public-and-blocked-from-retrieval", () => {
     "failure_cause_evidence",
     "hydraulic_intelligence",
   ].forEach((field) => assert.equal(HYDRAULIC_MATCHER_BLOCKED_FIELDS.includes(field), true));
+});
+
+await check("atlas-crossing-name-localization-is-display-only", () => {
+  assert.equal(localizedCrossingName("Sangro river", "it"), "Fiume Sangro");
+  assert.equal(localizedCrossingName("Cervo stream", "it"), "Torrente Cervo");
+  assert.equal(localizedCrossingName("Enel canal", "it"), "Canale Enel");
+  assert.equal(
+    localizedCrossingName("Municipality of Massafra", "it"),
+    "Comune di Massafra"
+  );
+  assert.equal(localizedCrossingName("Sangro river", "en"), "Sangro river");
+  assert.equal(
+    localizedBridgeDisplayName(
+      { bridge_name: null, bridge_crossing_name: "Aterno river" },
+      "it"
+    ),
+    "Ponte sul Fiume Aterno"
+  );
+  assert.equal(
+    localizedBridgeDisplayName(
+      { bridge_name: "Ponte della Becca", bridge_crossing_name: "Po river" },
+      "it"
+    ),
+    "Ponte della Becca"
+  );
+  assert.equal(
+    localizedBridgeDisplayName(
+      { bridge_name: null, bridge_crossing_name: "Aterno river" },
+      "en"
+    ),
+    "Bridge over Aterno river"
+  );
+});
+
+await check("single-event-dossier-respects-open-boundary", () => {
+  const event = {
+    ...events[0],
+    customer_project_id: "must-not-leak",
+    normalized_mitigation_score: 99,
+  };
+  const source = {
+    ...sources.find((item) => item.event_id === event.event_id),
+    notes: "private editorial note",
+  };
+  const permalink = `https://arcus.example/atlas?event=${event.event_slug}`;
+  const citation = buildOpenEventCitation({
+    event,
+    permalink,
+    releaseCitation: manifest.citation,
+    releaseVersion: manifest.version,
+  });
+  const dossier = buildOpenEventDossier({
+    event,
+    permalink,
+    releaseCitation: manifest.citation,
+    releaseVersion: manifest.version,
+    sources: [source],
+  });
+
+  assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
+  assert.match(citation, /arcus-open-2026\.3/);
+  assert.equal(dossier.release, manifest.version);
+  assert.equal(dossier.permalink, permalink);
+  assert.equal(dossier.event.event_id, event.event_id);
+  assert.equal(Object.hasOwn(dossier.event, "customer_project_id"), false);
+  assert.equal(Object.hasOwn(dossier.event, "normalized_mitigation_score"), false);
+  assert.equal(Object.hasOwn(dossier.sources[0], "notes"), false);
 });
 
 await check("frontend-product-boundary", () => {
@@ -296,7 +403,7 @@ await check("downloads", async () => {
   assert.match(csv.content.toString("utf8").split("\n")[1], /"IT\d{2}\.\d{2}\.\d{2}"/);
   const parsed = JSON.parse(geojson.content.toString("utf8"));
   assert.equal(parsed.type, "FeatureCollection");
-  assert.equal(parsed.features.length, 263);
+  assert.equal(parsed.features.length, 261);
   assert.equal(parsed.features.every((feature) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(feature.id)), true);
 });
 

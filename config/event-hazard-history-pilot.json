@@ -1,0 +1,165 @@
+{
+  "schema_version": "arcus-event-hazard-history-catalog-config-v2",
+  "analysis_role": "versioned_cartographic_context_not_collapse_causation",
+  "boundary_tolerance_m": 50,
+  "scope": {
+    "event_selection": "all_exact_location_events",
+    "hazards": [
+      "hydraulic",
+      "landslide"
+    ],
+    "approximate_coordinates": "excluded_from_point_classification"
+  },
+  "caveats": [
+    "A change between official mosaics is a cartographic change, not proof that territorial hazard physically changed.",
+    "A bridge collapse must not be described as the cause of a class change unless an official plan or technical source explicitly establishes that link.",
+    "No-intersection means that the documented coordinate does not intersect the polygons in that release; it does not prove absence of hazard.",
+    "Records within the conservative 50 m ARCUS screening tolerance are marked boundary-sensitive and must not support a directional interpretation without manual GIS review.",
+    "The 50 m tolerance is an ARCUS review threshold for point-versus-polygon robustness; it is not presented as the positional accuracy of the ISPRA source."
+  ],
+  "releases": [
+    {
+      "id": "ispra-hydraulic-2017-v4",
+      "hazard": "hydraulic",
+      "provider": "ISPRA",
+      "title": "Mosaicatura ISPRA (2017) delle aree a pericolosita idraulica",
+      "version": "v4.0",
+      "reference_period": {
+        "start_year": 2017,
+        "end_year": 2017,
+        "precision": "month",
+        "label": "December 2017"
+      },
+      "license": "CC BY-SA 4.0",
+      "projection": "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs",
+      "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica.zip",
+      "archive_name": "hydraulic-2017.zip",
+      "archive_bytes": 447283981,
+      "archive_sha256": "0a095218c9c300cbcbee32e9074db80379104d6ce1ddcfd094651560c4d73bf3",
+      "extracted_root": "Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica",
+      "layers": [
+        {
+          "class": "P1",
+          "basename": "Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica_P1"
+        },
+        {
+          "class": "P2",
+          "basename": "Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica_P2"
+        },
+        {
+          "class": "P3",
+          "basename": "Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica_P3"
+        }
+      ]
+    },
+    {
+      "id": "ispra-hydraulic-2020-v5",
+      "hazard": "hydraulic",
+      "provider": "ISPRA",
+      "title": "Mosaicatura ISPRA (2020) delle aree a pericolosita idraulica",
+      "version": "v5.0",
+      "reference_period": {
+        "start_year": 2020,
+        "end_year": 2020,
+        "precision": "year",
+        "label": "2020"
+      },
+      "license": "CC BY-SA 4.0",
+      "projection": "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs",
+      "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica.zip",
+      "archive_name": "hydraulic-2020.zip",
+      "archive_bytes": 753540488,
+      "archive_sha256": "341bd743093e5e409cea561ca372cf1e06616c03d26571aa311be70c1eca714c",
+      "extracted_root": "Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica",
+      "layers": [
+        {
+          "class": "P1",
+          "basename": "LPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_bassa"
+        },
+        {
+          "class": "P2",
+          "basename": "MPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_media"
+        },
+        {
+          "class": "P3",
+          "basename": "HPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_elevata"
+        }
+      ]
+    },
+    {
+      "id": "ispra-landslide-2017-v3",
+      "hazard": "landslide",
+      "provider": "ISPRA",
+      "title": "Mosaicatura ISPRA (2017) della pericolosita da frana PAI",
+      "version": "v3.0",
+      "reference_period": {
+        "start_year": 2017,
+        "end_year": 2017,
+        "precision": "month",
+        "label": "December 2017"
+      },
+      "license": "CC BY-SA 4.0",
+      "projection": "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs",
+      "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2017_aree_pericolosita_frana_PAI.zip",
+      "archive_name": "landslide-2017.zip",
+      "archive_bytes": 801836818,
+      "archive_sha256": "b3c920bc769b9dfe3e80d9bbb0c745eeda8ba7f4ad30cd283b706910776c4e69",
+      "extracted_root": "Mosaicatura_ISPRA_2017_aree_pericolosita_frana_PAI",
+      "layers": [
+        {
+          "attribute": "PERIC_ITA",
+          "basename": "Mosaicatura_ISPRA_2017_aree_pericolosita_frana_PAI"
+        }
+      ]
+    },
+    {
+      "id": "ispra-landslide-2020-2021-v4",
+      "hazard": "landslide",
+      "provider": "ISPRA",
+      "title": "Mosaicatura ISPRA (2020-2021) della pericolosita da frana PAI",
+      "version": "v4.0",
+      "reference_period": {
+        "start_year": 2020,
+        "end_year": 2021,
+        "precision": "multi_year",
+        "label": "2020-2021"
+      },
+      "license": "CC BY-SA 4.0",
+      "projection": "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs",
+      "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI.zip",
+      "archive_name": "landslide-2020-2021.zip",
+      "archive_bytes": 1169100031,
+      "archive_sha256": "e4419abc6a96e0f1c8ad315855a2d2a8008c5f92b485511ca0e96e9226513107",
+      "extracted_root": "Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI",
+      "layers": [
+        {
+          "attribute": "PERIC_ITA",
+          "basename": "Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI"
+        }
+      ]
+    }
+  ],
+  "regression_cases": {
+    "hydraulic_event_ids": [
+      "IT18.02.01",
+      "IT18.02.02",
+      "IT18.10.01",
+      "IT18.10.02",
+      "IT18.10.03",
+      "IT18.10.04",
+      "IT18.10.05",
+      "IT18.10.06",
+      "IT18.10.07",
+      "IT19.10.01"
+    ],
+    "landslide_event_ids": [
+      "IT13.02.01",
+      "IT13.12.03",
+      "IT15.04.01",
+      "IT16.11.04",
+      "IT19.11.01",
+      "IT20.04.02",
+      "IT24.05.01"
+    ]
+  }
+}

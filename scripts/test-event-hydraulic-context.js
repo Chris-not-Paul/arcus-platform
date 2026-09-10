@@ -374,7 +374,7 @@ assert.deepEqual(
   [8.37, 11.32]
 );
 
-for (const eventId of ["IT20.10.01", "IT20.10.04"]) {
+for (const eventId of ["IT20.10.01"]) {
   const context = JSON.parse(
     fs.readFileSync(path.join(CONTEXT_ROOT, `${eventId}.json`), "utf8")
   );
@@ -384,6 +384,15 @@ for (const eventId of ["IT20.10.01", "IT20.10.04"]) {
     "no_compatible_station_in_validated_event_report"
   );
 }
+
+const guastacconcio2022 = JSON.parse(
+  fs.readFileSync(path.join(CONTEXT_ROOT, "IT22.02.01.json"), "utf8")
+);
+assert.equal(guastacconcio2022.event_hydrometry.observation_status, "not_available");
+assert.equal(
+  guastacconcio2022.event_hydrometry.reason_code,
+  "failure_chronology_precludes_event_hydrometry"
+);
 
 const colombiera2011 = JSON.parse(
   fs.readFileSync(path.join(CONTEXT_ROOT, "IT11.10.01.json"), "utf8")

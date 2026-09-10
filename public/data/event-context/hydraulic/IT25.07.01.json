@@ -52,8 +52,8 @@
       "title": "Frane in val Passiria, fango invade la statale nessun ferito",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "ANSA article",
+      "url": "https://www.ansa.it/sito/notizie/cronaca/2025/07/24/frane-in-val-passiria-fango-invade-la-statale-nessun-ferito_bbf5d01e-5891-4f68-8644-b99aaa0176ad.html",
+      "reference": null,
       "accessed_at": "2026-05-18"
     },
     {
@@ -62,8 +62,8 @@
       "title": "Alluvione in Alto Adige, frane e smottamenti in Val Passiria: i danni visti dal drone",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "Il Fatto Quotidiano video article",
+      "url": "https://www.ilfattoquotidiano.it/2025/07/24/alluvione-in-alto-adige-frane-e-smottamenti-in-val-passiria-i-danni-visti-dal-drone-video/8073154/",
+      "reference": null,
       "accessed_at": "2026-05-18"
     },
     {
@@ -72,8 +72,8 @@
       "title": "Val Passiria, piena del fiume travolge un ponte a Neuhaus",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "La7 video report",
+      "url": "https://www.la7.it/intanto/video/val-passiria-piena-del-fiume-travolge-un-ponte-a-neuhaus-nessun-ferito-24-07-2025-604994",
+      "reference": null,
       "accessed_at": "2026-05-18"
     }
   ],

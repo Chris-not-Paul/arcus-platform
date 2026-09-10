@@ -252,7 +252,7 @@
     {
       "confidence": "probable",
       "event_id": "B00.10.01",
-      "failure_pattern": "hydraulic_unspecified",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -728,14 +728,6 @@
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
-    },
-    {
-      "confidence": "probable",
-      "event_id": "B04.05.01",
-      "failure_pattern": "design_or_construction_deficiency",
-      "primary_cause_family": "design_construction",
-      "raw_specific_cause": "Design and Construction",
-      "raw_triggered": false
     },
     {
       "confidence": "probable",
@@ -1284,9 +1276,9 @@
     {
       "confidence": "probable",
       "event_id": "B14.07.01",
-      "failure_pattern": "design_or_construction_deficiency",
-      "primary_cause_family": "design_construction",
-      "raw_specific_cause": "Design and Construction",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
       "raw_triggered": false
     },
     {
@@ -1527,14 +1519,14 @@
       "failure_pattern": "design_or_construction_deficiency",
       "primary_cause_family": "design_construction",
       "raw_specific_cause": "Design and Construction",
-      "raw_triggered": false
+      "raw_triggered": true
     },
     {
       "confidence": "probable",
       "event_id": "B17.04.01",
-      "failure_pattern": "deterioration_or_material_degradation",
-      "primary_cause_family": "deterioration_maintenance",
-      "raw_specific_cause": "Material",
+      "failure_pattern": "design_or_construction_deficiency",
+      "primary_cause_family": "design_construction",
+      "raw_specific_cause": "Design and Construction",
       "raw_triggered": false
     },
     {
@@ -1675,14 +1667,6 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B19.08.01",
-      "failure_pattern": "design_or_construction_deficiency",
-      "primary_cause_family": "design_construction",
-      "raw_specific_cause": "Design and Construction",
-      "raw_triggered": true
-    },
-    {
-      "confidence": "probable",
       "event_id": "B19.10.01",
       "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
@@ -1764,9 +1748,9 @@
     {
       "confidence": "probable",
       "event_id": "B20.10.04",
-      "failure_pattern": "hydraulic_scour_or_foundation_loss",
-      "primary_cause_family": "hydraulic",
-      "raw_specific_cause": "Hydraulic",
+      "failure_pattern": "landslide_slope_instability",
+      "primary_cause_family": "landslide_ground_movement",
+      "raw_specific_cause": "Landslide",
       "raw_triggered": true
     },
     {
@@ -1943,7 +1927,7 @@
       "failure_pattern": "deterioration_or_material_degradation",
       "primary_cause_family": "deterioration_maintenance",
       "raw_specific_cause": "Material",
-      "raw_triggered": false
+      "raw_triggered": true
     },
     {
       "confidence": "probable",
@@ -1980,9 +1964,9 @@
     {
       "confidence": "probable",
       "event_id": "B22.02.01",
-      "failure_pattern": "deterioration_or_material_degradation",
-      "primary_cause_family": "deterioration_maintenance",
-      "raw_specific_cause": "Material",
+      "failure_pattern": "hydraulic_scour_or_foundation_loss",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
       "raw_triggered": false
     },
     {
@@ -2127,7 +2111,7 @@
       "failure_pattern": "design_or_construction_deficiency",
       "primary_cause_family": "design_construction",
       "raw_specific_cause": "Design and Construction",
-      "raw_triggered": true
+      "raw_triggered": false
     },
     {
       "confidence": "probable",
@@ -2215,7 +2199,7 @@
       "failure_pattern": "design_or_construction_deficiency",
       "primary_cause_family": "design_construction",
       "raw_specific_cause": "Design and Construction",
-      "raw_triggered": false
+      "raw_triggered": true
     },
     {
       "confidence": "probable",
@@ -2335,7 +2319,7 @@
       "failure_pattern": "deterioration_or_material_degradation",
       "primary_cause_family": "deterioration_maintenance",
       "raw_specific_cause": "Material",
-      "raw_triggered": false
+      "raw_triggered": true
     },
     {
       "confidence": "probable",

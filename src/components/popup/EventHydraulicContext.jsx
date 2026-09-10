@@ -485,6 +485,8 @@ function EventHydraulicContext({ context }) {
       "no_event_specific_value_in_validated_hydrological_annal",
       "no_hydrometric_value_in_validated_event_source",
     ].includes(context.event_hydrometry.reason_code);
+  const compactReviewedGap =
+    reviewedGap && !station && !watercourse;
   const reviewRequired =
     context.event_hydrometry.observation_status === "not_verified";
   const bridgeStation = [
@@ -506,12 +508,16 @@ function EventHydraulicContext({ context }) {
       <header>
         <div>
           <span>{it ? "Dossier idraulico dell’evento" : "Event hydraulic dossier"}</span>
-          <h3>{it ? "Dalla pioggia alla risposta del bacino" : "From rainfall to catchment response"}</h3>
+          <h3>
+            {compactReviewedGap
+              ? (it ? "Verifica delle fonti idrometriche" : "Hydrometric source review")
+              : (it ? "Dalla pioggia alla risposta del bacino" : "From rainfall to catchment response")}
+          </h3>
         </div>
         <strong>{sourceBadge}</strong>
       </header>
 
-      <div className={`arcus-event-hydraulic-availability${hydrometricEvidence ? " is-observed" : ""}`}>
+      <div className={`arcus-event-hydraulic-availability${hydrometricEvidence ? " is-observed" : ""}${compactReviewedGap ? " is-compact" : ""}`}>
         <div>
           <span>{it ? "Idrometria dell’evento" : "Event hydrometry"}</span>
           <strong>
@@ -526,7 +532,7 @@ function EventHydraulicContext({ context }) {
               : networkFailure
                 ? (it ? "Colmo non registrato: rete interrotta" : "Peak not recorded: network interrupted")
               : reviewedGap
-                ? (it ? "Nessuna misura compatibile pubblicata" : "No compatible published measurement")
+                ? (it ? "Verifica completata: nessuna misura compatibile" : "Review completed: no compatible measurement")
               : reviewRequired
                 ? (it ? "Idrometria non ancora verificata" : "Hydrometry not yet verified")
                 : (it ? `Nessuna misura osservata nel ${context.event_date.slice(0, 4)}` : `No observed measurement in ${context.event_date.slice(0, 4)}`)}
@@ -554,9 +560,13 @@ function EventHydraulicContext({ context }) {
                   ? "La rete era attiva, ma l’evento ha sormontato o danneggiato i sensori del bacino. ARCUS mostra il motivo del dato mancante senza ricostruire il colmo."
                   : "The network was active, but the event overtopped or damaged basin sensors. ARCUS shows why the data are missing without reconstructing the peak.")
               : reviewedGap
-                ? (it
-                    ? "La copertura ufficiale è stata verificata, ma non offre una misura compatibile per corso d’acqua e data. Il limite è mostrato come risultato, non come dato mancante generico."
-                    : "Official coverage was reviewed, but it offers no measurement compatible by watercourse and date. The limitation is shown as a result, not as a generic missing value.")
+                ? compactReviewedGap && context.event_hydrometry.network_status
+                  ? (it
+                      ? context.event_hydrometry.network_status.summary_it
+                      : context.event_hydrometry.network_status.summary_en)
+                  : (it
+                      ? "La copertura ufficiale è stata verificata, ma non offre una misura compatibile per corso d’acqua e data. Il limite è mostrato come risultato, non come dato mancante generico."
+                      : "Official coverage was reviewed, but it offers no measurement compatible by watercourse and date. The limitation is shown as a result, not as a generic missing value.")
               : reviewRequired
                 ? (it
                     ? "Le fonti disponibili documentano il collasso, ma il collegamento con una stazione o una sezione idraulica deve ancora essere verificato."
@@ -567,25 +577,27 @@ function EventHydraulicContext({ context }) {
         </p>
       </div>
 
-      <div className="arcus-event-hydraulic-grid">
-        {hydrometricEvidence ? (
-          <ObservationPanel context={context} language={language} it={it} />
-        ) : watercourse ? (
-          <ModelledFlowPanel watercourse={watercourse} language={language} it={it} />
-        ) : networkFailure ? (
-          <HydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
-        ) : reviewedGap ? (
-          <ReviewedHydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
-        ) : (
-          <HydrometryReviewPanel context={context} it={it} />
-        )}
-        <StationPanel
-          station={station}
-          referenceSection={referenceSection}
-          language={language}
-          it={it}
-        />
-      </div>
+      {!compactReviewedGap && (
+        <div className="arcus-event-hydraulic-grid">
+          {hydrometricEvidence ? (
+            <ObservationPanel context={context} language={language} it={it} />
+          ) : watercourse ? (
+            <ModelledFlowPanel watercourse={watercourse} language={language} it={it} />
+          ) : networkFailure ? (
+            <HydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
+          ) : reviewedGap ? (
+            <ReviewedHydrometryGapPanel hydrometry={context.event_hydrometry} it={it} />
+          ) : (
+            <HydrometryReviewPanel context={context} it={it} />
+          )}
+          <StationPanel
+            station={station}
+            referenceSection={referenceSection}
+            language={language}
+            it={it}
+          />
+        </div>
+      )}
 
       {watercourse?.mapping_status === "review_required_due_to_source_reach_code_inconsistency" && (
         <p className="arcus-event-hydraulic-curation-note">
@@ -596,7 +608,7 @@ function EventHydraulicContext({ context }) {
         </p>
       )}
 
-      {context.curation_note && (
+      {context.curation_note && !compactReviewedGap && (
         <p className="arcus-event-hydraulic-curation-note">
           <strong>{it ? "Limite interpretativo" : "Interpretive limit"}</strong>
           {it ? ` ${context.curation_note.it}` : ` ${context.curation_note.en}`}

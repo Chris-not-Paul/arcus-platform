@@ -887,7 +887,7 @@ const professionalEvents = Array.isArray(professionalEventsResource)
   ? professionalEventsResource
   : professionalEventsResource.events || [];
 
-assert.equal(professionalEvents.length, 263);
+assert.equal(professionalEvents.length, 261);
 assert.equal(
   professionalEvents.filter((event) => event.hydraulic_intelligence).length >= 200,
   true

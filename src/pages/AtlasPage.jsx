@@ -19,6 +19,7 @@ import { causeColors } from "../utils/colors";
 import extractYear from "../utils/extractYear";
 import { researchEventId } from "../utils/eventIdentity";
 import taxonomyLabel from "../utils/taxonomyLabels";
+import { localizedEventFilterValue } from "../utils/eventDisplayLabels";
 import {
   openEvents,
   openDownloadUrls,
@@ -198,15 +199,15 @@ function AtlasPage() {
         : "Data access",
     downloadCsv:
       language === "it"
-        ? "CSV public release"
-         : "Public release CSV",
+        ? "CSV della selezione"
+         : "Selection CSV",
     downloadGeoJson:
       language === "it"
         ? "GeoJSON public release"
         : "Public release GeoJSON",
     researchCoverage:
       language === "it"
-        ? "Release Open Research completa, versionata e citabile. Le frequenze descrivono il database storico e non sono probabilita di collasso."
+        ? "Release Open Research completa, versionata e citabile. Le frequenze descrivono il database storico e non sono probabilità di collasso."
         : "Complete, versioned and citable Open Research release. Frequencies describe the historical database and are not collapse probabilities.",
     failureAtlas:
       language === "it"
@@ -394,6 +395,9 @@ function AtlasPage() {
 
   const [openRelease, setOpenRelease] =
     useState(null);
+  const [dataStatus, setDataStatus] = useState({ events: "loading", sources: "loading", release: "loading" });
+  const [dataAttempt, setDataAttempt] = useState(0);
+  const [researchExpanded, setResearchExpanded] = useState(false);
 
   const [causeFilter, setCauseFilter] =
     useState("All");
@@ -421,6 +425,8 @@ function AtlasPage() {
 
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
+  const [selectedAtlasEvent, setSelectedAtlasEvent] =
+    useState(undefined);
 
   const [yearFilter, setYearFilter] =
     useState(PUBLIC_RELEASE_END_YEAR);
@@ -478,6 +484,7 @@ function AtlasPage() {
         setEvents([]);
         setSources([]);
         setOpenRelease(null);
+        setDataStatus({ events: "loading", sources: "loading", release: "loading" });
       }
     });
 
@@ -512,33 +519,39 @@ function AtlasPage() {
         .then((data) => {
           if (!cancelled) {
             setEvents(data.map(normalizeEvent));
+            setDataStatus((status) => ({ ...status, events: "available" }));
           }
         })
         .catch(() => {
           if (!cancelled) {
             setEvents([]);
+            setDataStatus((status) => ({ ...status, events: "error" }));
           }
         });
       openSources()
         .then((data) => {
           if (!cancelled) {
             setSources(data.map(normalizeSource));
+            setDataStatus((status) => ({ ...status, sources: "available" }));
           }
         })
         .catch(() => {
           if (!cancelled) {
             setSources([]);
+            setDataStatus((status) => ({ ...status, sources: "error" }));
           }
         });
       openManifest()
         .then((data) => {
           if (!cancelled) {
             setOpenRelease(data);
+            setDataStatus((status) => ({ ...status, release: "available" }));
           }
         })
         .catch(() => {
           if (!cancelled) {
             setOpenRelease(null);
+            setDataStatus((status) => ({ ...status, release: "error" }));
           }
         });
     }
@@ -546,7 +559,7 @@ function AtlasPage() {
     return () => {
       cancelled = true;
     };
-  }, [isEnhancedMode, navigate]);
+  }, [isEnhancedMode, navigate, dataAttempt]);
 
   useEffect(() => {
     let cancelled = false;
@@ -832,6 +845,21 @@ function AtlasPage() {
     setYearFilter(maxYear);
   };
 
+  const handleAtlasEventSelect = (event) => {
+    setSelectedAtlasEvent(event);
+
+    if (event?.event_slug) {
+      navigate(`/atlas?event=${encodeURIComponent(event.event_slug)}`, {
+        replace: true,
+      });
+      return;
+    }
+
+    if (!event) {
+      navigate("/atlas", { replace: true });
+    }
+  };
+
   const handleDownloadFilteredCsv = () => {
     const headers = [
       "event_id",
@@ -881,11 +909,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.2",
+      release: openRelease?.version || "arcus-open-2026.3",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.2"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.3"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );
@@ -907,10 +935,9 @@ function AtlasPage() {
         e.collapse_severity === "PC"
     ).length;
 
-  const totalTriggered =
-    filteredEvents.filter(
-      (e) => e.triggered
-    ).length;
+  const totalTriggered = filteredEvents.filter(
+    (event) => String(event.triggered).toUpperCase() === "TRUE"
+  ).length;
 
   const visibleSourceCount =
     useMemo(() => {
@@ -1167,7 +1194,11 @@ function AtlasPage() {
     options: valuesForFilter(field).map((option) => ({
       label: option === "All"
         ? (language === "it" ? "Tutti" : "All")
-        : option,
+        : id === "structure"
+          ? taxonomyLabel("structuralType", option, language)
+          : id === "material"
+            ? taxonomyLabel("material", option, language)
+            : localizedEventFilterValue(id, option, language),
       value: option,
     })),
   });
@@ -1180,6 +1211,21 @@ function AtlasPage() {
     buildAdditionalFilter("structure", language === "it" ? "Struttura" : "Structure", structureFilter, setStructureFilter, "structural_type"),
     buildAdditionalFilter("material", language === "it" ? "Materiale" : "Material", materialFilter, setMaterialFilter, "material_type"),
   ];
+  const hasActiveAtlasFilters =
+    Boolean(searchQuery.trim()) ||
+    activeYearFilter < maxYear ||
+    [
+      causeFilter,
+      severityFilter,
+      processFilter,
+      componentFilter,
+      evidenceFilter,
+      regionFilter,
+      provinceFilter,
+      structureFilter,
+      materialFilter,
+      triggeredFilter,
+    ].some((value) => value !== "All");
 
   const markerLegendItems =
     isEnhancedMode
@@ -1255,6 +1301,7 @@ function AtlasPage() {
 
       <Link
         className="atlas-home-link"
+        aria-label={homeLabel}
         to="/"
       >
         <img
@@ -1265,7 +1312,17 @@ function AtlasPage() {
         <span>{homeLabel}</span>
       </Link>
 
-      <aside className="atlas-command-panel">
+      {!isEnhancedMode && Object.values(dataStatus).some((status) => status !== "available") && (
+        <div className="atlas-data-status" role="status">
+          {Object.values(dataStatus).includes("error") ? (
+            <>
+              <span>{language === "it" ? "Caricamento incompleto" : "Incomplete loading"}: {Object.entries(dataStatus).filter(([, status]) => status === "error").map(([key]) => ({ events: language === "it" ? "eventi" : "events", sources: language === "it" ? "fonti" : "sources", release: "release" })[key]).join(", ")}.</span>
+              <button type="button" onClick={() => setDataAttempt((value) => value + 1)}>{language === "it" ? "Riprova" : "Retry"}</button>
+            </>
+          ) : (language === "it" ? "Caricamento del catalogo…" : "Loading catalogue…")}
+        </div>
+      )}
+      <aside className={`atlas-command-panel ${researchExpanded ? "is-expanded" : "is-compact"}`}>
         <div className="atlas-command-kicker">
           ARCUS ATLAS / {atlasModeCopy.label}
         </div>
@@ -1282,7 +1339,7 @@ function AtlasPage() {
           <div>
             <span>{atlasText.currentView}</span>
             <strong>
-              {filteredEvents.length}
+              {dataStatus.events === "available" ? filteredEvents.length : "—"}
             </strong>
           </div>
 
@@ -1291,7 +1348,7 @@ function AtlasPage() {
               {atlasText.documentedSources}
             </span>
             <strong>
-              {visibleSourceCount}
+              {dataStatus.sources === "available" ? visibleSourceCount : "—"}
             </strong>
           </div>
 
@@ -1301,8 +1358,11 @@ function AtlasPage() {
           </div>
         </div>
 
-        {!isProfessionalMode && (
-          <div className="atlas-research-actions">
+        <button className="atlas-research-toggle" type="button" aria-expanded={researchExpanded} aria-controls="atlas-research-actions" onClick={() => setResearchExpanded((value) => !value)}>
+          {language === "it" ? "Ricerca e download" : "Research and downloads"} {researchExpanded ? "−" : "+"}
+        </button>
+        {!isProfessionalMode && researchExpanded && (
+          <div className="atlas-research-actions" id="atlas-research-actions">
             <span>{atlasText.researchUse}</span>
 
             <div>
@@ -1317,6 +1377,7 @@ function AtlasPage() {
               </Link>
               <button
                 type="button"
+                disabled={dataStatus.events !== "available" || dataStatus.sources !== "available"}
                 onClick={handleDownloadFilteredCsv}
               >
                 {atlasText.downloadCsv}
@@ -1335,13 +1396,15 @@ function AtlasPage() {
           </div>
         )}
 
-        <button
-          className="atlas-command-reset"
-          type="button"
-          onClick={resetAtlasFilters}
-        >
-          {atlasText.reset}
-        </button>
+        {hasActiveAtlasFilters && (
+          <button
+            className="atlas-command-reset"
+            type="button"
+            onClick={resetAtlasFilters}
+          >
+            {atlasText.reset}
+          </button>
+        )}
       </aside>
 
       {isProfessionalMode && (
@@ -1717,6 +1780,11 @@ function AtlasPage() {
           uniqueCauses
         }
         additionalFilters={additionalFilters}
+        onResetFilters={resetAtlasFilters}
+        onSelectEvent={handleAtlasEventSelect}
+        selectedEventId={
+          selectedAtlasEvent?.event_id || focusedEvent?.event_id || null
+        }
       />
 
       {/* ================================= */}
@@ -1735,6 +1803,7 @@ function AtlasPage() {
       >
 
         <CollapseMap
+          sourcesStatus={dataStatus.sources}
 
           activeHazardOverlays={
             showHazardLayer || isEnterpriseMode
@@ -1770,6 +1839,10 @@ function AtlasPage() {
 
           mapStyle={mapStyle}
 
+          openRelease={openRelease}
+
+          onEventSelect={handleAtlasEventSelect}
+
           professionalMode={
             isEnhancedMode
           }
@@ -1787,6 +1860,8 @@ function AtlasPage() {
           sidebarOpen={
             sidebarOpen
           }
+
+          selectedEvent={selectedAtlasEvent}
 
         />
 

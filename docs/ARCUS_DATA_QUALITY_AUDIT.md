@@ -1,8 +1,8 @@
 # ARCUS Data Quality Audit
 
-The active `arcus-open-2026.2` release passed its structural gate with 263 unique events, 263 unique slugs, 712 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
+The active `arcus-open-2026.3` release passed its structural gate with 261 unique events, 261 unique slugs, 716 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
 
-The current Professional live build contains 263 events and 712 sources. All 263 Open events and all 712 Open source IDs are present in Professional after explicit identifier translation, and shared public fields are equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
+The current Professional live build contains 261 events and 716 sources. All 261 Open events and all 716 Open source IDs are present in Professional after explicit identifier translation, and shared public fields are equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
 
 ## Normalization rules
 
@@ -15,12 +15,16 @@ The current Professional live build contains 263 events and 712 sources. All 263
 
 ## Release findings
 
-The audit records 41 warnings and zero blocking errors. They comprise 19 territorial warnings, 8 non-URL source references, 8 Needs review evidence warnings, 5 specific processes with weak/unspecified evidence and 1 component/process inconsistency.
+The audit records 74 warnings and zero blocking errors. They comprise 20 territorial warnings, 50 non-hydraulic records carrying cross-hazard failure-detail fields, 2 hydraulic Needs review evidence warnings, 1 component/process inconsistency and 1 hydraulic trigger outside the hydraulic trigger vocabulary.
 
-Territorial warnings include the expected `Ivrea` and `Caltanisetta` cases, administrative-name variants, four coordinate/province mismatches and one point outside the available province geometry. Eight text-only references remain valid source records but are not links.
+Territorial warnings include administrative-name variants and coordinate/province mismatches retained for review. The corrected source registry contains no text-only value misrepresented as a URL. A publication year recorded without month and day remains undated in the normalized release rather than being converted into a false Excel date.
 
-Hydraulic coverage is 172 specific processes and 166 specific components. Evidence classes are 124 Documented, 43 Probable, 8 Needs review and 36 Unspecified. Missing values remain visible in Open statistics.
+Hydraulic coverage remains 211 events, with 172 specific processes and 166 specific components. Evidence classes are 126 Documented, 46 Probable, 2 Needs review and 37 Unspecified. Missing values remain visible in Open statistics.
 
-The machine-readable source is `private-data/open/releases/arcus-open-2026.2/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
+The machine-readable source is `private-data/open/releases/arcus-open-2026.3/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
 
 Open immutability is checked with a complete release-directory fingerprint before and after Professional regeneration. Professional derived resources use `professional-events.json` and `professional-sources.json`; tests reject a fallback to processed legacy files. Hydraulic outcome fields remain excluded from FPI, Path 02, incidence, official exposure, territory profiles, asset screening and analogue retrieval.
+
+## Atlas editorial review — 10 September 2026
+
+The 74 warnings were triaged without modifying the immutable release or master. The decisions and unresolved cases are recorded in [Atlas acceptance](ARCUS_ATLAS_ACCEPTANCE.md). Review-state records now have a notice before their full narrative; displayed prose uses canonical IT references. An outdated rainfall context for IT00.10.41 was re-retrieved at the current coordinates, and point/grid context date and coordinate checks now prevent silent reuse after a record changes. This does not resolve the outstanding documentary questions at Bussoleno or the administrative-boundary discrepancies.

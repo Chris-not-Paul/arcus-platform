@@ -130,6 +130,7 @@ async function main() {
   });
   const retrievalUrl = `https://archive-api.open-meteo.com/v1/archive?${query}`;
   const response = await fetch(retrievalUrl, {
+    signal: AbortSignal.timeout(20000),
     headers: {
       "User-Agent": "ARCUS-event-context-builder/1.0",
     },
@@ -146,7 +147,8 @@ async function main() {
   if (
     times.length !== days ||
     precipitation.length !== days ||
-    precipitation.some((value) => !Number.isFinite(Number(value)))
+    precipitation.some((value) => typeof value !== "number" || !Number.isFinite(value) || value < 0) ||
+    times.some((date, index) => date !== dateOffset(startDate, index))
   ) {
     throw new Error(
       `${model.dataset} did not return a complete ${days}-day precipitation series for ${requestedId}`

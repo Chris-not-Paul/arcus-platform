@@ -52,8 +52,8 @@
       "title": "Le vittime del disastro: Antonino e Teresa travolti senza scampo",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "La Nazione article",
+      "url": "https://www.lanazione.it/pistoia/cronaca/maltempo-morti-lamporecchio-d7972859",
+      "reference": null,
       "accessed_at": "2026-05-18"
     },
     {
@@ -62,8 +62,8 @@
       "title": "Straripa un fosso, travolge l'auto, muoiono marito e moglie",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "Rai News article",
+      "url": "https://www.rainews.it/tgr/toscana/video/2023/11/maltempo-toscana-morti-lamporecchio-9947ad56-ecf4-4b77-ade1-d9076cf57b3b.html",
+      "reference": null,
       "accessed_at": "2026-05-18"
     },
     {
@@ -72,8 +72,8 @@
       "title": "Marito e moglie travolti da acqua e fango: il corpo dell'uomo trovato a 3 km dall'auto",
       "role": "event_identification_and_failure_process_context",
       "source_class": "News",
-      "url": null,
-      "reference": "La Nazione article 2",
+      "url": "https://www.lanazione.it/empoli/cronaca/morti-vinci-lamporecchio-vkl3snbg",
+      "reference": null,
       "accessed_at": "2026-05-18"
     }
   ],

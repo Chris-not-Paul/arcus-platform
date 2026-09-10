@@ -44,6 +44,11 @@ function EventRainfallContext({ context }) {
     "event_chronology_review_required",
     "lagged_catchment_response_supported",
   ].includes(quality?.status);
+  const quantitativeContextAvailable =
+    quality?.status !== "reanalysis_not_representative";
+  const eventDayIsDry =
+    aggregates.event_calendar_day_mm === 0 &&
+    aggregates.event_and_previous_2_days_mm > 0;
 
   const qualityTitle = {
     reanalysis_not_representative: it
@@ -94,61 +99,78 @@ function EventRainfallContext({ context }) {
         </p>
       )}
 
-      <div className="arcus-event-rainfall-metrics">
-        <Metric
-          label={it ? "Cella ponte · giorno civile" : "Bridge cell · calendar day"}
-          language={language}
-          value={aggregates.event_calendar_day_mm}
-        />
-        <Metric
-          label={it ? "3 giorni, incluso evento" : "3 days, incl. event"}
-          language={language}
-          value={aggregates.event_and_previous_2_days_mm}
-        />
-        <Metric
-          label={it ? "7 giorni, incluso evento" : "7 days, incl. event"}
-          language={language}
-          value={aggregates.event_and_previous_6_days_mm}
-        />
-        <Metric
-          label={it ? "14 giorni, incluso evento" : "14 days, incl. event"}
-          language={language}
-          value={aggregates.full_period_mm}
-        />
-      </div>
+      {quantitativeContextAvailable && (
+        <>
+          {eventDayIsDry && (
+            <p className="arcus-event-rainfall-zero-note">
+              <strong>
+                {it
+                  ? "0 mm nella cella del ponte il giorno civile dell’evento."
+                  : "0 mm in the bridge grid cell on the event calendar day."}
+              </strong>
+              {it
+                ? ` Nei tre giorni considerati la rianalisi registra ${aggregates.event_and_previous_2_days_mm.toLocaleString("it-IT", { maximumFractionDigits: 1 })} mm: lo zero giornaliero non dimostra assenza di forzante idrologica nel bacino.`
+                : ` Across the three-day window, reanalysis records ${aggregates.event_and_previous_2_days_mm.toLocaleString("en-GB", { maximumFractionDigits: 1 })} mm: the daily zero does not demonstrate absence of hydrological forcing in the catchment.`}
+            </p>
+          )}
 
-      <div
-        aria-label={it ? "Grafico delle precipitazioni giornaliere" : "Daily precipitation chart"}
-        className="arcus-event-rainfall-chart"
-        role="img"
-        style={{
-          gridTemplateColumns: `repeat(${context.daily.length}, minmax(0, 1fr))`,
-        }}
-      >
-        {context.daily.map((item, index) => {
-          const eventDay = item.date === eventDate;
+          <div className="arcus-event-rainfall-metrics">
+            <Metric
+              label={it ? "Cella ponte · giorno civile" : "Bridge cell · calendar day"}
+              language={language}
+              value={aggregates.event_calendar_day_mm}
+            />
+            <Metric
+              label={it ? "3 giorni, incluso evento" : "3 days, incl. event"}
+              language={language}
+              value={aggregates.event_and_previous_2_days_mm}
+            />
+            <Metric
+              label={it ? "7 giorni, incluso evento" : "7 days, incl. event"}
+              language={language}
+              value={aggregates.event_and_previous_6_days_mm}
+            />
+            <Metric
+              label={it ? "14 giorni, incluso evento" : "14 days, incl. event"}
+              language={language}
+              value={aggregates.full_period_mm}
+            />
+          </div>
 
-          return (
-            <div className={eventDay ? "is-event-day" : ""} key={item.date}>
-              <span className="arcus-event-rainfall-value">
-                {item.precipitation_mm > 0 ? item.precipitation_mm : ""}
-              </span>
-              <span className="arcus-event-rainfall-bar-track">
-                <span
-                  className="arcus-event-rainfall-bar"
-                  style={{ height: `${Math.max(2, (item.precipitation_mm / maximum) * 100)}%` }}
-                  title={`${formatDay(item.date, language)}: ${item.precipitation_mm} mm`}
-                />
-              </span>
-              <small>
-                {index === 0 || eventDay || index === context.daily.length - 1
-                  ? formatDay(item.date, language)
-                  : ""}
-              </small>
-            </div>
-          );
-        })}
-      </div>
+          <div
+            aria-label={it ? "Grafico delle precipitazioni giornaliere" : "Daily precipitation chart"}
+            className="arcus-event-rainfall-chart"
+            role="img"
+            style={{
+              gridTemplateColumns: `repeat(${context.daily.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {context.daily.map((item, index) => {
+              const eventDay = item.date === eventDate;
+
+              return (
+                <div className={eventDay ? "is-event-day" : ""} key={item.date}>
+                  <span className="arcus-event-rainfall-value">
+                    {item.precipitation_mm > 0 ? item.precipitation_mm : ""}
+                  </span>
+                  <span className="arcus-event-rainfall-bar-track">
+                    <span
+                      className="arcus-event-rainfall-bar"
+                      style={{ height: `${Math.max(2, (item.precipitation_mm / maximum) * 100)}%` }}
+                      title={`${formatDay(item.date, language)}: ${item.precipitation_mm} mm`}
+                    />
+                  </span>
+                  <small>
+                    {index === 0 || eventDay || index === context.daily.length - 1
+                      ? formatDay(item.date, language)
+                      : ""}
+                  </small>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <footer>
         <span>

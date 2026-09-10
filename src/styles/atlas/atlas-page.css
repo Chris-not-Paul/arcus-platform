@@ -275,7 +275,7 @@
 
 .atlas-command-title {
   margin-top: 6px;
-  padding-right: 180px;
+  padding-right: 0;
 
   font-family: var(--arcus-font-display);
   font-size: 20px;
@@ -1152,6 +1152,72 @@
   padding: 4px 8px;
 }
 
+.atlas-page { height: 100dvh; }
+.atlas-page .atlas-command-panel.is-compact { width: 300px; }
+.atlas-research-toggle {
+  width: 100%;
+  margin-top: 12px;
+  min-height: 36px;
+  border: 1px solid rgba(32,40,38,0.18);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--arcus-night);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.atlas-data-status {
+  position: absolute;
+  z-index: 7500;
+  top: 78px;
+  right: 18px;
+  max-width: min(400px, calc(100vw - 36px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--arcus-bronze);
+  border-radius: 3px;
+  background: var(--arcus-paper);
+  color: var(--arcus-ink);
+  font-size: 13px;
+}
+.atlas-data-status button {
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 0;
+  background: var(--arcus-night);
+  color: #fff;
+  cursor: pointer;
+}
+.atlas-research-actions button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 980px) {
+  .atlas-page.sidebar-closed .atlas-command-panel,
+  .atlas-page.sidebar-open .atlas-command-panel {
+    display: block;
+    left: 76px;
+    right: 76px;
+    width: auto;
+    max-width: 400px;
+    max-height: calc(100dvh - 210px);
+    overflow-y: auto;
+  }
+  .atlas-page .atlas-command-panel.is-compact { width: auto; }
+  .atlas-page.sidebar-open .atlas-command-panel { visibility: hidden; pointer-events: none; }
+  .atlas-command-panel.is-compact .atlas-command-grid,
+  .atlas-command-panel.is-compact .atlas-command-kicker { display: none; }
+  .atlas-command-panel .atlas-command-title { font-size: 16px; }
+  .atlas-map-legend { max-width: calc(100vw - 90px); bottom: 48px; }
+  .atlas-color-legend { display: none; }
+}
+@media (max-width: 520px) {
+  .atlas-command-panel { padding: 10px; }
+  .atlas-command-panel .atlas-command-title { font-size: 13px; }
+  .atlas-research-toggle { font-size: 11px; margin-top: 6px; }
+  .atlas-map-summary { flex-wrap: wrap; gap: 6px 10px; }
+}
+
 .arcus-hazard-tooltip {
   display: grid;
   gap: 3px;
@@ -1175,10 +1241,6 @@
 }
 
 @media (max-width: 980px) {
-  .atlas-command-panel {
-    display: none;
-  }
-
   .atlas-professional-panel {
     display: none;
   }

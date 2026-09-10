@@ -17,6 +17,7 @@ import {
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -143,15 +144,8 @@ function MapResizeController({
 
       map.invalidateSize({
         animate: false,
+        pan: false,
       });
-
-      map.setView(
-        map.getCenter(),
-        map.getZoom(),
-        {
-          animate: false,
-        }
-      );
     };
 
     resizeMap();
@@ -186,10 +180,43 @@ function MapFitController({
   selectionBounds = null,
 }) {
   const map = useMap();
+  const lastFocusedEventKey = useRef(null);
 
   useEffect(() => {
     const points = [];
     let useItalyOverview = false;
+    const hasFocusedEvent =
+      Number.isFinite(Number(focusedEvent?.latitude)) &&
+      Number.isFinite(Number(focusedEvent?.longitude));
+    const focusedEventKey = hasFocusedEvent
+      ? `${researchEventId(focusedEvent) || "event"}:${Number(
+          focusedEvent.latitude
+        )}:${Number(focusedEvent.longitude)}`
+      : null;
+    const previousFocusedEventKey = lastFocusedEventKey.current;
+
+    // Event focus is a one-shot navigation action. Re-renders caused by
+    // filters, side panels or layer controls must not override user zoom.
+    if (
+      focusedEventKey &&
+      previousFocusedEventKey === focusedEventKey &&
+      !selectedPoint &&
+      !selectionBounds
+    ) {
+      return undefined;
+    }
+
+    // Closing the event card should release the focus without snapping the
+    // map back to the national overview.
+    if (
+      !focusedEventKey &&
+      previousFocusedEventKey &&
+      !selectedPoint &&
+      !selectionBounds
+    ) {
+      lastFocusedEventKey.current = null;
+      return undefined;
+    }
 
     if (selectionBounds) {
       points.push(
@@ -198,10 +225,7 @@ function MapFitController({
       );
     }
 
-    if (
-      Number.isFinite(Number(focusedEvent?.latitude)) &&
-      Number.isFinite(Number(focusedEvent?.longitude))
-    ) {
+    if (hasFocusedEvent) {
       points.push([
         Number(focusedEvent.latitude),
         Number(focusedEvent.longitude),
@@ -250,8 +274,42 @@ function MapFitController({
     }
 
     const timer = setTimeout(() => {
+      // Mark focus as handled only after applying it. A source/metadata render
+      // can cancel this timer; marking it earlier would lose the navigation.
+      lastFocusedEventKey.current = focusedEventKey;
+      if (hasFocusedEvent) {
+        const targetZoom = Math.min(
+          10,
+          Math.max(9.25, map.getZoom())
+        );
+
+        map.stop();
+        const size = map.getSize();
+        const target = map.project([Number(focusedEvent.latitude), Number(focusedEvent.longitude)], targetZoom);
+        const offsetX = size.x > 520 && size.x <= 980 ? size.x * 0.3 : 0;
+        const offsetY = size.x <= 520 ? size.y * 0.18 : 0;
+        map.setView(
+          map.unproject([target.x + offsetX, target.y + offsetY], targetZoom),
+          targetZoom,
+          {
+            animate: true,
+            duration: 0.65,
+          }
+        );
+        return;
+      }
+
       if (useItalyOverview) {
         const mapSize = map.getSize();
+        if (mapSize.x <= 980) {
+          map.fitBounds([[36.55, 6.62], [47.1, 18.6]], {
+            animate: false,
+            paddingTopLeft: [24, 132],
+            paddingBottomRight: [24, 105],
+            maxZoom: 6.5,
+          });
+          return;
+        }
         const overviewZoom = mapSize.y >= 850
           ? 6.25
           : mapSize.y >= 690
@@ -545,6 +603,8 @@ function CollapseMap({
   focusedEvent = null,
   height = "100vh",
   mapStyle = "voyager",
+  openRelease = null,
+  onEventSelect,
   professionalMode = false,
   publicWmsOverlays = [],
   onPointSelect,
@@ -553,8 +613,10 @@ function CollapseMap({
   selectionBounds = null,
   selectionEnabled = false,
   selectionLabel,
+  selectedEvent: controlledSelectedEvent,
   resizeSignal,
   sourcesByEvent,
+  sourcesStatus = "available",
   sidebarOpen,
   showHeatmap = false,
   showEventMarkers = true,
@@ -563,8 +625,13 @@ function CollapseMap({
   watchlistMarkers = [],
 }) {
   const [selectedEvent, setSelectedEvent] = useState(undefined);
+  const hasControlledSelection = controlledSelectedEvent !== undefined;
   const selectedEventCandidate =
-    selectedEvent === undefined ? focusedEvent : selectedEvent;
+    hasControlledSelection
+      ? controlledSelectedEvent
+      : selectedEvent === undefined
+        ? focusedEvent
+        : selectedEvent;
   const activeSelectedEvent =
     selectedEventCandidate &&
     filteredEvents.some(
@@ -572,6 +639,13 @@ function CollapseMap({
     )
       ? selectedEventCandidate
       : null;
+  const handleEventSelect = (event) => {
+    if (!hasControlledSelection) {
+      setSelectedEvent(event);
+    }
+
+    onEventSelect?.(event);
+  };
 
   const mapStyles = {
     dark: {
@@ -656,7 +730,10 @@ function CollapseMap({
             showAssetMarkers ? assetMarkers : []
           }
           events={filteredEvents}
-          focusedEvent={focusedEvent}
+          focusedEvent={
+            activeSelectedEvent ||
+            (!hasControlledSelection ? focusedEvent : null)
+          }
           selectedPoint={selectedPoint}
           selectionBounds={selectionBounds}
         />
@@ -800,7 +877,11 @@ function CollapseMap({
 
                     event={event}
 
-                    onSelect={setSelectedEvent}
+                    selected={
+                      activeSelectedEvent?.event_id === event.event_id
+                    }
+
+                    onSelect={handleEventSelect}
                     professionalMode={
                       professionalMode
                     }
@@ -872,17 +953,20 @@ function CollapseMap({
             aria-label="Chiudi scheda evento"
             className="atlas-event-preview-close"
             type="button"
-            onClick={() => setSelectedEvent(null)}
+            onClick={() => handleEventSelect(null)}
           >
             ×
           </button>
           <EventPopup
+            key={activeSelectedEvent.event_id}
             atlasMode={atlasMode}
             event={activeSelectedEvent}
             hazardProfile={eventHazards[activeSelectedEvent.province] || null}
+            openRelease={openRelease}
             professionalMode={professionalMode}
             reliability={eventReliability[activeSelectedEvent.event_id] || null}
             relatedSources={sourcesByEvent[activeSelectedEvent.event_id] || []}
+            sourcesStatus={sourcesStatus}
             vulnerability={eventVulnerability[activeSelectedEvent.event_id] || null}
           />
         </div>

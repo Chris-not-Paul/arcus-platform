@@ -157,15 +157,17 @@ export function revokeOtherAccountSessions() {
 }
 
 export function openEvents() {
-  return apiJson("/api/open/events").then(
-    (data) => data.events || []
-  );
+  return apiJson("/api/open/events", { signal: AbortSignal.timeout(15000) }).then((data) => {
+    if (!Array.isArray(data.events)) throw new Error("Invalid Open events response");
+    return data.events;
+  });
 }
 
 export function openSources() {
-  return apiJson("/api/open/sources").then(
-    (data) => data.sources || []
-  );
+  return apiJson("/api/open/sources", { signal: AbortSignal.timeout(15000) }).then((data) => {
+    if (!Array.isArray(data.sources)) throw new Error("Invalid Open sources response");
+    return data.sources;
+  });
 }
 
 export function openResource(resource) {
@@ -173,7 +175,10 @@ export function openResource(resource) {
 }
 
 export function openManifest() {
-  return openResource("manifest");
+  return apiJson("/api/open/manifest", { signal: AbortSignal.timeout(15000) }).then((data) => {
+    if (!data?.version) throw new Error("Invalid Open manifest response");
+    return data;
+  });
 }
 
 export const openDownloadUrls = Object.freeze({

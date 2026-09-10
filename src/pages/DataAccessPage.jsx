@@ -182,12 +182,12 @@ function DataAccessPage() {
         };
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.2";
+    manifest?.version || "arcus-open-2026.3";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
-  const releaseEventCount = manifest?.event_count ?? 263;
-  const releaseSourceCount = manifest?.source_count ?? 712;
+  const releaseEventCount = manifest?.event_count ?? 261;
+  const releaseSourceCount = manifest?.source_count ?? 716;
   const releasePublicText = language === "it"
     ? `${copy.publicText} La release ${releaseVersion} contiene ${releaseEventCount} eventi e ${releaseSourceCount} fonti.`
     : `${copy.publicText} Release ${releaseVersion} contains ${releaseEventCount} events and ${releaseSourceCount} sources.`;

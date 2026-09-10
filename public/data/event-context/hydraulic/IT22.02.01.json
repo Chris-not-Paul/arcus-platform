@@ -1,0 +1,86 @@
+{
+  "schema_version": "arcus-event-hydraulic-context-v1",
+  "event_id": "IT22.02.01",
+  "event_date": "2022-02-13",
+  "status": "context_available",
+  "display_badge": "Parliamentary record",
+  "coverage_level": "validated_event_report_review",
+  "event_section": {
+    "crossing_name": "Sangro river",
+    "latitude": 42.1854,
+    "longitude": 14.4812,
+    "municipality": "Guastacconcio",
+    "hydrographic_context": "Sangro river",
+    "location_precision": "exact"
+  },
+  "event_hydrometry": {
+    "observation_status": "not_available",
+    "reason_code": "failure_chronology_precludes_event_hydrometry",
+    "observed_discharge_m3s": null,
+    "observed_stage_m": null,
+    "hydrograph": null,
+    "network_status": {
+      "network": "Ponte Guastacconcio – interrogazione parlamentare e quadro dei dissesti",
+      "summary_it": "Le fonti collegano il dissesto progressivo della pila alle piene ripetute e all'abbassamento dell'alveo, ma il collasso finale avvenne senza una piena discreta contestuale. Non esiste quindi un colmo idrometrico evento-specifico da associare alla rottura.",
+      "summary_en": "The sources link progressive pier distress to repeated floods and riverbed lowering, but the final collapse occurred without a concurrent discrete flood. There is therefore no event-specific hydrometric peak to associate with the failure."
+    }
+  },
+  "reference_station": null,
+  "modelled_event_watercourse": null,
+  "modelled_reference_section": null,
+  "process_evidence": {
+    "failure_process": "scour",
+    "component_involved": "pier_foundation",
+    "evidence_level": "documented",
+    "taxonomy_version": "hydraulic-v2"
+  },
+  "documented_basin_processes": [
+    "scour"
+  ],
+  "sources": [
+    {
+      "source_id": "SRC0718",
+      "provider": "Parliamentary record",
+      "title": "Ponte Guastacconcio – interrogazione parlamentare e quadro dei dissesti",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Official/Technical",
+      "url": "https://www.senato.it/show-doc?id=1340591&leg=18&part=doc_dc-allegatob_ab-sezionetit_i-atto_303138&tipodoc=Resaula",
+      "reference": null,
+      "accessed_at": "2026-09-08"
+    },
+    {
+      "source_id": "SRC0719",
+      "provider": "Journal Paper",
+      "title": "D'Angelo, Ballio & Ravazzani (2025), Geomorphologic risk factors for river bridges",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Scientific",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2212420925004315",
+      "reference": null,
+      "accessed_at": "2026-09-08"
+    },
+    {
+      "source_id": "SRC0138",
+      "provider": "Rete8",
+      "title": "Paglieta, è crollato il ponte Guastacconcio sulla S.P. 97",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "News",
+      "url": "https://www.rete8.it/cronaca/paglieta-e-crollato-il-ponte-guastacconcio-sulla-strada-provinciale-97/",
+      "reference": null,
+      "accessed_at": "2026-05-20"
+    }
+  ],
+  "curation_note": {
+    "it": "Le fonti collegano il dissesto progressivo della pila alle piene ripetute e all'abbassamento dell'alveo, ma il collasso finale avvenne senza una piena discreta contestuale. Non esiste quindi un colmo idrometrico evento-specifico da associare alla rottura.",
+    "en": "The sources link progressive pier distress to repeated floods and riverbed lowering, but the final collapse occurred without a concurrent discrete flood. There is therefore no event-specific hydrometric peak to associate with the failure."
+  },
+  "provenance": {
+    "method": "Manual extraction encoded in the ARCUS event-report curation registry",
+    "source_registry_accessed_through": "2026-09-08"
+  },
+  "caveats": [
+    "The cited source review is complete; no compatible tabulated bridge-section value is assigned.",
+    "ARCUS does not digitise plotted hydrographs into false-precision event peaks.",
+    "The encoded failure process remains separate from hydrometric evidence.",
+    "Rainfall is not converted into stage or discharge."
+  ]
+}

@@ -2,7 +2,7 @@
 
 ARCUS Professional is a live, authenticated operational layer. It may advance beyond the latest Open cutoff through controlled editorial updates and reviewed records.
 
-The normalized `EVENTS`, `SOURCES` and taxonomy sheets from `MASTER_RESEARCH.xlsx` are the common in-memory input for both products. Open writes a versioned immutable snapshot; Professional writes the live superset. The current baseline is 263 Professional events and 712 Professional sources.
+The normalized `EVENTS`, `SOURCES` and taxonomy sheets from `MASTER_RESEARCH.xlsx` are the common in-memory input for both products. Open writes a versioned immutable snapshot; Professional writes the live superset. The current baseline is 261 Professional events and 716 Professional sources.
 
 Inputs include the curated live event/source dataset, event reliability, event vulnerability, public ISPRA/INGV hazard services, territorial profiles, publishable denominator-derived indicators, asset inventories supplied by authorised customers and mitigation knowledge with explicit validation status.
 

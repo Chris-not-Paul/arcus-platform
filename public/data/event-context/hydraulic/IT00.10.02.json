@@ -6,11 +6,11 @@
   "display_badge": "ARPA Piemonte",
   "coverage_level": "validated_event_report_review",
   "event_section": {
-    "crossing_name": "Stura di Demonte river",
+    "crossing_name": "Po river",
     "latitude": 44.6984,
     "longitude": 7.1584,
     "municipality": "Crissolo",
-    "hydrographic_context": "Stura di Demonte river",
+    "hydrographic_context": "Po river",
     "location_precision": "exact"
   },
   "event_hydrometry": {

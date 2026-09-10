@@ -418,7 +418,7 @@ check("red-team-top3-coherent-with-class-count", () => {
   );
 });
 check("red-team-live-enrichment-coherent-with-eligible", () => {
-  assert.equal(redTeam.enrichment_status.eligible_for_enrichment, 263);
+  assert.equal(redTeam.enrichment_status.eligible_for_enrichment, 261);
   assert.equal(redTeam.enrichment_status.fully_enriched > 0, true);
   assert.equal(
     redTeam.enrichment_status.fully_enriched <=
@@ -612,17 +612,17 @@ check("hazard-gated-hit3-confidence-interval", () => {
     .failure_pattern_hit_at_3_ci_95;
 
   assert.equal(interval.method, "wilson_score");
-  assert.equal(interval.sample_size, 148);
-  assert.equal(interval.lower <= 0.473, true);
-  assert.equal(interval.upper >= 0.473, true);
+  assert.equal(interval.sample_size, 145);
+  assert.equal(interval.lower <= 0.469, true);
+  assert.equal(interval.upper >= 0.469, true);
 });
 check("hazard-gated-paired-baseline-uncertainty", () => {
   const differences = hazardGated.analysis.value_add_benchmark
     .paired_hit_at_3_difference;
 
   assert.equal(differences.versus_random.method, "paired_deterministic_bootstrap");
-  assert.equal(differences.versus_random.sample_size, 148);
-  assert.equal(differences.versus_majority.sample_size, 148);
+  assert.equal(differences.versus_random.sample_size, 145);
+  assert.equal(differences.versus_majority.sample_size, 145);
 });
 check("hazard-gated-feature-ablation", () => {
   const ablation = hazardGated.analysis.feature_ablation;
@@ -648,8 +648,8 @@ check("hazard-gated-strict-geography-holdouts", () => {
     professionalRows.map((event) => [event.event_id, event])
   );
 
-  assert.equal(holdout.leave_province_out.total_cases, 263);
-  assert.equal(holdout.leave_region_out.total_cases, 263);
+  assert.equal(holdout.leave_province_out.total_cases, 261);
+  assert.equal(holdout.leave_region_out.total_cases, 261);
   assert.equal(holdout.leave_region_out.name.includes("hydraulic"), true);
   holdout.leave_region_out.rows
     .filter((row) => !row.abstained)
@@ -692,7 +692,7 @@ check("hazard-gated-episode-holdout", () => {
     episode.registry.methodology.version,
     "arcus-hydraulic-episode-registry-v2"
   );
-  assert.equal(episode.validation.total_cases, 263);
+  assert.equal(episode.validation.total_cases, 261);
   episode.validation.rows
     .filter(
       (row) =>

@@ -2,25 +2,31 @@ import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { causeColors } from "../../utils/colors";
 import useLanguage from "../../context/useLanguage";
+import {
+  localizedBridgeDisplayName,
+  localizedCrossingName,
+  publicRecordDescription,
+} from "../../utils/eventDisplayLabels";
 import taxonomyLabel from "../../utils/taxonomyLabels";
+import {
+  buildOpenEventCitation,
+  buildOpenEventDossier,
+} from "../../utils/openEventDossier";
 import { researchEventId } from "../../utils/eventIdentity";
 import EventHydraulicContext from "./EventHydraulicContext";
+import EventHazardHistory from "./EventHazardHistory";
 import EventMedia from "./EventMedia";
 import EventRainfallContext from "./EventRainfallContext";
-import useEventHydraulicContext from "./useEventHydraulicContext";
-import useEventMedia from "./useEventMedia";
-import useEventRainfallContext from "./useEventRainfallContext";
+import EventTerritorialContext from "./EventTerritorialContext";
+import useEventContextResource from "./useEventContextResource";
+import EventResourceState from "./EventResourceState";
 import "./EventPopup.css";
 
 function eventTitle(event, language) {
-  if (event.bridge_name) {
-    return event.bridge_name;
-  }
+  const documentedName = localizedBridgeDisplayName(event, language);
 
-  if (event.bridge_crossing_name) {
-    return language === "it"
-      ? event.bridge_crossing_name
-      : `${event.bridge_crossing_name} Bridge`;
+  if (documentedName) {
+    return documentedName;
   }
 
   if (event.structural_type) {
@@ -54,6 +60,49 @@ function sourceHost(source) {
   }
 }
 
+function sourceCategory(source) {
+  const role = String(source?.source_role || "").trim().toLowerCase();
+
+  if (role.includes("official") || role.includes("technical") || role === "primary") {
+    return "official";
+  }
+
+  if (role.includes("scientific")) {
+    return "scientific";
+  }
+
+  if (role.includes("news") || role === "secondary") {
+    return "news";
+  }
+
+  return "other";
+}
+
+function sourceCategoryPriority(source) {
+  return {
+    official: 0,
+    scientific: 1,
+    news: 2,
+    other: 3,
+  }[sourceCategory(source)];
+}
+
+function fieldAvailability(value) {
+  if (value === null || value === undefined || String(value).trim() === "") {
+    return "undocumented";
+  }
+
+  if (
+    ["n/a", "na", "not applicable", "non applicabile"].includes(
+      String(value).trim().toLowerCase()
+    )
+  ) {
+    return "not-applicable";
+  }
+
+  return "available";
+}
+
 function formatDate(value, language) {
   if (!value) {
     return null;
@@ -74,6 +123,24 @@ function formatDate(value, language) {
       year: "numeric",
     }
   ).format(date);
+}
+
+function evidenceTone(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+
+  if (["documented", "high"].includes(normalized)) {
+    return "documented";
+  }
+
+  if (["probable", "medium"].includes(normalized)) {
+    return "probable";
+  }
+
+  if (normalized.includes("review")) {
+    return "review";
+  }
+
+  return "unspecified";
 }
 
 function localizedValue(group, value, language) {
@@ -122,10 +189,13 @@ function localizedValue(group, value, language) {
     component: {
       Abutment: "Spalla",
       "Approach embankment": "Rilevato di accesso",
+      "Cable / hanger / pylon": "Cavo / pendino / pilone",
+      "Connection / joint": "Connessione / giunto",
       "Deck / superstructure": "Impalcato / sovrastruttura",
       "Entire structure": "Intera struttura",
       "Multiple components": "Componenti multipli",
       "Pier / foundation": "Pila / fondazione",
+      "Temporary works": "Opere provvisionali",
     },
     curation: {
       Flagship: "Approfondita",
@@ -144,10 +214,17 @@ function localizedValue(group, value, language) {
     },
     process: {
       "Bank erosion / embankment failure": "Erosione spondale / cedimento del rilevato",
+      Bending: "Flessione",
       "Debris accumulation / obstruction": "Accumulo di detriti / ostruzione",
       "Debris flow / solid transport": "Colata detritica / trasporto solido",
+      "Falsework / temporary works collapse": "Collasso di centine / opere provvisionali",
+      Fatigue: "Fatica",
+      Fracture: "Frattura",
+      "Knocked down by external action": "Abbattimento per azione esterna",
+      "Other documented mode": "Altro meccanismo documentato",
       "Other documented hydraulic process": "Altro processo idraulico documentato",
       "Overtopping / hydrodynamic action": "Sormonto / azione idrodinamica",
+      Overstress: "Sovrasollecitazione",
       Scour: "Scalzamento (scour)",
     },
     provinceStatus: {
@@ -168,8 +245,19 @@ function localizedValue(group, value, language) {
       secondary: "Secondaria",
     },
     trigger: {
+      "Demolition operation": "Operazione di demolizione",
+      Earthquake: "Sisma",
+      "Exceptional overload": "Sovraccarico eccezionale",
+      "Excavation / construction works": "Scavi / lavori di costruzione",
+      "Fire / explosion": "Incendio / esplosione",
       Flood: "Piena",
+      "Landslide / slope failure": "Frana / instabilità di versante",
+      "Lifting / construction operation": "Sollevamento / operazione costruttiva",
+      "Movable bridge operation": "Manovra del ponte mobile",
+      "No identifiable external trigger": "Nessun innesco esterno identificabile",
       "Rainfall-induced landslide": "Frana indotta da precipitazioni",
+      "Static load test": "Prova di carico statica",
+      "Vehicle impact": "Impatto veicolare",
     },
   };
 
@@ -180,9 +268,11 @@ function EventPopup({
   atlasMode = "open",
   event,
   hazardProfile = null,
+  openRelease = null,
   professionalMode = false,
   reliability = null,
   relatedSources = [],
+  sourcesStatus = "available",
   vulnerability = null,
 }) {
   const { language } = useLanguage();
@@ -194,9 +284,12 @@ function EventPopup({
     useState("event");
   const [activeContextTab, setActiveContextTab] =
     useState("rainfall");
+  const [researchActionStatus, setResearchActionStatus] =
+    useState(null);
   const dossierId = useId();
   const dossierTitleId = useId();
   const dossierToggleRef = useRef(null);
+  const dossierRef = useRef(null);
   const dossierTabRefs = useRef([]);
   const it = language === "it";
 
@@ -208,25 +301,42 @@ function EventPopup({
     crossing: it ? "Attraversamento" : "Crossing",
     crossingType: it ? "Tipo di attraversamento" : "Crossing type",
     curationLevel: it ? "Livello di curatela" : "Curation level",
-    description: it ? "Descrizione evento" : "Event Description",
+    description: it ? "Testo del record · lingua originale" : "Record text · original language",
     eventDriven: it ? "Evento innescato" : "Event-driven",
     fatalities: it ? "Vittime" : "Fatalities",
     historicalEvidence: it
-      ? "Evidenza storica documentata"
-      : "Documented historical evidence",
+      ? "Evidenza storica del record"
+      : "Historical record evidence",
     injuries: it ? "Feriti" : "Injuries",
     infrastructureUse: it ? "Uso infrastrutturale" : "Infrastructure Use",
     trigger: it ? "Trigger storico" : "Historical trigger",
     failureProcess: it ? "Processo osservato" : "Observed process",
     componentInvolved: it ? "Componente coinvolta" : "Component involved",
     evidenceLevel: it ? "Livello di evidenza" : "Evidence level",
+    evidenceNote: it
+      ? "La sequenza riordina esclusivamente i campi curati nel record. I passaggi mancanti non vengono ricostruiti e la concatenazione non attribuisce da sola un nesso causale definitivo. L’esito storico documentato non è una previsione per altri ponti né una stima di rischio."
+      : "The sequence only reorganises curated record fields. Missing stages are not reconstructed, and the sequence does not by itself establish a definitive causal link. Documented historical outcome: this is neither a prediction for other bridges nor a risk estimate.",
+    failureSequence: it ? "Dinamica del cedimento" : "Failure sequence",
     locationQuality: it ? "Qualità localizzazione" : "Location quality",
     material: it ? "Materiale" : "Material",
     na: it ? "N/D" : "N/A",
-    noSources: it
+    noSources: sourcesStatus === "error"
+      ? (it ? "Le fonti non sono state caricate. Usa Riprova nell’Atlas." : "Sources could not be loaded. Use Retry in the Atlas.")
+      : sourcesStatus === "loading"
+        ? (it ? "Caricamento delle fonti…" : "Loading sources…")
+        : it
       ? "Nessuna fonte collegata a questo evento nel dataset corrente."
       : "No source is linked to this event in the current dataset.",
     partial: it ? "Parziale" : "Partial",
+    notDocumented: it
+      ? "Non documentato nel record"
+      : "Not documented in the record",
+    missingData: it ? "Dato assente" : "Missing data",
+    notApplicable: it ? "Non applicabile" : "Not applicable",
+    availableData: it ? "Dati disponibili" : "Available data",
+    bridgeCoverageNote: it
+      ? "La copertura descrive la compilazione del record, non la qualità o la sicurezza dell’opera."
+      : "Coverage describes record completion, not asset quality or safety.",
     priorityEvent: it ? "Evento prioritario" : "Priority event",
     professionalLayer:
       atlasMode === "enterprise"
@@ -243,7 +353,19 @@ function EventPopup({
     riskReading: it ? "Lettura rischio" : "Risk reading",
     showLess: it ? "Riduci" : "Show less",
     sources: it ? "Fonti" : "Sources",
+    sourceComposition: it ? "Composizione documentale" : "Document composition",
+    sourceCompositionNote: it
+      ? "Le categorie descrivono la provenienza delle fonti e non costituiscono un punteggio automatico di affidabilità."
+      : "Categories describe source provenance and are not an automatic reliability score.",
     sourceConfidence: it ? "Confidenza delle fonti" : "Source confidence",
+    copyLink: it ? "Copia link" : "Copy link",
+    copyCitation: it ? "Copia citazione" : "Copy citation",
+    exportDossier: it ? "Esporta record e fonti" : "Export record and sources",
+    researchTools: it ? "Strumenti per la ricerca" : "Research tools",
+    linkCopied: it ? "Link copiato" : "Link copied",
+    citationCopied: it ? "Citazione copiata" : "Citation copied",
+    dossierExported: it ? "Dossier esportato" : "Dossier exported",
+    actionFailed: it ? "Operazione non riuscita" : "Action failed",
     documented: it ? "documentate" : "documented",
     closeDossier: it ? "Chiudi approfondimento" : "Close full record",
     openDossier: it ? "Apri scheda completa" : "Open full record",
@@ -271,12 +393,49 @@ function EventPopup({
     language
   );
   const sourceCount = relatedSources.length;
+  const sourceGroups = [
+    {
+      id: "official",
+      label: it ? "Ufficiali / tecniche" : "Official / technical",
+    },
+    {
+      id: "scientific",
+      label: it ? "Scientifiche" : "Scientific",
+    },
+    {
+      id: "news",
+      label: it ? "Notizie" : "News",
+    },
+    {
+      id: "other",
+      label: it ? "Altre" : "Other",
+    },
+  ]
+    .map((group) => ({
+      ...group,
+      count: relatedSources.filter(
+        (source) => sourceCategory(source) === group.id
+      ).length,
+    }))
+    .filter((group) => group.count > 0);
+  const orderedSources = [...relatedSources].sort(
+    (left, right) =>
+      sourceCategoryPriority(left) - sourceCategoryPriority(right)
+  );
   const recordId = researchEventId(event);
-  const hydraulicContext = useEventHydraulicContext(recordId);
-  const eventMedia = useEventMedia(recordId);
-  const rainfallContext = useEventRainfallContext(recordId);
+  const releaseVersion = openRelease?.version || "arcus-open-2026.3";
+  const hydraulicResource = useEventContextResource("hydraulic", recordId, dossierExpanded, event);
+  const historyResource = useEventContextResource("hazard-history", recordId, dossierExpanded, event);
+  const mediaResource = useEventContextResource("media", recordId, dossierExpanded, event);
+  const rainfallResource = useEventContextResource("rainfall", recordId, dossierExpanded, event);
+  const territorialResource = useEventContextResource("territorial", recordId, dossierExpanded, event);
+  const hydraulicContext = hydraulicResource.data;
+  const hazardHistory = historyResource.data;
+  const eventMedia = mediaResource.data || [];
+  const rainfallContext = rainfallResource.data;
+  const territorialContext = territorialResource.data;
   const title = eventTitle(event, language);
-  const descriptionText = String(
+  const descriptionText = publicRecordDescription(
     event.description || ""
   );
   const descriptionLimit = 230;
@@ -294,6 +453,7 @@ function EventPopup({
   const profileItems = [
     {
       label: text.structuralType,
+      rawValue: event.structural_type,
       value: taxonomyLabel(
         "structuralType",
         event.structural_type,
@@ -302,10 +462,12 @@ function EventPopup({
     },
     {
       label: text.material,
+      rawValue: event.material_type,
       value: material,
     },
     {
       label: text.infrastructureUse,
+      rawValue: event.destination_use,
       value: taxonomyLabel(
         "use",
         event.destination_use,
@@ -314,6 +476,7 @@ function EventPopup({
     },
     {
       label: text.crossingType,
+      rawValue: event.bridge_crossing_type,
       value: localizedValue(
         "crossingType",
         event.bridge_crossing_type,
@@ -322,13 +485,29 @@ function EventPopup({
     },
     {
       label: text.crossing,
-      value: event.bridge_crossing_name,
+      rawValue: event.bridge_crossing_name,
+      value: localizedCrossingName(event.bridge_crossing_name, language),
     },
     {
       label: text.built,
+      rawValue: event.construction_year,
       value: event.construction_year,
     },
-  ].filter((item) => item.value);
+  ].map((item) => ({
+    ...item,
+    availability: fieldAvailability(item.rawValue),
+  }));
+  const profileAvailability = {
+    available: profileItems.filter(
+      (item) => item.availability === "available"
+    ).length,
+    undocumented: profileItems.filter(
+      (item) => item.availability === "undocumented"
+    ).length,
+    notApplicable: profileItems.filter(
+      (item) => item.availability === "not-applicable"
+    ).length,
+  };
   const outcomeItems = [
     {
       label: text.eventDriven,
@@ -368,6 +547,45 @@ function EventPopup({
       ),
     },
   ].filter((item) => item.value);
+  const rawEvidence =
+    event.failure_cause_evidence ||
+    event.hydraulic_intelligence?.evidence_level;
+  const evidenceLabel =
+    localizedValue("evidence", rawEvidence, language) || text.na;
+  const causalSequence = [
+    {
+      id: "trigger",
+      label: text.trigger,
+      value: localizedValue(
+        "trigger",
+        event.failure_trigger || event.hydraulic_intelligence?.trigger,
+        language
+      ),
+    },
+    {
+      id: "process",
+      label: text.failureProcess,
+      value: localizedValue(
+        "process",
+        event.failure_process || event.hydraulic_intelligence?.failure_process,
+        language
+      ),
+    },
+    {
+      id: "component",
+      label: text.componentInvolved,
+      value: localizedValue(
+        "component",
+        event.component_involved || event.hydraulic_intelligence?.component_involved,
+        language
+      ),
+    },
+    {
+      id: "outcome",
+      label: it ? "Esito osservato" : "Observed outcome",
+      value: isTotalCollapse ? text.total : text.partial,
+    },
+  ];
   const previewOutcomeItems =
     outcomeItems.filter((item) => item.label !== text.eventDriven).slice(0, 3);
   const compactOutcomeItems =
@@ -435,27 +653,12 @@ function EventPopup({
       id: "event",
       label: it ? "Evento" : "Event",
     },
-    ...(rainfallContext || hydraulicContext
-      ? [
-          {
-            id: "context",
-            label: it ? "Contesto" : "Context",
-          },
-        ]
-      : []),
+    { id: "context", label: it ? "Contesto" : "Context" },
     {
       id: "bridge",
       label: it ? "Ponte" : "Bridge",
     },
-    ...(eventMedia.length > 0
-      ? [
-          {
-            count: eventMedia.length,
-            id: "media",
-            label: it ? "Immagini" : "Media",
-          },
-        ]
-      : []),
+    { count: eventMedia.length || undefined, id: "media", label: it ? "Immagini" : "Media" },
     {
       count: sourceCount,
       id: "sources",
@@ -468,29 +671,45 @@ function EventPopup({
     ? activeDossierTab
     : "event";
   const contextTabs = [
-    ...(rainfallContext
-      ? [{
+    {
           id: "rainfall",
-          label: it ? "Pioggia" : "Rainfall",
-          meta: rainfallContext.source?.dataset || "Reanalysis",
-        }]
-      : []),
-    ...(hydraulicContext
-      ? [{
+          label: it ? "Meteo ricostruito" : "Reconstructed weather",
+          meta: rainfallContext?.source?.dataset || (it ? "Rianalisi" : "Reanalysis"),
+          resource: rainfallResource,
+          absentMessage: it ? "Nessuna ricostruzione meteorologica pubblicata per questo evento." : "No weather reconstruction is published for this event.",
+    },
+    {
           id: "hydraulic",
-          label: it ? "Idraulica" : "Hydraulics",
+          label: it ? "Verifica idrometrica" : "Hydrometric review",
           meta:
-            (hydraulicContext.status === "source_review_required"
+            (hydraulicContext?.status === "source_review_required"
               ? (it ? "Da verificare" : "Source review")
-              : hydraulicContext.display_badge) ||
-            hydraulicContext.sources?.[0]?.provider ||
-            "Official",
-        }]
-      : []),
+              : hydraulicContext?.display_badge) ||
+            hydraulicContext?.sources?.[0]?.provider || (it ? "Fonti dell’evento" : "Event sources"),
+          resource: hydraulicResource,
+          absentMessage: it ? "Nessun dossier idrometrico pubblicato per questo evento." : "No hydrometric dossier is published for this event.",
+    },
+    {
+          id: "territorial",
+          label: it ? "Territorio attuale" : "Current territory",
+          meta: "ISPRA · INGV",
+          resource: territorialResource,
+          absentMessage: it ? "Il punto non è presente nel catalogo territoriale pubblicato." : "The point is not in the published territorial catalogue.",
+    },
+    {
+          id: "hazard-history",
+          label: it ? "Classi nel tempo" : "Classes over time",
+          meta: it ? "ISPRA · release storiche" : "ISPRA · historical releases",
+          resource: historyResource,
+          absentMessage: event.exact_location === false
+            ? (it ? "Localizzazione approssimata: la cronologia delle classi al punto non viene attribuita." : "Approximate location: point class history is not assigned.")
+            : (it ? "Nessuna cronologia cartografica pubblicata per questo evento." : "No map history is published for this event."),
+    },
   ];
   const visibleContextTab = contextTabs.some((tab) => tab.id === activeContextTab)
     ? activeContextTab
     : contextTabs[0]?.id;
+  const selectedContext = contextTabs.find((tab) => tab.id === visibleContextTab);
 
   useEffect(() => {
     if (!dossierExpanded) {
@@ -504,7 +723,22 @@ function EventPopup({
 
     const closeOnEscape = (event) => {
       if (event.key === "Escape") {
+        event.stopPropagation();
         setDossierExpanded(false);
+      }
+      if (event.key === "Tab") {
+        const controls = [...dossierRef.current.querySelectorAll(
+          'button:not([disabled]), a[href], [tabindex="0"], summary'
+        )].filter((element) => element.tabIndex >= 0 && element.getClientRects().length > 0);
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
       }
     };
 
@@ -516,6 +750,75 @@ function EventPopup({
       dossierToggle?.focus();
     };
   }, [dossierExpanded]);
+
+  useEffect(() => {
+    if (!researchActionStatus) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(
+      () => setResearchActionStatus(null),
+      2400
+    );
+
+    return () => window.clearTimeout(timer);
+  }, [researchActionStatus]);
+
+  const eventPermalink = () => {
+    const url = new URL(window.location.href);
+    url.hash = "";
+    url.search = "";
+    url.searchParams.set("event", event.event_slug || recordId);
+    return url.toString();
+  };
+
+  const copyResearchText = async (value, successMessage) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setResearchActionStatus(successMessage);
+    } catch {
+      setResearchActionStatus(text.actionFailed);
+    }
+  };
+
+  const copyEventLink = () =>
+    copyResearchText(eventPermalink(), text.linkCopied);
+
+  const copyEventCitation = () => {
+    const permalink = eventPermalink();
+    const citation = buildOpenEventCitation({
+      event,
+      permalink,
+      releaseCitation: openRelease?.citation,
+      releaseVersion,
+    });
+
+    return copyResearchText(citation, text.citationCopied);
+  };
+
+  const exportEventDossier = () => {
+    const permalink = eventPermalink();
+    const dossier = buildOpenEventDossier({
+      event,
+      permalink,
+      releaseCitation: openRelease?.citation,
+      releaseVersion,
+      sources: orderedSources,
+    });
+    const blob = new Blob(
+      [`${JSON.stringify(dossier, null, 2)}\n`],
+      { type: "application/json;charset=utf-8" }
+    );
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${recordId || "arcus-event"}-dossier.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(objectUrl);
+    setResearchActionStatus(text.dossierExported);
+  };
 
   const selectDossierTab = (tabId, tabIndex) => {
     setActiveDossierTab(tabId);
@@ -645,7 +948,7 @@ function EventPopup({
           }
 
           setActiveDossierTab("event");
-          setActiveContextTab(rainfallContext ? "rainfall" : "hydraulic");
+          setActiveContextTab(event.specific_cause === "Hydraulic" ? "hydraulic" : "territorial");
           setDossierExpanded(true);
         }}
       >
@@ -674,11 +977,19 @@ function EventPopup({
             aria-labelledby={dossierTitleId}
             aria-modal="true"
             className="arcus-event-dossier"
+            ref={dossierRef}
             role="dialog"
           >
             <header className="arcus-event-dossier-header">
               <div>
-                <span>{text.publicRecord} · {recordId || text.na}</span>
+                <div className="arcus-event-dossier-kicker">
+                  <span>{text.publicRecord} · {recordId || text.na}</span>
+                  <span
+                    className={`arcus-event-evidence-badge is-${evidenceTone(rawEvidence)}`}
+                  >
+                    {text.evidenceLevel}: {evidenceLabel}
+                  </span>
+                </div>
                 <h2 id={dossierTitleId}>{title}</h2>
                 <p>
                   {formatDate(event.date, language) || text.na} · {event.municipality || text.na}
@@ -693,6 +1004,30 @@ function EventPopup({
                 ×
               </button>
             </header>
+
+            {!professionalMode && (
+              <div
+                aria-label={text.researchTools}
+                className="arcus-event-research-tools"
+                role="group"
+              >
+                <span>{text.researchTools}</span>
+                <div>
+                  <button type="button" onClick={copyEventLink}>
+                    {text.copyLink}
+                  </button>
+                  <button type="button" onClick={copyEventCitation}>
+                    {text.copyCitation}
+                  </button>
+                  <button type="button" onClick={exportEventDossier} disabled={sourcesStatus !== "available"}>
+                    {text.exportDossier} JSON
+                  </button>
+                </div>
+                <small aria-live="polite" role="status">
+                  {researchActionStatus || `${releaseVersion} · CC BY 4.0`}
+                </small>
+              </div>
+            )}
 
             <nav
               aria-label={it ? "Sezioni della scheda" : "Record sections"}
@@ -729,51 +1064,100 @@ function EventPopup({
             >
               {visibleDossierTab === "event" && (
                 <div className="arcus-event-tab-panel is-event">
-                  {eventMedia.length > 0 && (
-                    <EventMedia
-                      assets={eventMedia.slice(0, 1)}
-                      featured
-                      language={language}
-                    />
-                  )}
-                  {event.description && (
-                    <section className="arcus-event-description">
-                      <span>{text.description}</span>
-                      <p>{visibleDescription}</p>
-                      {hasLongDescription && (
-                        <button
-                          className="arcus-event-description-toggle"
-                          type="button"
-                          onClick={() =>
-                            setDescriptionExpanded((value) => !value)
-                          }
-                        >
-                          {descriptionExpanded ? text.showLess : text.readMore} {"->"}
-                        </button>
+                  <div
+                    className={`arcus-event-editorial-lead ${
+                      eventMedia.length > 0 ? "has-media" : ""
+                    }`}
+                  >
+                    {eventMedia.length > 0 && (
+                      <EventMedia
+                        assets={eventMedia.slice(0, 1)}
+                        featured
+                        language={language}
+                      />
+                    )}
+                    <div className="arcus-event-editorial-copy">
+                      <div className="arcus-event-editorial-label">
+                        <span>{evidenceTone(rawEvidence) === "review"
+                          ? (it ? "Record in verifica" : "Record under review")
+                          : (it ? "Record storico" : "Historical record")}</span>
+                        <strong>{cause || causeCategory || text.na}</strong>
+                      </div>
+                      {evidenceTone(rawEvidence) === "review" && (
+                        <p className="arcus-event-editorial-review" role="note">
+                          {it
+                            ? "Il record richiede revisione documentale. Leggere le note e le fonti prima di utilizzare la descrizione o l’attribuzione della causa."
+                            : "This record requires documentary review. Read the notes and sources before using its description or cause attribution."}
+                        </p>
                       )}
-                    </section>
-                  )}
+                      {event.description ? (
+                        <section className="arcus-event-description">
+                          <span>{text.description}</span>
+                          <p>{visibleDescription}</p>
+                          {hasLongDescription && (
+                            <button
+                              className="arcus-event-description-toggle"
+                              type="button"
+                              onClick={() =>
+                                setDescriptionExpanded((value) => !value)
+                              }
+                            >
+                              {descriptionExpanded ? text.showLess : text.readMore} {"->"}
+                            </button>
+                          )}
+                        </section>
+                      ) : (
+                        <p className="arcus-event-editorial-empty">
+                          {text.notDocumented}
+                        </p>
+                      )}
+                      <div className="arcus-event-editorial-stats">
+                        <div>
+                          <span>{text.collapse}</span>
+                          <strong>{isTotalCollapse ? text.total : text.partial}</strong>
+                        </div>
+                        <div>
+                          <span>{text.fatalities}</span>
+                          <strong>{event.victims ?? 0}</strong>
+                        </div>
+                        <div>
+                          <span>{text.injuries}</span>
+                          <strong>{event.injuries ?? 0}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                  {outcomeItems.length > 0 && (
-                    <section className="arcus-event-outcomes">
-                      <div className="arcus-event-section-heading">
+                  <section className="arcus-event-failure-sequence">
+                    <header>
+                      <div>
                         <span>{text.historicalEvidence}</span>
+                        <h3>{text.failureSequence}</h3>
                       </div>
-                      <div className="arcus-event-outcome-grid">
-                        {outcomeItems.map((item) => (
-                          <div key={item.label}>
+                      <strong
+                        className={`arcus-event-evidence-badge is-${evidenceTone(rawEvidence)}`}
+                      >
+                        {evidenceLabel}
+                      </strong>
+                    </header>
+                    <ol>
+                      {causalSequence.map((item, index) => (
+                        <li
+                          className={item.value ? "" : "is-undocumented"}
+                          key={item.id}
+                        >
+                          <span className="arcus-event-sequence-index">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <div>
                             <span>{item.label}</span>
-                            <strong>{item.value}</strong>
+                            <strong>{item.value || text.notDocumented}</strong>
                           </div>
-                        ))}
-                      </div>
-                      <p>
-                        {it
-                          ? "Esito storico osservato: non rappresenta una previsione per altri ponti né una stima di rischio."
-                          : "Documented historical outcome: this is neither a prediction for other bridges nor a risk estimate."}
-                      </p>
-                    </section>
-                  )}
+                        </li>
+                      ))}
+                    </ol>
+                    <p>{text.evidenceNote}</p>
+                  </section>
 
                   {professionalMode && (
                     <section className="arcus-event-risk">
@@ -804,7 +1188,7 @@ function EventPopup({
                 </div>
               )}
 
-              {visibleDossierTab === "context" && (rainfallContext || hydraulicContext) && (
+              {visibleDossierTab === "context" && (
                 <div className="arcus-event-tab-panel is-context">
                   {contextTabs.length > 1 && (
                     <div
@@ -826,11 +1210,27 @@ function EventPopup({
                       ))}
                     </div>
                   )}
+                  <EventResourceState resource={selectedContext.resource} language={language} absentMessage={selectedContext.absentMessage} />
                   {visibleContextTab === "rainfall" && rainfallContext && (
                     <EventRainfallContext context={rainfallContext} />
                   )}
                   {visibleContextTab === "hydraulic" && hydraulicContext && (
                     <EventHydraulicContext context={hydraulicContext} />
+                  )}
+                  {visibleContextTab === "territorial" && territorialContext && (
+                    <EventTerritorialContext
+                      context={territorialContext}
+                      history={hazardHistory}
+                    />
+                  )}
+                  {visibleContextTab === "territorial" && territorialContext && ["error", "mismatch"].includes(historyResource.status) && (
+                    <div className="arcus-event-history-recovery">
+                      <p>{it ? "L’evoluzione cartografica non è stata caricata." : "Map evolution could not be loaded."}</p>
+                      <EventResourceState resource={historyResource} language={language} />
+                    </div>
+                  )}
+                  {visibleContextTab === "hazard-history" && hazardHistory && (
+                    <EventHazardHistory history={hazardHistory} />
                   )}
                 </div>
               )}
@@ -845,29 +1245,59 @@ function EventPopup({
                         ? "Caratteristiche disponibili nel record storico; i campi non documentati non vengono ricostruiti."
                         : "Characteristics available in the historical record; undocumented fields are not reconstructed."}
                     </p>
+                    <div className="arcus-event-profile-coverage">
+                      <span>{text.availableData}</span>
+                      <strong>
+                        {profileAvailability.available}/{profileItems.length}
+                      </strong>
+                      <small>{text.bridgeCoverageNote}</small>
+                    </div>
                   </div>
-                  {profileItems.length > 0 && (
-                    <section className="arcus-event-profile">
-                      {profileItems.map((item) => (
-                        <div key={item.label}>
+                  <section className="arcus-event-profile">
+                      {profileItems.map((item) => {
+                        const displayedValue =
+                          item.availability === "undocumented"
+                            ? text.notDocumented
+                            : item.availability === "not-applicable"
+                              ? text.notApplicable
+                              : item.value;
+
+                        return (
+                        <div
+                          className={`is-${item.availability}`}
+                          key={item.label}
+                        >
                           <span>{item.label}</span>
-                          <strong>{item.value}</strong>
+                          <strong>{displayedValue}</strong>
+                          <small className="arcus-event-field-status">
+                            <i aria-hidden="true" />
+                            {item.availability === "available"
+                              ? (it ? "Documentato" : "Documented")
+                              : item.availability === "undocumented"
+                                ? text.missingData
+                                : text.notApplicable}
+                          </small>
                         </div>
-                      ))}
+                        );
+                      })}
                       {professionalMode && (
-                        <div>
+                        <div className="is-available">
                           <span>{it ? "Hazard dominante" : "Dominant hazard"}</span>
                           <strong>{hazardLabel}</strong>
+                          <small className="arcus-event-field-status">
+                            <i aria-hidden="true" />
+                            {it ? "Layer Professional" : "Professional layer"}
+                          </small>
                         </div>
                       )}
                     </section>
-                  )}
                 </div>
               )}
 
-              {visibleDossierTab === "media" && eventMedia.length > 0 && (
+              {visibleDossierTab === "media" && (
                 <div className="arcus-event-tab-panel is-media">
-                  <EventMedia assets={eventMedia} language={language} />
+                  <EventResourceState resource={mediaResource} language={language} absentMessage={it ? "Nessuna immagine o fonte visiva pubblicata per questo evento." : "No image or visual source is published for this event."} />
+                  {eventMedia.length > 0 && <EventMedia assets={eventMedia} language={language} />}
                 </div>
               )}
 
@@ -900,8 +1330,26 @@ function EventPopup({
                       <span>{sourceCount} {text.documented}</span>
                     </div>
                     {sourceCount > 0 ? (
-                      <div className="arcus-event-source-list">
-                        {relatedSources.map((source) => {
+                      <>
+                        <div className="arcus-event-source-composition">
+                          <span className="arcus-event-source-composition-title">
+                            {text.sourceComposition}
+                          </span>
+                          <div className="arcus-event-source-groups">
+                            {sourceGroups.map((group) => (
+                              <span
+                                className={`arcus-event-source-group is-${group.id}`}
+                                key={group.id}
+                              >
+                                <strong>{group.count}</strong>
+                                {group.label}
+                              </span>
+                            ))}
+                          </div>
+                          <p>{text.sourceCompositionNote}</p>
+                        </div>
+                        <div className="arcus-event-source-list">
+                        {orderedSources.map((source) => {
                           const content = (
                             <>
                               <span className="arcus-event-source-title">
@@ -955,7 +1403,8 @@ function EventPopup({
                             </div>
                           );
                         })}
-                      </div>
+                        </div>
+                      </>
                     ) : (
                       <p className="arcus-event-no-sources">{text.noSources}</p>
                     )}

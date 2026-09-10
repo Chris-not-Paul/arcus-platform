@@ -20,17 +20,6 @@ const ARPAL_2020_REPORT = {
   accessed_at: "2026-09-03",
 };
 
-const ARPAE_2020_REPORT = {
-  source_id: "arpae-emilia-romagna-flood-report-2020-18",
-  provider: "ARPAE Emilia-Romagna",
-  title: "Rapporto dell'evento meteorologico dall'1 al 4 ottobre 2020",
-  role: "event_hydrometry_and_documented_processes",
-  source_class: "Official/Technical",
-  url: "https://www.arpae.it/it/temi-ambientali/meteo/report-meteo/rapporti-post-evento/rapporto_meteo_idro_20201001-04.pdf/@@display-file/file/Rapporto_meteo_idro_20201001-04.pdf",
-  reference: "Trebbia event analysis and Figure 30",
-  accessed_at: "2026-09-03",
-};
-
 const ARPAE_SEPTEMBER_2015_REPORT = {
   source_id: "arpae-emilia-romagna-flood-report-2015-18",
   provider: "ARPAE Emilia-Romagna",
@@ -952,12 +941,11 @@ const ADDITIONAL_CURATIONS = {
     summary_it: "La fonte regionale documenta il rapido innalzamento del Niel e il crollo del ponte sulla SR44, ma non pubblica una misura idrometrica attribuibile alla sezione.",
     summary_en: "The regional source documents the rapid rise of the Niel and the SR44 bridge collapse but publishes no hydrometric measurement attributable to the section.",
   },
-  "IT20.10.04": {
+  "IT22.02.01": {
     type: "gap",
-    source: ARPAE_2020_REPORT,
-    reason_code: "no_compatible_station_in_validated_event_report",
-    summary_it: "Il rapporto mostra l'idrogramma validato del Trebbia a Bobbio e documenta il crollo del ponte Lenzino, ma non tabula il colmo e non misura la sezione del ponte. ARCUS non digitalizza il grafico.",
-    summary_en: "The report shows the validated Trebbia hydrograph at Bobbio and documents the Lenzino bridge collapse, but does not tabulate the peak or measure the bridge section. ARCUS does not digitise the graph.",
+    reason_code: "failure_chronology_precludes_event_hydrometry",
+    summary_it: "Le fonti collegano il dissesto progressivo della pila alle piene ripetute e all'abbassamento dell'alveo, ma il collasso finale avvenne senza una piena discreta contestuale. Non esiste quindi un colmo idrometrico evento-specifico da associare alla rottura.",
+    summary_en: "The sources link progressive pier distress to repeated floods and riverbed lowering, but the final collapse occurred without a concurrent discrete flood. There is therefore no event-specific hydrometric peak to associate with the failure.",
   },
   "IT20.10.06": {
     type: "observation",

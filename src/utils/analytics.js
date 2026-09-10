@@ -1,6 +1,6 @@
 import extractYear from "./extractYear.js";
 
-import { researchEventId } from "./eventIdentity";
+import { researchEventId } from "./eventIdentity.js";
 
 export function countBy(items, getter) {
   return Object.entries(

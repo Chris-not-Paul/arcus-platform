@@ -111,7 +111,7 @@
         },
         {
           "component_involved": "approach_embankment",
-          "evidence_level": "needs_review",
+          "evidence_level": "documented",
           "event_id": "B00.10.41",
           "failure_process": "bank_erosion_or_embankment_failure"
         },
@@ -491,6 +491,12 @@
           "component_involved": null,
           "evidence_level": "unspecified",
           "event_id": "B00.01.01",
+          "failure_process": null
+        },
+        {
+          "component_involved": null,
+          "evidence_level": "unspecified",
+          "event_id": "B00.10.01",
           "failure_process": null
         },
         {
@@ -921,7 +927,7 @@
         },
         {
           "component_involved": "deck_or_superstructure",
-          "evidence_level": "needs_review",
+          "evidence_level": "documented",
           "event_id": "B20.10.07",
           "failure_process": "overtopping_or_hydrodynamic_action"
         },
@@ -1023,7 +1029,7 @@
         },
         {
           "component_involved": null,
-          "evidence_level": "needs_review",
+          "evidence_level": "probable",
           "event_id": "B00.10.28",
           "failure_process": "scour"
         },
@@ -1287,7 +1293,7 @@
         },
         {
           "component_involved": "pier_foundation",
-          "evidence_level": "needs_review",
+          "evidence_level": "probable",
           "event_id": "B15.11.01",
           "failure_process": "scour"
         },
@@ -1340,12 +1346,6 @@
           "failure_process": "scour"
         },
         {
-          "component_involved": "multiple_components",
-          "evidence_level": "needs_review",
-          "event_id": "B20.10.04",
-          "failure_process": "scour"
-        },
-        {
           "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B20.10.05",
@@ -1385,6 +1385,12 @@
           "component_involved": "pier_foundation",
           "evidence_level": "documented",
           "event_id": "B21.12.01",
+          "failure_process": "scour"
+        },
+        {
+          "component_involved": "pier_foundation",
+          "evidence_level": "documented",
+          "event_id": "B22.02.01",
           "failure_process": "scour"
         },
         {
@@ -1501,12 +1507,6 @@
       "external_validation_required": true,
       "hazard_family": "hydraulic",
       "hydraulic_intelligence_inputs": [
-        {
-          "component_involved": null,
-          "evidence_level": "needs_review",
-          "event_id": "B00.10.01",
-          "failure_process": null
-        },
         {
           "component_involved": null,
           "evidence_level": "unspecified",

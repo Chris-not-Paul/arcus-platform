@@ -55,6 +55,9 @@ const labels = {
     Frame: {
       it: "Telaio",
     },
+    Masonry: {
+      it: "Muratura",
+    },
     Overpass: {
       it: "Sovrappasso",
     },

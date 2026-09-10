@@ -7,11 +7,11 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Po river (confluenza Ticino)",
-    "latitude": 45.1414,
-    "longitude": 9.2273,
+    "latitude": 45.1405539,
+    "longitude": 9.2267611,
     "municipality": "Mezzanino",
     "hydrographic_context": "Po river (confluenza Ticino)",
-    "location_precision": "approximate_or_unverified"
+    "location_precision": "exact"
   },
   "event_hydrometry": {
     "observation_status": "not_available",
@@ -43,7 +43,7 @@
       "provider": "Technical article",
       "title": "Ingenio: 'Ponti a struttura mista: la complessa messa in sicurezza di uno dei ponti storici del Po'",
       "role": "event_identification_and_failure_process_context",
-      "source_class": "primary",
+      "source_class": "Official/Technical",
       "url": "https://www.ingenio-web.it/articoli/la-complessa-messa-in-sicurezza-e-ristrutturazione-dello-storico-ponte-sulla-confluenza-tra-po-e-ticino/",
       "reference": null,
       "accessed_at": "2026-07-20"
@@ -53,7 +53,7 @@
       "provider": "Journal Paper",
       "title": "D'Angelo, Ballio & Ravazzani (2025), 'Geomorphologic risk factors for river bridges', IJDRR, database supplementare S3",
       "role": "event_identification_and_failure_process_context",
-      "source_class": "secondary",
+      "source_class": "Scientific",
       "url": "https://www.sciencedirect.com/science/article/pii/S2212420925004315",
       "reference": null,
       "accessed_at": "2026-07-20"
@@ -63,7 +63,7 @@
       "provider": "Newspaper",
       "title": "Il Giorno: 'Quei 45 giorni che salvarono il ponte della Becca'",
       "role": "event_identification_and_failure_process_context",
-      "source_class": "secondary",
+      "source_class": "News",
       "url": "https://www.ilgiorno.it/sondrio/cronaca/monumento-in-ferro-quei-45-giorni-che-salvarono-il-ponte-della-becca-3c024674",
       "reference": null,
       "accessed_at": "2026-07-20"

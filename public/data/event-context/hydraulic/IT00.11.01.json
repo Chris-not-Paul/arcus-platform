@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Orzanella stream",
-    "latitude": 44.3243422443156,
-    "longitude": 9.93616508129413,
+    "latitude": 44.349968,
+    "longitude": 9.909742,
     "municipality": "Filattiera",
     "hydrographic_context": "Orzanella stream",
     "location_precision": "approximate_or_unverified"

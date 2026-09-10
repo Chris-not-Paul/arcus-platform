@@ -6,11 +6,11 @@
   "display_badge": "ARPA Piemonte",
   "coverage_level": "validated_event_report_review",
   "event_section": {
-    "crossing_name": "Stura di Demonte river",
+    "crossing_name": "Po river",
     "latitude": 44.6972928032106,
     "longitude": 7.16185275629312,
     "municipality": "Crissolo",
-    "hydrographic_context": "Stura di Demonte river",
+    "hydrographic_context": "Po river",
     "location_precision": "exact"
   },
   "event_hydrometry": {
@@ -31,7 +31,7 @@
   "process_evidence": {
     "failure_process": null,
     "component_involved": null,
-    "evidence_level": "needs_review",
+    "evidence_level": "unspecified",
     "taxonomy_version": "hydraulic-v2"
   },
   "documented_basin_processes": [],
@@ -57,22 +57,22 @@
       "accessed_at": "2026-05-22"
     },
     {
+      "source_id": "SRC0715",
+      "provider": "ARPA Piemonte event report",
+      "title": "Rapporto sull'evento alluvionale del 13–16 ottobre 2000",
+      "role": "event_identification_and_failure_process_context",
+      "source_class": "Official/Technical",
+      "url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "reference": null,
+      "accessed_at": "2026-09-08"
+    },
+    {
       "source_id": "SRC0553",
       "provider": "Journal Paper",
       "title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
       "role": "event_identification_and_failure_process_context",
       "source_class": "Scientific",
       "url": "https://doi.org/10.1080/15732479.2025.2483500",
-      "reference": null,
-      "accessed_at": "2026-05-22"
-    },
-    {
-      "source_id": "SRC0552",
-      "provider": "ANSA",
-      "title": "10 anni fa alluvione Nord-Ovest, fu inferno d'acqua – Piemonte e Valle d'Aosta",
-      "role": "event_identification_and_failure_process_context",
-      "source_class": "News",
-      "url": "https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html",
       "reference": null,
       "accessed_at": "2026-05-22"
     }

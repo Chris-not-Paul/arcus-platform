@@ -31,7 +31,7 @@
   "process_evidence": {
     "failure_process": "scour",
     "component_involved": "pier_foundation",
-    "evidence_level": "needs_review",
+    "evidence_level": "probable",
     "taxonomy_version": "hydraulic-v2"
   },
   "documented_basin_processes": [],
