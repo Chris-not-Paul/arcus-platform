@@ -32,6 +32,10 @@ import LanguageProvider from "./context/LanguageProvider";
 import IntroOverlay from "./components/layout/IntroOverlay";
 import ProfessionalGate from "./components/auth/ProfessionalGate";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import {
+  accountsEnabled,
+  professionalEnabled,
+} from "./config/site";
 
 import "leaflet/dist/leaflet.css";
 
@@ -103,14 +107,16 @@ function App() {
             element={<AnalyticsPage />}
           />
 
-          <Route
-            path="/analytics/pro"
-            element={
-              <ProfessionalGate>
-                <PremiumAnalyticsPage />
-              </ProfessionalGate>
-            }
-          />
+          {professionalEnabled && (
+            <Route
+              path="/analytics/pro"
+              element={
+                <ProfessionalGate>
+                  <PremiumAnalyticsPage />
+                </ProfessionalGate>
+              }
+            />
+          )}
 
           <Route
             path="/data-access"
@@ -124,48 +130,61 @@ function App() {
 
           <Route
             path="/plans"
-            element={<Navigate replace to="/professional" />}
-          />
-
-          <Route
-            path="/professional"
             element={
-              <ProfessionalGate>
-                <CollapseIntelligencePage />
-              </ProfessionalGate>
+              <Navigate
+                replace
+                to={professionalEnabled ? "/professional" : "/data-access"}
+              />
             }
           />
 
-          <Route
-            path="/professional/login"
-            element={<ProfessionalLoginPage />}
-          />
+          {professionalEnabled && (
+            <>
+              <Route
+                path="/professional"
+                element={
+                  <ProfessionalGate>
+                    <CollapseIntelligencePage />
+                  </ProfessionalGate>
+                }
+              />
 
-          <Route
-            path="/professional/account"
-            element={
-              <ProfessionalGate>
-                <ProfessionalAccountPage />
-              </ProfessionalGate>
-            }
-          />
+              <Route
+                path="/professional/login"
+                element={<ProfessionalLoginPage />}
+              />
 
-          <Route
-            path="/account"
-            element={<AccountPage />}
-          />
+              <Route
+                path="/professional/account"
+                element={
+                  <ProfessionalGate>
+                    <ProfessionalAccountPage />
+                  </ProfessionalGate>
+                }
+              />
+            </>
+          )}
 
-          <Route
-            path="/admin"
-            element={
-              <ProfessionalGate
-                label="ARCUS ADMIN"
-                permission="admin:access"
-              >
-                <AdminPage />
-              </ProfessionalGate>
-            }
-          />
+          {accountsEnabled && (
+            <Route
+              path="/account"
+              element={<AccountPage />}
+            />
+          )}
+
+          {accountsEnabled && professionalEnabled && (
+            <Route
+              path="/admin"
+              element={
+                <ProfessionalGate
+                  label="ARCUS ADMIN"
+                  permission="admin:access"
+                >
+                  <AdminPage />
+                </ProfessionalGate>
+              }
+            />
+          )}
 
           {/* PUBLICATIONS */}
           <Route

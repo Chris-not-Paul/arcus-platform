@@ -11,7 +11,7 @@
 }
 
 .publications-hero {
-  padding: 154px 0 88px;
+  padding: 150px 0 80px;
   background:
     linear-gradient(
       180deg,
@@ -49,15 +49,61 @@
 }
 
 .publications-section {
-  padding: 88px 0;
+  padding: 82px 0;
 }
 
-.publications-feature article {
-  max-width: 860px;
+.publications-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(250px, 0.55fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.publications-feature article,
+.publications-feature aside {
   padding: 34px;
   border: 1px solid var(--arcus-border-light);
   border-radius: 8px;
   background: rgba(255, 248, 242, 0.76);
+}
+
+.publications-feature article {
+  position: relative;
+  overflow: hidden;
+}
+
+.publications-feature article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--arcus-bronze), rgba(110,133,141,0.58));
+}
+
+.publications-feature aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 3px solid var(--arcus-steel);
+  background: rgba(229, 232, 226, 0.72);
+}
+
+.publications-feature aside span,
+.publications-citation-guide > div:first-child > span {
+  color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.publications-feature aside p {
+  margin: 42px 0 0;
+  color: var(--arcus-ink-soft);
+  font-family: var(--arcus-font-display);
+  font-size: 25px;
+  line-height: 1.28;
 }
 
 .publications-feature span,
@@ -94,6 +140,40 @@
   color: var(--arcus-ink-soft);
   font-size: 16px;
   line-height: 1.7;
+}
+
+.publications-paper-facts {
+  display: grid;
+  grid-template-columns: 0.45fr 0.7fr 1.35fr;
+  gap: 1px;
+  margin: 26px 0 0;
+  padding: 1px;
+  border: 1px solid var(--arcus-border-light);
+  border-radius: 6px;
+  background: var(--arcus-border-light);
+  overflow: hidden;
+}
+
+.publications-paper-facts div {
+  min-width: 0;
+  padding: 13px 14px;
+  background: var(--arcus-paper);
+}
+
+.publications-paper-facts dt {
+  color: var(--arcus-clay);
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.publications-paper-facts dd {
+  margin: 7px 0 0;
+  color: var(--arcus-ink);
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
 }
 
 .publications-feature a {
@@ -173,6 +253,65 @@
   text-transform: uppercase;
 }
 
+.publications-citation-guide {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.28fr);
+  gap: 44px;
+  margin-top: 18px;
+  padding: 34px;
+  border: 1px solid var(--arcus-border-light);
+  border-radius: 8px;
+  background: rgba(229, 232, 226, 0.54);
+}
+
+.publications-citation-guide h2 {
+  margin: 14px 0 0;
+  font-family: var(--arcus-font-display);
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 1.04;
+}
+
+.publications-citation-options {
+  display: grid;
+}
+
+.publications-citation-options article {
+  display: grid;
+  grid-template-columns: 42px minmax(140px, 0.55fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--arcus-border-light);
+}
+
+.publications-citation-options article:first-child {
+  padding-top: 0;
+}
+
+.publications-citation-options article:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.publications-citation-options b {
+  color: var(--arcus-bronze);
+  font-family: var(--arcus-font-mono);
+  font-size: 10px;
+}
+
+.publications-citation-options strong {
+  color: var(--arcus-ink);
+  font-size: 14px;
+}
+
+.publications-citation-options p {
+  margin: 0;
+  color: var(--arcus-ink-soft);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 .publications-dark {
   background:
     linear-gradient(135deg, var(--arcus-night-soft), var(--arcus-night-panel));
@@ -191,12 +330,32 @@
   margin-top: 28px;
 }
 
-.publications-grid article {
+.publications-grid a {
+  position: relative;
   min-height: 170px;
   padding: 24px;
+  display: block;
   border: 1px solid rgba(243, 239, 232, 0.16);
   border-radius: 8px;
   background: rgba(255, 248, 242, 0.075);
+  color: inherit;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.publications-grid a:hover,
+.publications-grid a:focus-visible {
+  border-color: rgba(196,144,64,0.48);
+  background: rgba(255,248,242,0.11);
+  transform: translateY(-3px);
+}
+
+.publications-grid a > b {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  color: var(--arcus-bronze-soft);
+  font-size: 17px;
 }
 
 .publications-grid p {
@@ -212,11 +371,76 @@
     grid-template-columns: 1fr;
   }
 
-  .publications-release-grid {
+  .publications-feature,
+  .publications-release-grid,
+  .publications-citation-guide {
     grid-template-columns: 1fr;
   }
 
   .publications-section {
     padding: 76px 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .publications-container {
+    width: calc(100% - 28px);
+  }
+
+  .publications-hero {
+    padding: 108px 0 52px;
+  }
+
+  .publications-hero h1 {
+    font-size: 43px;
+    line-height: 1;
+  }
+
+  .publications-hero p {
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .publications-section {
+    padding: 56px 0;
+  }
+
+  .publications-feature article,
+  .publications-feature aside,
+  .publications-release-grid article,
+  .publications-release-grid aside,
+  .publications-citation-guide {
+    padding: 22px 20px;
+  }
+
+  .publications-feature h2 {
+    font-size: 36px;
+  }
+
+  .publications-feature aside p {
+    margin-top: 22px;
+    font-size: 22px;
+  }
+
+  .publications-paper-facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .publications-paper-facts div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .publications-citation-guide {
+    gap: 28px;
+  }
+
+  .publications-citation-options article {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .publications-citation-options article p {
+    grid-column: 2;
   }
 }

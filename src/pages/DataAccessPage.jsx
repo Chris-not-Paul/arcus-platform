@@ -10,6 +10,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
+import { professionalEnabled } from "../config/site";
 import {
   openDownloadUrls,
   openManifest,
@@ -181,6 +182,17 @@ function DataAccessPage() {
           ],
         };
 
+  const pageTitle = !professionalEnabled
+    ? language === "it"
+      ? "Accesso ai dati e release pubblica di ricerca."
+      : "Data access and public research release."
+    : copy.title;
+  const pageText = !professionalEnabled
+    ? language === "it"
+      ? "ARCUS Open pubblica una base scientifica versionata per consultazione, citazione, didattica e analisi riproducibile, con dati, fonti, tassonomia e controlli di qualità accessibili senza account."
+      : "ARCUS Open publishes a versioned scientific baseline for consultation, citation, teaching and reproducible analysis, with data, sources, taxonomy and quality controls available without an account."
+    : copy.text;
+
   const releaseVersion =
     manifest?.version || "arcus-open-2026.3";
   const releaseCitation =
@@ -188,9 +200,7 @@ function DataAccessPage() {
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
   const releaseEventCount = manifest?.event_count ?? 261;
   const releaseSourceCount = manifest?.source_count ?? 716;
-  const releasePublicText = language === "it"
-    ? `${copy.publicText} La release ${releaseVersion} contiene ${releaseEventCount} eventi e ${releaseSourceCount} fonti.`
-    : `${copy.publicText} Release ${releaseVersion} contains ${releaseEventCount} events and ${releaseSourceCount} sources.`;
+  const releasePublicText = copy.publicText;
   const releasePublicItems = copy.publicItems.map((item, index) =>
     index === 0
       ? [
@@ -201,17 +211,29 @@ function DataAccessPage() {
         ]
       : item
   );
-  const releaseResources = [
-    [language === "it" ? "Eventi CSV" : "Events CSV", openDownloadUrls.csv],
-    [language === "it" ? "Eventi GeoJSON" : "Events GeoJSON", openDownloadUrls.geojson],
-    [language === "it" ? "Fonti JSON" : "Sources JSON", openResourceUrls.sources],
-    ["Manifest", openResourceUrls.manifest],
-    [language === "it" ? "Dizionario dati" : "Data dictionary", openResourceUrls.dataDictionary],
-    [language === "it" ? "Tassonomia" : "Taxonomy", openResourceUrls.taxonomy],
-    [language === "it" ? "Audit qualità" : "Quality audit", openResourceUrls.qualityAudit],
-    [language === "it" ? "Statistiche release" : "Release statistics", openResourceUrls.statistics],
-    ["Changelog", openResourceUrls.changelog],
-  ];
+  const releaseResources = language === "it"
+    ? [
+        ["DATI", "Eventi CSV", "Tabella completa per analisi statistiche e riuso.", openDownloadUrls.csv],
+        ["DATI", "Eventi GeoJSON", "Record georeferenziati per GIS e analisi spaziali.", openDownloadUrls.geojson],
+        ["DATI", "Fonti JSON", "Metadati delle fonti collegati agli ID degli eventi.", openResourceUrls.sources],
+        ["VERSIONE", "Manifest", "Identità, data di rilascio, licenza e risorse della release.", openResourceUrls.manifest],
+        ["SCHEMA", "Dizionario dati", "Campi, tipi, copertura e note di interpretazione.", openResourceUrls.dataDictionary],
+        ["SCHEMA", "Tassonomia", "Valori controllati e definizioni operative pubblicate.", openResourceUrls.taxonomy],
+        ["QUALITÀ", "Audit qualità", "Errori, warning e record che richiedono revisione.", openResourceUrls.qualityAudit],
+        ["QUALITÀ", "Statistiche release", "Conteggi, distribuzioni e completezza dei campi.", openResourceUrls.statistics],
+        ["PROVENIENZA", "Changelog", "Modifiche introdotte tra una release e la successiva.", openResourceUrls.changelog],
+      ]
+    : [
+        ["DATA", "Events CSV", "Complete table for statistical analysis and reuse.", openDownloadUrls.csv],
+        ["DATA", "Events GeoJSON", "Georeferenced records for GIS and spatial analysis.", openDownloadUrls.geojson],
+        ["DATA", "Sources JSON", "Source metadata linked to event identifiers.", openResourceUrls.sources],
+        ["VERSION", "Manifest", "Release identity, date, license and resource inventory.", openResourceUrls.manifest],
+        ["SCHEMA", "Data dictionary", "Fields, types, coverage and interpretation notes.", openResourceUrls.dataDictionary],
+        ["SCHEMA", "Taxonomy", "Published controlled values and operational definitions.", openResourceUrls.taxonomy],
+        ["QUALITY", "Quality audit", "Errors, warnings and records requiring review.", openResourceUrls.qualityAudit],
+        ["QUALITY", "Release statistics", "Counts, distributions and field completeness.", openResourceUrls.statistics],
+        ["PROVENANCE", "Changelog", "Changes introduced between successive releases.", openResourceUrls.changelog],
+      ];
 
   return (
     <main
@@ -220,7 +242,7 @@ function DataAccessPage() {
     >
       <PageMeta
         title="ARCUS Data Access"
-        description={copy.text}
+        description={pageText}
       />
 
       <Navbar />
@@ -231,16 +253,18 @@ function DataAccessPage() {
             {copy.label}
           </div>
 
-          <h1>{copy.title}</h1>
-          <p>{copy.text}</p>
+          <h1>{pageTitle}</h1>
+          <p>{pageText}</p>
 
           <div className="data-access-actions">
             <Link to="/atlas">{copy.openAtlas}</Link>
             <a href={openDownloadUrls.csv}>CSV</a>
             <a href={openDownloadUrls.geojson}>GeoJSON</a>
-            <Link to="/professional">
-              {copy.openProfessional}
-            </Link>
+            {professionalEnabled && (
+              <Link to="/professional">
+                {copy.openProfessional}
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -252,6 +276,21 @@ function DataAccessPage() {
               {copy.publicTitle}
             </div>
             <h2>{releasePublicText}</h2>
+
+            <dl className="data-access-release-summary" aria-label={language === "it" ? "Riepilogo release" : "Release summary"}>
+              <div>
+                <dt>{language === "it" ? "Release" : "Release"}</dt>
+                <dd>{releaseVersion}</dd>
+              </div>
+              <div>
+                <dt>{language === "it" ? "Eventi" : "Events"}</dt>
+                <dd>{releaseEventCount}</dd>
+              </div>
+              <div>
+                <dt>{language === "it" ? "Fonti" : "Sources"}</dt>
+                <dd>{releaseSourceCount}</dd>
+              </div>
+            </dl>
           </div>
 
           <div className="data-access-card-list">
@@ -281,17 +320,13 @@ function DataAccessPage() {
           </div>
 
           <div className="data-access-endpoints">
-            {releaseResources.map(([label, href]) => (
-              <article key={label}>
-                <span>Open · no account</span>
+            {releaseResources.map(([category, label, description, href]) => (
+              <a className="data-access-resource-card" href={href} key={label}>
+                <span>{category}</span>
                 <strong>{label}</strong>
-                <a
-                  className="data-access-resource-link"
-                  href={href}
-                >
-                  {language === "it" ? "Apri risorsa" : "Open resource"}
-                </a>
-              </article>
+                <p>{description}</p>
+                <b>{language === "it" ? "Apri risorsa" : "Open resource"} ↗</b>
+              </a>
             ))}
           </div>
 
@@ -327,7 +362,7 @@ function DataAccessPage() {
         </div>
       </section>
 
-      <section className="data-access-section dark">
+      {professionalEnabled && <section className="data-access-section dark">
         <div className="data-access-container data-access-split">
           <div>
             <div className="data-access-label">
@@ -346,9 +381,9 @@ function DataAccessPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
-      <section className="data-access-section">
+      {professionalEnabled && <section className="data-access-section">
         <div className="data-access-container data-access-split">
           <div>
             <div className="data-access-label">
@@ -367,7 +402,7 @@ function DataAccessPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       <Footer />
     </main>

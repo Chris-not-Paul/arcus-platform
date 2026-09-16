@@ -110,7 +110,7 @@
 @media (max-width: 620px) {
   .site-footer-inner {
     width: calc(100% - 32px);
-    padding: 112px 0 44px;
+    padding: 64px 0 40px;
   }
 
   .site-footer-nav,

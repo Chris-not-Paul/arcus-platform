@@ -1,9 +1,8 @@
-import { useLayoutEffect } from "react";
-
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
+import { professionalEnabled } from "../config/site";
 import useLanguage from "../context/useLanguage";
 
 import "../styles/methodology/methodologypage.css";
@@ -58,105 +57,6 @@ function MethodologyScopeGrid({ items }) {
 
 function MethodologyPage() {
   const { language } = useLanguage();
-
-  useLayoutEffect(() => {
-    const revealSelector = [
-      ".methodology-hero .methodology-label",
-      ".methodology-title",
-      ".methodology-subtitle",
-      ".methodology-stat",
-      ".methodology-paper-card",
-      ".methodology-section-header",
-      ".methodology-split-left",
-      ".methodology-split-right p",
-      ".methodology-scope-grid article",
-      ".workflow-grid",
-      ".workflow-card",
-      ".classification-card",
-      ".methodology-axis-grid article",
-      ".methodology-layer-matrix article",
-      ".source-card",
-      ".extension-card",
-      ".methodology-output-grid article",
-      ".methodology-scoring-grid article",
-      ".reference-card",
-    ].join(",");
-
-    const page = document.querySelector(".methodology-page");
-    const elements = Array.from(document.querySelectorAll(revealSelector));
-
-    page?.classList.add("is-motion-ready");
-
-    elements.forEach((element, index) => {
-      element.classList.add("methodology-reveal");
-      element.style.setProperty("--reveal-index", String(index % 6));
-    });
-
-    let frame = 0;
-    let interval = 0;
-
-    const revealVisibleElements = () => {
-      const trigger = window.innerHeight * 0.88;
-      let hiddenCount = 0;
-
-      elements.forEach((element) => {
-        if (element.classList.contains("is-visible")) {
-          return;
-        }
-
-        const top = element.getBoundingClientRect().top;
-
-        if (top < trigger) {
-          element.classList.add("is-visible");
-          return;
-        }
-
-        hiddenCount += 1;
-      });
-
-      if (hiddenCount === 0 && interval) {
-        window.clearInterval(interval);
-        interval = 0;
-      }
-    };
-
-    const requestReveal = () => {
-      if (frame) {
-        return;
-      }
-
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        revealVisibleElements();
-      });
-    };
-
-    revealVisibleElements();
-    window.setTimeout(revealVisibleElements, 80);
-    interval = window.setInterval(revealVisibleElements, 260);
-
-    window.addEventListener("scroll", requestReveal, { passive: true });
-    window.addEventListener("resize", requestReveal);
-
-    return () => {
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
-
-      if (interval) {
-        window.clearInterval(interval);
-      }
-
-      window.removeEventListener("scroll", requestReveal);
-      window.removeEventListener("resize", requestReveal);
-      page?.classList.remove("is-motion-ready");
-
-      elements.forEach((element) => {
-        element.classList.remove("methodology-reveal", "is-visible");
-        element.style.removeProperty("--reveal-index");
-      });
-    };
-  }, []);
 
   const copy = {
     en: {
@@ -622,7 +522,197 @@ function MethodologyPage() {
     },
   };
 
-  const content = copy[language] || copy.en;
+  const baseContent = copy[language] || copy.en;
+  const openContent = language === "it"
+    ? {
+        subtitle:
+          "Un metodo trasparente per individuare, verificare, classificare e pubblicare record di collasso come base di evidenza versionata e riproducibile.",
+        title: "Come ARCUS costruisce l’evidenza",
+        validationFramework: "Validazione multi-fonte",
+        contextTitle: "Dai documenti dispersi a record verificabili",
+        contextParagraphs: [
+          "Le informazioni sui crolli dei ponti sono distribuite tra atti istituzionali, relazioni tecniche, pubblicazioni scientifiche, archivi di stampa e fonti locali.",
+          "ARCUS non tratta tutte le fonti come equivalenti e non confonde la presenza di un evento con la certezza della sua causa. Ogni affermazione viene collegata alla fonte che la sostiene e al relativo livello di evidenza.",
+          "Il risultato è una release di ricerca interrogabile: i record possono essere corretti, riclassificati e confrontati senza perdere la provenienza dell’informazione.",
+        ],
+        scopeTitle:
+          "Il metodo separa fatti osservati, classificazioni editoriali e informazioni non disponibili.",
+        scopeText:
+          "Questa separazione evita che un dato mancante diventi uno zero e che un’ipotesi tecnica venga presentata come conclusione accertata.",
+        scopeCards: [
+          {
+            title: "Identità dell’evento",
+            text: "Data, luogo, ponte e natura del cedimento vengono risolti prima di aggregare fonti o varianti dello stesso episodio.",
+          },
+          {
+            title: "Fatto e interpretazione",
+            text: "I valori osservati restano distinti dalle classi ARCUS derivate attraverso il processo editoriale.",
+          },
+          {
+            title: "Incertezza esplicita",
+            text: "Documented, Probable, Needs review e Unspecified descrivono il supporto disponibile senza colmare artificialmente i vuoti.",
+          },
+          {
+            title: "Uso corretto",
+            text: "I record sostengono ricerca comparativa e learning from failures; non stimano probabilità di collasso e non certificano la sicurezza.",
+          },
+        ],
+        workflowTitle: "Dal caso segnalato alla release pubblica",
+        workflowDescription:
+          "Ogni record attraversa controlli progressivi prima di entrare in una release ARCUS citabile.",
+        workflowSteps: [
+          ["01", "Individuazione", "Ricerca mirata in fonti istituzionali, tecniche, scientifiche, giornalistiche e locali."],
+          ["02", "Ammissibilità", "Esclusione di demolizioni controllate, soli danneggiamenti e casi privi di riscontro sufficiente."],
+          ["03", "Risoluzione dell’identità", "Allineamento di data, ponte, località e fonti per evitare duplicazioni dello stesso episodio."],
+          ["04", "Verifica documentale", "Confronto tra fonti indipendenti e attribuzione del ruolo svolto da ciascuna evidenza."],
+          ["05", "Georeferenziazione e classi", "Coordinate WGS84, severità, causa, trigger, processo ed evidenza sono registrati in campi distinti."],
+          ["06", "QA e versionamento", "Controlli automatici e revisione editoriale precedono ogni rilascio; correzioni e limiti restano tracciabili."],
+        ],
+        taxonomyTitle: "Una tassonomia leggibile e dichiarata",
+        severity: "Esito del cedimento",
+        mechanism: "Presenza del trigger",
+        generalCause: "Famiglia causale",
+        specificCauses: "Causa specifica prevalente",
+        classificationLogicTitle:
+          "Cinque assi impediscono di comprimere un evento complesso in una sola etichetta.",
+        classificationLogicText:
+          "Causa, trigger e processo non sono sinonimi. ARCUS conserva inoltre gravità, precisione spaziale e forza documentale per rendere ogni confronto auditabile.",
+        classificationAxes: [
+          { code: "DB.01", title: "Esito", text: "Collasso totale o parziale, distinto dal solo danneggiamento non incluso nel perimetro del database." },
+          { code: "DB.02", title: "Trigger", text: "Evento immediato identificabile, come piena, frana, sisma, impatto o sovraccarico; può restare non specificato." },
+          { code: "DB.03", title: "Causa e processo", text: "Famiglia causale prevalente e, quando documentato, meccanismo fisico e componente coinvolta." },
+          { code: "DB.04", title: "Posizione", text: "Coordinate, territorio amministrativo, precisione e anomalie geografiche sono verificati senza correzioni silenziose." },
+          { code: "DB.05", title: "Evidenza", text: "Ruolo delle fonti, indipendenza, confidenza e livello documentale restano disponibili per revisione e riuso." },
+        ],
+        sourceTitle: "Ruoli delle fonti e tracciabilità",
+        sourceText:
+          "Le categorie non sono una graduatoria automatica di verità: una fonte è valutata rispetto all’affermazione che deve sostenere. Contano prossimità all’evento, competenza, indipendenza, specificità e possibilità di verifica. Titolo, URL o riferimento, data, lingua e ruolo sono conservati nella release.",
+        sourceTiers: [
+          ["RUOLO 01", "Atti e comunicazioni istituzionali"],
+          ["RUOLO 02", "Relazioni tecniche e giudiziarie"],
+          ["RUOLO 03", "Pubblicazioni e dataset scientifici"],
+          ["RUOLO 04", "Cronaca contemporanea verificabile"],
+          ["RUOLO 05", "Archivi e fonti locali corroboranti"],
+        ],
+        extensionLabel: "CONTROLLI DELLA RELEASE",
+        extensionTitle: "La qualità resta ispezionabile",
+        extensions: [
+          "Manifest e versione della release",
+          "Dizionario dei campi pubblicati",
+          "Tassonomia con definizioni operative",
+          "Audit di errori e avvertenze",
+          "Statistiche di completezza",
+          "Changelog delle revisioni",
+        ],
+        scoringLabel: "COME LEGGERE I DATI",
+        scoringTitle: "L’evidenza viene descritta, non trasformata in certezza",
+        scoringText:
+          "ARCUS rende visibili supporto e limiti di ogni record. La completezza di un campo non equivale alla sicurezza di un ponte né alla probabilità di un evento futuro.",
+        scoringModels: [
+          ["Supporto documentale", "Documented e Probable distinguono una conclusione esplicita da un’attribuzione fortemente sostenuta ma non definitiva."],
+          ["Vuoto informativo", "Unspecified è un valore intenzionale: indica che il dettaglio non è ricostruibile dalle fonti disponibili."],
+          ["Revisione aperta", "Needs review conserva conflitti o anomalie senza nasconderli e senza forzare una classificazione."],
+          ["Comparabilità", "Le analisi devono dichiarare filtri, periodo, variabili disponibili e denominatore; frequenza osservata non significa rischio."],
+        ],
+        outputLabel: "STRUMENTI OPEN",
+        outputTitle: "Un metodo, tre modi verificabili di usare la release",
+        outputText:
+          "Atlante, Analytics e pacchetto dati leggono la stessa release versionata e mantengono accessibili fonti, tassonomia e limiti.",
+        outputs: [
+          ["Atlante", "Consultazione geografica dei 261 eventi, schede, coordinate e fonti documentate."],
+          ["Analytics", "Esplorazione descrittiva con filtri dichiarati ed esportazioni adatte al riuso scientifico."],
+          ["Pacchetto dati", "CSV, GeoJSON, fonti, dizionario, tassonomia, audit, statistiche e changelog senza account."],
+        ],
+        limitsTitle: "Cosa il database può — e non può — rappresentare",
+        limitsText:
+          "ARCUS descrive eventi documentati, non l’universo completo dei cedimenti avvenuti. Copertura delle fonti, precisione spaziale e dettaglio tecnico variano tra record e periodi; gli eventi meno recenti e locali possono essere sottorappresentati. Le frequenze dipendono anche dalla disponibilità documentale e non costituiscono tassi di rischio in assenza di un denominatore esposto affidabile. Il database non stima probabilità di collasso, non diagnostica strutture esistenti e non sostituisce ispezioni o valutazioni professionali.",
+        researchFramework: "Base scientifica e risorse riproducibili",
+        paperRelation:
+          "La pubblicazione costituisce la base scientifica originaria; la release ARCUS Open è successiva, versionata e soggetta a revisione continua.",
+      }
+    : {
+        subtitle:
+          "A transparent method for identifying, verifying, classifying and publishing bridge-collapse records as a versioned, reproducible evidence base.",
+        title: "How ARCUS builds evidence",
+        validationFramework: "Multi-source validation",
+        contextTitle: "From fragmented documents to verifiable records",
+        contextParagraphs: [
+          "Bridge-collapse information is distributed across institutional records, technical reports, scientific publications, news archives and local sources.",
+          "ARCUS does not treat every source as equivalent and does not confuse the occurrence of an event with certainty about its cause. Each claim remains linked to the evidence that supports it.",
+          "The result is an inspectable research release: records can be corrected, reclassified and compared without losing provenance.",
+        ],
+        scopeTitle:
+          "The method separates observed facts, editorial classifications and unavailable information.",
+        scopeText:
+          "This separation prevents missing information from becoming zero and technical hypotheses from being presented as established conclusions.",
+        scopeCards: [
+          { title: "Event identity", text: "Date, location, bridge and failure type are resolved before sources or variants of the same episode are combined." },
+          { title: "Fact and interpretation", text: "Observed values remain distinct from ARCUS classes derived through the editorial process." },
+          { title: "Explicit uncertainty", text: "Documented, Probable, Needs review and Unspecified describe support without artificially filling gaps." },
+          { title: "Proper use", text: "Records support comparative research and learning from failures; they do not estimate collapse probability or certify safety." },
+        ],
+        workflowTitle: "From reported case to public release",
+        workflowDescription: "Each record passes progressive controls before entering a citable ARCUS release.",
+        workflowSteps: [
+          ["01", "Discovery", "Targeted searches across institutional, technical, scientific, journalistic and local sources."],
+          ["02", "Eligibility", "Controlled demolitions, damage-only cases and events without sufficient corroboration are excluded."],
+          ["03", "Identity resolution", "Date, bridge, place and sources are aligned to prevent duplicate records for the same episode."],
+          ["04", "Evidence review", "Independent sources are compared and the role of each item of evidence is recorded."],
+          ["05", "Geolocation and classes", "WGS84 coordinates, severity, cause, trigger, process and evidence are stored in separate fields."],
+          ["06", "QA and versioning", "Automated checks and editorial review precede release; corrections and limitations remain traceable."],
+        ],
+        taxonomyTitle: "A declared, readable taxonomy",
+        severity: "Failure outcome",
+        mechanism: "Trigger presence",
+        generalCause: "Cause family",
+        specificCauses: "Prevalent specific cause",
+        classificationLogicTitle: "Five axes prevent a complex event from being compressed into one label.",
+        classificationLogicText: "Cause, trigger and process are not synonyms. ARCUS also preserves severity, spatial precision and documentary strength so comparisons remain auditable.",
+        classificationAxes: [
+          { code: "DB.01", title: "Outcome", text: "Total or partial collapse, kept distinct from damage-only cases outside the database scope." },
+          { code: "DB.02", title: "Trigger", text: "An identifiable immediate event such as flood, landslide, earthquake, impact or overload; it may remain unspecified." },
+          { code: "DB.03", title: "Cause and process", text: "Prevalent cause family and, when documented, physical process and component involved." },
+          { code: "DB.04", title: "Location", text: "Coordinates, administrative context, precision and geographic anomalies are checked without silent corrections." },
+          { code: "DB.05", title: "Evidence", text: "Source role, independence, confidence and documentary level remain available for review and reuse." },
+        ],
+        sourceTitle: "Source roles and traceability",
+        sourceText: "The categories are not an automatic hierarchy of truth: a source is assessed against the claim it must support. Proximity, expertise, independence, specificity and verifiability matter. Title, URL or reference, date, language and role are retained in the release.",
+        sourceTiers: [
+          ["ROLE 01", "Institutional records and notices"],
+          ["ROLE 02", "Technical and forensic reports"],
+          ["ROLE 03", "Scientific publications and datasets"],
+          ["ROLE 04", "Verifiable contemporary reporting"],
+          ["ROLE 05", "Corroborating local archives and sources"],
+        ],
+        extensionLabel: "RELEASE CONTROLS",
+        extensionTitle: "Quality remains inspectable",
+        extensions: ["Release manifest and version", "Published-field dictionary", "Taxonomy with operational definitions", "Error and warning audit", "Completeness statistics", "Revision changelog"],
+        scoringLabel: "HOW TO READ THE DATA",
+        scoringTitle: "Evidence is described, not converted into certainty",
+        scoringText: "ARCUS exposes the support and limitations of each record. Field completeness is neither bridge safety nor the probability of a future event.",
+        scoringModels: [
+          ["Documentary support", "Documented and Probable separate an explicit conclusion from a strongly supported but non-final attribution."],
+          ["Information gap", "Unspecified is intentional: the detail cannot be reconstructed from the available sources."],
+          ["Open review", "Needs review retains conflicts or anomalies without hiding them or forcing a classification."],
+          ["Comparability", "Analyses must declare filters, period, available variables and denominator; observed frequency is not risk."],
+        ],
+        outputLabel: "OPEN TOOLS",
+        outputTitle: "One method, three verifiable ways to use the release",
+        outputText: "The Atlas, Analytics and data package read the same versioned release and keep sources, taxonomy and limitations accessible.",
+        outputs: [
+          ["Atlas", "Geographic consultation of 261 events, records, coordinates and documented sources."],
+          ["Analytics", "Descriptive exploration with declared filters and exports suitable for scientific reuse."],
+          ["Data package", "CSV, GeoJSON, sources, dictionary, taxonomy, audit, statistics and changelog without an account."],
+        ],
+        limitsTitle: "What the database can — and cannot — represent",
+        limitsText: "ARCUS describes documented events, not the complete universe of failures. Source coverage, spatial precision and technical detail vary across records and periods; older and local events may be underrepresented. Frequencies also reflect documentary availability and are not risk rates without a reliable exposed denominator. The database does not estimate collapse probability, diagnose existing structures or replace inspection and professional assessment.",
+        researchFramework: "Scientific foundation and reproducible resources",
+        paperRelation: "The publication is the original scientific foundation; the ARCUS Open release is subsequent, versioned and continuously reviewed.",
+      };
+
+  const content = professionalEnabled
+    ? baseContent
+    : { ...baseContent, ...openContent };
 
   return (
     <main
@@ -632,9 +722,13 @@ function MethodologyPage() {
       <PageMeta
         title={content.title}
         description={
-          language === "it"
-            ? "Metodo ARCUS per validare e classificare eventi di collasso dei ponti e intersecarli con layer territoriali per output Professional."
-            : "ARCUS methodology for validating and classifying bridge collapse events and intersecting them with territorial layers for Professional outputs."
+          !professionalEnabled
+            ? language === "it"
+              ? "Metodo ARCUS per identificare, verificare, classificare e pubblicare record di collasso dei ponti come evidenza scientifica versionata."
+              : "ARCUS method for identifying, verifying, classifying and publishing bridge-collapse records as versioned scientific evidence."
+            : language === "it"
+              ? "Metodo ARCUS per validare e classificare eventi di collasso dei ponti e intersecarli con layer territoriali per output Professional."
+              : "ARCUS methodology for validating and classifying bridge collapse events and intersecting them with territorial layers for Professional outputs."
         }
       />
 
@@ -662,65 +756,46 @@ function MethodologyPage() {
             {content.subtitle}
           </p>
 
-          <div className="methodology-hero-stats">
+          <div className="methodology-hero-evidence">
+            <div className="methodology-hero-stats">
+              <div className="methodology-stat">
+                <span className="methodology-stat-value">2000-2026</span>
+                <span className="methodology-stat-label">{content.temporalCoverage}</span>
+              </div>
 
-            <div className="methodology-stat">
-              <span className="methodology-stat-value">
-                2000-2026
-              </span>
+              <div className="methodology-stat">
+                <span className="methodology-stat-value">261</span>
+                <span className="methodology-stat-label">{language === "it" ? "Eventi pubblicati" : "Published events"}</span>
+              </div>
 
-              <span className="methodology-stat-label">
-                {content.temporalCoverage}
-              </span>
+              <div className="methodology-stat">
+                <span className="methodology-stat-value">716</span>
+                <span className="methodology-stat-label">{language === "it" ? "Fonti documentate" : "Documented sources"}</span>
+              </div>
+
+              <div className="methodology-stat">
+                <span className="methodology-stat-value">WGS84</span>
+                <span className="methodology-stat-label">{content.geospatialStandard}</span>
+              </div>
             </div>
 
-            <div className="methodology-stat">
-              <span className="methodology-stat-value">
-                Multi-Source
-              </span>
-
-              <span className="methodology-stat-label">
-                {content.validationFramework}
-              </span>
-            </div>
-
-            <div className="methodology-stat">
-              <span className="methodology-stat-value">
-                WGS84
-              </span>
-
-              <span className="methodology-stat-label">
-                {content.geospatialStandard}
-              </span>
-            </div>
-
+            <a
+              className="methodology-paper-card"
+              href="https://doi.org/10.1016/j.dib.2025.112375"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div className="methodology-paper-label">{content.relatedPublication}</div>
+              <div className="methodology-paper-title">
+                Dataset of bridge collapses in Italy from 2000 to 2025
+              </div>
+              <div className="methodology-paper-meta">Data in Brief · Elsevier</div>
+              <div className="methodology-paper-authors">Paolini et al.</div>
+              {content.paperRelation && (
+                <p className="methodology-paper-relation">{content.paperRelation}</p>
+              )}
+            </a>
           </div>
-
-          <a
-            className="methodology-paper-card"
-            href="https://doi.org/10.1016/j.dib.2025.112375"
-            target="_blank"
-            rel="noreferrer"
-          >
-
-            <div className="methodology-paper-label">
-              {content.relatedPublication}
-            </div>
-
-            <div className="methodology-paper-title">
-              Dataset of bridge collapses in Italy
-              from 2000 to 2025
-            </div>
-
-            <div className="methodology-paper-meta">
-              Data in Brief - Elsevier
-            </div>
-
-            <div className="methodology-paper-authors">
-              Paolini et al.
-            </div>
-
-          </a>
 
         </div>
       </section>
@@ -864,8 +939,8 @@ function MethodologyPage() {
               </div>
 
               <div className="classification-tags">
-                <span>TC - Total Collapse</span>
-                <span>PC - Partial Collapse</span>
+                <span>{language === "it" ? "TC · Collasso totale" : "TC · Total collapse"}</span>
+                <span>{language === "it" ? "PC · Collasso parziale" : "PC · Partial collapse"}</span>
               </div>
             </div>
 
@@ -875,8 +950,9 @@ function MethodologyPage() {
               </div>
 
               <div className="classification-tags">
-                <span>Triggered</span>
-                <span>Not-Triggered</span>
+                <span>{language === "it" ? "Trigger identificato" : "Identified trigger"}</span>
+                <span>{language === "it" ? "Nessun trigger identificabile" : "No identifiable trigger"}</span>
+                <span>{language === "it" ? "Non specificato" : "Unspecified"}</span>
               </div>
             </div>
 
@@ -886,8 +962,9 @@ function MethodologyPage() {
               </div>
 
               <div className="classification-tags">
-                <span>Natural</span>
-                <span>Human-Induced</span>
+                <span>{language === "it" ? "Naturale" : "Natural"}</span>
+                <span>{language === "it" ? "Antropica" : "Human-induced"}</span>
+                <span>{language === "it" ? "Non specificata" : "Unspecified"}</span>
               </div>
             </div>
 
@@ -899,35 +976,35 @@ function MethodologyPage() {
               <div className="classification-tags">
 
                 <span className="taxonomy-hydraulic">
-                  Hydraulic
+                  {language === "it" ? "Hydraulic · Idraulica" : "Hydraulic"}
                 </span>
 
                 <span className="taxonomy-material">
-                  Material
+                  {language === "it" ? "Material · Materiali" : "Material"}
                 </span>
 
                 <span className="taxonomy-earthquake">
-                  Earthquake
+                  {language === "it" ? "Earthquake · Sisma" : "Earthquake"}
                 </span>
 
                 <span className="taxonomy-impact">
-                  Impact
+                  {language === "it" ? "Impact · Impatto" : "Impact"}
                 </span>
 
                 <span className="taxonomy-landslide">
-                  Landslide
+                  {language === "it" ? "Landslide · Frana" : "Landslide"}
                 </span>
 
                 <span className="taxonomy-overload">
-                  Overload
+                  {language === "it" ? "Overload · Sovraccarico" : "Overload"}
                 </span>
 
                 <span className="taxonomy-design">
-                  Design & Construction
+                  {language === "it" ? "Design & Construction · Progetto e costruzione" : "Design & Construction"}
                 </span>
 
                 <span className="taxonomy-fire">
-                  Fire & Explosion
+                  {language === "it" ? "Fire & Explosion · Incendio ed esplosione" : "Fire & Explosion"}
                 </span>
 
               </div>
@@ -969,7 +1046,7 @@ function MethodologyPage() {
 
       {/* PROFESSIONAL LAYER MATRIX */}
 
-      <section className="methodology-section methodology-dark">
+      {professionalEnabled && <section className="methodology-section methodology-dark">
 
         <div className="methodology-container">
 
@@ -1000,7 +1077,7 @@ function MethodologyPage() {
 
         </div>
 
-      </section>
+      </section>}
 
       {/* SOURCE VALIDATION */}
 

@@ -605,6 +605,13 @@ function AnalyticsPage() {
   const [manifest, setManifest] = useState(null);
   const [loadState, setLoadState] = useState("loading");
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [workspaceStep, setWorkspaceStep] = useState(() => {
+    const requestedStep = Number(searchParams.get("step"));
+    return [1, 2, 3].includes(requestedStep) ? requestedStep : 1;
+  });
+  const [analysisPath, setAnalysisPath] = useState(() => (
+    searchParams.get("path") === "custom" ? "custom" : "guided"
+  ));
   const [filters, setFilters] = useState(() => initialFilters(searchParams));
   const [chartDimension, setChartDimension] = useState(() => {
     const requestedDimension = searchParams.get("group");
@@ -620,6 +627,7 @@ function AnalyticsPage() {
   const [activePreset, setActivePreset] = useState(null);
   const [packageState, setPackageState] = useState("idle");
   const [captionState, setCaptionState] = useState("idle");
+  const [workspaceNavigationVisible, setWorkspaceNavigationVisible] = useState(false);
   const [columnDimension, setColumnDimension] = useState(() => {
     const requestedDimension = searchParams.get("column");
     const requestedRow = searchParams.get("group") || "specific_cause";
@@ -628,6 +636,7 @@ function AnalyticsPage() {
       : "collapse_severity";
   });
   const chartSvgRef = useRef(null);
+  const workspaceSectionRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -652,6 +661,18 @@ function AnalyticsPage() {
       cancelled = true;
     };
   }, [loadAttempt]);
+
+  useEffect(() => {
+    const section = workspaceSectionRef.current;
+    if (!section || typeof IntersectionObserver === "undefined") return undefined;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setWorkspaceNavigationVisible(entry.isIntersecting);
+    }, { rootMargin: "-64px 0px -48px", threshold: 0 });
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const nextParams = new URLSearchParams();
@@ -680,9 +701,11 @@ function AnalyticsPage() {
       if (comparisonFilters.severity !== DEFAULT_FILTERS.severity) nextParams.set("bseverity", comparisonFilters.severity);
       if (comparisonFilters.evidence !== DEFAULT_FILTERS.evidence) nextParams.set("bevidence", comparisonFilters.evidence);
     }
+    if (workspaceStep !== 1) nextParams.set("step", String(workspaceStep));
+    if (analysisPath === "custom") nextParams.set("path", "custom");
 
     setSearchParams(nextParams, { replace: true });
-  }, [analysisMode, chartDimension, chartView, columnDimension, comparisonFilters, filters, setSearchParams]);
+  }, [analysisMode, analysisPath, chartDimension, chartView, columnDimension, comparisonFilters, filters, setSearchParams, workspaceStep]);
 
   const releaseYears = useMemo(
     () => events.map((event) => extractYear(event.date)).filter(Boolean),
@@ -1477,6 +1500,17 @@ function AnalyticsPage() {
     setActivePreset(preset.id);
     setPackageState("idle");
     setCaptionState("idle");
+    setAnalysisPath("guided");
+  }
+
+  function changeWorkspaceStep(step) {
+    setWorkspaceStep(step);
+    window.requestAnimationFrame(() => {
+      document.querySelector(".analytics-workspace-index")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+    });
   }
 
   const heroPreviewItems = language === "it"
@@ -1584,21 +1618,67 @@ function AnalyticsPage() {
         </div>
       </section>
 
-      <section className="analytics-section analytics-explorer-section">
+      <section className="analytics-section analytics-explorer-section" ref={workspaceSectionRef}>
         <div className="analytics-container">
           <div className="analytics-section-header">
-            <div className="analytics-section-label">ARCUS OPEN RESEARCH EXPLORER</div>
+            <div className="analytics-section-label">ARCUS OPEN RESEARCH EXPLORER · STEP 0{workspaceStep}</div>
             <h2 className="analytics-section-title">
-              {language === "it" ? "Costruisci una coorte verificabile." : "Build a verifiable cohort."}
+              {workspaceStep === 1
+                ? (language === "it" ? "Costruisci una coorte verificabile." : "Build a verifiable cohort.")
+                : workspaceStep === 2
+                  ? (language === "it" ? "Progetta un’analisi riproducibile." : "Design a reproducible analysis.")
+                  : (language === "it" ? "Leggi l’evidenza dietro la figura." : "Read the evidence behind the figure.")}
             </h2>
             <p className="analytics-section-description">
-              {language === "it"
-                ? "I controlli aggiornano tutte le letture sottostanti. L’URL conserva le scelte, mentre numerosità, fonti e dati mancanti restano visibili per evitare confronti senza contesto."
-                : "The controls update every view below. The URL retains each choice, while sample size, sources and missing data remain visible to prevent context-free comparisons."}
+              {workspaceStep === 1
+                ? (language === "it"
+                    ? "Definisci il campione attraverso periodo, causa, territorio ed evidenza. Numerosità, fonti e dati mancanti restano sempre dichiarati."
+                    : "Define the sample through period, cause, territory and evidence. Sample size, sources and missing data always remain explicit.")
+                : workspaceStep === 2
+                  ? (language === "it"
+                      ? "Scegli una domanda guidata o configura variabili e confronto. Tutte le scelte restano salvate nell’URL."
+                      : "Choose a guided question or configure variables and comparison. Every choice remains stored in the URL.")
+                  : (language === "it"
+                      ? "Esamina il risultato insieme a denominatore, diagnostica descrittiva, completezza e record sottostanti."
+                      : "Inspect the result together with its denominator, descriptive diagnostics, completeness and underlying records.")}
             </p>
           </div>
 
-          <div className="analytics-explorer-shell">
+          <nav className="analytics-workspace-index" aria-label={language === "it" ? "Indice della console di ricerca" : "Research console index"}>
+            <button aria-current={workspaceStep === 1 ? "step" : undefined} className={workspaceStep === 1 ? "is-active" : workspaceStep > 1 ? "is-complete" : ""} onClick={() => changeWorkspaceStep(1)} type="button">
+              <span>01</span>
+              <strong>{language === "it" ? "Definisci la coorte" : "Define the cohort"}</strong>
+              <small>{language === "it" ? "Periodo, causa, regione ed evidenza" : "Period, cause, region and evidence"}</small>
+            </button>
+            <button aria-current={workspaceStep === 2 ? "step" : undefined} className={workspaceStep === 2 ? "is-active" : workspaceStep > 2 ? "is-complete" : ""} onClick={() => changeWorkspaceStep(2)} type="button">
+              <span>02</span>
+              <strong>{language === "it" ? "Costruisci l’analisi" : "Build the analysis"}</strong>
+              <small>{language === "it" ? "Preset, variabili e figura" : "Presets, variables and figure"}</small>
+            </button>
+            <button aria-current={workspaceStep === 3 ? "step" : undefined} className={workspaceStep === 3 ? "is-active" : ""} onClick={() => changeWorkspaceStep(3)} type="button">
+              <span>03</span>
+              <strong>{language === "it" ? "Verifica l’evidenza" : "Verify the evidence"}</strong>
+              <small>{language === "it" ? "Completezza e record sottostanti" : "Completeness and underlying records"}</small>
+            </button>
+          </nav>
+
+          <div className={`analytics-mobile-step-nav ${workspaceNavigationVisible ? "is-visible" : ""}`} aria-label={language === "it" ? "Navigazione fra gli step" : "Step navigation"}>
+            {workspaceStep > 1 ? (
+              <button className="is-back" onClick={() => changeWorkspaceStep(workspaceStep - 1)} type="button">
+                <span aria-hidden="true">←</span>{language === "it" ? "Indietro" : "Back"}
+              </button>
+            ) : <span />}
+            <strong>0{workspaceStep} / 03</strong>
+            {workspaceStep < 3 ? (
+              <button disabled={workspaceStep === 1 && (!validPeriod || loadState !== "available")} onClick={() => changeWorkspaceStep(workspaceStep + 1)} type="button">
+                {workspaceStep === 1
+                  ? (language === "it" ? "Analisi" : "Analysis")
+                  : (language === "it" ? "Risultati" : "Results")}<span aria-hidden="true">→</span>
+              </button>
+            ) : <span />}
+          </div>
+
+          {workspaceStep === 1 && <div className="analytics-explorer-shell" id="analytics-cohort-builder">
             <div className="analytics-filter-cohort-heading">
               <span>{analysisMode === "comparison" ? (language === "it" ? "Coorte A" : "Cohort A") : (language === "it" ? "Definizione della coorte" : "Cohort definition")}</span>
               <strong>{analysisMode === "comparison" ? (language === "it" ? "Filtri della coorte di riferimento" : "Reference cohort filters") : (language === "it" ? "Costruisci il campione analitico" : "Build the analytical sample")}</strong>
@@ -1674,9 +1754,9 @@ function AnalyticsPage() {
               <span>{activeFilterCount} {language === "it" ? "filtri attivi · stato conservato nell’URL" : "active filters · state retained in the URL"}</span>
               <button type="button" onClick={resetFilters}>{language === "it" ? "Azzera filtri" : "Reset filters"}</button>
             </div>
-          </div>
+          </div>}
 
-          <div className="analytics-cohort-summary" aria-live="polite">
+          <div className={`analytics-cohort-summary ${workspaceStep > 1 ? "is-compact" : ""}`} aria-live="polite">
             <div>
               <span>{language === "it" ? "Coorte corrente" : "Current cohort"}</span>
               <strong>{loadState === "available" ? formatValue(analytics.totalEvents) : "—"}</strong>
@@ -1707,7 +1787,16 @@ function AnalyticsPage() {
             </p>
           )}
 
-          <section className="analytics-chart-builder" aria-labelledby="analytics-chart-builder-title">
+          {workspaceStep === 1 && (
+            <div className="analytics-workspace-actions is-forward">
+              <p>{language === "it" ? "La coorte è pronta. Nel passaggio successivo puoi scegliere la domanda analitica e le variabili da rappresentare." : "The cohort is ready. In the next step you can choose the analytical question and variables to represent."}</p>
+              <button disabled={!validPeriod || loadState !== "available"} onClick={() => changeWorkspaceStep(2)} type="button">
+                {language === "it" ? "Continua all’analisi" : "Continue to analysis"}<span aria-hidden="true">→</span>
+              </button>
+            </div>
+          )}
+
+          {workspaceStep >= 2 && <section className={`analytics-chart-builder is-workspace-step-${workspaceStep}`} aria-labelledby="analytics-chart-builder-title">
             <div className="analytics-chart-builder-heading">
               <div>
                 <span>ARCUS CHART BUILDER</span>
@@ -1727,7 +1816,20 @@ function AnalyticsPage() {
               </div>
             </div>
 
-            <section className="analytics-research-presets" aria-labelledby="analytics-research-presets-title">
+            <div className="analytics-analysis-path" role="tablist" aria-label={language === "it" ? "Modalità di costruzione dell’analisi" : "Analysis building mode"}>
+              <button aria-selected={analysisPath === "guided"} className={analysisPath === "guided" ? "is-active" : ""} onClick={() => setAnalysisPath("guided")} role="tab" type="button">
+                <span>01</span>
+                <strong>{language === "it" ? "Domande guidate" : "Guided questions"}</strong>
+                <small>{language === "it" ? "Preset dichiarati e riproducibili" : "Declared, reproducible presets"}</small>
+              </button>
+              <button aria-selected={analysisPath === "custom"} className={analysisPath === "custom" ? "is-active" : ""} onClick={() => setAnalysisPath("custom")} role="tab" type="button">
+                <span>02</span>
+                <strong>{language === "it" ? "Configurazione libera" : "Custom configuration"}</strong>
+                <small>{language === "it" ? "Variabili, incroci e confronto A/B" : "Variables, cross-tabs and A/B comparison"}</small>
+              </button>
+            </div>
+
+            {analysisPath === "guided" && <section className="analytics-research-presets" aria-labelledby="analytics-research-presets-title">
               <div className="analytics-research-presets-heading">
                 <div>
                   <span>GUIDED RESEARCH QUERIES</span>
@@ -1757,9 +1859,14 @@ function AnalyticsPage() {
                   </button>
                 ))}
               </div>
-            </section>
+              <p className="analytics-guided-path-note">
+                {activePreset
+                  ? (language === "it" ? "Preset applicato. Puoi generare i risultati oppure scegliere un’altra domanda." : "Preset applied. You can generate the results or choose another question.")
+                  : (language === "it" ? "Seleziona una domanda. Senza preset, ARCUS mantiene la distribuzione predefinita per causa." : "Select a question. Without a preset, ARCUS retains the default distribution by cause.")}
+              </p>
+            </section>}
 
-            <fieldset className="analytics-analysis-mode">
+            {analysisPath === "custom" && <><fieldset className="analytics-analysis-mode">
               <legend>{language === "it" ? "Tipo di analisi" : "Analysis type"}</legend>
               <button
                 aria-pressed={analysisMode === "distribution"}
@@ -1948,7 +2055,7 @@ function AnalyticsPage() {
                   <small>{language === "it" ? "Conteggio e percentuale sulla riga" : "Count and row percentage"}</small>
                 </div>
               )}
-            </div>
+            </div></>}
 
             <section className="analytics-interpretation-checks" aria-label={language === "it" ? "Controlli di interpretazione" : "Interpretation checks"}>
               <div className="analytics-interpretation-checks-heading">
@@ -1966,7 +2073,26 @@ function AnalyticsPage() {
               </div>
             </section>
 
+            {workspaceStep === 2 && (
+              <div className="analytics-workspace-actions">
+                <button className="is-back" onClick={() => changeWorkspaceStep(1)} type="button">
+                  <span aria-hidden="true">←</span>{language === "it" ? "Modifica coorte" : "Edit cohort"}
+                </button>
+                <p>{language === "it" ? "La configurazione è pronta. Prosegui per esaminare figura, diagnostica, completezza e record sottostanti." : "The configuration is ready. Continue to inspect the figure, diagnostics, completeness and underlying records."}</p>
+                <button onClick={() => changeWorkspaceStep(3)} type="button">
+                  {language === "it" ? "Genera risultati" : "Generate results"}<span aria-hidden="true">→</span>
+                </button>
+              </div>
+            )}
+
             <div className="analytics-chart-output">
+              {workspaceStep === 3 && (
+                <div className="analytics-results-intro">
+                  <span>STEP 03 / RESEARCH OUTPUT</span>
+                  <h3>{language === "it" ? "Esamina, verifica ed esporta." : "Inspect, verify and export."}</h3>
+                  <p>{language === "it" ? "La figura è accompagnata da denominatore, controlli descrittivi e record che compongono il risultato." : "The figure is accompanied by its denominator, descriptive checks and the records behind the result."}</p>
+                </div>
+              )}
               <div className="analytics-chart-output-meta">
                 <div>
                   <span>{language === "it" ? "Figura corrente" : "Current figure"}</span>
@@ -2136,8 +2262,8 @@ function AnalyticsPage() {
               )}
 
               {temporalSensitivity && hasAnalyticalOutput && (
-                <section className="analytics-temporal-sensitivity" aria-labelledby="analytics-temporal-sensitivity-title">
-                  <div className="analytics-temporal-sensitivity-heading">
+                <details className="analytics-temporal-sensitivity analytics-result-disclosure" aria-labelledby="analytics-temporal-sensitivity-title">
+                  <summary className="analytics-temporal-sensitivity-heading">
                     <div>
                       <span>CLUSTERING SENSITIVITY</span>
                       <h5 id="analytics-temporal-sensitivity-title">
@@ -2145,7 +2271,7 @@ function AnalyticsPage() {
                       </h5>
                     </div>
                     <strong data-temporal-total-dates>{temporalSensitivity.totalDistinctDates} {language === "it" ? "date" : "dates"}</strong>
-                  </div>
+                  </summary>
                   <div className="analytics-chart-table-wrap">
                     <table className="analytics-chart-table analytics-temporal-table">
                       <thead>
@@ -2177,12 +2303,12 @@ function AnalyticsPage() {
                       ? "La seconda lettura riduce l’effetto di più ponti registrati nella stessa giornata. È una sensibilità al clustering: una data distinta non viene interpretata come episodio idraulico indipendente."
                       : "The second reading reduces the effect of multiple bridges recorded on the same day. It is a clustering sensitivity: a distinct date is not interpreted as an independent hydraulic episode."}
                   </p>
-                </section>
+                </details>
               )}
 
               {hasAnalyticalOutput && (
-                <section className="analytics-advanced-diagnostics" aria-labelledby="analytics-advanced-diagnostics-title">
-                  <div className="analytics-advanced-diagnostics-heading">
+                <details className="analytics-advanced-diagnostics analytics-result-disclosure" aria-labelledby="analytics-advanced-diagnostics-title">
+                  <summary className="analytics-advanced-diagnostics-heading">
                     <div>
                       <span>ADVANCED DESCRIPTIVE DIAGNOSTICS</span>
                       <h5 id="analytics-advanced-diagnostics-title">
@@ -2198,7 +2324,7 @@ function AnalyticsPage() {
                         ? "Misure calcolate sui record della release. ARCUS non applica soglie qualitative, p-value o inferenze sulla popolazione dei ponti."
                         : "Measures calculated on release records. ARCUS applies no qualitative thresholds, p-values or inference to the bridge population."}
                     </p>
-                  </div>
+                  </summary>
                   <div className="analytics-advanced-diagnostic-grid">
                     {advancedDiagnostics.map((diagnostic) => (
                       <article className={diagnostic.caution ? "is-caution" : ""} data-diagnostic={diagnostic.key} key={diagnostic.key}>
@@ -2216,7 +2342,7 @@ function AnalyticsPage() {
                         ? (language === "it" ? "La V di Cramér varia fra 0 e 1. Le celle attese piccole sono dichiarate perché rendono fragile qualsiasi lettura inferenziale, che qui non viene eseguita." : "Cramér’s V ranges from 0 to 1. Small expected cells are disclosed because they weaken inferential readings, which are not performed here.")
                         : (language === "it" ? "L’entropia normalizzata vale 0 per massima concentrazione e 1 per distribuzione uniforme; le categorie mancanti restano escluse dal calcolo." : "Normalized entropy equals 0 at maximum concentration and 1 for a uniform distribution; missing categories remain excluded from the calculation.")}
                   </p>
-                </section>
+                </details>
               )}
 
               {hasAnalyticalOutput && (
@@ -2275,22 +2401,22 @@ function AnalyticsPage() {
                 </p>
               )}
             </div>
-          </section>
+          </section>}
 
-          <div className="analytics-explorer-detail-grid">
-            <article className="analytics-panel">
-              <div className="analytics-panel-heading">
+          {workspaceStep === 3 && <div className="analytics-explorer-detail-grid" id="analytics-evidence-panels">
+            <details className="analytics-panel analytics-result-disclosure">
+              <summary className="analytics-panel-heading">
                 <div>
                   <span>{language === "it" ? "Completezza" : "Completeness"}</span>
                   <h3>{language === "it" ? "Copertura dei campi nella coorte" : "Field coverage in the cohort"}</h3>
                 </div>
                 <b>n={analytics.totalEvents}</b>
-              </div>
+              </summary>
               <AnalyticsCoverageList fields={analytics.coverageFields} language={language} />
-            </article>
+            </details>
 
-            <article className="analytics-panel analytics-cohort-records">
-              <div className="analytics-panel-heading">
+            <details className="analytics-panel analytics-cohort-records analytics-result-disclosure">
+              <summary className="analytics-panel-heading">
                 <div>
                   <span>ARCUS ATLAS</span>
                   <h3>{selectedSliceLabel || (language === "it" ? "Record che compongono il risultato" : "Records behind the result")}</h3>
@@ -2303,7 +2429,7 @@ function AnalyticsPage() {
                     </button>
                   )}
                 </div>
-              </div>
+              </summary>
               {recordPreview.length > 0 ? (
                 <div className="analytics-record-links">
                   {recordPreview.map((event) => (
@@ -2324,14 +2450,23 @@ function AnalyticsPage() {
               ) : (
                 <p>{language === "it" ? "Nessun record soddisfa questa combinazione. Modifica i filtri: ARCUS non converte una coorte vuota in uno zero di rischio." : "No records match this combination. Change the filters: ARCUS does not convert an empty cohort into zero risk."}</p>
               )}
-            </article>
-          </div>
+            </details>
+          </div>}
 
-          <p className="analytics-cohort-boundary">
+          {workspaceStep === 3 && (
+            <div className="analytics-workspace-actions is-results">
+              <button className="is-back" onClick={() => changeWorkspaceStep(2)} type="button">
+                <span aria-hidden="true">←</span>{language === "it" ? "Modifica analisi" : "Edit analysis"}
+              </button>
+              <p>{language === "it" ? "Filtri, analisi e vista restano salvati nell’URL: puoi tornare ai passaggi precedenti senza perdere il lavoro." : "Filters, analysis and view remain stored in the URL: you can return to previous steps without losing your work."}</p>
+            </div>
+          )}
+
+          {workspaceStep === 3 && <p className="analytics-cohort-boundary">
             {language === "it"
               ? "La coorte descrive i collassi documentati in ARCUS. Non rappresenta il parco ponti italiano e non costituisce una stima di rischio, frequenza o probabilità di collasso."
               : "The cohort describes collapses documented in ARCUS. It does not represent the Italian bridge inventory and is not an estimate of collapse risk, frequency or probability."}
-          </p>
+          </p>}
         </div>
       </section>
 

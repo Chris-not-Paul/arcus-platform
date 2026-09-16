@@ -50,13 +50,13 @@ function statusCopy(result, language) {
 
 function hydraulicValue(result, language) {
   if (result?.status === "available") {
-    return result.highest_class || result.matched_classes?.join(", ") || "—";
+    return language === "it" ? "Intersezione registrata" : "Intersection recorded";
   }
 
   if (result?.status === "no_intersection") {
     return language === "it"
-      ? "Nessuna classe al punto"
-      : "No class at point";
+      ? "Nessuna intersezione registrata"
+      : "No intersection recorded";
   }
 
   return language === "it" ? "Non determinato" : "Not determined";
@@ -64,13 +64,13 @@ function hydraulicValue(result, language) {
 
 function landslideValue(result, language) {
   if (result?.status === "available") {
-    return result.highest_hazard_class || (result.attention_area ? "AA" : "—");
+    return language === "it" ? "Intersezione registrata" : "Intersection recorded";
   }
 
   if (result?.status === "no_intersection") {
     return language === "it"
-      ? "Nessuna classe al punto"
-      : "No class at point";
+      ? "Nessuna intersezione registrata"
+      : "No intersection recorded";
   }
 
   return language === "it" ? "Non determinato" : "Not determined";
@@ -93,7 +93,9 @@ function detailCopy(key, result, language) {
 
   if (key === "hydraulic") {
     if (result.status === "available") {
-      return `${it ? "Classi intersecate" : "Intersected classes"}: ${result.matched_classes?.join(", ") || "—"}`;
+      return it
+        ? "Il punto ricade nel mosaico ufficiale consultato. La classe non viene pubblicata nella scheda Atlas."
+        : "The point intersects the consulted official mosaic. The class is not published in the Atlas dossier.";
     }
 
     if (result.status === "no_intersection") {
@@ -103,14 +105,15 @@ function detailCopy(key, result, language) {
     }
 
     return it
-      ? "La fonte non ha restituito un esito utilizzabile: ARCUS non assegna una classe sostitutiva."
-      : "The source returned no usable outcome: ARCUS does not assign a substitute class.";
+      ? "La fonte non ha restituito un esito utilizzabile: ARCUS non introduce un valore sostitutivo."
+      : "The source returned no usable outcome: ARCUS does not introduce a substitute value.";
   }
 
   if (key === "landslide") {
     if (result.status === "available") {
-      const classes = result.matched_hazard_classes?.join(", ") || "—";
-      return `${it ? "Classi intersecate" : "Intersected classes"}: ${classes}${result.attention_area ? " · AA" : ""}`;
+      return it
+        ? "Il punto ricade nel mosaico PAI consultato. La classe non viene pubblicata nella scheda Atlas."
+        : "The point intersects the consulted PAI mosaic. The class is not published in the Atlas dossier.";
     }
 
     if (result.status === "no_intersection") {
@@ -120,8 +123,8 @@ function detailCopy(key, result, language) {
     }
 
     return it
-      ? "La fonte non ha restituito un esito utilizzabile: ARCUS non assegna una classe sostitutiva."
-      : "The source returned no usable outcome: ARCUS does not assign a substitute class.";
+      ? "La fonte non ha restituito un esito utilizzabile: ARCUS non introduce un valore sostitutivo."
+      : "The source returned no usable outcome: ARCUS does not introduce a substitute value.";
   }
 
   return result.status === "available"
@@ -133,63 +136,16 @@ function detailCopy(key, result, language) {
         : "The value is not replaced by zero or an ARCUS estimate.");
 }
 
-function periodLabel(period, language) {
-  if (!period) return "—";
-  if (language === "it" && period.label === "December 2017") return "Dicembre 2017";
-  return period.label.replace("-", "–");
-}
-
-function classMembershipLabel(classes, language) {
-  return classes?.length
-    ? classes.join(" · ")
-    : (language === "it" ? "nessuna classe" : "no class");
-}
-
-function evolutionCopy(summary, language) {
-  const it = language === "it";
-
-  if (!summary) return null;
-
-  if (["changed", "unchanged"].includes(summary.status)) {
-    return {
-      detail: `${periodLabel(summary.baseline_reference_period, language)}: ${classMembershipLabel(summary.baseline_classes, language)} → ${periodLabel(summary.current_reference_period, language)}: ${classMembershipLabel(summary.current_classes, language)}`,
-      label: summary.status === "changed"
-        ? (it ? "Classi variate" : "Classes changed")
-        : (it ? "Classi invariate" : "Classes unchanged"),
-      tone: summary.status,
-    };
-  }
-
-  const reason = {
-    current_release_observation_unavailable: it
-      ? "Interrogazione della release corrente non disponibile."
-      : "Current-release query unavailable.",
-    no_post_event_release: it
-      ? "Nessuna release corrente successiva al collasso."
-      : "No current release follows the collapse.",
-    no_pre_event_release: it
-      ? "Nessuna release disponibile precedente al collasso."
-      : "No available release predates the collapse.",
-  }[summary.reason];
-
-  return {
-    detail: reason || (it ? "Confronto temporale non disponibile." : "Temporal comparison unavailable."),
-    label: it ? "Non confrontabile" : "Not comparable",
-    tone: "not-comparable",
-  };
-}
-
-function EventTerritorialContext({ context, history = null }) {
+function EventTerritorialContext({ cause, context }) {
   const { language } = useLanguage();
   const it = language === "it";
   const cards = [
     {
       key: "hydraulic",
       label: it ? "Pericolosità idraulica" : "Hydraulic hazard",
-      provider: "ISPRA · P1/P2/P3",
+      provider: "ISPRA · mosaico nazionale",
       result: context.hydraulic,
       value: hydraulicValue(context.hydraulic, language),
-      evolution: history?.hazards?.hydraulic?.comparison_summary,
     },
     {
       key: "landslide",
@@ -197,7 +153,6 @@ function EventTerritorialContext({ context, history = null }) {
       provider: "ISPRA · PAI v.5.0",
       result: context.landslide,
       value: landslideValue(context.landslide, language),
-      evolution: history?.hazards?.landslide?.comparison_summary,
     },
     {
       key: "seismic",
@@ -206,14 +161,20 @@ function EventTerritorialContext({ context, history = null }) {
       result: context.seismic,
       value: seismicValue(context.seismic, language),
     },
-  ];
+  ].filter((card) => ({ Hydraulic: "hydraulic", Landslide: "landslide", Earthquake: "seismic" }[cause] === card.key));
+  const causeLabel = {
+    Hydraulic: it ? "Idraulica" : "Hydraulic",
+    Landslide: it ? "Frana" : "Landslide",
+    Earthquake: it ? "Sisma" : "Earthquake",
+  }[cause] || cause;
+  const currentStatus = statusCopy(cards[0]?.result, language).label;
 
   return (
     <section className="arcus-event-territorial">
       <header>
         <div>
           <span>{it ? "Contesto territoriale attuale" : "Current territorial context"}</span>
-          <h3>{it ? "Layer ufficiali alla localizzazione documentata" : "Official layers at the documented location"}</h3>
+          <h3>{it ? "Layer pertinente alla causa documentata" : "Layer relevant to the documented cause"}</h3>
         </div>
         <strong>
           {it ? "Catalogo" : "Catalogue"} {dateLabel(context.snapshot_latest_query_at, language)}
@@ -222,15 +183,29 @@ function EventTerritorialContext({ context, history = null }) {
 
       <p className="arcus-event-territorial-intro">
         {it
-          ? "Questa lettura descrive i layer acquisiti alla data indicata nel punto del collasso. Non ricostruisce la pericolosità alla data dell’evento e non prova la causa storica."
-          : "This reading describes layers retrieved on the stated date at the collapse point. It does not reconstruct hazard at the event date or prove the historical cause."}
+          ? "La scheda mostra soltanto il contesto ufficiale pertinente alla causa documentata. Il dato è corrente: non ricostruisce la pericolosità alla data dell’evento e non prova il nesso causale."
+          : "The dossier shows only the official context relevant to the documented cause. The value is current: it does not reconstruct hazard at the event date or prove causation."}
       </p>
+
+      <div className="arcus-event-causal-separation" role="note">
+        <div>
+          <span>{it ? "Causa documentata" : "Documented cause"}</span>
+          <strong>{causeLabel}</strong>
+        </div>
+        <div>
+          <span>{it ? "Layer corrente pertinente" : "Relevant current layer"}</span>
+          <strong>{currentStatus}</strong>
+        </div>
+        <div>
+          <span>{it ? "Nesso causale automatico" : "Automatic causal link"}</span>
+          <strong>{it ? "Non inferito" : "Not inferred"}</strong>
+        </div>
+      </div>
 
       <div className="arcus-event-territorial-grid">
         {cards.map((card) => {
           const status = statusCopy(card.result, language);
           const queriedAt = dateLabel(card.result?.queried_at, language);
-          const evolution = evolutionCopy(card.evolution, language);
 
           return (
             <article className={`is-${status.tone}`} key={card.key}>
@@ -240,13 +215,6 @@ function EventTerritorialContext({ context, history = null }) {
               </div>
               <strong>{card.value}</strong>
               <p>{detailCopy(card.key, card.result, language)}</p>
-              {evolution && (
-                <div className={`arcus-event-territorial-evolution is-${evolution.tone}`}>
-                  <span>{it ? "Evoluzione cartografica" : "Map evolution"}</span>
-                  <strong>{evolution.label}</strong>
-                  <small>{evolution.detail}</small>
-                </div>
-              )}
               <footer>
                 <span>{status.label}</span>
                 {queriedAt ? <time dateTime={card.result.queried_at}>{queriedAt}</time> : null}
@@ -260,16 +228,18 @@ function EventTerritorialContext({ context, history = null }) {
         <strong>{it ? "Separazione delle evidenze" : "Evidence separation"}</strong>
         <p>
           {it
-            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Nessun valore modifica il record del collasso, assegna una classe di sicurezza o produce un punteggio normalizzato."
-            : "Current territorial context, not historical event evidence. No value changes the collapse record, assigns a safety class or produces a normalized score."}
+            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Le classi cartografiche restano escluse dalla scheda Atlas e nessun valore produce un punteggio o una valutazione di sicurezza."
+            : "Current territorial context, not historical event evidence. Map classes remain outside the Atlas dossier and no value produces a score or safety assessment."}
         </p>
       </div>
 
       <footer className="arcus-event-territorial-sources">
-        {Object.entries(context.sources || {}).map(([key, source]) => (
+        {Object.entries(context.sources || {}).filter(([key]) => (
+          ({ Hydraulic: "hydraulic", Landslide: "landslide", Earthquake: "seismic" }[cause] === key)
+        )).map(([key, source]) => (
           <a href={source.source_url} key={key} rel="noreferrer" target="_blank">
             {source.provider} · {{
-              hydraulic: it ? "Pericolosità idraulica P1/P2/P3" : "Hydraulic hazard P1/P2/P3",
+              hydraulic: it ? "Mosaico nazionale della pericolosità idraulica" : "National hydraulic hazard mosaic",
               landslide: it ? "Pericolosità da frana PAI v.5.0" : "PAI landslide hazard v.5.0",
               seismic: it ? "Modello di pericolosità MPS04" : "MPS04 hazard model",
             }[key] || source.source_name}

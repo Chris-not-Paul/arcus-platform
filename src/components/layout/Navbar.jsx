@@ -15,6 +15,10 @@ import {
   getSession,
   logoutProfessional,
 } from "../../utils/apiClient";
+import {
+  accountsEnabled,
+  professionalEnabled,
+} from "../../config/site";
 
 import "./Navbar.css";
 
@@ -44,12 +48,14 @@ function Navbar() {
       group: "core",
     },
 
-    {
-      label: t("professional"),
-      path: "/professional",
-      group: "core",
-      prominent: true,
-    },
+    ...(professionalEnabled
+      ? [{
+          label: t("professional"),
+          path: "/professional",
+          group: "core",
+          prominent: true,
+        }]
+      : []),
 
     {
       label: t("methodology"),
@@ -97,6 +103,10 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (!accountsEnabled) {
+      return undefined;
+    }
+
     let active = true;
 
     getSession()
@@ -215,7 +225,7 @@ function Navbar() {
         })}
       </nav>
 
-      <div className="navbar-account">
+      {accountsEnabled && <div className="navbar-account">
         {authenticated ? (
           <>
             <button
@@ -314,20 +324,22 @@ function Navbar() {
                     ? "Account free"
                     : "Free account"}
                 </Link>
-                <Link
-                  onClick={() => setAccountOpen(false)}
-                  to="/professional/login"
-                >
-                  <span>Professional</span>
-                  {language === "it"
-                    ? "Accesso controllato"
-                    : "Controlled access"}
-                </Link>
+                {professionalEnabled && (
+                  <Link
+                    onClick={() => setAccountOpen(false)}
+                    to="/professional/login"
+                  >
+                    <span>Professional</span>
+                    {language === "it"
+                      ? "Accesso controllato"
+                      : "Controlled access"}
+                  </Link>
+                )}
               </div>
             )}
           </>
         )}
-      </div>
+      </div>}
 
       <div className="navbar-language">
         {["en", "it"].map((code) => (
@@ -366,7 +378,7 @@ function Navbar() {
         className="navbar-mobile-panel"
         id="primary-navigation"
       >
-        {authenticated ? (
+        {accountsEnabled && (authenticated ? (
           <Link
             className="navbar-mobile-link account"
             onClick={() => setIsMenuOpen(false)}
@@ -391,18 +403,20 @@ function Navbar() {
                 ? "Account free"
                 : "Free account"}
             </Link>
-            <Link
-              className="navbar-mobile-link account"
-              onClick={() => setIsMenuOpen(false)}
-              to="/professional/login"
-            >
-              <span>Professional</span>
-              {language === "it"
-                ? "Accesso controllato"
-                : "Controlled access"}
-            </Link>
+            {professionalEnabled && (
+              <Link
+                className="navbar-mobile-link account"
+                onClick={() => setIsMenuOpen(false)}
+                to="/professional/login"
+              >
+                <span>Professional</span>
+                {language === "it"
+                  ? "Accesso controllato"
+                  : "Controlled access"}
+              </Link>
+            )}
           </>
-        )}
+        ))}
 
         {links.map((link) => {
           const isActive =

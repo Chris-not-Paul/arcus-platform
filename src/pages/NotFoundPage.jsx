@@ -43,6 +43,7 @@ export default function NotFoundPage() {
       <PageMeta
         title="404"
         description={content.meta}
+        noIndex
       />
 
       <Navbar />

@@ -1,2 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /account
+Disallow: /admin
+Disallow: /analytics/pro
+Disallow: /professional
+
+Sitemap: https://www.arcusbridges.org/sitemap.xml

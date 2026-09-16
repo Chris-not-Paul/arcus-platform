@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
+import {
+  contactAddresses,
+  contributionFormEnabled,
+} from "../config/site";
 import {
   contributionAcknowledgements,
   getExpertContributionStatus,
@@ -44,6 +49,8 @@ export default function ContributePage() {
   const set = (key, value) => setForm((current) => ({ ...current, [key]: value }));
 
   useEffect(() => {
+    if (!contributionFormEnabled) return undefined;
+
     openEvents().then(setEvents).catch(() => setEvents([]));
     contributionAcknowledgements().then(setAcknowledgements).catch(() => setAcknowledgements([]));
   }, []);
@@ -114,6 +121,80 @@ export default function ContributePage() {
     ["missing_event", it ? "Evento mancante" : "Missing event"],
     ["photo_media", it ? "Fotografia o media" : "Photo or media"],
   ];
+
+  if (!contributionFormEnabled) {
+    const contributionSubject = encodeURIComponent(
+      it ? "Proposta di contributo ARCUS" : "ARCUS evidence contribution"
+    );
+
+    return (
+      <main className="contribute-page" id="main-content">
+        <PageMeta
+          title={it ? "Contribuisci ad ARCUS" : "Contribute to ARCUS"}
+          description={it
+            ? "Invia evidenze documentate, correzioni e fonti al centro editoriale ARCUS."
+            : "Send documented evidence, corrections and sources to the ARCUS editorial centre."}
+        />
+        <Navbar />
+
+        <header className="contribute-hero">
+          <div className="contribute-shell">
+            <span>ARCUS EVIDENCE CONTRIBUTION</span>
+            <h1>{it ? "L’archivio cresce attraverso evidenze verificabili." : "The archive grows through verifiable evidence."}</h1>
+            <p>{it ? "Ricercatori, professionisti, enti e testimoni qualificati possono proporre correzioni, nuove fonti, eventi mancanti e immagini. Nessun contenuto viene pubblicato automaticamente." : "Researchers, practitioners, institutions and qualified witnesses may propose corrections, new sources, missing events and images. Nothing is published automatically."}</p>
+          </div>
+        </header>
+
+        <section className="contribute-process contribute-shell" aria-label={it ? "Processo editoriale" : "Editorial process"}>
+          {[
+            ["01", it ? "Invio documentato" : "Documented submission", it ? "Identifica il record ARCUS oppure descrivi chiaramente l’evento mancante." : "Identify the ARCUS record or clearly describe the missing event."],
+            ["02", it ? "Verifica" : "Verification", it ? "ARCUS controlla identità, provenienza, coerenza e diritti." : "ARCUS checks identity, provenance, consistency and rights."],
+            ["03", it ? "Decisione motivata" : "Reasoned decision", it ? "La proposta può richiedere chiarimenti, essere accettata o respinta." : "The proposal may need clarification, be accepted or rejected."],
+            ["04", it ? "Release e credito" : "Release and credit", it ? "Gli elementi accettati entrano in una release versionata con il credito concordato." : "Accepted evidence enters a versioned release with agreed credit."],
+          ].map(([number, title, text]) => (
+            <article key={number}>
+              <span>{number}</span>
+              <h2>{title}</h2>
+              <p>{text}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="contribute-email contribute-shell">
+          <div>
+            <span>{it ? "CANALE EDITORIALE" : "EDITORIAL CHANNEL"}</span>
+            <h2>{it ? "Invia la proposta al centro ARCUS." : "Send your proposal to the ARCUS centre."}</h2>
+            <p>{it ? "Durante la release Open iniziale, i contributi vengono acquisiti tramite email e revisionati manualmente. Inserisci nel messaggio soltanto informazioni che sei autorizzato a condividere." : "During the initial Open release, contributions are received by email and reviewed manually. Include only information you are authorised to share."}</p>
+            <a href={`mailto:${contactAddresses.contributions}?subject=${contributionSubject}`}>
+              {contactAddresses.contributions}
+            </a>
+          </div>
+          <aside>
+            <strong>{it ? "Cosa includere" : "What to include"}</strong>
+            <ul>
+              <li>{it ? "ID ARCUS, nome del ponte o località" : "ARCUS ID, bridge name or location"}</li>
+              <li>{it ? "Correzione o informazione proposta" : "Proposed correction or information"}</li>
+              <li>{it ? "Fonte verificabile o riferimento del documento" : "Verifiable source or document reference"}</li>
+              <li>{it ? "Autore, credito e diritti per fotografie" : "Creator, credit and rights for photographs"}</li>
+              <li>{it ? "Nome, ruolo e affiliazione, se si desidera il riconoscimento" : "Name, role and affiliation if acknowledgement is requested"}</li>
+            </ul>
+            <div className="contribute-editorial-boundary">
+              <div>
+                <span>{it ? "Contributi appropriati" : "Suitable contributions"}</span>
+                <p>{it ? "Correzioni verificabili, fonti, documenti, contesto tecnico, eventi mancanti e immagini con diritti chiariti." : "Verifiable corrections, sources, documents, technical context, missing events and images with clarified rights."}</p>
+              </div>
+              <div>
+                <span>{it ? "Non inviare" : "Do not send"}</span>
+                <p>{it ? "Dati personali non necessari, materiale riservato senza autorizzazione, opinioni prive di riscontro o richieste di certificazione della sicurezza." : "Unnecessary personal data, confidential material without permission, unsupported opinions or requests for safety certification."}</p>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <Footer />
+      </main>
+    );
+  }
 
   return (
     <main className="contribute-page" id="main-content">
@@ -248,6 +329,7 @@ export default function ContributePage() {
           <button className="contribute-submit" disabled={status === "submitting"} type="submit">{status === "submitting" ? (it ? "Invio in corso…" : "Submitting…") : (it ? "Invia alla revisione ARCUS" : "Submit for ARCUS review")}</button>
         </form>
       </section>
+      <Footer />
     </main>
   );
 }

@@ -15,6 +15,7 @@ backups
 .env
 .env.*
 !.env.example
+!.env.open
 *.local
 
 # Editor directories and files

@@ -14,7 +14,6 @@ import {
 } from "../../utils/openEventDossier";
 import { researchEventId } from "../../utils/eventIdentity";
 import EventHydraulicContext from "./EventHydraulicContext";
-import EventHazardHistory from "./EventHazardHistory";
 import EventMedia from "./EventMedia";
 import EventRainfallContext from "./EventRainfallContext";
 import EventTerritorialContext from "./EventTerritorialContext";
@@ -424,13 +423,13 @@ function EventPopup({
   );
   const recordId = researchEventId(event);
   const releaseVersion = openRelease?.version || "arcus-open-2026.3";
-  const hydraulicResource = useEventContextResource("hydraulic", recordId, dossierExpanded, event);
-  const historyResource = useEventContextResource("hazard-history", recordId, dossierExpanded, event);
+  const isHydraulicEvent = event.specific_cause === "Hydraulic";
+  const hasCauseRelevantTerritorialContext = ["Hydraulic", "Landslide", "Earthquake"].includes(event.specific_cause);
+  const hydraulicResource = useEventContextResource("hydraulic", recordId, dossierExpanded && isHydraulicEvent, event);
   const mediaResource = useEventContextResource("media", recordId, dossierExpanded, event);
-  const rainfallResource = useEventContextResource("rainfall", recordId, dossierExpanded, event);
-  const territorialResource = useEventContextResource("territorial", recordId, dossierExpanded, event);
+  const rainfallResource = useEventContextResource("rainfall", recordId, dossierExpanded && isHydraulicEvent, event);
+  const territorialResource = useEventContextResource("territorial", recordId, dossierExpanded && hasCauseRelevantTerritorialContext, event);
   const hydraulicContext = hydraulicResource.data;
-  const hazardHistory = historyResource.data;
   const eventMedia = mediaResource.data || [];
   const rainfallContext = rainfallResource.data;
   const territorialContext = territorialResource.data;
@@ -653,12 +652,16 @@ function EventPopup({
       id: "event",
       label: it ? "Evento" : "Event",
     },
-    { id: "context", label: it ? "Contesto" : "Context" },
+    ...(hasCauseRelevantTerritorialContext
+      ? [{ id: "context", label: it ? "Contesto" : "Context" }]
+      : []),
     {
       id: "bridge",
       label: it ? "Ponte" : "Bridge",
     },
-    { count: eventMedia.length || undefined, id: "media", label: it ? "Immagini" : "Media" },
+    ...(mediaResource.status !== "absent"
+      ? [{ count: eventMedia.length || undefined, id: "media", label: it ? "Immagini" : "Media" }]
+      : []),
     {
       count: sourceCount,
       id: "sources",
@@ -671,7 +674,7 @@ function EventPopup({
     ? activeDossierTab
     : "event";
   const contextTabs = [
-    {
+    ...(isHydraulicEvent ? [{
           id: "rainfall",
           label: it ? "Meteo ricostruito" : "Reconstructed weather",
           meta: rainfallContext?.source?.dataset || (it ? "Rianalisi" : "Reanalysis"),
@@ -688,23 +691,18 @@ function EventPopup({
             hydraulicContext?.sources?.[0]?.provider || (it ? "Fonti dell’evento" : "Event sources"),
           resource: hydraulicResource,
           absentMessage: it ? "Nessun dossier idrometrico pubblicato per questo evento." : "No hydrometric dossier is published for this event.",
-    },
-    {
+    }] : []),
+    ...(hasCauseRelevantTerritorialContext ? [{
           id: "territorial",
-          label: it ? "Territorio attuale" : "Current territory",
-          meta: "ISPRA · INGV",
+          label: event.specific_cause === "Hydraulic"
+            ? (it ? "Contesto idraulico attuale" : "Current hydraulic context")
+            : event.specific_cause === "Landslide"
+              ? (it ? "Contesto franoso attuale" : "Current landslide context")
+              : (it ? "Contesto sismico attuale" : "Current seismic context"),
+          meta: event.specific_cause === "Earthquake" ? "INGV" : "ISPRA",
           resource: territorialResource,
           absentMessage: it ? "Il punto non è presente nel catalogo territoriale pubblicato." : "The point is not in the published territorial catalogue.",
-    },
-    {
-          id: "hazard-history",
-          label: it ? "Classi nel tempo" : "Classes over time",
-          meta: it ? "ISPRA · release storiche" : "ISPRA · historical releases",
-          resource: historyResource,
-          absentMessage: event.exact_location === false
-            ? (it ? "Localizzazione approssimata: la cronologia delle classi al punto non viene attribuita." : "Approximate location: point class history is not assigned.")
-            : (it ? "Nessuna cronologia cartografica pubblicata per questo evento." : "No map history is published for this event."),
-    },
+    }] : []),
   ];
   const visibleContextTab = contextTabs.some((tab) => tab.id === activeContextTab)
     ? activeContextTab
@@ -1219,18 +1217,9 @@ function EventPopup({
                   )}
                   {visibleContextTab === "territorial" && territorialContext && (
                     <EventTerritorialContext
+                      cause={event.specific_cause}
                       context={territorialContext}
-                      history={hazardHistory}
                     />
-                  )}
-                  {visibleContextTab === "territorial" && territorialContext && ["error", "mismatch"].includes(historyResource.status) && (
-                    <div className="arcus-event-history-recovery">
-                      <p>{it ? "L’evoluzione cartografica non è stata caricata." : "Map evolution could not be loaded."}</p>
-                      <EventResourceState resource={historyResource} language={language} />
-                    </div>
-                  )}
-                  {visibleContextTab === "hazard-history" && hazardHistory && (
-                    <EventHazardHistory history={hazardHistory} />
                   )}
                 </div>
               )}

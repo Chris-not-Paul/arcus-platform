@@ -3,6 +3,10 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
+import {
+  contactAddresses,
+  professionalEnabled,
+} from "../config/site";
 
 import "../styles/about-page.css";
 
@@ -12,85 +16,103 @@ function AboutPage() {
   const copy = {
     en: {
       eyebrow: "ARCUS IDENTITY",
-      title: "Scientific infrastructure intelligence, built from verified collapse evidence.",
+      title: "A public research infrastructure for bridge-collapse evidence.",
       lead:
-        "ARCUS is a research infrastructure for observing, classifying and interpreting bridge collapse events. It connects documented records, source traceability, geospatial context and professional analytics in one coherent system.",
+        "ARCUS curates documented bridge-collapse events as a versioned, inspectable evidence base. It connects records, sources, geolocation, taxonomy and reproducible analysis without hiding uncertainty.",
       missionLabel: "What ARCUS Does",
       missionTitle:
-        "It turns fragmented collapse records into structured evidence.",
+        "It preserves evidence and makes it reusable.",
       missionText:
-        "Bridge failure information is often scattered across technical reports, public authorities, scientific publications and verified news archives. ARCUS organizes that evidence so researchers and professionals can read patterns, compare territories and produce transparent outputs.",
+        "Bridge-failure information is fragmented across technical reports, public records, scientific publications, news archives and local sources. ARCUS resolves event identity, preserves provenance and publishes explicit classifications so every result can be checked against the underlying evidence.",
       audienceLabel: "Who It Serves",
       audienceTitle:
-        "A common evidence layer for research and technical decisions.",
+        "For people who need to inspect the evidence, not just a dashboard.",
       pillars: [
         [
-          "Verified archive",
-          "Events are organized with dates, location, severity, causes, triggers and documented sources.",
+          "Open evidence base",
+          "Events, coordinates, classifications and source metadata are published in a citable release.",
         ],
         [
           "Scientific method",
           "The methodology makes validation, classification and limits explicit instead of hiding uncertainty.",
         ],
         [
-          "Operational workspace",
-          "Professional turns the archive into comparable failures, supported lessons, explicit abstention and traceable evidence packages.",
+          "Continuous curation",
+          "Corrections, new documents and qualified contributions enter editorial review and remain traceable across releases.",
         ],
       ],
       audiences: [
         "Researchers and universities",
-        "Engineering companies and consultants",
-        "Infrastructure managers and concessionaires",
-        "Analysts, insurers and technical stakeholders",
+        "Bridge and structural engineering community",
+        "Infrastructure authorities and public institutions",
+        "Educators, analysts and technical communicators",
       ],
+      principlesLabel: "Scientific Commitments",
+      principlesTitle: "Credibility depends on restraint.",
+      principlesLead: "ARCUS is designed to show what the records support, where they remain incomplete and which conclusions they cannot justify.",
       principles: [
         ["Traceability", "Every analytical output should remain connected to the evidence behind it."],
         ["Reproducibility", "Methods, releases and model limits should be readable and auditable."],
-        ["Decision support", "ARCUS supports technical screening; it does not replace inspections, structural diagnosis or safety certification."],
+        ["Scientific restraint", "Historical records do not by themselves predict collapse, certify safety or replace inspections and structural assessment."],
       ],
     },
     it: {
-      eyebrow: "IDENTITA ARCUS",
-      title: "Infrastructure intelligence scientifica, costruita da evidenze di collasso verificate.",
+      eyebrow: "IDENTITÀ ARCUS",
+      title: "Un’infrastruttura pubblica di ricerca sulle evidenze di collasso dei ponti.",
       lead:
-        "ARCUS e un'infrastruttura di ricerca per osservare, classificare e interpretare i crolli dei ponti. Connette record documentati, tracciabilita delle fonti, contesto geospaziale e analytics professionali in un sistema coerente.",
+        "ARCUS cura eventi documentati di collasso dei ponti come base di evidenza versionata e ispezionabile. Connette record, fonti, geolocalizzazione, tassonomia e analisi riproducibili senza nascondere l’incertezza.",
       missionLabel: "Cosa Fa ARCUS",
       missionTitle:
-        "Trasforma registri frammentati in evidenza strutturata.",
+        "Conserva l’evidenza e la rende riutilizzabile.",
       missionText:
-        "Le informazioni sui cedimenti sono spesso disperse tra report tecnici, autorita pubbliche, pubblicazioni scientifiche e archivi stampa verificati. ARCUS organizza questa evidenza per leggere pattern, confrontare territori e produrre output trasparenti.",
+        "Le informazioni sui cedimenti sono disperse tra relazioni tecniche, atti pubblici, pubblicazioni scientifiche, archivi stampa e fonti locali. ARCUS risolve l’identità degli eventi, conserva la provenienza e pubblica classificazioni esplicite affinché ogni risultato possa essere verificato sull’evidenza sottostante.",
       audienceLabel: "A Chi Serve",
       audienceTitle:
-        "Un layer comune di evidenza per ricerca e decisioni tecniche.",
+        "Per chi deve esaminare l’evidenza, non soltanto osservare una dashboard.",
       pillars: [
         [
-          "Archivio verificato",
-          "Gli eventi sono organizzati con date, localizzazione, gravita, cause, trigger e fonti documentate.",
+          "Base di evidenza Open",
+          "Eventi, coordinate, classificazioni e metadati delle fonti sono pubblicati in una release citabile.",
         ],
         [
           "Metodo scientifico",
           "La metodologia rende espliciti validazione, classificazione e limiti invece di nascondere l'incertezza.",
         ],
         [
-          "Workspace operativo",
-          "Professional trasforma l'archivio in collassi comparabili, lezioni sostenute, astensione esplicita ed evidence package tracciabili.",
+          "Curatela continua",
+          "Correzioni, nuovi documenti e contributi qualificati entrano in revisione editoriale e restano tracciabili tra le release.",
         ],
       ],
       audiences: [
-        "Ricercatori e universita",
-        "Societa di ingegneria e consulenti",
-        "Gestori infrastrutturali e concessionari",
-        "Analisti, assicurazioni e stakeholder tecnici",
+        "Ricercatori e università",
+        "Comunità dell’ingegneria dei ponti e strutturale",
+        "Gestori infrastrutturali e istituzioni pubbliche",
+        "Docenti, analisti e comunicatori tecnici",
       ],
+      principlesLabel: "IMPEGNI SCIENTIFICI",
+      principlesTitle: "La credibilità richiede misura.",
+      principlesLead: "ARCUS è progettato per mostrare ciò che i record sostengono, dove rimangono incompleti e quali conclusioni non possono giustificare.",
       principles: [
-        ["Tracciabilita", "Ogni output analitico deve restare collegato all'evidenza che lo sostiene."],
-        ["Riproducibilita", "Metodi, release e limiti dei modelli devono essere leggibili e verificabili."],
-        ["Supporto decisionale", "ARCUS supporta lo screening tecnico; non sostituisce ispezioni, diagnosi strutturali o certificazioni di sicurezza."],
+        ["Tracciabilità", "Ogni risultato analitico deve restare collegato all’evidenza che lo sostiene."],
+        ["Riproducibilità", "Metodi, release e limiti devono essere leggibili, versionati e verificabili."],
+        ["Misura scientifica", "I record storici non predicono da soli il collasso, non certificano la sicurezza e non sostituiscono ispezioni o valutazioni strutturali."],
       ],
     },
   };
 
-  const content = copy[language] || copy.en;
+  const baseContent = copy[language] || copy.en;
+  const content = professionalEnabled
+    ? baseContent
+    : {
+        ...baseContent,
+        lead: baseContent.lead,
+        pillars: [
+          ...baseContent.pillars,
+          language === "it"
+            ? ["Strumenti Open", "Atlante, Analytics e release scaricabile rendono consultabili record, pattern e limiti senza richiedere un account."]
+            : ["Open tools", "The Atlas, Analytics and downloadable release make records, patterns and limitations accessible without an account."],
+        ],
+      };
 
   return (
     <main className="about-page" id="main-content">
@@ -147,13 +169,55 @@ function AboutPage() {
       </section>
 
       <section className="about-section">
+        <div className="about-container about-principles-intro">
+          <div>
+            <div className="about-label">{content.principlesLabel}</div>
+            <h2>{content.principlesTitle}</h2>
+          </div>
+          <p>{content.principlesLead}</p>
+        </div>
         <div className="about-container about-principles">
-          {content.principles.map(([title, text]) => (
+          {content.principles.map(([title, text], index) => (
             <article key={title}>
+              <b>{String(index + 1).padStart(2, "0")}</b>
               <span>{title}</span>
               <p>{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="about-section about-contact">
+        <div className="about-container about-split">
+          <div>
+            <div className="about-label">
+              {language === "it" ? "CONTATTI" : "CONTACT"}
+            </div>
+            <h2>
+              {language === "it"
+                ? "Ricerca, dati e collaborazione."
+                : "Research, data and collaboration."}
+            </h2>
+          </div>
+          <div className="about-contact-list">
+            <p>
+              {language === "it"
+                ? "Scegli il canale più adatto: le proposte documentali vengono revisionate prima di qualunque integrazione nella release."
+                : "Choose the most appropriate channel: documented submissions are reviewed before any integration into a release."}
+            </p>
+            <a href={`mailto:${contactAddresses.general}`}>
+              <span>{language === "it" ? "Informazioni" : "General"}</span>
+              {contactAddresses.general}
+            </a>
+            <a href={`mailto:${contactAddresses.research}`}>
+              <span>Research</span>
+              {contactAddresses.research}
+            </a>
+            <a href={`mailto:${contactAddresses.contributions}`}>
+              <span>{language === "it" ? "Contributi" : "Contributions"}</span>
+              {contactAddresses.contributions}
+            </a>
+          </div>
         </div>
       </section>
 

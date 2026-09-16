@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 
 import useLanguage from "../../context/useLanguage";
 import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
+import {
+  contactAddresses,
+  professionalEnabled,
+} from "../../config/site";
 
 import "./Footer.css";
 
@@ -20,8 +24,10 @@ function Footer() {
           label: "Platform",
           links: [
             ["Atlas", "/atlas"],
-            ["Professional", "/professional"],
             ["Analytics", "/analytics"],
+            ...(professionalEnabled
+              ? [["Professional", "/professional"]]
+              : []),
           ],
         },
         {
@@ -36,7 +42,8 @@ function Footer() {
           label: "About",
           links: [
             ["Identity", "/about"],
-            ["Contact", "/about"],
+            ["Contribute", "/contribute"],
+            ["Contact", `mailto:${contactAddresses.general}`],
           ],
         },
       ],
@@ -52,8 +59,10 @@ function Footer() {
           label: "Piattaforma",
           links: [
             ["Atlante", "/atlas"],
-            ["Professional", "/professional"],
             ["Analytics", "/analytics"],
+            ...(professionalEnabled
+              ? [["Professional", "/professional"]]
+              : []),
           ],
         },
         {
@@ -68,7 +77,8 @@ function Footer() {
           label: "About",
           links: [
             ["Identita", "/about"],
-            ["Contatto", "/about"],
+            ["Contribuisci", "/contribute"],
+            ["Contatto", `mailto:${contactAddresses.general}`],
           ],
         },
       ],
@@ -105,14 +115,23 @@ function Footer() {
                 key={group.label}
               >
                 <span>{group.label}</span>
-                {group.links.map(([label, path]) => (
-                  <Link
-                    key={`${group.label}-${label}-${path}`}
-                    to={path}
-                  >
-                    {label}
-                  </Link>
-                ))}
+                {group.links.map(([label, path]) =>
+                  path.startsWith("mailto:") ? (
+                    <a
+                      href={path}
+                      key={`${group.label}-${label}-${path}`}
+                    >
+                      {label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={`${group.label}-${label}-${path}`}
+                      to={path}
+                    >
+                      {label}
+                    </Link>
+                  )
+                )}
               </div>
             ))}
           </nav>

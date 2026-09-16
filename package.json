@@ -3,12 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "api": "node server/server.js",
     "dev": "vite",
     "dev:lan": "vite --host 0.0.0.0",
     "dev:api": "node server/server.js",
     "build": "vite build",
+    "build:open": "vite build --mode open",
     "build-data": "node scripts/build-data.js",
     "build:open-release": "node scripts/build-open-research-release.js",
     "build:ainop-index": "node scripts/build-ainop-bridge-index.js",
@@ -79,6 +83,8 @@
     "test:seismic-mitigation": "node scripts/test-seismic-mitigation-readiness.js",
     "test:seismic-intake": "node scripts/test-seismic-evidence-intake.js",
     "test:open-release": "node scripts/test-open-research-release.js",
+    "test:open-production": "npm run build:open && node scripts/test-open-production.js",
+    "test:open-production-ui": "node scripts/test-open-production-ui.js",
     "test:collapse-intelligence": "node scripts/test-collapse-intelligence.js",
     "test:collapse-intelligence-report": "node scripts/test-collapse-intelligence-report.js",
     "test:product-scope": "node scripts/test-product-scope.js",

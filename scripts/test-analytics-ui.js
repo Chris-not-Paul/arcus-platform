@@ -58,6 +58,13 @@ try {
   await page.addInitScript(() => localStorage.setItem("arcus-language", "it"));
   await page.goto(`${base}/analytics`);
 
+  const goToWorkspaceStep = async (step) => {
+    await page.locator(".analytics-workspace-index button").nth(step - 1).click();
+    await page.locator(".analytics-workspace-index button").nth(step - 1).getAttribute("aria-current").then((value) => {
+      assert.equal(value, "step");
+    });
+  };
+
   await page.locator(".analytics-filter-grid select").first().waitFor();
   await page.locator(".analytics-hero-pro-preview").getByText(new RegExp(`${events.length} eventi e ${sources.length} fonti`)).waitFor();
   const releaseCardText = await page.locator(".analytics-hero-pro-preview").innerText();
@@ -71,8 +78,6 @@ try {
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(commonHydraulic.length));
   assert.equal(await cohortStats.nth(1).locator("strong").innerText(), String(commonHydraulicSources.length));
   assert.equal(await cohortStats.nth(2).locator("strong").innerText(), "2000-2022");
-  assert.match(await page.locator(".analytics-cohort-boundary").innerText(), /non costituisce una stima di rischio/i);
-
   const preservedUrl = page.url();
   await page.reload();
   assert.equal(page.url(), preservedUrl);
@@ -81,10 +86,15 @@ try {
   assert.equal(await selects.nth(1).inputValue(), "Hydraulic");
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(commonHydraulic.length));
 
+  await goToWorkspaceStep(3);
+  assert.match(await page.locator(".analytics-cohort-boundary").innerText(), /non costituisce una stima di rischio/i);
+  await page.locator(".analytics-explorer-detail-grid details").nth(0).locator("summary").click();
+  await page.locator(".analytics-explorer-detail-grid details").nth(1).locator("summary").click();
   const constructionCoverage = page.locator(".analytics-coverage-row").filter({ hasText: "Anno di costruzione" });
   assert.match(await constructionCoverage.innerText(), /mancanti/);
   assert.ok(await page.locator(".analytics-record-links a").count() > 0);
 
+  await goToWorkspaceStep(2);
   const chartBuilder = page.locator(".analytics-chart-builder");
   await chartBuilder.getByText("Trasforma la coorte in una figura verificabile.").waitFor();
   assert.equal(
@@ -102,8 +112,9 @@ try {
   await seasonalityPreset.click();
   await page.waitForURL(/cause=Hydraulic.*group=season/);
   assert.equal(await seasonalityPreset.getAttribute("aria-pressed"), "true");
-  assert.equal(await chartBuilder.locator(".analytics-chart-dimension").inputValue(), "season");
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(hydraulicEvents.length));
+  await goToWorkspaceStep(3);
+  await chartBuilder.locator(".analytics-temporal-sensitivity > summary").click();
   const seasonLabels = await chartBuilder.locator('.analytics-research-chart g[role="button"] > text:first-of-type').allTextContents();
   assert.deepEqual(seasonLabels, ["Inverno", "Primavera", "Estate", "Autunno"].filter((season) => hydraulicSeasonCounts.has(season)));
   const seasonTotal = await chartBuilder.locator("[data-chart-value]").evaluateAll((rows) => rows.reduce(
@@ -126,30 +137,37 @@ try {
   assert.equal(seasonManifest.temporal_sensitivity.total_distinct_dates, hydraulicDistinctDates.size);
   assert.equal(seasonManifest.temporal_sensitivity.independent_episode_claim, false);
 
+  await goToWorkspaceStep(2);
   const hydraulicPreset = chartBuilder.locator('[data-research-preset="hydraulic-common-trend"]');
   await hydraulicPreset.click();
   await page.waitForURL(/period=common.*cause=Hydraulic.*group=year/);
   assert.equal(await hydraulicPreset.getAttribute("aria-pressed"), "true");
-  assert.equal(await chartBuilder.locator(".analytics-chart-dimension").inputValue(), "year");
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(commonHydraulic.length));
 
   assert.ok(emptyPair, "Expected at least one empty cause-region pair in the common period");
+  await goToWorkspaceStep(1);
   await selects.nth(1).selectOption(emptyPair.cause);
   await selects.nth(2).selectOption(emptyPair.region);
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), "0");
+  await goToWorkspaceStep(3);
+  await page.locator(".analytics-cohort-records > summary").click();
   assert.match(await page.locator(".analytics-cohort-records").innerText(), /non converte una coorte vuota in uno zero di rischio/i);
   assert.ok(await page.locator(".analytics-chart-empty").count() >= 1);
 
+  await goToWorkspaceStep(1);
   await page.getByRole("button", { name: "Azzera filtri" }).click();
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(events.length));
   assert.equal(new URL(page.url()).searchParams.has("cause"), false);
   assert.equal(new URL(page.url()).searchParams.has("period"), false);
   assert.equal(new URL(page.url()).searchParams.get("group"), "year");
 
+  await goToWorkspaceStep(2);
+  await chartBuilder.getByRole("tab", { name: /Configurazione libera/ }).click();
   const dimensionSelect = chartBuilder.locator(".analytics-chart-dimension");
   await dimensionSelect.selectOption("region");
   await chartBuilder.getByRole("button", { name: "Tabella" }).click();
   await page.waitForURL(/group=region.*view=table/);
+  await goToWorkspaceStep(3);
   const tableTotal = await chartBuilder.locator(".analytics-chart-table tbody [data-chart-value]").evaluateAll((rows) => (
     rows.reduce((total, row) => total + Number(row.getAttribute("data-chart-value")), 0)
   ));
@@ -172,9 +190,12 @@ try {
   assert.ok(chartManifest.limitations.some((value) => /not estimates of collapse risk/i.test(value)));
   assert.equal(chartManifest.advanced_diagnostics.scope, "descriptive_only");
   assert.equal(chartManifest.advanced_diagnostics.distribution.normalizedEntropy, Number(regionEntropy.toFixed(3)));
+  await chartBuilder.locator(".analytics-advanced-diagnostics").evaluate((details) => { details.open = true; });
   assert.equal(Number(await chartBuilder.locator('[data-diagnostic="normalized_entropy"] strong').innerText()), Number(regionEntropy.toFixed(3)));
 
+  await goToWorkspaceStep(2);
   await chartBuilder.getByRole("button", { name: "Barre" }).click();
+  await goToWorkspaceStep(3);
   const svgDownloadPromise = page.waitForEvent("download");
   await chartBuilder.getByRole("button", { name: "Scarica figura SVG" }).click();
   const svgDownload = await svgDownloadPromise;
@@ -201,8 +222,10 @@ try {
   assert.match(archive.readAsText("README.md"), /must not be used as estimates of collapse risk/i);
   assert.equal(archive.readAsText("figure-caption.txt").trim(), figureCaption);
 
+  await goToWorkspaceStep(2);
   await chartBuilder.getByRole("button", { name: /Tavola di contingenza/ }).click();
   await page.waitForURL(/group=region.*analysis=crosstab/);
+  await goToWorkspaceStep(3);
   const crossTabCellsTotal = await chartBuilder.locator(".analytics-crosstab tbody [data-chart-value]").evaluateAll((cells) => (
     cells.reduce((total, cell) => total + Number(cell.getAttribute("data-chart-value")), 0)
   ));
@@ -213,6 +236,7 @@ try {
   const selectedCellCount = Number(await firstNonZeroCell.getAttribute("data-chart-value"));
   await firstNonZeroCell.click();
   assert.equal(Number(await page.locator("[data-record-total]").innerText()), selectedCellCount);
+  await page.locator(".analytics-cohort-records > summary").click();
   await page.getByRole("button", { name: "Mostra intera coorte" }).click();
   assert.equal(Number(await page.locator("[data-record-total]").innerText()), events.length);
 
@@ -226,6 +250,7 @@ try {
   assert.equal(crossManifest.contingency_table.rows.reduce((total, row) => total + row.total, 0), events.length);
   assert.ok(crossManifest.advanced_diagnostics.contingency.cramersV >= 0 && crossManifest.advanced_diagnostics.contingency.cramersV <= 1);
   assert.equal(crossManifest.advanced_diagnostics.contingency.hypothesis_test_performed, false);
+  await chartBuilder.locator(".analytics-advanced-diagnostics").evaluate((details) => { details.open = true; });
   assert.match(await chartBuilder.locator('[data-diagnostic="cramers_v"] code').innerText(), /χ²/);
 
   const crossCsvDownloadPromise = page.waitForEvent("download");
@@ -238,13 +263,15 @@ try {
   await page.reload();
   assert.equal(page.url(), chartUrl);
   assert.equal(await dimensionSelect.inputValue(), "region");
-  assert.equal(await chartBuilder.getByRole("button", { name: /Tavola di contingenza/ }).getAttribute("aria-pressed"), "true");
+  assert.equal(await chartBuilder.getByRole("button", { name: /Tavola di contingenza/, includeHidden: true }).getAttribute("aria-pressed"), "true");
 
+  await goToWorkspaceStep(2);
   await chartBuilder.getByRole("button", { name: /Confronto A\/B/ }).click();
   await dimensionSelect.selectOption("specific_cause");
   const comparisonSelects = chartBuilder.locator(".analytics-comparison-filter-grid select");
   await comparisonSelects.nth(1).selectOption("Hydraulic");
   await page.waitForURL(/analysis=comparison.*bcause=Hydraulic/);
+  await goToWorkspaceStep(3);
   const cohortATotal = await chartBuilder.locator('[data-cohort="A"]').evaluateAll((bars) => (
     bars.reduce((total, bar) => total + Number(bar.getAttribute("data-chart-value")), 0)
   ));
@@ -276,7 +303,7 @@ try {
   await page.reload();
   assert.equal(page.url(), comparisonUrl);
   assert.equal(await comparisonSelects.nth(1).inputValue(), "Hydraulic");
-  assert.equal(await chartBuilder.getByRole("button", { name: /Confronto A\/B/ }).getAttribute("aria-pressed"), "true");
+  assert.equal(await chartBuilder.getByRole("button", { name: /Confronto A\/B/, includeHidden: true }).getAttribute("aria-pressed"), "true");
 
   await page.setViewportSize({ width: 390, height: 844 });
   const dimensions = await page.evaluate(() => ({
@@ -317,6 +344,7 @@ try {
       "empty cohort is not presented as zero risk",
       "filter reset",
       "mobile horizontal overflow",
+      "progressive three-step workspace and URL persistence",
     ],
     commonHydraulicEvents: commonHydraulic.length,
     commonHydraulicSources: commonHydraulicSources.length,

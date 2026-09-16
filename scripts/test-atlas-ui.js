@@ -128,13 +128,15 @@ try {
   await page.getByRole("button", { name: /Apri scheda completa/ }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("tab", { name: "Contesto", exact: true }).click();
-  await dialog.getByRole("button", { name: /Territorio attuale/ }).click();
-  await dialog.getByText("Classi variate", { exact: true }).waitFor();
-  await dialog.getByText("Classi invariate", { exact: true }).waitFor();
+  await dialog.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
+  await dialog.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
+  assert.equal(await dialog.locator(".arcus-event-territorial-grid article").count(), 1);
+  assert.equal(await dialog.locator(".arcus-event-causal-separation > div").count(), 3);
+  assert.match(await dialog.locator(".arcus-event-causal-separation").innerText(), /Causa documentata[\s\S]*Idraulica[\s\S]*Nesso causale automatico[\s\S]*Non inferito/i);
+  assert.doesNotMatch(await dialog.locator(".arcus-event-territorial").innerText(), /P1|P2|P3|Classi variate|Classi invariate/);
+  await waitFor(async () => (await dialog.getByRole("tab", { name: "Immagini", exact: true }).count()) === 0, "Empty media tab removed");
   await noHorizontalOverflow(page);
   await screenshot(page, "desktop-territorial");
-  await dialog.getByRole("button", { name: /Classi nel tempo/ }).click();
-  await dialog.getByRole("heading", { name: "Classi ISPRA alla coordinata del ponte" }).waitFor();
   await dialog.getByRole("tab", { name: "Ponte", exact: true }).click();
   await dialog.getByRole("heading", { name: "Il ponte documentato" }).waitFor();
   await dialog.getByRole("tab", { name: /Fonti e qualità/ }).click();
@@ -168,7 +170,7 @@ try {
   await page.waitForTimeout(700);
   assert.equal(await tileZoom(), userZoom, "Sidebar changes preserve user zoom for the selected bridge");
   checks.push("Direct marker selection and user zoom preserved while toggling sidebar");
-  checks.push("Sidebar selection, highlighted marker, context/history/bridge/sources tabs, JSON identity, keyboard focus and Escape");
+  checks.push("Sidebar selection, highlighted marker, cause-relevant context, bridge/sources tabs, JSON identity, keyboard focus and Escape");
 
   // Change to another distant bridge within the same SPA: the index files must be shared.
   const second = byId("IT13.02.01");
@@ -179,12 +181,12 @@ try {
   await page.locator(".arcus-event-card").filter({ hasText: second.event_id }).waitFor();
   await page.getByRole("button", { name: /Apri scheda completa/ }).click();
   await page.getByRole("tab", { name: "Contesto", exact: true }).click();
-  await page.getByRole("button", { name: /Territorio attuale/ }).click();
+  await page.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
   await page.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
   for (const [url, count] of contextRequests) {
     if (url.endsWith("index.json")) assert.equal(count, 1, `Catalogue reused: ${url}`);
   }
-  checks.push("Different event in same session reuses all five parsed catalogues");
+  checks.push("Different hydraulic event reuses the relevant parsed context catalogues");
 
   for (const [name, width, height] of [["tablet", 768, 1024], ["mobile", 390, 844], ["small-mobile", 360, 640]]) {
     await page.setViewportSize({ width, height });
@@ -201,14 +203,12 @@ try {
     await screenshot(page, `${name}-selection`);
     await page.getByRole("button", { name: /Apri scheda completa/ }).click();
     await page.getByRole("tab", { name: "Contesto", exact: true }).click();
-    await page.getByRole("button", { name: /Territorio attuale/ }).click();
-    await page.getByText("Classi variate", { exact: true }).waitFor();
+    await page.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
+    await page.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
+    assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
     await noHorizontalOverflow(page);
     await screenshot(page, `${name}-territorial`);
-    await page.getByRole("button", { name: /Classi nel tempo/ }).click();
-    await page.getByRole("heading", { name: "Classi ISPRA alla coordinata del ponte" }).waitFor();
-    await noHorizontalOverflow(page);
-    checks.push(`${name} (${width}×${height}): overview, dossier, current/history panels, no horizontal overflow`);
+    checks.push(`${name} (${width}×${height}): overview, dossier, cause-relevant context, no horizontal overflow`);
   }
 
   const reviewEvent = byId("IT00.10.23");
@@ -219,28 +219,59 @@ try {
   assert.ok(!(await page.getByRole("dialog").locator(".arcus-event-description").innerText()).includes("B00.10.22"));
   checks.push("Review status precedes disputed narrative; legacy reference is displayed as IT00.10.22");
 
-  const approximate = byId("IT20.10.18");
-  await openDossier(page, approximate);
+  const landslideEvent = byId("IT15.04.01");
+  await openDossier(page, landslideEvent);
   await page.getByRole("tab", { name: "Contesto", exact: true }).click();
-  await page.getByRole("button", { name: /Classi nel tempo/ }).click();
-  await page.getByText(/Localizzazione approssimata: la cronologia/).waitFor();
-  checks.push("Approximate coordinate produces explicit coverage message without class assignment");
+  await page.getByText("Layer pertinente alla causa documentata", { exact: true }).waitFor();
+  assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
+  assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), /Pericolosità da frana/i);
+  assert.doesNotMatch(await page.locator(".arcus-event-territorial").innerText(), /Pericolosità idraulica|Pericolosità sismica|P1|P2|P3/i);
+  checks.push("Landslide dossier exposes only cause-relevant context and withholds map classes");
+
+  const materialEvent = byId("IT11.05.01");
+  await openDossier(page, materialEvent);
+  assert.equal(await page.getByRole("tab", { name: "Contesto", exact: true }).count(), 0);
+  await waitFor(async () => (await page.getByRole("tab", { name: "Immagini", exact: true }).count()) === 0, "Empty material-event media tab removed");
+  checks.push("Non-environmental collapse dossier does not expose unrelated hazard context");
+
+  const stratifiedExpectations = [
+    ["Earthquake", true, /Pericolosità sismica/i],
+    ["Impact", false, null],
+    ["Design and Construction", false, null],
+    ["Overload", false, null],
+    ["Fire and Explosion", false, null],
+  ];
+  for (const [cause, expectsContext, expectedCopy] of stratifiedExpectations) {
+    const sample = events.find((candidate) => candidate.specific_cause === cause);
+    assert.ok(sample, `Missing stratified Atlas sample for ${cause}`);
+    await openDossier(page, sample);
+    const contextTab = page.getByRole("tab", { name: "Contesto", exact: true });
+    assert.equal(await contextTab.count(), expectsContext ? 1 : 0, `${cause} context-tab relevance`);
+    if (expectsContext) {
+      await contextTab.click();
+      await page.getByText("Layer pertinente alla causa documentata", { exact: true }).waitFor();
+      assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
+      assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), expectedCopy);
+      assert.match(await page.locator(".arcus-event-causal-separation").innerText(), /Non inferito/i);
+    }
+  }
+  checks.push("Cause-stratified dossier audit covers all eight ARCUS cause families");
 
   // Controlled network failure: retains the tab, explains failure, then recovers.
   const errorPage = await context.newPage();
-  let blockHistory = true;
-  await errorPage.route("**/data/event-context/hazard-history/index.json", (route) => blockHistory
+  let blockTerritorial = true;
+  await errorPage.route("**/data/event-context/territorial/index.json", (route) => blockTerritorial
     ? route.fulfill({ status: 503, body: "Controlled acceptance-test failure" })
     : route.continue());
   await openDossier(errorPage, event);
   await errorPage.getByRole("tab", { name: "Contesto", exact: true }).click();
-  await errorPage.getByRole("button", { name: /Classi nel tempo/ }).click();
+  await errorPage.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
   await errorPage.getByText("Caricamento non riuscito", { exact: true }).waitFor();
   await screenshot(errorPage, "controlled-failure-retry");
-  blockHistory = false;
+  blockTerritorial = false;
   await errorPage.getByRole("button", { name: "Riprova", exact: true }).click();
-  await errorPage.getByRole("heading", { name: "Classi ISPRA alla coordinata del ponte" }).waitFor();
-  checks.push("Controlled history HTTP 503: explicit error, retry and recovery with real local data");
+  await errorPage.getByRole("heading", { name: "Layer pertinente alla causa documentata" }).waitFor();
+  checks.push("Controlled territorial HTTP 503: explicit error, retry and recovery with real local data");
 
   let blockEventApi = true;
   let blockStaticEvents = false;
