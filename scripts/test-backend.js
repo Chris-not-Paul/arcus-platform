@@ -360,6 +360,12 @@ await upsertUser({
   username: "suite-admin@example.test",
 });
 
+await upsertUser({
+  password: "suite-expert-password",
+  role: "professional",
+  username: "suite-expert@example.test",
+});
+
 const server = await startArcusApiServer();
 
 try {
@@ -413,6 +419,158 @@ try {
   const adminSession = await login(
     "suite-admin@example.test",
     "suite-admin-password"
+  );
+  const expertSession = await login(
+    "suite-expert@example.test",
+    "suite-expert-password"
+  );
+
+  const contributionReceipt = await json(
+    await postJson("/api/contributions", {
+      contributionTypes: ["new_source"],
+      email: "expert@example.test",
+      eventId: "IT20.01.01",
+      evidenceBasis: "published_source",
+      name: "Test Expert",
+      documentAttachment: {
+        dataUrl: `data:application/pdf;base64,${Buffer.from("%PDF-1.4\n%%EOF\n").toString("base64")}`,
+        filename: "private-assessment.pdf",
+        rightsConfirmed: true,
+      },
+      documentSource: {
+        accessBasis: "share_copy",
+        documentType: "technical_report",
+        issuer: "Test Technical Authority",
+        title: "Private bridge assessment",
+      },
+      sources: ["https://example.test/technical-report"],
+      sourceAvailability: "mixed",
+      summary: "Documented technical evidence submitted for controlled editorial review.",
+      targetType: "existing_event",
+      termsAccepted: true,
+    })
+  );
+  assert(contributionReceipt.contribution.status === "new", "contribution was not queued");
+  const publicContributionStatus = await getJson(
+    `/api/contributions/${encodeURIComponent(contributionReceipt.contribution.id)}/status`
+  );
+  assert(publicContributionStatus.contribution.status === "new", "public contribution status is unavailable");
+  const contributionQueue = await getJson("/api/admin/contributions", adminSession);
+  assert(contributionQueue.contributions.length === 1, "admin contribution queue is empty");
+  assert(contributionQueue.contributions[0].documentAttachment?.sha256, "private document checksum is missing");
+  const privateDocument = await fetch(
+    `${base}/api/admin/contributions/${encodeURIComponent(contributionReceipt.contribution.id)}/document`,
+    { headers: { Cookie: adminSession.cookie } }
+  );
+  assert(privateDocument.ok, "admin cannot retrieve the private document");
+  assert(Buffer.from(await privateDocument.arrayBuffer()).subarray(0, 5).toString() === "%PDF-", "private PDF content changed");
+  const reviewedContribution = await json(
+    await postJson(
+      `/api/admin/contributions/${encodeURIComponent(contributionReceipt.contribution.id)}/status`,
+      { reviewNote: "Source identity checked.", status: "under_review" },
+      adminSession
+    )
+  );
+  assert(reviewedContribution.contribution.status === "under_review", "contribution status was not updated");
+  await json(
+    await postJson(
+      `/api/admin/contributions/${encodeURIComponent(contributionReceipt.contribution.id)}/status`,
+      { reviewNote: "Accepted for the next curated release.", status: "accepted" },
+      adminSession
+    )
+  );
+  const acknowledgements = await getJson("/api/contributions/acknowledgements");
+  assert(acknowledgements.acknowledgements.length === 1, "accepted contributor was not acknowledged");
+
+  const analogueJudgementPayload = {
+    analogueEventId: "IT20.01.01",
+    comparisonSnapshot: { hydraulic: { highest_class_exact: true } },
+    consentForModelDevelopment: true,
+    engineVersion: "arcus-mitigation-intelligence-v4",
+    note: "The hydraulic context is comparable for this expert review.",
+    projectBridgeProfile: { material_type: "concrete" },
+    projectLocation: { latitude: 43.6, longitude: 13.5, province: "Ancona" },
+    queryId: "req-expert-feedback-suite",
+    rating: "useful",
+    reasonCodes: ["hazard_comparable"],
+    retrievalRank: 1,
+    targetHazardSnapshot: { hydraulic: { highestClass: "P2" } },
+  };
+  const firstJudgement = await json(
+    await postJson(
+      "/api/professional/failure-learning-feedback",
+      analogueJudgementPayload,
+      adminSession
+    )
+  );
+  const revisedJudgement = await json(
+    await postJson(
+      "/api/professional/failure-learning-feedback",
+      {
+        ...analogueJudgementPayload,
+        note: "A revised expert assessment confirms the same relevance judgement.",
+        queryId: "req-revised-expert-feedback-suite",
+      },
+      adminSession
+    )
+  );
+  assert(
+    revisedJudgement.judgement.supersedes === firstJudgement.judgement.id,
+    "revised analogue judgement did not preserve lineage"
+  );
+  const judgementDataset = await getJson(
+    "/api/admin/failure-learning-feedback",
+    adminSession
+  );
+  assert(judgementDataset.judgements.length === 2, "expert judgement dataset is incomplete");
+  assert(
+    judgementDataset.judgements.every((item) => item.analoguePairFingerprint),
+    "expert judgement fingerprints are missing"
+  );
+  await json(
+    await postJson(
+      "/api/professional/failure-learning-feedback",
+      {
+        ...analogueJudgementPayload,
+        note: "Independent expert review of the same target and analogue pair.",
+        queryId: "req-independent-expert-feedback-suite",
+      },
+      expertSession
+    )
+  );
+  const learningReadiness = await getJson(
+    "/api/admin/failure-learning-readiness",
+    adminSession
+  );
+  assert(
+    learningReadiness.readiness.status === "not_ready_for_model_training",
+    "premature model-training readiness was reported"
+  );
+  assert(
+    learningReadiness.readiness.observed.multiRatedPairs === 1 &&
+      learningReadiness.readiness.agreement.exactPairwiseAgreement === 1,
+    "independent pairwise agreement was not measured"
+  );
+  const learningExportResponse = await fetch(
+    `${base}/api/admin/failure-learning-export`,
+    { headers: { Cookie: adminSession.cookie } }
+  );
+  assert(learningExportResponse.ok, "calibration dataset export failed");
+  const learningExport = await learningExportResponse.json();
+  assert(
+    learningExport.manifest.privacyStatus === "pseudonymised_and_deidentified_not_anonymous",
+    "calibration export privacy status is inaccurate"
+  );
+  assert(learningExport.records.length === 2, "calibration export includes superseded labels");
+  assert(
+    learningExport.records.every((item) =>
+      item.reviewerCode &&
+      !Object.hasOwn(item, "reviewerUsername") &&
+      !Object.hasOwn(item, "projectLocation") &&
+      !Object.hasOwn(item, "queryId") &&
+      !Object.hasOwn(item, "note")
+    ),
+    "calibration export contains direct identity or project-location fields"
   );
 
   const approved = await json(
@@ -1020,6 +1178,9 @@ try {
       checks: [
         "free-registration",
         "access-request-promotion",
+        "expert-contribution-editorial-queue",
+        "failure-learning-expert-judgement-lineage",
+        "failure-learning-readiness-and-deidentified-export",
         "entitlements",
         "password-change",
         "self-session-management",

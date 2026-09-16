@@ -156,45 +156,87 @@ export function revokeOtherAccountSessions() {
   });
 }
 
+const openReleaseBaseUrl = "/data/open-release";
+
+async function withTimeout(request, timeoutMs) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await request(controller.signal);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function openReleaseJson(apiPath, staticFileName) {
+  try {
+    return await withTimeout(
+      (signal) => apiJson(apiPath, { signal }),
+      4000
+    );
+  } catch (apiError) {
+    try {
+      return await withTimeout(async (signal) => {
+        const response = await fetch(
+          `${openReleaseBaseUrl}/${staticFileName}`,
+          { credentials: "same-origin", signal }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `ARCUS Open release fallback failed: ${response.status} ${staticFileName}`
+          );
+        }
+
+        return response.json();
+      }, 15000);
+    } catch (fallbackError) {
+      fallbackError.cause = apiError;
+      throw fallbackError;
+    }
+  }
+}
+
 export function openEvents() {
-  return apiJson("/api/open/events", { signal: AbortSignal.timeout(15000) }).then((data) => {
+  return openReleaseJson("/api/open/events", "events.json").then((data) => {
     if (!Array.isArray(data.events)) throw new Error("Invalid Open events response");
     return data.events;
   });
 }
 
 export function openSources() {
-  return apiJson("/api/open/sources", { signal: AbortSignal.timeout(15000) }).then((data) => {
+  return openReleaseJson("/api/open/sources", "sources.json").then((data) => {
     if (!Array.isArray(data.sources)) throw new Error("Invalid Open sources response");
     return data.sources;
   });
 }
 
 export function openResource(resource) {
-  return apiJson(`/api/open/${resource}`);
+  return openReleaseJson(`/api/open/${resource}`, `${resource}.json`);
 }
 
 export function openManifest() {
-  return apiJson("/api/open/manifest", { signal: AbortSignal.timeout(15000) }).then((data) => {
+  return openReleaseJson("/api/open/manifest", "manifest.json").then((data) => {
     if (!data?.version) throw new Error("Invalid Open manifest response");
     return data;
   });
 }
 
 export const openDownloadUrls = Object.freeze({
-  csv: "/api/open/download/csv",
-  geojson: "/api/open/download/geojson",
+  csv: `${openReleaseBaseUrl}/events.csv`,
+  geojson: `${openReleaseBaseUrl}/events.geojson`,
 });
 
 export const openResourceUrls = Object.freeze({
-  changelog: "/api/open/changelog",
-  dataDictionary: "/api/open/data-dictionary",
-  idMapping: "/api/open/id-mapping",
-  manifest: "/api/open/manifest",
-  qualityAudit: "/api/open/quality-audit",
-  sources: "/api/open/sources",
-  statistics: "/api/open/statistics",
-  taxonomy: "/api/open/taxonomy",
+  changelog: `${openReleaseBaseUrl}/changelog.json`,
+  dataDictionary: `${openReleaseBaseUrl}/data-dictionary.json`,
+  idMapping: `${openReleaseBaseUrl}/id-mapping.json`,
+  manifest: `${openReleaseBaseUrl}/manifest.json`,
+  qualityAudit: `${openReleaseBaseUrl}/quality-audit.json`,
+  sources: `${openReleaseBaseUrl}/sources.json`,
+  statistics: `${openReleaseBaseUrl}/statistics.json`,
+  taxonomy: `${openReleaseBaseUrl}/taxonomy.json`,
 });
 
 export function professionalResource(resource) {
@@ -221,6 +263,17 @@ export function professionalMitigationIntelligence(payload) {
     },
     method: "POST",
   });
+}
+
+export function submitFailureLearningFeedback(payload) {
+  return apiJson("/api/professional/failure-learning-feedback", {
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+      "X-ARCUS-CSRF-Token": csrfToken || "",
+    },
+    method: "POST",
+  }).then((data) => data.judgement);
 }
 
 function filenameFromDisposition(value) {
@@ -381,6 +434,80 @@ export function requestProfessionalAccess(payload) {
     },
     method: "POST",
   }).then((data) => data.request);
+}
+
+export function submitExpertContribution(payload) {
+  return apiJson("/api/contributions", {
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+  }).then((data) => data.contribution);
+}
+
+export function contributionAcknowledgements() {
+  return apiJson("/api/contributions/acknowledgements").then(
+    (data) => data.acknowledgements || []
+  );
+}
+
+export function getExpertContributionStatus(id) {
+  return apiJson(
+    `/api/contributions/${encodeURIComponent(id)}/status`
+  ).then((data) => data.contribution);
+}
+
+export function adminContributions() {
+  return apiJson("/api/admin/contributions").then(
+    (data) => data.contributions || []
+  );
+}
+
+export function adminFailureLearningFeedback() {
+  return apiJson("/api/admin/failure-learning-feedback").then(
+    (data) => data.judgements || []
+  );
+}
+
+export function adminFailureLearningReadiness() {
+  return apiJson("/api/admin/failure-learning-readiness").then(
+    (data) => data.readiness
+  );
+}
+
+export async function downloadAdminFailureLearningDataset() {
+  const response = await fetch("/api/admin/failure-learning-export", {
+    credentials: "include",
+    headers: {
+      "X-Request-ID": createRequestId(),
+    },
+  });
+  if (!response.ok) {
+    const error = new Error(
+      `ARCUS Failure Learning export failed: ${response.status}`
+    );
+    error.status = response.status;
+    throw error;
+  }
+  return {
+    blob: await response.blob(),
+    filename: filenameFromDisposition(
+      response.headers.get("content-disposition")
+    ),
+  };
+}
+
+export function adminUpdateContributionStatus(id, status, reviewNote = "") {
+  return apiJson(
+    `/api/admin/contributions/${encodeURIComponent(id)}/status`,
+    {
+      body: JSON.stringify({ reviewNote, status }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-ARCUS-CSRF-Token": csrfToken || "",
+      },
+      method: "POST",
+    }
+  ).then((data) => data.contribution);
 }
 
 export function adminAccessRequests() {

@@ -34,6 +34,14 @@ import {
   updateAccessRequestStatus,
 } from "./accessRequestStore.js";
 import {
+  createContribution,
+  getContributionAttachment,
+  getPublicContributionStatus,
+  listContributionsForAdmin,
+  listPublicContributionAcknowledgements,
+  updateContributionStatus,
+} from "./contributionStore.js";
+import {
   getOpenEvents,
   getOpenDownload,
   getOpenResource,
@@ -131,8 +139,28 @@ import {
   synchronizeMitigationProjectLocation,
 } from "./mitigationIntelligenceService.js";
 import { ARCUS_API_CONTRACT_VERSION } from "./apiContract.js";
+import {
+  createFailureLearningFeedback,
+  getDeidentifiedFailureLearningDatasetForAdmin,
+  getFailureLearningReadinessForAdmin,
+  listFailureLearningFeedbackForAdmin,
+} from "./failureLearningFeedbackStore.js";
 
 let provinceGeometryFeaturesPromise = null;
+const contributionAttempts = new Map();
+const contributionRateWindowMs = 60 * 60 * 1000;
+const contributionRateMaximum = 6;
+
+function contributionRequestAllowed(request) {
+  const key = String(request.socket?.remoteAddress || "unknown");
+  const now = Date.now();
+  const recent = (contributionAttempts.get(key) || [])
+    .filter((timestamp) => now - timestamp < contributionRateWindowMs);
+  if (recent.length >= contributionRateMaximum) return false;
+  recent.push(now);
+  contributionAttempts.set(key, recent);
+  return true;
+}
 
 function getProvinceGeometryFeatures() {
   provinceGeometryFeaturesPromise ||= fs
@@ -146,7 +174,7 @@ function getProvinceGeometryFeatures() {
   return provinceGeometryFeaturesPromise;
 }
 
-async function readJsonBody(request) {
+async function readJsonBody(request, maximumBytes = 64 * 1024) {
   const contentType = String(request.headers["content-type"] || "");
 
   if (contentType && !contentType.includes("application/json")) {
@@ -162,7 +190,7 @@ async function readJsonBody(request) {
   for await (const chunk of request) {
     bodySize += chunk.length;
 
-    if (bodySize > 64 * 1024) {
+    if (bodySize > maximumBytes) {
       const error = new Error("request_body_too_large");
 
       error.statusCode = 413;
@@ -964,6 +992,73 @@ async function routeRequest(request, response) {
     return;
   }
 
+  if (url.pathname === "/api/contributions/acknowledgements") {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    sendJson(request, response, 200, {
+      acknowledgements: await listPublicContributionAcknowledgements(),
+    });
+    return;
+  }
+
+  const publicContributionStatusMatch = url.pathname.match(
+    /^\/api\/contributions\/(contribution-[0-9a-f-]+)\/status$/
+  );
+  if (publicContributionStatusMatch) {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const contribution = await getPublicContributionStatus(
+      publicContributionStatusMatch[1]
+    );
+    if (!contribution) {
+      sendJson(request, response, 404, { error: "contribution_not_found" });
+      return;
+    }
+    sendJson(request, response, 200, { contribution });
+    return;
+  }
+
+  if (url.pathname === "/api/contributions") {
+    if (request.method !== "POST") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+
+    if (!contributionRequestAllowed(request)) {
+      sendJson(
+        request,
+        response,
+        429,
+        { error: "contribution_rate_limit_exceeded" },
+        { "Retry-After": "3600" }
+      );
+      return;
+    }
+
+    const contribution = await createContribution(
+      await readJsonBody(request, 24 * 1024 * 1024)
+    );
+
+    await appendAuditEvent({
+      event: "expert_contribution_received",
+      contributionId: contribution.id,
+      targetType: contribution.targetType,
+    });
+
+    sendJson(request, response, 201, {
+      contribution: {
+        createdAt: contribution.createdAt,
+        id: contribution.id,
+        status: contribution.status,
+      },
+    });
+    return;
+  }
+
   if (url.pathname === "/api/professional/exports") {
     if (request.method !== "POST") {
       sendJson(request, response, 405, {
@@ -1235,6 +1330,43 @@ async function routeRequest(request, response) {
     sendJson(request, response, 200, {
       ...intelligence,
       request_id: request.requestId,
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/professional/failure-learning-feedback") {
+    if (request.method !== "POST") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "professional:read");
+    if (!session) {
+      sendJson(request, response, 401, { error: "professional_access_required" });
+      return;
+    }
+    if (csrfRequiredFor(session) && !(await isCsrfTokenValid(request))) {
+      sendJson(request, response, 403, { error: "csrf_token_required" });
+      return;
+    }
+    const judgement = await createFailureLearningFeedback(
+      await readJsonBody(request),
+      session
+    );
+    await appendAuditEvent({
+      analogueEventId: judgement.analogueEventId,
+      event: "failure_learning_analogue_judged",
+      judgementId: judgement.id,
+      queryId: judgement.queryId,
+      rating: judgement.rating,
+      username: session.username,
+    });
+    sendJson(request, response, 201, {
+      judgement: {
+        createdAt: judgement.createdAt,
+        id: judgement.id,
+        rating: judgement.rating,
+        supersedes: judgement.supersedes,
+      },
     });
     return;
   }
@@ -1748,6 +1880,114 @@ async function routeRequest(request, response) {
     return;
   }
 
+  if (url.pathname === "/api/admin/contributions") {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    sendJson(request, response, 200, {
+      contributions: await listContributionsForAdmin(url.searchParams.get("limit") || 100),
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/admin/failure-learning-feedback") {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    sendJson(request, response, 200, {
+      judgements: await listFailureLearningFeedbackForAdmin(
+        url.searchParams.get("limit") || 500
+      ),
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/admin/failure-learning-readiness") {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    sendJson(request, response, 200, {
+      readiness: await getFailureLearningReadinessForAdmin(),
+    });
+    return;
+  }
+
+  if (url.pathname === "/api/admin/failure-learning-export") {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    const dataset = await getDeidentifiedFailureLearningDatasetForAdmin();
+    await appendAuditEvent({
+      event: "failure_learning_calibration_dataset_exported",
+      recordCount: dataset.records.length,
+      status: dataset.readiness.status,
+      username: session.username,
+    });
+    sendDownload(request, response, {
+      content: `${JSON.stringify(dataset, null, 2)}\n`,
+      contentType: "application/json; charset=utf-8",
+      filename: `arcus-failure-learning-calibration-${new Date().toISOString().slice(0, 10)}.json`,
+      headers: {
+        "Cache-Control": "no-store",
+        "X-ARCUS-Failure-Learning-Status": dataset.readiness.status,
+      },
+    });
+    return;
+  }
+
+  const contributionAttachmentMatch = url.pathname.match(
+    /^\/api\/admin\/contributions\/([^/]+)\/(attachment|document)$/
+  );
+  if (contributionAttachmentMatch) {
+    if (request.method !== "GET") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    const attachment = await getContributionAttachment(
+      decodeURIComponent(contributionAttachmentMatch[1]),
+      contributionAttachmentMatch[2] === "document" ? "document" : "image"
+    );
+    if (!attachment) {
+      sendJson(request, response, 404, { error: "contribution_attachment_not_found" });
+      return;
+    }
+    sendDownload(request, response, {
+      content: attachment.content,
+      contentType: attachment.mediaType,
+      filename: attachment.originalFilename || attachment.storageName,
+    });
+    return;
+  }
+
   if (url.pathname === "/api/admin/metrics") {
     if (request.method !== "GET") {
       sendJson(request, response, 405, {
@@ -2142,6 +2382,44 @@ async function routeRequest(request, response) {
     sendJson(request, response, 200, {
       request: accessRequest,
     });
+    return;
+  }
+
+  const adminContributionMatch = url.pathname.match(
+    /^\/api\/admin\/contributions\/([^/]+)\/status$/
+  );
+  if (adminContributionMatch) {
+    if (request.method !== "POST") {
+      sendJson(request, response, 405, { error: "method_not_allowed" });
+      return;
+    }
+    const session = await getAuthorisedSession(request, "admin:access");
+    if (!session) {
+      sendJson(request, response, 403, { error: "admin_access_required" });
+      return;
+    }
+    if (!(await isCsrfTokenValid(request))) {
+      sendJson(request, response, 403, { error: "csrf_token_required" });
+      return;
+    }
+    const payload = await readJsonBody(request);
+    const contribution = await updateContributionStatus(
+      decodeURIComponent(adminContributionMatch[1]),
+      String(payload.status || ""),
+      session,
+      payload.reviewNote
+    );
+    if (!contribution) {
+      sendJson(request, response, 404, { error: "contribution_not_found" });
+      return;
+    }
+    await appendAuditEvent({
+      event: "expert_contribution_status_changed",
+      contributionId: contribution.id,
+      performedBy: session.username,
+      status: contribution.status,
+    });
+    sendJson(request, response, 200, { contribution });
     return;
   }
 

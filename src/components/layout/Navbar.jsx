@@ -71,6 +71,12 @@ function Navbar() {
       path: "/data-access",
       group: "research",
     },
+
+    {
+      label: language === "it" ? "Contribuisci" : "Contribute",
+      path: "/contribute",
+      group: "research",
+    },
   ];
 
   useEffect(() => {

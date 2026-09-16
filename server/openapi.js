@@ -103,6 +103,9 @@ export const openApiDocument = {
     "/api/v1/professional/mitigation-intelligence": {
       post: { summary: "Generate evidence-linked mitigation intelligence for a validated project point" },
     },
+    "/api/v1/professional/failure-learning-feedback": {
+      post: { summary: "Record a consented expert judgement on a retrieved analogue" },
+    },
     "/api/v1/professional/workspaces": {
       get: { summary: "List organization workspaces" },
       post: { summary: "Create an organization workspace" },
@@ -133,6 +136,15 @@ export const openApiDocument = {
     },
     "/api/v1/admin/audit-events": {
       get: { summary: "List recent ARCUS audit events" },
+    },
+    "/api/v1/admin/failure-learning-feedback": {
+      get: { summary: "List private expert analogue judgements and revision lineage" },
+    },
+    "/api/v1/admin/failure-learning-readiness": {
+      get: { summary: "Read provisional offline-calibration readiness diagnostics" },
+    },
+    "/api/v1/admin/failure-learning-export": {
+      get: { summary: "Download the pseudonymised, de-identified active calibration dataset" },
     },
     "/api/v1/admin/ops/status": {
       get: { summary: "Read ARCUS operational status checks" },

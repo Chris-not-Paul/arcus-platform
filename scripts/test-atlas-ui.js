@@ -71,6 +71,17 @@ async function noHorizontalOverflow(page) {
 
 try {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: "it-IT" });
+  const deterministicMapTile = await fs.readFile(
+    path.resolve("public/data/map-tiles/voyager/7/64/44.png")
+  );
+  await context.route(
+    /https:\/\/server\.arcgisonline\.com\/ArcGIS\/rest\/services\/World_Street_Map\/MapServer\/tile\//,
+    (route) => route.fulfill({
+      body: deterministicMapTile,
+      contentType: "image/png",
+      status: 200,
+    })
+  );
   await context.addInitScript(() => localStorage.setItem("arcus-language", "it"));
   const page = await context.newPage();
   page.on("pageerror", (error) => failures.push(error.message));
@@ -231,17 +242,39 @@ try {
   await errorPage.getByRole("heading", { name: "Classi ISPRA alla coordinata del ponte" }).waitFor();
   checks.push("Controlled history HTTP 503: explicit error, retry and recovery with real local data");
 
-  let blockEvents = true;
-  await errorPage.route("**/api/open/events", (route) => blockEvents
+  let blockEventApi = true;
+  let blockStaticEvents = false;
+  await errorPage.route("**/api/open/events", (route) => blockEventApi
+    ? route.fulfill({ status: 503, body: "Controlled acceptance-test failure" })
+    : route.continue());
+  await errorPage.route("**/api/open/sources", (route) => blockEventApi
+    ? route.fulfill({ status: 503, body: "Controlled acceptance-test failure" })
+    : route.continue());
+  await errorPage.route("**/data/open-release/events.json", (route) => blockStaticEvents
     ? route.fulfill({ status: 503, body: "Controlled acceptance-test failure" })
     : route.continue());
   await errorPage.goto(`${base}/atlas`);
+  await waitFor(async () => (await errorPage.locator(".atlas-command-grid strong").first().innerText()) === String(events.length), "static event fallback");
+  checks.push("Controlled event API HTTP 503: static Open release fallback preserves the real map count");
+
+  blockStaticEvents = true;
+  await errorPage.goto(`${base}/atlas`);
   await errorPage.getByText("Caricamento incompleto: eventi.", { exact: true }).waitFor();
   assert.equal(await errorPage.locator(".atlas-command-grid strong").first().innerText(), "—");
-  blockEvents = false;
+  blockEventApi = false;
+  blockStaticEvents = false;
   await errorPage.getByRole("button", { name: "Riprova", exact: true }).click();
   await waitFor(async () => (await errorPage.locator(".atlas-command-grid strong").first().innerText()) === String(events.length), "event API recovery");
-  checks.push("Controlled event API HTTP 503: no misleading zero count, retry and recovery");
+  checks.push("Controlled API and fallback failure: no misleading zero count, retry and recovery");
+
+  blockEventApi = true;
+  await errorPage.setViewportSize({ width: 390, height: 844 });
+  await errorPage.goto(`${base}/`);
+  const homeMetrics = errorPage.locator(".home-metric strong");
+  await homeMetrics.nth(0).getByText(String(events.length), { exact: true }).waitFor();
+  assert.equal(await homeMetrics.nth(1).innerText(), String((await (await fetch(`${base}/api/open/sources`)).json()).sources.length));
+  assert.notEqual(await homeMetrics.nth(0).innerText(), "0");
+  checks.push("Mobile home: API failure falls back to the public release and never presents unloaded data as zero");
   await errorPage.close();
   assert.deepEqual(failures, [], "No unexpected local HTTP failures or uncaught browser errors");
   completed = true;

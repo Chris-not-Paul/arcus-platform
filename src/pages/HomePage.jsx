@@ -23,6 +23,10 @@ import {
 import "../styles/home/HomePage.css";
 
 function formatValue(value) {
+  if (!Number.isFinite(Number(value))) {
+    return "—";
+  }
+
   return new Intl.NumberFormat("en-US").format(
     value
   );
@@ -424,19 +428,74 @@ export default function HomePage() {
   const [provinceFeatures, setProvinceFeatures] =
     useState([]);
   const [sources, setSources] = useState([]);
+  const [openDataStatus, setOpenDataStatus] = useState({
+    events: "loading",
+    sources: "loading",
+  });
 
   useEffect(() => {
+    let cancelled = false;
+
     openEvents()
-      .then(setEvents);
+      .then((data) => {
+        if (!cancelled) {
+          setEvents(data);
+          setOpenDataStatus((status) => ({
+            ...status,
+            events: "available",
+          }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setEvents([]);
+          setOpenDataStatus((status) => ({
+            ...status,
+            events: "error",
+          }));
+        }
+      });
 
     openSources()
-      .then(setSources);
+      .then((data) => {
+        if (!cancelled) {
+          setSources(data);
+          setOpenDataStatus((status) => ({
+            ...status,
+            sources: "available",
+          }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSources([]);
+          setOpenDataStatus((status) => ({
+            ...status,
+            sources: "error",
+          }));
+        }
+      });
 
     fetch("/data/geo/italy-provinces.geojson")
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Province geometry unavailable (${response.status})`);
+        }
+
+        return response.json();
+      })
       .then((geoJson) =>
-        setProvinceFeatures(geoJson?.features || [])
-      );
+        !cancelled && setProvinceFeatures(geoJson?.features || [])
+      )
+      .catch(() => {
+        if (!cancelled) {
+          setProvinceFeatures([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const metrics = useMemo(() => {
@@ -449,15 +508,24 @@ export default function HomePage() {
     ).length;
 
     return {
-      events: events.length,
-      sources: sources.length,
-      totalCollapse,
+      events:
+        openDataStatus.events === "available"
+          ? events.length
+          : "—",
+      sources:
+        openDataStatus.sources === "available"
+          ? sources.length
+          : "—",
+      totalCollapse:
+        openDataStatus.events === "available"
+          ? totalCollapse
+          : "—",
       years:
-        years.length > 0
+        openDataStatus.events === "available" && years.length > 0
           ? `${Math.min(...years)}-${Math.max(...years)}`
-          : "-",
+          : "—",
     };
-  }, [events, sources]);
+  }, [events, openDataStatus, sources]);
 
   const copy = {
     en: {

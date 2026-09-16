@@ -332,6 +332,9 @@
 }
 
 .atlas-command-grid div {
+  display: grid;
+  grid-template-rows: 2.3em auto;
+  align-content: start;
   min-width: 0;
   padding-top: 9px;
 
@@ -346,6 +349,7 @@
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.10em;
+  line-height: 1.15;
   text-transform: uppercase;
 }
 
@@ -1286,6 +1290,19 @@
 
 .atlas-home-link::after {
   background: var(--arcus-bronze);
+}
+
+.atlas-home-link:hover,
+.atlas-home-link:focus-visible {
+  border-color: rgba(167,101,50,0.52);
+  background: var(--arcus-paper-soft);
+  color: var(--arcus-night);
+  box-shadow: 0 14px 34px rgba(32,40,38,0.15);
+}
+
+.atlas-home-link:focus-visible {
+  outline: 2px solid rgba(167,101,50,0.48);
+  outline-offset: 3px;
 }
 
 .atlas-command-kicker,

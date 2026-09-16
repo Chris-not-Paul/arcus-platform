@@ -1,0 +1,2586 @@
+{
+  "release": "arcus-open-2026.3",
+  "generated_at": "2026-09-08T07:22:36.626Z",
+  "status": "passed",
+  "counts": {
+    "events": 261,
+    "sources": 716,
+    "taxonomy_entries": 57,
+    "warnings": 74,
+    "errors": 0,
+    "needs_review": 4,
+    "process_available": 213,
+    "component_available": 211,
+    "evidence_available": 221
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT00.10.19",
+      "municipality": "Settimo Vittone",
+      "province_raw": "Ivrea",
+      "declared_official": null,
+      "coordinate_province": "Torino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "hydraulic_evidence_level_needs_review",
+      "event_id": "IT00.10.22",
+      "field": "hydraulic_evidence_level",
+      "normalized_as": "needs_review",
+      "source_value": "Needs review"
+    },
+    {
+      "code": "hydraulic_evidence_level_needs_review",
+      "event_id": "IT00.10.23",
+      "field": "hydraulic_evidence_level",
+      "normalized_as": "needs_review",
+      "source_value": "Needs review"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT00.10.41",
+      "municipality": "Rondissone",
+      "province_raw": "Torino",
+      "declared_official": "Torino",
+      "coordinate_province": "Vercelli",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT00.12.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT01.03.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT04.12.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT05.06.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT05.11.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT06.06.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.01.01",
+      "municipality": "Taurianova",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT09.04.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT09.04.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT09.04.03"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.04.04",
+      "municipality": "Piacenza",
+      "province_raw": "Piacenza",
+      "declared_official": "Piacenza",
+      "coordinate_province": "Lodi",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.05.01",
+      "municipality": "Gela",
+      "province_raw": "Caltanisetta",
+      "declared_official": null,
+      "coordinate_province": "Caltanissetta",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT09.05.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT11.05.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT13.09.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT13.11.06",
+      "municipality": "Olbia",
+      "province_raw": "Olbia",
+      "declared_official": null,
+      "coordinate_province": "Sassari",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT13.12.01",
+      "municipality": "Rubbianello",
+      "province_raw": "Ascoli",
+      "declared_official": null,
+      "coordinate_province": "Ascoli Piceno",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT13.12.03"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT14.04.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT14.07.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT14.07.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT14.12.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT15.03.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT15.03.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT15.04.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT15.11.01",
+      "municipality": "Marina di Caulonia",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT16.10.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT16.11.01",
+      "municipality": "Bruzzano Zeffirio",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT16.11.04"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT17.01.01",
+      "municipality": "Caulonia Marina",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT17.03.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT17.04.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT17.09.01",
+      "municipality": "Quercianella",
+      "province_raw": "Livorno",
+      "declared_official": "Livorno",
+      "coordinate_province": null,
+      "coordinate_error": "point_outside_italy",
+      "status": "name_valid_coordinates_unresolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT17.12.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT18.01.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT18.02.01",
+      "municipality": "Forli",
+      "province_raw": "Cesena",
+      "declared_official": null,
+      "coordinate_province": "Forli'-Cesena",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT18.08.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT18.08.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT19.03.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT19.11.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.04.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.04.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.09.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.10.04"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT20.10.10",
+      "municipality": "Valstrona",
+      "province_raw": "Verbania",
+      "declared_official": null,
+      "coordinate_province": "Verbano-Cusio-Ossola",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.10.12"
+    },
+    {
+      "code": "component_specific_but_process_unspecified",
+      "event_id": "IT20.10.18"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT20.11.01",
+      "municipality": "Pallanzeno",
+      "province_raw": "Verbania",
+      "declared_official": null,
+      "coordinate_province": "Verbano-Cusio-Ossola",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT20.11.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT21.05.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT21.08.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT21.10.01"
+    },
+    {
+      "code": "hydraulic_trigger_unrecognized",
+      "event_id": "IT22.02.01",
+      "field": "hydraulic_trigger",
+      "source_value": "No identifiable external trigger"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.08.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.04",
+      "municipality": "Cantiano",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.05",
+      "municipality": "Serra Sant'Abbondio",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.08",
+      "municipality": "Cantiano",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.10.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.11.01",
+      "municipality": "Laino Castello",
+      "province_raw": "Cosenza",
+      "declared_official": "Cosenza",
+      "coordinate_province": "Potenza",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.11.02"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.12.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.12.03"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT22.12.04"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT23.01.02"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT23.05.07",
+      "municipality": "Fontanelice",
+      "province_raw": "Bologna",
+      "declared_official": "Bologna",
+      "coordinate_province": "Ravenna",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT23.07.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT23.09.01"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT24.05.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT26.03.01",
+      "municipality": "Pisa",
+      "province_raw": "Pisa",
+      "declared_official": "Pisa",
+      "coordinate_province": "Livorno",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "non_hydraulic_with_hydraulic_fields",
+      "event_id": "IT26.03.01"
+    }
+  ],
+  "delta": {
+    "previous_release": "arcus-open-2026.2",
+    "new_events": [],
+    "updated_events": [
+      "IT00.10.01",
+      "IT00.10.02",
+      "IT00.10.04",
+      "IT00.10.12",
+      "IT00.10.16",
+      "IT00.10.26",
+      "IT00.10.28",
+      "IT00.10.29",
+      "IT00.10.32",
+      "IT00.10.34",
+      "IT00.10.37",
+      "IT00.10.38",
+      "IT00.10.39",
+      "IT00.10.40",
+      "IT00.10.41",
+      "IT00.11.01",
+      "IT00.12.01",
+      "IT01.03.01",
+      "IT04.12.02",
+      "IT05.06.01",
+      "IT05.11.01",
+      "IT06.06.01",
+      "IT09.04.01",
+      "IT09.04.02",
+      "IT09.04.03",
+      "IT09.05.01",
+      "IT11.03.03",
+      "IT11.03.05",
+      "IT11.05.01",
+      "IT11.10.07",
+      "IT13.09.01",
+      "IT13.12.03",
+      "IT14.04.01",
+      "IT14.07.01",
+      "IT14.07.02",
+      "IT14.12.01",
+      "IT15.03.01",
+      "IT15.03.02",
+      "IT15.04.01",
+      "IT15.11.01",
+      "IT16.10.01",
+      "IT16.11.04",
+      "IT16.11.06",
+      "IT17.03.01",
+      "IT17.04.01",
+      "IT17.12.01",
+      "IT18.01.01",
+      "IT18.08.01",
+      "IT18.08.02",
+      "IT19.03.01",
+      "IT19.11.01",
+      "IT20.04.01",
+      "IT20.04.02",
+      "IT20.09.01",
+      "IT20.10.04",
+      "IT20.10.07",
+      "IT20.10.12",
+      "IT20.10.17",
+      "IT20.10.18",
+      "IT20.10.19",
+      "IT20.11.01",
+      "IT21.05.01",
+      "IT21.08.01",
+      "IT21.10.01",
+      "IT22.02.01",
+      "IT22.08.01",
+      "IT22.10.01",
+      "IT22.11.02",
+      "IT22.12.01",
+      "IT22.12.03",
+      "IT22.12.04",
+      "IT23.01.02",
+      "IT23.05.07",
+      "IT23.07.01",
+      "IT23.09.01",
+      "IT24.05.01",
+      "IT26.03.01"
+    ],
+    "removed_events": [
+      "IT04.05.01",
+      "IT19.08.01"
+    ],
+    "new_sources": [
+      "SRC0714",
+      "SRC0715",
+      "SRC0716",
+      "SRC0717",
+      "SRC0718",
+      "SRC0719",
+      "SRC0720",
+      "SRC0721",
+      "SRC0722"
+    ],
+    "removed_sources": [
+      "SRC0227",
+      "SRC0228",
+      "SRC0229",
+      "SRC0500",
+      "SRC0501"
+    ]
+  },
+  "id_mapping": [
+    {
+      "event_id": "IT00.01.01",
+      "legacy_event_id": "B00.01.01",
+      "event_slug": "campobasso-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.01",
+      "legacy_event_id": "B00.10.01",
+      "event_slug": "crissolo-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.02",
+      "legacy_event_id": "B00.10.02",
+      "event_slug": "crissolo-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.03",
+      "legacy_event_id": "B00.10.03",
+      "event_slug": "ala-di-stura-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.04",
+      "legacy_event_id": "B00.10.04",
+      "event_slug": "ala-di-stura-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.05",
+      "legacy_event_id": "B00.10.05",
+      "event_slug": "ala-di-stura-2000-3",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.06",
+      "legacy_event_id": "B00.10.06",
+      "event_slug": "felleto-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.07",
+      "legacy_event_id": "B00.10.07",
+      "event_slug": "balme-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.08",
+      "legacy_event_id": "B00.10.08",
+      "event_slug": "balme-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.09",
+      "legacy_event_id": "B00.10.09",
+      "event_slug": "chialamberto-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.10",
+      "legacy_event_id": "B00.10.10",
+      "event_slug": "chialamberto-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.11",
+      "legacy_event_id": "B00.10.11",
+      "event_slug": "pinerolo-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.12",
+      "legacy_event_id": "B00.10.12",
+      "event_slug": "pinerolo-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.13",
+      "legacy_event_id": "B00.10.13",
+      "event_slug": "pinerolo-2000-3",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.14",
+      "legacy_event_id": "B00.10.14",
+      "event_slug": "giaveno-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.15",
+      "legacy_event_id": "B00.10.15",
+      "event_slug": "castellamonte-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.16",
+      "legacy_event_id": "B00.10.16",
+      "event_slug": "noasca-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.17",
+      "legacy_event_id": "B00.10.17",
+      "event_slug": "robassomero-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.18",
+      "legacy_event_id": "B00.10.18",
+      "event_slug": "salassa-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.19",
+      "legacy_event_id": "B00.10.19",
+      "event_slug": "settimo-vittone-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.20",
+      "legacy_event_id": "B00.10.20",
+      "event_slug": "paesana-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.21",
+      "legacy_event_id": "B00.10.21",
+      "event_slug": "bardonecchia-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.22",
+      "legacy_event_id": "B00.10.22",
+      "event_slug": "bussoleno-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.23",
+      "legacy_event_id": "B00.10.23",
+      "event_slug": "bussoleno-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.24",
+      "legacy_event_id": "B00.10.24",
+      "event_slug": "chialamberto-2000-3",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.25",
+      "legacy_event_id": "B00.10.25",
+      "event_slug": "san-colombano-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.26",
+      "legacy_event_id": "B00.10.26",
+      "event_slug": "fenestrelle-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.27",
+      "legacy_event_id": "B00.10.27",
+      "event_slug": "bonzo-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.28",
+      "legacy_event_id": "B00.10.28",
+      "event_slug": "locana-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.29",
+      "legacy_event_id": "B00.10.29",
+      "event_slug": "noasca-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.30",
+      "legacy_event_id": "B00.10.30",
+      "event_slug": "inverso-pinasca-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.31",
+      "legacy_event_id": "B00.10.31",
+      "event_slug": "san-germano-chisone-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.32",
+      "legacy_event_id": "B00.10.32",
+      "event_slug": "pont-canavese-2000-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.33",
+      "legacy_event_id": "B00.10.33",
+      "event_slug": "pont-canavese-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.34",
+      "legacy_event_id": "B00.10.34",
+      "event_slug": "porte-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.35",
+      "legacy_event_id": "B00.10.35",
+      "event_slug": "san-benigno-canavese-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.36",
+      "legacy_event_id": "B00.10.36",
+      "event_slug": "pragelato-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.37",
+      "legacy_event_id": "B00.10.37",
+      "event_slug": "quincinetto-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.38",
+      "legacy_event_id": "B00.10.38",
+      "event_slug": "san-germano-chisone-2000-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.39",
+      "legacy_event_id": "B00.10.39",
+      "event_slug": "pianetto-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.40",
+      "legacy_event_id": "B00.10.40",
+      "event_slug": "alagna-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.41",
+      "legacy_event_id": "B00.10.41",
+      "event_slug": "vercelli-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.42",
+      "legacy_event_id": "B00.10.42",
+      "event_slug": "issime-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.10.43",
+      "legacy_event_id": "B00.10.43",
+      "event_slug": "comune-di-strambino-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.11.01",
+      "legacy_event_id": "B00.11.01",
+      "event_slug": "filattiera-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT00.12.01",
+      "legacy_event_id": "B00.12.01",
+      "event_slug": "occhiobello-2000",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT01.03.01",
+      "legacy_event_id": "B01.03.01",
+      "event_slug": "bologna-2001",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.05.01",
+      "legacy_event_id": "B02.05.01",
+      "event_slug": "germignaga-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.01",
+      "legacy_event_id": "B02.06.01",
+      "event_slug": "netro-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.02",
+      "legacy_event_id": "B02.06.02",
+      "event_slug": "campiglia-cervo-2002-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.03",
+      "legacy_event_id": "B02.06.03",
+      "event_slug": "biella-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.04",
+      "legacy_event_id": "B02.06.04",
+      "event_slug": "campiglia-cervo-2002-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.05",
+      "legacy_event_id": "B02.06.05",
+      "event_slug": "valsavarenche-2002-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.06.06",
+      "legacy_event_id": "B02.06.06",
+      "event_slug": "valsavarenche-2002-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.07.01",
+      "legacy_event_id": "B02.07.01",
+      "event_slug": "entracque-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.07.02",
+      "legacy_event_id": "B02.07.02",
+      "event_slug": "roccavione-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.07.03",
+      "legacy_event_id": "B02.07.03",
+      "event_slug": "boves-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT02.11.01",
+      "legacy_event_id": "B02.11.01",
+      "event_slug": "arquata-scrivia-2002",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT03.01.01",
+      "legacy_event_id": "B03.01.01",
+      "event_slug": "montenero-2003",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT03.08.01",
+      "legacy_event_id": "B03.08.01",
+      "event_slug": "pontebba-2003",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT03.09.01",
+      "legacy_event_id": "B03.09.01",
+      "event_slug": "massafra-2003",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT04.10.01",
+      "legacy_event_id": "B04.10.01",
+      "event_slug": "torino-di-sangro-marina-2004",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT04.12.01",
+      "legacy_event_id": "B04.12.01",
+      "event_slug": "nuoro-2004",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT04.12.02",
+      "legacy_event_id": "B04.12.02",
+      "event_slug": "tramonti-di-sopra-2004",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT05.06.01",
+      "legacy_event_id": "B05.06.01",
+      "event_slug": "capo-di-ponte-2005",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT05.10.01",
+      "legacy_event_id": "B05.10.01",
+      "event_slug": "massafra-2005",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT05.10.02",
+      "legacy_event_id": "B05.10.02",
+      "event_slug": "cassano-delle-murge-2005",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT05.10.03",
+      "legacy_event_id": "B05.10.03",
+      "event_slug": "comune-di-adelfia-2005",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT05.11.01",
+      "legacy_event_id": "B05.11.01",
+      "event_slug": "villanova-d-asti-2005",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT06.06.01",
+      "legacy_event_id": "B06.06.01",
+      "event_slug": "augusta-2006",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT06.09.01",
+      "legacy_event_id": "B06.09.01",
+      "event_slug": "vallecrosia-2006",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.05.01",
+      "legacy_event_id": "B08.05.01",
+      "event_slug": "frassino-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.05.02",
+      "legacy_event_id": "B08.05.02",
+      "event_slug": "usseglio-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.10.01",
+      "legacy_event_id": "B08.10.01",
+      "event_slug": "capoterra-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.10.02",
+      "legacy_event_id": "B08.10.02",
+      "event_slug": "triei-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.10.03",
+      "legacy_event_id": "B08.10.03",
+      "event_slug": "tertenia-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.11.01",
+      "legacy_event_id": "B08.11.01",
+      "event_slug": "orosei-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT08.12.01",
+      "legacy_event_id": "B08.12.01",
+      "event_slug": "nocera-terinese-2008",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.01.01",
+      "legacy_event_id": "B09.01.01",
+      "event_slug": "taurianova-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.02.01",
+      "legacy_event_id": "B09.02.01",
+      "event_slug": "enna-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.04.01",
+      "legacy_event_id": "B09.04.01",
+      "event_slug": "fossa-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.04.02",
+      "legacy_event_id": "B09.04.02",
+      "event_slug": "l-aquila-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.04.03",
+      "legacy_event_id": "B09.04.03",
+      "event_slug": "scoppito-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.04.04",
+      "legacy_event_id": "B09.04.04",
+      "event_slug": "piacenza-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.05.01",
+      "legacy_event_id": "B09.05.01",
+      "event_slug": "gela-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT09.12.01",
+      "legacy_event_id": "B09.12.01",
+      "event_slug": "palagano-2009",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT10.01.01",
+      "legacy_event_id": "B10.01.01",
+      "event_slug": "cicala-2010",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT10.03.01",
+      "legacy_event_id": "B10.03.01",
+      "event_slug": "simeri-crichi-2010",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT10.06.01",
+      "legacy_event_id": "B10.06.01",
+      "event_slug": "monchiero-2010",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT10.10.01",
+      "legacy_event_id": "B10.10.01",
+      "event_slug": "frassinoro-2010",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.01.01",
+      "legacy_event_id": "B11.01.01",
+      "event_slug": "corinaldo-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.03.01",
+      "legacy_event_id": "B11.03.01",
+      "event_slug": "calciano-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.03.02",
+      "legacy_event_id": "B11.03.02",
+      "event_slug": "corropoli-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.03.03",
+      "legacy_event_id": "B11.03.03",
+      "event_slug": "campli-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.03.04",
+      "legacy_event_id": "B11.03.04",
+      "event_slug": "colbuccaro-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.03.05",
+      "legacy_event_id": "B11.03.05",
+      "event_slug": "ponte-della-becca-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.05.01",
+      "legacy_event_id": "B11.05.01",
+      "event_slug": "caltagirone-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.01",
+      "legacy_event_id": "B11.10.01",
+      "event_slug": "ameglia-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.02",
+      "legacy_event_id": "B11.10.02",
+      "event_slug": "aulla-2011-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.03",
+      "legacy_event_id": "B11.10.03",
+      "event_slug": "aulla-2011-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.04",
+      "legacy_event_id": "B11.10.04",
+      "event_slug": "castagnetoli-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.05",
+      "legacy_event_id": "B11.10.05",
+      "event_slug": "pignone-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.06",
+      "legacy_event_id": "B11.10.06",
+      "event_slug": "rocchetta-di-vara-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.07",
+      "legacy_event_id": "B11.10.07",
+      "event_slug": "brugnato-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.10.08",
+      "legacy_event_id": "B11.10.08",
+      "event_slug": "pontremoli-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.11.01",
+      "legacy_event_id": "B11.11.01",
+      "event_slug": "torre-pellice-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.11.02",
+      "legacy_event_id": "B11.11.02",
+      "event_slug": "amato-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT11.11.03",
+      "legacy_event_id": "B11.11.03",
+      "event_slug": "barcellona-pozzo-di-gotto-2011",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT12.11.01",
+      "legacy_event_id": "B12.11.01",
+      "event_slug": "sericciolo-2012",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT12.11.02",
+      "legacy_event_id": "B12.11.02",
+      "event_slug": "mel-2012",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT12.11.03",
+      "legacy_event_id": "B12.11.03",
+      "event_slug": "marsiliana-2012",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT12.11.04",
+      "legacy_event_id": "B12.11.04",
+      "event_slug": "gallina-2012",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.02.01",
+      "legacy_event_id": "B13.02.01",
+      "event_slug": "ribera-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.03.01",
+      "legacy_event_id": "B13.03.01",
+      "event_slug": "zocca-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.09.01",
+      "legacy_event_id": "B13.09.01",
+      "event_slug": "roma-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.10.01",
+      "legacy_event_id": "B13.10.01",
+      "event_slug": "carasco-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.10.02",
+      "legacy_event_id": "B13.10.02",
+      "event_slug": "firenzuola-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.01",
+      "legacy_event_id": "B13.11.01",
+      "event_slug": "olbia-2013-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.02",
+      "legacy_event_id": "B13.11.02",
+      "event_slug": "oliena-2013-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.03",
+      "legacy_event_id": "B13.11.03",
+      "event_slug": "olbia-2013-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.04",
+      "legacy_event_id": "B13.11.04",
+      "event_slug": "oliena-2013-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.05",
+      "legacy_event_id": "B13.11.05",
+      "event_slug": "galatelli-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.06",
+      "legacy_event_id": "B13.11.06",
+      "event_slug": "olbia-2013-3",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.11.07",
+      "legacy_event_id": "B13.11.07",
+      "event_slug": "foligno-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.12.01",
+      "legacy_event_id": "B13.12.01",
+      "event_slug": "rubbianello-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.12.02",
+      "legacy_event_id": "B13.12.02",
+      "event_slug": "apice-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT13.12.03",
+      "legacy_event_id": "B13.12.03",
+      "event_slug": "costa-di-serina-2013",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.04.01",
+      "legacy_event_id": "B14.04.01",
+      "event_slug": "pisa-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.05.01",
+      "legacy_event_id": "B14.05.01",
+      "event_slug": "sant-elpidio-a-mare-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.07.01",
+      "legacy_event_id": "B14.07.01",
+      "event_slug": "licata-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.07.02",
+      "legacy_event_id": "B14.07.02",
+      "event_slug": "roma-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.08.01",
+      "legacy_event_id": "B14.08.01",
+      "event_slug": "moggio-udinese-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.09.01",
+      "legacy_event_id": "B14.09.01",
+      "event_slug": "casalfiumanese-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.10.01",
+      "legacy_event_id": "B14.10.01",
+      "event_slug": "parma-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.11.01",
+      "legacy_event_id": "B14.11.01",
+      "event_slug": "trasta-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.11.02",
+      "legacy_event_id": "B14.11.02",
+      "event_slug": "ventimiglia-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.11.03",
+      "legacy_event_id": "B14.11.03",
+      "event_slug": "salice-terme-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT14.12.01",
+      "legacy_event_id": "B14.12.01",
+      "event_slug": "mezzojuso-2014",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.03.01",
+      "legacy_event_id": "B15.03.01",
+      "event_slug": "laino-borgo-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.03.02",
+      "legacy_event_id": "B15.03.02",
+      "event_slug": "cerami-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.03.03",
+      "legacy_event_id": "B15.03.03",
+      "event_slug": "enna-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.04.01",
+      "legacy_event_id": "B15.04.01",
+      "event_slug": "himera-scillato-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.09.01",
+      "legacy_event_id": "B15.09.01",
+      "event_slug": "bobbio-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.10.01",
+      "legacy_event_id": "B15.10.01",
+      "event_slug": "circello-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.10.02",
+      "legacy_event_id": "B15.10.02",
+      "event_slug": "morcone-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.10.03",
+      "legacy_event_id": "B15.10.03",
+      "event_slug": "cautano-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.10.04",
+      "legacy_event_id": "B15.10.04",
+      "event_slug": "casalduni-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.10.05",
+      "legacy_event_id": "B15.10.05",
+      "event_slug": "baselice-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT15.11.01",
+      "legacy_event_id": "B15.11.01",
+      "event_slug": "marina-di-caulonia-2015",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.03.01",
+      "legacy_event_id": "B16.03.01",
+      "event_slug": "stigliano-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.09.01",
+      "legacy_event_id": "B16.09.01",
+      "event_slug": "trivento-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.10.01",
+      "legacy_event_id": "B16.10.01",
+      "event_slug": "annone-ss36-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.01",
+      "legacy_event_id": "B16.11.01",
+      "event_slug": "bruzzano-zeffirio-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.02",
+      "legacy_event_id": "B16.11.02",
+      "event_slug": "murialdo-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.03",
+      "legacy_event_id": "B16.11.03",
+      "event_slug": "sanfront-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.04",
+      "legacy_event_id": "B16.11.04",
+      "event_slug": "monesi-di-triora-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.05",
+      "legacy_event_id": "B16.11.05",
+      "event_slug": "priola-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT16.11.06",
+      "legacy_event_id": "B16.11.06",
+      "event_slug": "sanfront-po-secondo-ponte-2016",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.01.01",
+      "legacy_event_id": "B17.01.01",
+      "event_slug": "caulonia-marina-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.03.01",
+      "legacy_event_id": "B17.03.01",
+      "event_slug": "camerano-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.04.01",
+      "legacy_event_id": "B17.04.01",
+      "event_slug": "fossano-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.06.01",
+      "legacy_event_id": "B17.06.01",
+      "event_slug": "strambino-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.09.01",
+      "legacy_event_id": "B17.09.01",
+      "event_slug": "quercianella-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.09.02",
+      "legacy_event_id": "B17.09.02",
+      "event_slug": "limoncino-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT17.12.01",
+      "legacy_event_id": "B17.12.01",
+      "event_slug": "laino-castello-2017",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.01.01",
+      "legacy_event_id": "B18.01.01",
+      "event_slug": "montirone-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.02.01",
+      "legacy_event_id": "B18.02.01",
+      "event_slug": "forli-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.02.02",
+      "legacy_event_id": "B18.02.02",
+      "event_slug": "salemi-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.08.01",
+      "legacy_event_id": "B18.08.01",
+      "event_slug": "morandi-genoa-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.08.02",
+      "legacy_event_id": "B18.08.02",
+      "event_slug": "bologna-a14-fire-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.01",
+      "legacy_event_id": "B18.10.01",
+      "event_slug": "uta-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.02",
+      "legacy_event_id": "B18.10.02",
+      "event_slug": "capoterra-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.03",
+      "legacy_event_id": "B18.10.03",
+      "event_slug": "fierozzo-sant-orsola-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.04",
+      "legacy_event_id": "B18.10.04",
+      "event_slug": "stramentizzo-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.05",
+      "legacy_event_id": "B18.10.05",
+      "event_slug": "comeglians-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.06",
+      "legacy_event_id": "B18.10.06",
+      "event_slug": "pizzighettone-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT18.10.07",
+      "legacy_event_id": "B18.10.07",
+      "event_slug": "cavalese-2018",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT19.03.01",
+      "legacy_event_id": "B19.03.01",
+      "event_slug": "carimate-2019",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT19.10.01",
+      "legacy_event_id": "B19.10.01",
+      "event_slug": "caprita-d-orba-2019",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT19.11.01",
+      "legacy_event_id": "B19.11.01",
+      "event_slug": "savona-2019",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT19.12.01",
+      "legacy_event_id": "B19.12.01",
+      "event_slug": "castellammare-2019",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.04.01",
+      "legacy_event_id": "B20.04.01",
+      "event_slug": "gonessa-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.04.02",
+      "legacy_event_id": "B20.04.02",
+      "event_slug": "albiano-magra-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.05.01",
+      "legacy_event_id": "B20.05.01",
+      "event_slug": "abbadia-san-salvatore-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.09.01",
+      "legacy_event_id": "B20.09.01",
+      "event_slug": "santa-maria-di-galeria-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.01",
+      "legacy_event_id": "B20.10.01",
+      "event_slug": "gaby-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.02",
+      "legacy_event_id": "B20.10.02",
+      "event_slug": "piedicavallo-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.03",
+      "legacy_event_id": "B20.10.03",
+      "event_slug": "crevacuore-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.04",
+      "legacy_event_id": "B20.10.04",
+      "event_slug": "piacenza-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.05",
+      "legacy_event_id": "B20.10.05",
+      "event_slug": "romagnano-sesia-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.06",
+      "legacy_event_id": "B20.10.06",
+      "event_slug": "vessalico-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.07",
+      "legacy_event_id": "B20.10.07",
+      "event_slug": "bagnasco-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.08",
+      "legacy_event_id": "B20.10.08",
+      "event_slug": "ventimiglia-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.09",
+      "legacy_event_id": "B20.10.09",
+      "event_slug": "valdieri-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.10",
+      "legacy_event_id": "B20.10.10",
+      "event_slug": "valstrona-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.12",
+      "legacy_event_id": "B20.10.12",
+      "event_slug": "roma-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.13",
+      "legacy_event_id": "B20.10.13",
+      "event_slug": "picinisco-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.14",
+      "legacy_event_id": "B20.10.14",
+      "event_slug": "varallo-camasco-2020-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.15",
+      "legacy_event_id": "B20.10.15",
+      "event_slug": "varallo-camasco-2020-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.16",
+      "legacy_event_id": "B20.10.16",
+      "event_slug": "varallo-camasco-2020-3",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.17",
+      "legacy_event_id": "B20.10.17",
+      "event_slug": "campertogno-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.18",
+      "legacy_event_id": "B20.10.18",
+      "event_slug": "ormea-barchi-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.10.19",
+      "legacy_event_id": "B20.10.19",
+      "event_slug": "entracque-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.11.01",
+      "legacy_event_id": "B20.11.01",
+      "event_slug": "pallanzeno-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.11.02",
+      "legacy_event_id": "B20.11.02",
+      "event_slug": "crotone-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.11.03",
+      "legacy_event_id": "B20.11.03",
+      "event_slug": "melissa-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.11.04",
+      "legacy_event_id": "B20.11.04",
+      "event_slug": "bitti-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.12.01",
+      "legacy_event_id": "B20.12.01",
+      "event_slug": "pavullo-nel-frignano-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.12.02",
+      "legacy_event_id": "B20.12.02",
+      "event_slug": "gosaldo-2020-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT20.12.03",
+      "legacy_event_id": "B20.12.03",
+      "event_slug": "gosaldo-2020-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT21.05.01",
+      "legacy_event_id": "B21.05.01",
+      "event_slug": "la-spezia-2021",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT21.08.01",
+      "legacy_event_id": "B21.08.01",
+      "event_slug": "comacchio-2021",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT21.10.01",
+      "legacy_event_id": "B21.10.01",
+      "event_slug": "roma-2021",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT21.10.02",
+      "legacy_event_id": "B21.10.02",
+      "event_slug": "quiliano-2021",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT21.12.01",
+      "legacy_event_id": "B21.12.01",
+      "event_slug": "alcamo-2021",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.02.01",
+      "legacy_event_id": "B22.02.01",
+      "event_slug": "guastacconcio-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.08.01",
+      "legacy_event_id": "B22.08.01",
+      "event_slug": "brescia-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.01",
+      "legacy_event_id": "B22.09.01",
+      "event_slug": "arcevia-2022-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.02",
+      "legacy_event_id": "B22.09.02",
+      "event_slug": "ostra-vetere-2022-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.03",
+      "legacy_event_id": "B22.09.03",
+      "event_slug": "ostra-vetere-2022-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.04",
+      "legacy_event_id": "B22.09.04",
+      "event_slug": "cantiano-2022-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.05",
+      "legacy_event_id": "B22.09.05",
+      "event_slug": "serra-sant-abbondio-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.06",
+      "legacy_event_id": "B22.09.06",
+      "event_slug": "arcevia-2022-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.07",
+      "legacy_event_id": "B22.09.07",
+      "event_slug": "monterosso-stazione-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.08",
+      "legacy_event_id": "B22.09.08",
+      "event_slug": "cantiano-2022-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.09",
+      "legacy_event_id": "B22.09.09",
+      "event_slug": "sassoferrato-2022-1",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.09.10",
+      "legacy_event_id": "B22.09.10",
+      "event_slug": "sassoferrato-2022-2",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.10.01",
+      "legacy_event_id": "B22.10.01",
+      "event_slug": "novara-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.11.01",
+      "legacy_event_id": "B22.11.01",
+      "event_slug": "laino-castello-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.11.02",
+      "legacy_event_id": "B22.11.02",
+      "event_slug": "varazze-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.12.01",
+      "legacy_event_id": "B22.12.01",
+      "event_slug": "monteverdi-marittimo-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.12.02",
+      "legacy_event_id": "B22.12.02",
+      "event_slug": "terme-vigliatore-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.12.03",
+      "legacy_event_id": "B22.12.03",
+      "event_slug": "chiusa-sclafani-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT22.12.04",
+      "legacy_event_id": "B22.12.04",
+      "event_slug": "bellante-2022",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.01.01",
+      "legacy_event_id": "B23.01.01",
+      "event_slug": "molina-aterno-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.01.02",
+      "legacy_event_id": "B23.01.02",
+      "event_slug": "promano-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.01",
+      "legacy_event_id": "B23.05.01",
+      "event_slug": "longobucco-ortiano-ii-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.02",
+      "legacy_event_id": "B23.05.02",
+      "event_slug": "san-martino-in-argine-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.03",
+      "legacy_event_id": "B23.05.03",
+      "event_slug": "prada-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.04",
+      "legacy_event_id": "B23.05.04",
+      "event_slug": "gambellara-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.05",
+      "legacy_event_id": "B23.05.05",
+      "event_slug": "modigliana-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.06",
+      "legacy_event_id": "B23.05.06",
+      "event_slug": "monterenzio-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.05.07",
+      "legacy_event_id": "B23.05.07",
+      "event_slug": "fontanelice-santerno-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.07.01",
+      "legacy_event_id": "B23.07.01",
+      "event_slug": "coltano-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.09.01",
+      "legacy_event_id": "B23.09.01",
+      "event_slug": "riolo-terme-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.10.01",
+      "legacy_event_id": "B23.10.01",
+      "event_slug": "terenzo-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.11.01",
+      "legacy_event_id": "B23.11.01",
+      "event_slug": "vaiano-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT23.11.02",
+      "legacy_event_id": "B23.11.02",
+      "event_slug": "lamporecchio-2023",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.05.01",
+      "legacy_event_id": "B24.05.01",
+      "event_slug": "santa-sofia-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.05.02",
+      "legacy_event_id": "B24.05.02",
+      "event_slug": "cavenago-di-brianza-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.05.03",
+      "legacy_event_id": "B24.05.03",
+      "event_slug": "malo-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.06.01",
+      "legacy_event_id": "B24.06.01",
+      "event_slug": "cogne-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.09.01",
+      "legacy_event_id": "B24.09.01",
+      "event_slug": "mattie-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.10.01",
+      "legacy_event_id": "B24.10.01",
+      "event_slug": "sasso-marconi-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.10.02",
+      "legacy_event_id": "B24.10.02",
+      "event_slug": "san-pietro-e-maida-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT24.10.03",
+      "legacy_event_id": "B24.10.03",
+      "event_slug": "carcare-2024",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT25.04.01",
+      "legacy_event_id": "B25.04.01",
+      "event_slug": "mongrado-2025",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT25.04.02",
+      "legacy_event_id": "B25.04.02",
+      "event_slug": "valdagno-2025",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT25.07.01",
+      "legacy_event_id": "B25.07.01",
+      "event_slug": "san-martino-in-passiria-2025",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT26.03.01",
+      "legacy_event_id": "B26.03.01",
+      "event_slug": "viadotto-navicelli-2026",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
+      "event_id": "IT26.04.01",
+      "legacy_event_id": "B26.04.01",
+      "event_slug": "montenero-di-bisaccia-2026",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    }
+  ],
+  "invalid_urls": [],
+  "territorial_warnings": [
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT00.10.19",
+      "municipality": "Settimo Vittone",
+      "province_raw": "Ivrea",
+      "declared_official": null,
+      "coordinate_province": "Torino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT00.10.41",
+      "municipality": "Rondissone",
+      "province_raw": "Torino",
+      "declared_official": "Torino",
+      "coordinate_province": "Vercelli",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.01.01",
+      "municipality": "Taurianova",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.04.04",
+      "municipality": "Piacenza",
+      "province_raw": "Piacenza",
+      "declared_official": "Piacenza",
+      "coordinate_province": "Lodi",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT09.05.01",
+      "municipality": "Gela",
+      "province_raw": "Caltanisetta",
+      "declared_official": null,
+      "coordinate_province": "Caltanissetta",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT13.11.06",
+      "municipality": "Olbia",
+      "province_raw": "Olbia",
+      "declared_official": null,
+      "coordinate_province": "Sassari",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT13.12.01",
+      "municipality": "Rubbianello",
+      "province_raw": "Ascoli",
+      "declared_official": null,
+      "coordinate_province": "Ascoli Piceno",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT15.11.01",
+      "municipality": "Marina di Caulonia",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT16.11.01",
+      "municipality": "Bruzzano Zeffirio",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT17.01.01",
+      "municipality": "Caulonia Marina",
+      "province_raw": "Reggio Calabria",
+      "declared_official": null,
+      "coordinate_province": "Reggio di Calabria",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT17.09.01",
+      "municipality": "Quercianella",
+      "province_raw": "Livorno",
+      "declared_official": "Livorno",
+      "coordinate_province": null,
+      "coordinate_error": "point_outside_italy",
+      "status": "name_valid_coordinates_unresolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT18.02.01",
+      "municipality": "Forli",
+      "province_raw": "Cesena",
+      "declared_official": null,
+      "coordinate_province": "Forli'-Cesena",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT20.10.10",
+      "municipality": "Valstrona",
+      "province_raw": "Verbania",
+      "declared_official": null,
+      "coordinate_province": "Verbano-Cusio-Ossola",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT20.11.01",
+      "municipality": "Pallanzeno",
+      "province_raw": "Verbania",
+      "declared_official": null,
+      "coordinate_province": "Verbano-Cusio-Ossola",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.04",
+      "municipality": "Cantiano",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.05",
+      "municipality": "Serra Sant'Abbondio",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.09.08",
+      "municipality": "Cantiano",
+      "province_raw": "Pesaro Urbino",
+      "declared_official": null,
+      "coordinate_province": "Pesaro e Urbino",
+      "coordinate_error": null,
+      "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.11.01",
+      "municipality": "Laino Castello",
+      "province_raw": "Cosenza",
+      "declared_official": "Cosenza",
+      "coordinate_province": "Potenza",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT23.05.07",
+      "municipality": "Fontanelice",
+      "province_raw": "Bologna",
+      "declared_official": "Bologna",
+      "coordinate_province": "Ravenna",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT26.03.01",
+      "municipality": "Pisa",
+      "province_raw": "Pisa",
+      "declared_official": "Pisa",
+      "coordinate_province": "Livorno",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    }
+  ],
+  "needs_review_records": [
+    "IT00.10.22",
+    "IT00.10.23",
+    "IT18.08.01",
+    "IT22.10.01"
+  ]
+}

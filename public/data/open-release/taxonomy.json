@@ -1,0 +1,290 @@
+{
+  "release": "arcus-open-2026.3",
+  "taxonomy": [
+    {
+      "field": "NOTE",
+      "value": "Operational taxonomy",
+      "definition_it": "Vocabolario operativo del MASTER_RESEARCH dopo QA finale; non costituisce ancora la proposta definitiva TG1.5."
+    },
+    {
+      "field": "cause_category",
+      "value": "Natural",
+      "definition_it": "Origine prevalente naturale/ambientale dell'evento o del processo causale."
+    },
+    {
+      "field": "cause_category",
+      "value": "Human-induced",
+      "definition_it": "Origine prevalente antropica, progettuale, costruttiva, operativa o manutentiva."
+    },
+    {
+      "field": "cause_category",
+      "value": "Unspecified",
+      "definition_it": "Origine non ricostruibile con sufficiente affidabilità."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Hydraulic",
+      "definition_it": "Causa riconducibile a fenomeni idraulici/fluviali o torrentizi."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Design and Construction",
+      "definition_it": "Errori o carenze di progetto, dettaglio, esecuzione, montaggio o opere provvisionali."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Material",
+      "definition_it": "Degrado, difetti o perdita di prestazione dei materiali/componenti."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Overload",
+      "definition_it": "Domanda eccezionale superiore alla capacità della struttura."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Impact",
+      "definition_it": "Impatto di veicolo, natante o altro corpo esterno."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Fire and Explosion",
+      "definition_it": "Azione termica/incendio o esplosione."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Earthquake",
+      "definition_it": "Azione sismica."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Landslide",
+      "definition_it": "Frana, movimento di versante o instabilità del terreno come causa prevalente."
+    },
+    {
+      "field": "specific_cause",
+      "value": "Unspecified",
+      "definition_it": "Famiglia causale non ricostruibile."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Flood",
+      "definition_it": "Piena fluviale/torrentizia o flash flood come evento innescante."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Rainfall-induced landslide",
+      "definition_it": "Frana innescata direttamente da precipitazioni eccezionali."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Landslide / slope failure",
+      "definition_it": "Movimento di versante/frana identificabile come evento innescante."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Earthquake",
+      "definition_it": "Evento sismico identificabile."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Vehicle impact",
+      "definition_it": "Impatto di veicolo stradale."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Exceptional overload",
+      "definition_it": "Applicazione/transito di carico eccezionale."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Fire / explosion",
+      "definition_it": "Incendio o esplosione come evento immediato."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Static load test",
+      "definition_it": "Prova di carico statica come evento immediatamente precedente al collasso."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Movable bridge operation",
+      "definition_it": "Operazione di apertura/chiusura/sollevamento di ponte mobile."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Demolition operation",
+      "definition_it": "Operazione di demolizione come evento immediato."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Lifting / construction operation",
+      "definition_it": "Operazione di sollevamento, montaggio o costruzione."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Excavation / construction works",
+      "definition_it": "Scavo o lavorazione di cantiere prossima alla struttura."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Water leakage / local washout",
+      "definition_it": "Perdita/azione idrica locale non riconducibile a piena fluviale."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "No identifiable external trigger",
+      "definition_it": "Nessun evento esterno discreto identificabile immediatamente prima del collasso."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Unspecified",
+      "definition_it": "Trigger non ricostruibile."
+    },
+    {
+      "field": "failure_process",
+      "value": "Scour",
+      "definition_it": "Scalzamento/erosione verticale con perdita di supporto fondale."
+    },
+    {
+      "field": "failure_process",
+      "value": "Bank erosion / embankment failure",
+      "definition_it": "Erosione laterale e/o cedimento del rilevato/rampa di accesso."
+    },
+    {
+      "field": "failure_process",
+      "value": "Debris flow / solid transport",
+      "definition_it": "Colata detritica o trasporto solido massivo."
+    },
+    {
+      "field": "failure_process",
+      "value": "Debris accumulation / obstruction",
+      "definition_it": "Accumulo/occlusione da materiale flottante con incremento delle azioni."
+    },
+    {
+      "field": "failure_process",
+      "value": "Overtopping / hydrodynamic action",
+      "definition_it": "Sormonto e/o azione idrodinamica diretta sulla struttura."
+    },
+    {
+      "field": "failure_process",
+      "value": "Washout / hydraulic action",
+      "definition_it": "Asportazione o spostamento della struttura per azione idraulica."
+    },
+    {
+      "field": "failure_process",
+      "value": "Bending",
+      "definition_it": "Collasso/flessione governante di elemento primario."
+    },
+    {
+      "field": "failure_process",
+      "value": "Fracture",
+      "definition_it": "Rottura/frattura di elemento, connessione o componente resistente."
+    },
+    {
+      "field": "failure_process",
+      "value": "Fatigue",
+      "definition_it": "Danno progressivo governato da carichi ciclici."
+    },
+    {
+      "field": "failure_process",
+      "value": "Overstress",
+      "definition_it": "Domanda resistente superiore alla capacità senza meccanismo più specifico disponibile."
+    },
+    {
+      "field": "failure_process",
+      "value": "Falsework / temporary works collapse",
+      "definition_it": "Collasso di centine, ponteggi, casseforme o opere provvisionali."
+    },
+    {
+      "field": "failure_process",
+      "value": "Knocked down by external action",
+      "definition_it": "Abbattimento/spostamento della struttura per azione esterna diretta."
+    },
+    {
+      "field": "failure_process",
+      "value": "Other documented hydraulic process",
+      "definition_it": "Processo idraulico documentato non ricadente nelle classi precedenti."
+    },
+    {
+      "field": "failure_process",
+      "value": "Other documented mode",
+      "definition_it": "Meccanismo documentato ma non ricadente nelle classi operative precedenti."
+    },
+    {
+      "field": "failure_process",
+      "value": "Unspecified",
+      "definition_it": "Meccanismo non ricostruibile dalle fonti disponibili."
+    },
+    {
+      "field": "component_involved",
+      "value": "Pier / foundation",
+      "definition_it": "Pila e/o fondazione direttamente coinvolta."
+    },
+    {
+      "field": "component_involved",
+      "value": "Abutment",
+      "definition_it": "Spalla direttamente coinvolta."
+    },
+    {
+      "field": "component_involved",
+      "value": "Approach embankment",
+      "definition_it": "Rilevato/rampa di accesso."
+    },
+    {
+      "field": "component_involved",
+      "value": "Deck / superstructure",
+      "definition_it": "Impalcato/sovrastruttura, incluse arcate."
+    },
+    {
+      "field": "component_involved",
+      "value": "Cable / hanger / pylon",
+      "definition_it": "Cavo, pendino, strallo, fune o pilone."
+    },
+    {
+      "field": "component_involved",
+      "value": "Connection / joint",
+      "definition_it": "Connessione, giunto, cerniera o apparecchio di collegamento."
+    },
+    {
+      "field": "component_involved",
+      "value": "Temporary works",
+      "definition_it": "Opera provvisionale/temporanea."
+    },
+    {
+      "field": "component_involved",
+      "value": "Entire structure",
+      "definition_it": "Struttura coinvolta/distrutta nel complesso."
+    },
+    {
+      "field": "component_involved",
+      "value": "Multiple components",
+      "definition_it": "Più componenti direttamente coinvolte."
+    },
+    {
+      "field": "component_involved",
+      "value": "Unspecified",
+      "definition_it": "Componente governante non documentata."
+    },
+    {
+      "field": "failure_cause_evidence",
+      "value": "Documented",
+      "definition_it": "Causa/processo supportato esplicitamente da fonte tecnica, giudiziaria, scientifica o documentazione equivalente."
+    },
+    {
+      "field": "failure_cause_evidence",
+      "value": "Probable",
+      "definition_it": "Attribuzione fortemente supportata dalle fonti ma non conclusiva o non direttamente formalizzata."
+    },
+    {
+      "field": "failure_cause_evidence",
+      "value": "Needs review",
+      "definition_it": "Informazioni confliggenti o identità/classificazione dell'evento ancora da verificare."
+    },
+    {
+      "field": "failure_cause_evidence",
+      "value": "Unspecified",
+      "definition_it": "Dettaglio non ricostruibile dalle fonti; valore intenzionale, non backlog di revisione."
+    }
+  ]
+}

@@ -14,6 +14,7 @@ import {
   professionalHazardExposurePoint,
   professionalMitigationIntelligence,
   professionalResource,
+  submitFailureLearningFeedback,
 } from "../utils/apiClient";
 import {
   deriveProvinceForPoint,
@@ -105,6 +106,7 @@ export default function CollapseIntelligencePage() {
   const [projectProfileDirty, setProjectProfileDirty] = useState(false);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
+  const [analogueFeedback, setAnalogueFeedback] = useState({});
 
   useEffect(() => {
     professionalResource("professional-events")
@@ -166,6 +168,77 @@ export default function CollapseIntelligencePage() {
     supportCard(intelligence?.seismic_support, it ? "Sisma" : "Seismic", language),
   ];
 
+  const feedbackReasons = [
+    ["hazard_comparable", it ? "Contesto hazard comparabile" : "Comparable hazard context"],
+    ["structural_profile_comparable", it ? "Profilo strutturale comparabile" : "Comparable structural profile"],
+    ["mechanism_relevant", it ? "Meccanismo tecnicamente rilevante" : "Technically relevant mechanism"],
+    ["evidence_strong", it ? "Evidenza documentale solida" : "Strong documentary evidence"],
+    ["key_feature_mismatch", it ? "Differenza in una caratteristica decisiva" : "Mismatch in a decisive feature"],
+    ["insufficient_data", it ? "Dati insufficienti per giudicare" : "Insufficient data to judge"],
+    ["same_episode_concern", it ? "Possibile dipendenza dallo stesso episodio" : "Possible same-episode dependence"],
+    ["other", it ? "Altro motivo" : "Other reason"],
+  ];
+
+  const updateFeedback = (eventId, field, value) => {
+    setAnalogueFeedback((current) => ({
+      ...current,
+      [eventId]: {
+        consent: false,
+        note: "",
+        rating: "",
+        reason: "",
+        status: "idle",
+        ...(current[eventId] || {}),
+        [field]: value,
+      },
+    }));
+  };
+
+  const submitAnalogueJudgement = async (analogue) => {
+    const eventId = analogue.event?.event_id;
+    const draft = analogueFeedback[eventId] || {};
+    updateFeedback(eventId, "status", "submitting");
+
+    try {
+      await submitFailureLearningFeedback({
+        analogueEventId: eventId,
+        comparisonSnapshot: analogue.retrieval_comparison || {},
+        consentForModelDevelopment: Boolean(draft.consent),
+        engineVersion: intelligence?.engine_version || "",
+        note: draft.note || "",
+        projectBridgeProfile: projectProfileResult.profile || projectBridgeProfile,
+        projectLocation: {
+          latitude: point?.latitude,
+          longitude: point?.longitude,
+          province: point?.derivedProvince,
+        },
+        queryId: intelligence?.request_id,
+        rating: draft.rating,
+        reasonCodes: draft.reason ? [draft.reason] : [],
+        retrievalRank: analogue.retrieval_rank,
+        targetHazardSnapshot: {
+          hydraulic: {
+            highestClass: exposure?.hydraulic?.highest_class || null,
+            matchedClasses: exposure?.hydraulic?.matched_classes || [],
+            status: exposure?.hydraulic?.status || "not_available",
+          },
+          landslide: {
+            highestClass: exposure?.landslide?.highest_hazard_class || null,
+            matchedClasses: exposure?.landslide?.matched_hazard_classes || [],
+            status: exposure?.landslide?.status || "not_available",
+          },
+          seismic: {
+            pgaP50G: exposure?.seismic?.pga_p50_g ?? null,
+            status: exposure?.seismic?.status || "not_available",
+          },
+        },
+      });
+      updateFeedback(eventId, "status", "saved");
+    } catch {
+      updateFeedback(eventId, "status", "error");
+    }
+  };
+
   const queryPoint = async (selectedPoint) => {
     const requestId = requestRef.current + 1;
     requestRef.current = requestId;
@@ -173,6 +246,7 @@ export default function CollapseIntelligencePage() {
 
     setExposure(null);
     setIntelligence(null);
+    setAnalogueFeedback({});
     setError("");
 
     if (!derived.validated) {
@@ -622,17 +696,75 @@ export default function CollapseIntelligencePage() {
                   <h3>{it ? "Collassi comparabili recuperati" : "Retrieved comparable collapses"}</h3>
                 </header>
                 <ol>
-                  {analogues.slice(0, 8).map((analogue) => (
-                    <li key={analogue.event?.event_id || analogue.retrieval_rank}>
-                      <b>#{analogue.retrieval_rank} {analogue.event?.municipality || "-"}, {analogue.event?.province || "-"}</b>
-                      <span>{it ? "Evento" : "Event"} {analogue.event?.event_id || "-"}</span>
-                      {projectProfileResult.match_field_count > 0 ? (
-                        <span>
-                          {it ? "Corrispondenze profilo" : "Profile matches"}: {analogue.retrieval_comparison?.project_bridge_profile?.exact_match_count || 0}/{analogue.retrieval_comparison?.project_bridge_profile?.compared_field_count || 0}
-                        </span>
-                      ) : null}
-                    </li>
-                  ))}
+                  {analogues.slice(0, 8).map((analogue) => {
+                    const eventId = analogue.event?.event_id;
+                    const feedback = analogueFeedback[eventId] || {};
+                    const noteRequired = ["partially_useful", "not_useful"].includes(feedback.rating);
+                    const canSubmit = Boolean(
+                      feedback.rating &&
+                      feedback.reason &&
+                      feedback.consent &&
+                      (!noteRequired || String(feedback.note || "").trim().length >= 20)
+                    );
+
+                    return (
+                      <li key={eventId || analogue.retrieval_rank}>
+                        <div className="collapse-intelligence-analogue-summary">
+                          <b>#{analogue.retrieval_rank} {analogue.event?.municipality || "-"}, {analogue.event?.province || "-"}</b>
+                          <span>{it ? "Evento" : "Event"} {eventId || "-"}</span>
+                          {projectProfileResult.match_field_count > 0 ? (
+                            <span>
+                              {it ? "Corrispondenze profilo" : "Profile matches"}: {analogue.retrieval_comparison?.project_bridge_profile?.exact_match_count || 0}/{analogue.retrieval_comparison?.project_bridge_profile?.compared_field_count || 0}
+                            </span>
+                          ) : null}
+                        </div>
+
+                        <div className="collapse-intelligence-analogue-feedback">
+                          <strong>{it ? "Giudizio esperto sull’analogo" : "Expert analogue judgement"}</strong>
+                          <div className="collapse-intelligence-feedback-ratings">
+                            {[
+                              ["useful", it ? "Utile" : "Useful"],
+                              ["partially_useful", it ? "Parziale" : "Partial"],
+                              ["not_useful", it ? "Non utile" : "Not useful"],
+                              ["insufficient_information", it ? "Non giudicabile" : "Cannot judge"],
+                            ].map(([value, label]) => (
+                              <button
+                                aria-pressed={feedback.rating === value}
+                                key={value}
+                                onClick={() => updateFeedback(eventId, "rating", value)}
+                                type="button"
+                              >
+                                {label}
+                              </button>
+                            ))}
+                          </div>
+                          {feedback.rating ? (
+                            <div className="collapse-intelligence-feedback-detail">
+                              <label>
+                                <span>{it ? "Motivo principale" : "Primary reason"}</span>
+                                <select onChange={(event) => updateFeedback(eventId, "reason", event.target.value)} value={feedback.reason || ""}>
+                                  <option value="">—</option>
+                                  {feedbackReasons.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                                </select>
+                              </label>
+                              <label>
+                                <span>{it ? `Nota tecnica${noteRequired ? " (obbligatoria)" : ""}` : `Technical note${noteRequired ? " (required)" : ""}`}</span>
+                                <textarea onChange={(event) => updateFeedback(eventId, "note", event.target.value)} rows="3" value={feedback.note || ""} />
+                              </label>
+                              <label className="collapse-intelligence-feedback-consent">
+                                <input checked={Boolean(feedback.consent)} onChange={(event) => updateFeedback(eventId, "consent", event.target.checked)} type="checkbox" />
+                                <span>{it ? "Autorizzo l’uso pseudonimizzato e de-identificato del giudizio per calibrare e validare il ranking ARCUS; non per decisioni automatiche." : "I allow pseudonymised and de-identified use of this judgement to calibrate and validate ARCUS ranking, not for automated decisions."}</span>
+                              </label>
+                              <button disabled={!canSubmit || feedback.status === "submitting"} onClick={() => submitAnalogueJudgement(analogue)} type="button">
+                                {feedback.status === "saved" ? (it ? "Giudizio salvato" : "Judgement saved") : feedback.status === "submitting" ? (it ? "Salvataggio…" : "Saving…") : (it ? "Salva giudizio" : "Save judgement")}
+                              </button>
+                              {feedback.status === "error" ? <small>{it ? "Giudizio non salvato. Controlla i campi e riprova." : "Judgement not saved. Check the fields and retry."}</small> : null}
+                            </div>
+                          ) : null}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ol>
                 <p>{it
                   ? "La firma hazard attuale serve alla comparabilità; non ricostruisce automaticamente la pericolosità all’anno del collasso e non dimostra la causa."

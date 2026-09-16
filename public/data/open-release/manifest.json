@@ -1,0 +1,38 @@
+{
+  "version": "arcus-open-2026.3",
+  "generated_at": "2026-09-08T07:22:36.626Z",
+  "data_cutoff": "2026-04-02",
+  "event_count": 261,
+  "source_count": 716,
+  "taxonomy_version": "hydraulic-v2",
+  "schema_version": "arcus-open-schema-v2",
+  "license": {
+    "id": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0 International",
+    "scope": "ARCUS-authored event metadata and taxonomy definitions. Linked third-party sources remain subject to their original rights and terms.",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "citation": "ARCUS Open Research (arcus-open-2026.3). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.3.",
+  "changelog": "changelog.json",
+  "known_limitations": [
+    "The database describes documented historical events and cannot estimate the probability of future collapse.",
+    "Source coverage and location precision vary across records.",
+    "Needs review is retained as a distinct editorial evidence class.",
+    "Third-party source content is not redistributed; links and bibliographic metadata remain subject to provider terms.",
+    "Province mismatches are flagged and never silently corrected."
+  ],
+  "source_workbook_fingerprint": "sha256:ef988607f46b4d01cc91b85f650afa6f7c921d3b1ce6899f03e1c7d8ad7c54de",
+  "access": "public_read_only_no_account_required",
+  "resources": {
+    "events": "events.json",
+    "sources": "sources.json",
+    "taxonomy": "taxonomy.json",
+    "data_dictionary": "data-dictionary.json",
+    "changelog": "changelog.json",
+    "statistics": "statistics.json",
+    "quality_audit": "quality-audit.json",
+    "id_mapping": "id-mapping.json",
+    "csv": "events.csv",
+    "geojson": "events.geojson"
+  }
+}

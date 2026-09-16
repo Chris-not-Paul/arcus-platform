@@ -29,6 +29,7 @@ desktop.ini
 *.sln
 *.sw?
 .tmp/ 
+tmp/
 .runtime-logs/
 .claude/
 outputs/

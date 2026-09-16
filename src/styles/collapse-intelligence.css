@@ -7,7 +7,7 @@
 .collapse-intelligence-hero {
   background: #232220;
   color: #f7f3eb;
-  padding: 112px 0 76px;
+  padding: 96px 0 52px;
 }
 
 .collapse-intelligence-hero span,
@@ -28,17 +28,17 @@
 
 .collapse-intelligence-hero h1 {
   font-family: var(--arcus-font-display, Georgia, serif);
-  font-size: clamp(48px, 7vw, 92px);
+  font-size: clamp(46px, 5.5vw, 76px);
   font-weight: 500;
-  line-height: 0.94;
-  margin: 24px 0;
-  max-width: 980px;
+  line-height: 0.97;
+  margin: 18px 0;
+  max-width: 900px;
 }
 
 .collapse-intelligence-hero > div > p {
   color: #d2cec6;
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.5;
   max-width: 800px;
 }
 
@@ -46,7 +46,7 @@
   border-left: 3px solid #c89236;
   display: grid;
   gap: 6px;
-  margin-top: 34px;
+  margin-top: 24px;
   max-width: 800px;
   padding: 10px 0 10px 20px;
 }
@@ -560,6 +560,100 @@
   padding: 15px;
 }
 
+.collapse-intelligence-analogue-summary {
+  display: grid;
+  gap: 6px;
+}
+
+.collapse-intelligence-analogue-feedback {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #484443;
+}
+
+.collapse-intelligence-analogue-feedback > strong {
+  color: #d39b42;
+  font-family: var(--arcus-font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.collapse-intelligence-feedback-ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.collapse-intelligence-feedback-ratings button,
+.collapse-intelligence-feedback-detail > button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid #5b5651;
+  background: #282727;
+  color: #d4cfc7;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.collapse-intelligence-feedback-ratings button[aria-pressed="true"] {
+  border-color: #d39b42;
+  background: #d39b42;
+  color: #1e1d1b;
+}
+
+.collapse-intelligence-feedback-detail {
+  display: grid;
+  gap: 10px;
+}
+
+.collapse-intelligence-feedback-detail label {
+  display: grid;
+  gap: 6px;
+}
+
+.collapse-intelligence-feedback-detail label > span {
+  color: #aaa39a;
+  font-size: 10px;
+}
+
+.collapse-intelligence-feedback-detail select,
+.collapse-intelligence-feedback-detail textarea {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #5b5651;
+  background: #242323;
+  color: #eee9e1;
+  font: inherit;
+}
+
+.collapse-intelligence-feedback-consent {
+  grid-template-columns: auto 1fr !important;
+  align-items: start;
+}
+
+.collapse-intelligence-feedback-consent input {
+  accent-color: #d39b42;
+}
+
+.collapse-intelligence-feedback-detail > button {
+  justify-self: start;
+  border-color: #d39b42;
+}
+
+.collapse-intelligence-feedback-detail > button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.collapse-intelligence-feedback-detail small {
+  color: #df917d;
+  font-size: 11px;
+}
+
 .collapse-intelligence-analogues li span {
   color: #9e978e;
   font-size: 12px;
@@ -639,7 +733,22 @@
 
 @media (max-width: 620px) {
   .collapse-intelligence-hero {
-    padding-top: 86px;
+    padding: 88px 0 36px;
+  }
+
+  .collapse-intelligence-hero h1 {
+    font-size: clamp(38px, 12vw, 52px);
+    margin: 14px 0;
+  }
+
+  .collapse-intelligence-hero > div > p {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .collapse-intelligence-boundary {
+    margin-top: 20px;
+    padding-left: 14px;
   }
 
   .collapse-intelligence-location,

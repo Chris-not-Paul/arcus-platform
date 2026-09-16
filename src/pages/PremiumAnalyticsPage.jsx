@@ -1,1006 +1,744 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
-
 import useLanguage from "../context/useLanguage";
-
-import extractYear from "../utils/extractYear";
-import taxonomyLabel from "../utils/taxonomyLabels";
+import { professionalResource } from "../utils/apiClient";
+import createStoredZip from "../utils/createStoredZip";
 import {
-  professionalResource,
-} from "../utils/apiClient";
+  ANALOGUE_FEATURES,
+  buildAnalogueSensitivity,
+  buildEpisodeCalibration,
+  buildEpisodeSensitivity,
+  buildFailureChains,
+  buildResearchEpisodes,
+  buildRobustnessScenarios,
+  retrieveAnalogues,
+  rowsToCsv,
+} from "../utils/researchWorkbench";
 
 import "../styles/analytics/premium-analytics-page.css";
 
 const ALL = "All";
+const NOTEBOOK_KEY = "arcus-research-plus-notebooks-v1";
 
-function countBy(items, getter) {
-  return Object.entries(
-    items.reduce((accumulator, item) => {
-      const value =
-        typeof getter === "function"
-          ? getter(item)
-          : item[getter];
-
-      if (!value) {
-        return accumulator;
-      }
-
-      accumulator[value] =
-        (accumulator[value] || 0) + 1;
-
-      return accumulator;
-    }, {})
-  ).sort((a, b) => b[1] - a[1]);
+function publicEventId(event) {
+  return event?.research_event_id || event?.event_id || "—";
 }
 
-function sumBy(items, getter) {
-  return items.reduce(
-    (total, item) =>
-      total + (Number(getter(item)) || 0),
-    0
-  );
+function eventName(event) {
+  return event?.bridge_name || event?.bridge_crossing_name || event?.municipality || publicEventId(event);
 }
 
-function uniqueValues(items, key) {
-  return [
-    ALL,
-    ...new Set(
-      items
-        .map((item) => item[key])
-        .filter(Boolean)
-        .sort()
-    ),
-  ];
+function analogueRank(results, index) {
+  const current = results[index];
+  return results.findIndex((result) =>
+    result.score === current.score && result.coverage === current.coverage
+  ) + 1;
 }
 
-function percentage(value, total) {
-  if (!total) {
-    return 0;
-  }
-
-  return Math.round((value / total) * 100);
+function downloadFile(content, filename, type) {
+  const blob = content instanceof Blob ? content : new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
 
-function formatValue(value) {
-  return new Intl.NumberFormat("en-US").format(
-    value
-  );
+async function sha256(content) {
+  if (!globalThis.crypto?.subtle) return null;
+  const bytes = new TextEncoder().encode(String(content));
+  const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, "0")).join("");
 }
 
-function toCsvValue(value) {
-  const text =
-    value === null || value === undefined
-      ? ""
-      : String(value);
-
-  return `"${text.replaceAll('"', '""')}"`;
+function unique(items, key) {
+  return [ALL, ...new Set(items.map((item) => item[key]).filter(Boolean).sort())];
 }
 
-function RankingList({
-  items,
-  total,
-  label,
-}) {
-  const maxValue =
-    Math.max(...items.map((item) => item[1]), 1);
-
+function FilterSelect({ label, onChange, options, value }) {
   return (
-    <div className="premium-ranking-list">
-      {items.map(([name, value]) => (
-        <div
-          className="premium-ranking-row"
-          key={name}
-        >
-          <div className="premium-ranking-meta">
-            <span>{name}</span>
-            <strong>
-              {formatValue(value)}
-              {label ? ` ${label}` : ""}
-            </strong>
-          </div>
-
-          <div className="premium-ranking-track">
-            <div
-              className="premium-ranking-fill"
-              style={{
-                width: `${Math.max(
-                  4,
-                  (value / maxValue) * 100
-                )}%`,
-              }}
-            />
-          </div>
-
-          <div className="premium-ranking-share">
-            {percentage(value, total)}%
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function FilterSelect({
-  label,
-  value,
-  options,
-  onChange,
-  formatOption = (option) => option,
-}) {
-  return (
-    <label className="premium-filter">
+    <label className="research-filter">
       <span>{label}</span>
-
-      <select
-        value={value}
-        onChange={(event) =>
-          onChange(event.target.value)
-        }
-      >
-        {options.map((option) => (
-          <option
-            key={option}
-            value={option}
-          >
-            {formatOption(option)}
-          </option>
-        ))}
+      <select onChange={(event) => onChange(event.target.value)} value={value}>
+        {options.map((option) => <option key={option} value={option}>{option}</option>)}
       </select>
     </label>
   );
 }
 
+function ModuleHeading({ eyebrow, title, text }) {
+  return (
+    <header className="research-module-heading">
+      <span>{eyebrow}</span>
+      <h3>{title}</h3>
+      <p>{text}</p>
+    </header>
+  );
+}
+
+function EmptyState({ children }) {
+  return <p className="research-empty">{children}</p>;
+}
+
 function PremiumAnalyticsPage() {
   const { language } = useLanguage();
-
-  const copy =
-    language === "it"
-      ? {
-          briefing: "BRIEFING AI-READY",
-          briefingTitle:
-            "Sintesi intelligence generata",
-          cause: "Causa",
-          confidence: "Confidenza",
-          controlledAccess: "ACCESSO CONTROLLATO",
-          exportCsv: "Esporta CSV",
-          filteredEvents: "Eventi filtrati",
-          fromYear: "Da anno",
-          heading: "Vista Intelligence Professionale",
-          highestImpact: "Maggiore impatto umano",
-          impact: "IMPATTO",
-          material: "Materiale",
-          minSources: "Fonti minime",
-          professionalLayer:
-            "Layer professionale controllato per intelligence filtrata, dati esportabili e briefing istituzionali.",
-          ranking: "RANKING",
-          region: "Regione",
-          regionBenchmark: "Benchmark territoriale",
-          regionalConcentration:
-            "Concentrazione regionale",
-          resetFilters: "Reset filtri",
-          reviewEvents:
-            "Eventi da rivedere",
-          severity: "Gravita",
-          sourceCoverage: "Copertura fonti",
-          title:
-            "Workspace Analytics Avanzato",
-          toYear: "Ad anno",
-          traceability: "TRACCIABILITA",
-          triggered: "Innescato",
-          use: "Uso",
-          workspaceStatus: "Demo Premium v1",
-          mechanism: "MECCANISMO",
-          causeProfile: "Profilo cause",
-          comparative: "COMPARATIVA",
-          structuralType: "Tipologia strutturale",
-        }
-      : {
-          briefing: "AI-READY BRIEFING",
-          briefingTitle:
-            "Generated intelligence summary",
-          cause: "Cause",
-          confidence: "Confidence",
-          controlledAccess: "CONTROLLED ACCESS",
-          exportCsv: "Export CSV",
-          filteredEvents: "Filtered events",
-          fromYear: "From year",
-          heading: "Professional Intelligence View",
-          highestImpact: "Highest human impact",
-          impact: "IMPACT",
-          material: "Material",
-          minSources: "Min sources",
-          professionalLayer:
-            "Controlled professional layer for filtered intelligence, exportable data and institutional briefings.",
-          ranking: "RANKING",
-          region: "Region",
-          regionBenchmark: "Region benchmark",
-          regionalConcentration:
-            "Regional concentration",
-          resetFilters: "Reset filters",
-          reviewEvents:
-            "Events needing review",
-          severity: "Severity",
-          sourceCoverage: "Source coverage",
-          title:
-            "Advanced Analytics Workspace",
-          toYear: "To year",
-          traceability: "TRACEABILITY",
-          triggered: "Triggered",
-          use: "Use",
-          workspaceStatus: "Demo Premium v1",
-          mechanism: "MECHANISM",
-          causeProfile: "Cause profile",
-          comparative: "COMPARATIVE",
-          structuralType: "Structural type",
-        };
-
+  const italian = language === "it";
+  const t = (it, en) => italian ? it : en;
   const [events, setEvents] = useState([]);
   const [sources, setSources] = useState([]);
-
+  const [release, setRelease] = useState(null);
+  const [loadError, setLoadError] = useState(false);
+  const [module, setModule] = useState("episodes");
   const [filters, setFilters] = useState({
-    cause: ALL,
+    cause: "Hydraulic",
     confidence: ALL,
     fromYear: 2000,
-    material: ALL,
-    minSources: 0,
     region: ALL,
-    severity: ALL,
-    structuralType: ALL,
     toYear: 2026,
-    triggered: ALL,
-    use: ALL,
   });
+  const [episodeSettings, setEpisodeSettings] = useState({
+    maximumDistanceKm: 150,
+    maximumGapDays: 2,
+  });
+  const [targetId, setTargetId] = useState("");
+  const [enabledFeatureKeys, setEnabledFeatureKeys] = useState(
+    ANALOGUE_FEATURES.map((feature) => feature.key)
+  );
+  const [excludeSameEpisode, setExcludeSameEpisode] = useState(true);
+  const [notebookTitle, setNotebookTitle] = useState("");
+  const [notebookNotes, setNotebookNotes] = useState("");
+  const [savedNotebooks, setSavedNotebooks] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  });
+  const [packageStatus, setPackageStatus] = useState("idle");
 
   useEffect(() => {
-    professionalResource("professional-events")
-      .then((data) => setEvents(Array.isArray(data) ? data : data.events || []))
-      .catch(() => setEvents([]));
-
-    professionalResource("professional-sources")
-      .then((data) => setSources(Array.isArray(data) ? data : data.sources || []))
-      .catch(() => setSources([]));
+    Promise.all([
+      professionalResource("professional-events"),
+      professionalResource("professional-sources"),
+      professionalResource("data-release"),
+    ])
+      .then(([eventResource, sourceResource, dataRelease]) => {
+        setEvents(Array.isArray(eventResource) ? eventResource : eventResource?.events || []);
+        setSources(Array.isArray(sourceResource) ? sourceResource : sourceResource?.sources || []);
+        setRelease(dataRelease?.release || dataRelease || null);
+      })
+      .catch(() => setLoadError(true));
   }, []);
 
-  const sourceCountByEvent = useMemo(() => {
-    return sources.reduce((accumulator, source) => {
-      accumulator[source.event_id] =
-        (accumulator[source.event_id] || 0) + 1;
-
-      return accumulator;
-    }, {});
-  }, [sources]);
-
-  const years = useMemo(() => {
-    const eventYears = events
-      .map((event) => extractYear(event.date))
-      .filter(Boolean);
-
+  const yearRange = useMemo(() => {
+    const years = events.map((event) => Number(String(event.date || "").slice(0, 4))).filter(Number.isFinite);
     return {
-      max:
-        eventYears.length > 0
-          ? Math.max(...eventYears)
-          : 2026,
-      min:
-        eventYears.length > 0
-          ? Math.min(...eventYears)
-          : 2000,
+      max: years.length ? Math.max(...years) : 2026,
+      min: years.length ? Math.min(...years) : 2000,
     };
   }, [events]);
 
-  const filteredEvents = useMemo(() => {
-    return events.filter((event) => {
-      const year = extractYear(event.date);
-      const sourceCount =
-        sourceCountByEvent[event.event_id] || 0;
+  const filteredEvents = useMemo(() => events.filter((event) => {
+    const year = Number(String(event.date || "").slice(0, 4));
+    return (
+      (filters.cause === ALL || event.specific_cause === filters.cause) &&
+      (filters.region === ALL || event.region === filters.region) &&
+      (filters.confidence === ALL || event.source_confidence === filters.confidence) &&
+      (!Number.isFinite(year) || (year >= filters.fromYear && year <= filters.toYear))
+    );
+  }), [events, filters]);
 
-      const checks = [
-        filters.region === ALL ||
-          event.region === filters.region,
-        filters.cause === ALL ||
-          event.specific_cause === filters.cause,
-        filters.severity === ALL ||
-          event.collapse_severity ===
-            filters.severity,
-        filters.material === ALL ||
-          event.material_type === filters.material,
-        filters.structuralType === ALL ||
-          event.structural_type ===
-            filters.structuralType,
-        filters.use === ALL ||
-          event.destination_use === filters.use,
-        filters.confidence === ALL ||
-          String(event.source_confidence)
-            .toLowerCase() ===
-            filters.confidence.toLowerCase(),
-        filters.triggered === ALL ||
-          String(event.triggered) ===
-            filters.triggered,
-        !year ||
-          (year >= filters.fromYear &&
-            year <= filters.toYear),
-        sourceCount >= Number(filters.minSources),
-      ];
+  const hydraulicEvents = useMemo(
+    () => filteredEvents.filter((event) => event.hydraulic_intelligence),
+    [filteredEvents]
+  );
+  const episodeRegistry = useMemo(
+    () => buildResearchEpisodes(hydraulicEvents, episodeSettings),
+    [episodeSettings, hydraulicEvents]
+  );
+  const episodeSensitivity = useMemo(
+    () => buildEpisodeSensitivity(hydraulicEvents),
+    [hydraulicEvents]
+  );
+  const episodeCalibration = useMemo(
+    () => buildEpisodeCalibration(hydraulicEvents),
+    [hydraulicEvents]
+  );
+  const chains = useMemo(
+    () => buildFailureChains(filteredEvents, episodeRegistry.eventToEpisode),
+    [episodeRegistry.eventToEpisode, filteredEvents]
+  );
+  const selectedTarget = useMemo(
+    () => filteredEvents.find((event) => event.event_id === targetId) || filteredEvents[0] || null,
+    [filteredEvents, targetId]
+  );
+  const analogueFeatures = useMemo(
+    () => ANALOGUE_FEATURES.filter((feature) => enabledFeatureKeys.includes(feature.key)),
+    [enabledFeatureKeys]
+  );
+  const analogues = useMemo(
+    () => retrieveAnalogues(selectedTarget, filteredEvents, {
+      eventToEpisode: episodeRegistry.eventToEpisode,
+      excludeSameEpisode,
+      features: analogueFeatures,
+      minimumComparableFeatures: 2,
+    }).slice(0, 8),
+    [analogueFeatures, episodeRegistry.eventToEpisode, excludeSameEpisode, filteredEvents, selectedTarget]
+  );
+  const analogueSensitivity = useMemo(
+    () => buildAnalogueSensitivity(selectedTarget, filteredEvents, {
+      eventToEpisode: episodeRegistry.eventToEpisode,
+      excludeSameEpisode,
+      features: analogueFeatures,
+      minimumComparableFeatures: 2,
+      topK: 5,
+    }),
+    [analogueFeatures, episodeRegistry.eventToEpisode, excludeSameEpisode, filteredEvents, selectedTarget]
+  );
+  const robustness = useMemo(
+    () => buildRobustnessScenarios(filteredEvents, sources, episodeRegistry),
+    [episodeRegistry, filteredEvents, sources]
+  );
+  const filteredSources = useMemo(() => {
+    const ids = new Set(filteredEvents.map((event) => event.event_id));
+    return sources.filter((source) => ids.has(source.event_id));
+  }, [filteredEvents, sources]);
 
-      return checks.every(Boolean);
-    });
-  }, [
-    events,
+  const setFilter = (key, value) => setFilters((current) => ({
+    ...current,
+    [key]: ["fromYear", "toYear"].includes(key) ? Number(value) : value,
+  }));
+
+  const resetFilters = () => setFilters({
+    cause: "Hydraulic",
+    confidence: ALL,
+    fromYear: yearRange.min,
+    region: ALL,
+    toYear: yearRange.max,
+  });
+
+  const toggleFeature = (key) => setEnabledFeatureKeys((current) =>
+    current.includes(key)
+      ? current.filter((item) => item !== key)
+      : [...current, key]
+  );
+
+  const analysisState = () => ({
+    episode_settings: episodeSettings,
     filters,
-    sourceCountByEvent,
-  ]);
+    module,
+    analogue: {
+      enabled_features: enabledFeatureKeys,
+      exclude_same_episode: excludeSameEpisode,
+      target_event_id: selectedTarget ? publicEventId(selectedTarget) : null,
+    },
+  });
 
-  const analytics = useMemo(() => {
-    const total = filteredEvents.length;
-    const totalCollapse =
-      filteredEvents.filter(
-        (event) =>
-          event.collapse_severity === "TC"
-      ).length;
-    const triggered =
-      filteredEvents.filter(
-        (event) => event.triggered
-      ).length;
-    const fatalEvents =
-      filteredEvents.filter(
-        (event) => Number(event.victims) > 0
-      ).length;
-
-    const filteredSourceTotal =
-      filteredEvents.reduce(
-        (totalSources, event) =>
-          totalSources +
-          (sourceCountByEvent[event.event_id] || 0),
-        0
-      );
-
-    return {
-      causeRanking: countBy(
-        filteredEvents,
-        "specific_cause"
-      ),
-      exactLocations: filteredEvents.filter(
-        (event) => event.exact_location
-      ).length,
-      fatalEvents,
-      filteredSourceTotal,
-      impactRanking: [...filteredEvents]
-        .sort(
-          (a, b) =>
-            (Number(b.victims) || 0) -
-              (Number(a.victims) || 0) ||
-            (Number(b.injuries) || 0) -
-              (Number(a.injuries) || 0)
-        )
-        .slice(0, 5),
-      injuries: sumBy(
-        filteredEvents,
-        (event) => event.injuries
-      ),
-      regionRanking: countBy(
-        filteredEvents,
-        "region"
-      ).slice(0, 8),
-      sourceWeakEvents: [...filteredEvents]
-        .sort(
-          (a, b) =>
-            (sourceCountByEvent[a.event_id] || 0) -
-            (sourceCountByEvent[b.event_id] || 0)
-        )
-        .slice(0, 5),
-      total,
-      totalCollapse,
-      triggered,
-      victims: sumBy(
-        filteredEvents,
-        (event) => event.victims
-      ),
+  const saveNotebook = () => {
+    const notebook = {
+      created_at: new Date().toISOString(),
+      id: globalThis.crypto?.randomUUID?.() || String(Date.now()),
+      notes: notebookNotes.trim(),
+      state: analysisState(),
+      title: notebookTitle.trim() || t("Analisi senza titolo", "Untitled analysis"),
     };
-  }, [
-    filteredEvents,
-    sourceCountByEvent,
-  ]);
+    const next = [notebook, ...savedNotebooks].slice(0, 12);
+    localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next));
+    setSavedNotebooks(next);
+    setNotebookTitle("");
+    setNotebookNotes("");
+  };
 
-  const comparison = useMemo(() => {
-    const regions = countBy(events, "region");
-    const firstRegion =
-      filters.region !== ALL
-        ? filters.region
-        : regions[0]?.[0];
-    const secondRegion =
-      regions.find(([region]) => region !== firstRegion)
-        ?.[0];
+  const restoreNotebook = (notebook) => {
+    setFilters(notebook.state.filters);
+    setEpisodeSettings(notebook.state.episode_settings);
+    setModule(notebook.state.module);
+    setEnabledFeatureKeys(notebook.state.analogue.enabled_features);
+    setExcludeSameEpisode(notebook.state.analogue.exclude_same_episode);
+    const target = events.find((event) => publicEventId(event) === notebook.state.analogue.target_event_id);
+    setTargetId(target?.event_id || "");
+    setNotebookTitle(notebook.title);
+    setNotebookNotes(notebook.notes);
+  };
 
-    const buildProfile = (region) => {
-      const regionEvents = events.filter(
-        (event) => event.region === region
-      );
-      const total = regionEvents.length;
+  const deleteNotebook = (id) => {
+    const next = savedNotebooks.filter((notebook) => notebook.id !== id);
+    localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next));
+    setSavedNotebooks(next);
+  };
 
-      return {
-        fatalEvents: regionEvents.filter(
-          (event) => Number(event.victims) > 0
-        ).length,
-        region,
-        topCause:
-          countBy(regionEvents, "specific_cause")[0]
-            ?.[0] || "-",
-        total,
-        totalCollapse: regionEvents.filter(
-          (event) =>
-            event.collapse_severity === "TC"
-        ).length,
-        triggered: regionEvents.filter(
-          (event) => event.triggered
-        ).length,
+  const downloadResearchPackage = async () => {
+    setPackageStatus("working");
+    try {
+      const generatedAt = new Date();
+      const episodeRows = episodeRegistry.episodes.map((episode) => ({
+        confidence: episode.confidence,
+        end_date: episode.endDate,
+        episode_id: episode.id,
+        event_count: episode.eventCount,
+        event_ids: episode.eventIds.join(" | "),
+        regions: episode.regions.join(" | "),
+        start_date: episode.startDate,
+      }));
+      const chainRows = chains.map((chain) => ({
+        component: chain.component,
+        event_count: chain.count,
+        event_ids: chain.eventIds.join(" | "),
+        independent_episode_count: chain.episodeCount,
+        process: chain.process,
+        share_percent: chain.share,
+        trigger: chain.trigger,
+      }));
+      const analogueRows = analogues.map((result, index) => ({
+        coverage_percent: result.coverage,
+        feature_comparison: result.contributions.map((item) =>
+          `${item.label}:${item.matched ? "match" : "different"}:${item.target ?? ""}->${item.value ?? ""}`
+        ).join(" | "),
+        matched_features: result.contributions.filter((item) => item.matched).map((item) => item.label).join(" | "),
+        equivalent_candidate_count: result.equivalentCandidateCount,
+        rank: analogueRank(analogues, index),
+        research_event_id: publicEventId(result.candidate),
+        similarity_percent: result.score,
+      }));
+      const eventRows = filteredEvents.map((event) => ({
+        component_involved: event.component_involved,
+        date: event.date,
+        event_id: publicEventId(event),
+        failure_cause_evidence: event.failure_cause_evidence,
+        failure_process: event.failure_process,
+        failure_trigger: event.failure_trigger,
+        material_type: event.material_type,
+        region: event.region,
+        specific_cause: event.specific_cause,
+        structural_type: event.structural_type,
+      }));
+      const sourceRows = filteredSources.map((source) => ({
+        access_date: source.access_date,
+        event_id: source.research_event_id || source.event_id,
+        publication_date: source.publication_date,
+        source_id: source.source_id,
+        source_role: source.source_role,
+        source_title: source.source_title,
+        source_type: source.source_type,
+        source_url: source.source_url,
+      }));
+      const robustnessRows = robustness.scenarios.map((scenario) => ({
+        leading_process: scenario.top?.label,
+        leading_share_percent: scenario.top?.share,
+        record_count: scenario.count,
+        record_retention_percent: scenario.retention,
+        scenario: scenario.label,
+        top_category_retained: scenario.topRetained,
+      }));
+      const calibrationRows = episodeCalibration.rows.map((row) => ({
+        candidate_episode_count: row.candidateEpisodeCount,
+        maximum_distance_km: row.maximumDistanceKm,
+        maximum_gap_days: row.maximumGapDays,
+        pair_f1: row.f1,
+        pair_precision: row.precision,
+        pair_recall: row.recall,
+        reference_episode_count: row.referenceEpisodeCount,
+      }));
+      const analogueSensitivityRows = analogueSensitivity.rows.map((row) => ({
+        removed_feature: row.removedFeatureLabel,
+        retained_top_k: row.retained,
+        retention_percent: row.retention,
+        top_k: analogueSensitivity.topK,
+      }));
+      const files = [
+        {
+          name: "episodes.csv",
+          content: rowsToCsv(["episode_id", "start_date", "end_date", "event_count", "regions", "confidence", "event_ids"], episodeRows),
+        },
+        {
+          name: "failure-chains.csv",
+          content: rowsToCsv(["trigger", "process", "component", "event_count", "share_percent", "independent_episode_count", "event_ids"], chainRows),
+        },
+        {
+          name: "analogues.csv",
+          content: rowsToCsv(["rank", "research_event_id", "similarity_percent", "coverage_percent", "equivalent_candidate_count", "matched_features", "feature_comparison"], analogueRows),
+        },
+        {
+          name: "records.csv",
+          content: rowsToCsv(["event_id", "date", "region", "specific_cause", "failure_trigger", "failure_process", "component_involved", "failure_cause_evidence", "structural_type", "material_type"], eventRows),
+        },
+        {
+          name: "sources.csv",
+          content: rowsToCsv(["source_id", "event_id", "source_role", "source_type", "source_title", "source_url", "publication_date", "access_date"], sourceRows),
+        },
+        {
+          name: "robustness.csv",
+          content: rowsToCsv(["scenario", "record_count", "record_retention_percent", "leading_process", "leading_share_percent", "top_category_retained"], robustnessRows),
+        },
+        {
+          name: "episode-calibration.csv",
+          content: rowsToCsv(["maximum_gap_days", "maximum_distance_km", "candidate_episode_count", "reference_episode_count", "pair_precision", "pair_recall", "pair_f1"], calibrationRows),
+        },
+        {
+          name: "analogue-sensitivity.csv",
+          content: rowsToCsv(["removed_feature", "top_k", "retained_top_k", "retention_percent"], analogueSensitivityRows),
+        },
+        {
+          name: "notebook.json",
+          content: `${JSON.stringify({
+            notes: notebookNotes.trim() || null,
+            state: analysisState(),
+            title: notebookTitle.trim() || null,
+          }, null, 2)}\n`,
+        },
+        {
+          name: "methods.md",
+          content: `# ARCUS Research Plus methods\n\nEpisode groups are rule-based sensitivity constructs using a maximum temporal gap of ${episodeSettings.maximumGapDays} days and maximum spatial distance of ${episodeSettings.maximumDistanceKm} km. Curated episode identifiers take precedence. Similarity is a transparent weighted exact-match measure calculated only across comparable populated fields. Robustness scenarios are descriptive filters. None of these outputs estimates bridge risk, collapse probability, causal effect or national prevalence.\n`,
+        },
+      ];
+      const checksums = {};
+      for (const file of files) checksums[file.name] = await sha256(file.content);
+      const manifest = {
+        analysis_state: analysisState(),
+        checksums_sha256: checksums,
+        dataset: release?.datasetVersion || release?.dataset_version || release?.version || null,
+        denominators: {
+          cohort_records: filteredEvents.length,
+          linked_sources: filteredSources.length,
+          research_episodes: episodeRegistry.episodes.length,
+        },
+        generated_at: generatedAt.toISOString(),
+        limitations: [
+          "ARCUS records are documented historical failures, not a bridge inventory denominator.",
+          "Inferred episodes are sensitivity constructs and do not prove common meteorological causation.",
+          "Analogue similarity is descriptive and is not a probability or safety classification.",
+          "Missing values are not imputed.",
+        ],
+        product: "ARCUS Research Plus — Failure Research Workbench",
+        schema_version: "research-package-v1",
       };
-    };
-
-    return [
-      firstRegion ? buildProfile(firstRegion) : null,
-      secondRegion ? buildProfile(secondRegion) : null,
-    ].filter(Boolean);
-  }, [events, filters.region]);
-
-  const briefing = useMemo(() => {
-    const topCause =
-      analytics.causeRanking[0]?.[0] || "n/a";
-    const topRegion =
-      analytics.regionRanking[0]?.[0] || "n/a";
-    const sourceAverage =
-      analytics.total > 0
-        ? (
-            analytics.filteredSourceTotal /
-            analytics.total
-          ).toFixed(1)
-        : "0.0";
-
-    return [
-      `${formatValue(
-        analytics.total
-      )} events match the current professional filter set.`,
-      `${percentage(
-        analytics.totalCollapse,
-        analytics.total
-      )}% are total collapses and ${percentage(
-        analytics.triggered,
-        analytics.total
-      )}% are event-driven failures.`,
-      `The leading mechanism is ${topCause}, with the strongest territorial concentration in ${topRegion}.`,
-      `The filtered evidence base averages ${sourceAverage} sources per event.`,
-    ];
-  }, [analytics]);
-
-  const setFilter = (key, value) => {
-    setFilters((current) => ({
-      ...current,
-      [key]: value,
-    }));
+      files.push({ name: "manifest.json", content: `${JSON.stringify(manifest, null, 2)}\n` });
+      const zip = createStoredZip(files, generatedAt);
+      downloadFile(new Blob([zip], { type: "application/zip" }), `arcus-research-plus-${generatedAt.toISOString().slice(0, 10)}.zip`, "application/zip");
+      setPackageStatus("done");
+    } catch {
+      setPackageStatus("error");
+    }
   };
 
-  const resetFilters = () => {
-    setFilters({
-      cause: ALL,
-      confidence: ALL,
-      fromYear: years.min,
-      material: ALL,
-      minSources: 0,
-      region: ALL,
-      severity: ALL,
-      structuralType: ALL,
-      toYear: years.max,
-      triggered: ALL,
-      use: ALL,
-    });
-  };
-
-  const exportFilteredEvents = () => {
-    const columns = [
-      "event_id",
-      "date",
-      "municipality",
-      "province",
-      "region",
-      "specific_cause",
-      "collapse_severity",
-      "triggered",
-      "material_type",
-      "structural_type",
-      "destination_use",
-      "source_confidence",
-      "victims",
-      "injuries",
-      "source_count",
-    ];
-
-    const rows = filteredEvents.map((event) => ({
-      ...event,
-      source_count:
-        sourceCountByEvent[event.event_id] || 0,
-    }));
-
-    const csv = [
-      columns.join(","),
-      ...rows.map((row) =>
-        columns
-          .map((column) => toCsvValue(row[column]))
-          .join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csv], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = "arcus-premium-filtered-events.csv";
-    link.click();
-
-    URL.revokeObjectURL(url);
-  };
+  const moduleDefinitions = [
+    { id: "episodes", index: "01", label: t("Episodi", "Episodes") },
+    { id: "chains", index: "02", label: t("Catene", "Chains") },
+    { id: "analogues", index: "03", label: t("Casi analoghi", "Analogues") },
+    { id: "robustness", index: "04", label: t("Robustezza", "Robustness") },
+    { id: "notebook", index: "05", label: "Notebook" },
+  ];
 
   return (
-    <div
-      className="premium-page"
-      id="main-content"
-    >
+    <div className="research-page" id="main-content">
       <PageMeta
-        title="Premium Analytics"
-        description={
-          language === "it"
-            ? "Workspace professionale ARCUS per filtri avanzati, export dati, briefing istituzionali e analytics comparativi."
-            : "ARCUS professional workspace for advanced filtering, data export, institutional briefings and comparative analytics."
-        }
+        title="ARCUS Research Plus"
+        description={t(
+          "Workbench ARCUS per analisi riproducibili sui collassi documentati.",
+          "ARCUS workbench for reproducible analysis of documented bridge collapses."
+        )}
       />
-
       <Navbar />
 
-      <section className="premium-shell">
-        <aside className="premium-sidebar">
-          <div className="premium-sidebar-header">
-            <span>ARCUS PREMIUM</span>
-            <h1>{copy.title}</h1>
-            <p>
-              {copy.professionalLayer}
-            </p>
+      <div className="research-shell">
+        <aside className="research-sidebar">
+          <div className="research-brand">
+            <span>ARCUS / RESEARCH PLUS</span>
+            <h1>Failure Research Workbench</h1>
+            <p>{t(
+              "Episodi, catene documentate, casi analoghi e verifiche di sensibilità in un ambiente riproducibile.",
+              "Episodes, documented chains, analogue cases and sensitivity checks in a reproducible environment."
+            )}</p>
           </div>
 
-          <div className="premium-filter-grid">
-            <FilterSelect
-              label={copy.region}
-              value={filters.region}
-              options={uniqueValues(events, "region")}
-              formatOption={(option) =>
-                option === ALL && language === "it"
-                  ? "Tutti"
-                  : option
-              }
-              onChange={(value) =>
-                setFilter("region", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.cause}
-              value={filters.cause}
-              options={uniqueValues(
-                events,
-                "specific_cause"
-              )}
-              formatOption={(option) =>
-                option === ALL
-                  ? language === "it"
-                    ? "Tutti"
-                    : ALL
-                  : taxonomyLabel(
-                      "cause",
-                      option,
-                      language
-                    )
-              }
-              onChange={(value) =>
-                setFilter("cause", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.severity}
-              value={filters.severity}
-              options={[ALL, "TC", "PC"]}
-              formatOption={(option) =>
-                option === ALL && language === "it"
-                  ? "Tutti"
-                  : option
-              }
-              onChange={(value) =>
-                setFilter("severity", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.triggered}
-              value={filters.triggered}
-              options={[ALL, "true", "false"]}
-              formatOption={(option) => {
-                if (option === ALL) {
-                  return language === "it" ? "Tutti" : ALL;
-                }
-
-                return option === "true"
-                  ? language === "it"
-                    ? "Si"
-                    : "True"
-                  : language === "it"
-                    ? "No"
-                    : "False";
-              }}
-              onChange={(value) =>
-                setFilter("triggered", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.material}
-              value={filters.material}
-              options={uniqueValues(
-                events,
-                "material_type"
-              )}
-              formatOption={(option) =>
-                option === ALL
-                  ? language === "it"
-                    ? "Tutti"
-                    : ALL
-                  : taxonomyLabel(
-                      "material",
-                      option,
-                      language
-                    )
-              }
-              onChange={(value) =>
-                setFilter("material", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.structuralType}
-              value={filters.structuralType}
-              options={uniqueValues(
-                events,
-                "structural_type"
-              )}
-              formatOption={(option) =>
-                option === ALL
-                  ? language === "it"
-                    ? "Tutti"
-                    : ALL
-                  : taxonomyLabel(
-                      "structuralType",
-                      option,
-                      language
-                    )
-              }
-              onChange={(value) =>
-                setFilter("structuralType", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.use}
-              value={filters.use}
-              options={uniqueValues(
-                events,
-                "destination_use"
-              )}
-              formatOption={(option) =>
-                option === ALL
-                  ? language === "it"
-                    ? "Tutti"
-                    : ALL
-                  : taxonomyLabel(
-                      "use",
-                      option,
-                      language
-                    )
-              }
-              onChange={(value) =>
-                setFilter("use", value)
-              }
-            />
-
-            <FilterSelect
-              label={copy.confidence}
-              value={filters.confidence}
-              options={uniqueValues(
-                events,
-                "source_confidence"
-              )}
-              formatOption={(option) =>
-                option === ALL && language === "it"
-                  ? "Tutti"
-                  : option
-              }
-              onChange={(value) =>
-                setFilter("confidence", value)
-              }
-            />
-
-            <label className="premium-filter">
-              <span>{copy.fromYear}</span>
-              <input
-                min={years.min}
-                max={years.max}
-                type="number"
-                value={filters.fromYear}
-                onChange={(event) =>
-                  setFilter(
-                    "fromYear",
-                    Number(event.target.value)
-                  )
-                }
-              />
-            </label>
-
-            <label className="premium-filter">
-              <span>{copy.toYear}</span>
-              <input
-                min={years.min}
-                max={years.max}
-                type="number"
-                value={filters.toYear}
-                onChange={(event) =>
-                  setFilter(
-                    "toYear",
-                    Number(event.target.value)
-                  )
-                }
-              />
-            </label>
-
-            <label className="premium-filter">
-              <span>{copy.minSources}</span>
-              <input
-                min="0"
-                type="number"
-                value={filters.minSources}
-                onChange={(event) =>
-                  setFilter(
-                    "minSources",
-                    Number(event.target.value)
-                  )
-                }
-              />
-            </label>
+          <div className="research-release-card">
+            <span>{t("Release controllata", "Controlled release")}</span>
+            <strong>{release?.datasetVersion || release?.dataset_version || release?.version || t("Caricamento…", "Loading…")}</strong>
+            <small>{events.length} {t("record", "records")} · {sources.length} {t("fonti", "sources")}</small>
           </div>
 
-          <div className="premium-actions">
-            <button
-              type="button"
-              onClick={resetFilters}
-            >
-              {copy.resetFilters}
-            </button>
-
-            <button
-              type="button"
-              onClick={exportFilteredEvents}
-            >
-              {copy.exportCsv}
-            </button>
+          <div className="research-filter-grid">
+            <FilterSelect label={t("Famiglia di causa", "Cause family")} onChange={(value) => setFilter("cause", value)} options={unique(events, "specific_cause")} value={filters.cause} />
+            <FilterSelect label={t("Regione", "Region")} onChange={(value) => setFilter("region", value)} options={unique(events, "region")} value={filters.region} />
+            <FilterSelect label={t("Confidenza fonti", "Source confidence")} onChange={(value) => setFilter("confidence", value)} options={unique(events, "source_confidence")} value={filters.confidence} />
+            <div className="research-year-grid">
+              <label className="research-filter">
+                <span>{t("Da", "From")}</span>
+                <input max={filters.toYear} min={yearRange.min} onChange={(event) => setFilter("fromYear", event.target.value)} type="number" value={filters.fromYear} />
+              </label>
+              <label className="research-filter">
+                <span>{t("A", "To")}</span>
+                <input max={yearRange.max} min={filters.fromYear} onChange={(event) => setFilter("toYear", event.target.value)} type="number" value={filters.toYear} />
+              </label>
+            </div>
           </div>
+          <button className="research-reset" onClick={resetFilters} type="button">{t("Ripristina coorte idraulica", "Reset hydraulic cohort")}</button>
+
+          <nav className="research-module-nav" aria-label={t("Moduli di ricerca", "Research modules")}>
+            {moduleDefinitions.map((item) => (
+              <button className={module === item.id ? "is-active" : ""} key={item.id} onClick={() => setModule(item.id)} type="button">
+                <span>{item.index}</span><strong>{item.label}</strong>
+              </button>
+            ))}
+          </nav>
         </aside>
 
-        <main className="premium-main">
-          <div className="premium-topbar">
+        <main className="research-main">
+          <header className="research-topbar">
             <div>
-              <span>{copy.controlledAccess}</span>
-              <h2>{copy.heading}</h2>
+              <span>CONTROLLED RESEARCH ENVIRONMENT</span>
+              <h2>{moduleDefinitions.find((item) => item.id === module)?.label}</h2>
             </div>
-
-            <div className="premium-status">
-              {copy.workspaceStatus}
+            <div className="research-boundary">
+              <strong>n = {filteredEvents.length}</strong>
+              <span>{t("collassi documentati · non rischio", "documented collapses · not risk")}</span>
             </div>
-          </div>
+          </header>
 
-          <div className="premium-kpi-grid">
-            {[
-              {
-                label: copy.filteredEvents,
-                value: analytics.total,
-                detail: `${percentage(
-                  analytics.total,
-                  events.length
-                )}% of archive`,
-              },
-              {
-                label: "Total collapse share",
-                value: `${percentage(
-                  analytics.totalCollapse,
-                  analytics.total
-                )}%`,
-                detail: `${analytics.totalCollapse} TC records`,
-              },
-              {
-                label: "Triggered share",
-                value: `${percentage(
-                  analytics.triggered,
-                  analytics.total
-                )}%`,
-                detail: `${analytics.triggered} event-driven`,
-              },
-              {
-                label: copy.sourceCoverage,
-                value:
-                  analytics.total > 0
-                    ? (
-                        analytics.filteredSourceTotal /
-                        analytics.total
-                      ).toFixed(1)
-                    : "0.0",
-                detail: "avg. sources per event",
-              },
-            ].map((item) => (
-              <div
-                className="premium-kpi-card"
-                key={item.label}
-              >
-                <div>{item.value}</div>
-                <span>{item.label}</span>
-                <p>{item.detail}</p>
-              </div>
-            ))}
-          </div>
+          {loadError && <div className="research-alert is-error">{t("Impossibile caricare la release controllata.", "Unable to load the controlled release.")}</div>}
 
-          <section className="premium-grid two">
-            <div className="premium-panel">
-              <div className="premium-panel-heading">
-                <span>{copy.ranking}</span>
-                <h3>{copy.regionalConcentration}</h3>
-              </div>
-
-              <RankingList
-                items={analytics.regionRanking}
-                total={analytics.total}
-                label="events"
-              />
-            </div>
-
-            <div className="premium-panel">
-              <div className="premium-panel-heading">
-                <span>{copy.mechanism}</span>
-                <h3>{copy.causeProfile}</h3>
-              </div>
-
-              <RankingList
-                items={analytics.causeRanking.slice(
-                  0,
-                  8
+          {module === "episodes" && (
+            <section className="research-module" data-research-module="episodes">
+              <ModuleHeading
+                eyebrow="EPISODE INTELLIGENCE"
+                title={t("Dal numero di ponti al numero di episodi", "From bridge counts to episode counts")}
+                text={t(
+                  "Verifica quanto una lettura cambia quando più collassi vicini nel tempo e nello spazio vengono trattati come possibile episodio comune.",
+                  "Test how a reading changes when collapses close in time and space are treated as a possible shared episode."
                 )}
-                total={analytics.total}
-                label="events"
               />
-            </div>
-          </section>
-
-          <section className="premium-grid three">
-            <div className="premium-panel">
-              <div className="premium-panel-heading">
-                <span>{copy.comparative}</span>
-                <h3>{copy.regionBenchmark}</h3>
-              </div>
-
-              <div className="premium-comparison">
-                {comparison.map((profile) => (
-                  <div
-                    className="premium-compare-card"
-                    key={profile.region}
-                  >
-                    <strong>{profile.region}</strong>
-                    <span>
-                      {profile.total} events
-                    </span>
-                    <span>
-                      {percentage(
-                        profile.totalCollapse,
-                        profile.total
-                      )}
-                      % TC
-                    </span>
-                    <span>
-                      {percentage(
-                        profile.triggered,
-                        profile.total
-                      )}
-                      % triggered
-                    </span>
-                    <span>
-                      Top cause: {profile.topCause}
-                    </span>
+              {hydraulicEvents.length ? <>
+                <div className="research-control-band">
+                  <label>
+                    <span>{t("Finestra temporale", "Temporal window")}</span>
+                    <strong>{episodeSettings.maximumGapDays} {t("giorni", "days")}</strong>
+                    <input max="5" min="0" onChange={(event) => setEpisodeSettings((current) => ({ ...current, maximumGapDays: Number(event.target.value) }))} type="range" value={episodeSettings.maximumGapDays} />
+                  </label>
+                  <label>
+                    <span>{t("Distanza massima", "Maximum distance")}</span>
+                    <strong>{episodeSettings.maximumDistanceKm} km</strong>
+                    <input max="400" min="25" onChange={(event) => setEpisodeSettings((current) => ({ ...current, maximumDistanceKm: Number(event.target.value) }))} step="25" type="range" value={episodeSettings.maximumDistanceKm} />
+                  </label>
+                </div>
+                <div className="research-kpi-grid">
+                  <article><strong>{episodeRegistry.eventCount}</strong><span>{t("record idraulici datati", "dated hydraulic records")}</span></article>
+                  <article><strong>{episodeRegistry.episodes.length}</strong><span>{t("episodi di ricerca", "research episodes")}</span></article>
+                  <article><strong>{episodeRegistry.multiEventEpisodeCount}</strong><span>{t("episodi multi-collasso", "multi-collapse episodes")}</span></article>
+                  <article><strong>{episodeRegistry.episodes[0]?.eventCount || 0}</strong><span>{t("massimo record/episodio", "maximum records/episode")}</span></article>
+                </div>
+                <div className="research-grid two">
+                  <article className="research-panel">
+                    <h4>{t("Sensibilità alle soglie", "Threshold sensitivity")}</h4>
+                    <div className="research-table-wrap">
+                      <table>
+                        <thead><tr><th>{t("Scenario", "Scenario")}</th><th>{t("Soglie", "Thresholds")}</th><th>{t("Episodi", "Episodes")}</th><th>{t("Max", "Max")}</th></tr></thead>
+                        <tbody>{episodeSensitivity.map((scenario) => (
+                          <tr key={scenario.key}><th>{scenario.label}</th><td>{scenario.maximumGapDays} d · {scenario.maximumDistanceKm} km</td><td>{scenario.episodeCount}</td><td>{scenario.largestEpisode}</td></tr>
+                        ))}</tbody>
+                      </table>
+                    </div>
+                  </article>
+                  <article className="research-panel">
+                    <h4>{t("Episodi più estesi", "Largest inferred episodes")}</h4>
+                    <div className="research-episode-list">
+                      {episodeRegistry.episodes.slice(0, 6).map((episode) => (
+                        <div key={episode.id}>
+                          <strong>{episode.eventCount} {t("ponti", "bridges")}</strong>
+                          <span>{episode.startDate}{episode.endDate !== episode.startDate ? ` → ${episode.endDate}` : ""}</span>
+                          <small>{episode.regions.join(" · ")} · {episode.confidence}</small>
+                        </div>
+                      ))}
+                    </div>
+                  </article>
+                </div>
+                <article className="research-panel research-calibration-panel">
+                  <div className="research-calibration-heading">
+                    <div>
+                      <span>METHOD CONCORDANCE</span>
+                      <h4>{t("Confronto con il registro controllato ARCUS", "Comparison with the controlled ARCUS registry")}</h4>
+                    </div>
+                    <div>
+                      <strong>{episodeCalibration.reference.episodes.length}</strong>
+                      <span>{t("episodi nel riferimento", "episodes in reference")}</span>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div className="research-table-wrap">
+                    <table>
+                      <thead><tr><th>{t("Finestra", "Window")}</th><th>{t("Distanza", "Distance")}</th><th>{t("Episodi", "Episodes")}</th><th>{t("Precisione coppie", "Pair precision")}</th><th>{t("Richiamo coppie", "Pair recall")}</th><th>F1</th></tr></thead>
+                      <tbody>{episodeCalibration.rows.map((row) => {
+                        const isBest = episodeCalibration.best?.maximumGapDays === row.maximumGapDays && episodeCalibration.best?.maximumDistanceKm === row.maximumDistanceKm;
+                        const isCurrent = episodeSettings.maximumGapDays === row.maximumGapDays && episodeSettings.maximumDistanceKm === row.maximumDistanceKm;
+                        return (
+                          <tr className={isBest ? "is-best" : isCurrent ? "is-current" : ""} key={`${row.maximumGapDays}-${row.maximumDistanceKm}`}>
+                            <th>{row.maximumGapDays} d {isCurrent && <small>{t("corrente", "current")}</small>}</th><td>{row.maximumDistanceKm} km</td><td>{row.candidateEpisodeCount}</td><td>{Math.round(row.precision * 1000) / 10}%</td><td>{Math.round(row.recall * 1000) / 10}%</td><td><strong>{row.f1.toFixed(3)}</strong>{isBest && <small>{t(" migliore concordanza", " best concordance")}</small>}</td>
+                          </tr>
+                        );
+                      })}</tbody>
+                    </table>
+                  </div>
+                  <p>{t("La F1 confronta le coppie di record assegnate allo stesso episodio dai due metodi. Misura concordanza con il registro corrente, non accuratezza rispetto a una verità meteorologica.", "F1 compares record pairs assigned to the same episode by both methods. It measures agreement with the current registry, not accuracy against meteorological ground truth.")}</p>
+                </article>
+                <p className="research-method-note">{t(
+                  "Le aggregazioni sono costrutti di sensibilità deterministici. Non dimostrano che i ponti condividano la stessa piena o la stessa causa meteorologica.",
+                  "Groups are deterministic sensitivity constructs. They do not prove that bridges shared the same flood or meteorological cause."
+                )}</p>
+              </> : <EmptyState>{t("Questo modulo richiede una coorte contenente casi idraulici datati.", "This module requires a cohort containing dated hydraulic cases.")}</EmptyState>}
+            </section>
+          )}
 
-            <div className="premium-panel">
-              <div className="premium-panel-heading">
-                <span>{copy.impact}</span>
-                <h3>{copy.highestImpact}</h3>
-              </div>
+          {module === "chains" && (
+            <section className="research-module" data-research-module="chains">
+              <ModuleHeading
+                eyebrow="FAILURE CHAIN EXPLORER"
+                title={t("Come sono documentate le sequenze di cedimento", "How failure sequences are documented")}
+                text={t("Collega innesco, processo e componente senza trasformare l’associazione osservata in causalità automatica.", "Connect trigger, process and component without turning observed association into automatic causality.")}
+              />
+              {chains.length ? <>
+                <div className="research-chain-legend"><span>{t("Innesco", "Trigger")}</span><span>{t("Processo", "Process")}</span><span>{t("Componente", "Component")}</span><span>{t("Evidenza", "Evidence")}</span></div>
+                <div className="research-chain-list">
+                  {chains.slice(0, 18).map((chain) => (
+                    <article key={`${chain.trigger}-${chain.process}-${chain.component}`}>
+                      <div>{chain.trigger}</div><i>→</i><div>{chain.process}</div><i>→</i><div>{chain.component}</div>
+                      <aside><strong>{chain.count}</strong><span>{chain.share}%</span><small>{chain.episodeCount === null ? "—" : `${chain.episodeCount} ep.`}</small></aside>
+                    </article>
+                  ))}
+                </div>
+                <p className="research-method-note">{t("I valori “Not documented” restano visibili: ARCUS non completa né imputa passaggi mancanti.", "“Not documented” values remain visible: ARCUS does not complete or impute missing links.")}</p>
+              </> : <EmptyState>{t("Nessuna catena disponibile per la coorte corrente.", "No chains are available for the current cohort.")}</EmptyState>}
+            </section>
+          )}
 
-              <div className="premium-event-list">
-                {analytics.impactRanking.map(
-                  (event) => (
-                    <div
-                      className="premium-event-row"
-                      key={event.event_id}
-                    >
-                      <strong>
-                        {event.municipality},{" "}
-                        {event.region}
-                      </strong>
-                      <span>
-                        {extractYear(event.date)} ·{" "}
-                        {event.victims || 0} fatalities ·{" "}
-                        {event.injuries || 0} injuries
-                      </span>
+          {module === "analogues" && (
+            <section className="research-module" data-research-module="analogues">
+              <ModuleHeading
+                eyebrow="ANALOGUE CASE LAB"
+                title={t("Confrontabilità spiegata, non black box", "Explained comparability, not a black box")}
+                text={t("Scegli un caso e controlla quali caratteristiche producono la similarità. Il risultato non è una previsione.", "Choose a case and inspect which characteristics produce similarity. The result is not a prediction.")}
+              />
+              {selectedTarget ? <>
+                <div className="research-analogue-controls">
+                  <label className="research-filter">
+                    <span>{t("Caso indice", "Index case")}</span>
+                    <select onChange={(event) => setTargetId(event.target.value)} value={selectedTarget.event_id}>
+                      {filteredEvents.map((event) => <option key={event.event_id} value={event.event_id}>{publicEventId(event)} · {eventName(event)} · {event.date}</option>)}
+                    </select>
+                  </label>
+                  <label className="research-switch"><input checked={excludeSameEpisode} onChange={(event) => setExcludeSameEpisode(event.target.checked)} type="checkbox" /><span>{t("Escludi lo stesso episodio", "Exclude same episode")}</span></label>
+                </div>
+                <div className="research-feature-grid">
+                  {ANALOGUE_FEATURES.map((feature) => (
+                    <label className={enabledFeatureKeys.includes(feature.key) ? "is-enabled" : ""} key={feature.key}>
+                      <input checked={enabledFeatureKeys.includes(feature.key)} onChange={() => toggleFeature(feature.key)} type="checkbox" />
+                      <span>{feature.label}</span><small>w {feature.weight}</small>
+                    </label>
+                  ))}
+                </div>
+                {analogueFeatures.length < 2 ? <div className="research-alert">{t("Attiva almeno due variabili confrontabili.", "Enable at least two comparable variables.")}</div> : (
+                  <>
+                    <div className="research-analogue-list">
+                      {analogues.map((result, index) => (
+                        <article key={result.candidate.event_id}>
+                          <div className="research-analogue-rank">{String(analogueRank(analogues, index)).padStart(2, "0")}</div>
+                          <div className="research-analogue-event">
+                            <span>{publicEventId(result.candidate)} · {result.candidate.date}</span>
+                            <h4>{eventName(result.candidate)}</h4>
+                            <p>{result.candidate.municipality} · {result.candidate.region}</p>
+                            <div>{result.contributions.map((item) => <em className={item.matched ? "is-match" : ""} key={item.key}>{item.label}: {item.matched ? "=" : "≠"}</em>)}</div>
+                          </div>
+                          <aside><strong>{result.score}%</strong><span>{t("similarità", "similarity")}</span><small>{result.coverage}% {t("copertura", "coverage")}</small><small className={result.equivalentCandidateCount > 1 ? "is-caution" : ""}>{result.equivalentCandidateCount} {t("candidati equivalenti", "equivalent candidates")}</small></aside>
+                        </article>
+                      ))}
                     </div>
-                  )
+                    <section className="research-analogue-sensitivity">
+                      <header>
+                        <div><span>LEAVE-ONE-FEATURE-OUT</span><h4>{t("Stabilità dei primi cinque analoghi", "Top-five analogue stability")}</h4></div>
+                        <div><strong>{analogueSensitivity.meanRetention ?? "—"}%</strong><span>{t("ritenzione media", "mean retention")}</span><small className={(analogueSensitivity.minimumRetention ?? 100) < 60 ? "is-caution" : ""}>min {analogueSensitivity.minimumRetention ?? "—"}%</small></div>
+                      </header>
+                      <div className="research-feature-sensitivity-grid">
+                        {analogueSensitivity.rows.map((row) => (
+                          <article key={row.removedFeatureKey}><span>{row.removedFeatureLabel}</span><strong>{row.retention}%</strong><small>{row.retained}/{analogueSensitivity.baseCount} {t("analoghi mantenuti", "analogues retained")}</small></article>
+                        ))}
+                      </div>
+                      <p>{t("Ogni prova rimuove una variabile e ricalcola i primi cinque casi. Una bassa ritenzione segnala che il risultato dipende fortemente da quella scelta metodologica.", "Each run removes one variable and recalculates the top five cases. Low retention indicates that the result depends strongly on that methodological choice.")}</p>
+                    </section>
+                  </>
                 )}
+                <p className="research-method-note">{t("La percentuale è un confronto pesato sui soli campi popolati in entrambi i casi. Non misura rischio, sicurezza o probabilità di collasso.", "The percentage is a weighted comparison across fields populated in both cases. It does not measure risk, safety or collapse probability.")}</p>
+              </> : <EmptyState>{t("Nessun caso nella coorte corrente.", "No case in the current cohort.")}</EmptyState>}
+            </section>
+          )}
+
+          {module === "robustness" && (
+            <section className="research-module" data-research-module="robustness">
+              <ModuleHeading
+                eyebrow="ROBUSTNESS & SENSITIVITY"
+                title={t("Quali letture sopravvivono a criteri più severi", "Which readings survive stricter criteria")}
+                text={t("Confronta il processo più rappresentato quando cambiano qualità dell’evidenza, fonti e indipendenza degli episodi.", "Compare the most represented process as evidence quality, sources and episode independence change.")}
+              />
+              {filteredEvents.length ? <>
+                <div className="research-robustness-summary">
+                  <div><span>{t("Processo di riferimento", "Reference process")}</span><strong>{robustness.baseTop?.label || "—"}</strong><small>{robustness.baseTop ? `${robustness.baseTop.count} record · ${robustness.baseTop.share}%` : t("non documentato", "not documented")}</small></div>
+                  <div><span>LEAVE-ONE-EPISODE-OUT</span><strong>{robustness.leaveOneEpisodeOutStability === null ? "—" : `${robustness.leaveOneEpisodeOutStability}%`}</strong><small>{t("stabilità della categoria principale", "stability of the leading category")}</small></div>
+                </div>
+                <div className="research-table-wrap research-robustness-table">
+                  <table>
+                    <thead><tr><th>{t("Scenario", "Scenario")}</th><th>n</th><th>{t("Ritenzione", "Retention")}</th><th>{t("Processo principale", "Leading process")}</th><th>{t("Esito", "Outcome")}</th></tr></thead>
+                    <tbody>{robustness.scenarios.map((scenario) => (
+                      <tr key={scenario.key}><th>{scenario.label}</th><td>{scenario.count}</td><td>{scenario.retention}%</td><td>{scenario.top?.label || "—"}{scenario.top ? ` · ${scenario.top.share}%` : ""}</td><td><span className={scenario.topRetained ? "research-status is-stable" : "research-status is-sensitive"}>{scenario.topRetained ? t("stabile", "stable") : t("sensibile", "sensitive")}</span></td></tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+                <p className="research-method-note">{t("“Stabile” significa soltanto che rimane la categoria più frequente nel database sotto lo scenario indicato. Non costituisce validazione statistica o ingegneristica.", "“Stable” only means that the category remains the most frequent in the database under the stated scenario. It is not statistical or engineering validation.")}</p>
+              </> : <EmptyState>{t("Nessun record da sottoporre a sensibilità.", "No records are available for sensitivity checks.")}</EmptyState>}
+            </section>
+          )}
+
+          {module === "notebook" && (
+            <section className="research-module" data-research-module="notebook">
+              <ModuleHeading
+                eyebrow="REPRODUCIBLE RESEARCH NOTEBOOK"
+                title={t("Salva il ragionamento insieme al risultato", "Save the reasoning with the result")}
+                text={t("Conserva filtri, soglie e configurazione; esporta dati, metodi, risultati e checksum in un unico pacchetto.", "Preserve filters, thresholds and configuration; export data, methods, results and checksums in one package.")}
+              />
+              <div className="research-notebook-grid">
+                <div className="research-panel research-notebook-editor">
+                  <label><span>{t("Titolo dell’analisi", "Analysis title")}</span><input onChange={(event) => setNotebookTitle(event.target.value)} placeholder={t("Es. sensibilità degli episodi idraulici", "E.g. hydraulic episode sensitivity")} value={notebookTitle} /></label>
+                  <label><span>{t("Nota metodologica", "Method note")}</span><textarea onChange={(event) => setNotebookNotes(event.target.value)} placeholder={t("Ipotesi, scelte e limiti da ricordare…", "Assumptions, choices and limitations to retain…")} rows="7" value={notebookNotes} /></label>
+                  <button disabled={!filteredEvents.length} onClick={saveNotebook} type="button">{t("Salva configurazione", "Save configuration")}</button>
+                </div>
+                <div className="research-panel research-package-card">
+                  <span>RESEARCH PACKAGE / ZIP</span>
+                  <strong>{filteredEvents.length} {t("record", "records")}</strong>
+                  <p>{t("Manifest, checksum SHA-256, record, fonti, catene, episodi, analoghi, robustezza e metodo. I dati mancanti restano mancanti.", "Manifest, SHA-256 checksums, records, sources, chains, episodes, analogues, robustness and method. Missing data remain missing.")}</p>
+                  <button disabled={!filteredEvents.length || packageStatus === "working"} onClick={downloadResearchPackage} type="button">{packageStatus === "working" ? t("Preparazione…", "Preparing…") : t("Scarica pacchetto riproducibile", "Download reproducible package")}</button>
+                  {packageStatus === "done" && <small role="status">{t("Pacchetto generato.", "Package generated.")}</small>}
+                  {packageStatus === "error" && <small className="is-error" role="alert">{t("Generazione non riuscita.", "Package generation failed.")}</small>}
+                </div>
               </div>
-            </div>
-
-            <div className="premium-panel">
-              <div className="premium-panel-heading">
-                <span>{copy.traceability}</span>
-                <h3>{copy.reviewEvents}</h3>
+              <div className="research-saved-list">
+                <h4>{t("Analisi salvate nel browser", "Analyses saved in this browser")}</h4>
+                {savedNotebooks.length ? savedNotebooks.map((notebook) => (
+                  <article key={notebook.id}>
+                    <div><strong>{notebook.title}</strong><span>{new Date(notebook.created_at).toLocaleString(language)}</span><p>{notebook.notes || t("Nessuna nota", "No notes")}</p></div>
+                    <aside><button onClick={() => restoreNotebook(notebook)} type="button">{t("Ripristina", "Restore")}</button><button onClick={() => deleteNotebook(notebook.id)} type="button">{t("Elimina", "Delete")}</button></aside>
+                  </article>
+                )) : <EmptyState>{t("Nessuna configurazione salvata.", "No saved configuration.")}</EmptyState>}
               </div>
+            </section>
+          )}
 
-              <div className="premium-event-list">
-                {analytics.sourceWeakEvents.map(
-                  (event) => (
-                    <div
-                      className="premium-event-row"
-                      key={event.event_id}
-                    >
-                      <strong>
-                        {event.municipality},{" "}
-                        {event.region}
-                      </strong>
-                      <span>
-                        {sourceCountByEvent[
-                          event.event_id
-                        ] || 0}{" "}
-                        sources ·{" "}
-                        {event.source_confidence}
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          </section>
-
-          <section className="premium-briefing">
-            <div className="premium-panel-heading">
-              <span>{copy.briefing}</span>
-              <h3>{copy.briefingTitle}</h3>
-            </div>
-
-            <div className="premium-briefing-grid">
-              {briefing.map((line) => (
-                <p key={line}>{line}</p>
-              ))}
-            </div>
-          </section>
+          <footer className="research-footer-boundary">
+            <strong>{t("Confine interpretativo", "Interpretation boundary")}</strong>
+            <p>{t(
+              "ARCUS descrive collassi documentati e la loro evidenza. Non rappresenta l’inventario dei ponti italiani e non stima probabilità, sicurezza, causalità o prevalenza nazionale.",
+              "ARCUS describes documented collapses and their evidence. It does not represent the Italian bridge inventory and does not estimate probability, safety, causality or national prevalence."
+            )}</p>
+          </footer>
         </main>
-      </section>
+      </div>
     </div>
   );
 }

@@ -25,6 +25,7 @@ const ProfessionalLoginPage = lazy(() => import("./pages/ProfessionalLoginPage")
 const ProfessionalAccountPage = lazy(() => import("./pages/ProfessionalAccountPage"));
 const AccountPage = lazy(() => import("./pages/AccountPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
+const ContributePage = lazy(() => import("./pages/ContributePage"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -56,7 +57,7 @@ function PageLoading() {
 
 function App() {
 
-  const [showIntro, setShowIntro] = useState(() => window.location.pathname !== "/atlas");
+  const [showIntro, setShowIntro] = useState(() => window.location.pathname === "/");
   return (
     <>
       <a
@@ -114,6 +115,11 @@ function App() {
           <Route
             path="/data-access"
             element={<DataAccessPage />}
+          />
+
+          <Route
+            path="/contribute"
+            element={<ContributePage />}
           />
 
           <Route

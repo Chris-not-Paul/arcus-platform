@@ -1,0 +1,371 @@
+{
+  "schema_version": "arcus-open-schema-v2",
+  "datasets": [
+    {
+      "name": "events",
+      "record_count": 261,
+      "fields": [
+        {
+          "field": "bridge_crossing_name",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "bridge_crossing_type",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "bridge_name",
+          "type": "string",
+          "populated": 66,
+          "missing": 195,
+          "coverage": 0.2529
+        },
+        {
+          "field": "cause_category",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "collapse_severity",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "component_involved",
+          "type": "string",
+          "populated": 211,
+          "missing": 50,
+          "coverage": 0.8084
+        },
+        {
+          "field": "construction_year",
+          "type": "string",
+          "populated": 32,
+          "missing": 229,
+          "coverage": 0.1226
+        },
+        {
+          "field": "construction_year_numeric",
+          "type": "number",
+          "populated": 31,
+          "missing": 230,
+          "coverage": 0.1188
+        },
+        {
+          "field": "construction_year_raw",
+          "type": "string",
+          "populated": 32,
+          "missing": 229,
+          "coverage": 0.1226
+        },
+        {
+          "field": "curation_level",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "date",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "description",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "destination_use",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "event_id",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "event_slug",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "exact_location",
+          "type": "boolean",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "failure_cause_evidence",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "failure_process",
+          "type": "string",
+          "populated": 213,
+          "missing": 48,
+          "coverage": 0.8161
+        },
+        {
+          "field": "failure_trigger",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "hydraulic_intelligence",
+          "type": "object",
+          "populated": 211,
+          "missing": 50,
+          "coverage": 0.8084
+        },
+        {
+          "field": "injuries",
+          "type": "number",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "latitude",
+          "type": "number",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "longitude",
+          "type": "number",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "material_type",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "municipality",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "province",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "province_code",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "province_key",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "province_raw",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "province_validation_status",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "region",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "source_confidence",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "specific_cause",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "structural_type",
+          "type": "string",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "triggered",
+          "type": "boolean",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "victims",
+          "type": "number",
+          "populated": 261,
+          "missing": 0,
+          "coverage": 1
+        }
+      ]
+    },
+    {
+      "name": "sources",
+      "record_count": 716,
+      "fields": [
+        {
+          "field": "access_date",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "event_id",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "language",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "publication_date",
+          "type": "string",
+          "populated": 704,
+          "missing": 12,
+          "coverage": 0.9832
+        },
+        {
+          "field": "source_id",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "source_reference",
+          "type": "null",
+          "populated": 0,
+          "missing": 716,
+          "coverage": 0
+        },
+        {
+          "field": "source_role",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "source_title",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "source_type",
+          "type": "string",
+          "populated": 716,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "source_url",
+          "type": "string",
+          "populated": 711,
+          "missing": 5,
+          "coverage": 0.993
+        }
+      ]
+    },
+    {
+      "name": "taxonomy",
+      "record_count": 57,
+      "fields": [
+        {
+          "field": "definition_it",
+          "type": "string",
+          "populated": 57,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "field",
+          "type": "string",
+          "populated": 57,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
+          "field": "value",
+          "type": "string",
+          "populated": 57,
+          "missing": 0,
+          "coverage": 1
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "hydraulic_intelligence describes observed historical outcomes and is not a prediction.",
+    "construction_year preserves the source value; construction_year_numeric is populated only for an exact four-digit year.",
+    "source_reference preserves non-URL source descriptions; source_url contains HTTP/HTTPS URLs only."
+  ]
+}

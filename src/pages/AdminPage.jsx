@@ -14,6 +14,9 @@ import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
 import {
   adminAccessRequests,
+  adminContributions,
+  adminFailureLearningFeedback,
+  adminFailureLearningReadiness,
   adminApiKeys,
   adminAuditEvents,
   adminCreateApiKey,
@@ -22,7 +25,9 @@ import {
   adminRevokeUserSessions,
   adminSetUserDisabled,
   adminUpdateAccessRequestStatus,
+  adminUpdateContributionStatus,
   adminUsers,
+  downloadAdminFailureLearningDataset,
   getSession,
 } from "../utils/apiClient";
 
@@ -59,6 +64,9 @@ export default function AdminPage() {
   const { language } = useLanguage();
   const [users, setUsers] = useState([]);
   const [accessRequests, setAccessRequests] = useState([]);
+  const [contributions, setContributions] = useState([]);
+  const [learningJudgements, setLearningJudgements] = useState([]);
+  const [learningReadiness, setLearningReadiness] = useState(null);
   const [apiKeys, setApiKeys] = useState([]);
   const [auditEvents, setAuditEvents] = useState([]);
   const [session, setSession] = useState(null);
@@ -67,7 +75,10 @@ export default function AdminPage() {
   const [activePanel, setActivePanel] = useState("users");
   const [busyUser, setBusyUser] = useState("");
   const [busyRequest, setBusyRequest] = useState("");
+  const [busyContribution, setBusyContribution] = useState("");
+  const [reviewNotes, setReviewNotes] = useState({});
   const [busyApiKey, setBusyApiKey] = useState("");
+  const [busyLearningExport, setBusyLearningExport] = useState(false);
   const [createdApiKey, setCreatedApiKey] = useState(null);
   const [apiKeyDraft, setApiKeyDraft] = useState({
     label: "",
@@ -204,6 +215,9 @@ export default function AdminPage() {
       getSession(),
       adminUsers(),
       adminAccessRequests(),
+      adminContributions(),
+      adminFailureLearningFeedback(),
+      adminFailureLearningReadiness(),
       adminApiKeys(),
       adminAuditEvents(),
     ])
@@ -211,12 +225,18 @@ export default function AdminPage() {
         nextSession,
         nextUsers,
         nextRequests,
+        nextContributions,
+        nextLearningJudgements,
+        nextLearningReadiness,
         nextApiKeys,
         nextAuditEvents,
       ]) => {
         setSession(nextSession);
         setUsers(nextUsers);
         setAccessRequests(nextRequests);
+        setContributions(nextContributions);
+        setLearningJudgements(nextLearningJudgements);
+        setLearningReadiness(nextLearningReadiness);
         setApiKeys(nextApiKeys);
         setAuditEvents(nextAuditEvents);
         setStatus("ready");
@@ -234,6 +254,9 @@ export default function AdminPage() {
       getSession(),
       adminUsers(),
       adminAccessRequests(),
+      adminContributions(),
+      adminFailureLearningFeedback(),
+      adminFailureLearningReadiness(),
       adminApiKeys(),
       adminAuditEvents(),
     ])
@@ -241,6 +264,9 @@ export default function AdminPage() {
         nextSession,
         nextUsers,
         nextRequests,
+        nextContributions,
+        nextLearningJudgements,
+        nextLearningReadiness,
         nextApiKeys,
         nextAuditEvents,
       ]) => {
@@ -251,6 +277,9 @@ export default function AdminPage() {
         setSession(nextSession);
         setUsers(nextUsers);
         setAccessRequests(nextRequests);
+        setContributions(nextContributions);
+        setLearningJudgements(nextLearningJudgements);
+        setLearningReadiness(nextLearningReadiness);
         setApiKeys(nextApiKeys);
         setAuditEvents(nextAuditEvents);
         setStatus("ready");
@@ -283,10 +312,14 @@ export default function AdminPage() {
       requests: accessRequests.filter(
         (request) => request.status === "new"
       ).length,
+      contributions: contributions.filter(
+        (item) => item.status === "new" || item.status === "needs_clarification"
+      ).length,
+      learningJudgements: learningJudgements.filter((item) => !item.supersededAt).length,
       apiKeys: apiKeys.filter((apiKey) => !apiKey.revokedAt).length,
       total: users.length,
     };
-  }, [accessRequests, apiKeys, users]);
+  }, [accessRequests, apiKeys, contributions, learningJudgements, users]);
 
   const updateUser = (username, action) => {
     setBusyUser(username);
@@ -352,6 +385,15 @@ export default function AdminPage() {
       });
   };
 
+  const updateContribution = (id, nextStatus) => {
+    setBusyContribution(id);
+    setMessage("");
+    adminUpdateContributionStatus(id, nextStatus, reviewNotes[id] || "")
+      .then(() => loadAdminState(false))
+      .catch(() => setMessage(copy.failed))
+      .finally(() => setBusyContribution(""));
+  };
+
   const toggleApiKeyPermission = (permission) => {
     setApiKeyDraft((current) => {
       const hasPermission = current.permissions.includes(permission);
@@ -415,6 +457,26 @@ export default function AdminPage() {
       });
   };
 
+  const exportLearningDataset = () => {
+    setBusyLearningExport(true);
+    setMessage("");
+    downloadAdminFailureLearningDataset()
+      .then(({ blob, filename }) => {
+        const href = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.download = filename;
+        anchor.click();
+        URL.revokeObjectURL(href);
+      })
+      .catch(() => {
+        setMessage(language === "it"
+          ? "Non riesco a esportare il dataset di calibrazione."
+          : "The calibration dataset could not be exported.");
+      })
+      .finally(() => setBusyLearningExport(false));
+  };
+
   return (
     <main className="admin-page" id="main-content">
       <PageMeta
@@ -466,8 +528,16 @@ export default function AdminPage() {
             <strong>{summary.requests}</strong>
           </article>
           <article>
+            <span>{language === "it" ? "Contributi aperti" : "Open contributions"}</span>
+            <strong>{summary.contributions}</strong>
+          </article>
+          <article>
             <span>{copy.apiKeys}</span>
             <strong>{summary.apiKeys}</strong>
+          </article>
+          <article>
+            <span>{language === "it" ? "Giudizi ML attivi" : "Active ML labels"}</span>
+            <strong>{summary.learningJudgements}</strong>
           </article>
         </section>
 
@@ -475,6 +545,8 @@ export default function AdminPage() {
           {[
             ["users", copy.users, users.length],
             ["requests", copy.requests, summary.requests],
+            ["contributions", language === "it" ? "Contributi" : "Contributions", summary.contributions],
+            ["learning", language === "it" ? "Failure learning" : "Failure learning", summary.learningJudgements],
             ["apiKeys", copy.apiKeys, summary.apiKeys],
             ["audit", copy.audit, auditEvents.length],
           ].map(([key, label, count]) => (
@@ -837,6 +909,134 @@ export default function AdminPage() {
           ) : (
             <p className="admin-state">{copy.apiKeyEmpty}</p>
           )}
+        </section>
+        )}
+
+        {activePanel === "contributions" && (
+        <section className="admin-contribution-panel">
+          <header>
+            <div>
+              <span>ARCUS EVIDENCE INTAKE</span>
+              <h2>{language === "it" ? "Contributi esperti" : "Expert contributions"}</h2>
+            </div>
+            <p>{language === "it" ? "Coda editoriale privata. Verifica fonti, identità dell’evento e diritti delle immagini prima di accettare; l’accettazione non aggiorna automaticamente il master." : "Private editorial queue. Verify sources, event identity and image rights before acceptance; acceptance never updates the master automatically."}</p>
+          </header>
+          {contributions.length ? contributions.map((item) => (
+            <article key={item.id}>
+              <div className="admin-contribution-heading">
+                <span>{item.status} · {formatDate(item.createdAt, language)}</span>
+                <strong>{item.eventId || item.bridgeName || item.place || item.id}</strong>
+                <p>{item.name} · {item.affiliation || item.expertRole || item.email}</p>
+              </div>
+              <div className="admin-contribution-body">
+                <p>{item.summary}</p>
+                <p><b>{language === "it" ? "Base" : "Basis"}:</b> {item.evidenceBasis} · {item.contributionTypes.join(", ")}</p>
+                {item.sources?.map((source) => <a href={source} key={source} rel="noreferrer" target="_blank">{source}</a>)}
+                {item.sourceAvailability !== "online" && item.documentSource?.title && <p><b>{language === "it" ? "Documento non online" : "Offline document"}:</b> {item.documentSource.title} · {item.documentSource.issuer} · {item.documentSource.documentType}{item.documentSource.pages ? ` · pp. ${item.documentSource.pages}` : ""}{item.documentSource.reference ? ` · ${item.documentSource.reference}` : ""}</p>}
+                {item.documentAttachment && <p><b>PDF:</b> {item.documentAttachment.originalFilename} · <a href={`/api/admin/contributions/${encodeURIComponent(item.id)}/document`} rel="noreferrer" target="_blank">{language === "it" ? "apri documento privato" : "open private document"}</a></p>}
+                {item.attachment && <p><b>{language === "it" ? "Immagine" : "Image"}:</b> {item.attachment.creditLine} · {item.attachment.rightsBasis} · <a href={`/api/admin/contributions/${encodeURIComponent(item.id)}/attachment`} rel="noreferrer" target="_blank">{language === "it" ? "apri file privato" : "open private file"}</a></p>}
+                <textarea aria-label={language === "it" ? "Nota di revisione" : "Review note"} onChange={(event) => setReviewNotes((current) => ({ ...current, [item.id]: event.target.value }))} placeholder={language === "it" ? "Nota di revisione o chiarimento richiesto" : "Review note or clarification request"} rows="2" value={reviewNotes[item.id] ?? item.reviewNote ?? ""} />
+              </div>
+              <div className="admin-request-actions">
+                {[
+                  ["under_review", language === "it" ? "In revisione" : "Review"],
+                  ["needs_clarification", language === "it" ? "Chiedi chiarimenti" : "Clarify"],
+                  ["accepted", language === "it" ? "Accetta" : "Accept"],
+                  ["rejected", language === "it" ? "Rifiuta" : "Reject"],
+                  ["archived", language === "it" ? "Archivia" : "Archive"],
+                ].map(([value, label]) => <button disabled={busyContribution === item.id || item.status === value} key={value} onClick={() => updateContribution(item.id, value)} type="button">{label}</button>)}
+              </div>
+            </article>
+          )) : <p className="admin-state">{language === "it" ? "Nessun contributo ricevuto." : "No contributions received."}</p>}
+        </section>
+        )}
+
+        {activePanel === "learning" && (
+        <section className="admin-contribution-panel admin-learning-panel">
+          <header>
+            <div>
+              <span>ARCUS FAILURE LEARNING</span>
+              <h2>{language === "it" ? "Dataset di giudizi esperti" : "Expert-judgement dataset"}</h2>
+            </div>
+            <div>
+              <p>{language === "it" ? "Etichette private per calibrare il ranking degli analoghi. Le revisioni sostituite restano conservate ma sono escluse dal dataset attivo." : "Private labels for analogue-ranking calibration. Superseded revisions remain preserved but are excluded from the active dataset."}</p>
+              <button className="admin-learning-export" disabled={busyLearningExport || !learningJudgements.some((item) => !item.supersededAt)} onClick={exportLearningDataset} type="button">
+                {busyLearningExport
+                  ? (language === "it" ? "Preparazione…" : "Preparing…")
+                  : (language === "it" ? "Esporta dataset pseudonimizzato" : "Export pseudonymised dataset")}
+              </button>
+            </div>
+          </header>
+          {learningReadiness && (
+            <div className="admin-learning-readiness">
+              <div className={`admin-learning-status ${learningReadiness.status === "ready_for_offline_baseline_assessment" ? "is-ready" : "is-collecting"}`}>
+                <span>CALIBRATION READINESS</span>
+                <strong>{learningReadiness.status}</strong>
+                <p>{language === "it"
+                  ? "Il superamento delle soglie abilita esclusivamente un confronto offline con il motore deterministico. Non autorizza previsioni o uso in produzione."
+                  : "Passing the gates enables only an offline comparison with the deterministic engine. It does not authorise prediction or production use."}</p>
+              </div>
+              <div className="admin-learning-metrics">
+                <article>
+                  <span>{language === "it" ? "Giudizi attivi" : "Active judgements"}</span>
+                  <strong>{learningReadiness.observed.activeJudgements}</strong>
+                </article>
+                <article>
+                  <span>{language === "it" ? "Esperti distinti" : "Unique experts"}</span>
+                  <strong>{learningReadiness.observed.uniqueReviewers}</strong>
+                </article>
+                <article>
+                  <span>{language === "it" ? "Contesti target" : "Target contexts"}</span>
+                  <strong>{learningReadiness.observed.uniqueTargetContexts}</strong>
+                </article>
+                <article>
+                  <span>{language === "it" ? "Coppie rivalutate" : "Multi-rated pairs"}</span>
+                  <strong>{Math.round((learningReadiness.observed.multiRatedPairRatio || 0) * 100)}%</strong>
+                </article>
+                <article>
+                  <span>{language === "it" ? "Accordo esatto" : "Exact agreement"}</span>
+                  <strong>{learningReadiness.agreement.exactPairwiseAgreement === null ? "—" : `${Math.round(learningReadiness.agreement.exactPairwiseAgreement * 100)}%`}</strong>
+                  <small>{learningReadiness.agreement.pairwiseComparisons} {language === "it" ? "confronti" : "comparisons"}</small>
+                </article>
+              </div>
+              <div className="admin-learning-gates">
+                {Object.entries(learningReadiness.gates).map(([key, gate]) => (
+                  <div className={gate.met ? "is-met" : "is-pending"} key={key}>
+                    <span>{key.replace(/([A-Z])/g, " $1")}</span>
+                    <strong>{key.toLowerCase().includes("ratio") ? `${Math.round(gate.observed * 100)}% / ${Math.round(gate.target * 100)}%` : `${gate.observed} / ${gate.target}`}</strong>
+                    <small>{gate.met ? (language === "it" ? "raggiunto" : "met") : (language === "it" ? "da completare" : "pending")}</small>
+                  </div>
+                ))}
+              </div>
+              <p className="admin-learning-caveat">{language === "it"
+                ? "Le soglie sono obiettivi di governance per il pilot, non cut-off scientifici validati. L’accordo esatto è descrittivo e non equivale a un coefficiente di affidabilità inter-valutatore."
+                : "The thresholds are pilot governance targets, not validated scientific cut-offs. Exact agreement is descriptive and is not an inter-rater reliability coefficient."}</p>
+              {learningReadiness.unresolvedDuplicateActiveJudgements > 0 && (
+                <p className="admin-learning-caveat is-warning">{language === "it"
+                  ? `${learningReadiness.unresolvedDuplicateActiveJudgements} etichette legacy duplicate sono escluse automaticamente dagli indicatori e dall’export.`
+                  : `${learningReadiness.unresolvedDuplicateActiveJudgements} duplicate legacy labels are automatically excluded from metrics and export.`}</p>
+              )}
+            </div>
+          )}
+          {learningJudgements.length ? learningJudgements.map((item) => (
+            <article className={item.supersededAt ? "is-superseded" : ""} key={item.id}>
+              <div className="admin-contribution-heading">
+                <span>{item.rating} · {formatDate(item.createdAt, language)}</span>
+                <strong>{item.analogueEventId}</strong>
+                <p>Rank #{item.retrievalRank} · {item.projectLocation?.province || "-"}</p>
+                <small>{item.analoguePairFingerprint || "-"}</small>
+              </div>
+              <div className="admin-contribution-body">
+                <p>{item.reasonCodes?.join(", ")}</p>
+                {item.note ? <p>{item.note}</p> : null}
+                <p>{item.engineVersion || "-"} · {item.schemaVersion}</p>
+              </div>
+              <div>
+                <span>{item.supersededAt ? (language === "it" ? "Sostituito" : "Superseded") : (language === "it" ? "Attivo" : "Active")}</span>
+                <p>{item.reviewerUsername}</p>
+              </div>
+            </article>
+          )) : <p className="admin-state">{language === "it" ? "Nessun giudizio esperto raccolto." : "No expert judgements collected."}</p>}
         </section>
         )}
 

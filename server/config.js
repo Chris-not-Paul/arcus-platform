@@ -47,6 +47,36 @@ export const accessRequestsFilePath = path.join(
   "access-requests.json"
 );
 
+export const contributionsDir = path.join(
+  privateDataDir,
+  "contributions"
+);
+
+export const contributionsFilePath = path.join(
+  contributionsDir,
+  "submissions.json"
+);
+
+export const contributionUploadsDir = path.join(
+  contributionsDir,
+  "uploads"
+);
+
+export const failureLearningDir = path.join(
+  privateDataDir,
+  "failure-learning"
+);
+
+export const failureLearningFeedbackFilePath = path.join(
+  failureLearningDir,
+  "expert-analogue-judgements.json"
+);
+
+export const failureLearningPseudonymSecretFilePath = path.join(
+  failureLearningDir,
+  "export-pseudonym-secret"
+);
+
 export const passwordResetTokensFilePath = path.join(
   authDataDir,
   "password-reset-tokens.json"

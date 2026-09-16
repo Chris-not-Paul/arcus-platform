@@ -52,6 +52,24 @@ await check("open-counts", () => {
   assert.equal(manifest.source_count, 716);
 });
 
+await check("static-open-release-fallback-matches-promoted-release", () => {
+  const publicEvents = JSON.parse(
+    fs.readFileSync("public/data/open-release/events.json", "utf8")
+  );
+  const publicSources = JSON.parse(
+    fs.readFileSync("public/data/open-release/sources.json", "utf8")
+  );
+  const publicManifest = JSON.parse(
+    fs.readFileSync("public/data/open-release/manifest.json", "utf8")
+  );
+
+  assert.equal(publicManifest.version, manifest.version);
+  assert.equal(publicEvents.release, manifest.version);
+  assert.equal(publicSources.release, manifest.version);
+  assert.deepEqual(publicEvents.events, events);
+  assert.deepEqual(publicSources.sources, sources);
+});
+
 await check("professional-hydraulic-geometry-is-source-backed-and-private", () => {
   const geometryEvents = professionalEventRows.filter(
     (event) => event.hydraulic_geometry
