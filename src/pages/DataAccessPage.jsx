@@ -10,7 +10,10 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import { professionalEnabled } from "../config/site";
+import {
+  contactAddresses,
+  professionalEnabled,
+} from "../config/site";
 import {
   openDownloadUrls,
   openManifest,
@@ -54,6 +57,7 @@ function DataAccessPage() {
           citationTitle: "Citazione della release",
           citationNote:
             "Citazione versionata disponibile; il DOI persistente della release ARCUS sarà aggiunto al deposito pubblico senza sostituire il DOI della pubblicazione scientifica originaria.",
+          researchContact: "Domande sulla release o sul riuso scientifico",
           licenseTitle: "Licenza e diritti",
           licenseText:
             "I metadati e le tassonomie prodotti da ARCUS sono rilasciati CC BY 4.0. I contenuti collegati di terze parti mantengono i rispettivi diritti.",
@@ -126,6 +130,7 @@ function DataAccessPage() {
           citationTitle: "Release citation",
           citationNote:
             "A versioned citation is available; the persistent DOI for the ARCUS release will be added with the public deposit without replacing the DOI of the original scientific publication.",
+          researchContact: "Questions about the release or scientific reuse",
           licenseTitle: "License and rights",
           licenseText:
             "ARCUS-authored metadata and taxonomies are released under CC BY 4.0. Linked third-party content retains its original rights.",
@@ -198,6 +203,11 @@ function DataAccessPage() {
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
+  const researchSubject = encodeURIComponent(
+    language === "it"
+      ? `Richiesta scientifica ARCUS Open - ${releaseVersion}`
+      : `ARCUS Open research enquiry - ${releaseVersion}`
+  );
   const releaseEventCount = manifest?.event_count ?? 261;
   const releaseSourceCount = manifest?.source_count ?? 716;
   const releasePublicText = copy.publicText;
@@ -338,6 +348,12 @@ function DataAccessPage() {
                 {releaseCitation}
               </p>
               <p>{copy.citationNote}</p>
+              <a
+                className="data-access-resource-link"
+                href={`mailto:${contactAddresses.research}?subject=${researchSubject}`}
+              >
+                {copy.researchContact}: {contactAddresses.research}
+              </a>
             </article>
 
             <article className="data-access-release">

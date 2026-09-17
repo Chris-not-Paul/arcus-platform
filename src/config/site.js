@@ -30,5 +30,5 @@ export const contactAddresses = Object.freeze({
   general: "info@arcusbridges.org",
   research: "research@arcusbridges.org",
   contributions: "contribute@arcusbridges.org",
-  privacy: "privacy@arcusbridges.org",
+  privacy: "info@arcusbridges.org",
 });

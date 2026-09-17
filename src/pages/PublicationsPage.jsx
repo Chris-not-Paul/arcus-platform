@@ -10,7 +10,10 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import { professionalEnabled } from "../config/site";
+import {
+  contactAddresses,
+  professionalEnabled,
+} from "../config/site";
 import { openManifest } from "../utils/apiClient";
 
 import "../styles/publications-page.css";
@@ -53,6 +56,7 @@ function PublicationsPage() {
       relationLabel: "Research lineage",
       relationText:
         "The paper and the Open release are related but not interchangeable: the first documents the scientific foundation; the second identifies the exact data snapshot used in an analysis.",
+      researchContact: "Research and citation enquiries",
       citationGuideLabel: "Citation guidance",
       citationGuideTitle: "Cite the object you actually used",
       citationGuide: [
@@ -87,6 +91,7 @@ function PublicationsPage() {
       relationLabel: "Linea di ricerca",
       relationText:
         "Paper e release Open sono collegati ma non intercambiabili: il primo documenta la base scientifica, la seconda identifica l’esatta fotografia dei dati impiegata in un’analisi.",
+      researchContact: "Richieste su ricerca e citazione",
       citationGuideLabel: "Guida alla citazione",
       citationGuideTitle: "Cita l’oggetto che hai realmente utilizzato",
       citationGuide: [
@@ -115,6 +120,11 @@ function PublicationsPage() {
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
+  const researchSubject = encodeURIComponent(
+    language === "it"
+      ? `Richiesta ricerca ARCUS - ${releaseVersion}`
+      : `ARCUS research enquiry - ${releaseVersion}`
+  );
 
   return (
     <main className="publications-page" id="main-content">
@@ -180,6 +190,9 @@ function PublicationsPage() {
           <aside>
             <span>{language === "it" ? "Citazione" : "Citation"}</span>
             <p>{releaseCitation}</p>
+            <a href={`mailto:${contactAddresses.research}?subject=${researchSubject}`}>
+              {content.researchContact}: {contactAddresses.research}
+            </a>
           </aside>
         </div>
 

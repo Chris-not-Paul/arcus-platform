@@ -15,6 +15,14 @@ const app = read("src/App.jsx");
 const navbar = read("src/components/layout/Navbar.jsx");
 const footer = read("src/components/layout/Footer.jsx");
 const contribute = read("src/pages/ContributePage.jsx");
+const dataAccess = read("src/pages/DataAccessPage.jsx");
+const publications = read("src/pages/PublicationsPage.jsx");
+const siteConfig = read("src/config/site.js");
+const logoHorizontalLight = read("src/assets/logo/logo-horizontal.svg");
+const logoHorizontalDark = read("src/assets/logo/logo-horizontal-dark.svg");
+const logoMark = read("src/assets/logo/logo-mark.svg");
+const favicon = read("public/favicon.svg");
+const globalStyles = read("src/index.css");
 const pageMeta = read("src/components/layout/PageMeta.jsx");
 const robots = read("public/robots.txt");
 const sitemap = read("public/sitemap.xml");
@@ -38,6 +46,47 @@ check("static contribution channel", () => {
   assert.match(contribute, /contributionFormEnabled/);
   assert.match(contribute, /contactAddresses\.contributions/);
   assert.match(contribute, /mailto:/);
+});
+
+check("operational contact channels", () => {
+  assert.match(siteConfig, /general: "info@arcusbridges\.org"/);
+  assert.match(siteConfig, /research: "research@arcusbridges\.org"/);
+  assert.match(siteConfig, /contributions: "contribute@arcusbridges\.org"/);
+  assert.match(siteConfig, /privacy: "info@arcusbridges\.org"/);
+  assert.match(footer, /contactAddresses\.research/);
+  assert.match(dataAccess, /contactAddresses\.research/);
+  assert.match(publications, /contactAddresses\.research/);
+});
+
+check("portable ARCUS brand assets", () => {
+  for (const logo of [logoHorizontalLight, logoHorizontalDark]) {
+    assert.doesNotMatch(logo, /<text/);
+    assert.match(logo, /aria-labelledby="title description"/);
+    assert.match(logo, /M107\.44 54 105\.1 46\.96/);
+  }
+  assert.match(logoMark, /#A76532/);
+  assert.match(favicon, /#A76532/);
+  assert.doesNotMatch(favicon, /<rect width="160" height="160"/);
+});
+
+check("self-hosted ARCUS typography system", () => {
+  assert.doesNotMatch(globalStyles, /fonts\.googleapis\.com/);
+  assert.match(globalStyles, /--arcus-font-sans:\s*\n\s*"IBM Plex Sans"/);
+  assert.match(globalStyles, /--arcus-font-display:\s*\n\s*"IBM Plex Serif"/);
+  assert.match(globalStyles, /--arcus-font-mono:\s*\n\s*"IBM Plex Mono"/);
+  for (const file of [
+    "IBMPlexSans-Regular.woff2",
+    "IBMPlexSans-SemiBold.woff2",
+    "IBMPlexSerif-Regular.woff2",
+    "IBMPlexMono-Regular.woff2",
+    "LICENSE.txt",
+  ]) {
+    assert.equal(
+      fs.existsSync(path.resolve("public/fonts/ibm-plex", file)),
+      true,
+      `${file} missing`
+    );
+  }
 });
 
 check("canonical metadata", () => {
@@ -80,6 +129,10 @@ check("production build artifacts", () => {
     "dist/_redirects",
     "dist/robots.txt",
     "dist/sitemap.xml",
+    "dist/fonts/ibm-plex/IBMPlexSans-Regular.woff2",
+    "dist/fonts/ibm-plex/IBMPlexSerif-Regular.woff2",
+    "dist/fonts/ibm-plex/IBMPlexMono-Regular.woff2",
+    "dist/fonts/ibm-plex/LICENSE.txt",
     "dist/data/open-release/events.json",
     "dist/data/open-release/sources.json",
   ]) {

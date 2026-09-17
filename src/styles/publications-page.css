@@ -63,7 +63,7 @@
 .publications-feature aside {
   padding: 34px;
   border: 1px solid var(--arcus-border-light);
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: rgba(255, 248, 242, 0.76);
 }
 
@@ -149,7 +149,7 @@
   margin: 26px 0 0;
   padding: 1px;
   border: 1px solid var(--arcus-border-light);
-  border-radius: 6px;
+  border-radius: var(--arcus-radius-control);
   background: var(--arcus-border-light);
   overflow: hidden;
 }
@@ -182,7 +182,7 @@
   padding: 0 18px;
   display: inline-flex;
   align-items: center;
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: var(--arcus-bronze);
   color: var(--arcus-night);
   font-size: 11px;
@@ -206,7 +206,7 @@
 .publications-release-grid aside {
   padding: 30px;
   border: 1px solid var(--arcus-border-light);
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: rgba(255, 248, 242, 0.76);
 }
 
@@ -260,7 +260,7 @@
   margin-top: 18px;
   padding: 34px;
   border: 1px solid var(--arcus-border-light);
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: rgba(229, 232, 226, 0.54);
 }
 
@@ -336,7 +336,7 @@
   padding: 24px;
   display: block;
   border: 1px solid rgba(243, 239, 232, 0.16);
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: rgba(255, 248, 242, 0.075);
   color: inherit;
   text-decoration: none;

@@ -316,7 +316,7 @@
   overflow: hidden;
   padding: 20px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(255,248,242,0.04);
@@ -398,7 +398,7 @@
   max-width: none;
   padding: 24px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(255,248,242,0.04);
@@ -611,7 +611,7 @@
 
   padding: 28px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     linear-gradient(
@@ -659,7 +659,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(163,126,92,0.10);
@@ -713,7 +713,7 @@
 .classification-card {
   padding: 28px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(255,248,242,0.56);
@@ -752,7 +752,7 @@
 
   padding: 11px 16px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   font-size: 13px;
   font-weight: 600;
@@ -857,7 +857,7 @@
 .methodology-layer-matrix {
   overflow: hidden;
   border: 1px solid rgba(241,238,231,0.12);
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   background: rgba(255,248,242,0.035);
 }
 
@@ -944,7 +944,7 @@
 
   padding: 30px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     linear-gradient(
@@ -1000,7 +1000,7 @@
 .extension-card {
   padding: 32px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(255,248,242,0.04);
@@ -1032,7 +1032,7 @@
 
   padding: 24px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   border: 1px solid var(--arcus-border-light);
 
   background: rgba(255,248,242,0.68);
@@ -1086,7 +1086,7 @@
   position: relative;
   overflow: hidden;
   padding: 24px;
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
   border: 1px solid var(--arcus-border-light);
   background: rgba(255,248,242,0.68);
   box-shadow: 0 16px 36px rgba(28,24,20,0.06);
@@ -1139,7 +1139,7 @@
 
   padding: 34px;
 
-  border-radius: 8px;
+  border-radius: var(--arcus-radius-panel);
 
   background:
     rgba(255,248,242,0.58);
@@ -1415,7 +1415,7 @@
     margin-right: -14px;
     padding-bottom: 6px;
     border-right: 0;
-    border-radius: 8px 0 0 8px;
+    border-radius: var(--arcus-radius-overlay) 0 0 var(--arcus-radius-overlay);
   }
 
 }

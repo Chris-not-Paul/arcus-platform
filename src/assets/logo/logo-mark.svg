@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 160" width="140" height="160">
-  <title>ARCUS — Logo Mark</title>
-  <g transform="translate(70, 72)">
-    <polygon points="-65,68  0,-55  0,-36  -43,68" fill="#C49040"/>
-    <polygon points="0,-55  65,68  43,68  0,-36" fill="#C49040"/>
-    <rect x="-32" y="18" width="64" height="4" fill="#C49040"/>
-    <rect x="-65" y="62" width="130" height="6" rx="1" fill="#C49040"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 160" role="img" aria-labelledby="title description">
+  <title id="title">ARCUS</title>
+  <desc id="description">Marchio ARCUS ispirato alla lettera A e alla struttura di un ponte.</desc>
+  <g transform="translate(70 72)" fill="#A76532">
+    <path d="M-65 68 0-55v19L-43 68Z"/>
+    <path d="M0-55 65 68H43L0-36Z"/>
+    <rect x="-33" y="17" width="66" height="6" rx="1"/>
+    <rect x="-65" y="61" width="130" height="7" rx="1"/>
   </g>
 </svg>

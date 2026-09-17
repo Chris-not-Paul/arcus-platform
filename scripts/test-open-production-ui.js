@@ -22,6 +22,12 @@ try {
 
   await page.goto(`${base}/about`);
   await page.locator('a[href="mailto:info@arcusbridges.org"]').first().waitFor();
+  const typography = await page.evaluate(() => ({
+    body: getComputedStyle(document.body).fontFamily,
+    heading: getComputedStyle(document.querySelector("h1")).fontFamily,
+  }));
+  assert.match(typography.body, /IBM Plex Sans/);
+  assert.match(typography.heading, /IBM Plex Serif/);
   assert.equal(await page.getByRole("link", { name: "Professional", exact: true }).count(), 0);
   assert.equal(await page.getByRole("button", { name: /Accedi|Sign in/ }).count(), 0);
   assert.equal(await page.locator('a[href="mailto:info@arcusbridges.org"]').count() > 0, true);
@@ -30,6 +36,16 @@ try {
     "https://www.arcusbridges.org/about"
   );
   checks.push("public navigation and canonical contact surface");
+
+  for (const font of [
+    "IBMPlexSans-Regular.woff2",
+    "IBMPlexSerif-Regular.woff2",
+    "IBMPlexMono-Medium.woff2",
+  ]) {
+    const response = await page.request.get(`${base}/fonts/ibm-plex/${font}`);
+    assert.equal(response.ok(), true, `${font} not served`);
+  }
+  checks.push("self-hosted typography assets");
 
   await page.goto(`${base}/contribute`);
   await page.locator('a[href^="mailto:contribute@arcusbridges.org"]').waitFor();
@@ -42,6 +58,7 @@ try {
   assert.equal(await page.getByRole("link", { name: /Professional/ }).count(), 0);
   assert.equal(await page.getByRole("link", { name: "CSV", exact: true }).count(), 1);
   assert.equal(await page.getByRole("link", { name: "GeoJSON", exact: true }).count(), 1);
+  assert.equal(await page.locator('a[href^="mailto:research@arcusbridges.org"]').count() > 0, true);
   checks.push("public data package without inactive product access");
 
   await page.goto(`${base}/professional`);
@@ -111,6 +128,7 @@ try {
   await noHorizontalOverflow(mobile);
   assert.equal(await mobile.locator(".publications-citation-options article").count(), 3);
   assert.equal(await mobile.locator(".publications-grid a").count(), 3);
+  assert.equal(await mobile.locator('a[href^="mailto:research@arcusbridges.org"]').count() > 0, true);
   checks.push("publication lineage and citation guidance");
 
   await mobile.goto(`${base}/contribute`);
