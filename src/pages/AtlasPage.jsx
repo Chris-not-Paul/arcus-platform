@@ -263,7 +263,7 @@ function AtlasPage() {
         : "Public dataset, timeline, taxonomies and documented sources.",
     professionalDescription:
       language === "it"
-        ? "Layer operativi con affidabilita fonti, vulnerabilita, overlay hazard pubblici e priorita territoriali."
+        ? "Livelli operativi con affidabilità delle fonti, vulnerabilità, sovrapposizioni di pericolosità pubbliche e priorità territoriali."
         : "Operational layers with evidence reliability, vulnerability, public hazard overlays and territorial priorities.",
     enterpriseDescription:
       language === "it"
@@ -283,7 +283,7 @@ function AtlasPage() {
         : "Create brief",
     exportPriority:
       language === "it"
-        ? "Esporta priorita"
+        ? "Esporta priorità"
         : "Export priority",
     openConsole:
       language === "it"
@@ -307,7 +307,7 @@ function AtlasPage() {
         : "Integration queue",
     territorialPriorities:
       language === "it"
-        ? "Priorita territoriali"
+        ? "Priorità territoriali"
         : "Territorial priorities",
     risk:
       language === "it"
@@ -315,7 +315,7 @@ function AtlasPage() {
         : "risk",
     reliability:
       language === "it"
-        ? "Affidabilita"
+        ? "Affidabilità"
         : "Reliability",
     vulnerability:
       language === "it"
@@ -1253,7 +1253,7 @@ function AtlasPage() {
     activeHazardOverlays.hydraulic
       ? {
           attribution:
-            "ISPRA SDI - Aree pericolosita idraulica P3",
+            "ISPRA SDI - Aree a pericolosità idraulica P3",
           id: "ispra-flood-p3",
           layers: "aree_peric_idraulica_p3",
           opacity: 0.38,
@@ -1263,7 +1263,7 @@ function AtlasPage() {
     activeHazardOverlays.landslide
       ? {
           attribution:
-            "ISPRA IdroGEO - Pericolosita frane PAI v.5.0 (2024)",
+            "ISPRA IdroGEO - Pericolosità da frana PAI v.5.0 (2024)",
           id: "ispra-idrogeo-landslide-pai",
           layers: "idrogeo:pericolosita_frane",
           opacity: 0.42,

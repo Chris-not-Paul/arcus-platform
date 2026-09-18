@@ -133,7 +133,8 @@ try {
   assert.equal(await dialog.locator(".arcus-event-territorial-grid article").count(), 1);
   assert.equal(await dialog.locator(".arcus-event-causal-separation > div").count(), 3);
   assert.match(await dialog.locator(".arcus-event-causal-separation").innerText(), /Causa documentata[\s\S]*Idraulica[\s\S]*Nesso causale automatico[\s\S]*Non inferito/i);
-  assert.doesNotMatch(await dialog.locator(".arcus-event-territorial").innerText(), /P1|P2|P3|Classi variate|Classi invariate/);
+  assert.match(await dialog.locator(".arcus-event-territorial").innerText(), /Classe P2[\s\S]*P1, P2[\s\S]*Classe più elevata rilevata: P2/i);
+  assert.doesNotMatch(await dialog.locator(".arcus-event-territorial").innerText(), /Classi variate|Classi invariate/);
   await waitFor(async () => (await dialog.getByRole("tab", { name: "Immagini", exact: true }).count()) === 0, "Empty media tab removed");
   await noHorizontalOverflow(page);
   await screenshot(page, "desktop-territorial");
@@ -222,7 +223,7 @@ try {
   const landslideEvent = byId("IT15.04.01");
   await openDossier(page, landslideEvent);
   await page.getByRole("tab", { name: "Contesto", exact: true }).click();
-  await page.getByText("Layer pertinente alla causa documentata", { exact: true }).waitFor();
+  await page.getByText("Livello informativo pertinente alla causa documentata", { exact: true }).waitFor();
   assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
   assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), /Pericolosità da frana/i);
   assert.doesNotMatch(await page.locator(".arcus-event-territorial").innerText(), /Pericolosità idraulica|Pericolosità sismica|P1|P2|P3/i);
@@ -233,6 +234,14 @@ try {
   assert.equal(await page.getByRole("tab", { name: "Contesto", exact: true }).count(), 0);
   await waitFor(async () => (await page.getByRole("tab", { name: "Immagini", exact: true }).count()) === 0, "Empty material-event media tab removed");
   checks.push("Non-environmental collapse dossier does not expose unrelated hazard context");
+
+  const sourceOnlyMediaEvent = byId("IT13.10.01");
+  await openDossier(page, sourceOnlyMediaEvent);
+  await waitFor(
+    async () => (await page.getByRole("tab", { name: "Immagini", exact: true }).count()) === 0,
+    "Source-only media does not create an Images tab"
+  );
+  checks.push("Source-only visual references remain outside the image surface");
 
   const stratifiedExpectations = [
     ["Earthquake", true, /Pericolosità sismica/i],
@@ -249,7 +258,7 @@ try {
     assert.equal(await contextTab.count(), expectsContext ? 1 : 0, `${cause} context-tab relevance`);
     if (expectsContext) {
       await contextTab.click();
-      await page.getByText("Layer pertinente alla causa documentata", { exact: true }).waitFor();
+      await page.getByText("Livello informativo pertinente alla causa documentata", { exact: true }).waitFor();
       assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
       assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), expectedCopy);
       assert.match(await page.locator(".arcus-event-causal-separation").innerText(), /Non inferito/i);
@@ -270,7 +279,7 @@ try {
   await screenshot(errorPage, "controlled-failure-retry");
   blockTerritorial = false;
   await errorPage.getByRole("button", { name: "Riprova", exact: true }).click();
-  await errorPage.getByRole("heading", { name: "Layer pertinente alla causa documentata" }).waitFor();
+  await errorPage.getByRole("heading", { name: "Livello informativo pertinente alla causa documentata" }).waitFor();
   checks.push("Controlled territorial HTTP 503: explicit error, retry and recovery with real local data");
 
   let blockEventApi = true;

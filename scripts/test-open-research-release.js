@@ -16,7 +16,9 @@ import {
 } from "../src/utils/hydraulicGeometry.js";
 import {
   localizedBridgeDisplayName,
+  localizedEventDescription,
   localizedCrossingName,
+  publicRecordDescription,
 } from "../src/utils/eventDisplayLabels.js";
 import {
   buildOpenEventCitation,
@@ -278,6 +280,7 @@ await check("hydraulic-outcomes-public-and-blocked-from-retrieval", () => {
 
 await check("atlas-crossing-name-localization-is-display-only", () => {
   assert.equal(localizedCrossingName("Sangro river", "it"), "Fiume Sangro");
+  assert.equal(localizedCrossingName("Po river (confluenza Ticino)", "it"), "Fiume Po (confluenza Ticino)");
   assert.equal(localizedCrossingName("Cervo stream", "it"), "Torrente Cervo");
   assert.equal(localizedCrossingName("Enel canal", "it"), "Canale Enel");
   assert.equal(
@@ -306,6 +309,14 @@ await check("atlas-crossing-name-localization-is-display-only", () => {
     ),
     "Bridge over Aterno river"
   );
+});
+
+await check("italian-event-description-is-complete-and-accented", () => {
+  const description = localizedEventDescription(events[0], "it");
+  assert.match(description, /si è verificato/);
+  assert.match(description, /L’attribuzione causale/);
+  assert.doesNotMatch(description, /\b(Total collapse|Partial collapse|bridge|failure)\b/i);
+  assert.equal(localizedEventDescription(events[0], "en"), publicRecordDescription(events[0].description));
 });
 
 await check("single-event-dossier-respects-open-boundary", () => {

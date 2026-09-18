@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Risposta parlamentare sul crollo del ponte sul fiume Verdura",
-      "summary_it": "La fonte istituzionale conferma il crollo di due campate del ponte sul Verdura il 2 febbraio 2013, mentre gli atti successivi richiamano movimenti idraulici ed erosione progressivi. Non e pubblicato un livello o una portata evento-specifica e ARCUS non usa portate di progetto come se fossero osservazioni del crollo.",
+      "summary_it": "La fonte istituzionale conferma il crollo di due campate del ponte sul Verdura il 2 febbraio 2013, mentre gli atti successivi richiamano fenomeni idraulici e processi erosivi progressivi. Non sono pubblicati un livello o una portata riferibili all’evento; ARCUS non usa le portate di progetto come se fossero osservazioni del crollo.",
       "summary_en": "The institutional source confirms collapse of two spans of the Verdura bridge on 2 February 2013, while later records refer to progressive hydraulic movement and erosion. No event-specific stage or discharge is published, and ARCUS does not treat design flows as collapse observations."
     }
   },
@@ -68,7 +68,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte istituzionale conferma il crollo di due campate del ponte sul Verdura il 2 febbraio 2013, mentre gli atti successivi richiamano movimenti idraulici ed erosione progressivi. Non e pubblicato un livello o una portata evento-specifica e ARCUS non usa portate di progetto come se fossero osservazioni del crollo.",
+    "it": "La fonte istituzionale conferma il crollo di due campate del ponte sul Verdura il 2 febbraio 2013, mentre gli atti successivi richiamano fenomeni idraulici e processi erosivi progressivi. Non sono pubblicati un livello o una portata riferibili all’evento; ARCUS non usa le portate di progetto come se fossero osservazioni del crollo.",
     "en": "The institutional source confirms collapse of two spans of the Verdura bridge on 2 February 2013, while later records refer to progressive hydraulic movement and erosion. No event-specific stage or discharge is published, and ARCUS does not treat design flows as collapse observations."
   },
   "provenance": {

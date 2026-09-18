@@ -187,7 +187,7 @@ const pageCopy = {
     title:
       "Decisioni sul rischio infrastrutturale, costruite su evidenze verificate.",
     text:
-      "ARCUS aiuta enti pubblici, gestori infrastrutturali, team di ingegneria e gruppi di ricerca a trasformare i record di crollo dei ponti in screening territoriale, priorita asset e pianificazione della mitigazione.",
+      "ARCUS aiuta enti pubblici, gestori infrastrutturali, gruppi di ingegneria e di ricerca a trasformare i record dei crolli dei ponti in analisi territoriali, priorità degli asset e pianificazione della mitigazione.",
     primaryCta: "Esplora Atlante",
     secondaryCta: "Apri Professional",
     heroStack: [
@@ -204,7 +204,7 @@ const pageCopy = {
     audienceTitle:
       "Stakeholder diversi, un unico layer di intelligence tracciabile.",
     audienceText:
-      "La piattaforma non e una dashboard generica. Ogni percorso parte da una decisione tecnica, legge l'evidenza ARCUS rispetto al contesto territoriale e produce un output verificabile, condivisibile o esportabile.",
+      "La piattaforma non è un pannello di controllo generico. Ogni percorso parte da una decisione tecnica, interpreta l’evidenza ARCUS rispetto al contesto territoriale e produce un risultato verificabile, condivisibile o esportabile.",
     audiences: [
       {
         label: "Enti pubblici",
@@ -212,18 +212,18 @@ const pageCopy = {
         problem:
           "Individuare province, corridoi e contesti locali dove evidenza storica ed esposizione hazard meritano attenzione tecnica.",
         output:
-          "Mappe di priorita, brief pubblici, sintesi orientate alla mitigazione.",
+          "Mappe delle priorità, documenti pubblici e sintesi orientate alla mitigazione.",
       },
       {
         label: "Gestori infrastrutturali",
-        title: "Priorita asset",
+        title: "Priorità degli asset",
         problem:
           "Confrontare gli asset gestiti con precedenti di collasso, esposizione territoriale e condizioni di scenario.",
         output:
           "Watchlist asset, code di ispezione, snapshot progetto.",
       },
       {
-        label: "Societa di ingegneria",
+        label: "Società di ingegneria",
         title: "Supporto due diligence",
         problem:
           "Preparare letture tecniche per gare, studi di fattibilita, risk assessment preliminari e meeting cliente.",
@@ -257,7 +257,7 @@ const pageCopy = {
       [
         "Quali territori vanno analizzati prima?",
         "Record di collasso, indicatori normalizzati provinciali e layer hazard dichiarati.",
-        "Ranking territoriale di priorita.",
+        "Classificazione territoriale delle priorità.",
       ],
       [
         "Quali asset richiedono attenzione?",
@@ -272,23 +272,23 @@ const pageCopy = {
       [
         "Come cambia il rischio su un dominio specifico?",
         "Enfasi idraulica, frane, sismica, degrado ed esposizione.",
-        "Matrice scenario e priorita ricalibrate.",
+        "Matrice degli scenari e priorità ricalibrate.",
       ],
     ],
     previewLabel: "Preview output Professional",
     previewTitle:
       "Il cliente non riceve una vista dashboard. Riceve un pacchetto decisionale.",
     previewText:
-      "Professional trasforma il layer evidenziale ARCUS in territori ordinati per priorita, watchlist asset e materiali esportabili per il coordinamento tecnico.",
+      "Professional trasforma il livello informativo ARCUS in territori ordinati per priorità, elenchi di asset da monitorare e materiali esportabili per il coordinamento tecnico.",
     previewRows: [
-      ["Ranking provinciale", "Rapporto collassi normalizzato", "Classe priorita"],
+      ["Classificazione provinciale", "Rapporto normalizzato dei collassi", "Classe di priorità"],
       ["Watchlist asset", "Precedenti comparabili + esposizione", "Coda revisione"],
       ["Matrice scenario", "Enfasi idraulica / frane / sismica", "Ranking ricalibrato"],
       ["Export package", "PDF, CSV, Excel, GeoJSON", "Output per tavolo tecnico"],
     ],
     previewNotes: [
       ["Input", "Territorio, corridoio o inventario asset"],
-      ["Lettura", "Evidenza, contesto hazard e tracciabilita metodo"],
+      ["Lettura", "Evidenza, contesto di pericolosità e tracciabilità del metodo"],
       ["Output", "Ranking, watchlist, scenario brief ed export GIS"],
     ],
     domainsLabel: "Domini di rischio",
@@ -299,22 +299,22 @@ const pageCopy = {
     domains: [
       ["Vulnerabilita idraulica", "Alluvioni, interazione con corsi d'acqua, scalzamento ed esposizione idro-geomorfologica."],
       ["Contesto frane", "Instabilita di versante, dinamiche del terreno e pressione geomorfologica locale."],
-      ["Esposizione sismica", "Contesto di pericolosita sismica e sensibilita territoriale."],
-      ["Degrado e fattori strutturali", "Decadimento materiale, tipologia, eta e condizioni documentate di cedimento."],
-      ["Esposizione territoriale", "Confronto provinciale, densita infrastrutturale e contesto interessato."],
-      ["Priorita di intervento", "Lettura combinata per ranking, briefing e pianificazione della mitigazione."],
+      ["Esposizione sismica", "Contesto di pericolosità sismica e sensibilità territoriale."],
+      ["Degrado e fattori strutturali", "Decadimento dei materiali, tipologia, età e condizioni documentate di cedimento."],
+      ["Esposizione territoriale", "Confronto provinciale, densità infrastrutturale e contesto interessato."],
+      ["Priorità di intervento", "Lettura combinata per classificazione, sintesi e pianificazione della mitigazione."],
     ],
     accessLabel: "Open e Professional",
     accessTitle:
       "Open costruisce fiducia. Professional la trasforma in lavoro.",
     accessText:
-      "La stessa base scientifica supporta due livelli di utilizzo: un layer pubblico di evidenza per la trasparenza e un workspace Professional per l'analisi operativa.",
+      "La stessa base scientifica supporta due livelli di utilizzo: un livello pubblico di evidenza per la trasparenza e un ambiente Professional per l’analisi operativa.",
     access: [
       {
         title: "Open Atlas",
         label: "Layer evidenza pubblica",
         text:
-          "Consulta eventi verificati, classificazioni, timeline, analytics pubblici e tracciabilita delle fonti.",
+          "Consulta eventi verificati, classificazioni, cronologie, analisi pubbliche e tracciabilità delle fonti.",
         items: [
           "Mappa interattiva dei crolli",
           "Schede evento e link fonte",
@@ -341,7 +341,7 @@ const pageCopy = {
     methodTitle:
       "Supporto decisionale, non giudizio black-box.",
     methodText:
-      "ARCUS non sostituisce ispezioni, valutazioni strutturali o responsabilita istituzionali. Organizza evidenze, dichiara le fonti e aiuta i team tecnici a decidere dove approfondire.",
+      "ARCUS non sostituisce ispezioni, valutazioni strutturali o responsabilità istituzionali. Organizza le evidenze, dichiara le fonti e aiuta i gruppi tecnici a decidere dove approfondire.",
     methodPoints: [
       "Database eventi collegato alle fonti",
       "Framework di classificazione trasparente",

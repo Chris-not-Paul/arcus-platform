@@ -26,7 +26,7 @@
         "label": "December 2017"
       },
       "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2017_aree_pericolosita_idraulica.zip",
-      "title": "Mosaicatura ISPRA (2017) delle aree a pericolosita idraulica",
+      "title": "Mosaicatura ISPRA (2017) delle aree a pericolosità idraulica",
       "version": "v4.0"
     },
     "ispra-hydraulic-2020-v5": {
@@ -42,7 +42,7 @@
         "label": "2020"
       },
       "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica.zip",
-      "title": "Mosaicatura ISPRA (2020) delle aree a pericolosita idraulica",
+      "title": "Mosaicatura ISPRA (2020) delle aree a pericolosità idraulica",
       "version": "v5.0"
     },
     "ispra-landslide-2017-v3": {
@@ -58,7 +58,7 @@
         "label": "December 2017"
       },
       "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2017_aree_pericolosita_frana_PAI.zip",
-      "title": "Mosaicatura ISPRA (2017) della pericolosita da frana PAI",
+      "title": "Mosaicatura ISPRA (2017) della pericolosità da frana PAI",
       "version": "v3.0"
     },
     "ispra-landslide-2020-2021-v4": {
@@ -74,7 +74,7 @@
         "label": "2020-2021"
       },
       "source_url": "https://idrogeo.isprambiente.it/opendata/wms/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI.zip",
-      "title": "Mosaicatura ISPRA (2020-2021) della pericolosita da frana PAI",
+      "title": "Mosaicatura ISPRA (2020-2021) della pericolosità da frana PAI",
       "version": "v4.0"
     },
     "ispra-landslide-2024-v5": {

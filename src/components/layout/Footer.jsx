@@ -78,7 +78,7 @@ function Footer() {
         {
           label: "About",
           links: [
-            ["Identita", "/about"],
+            ["Identità", "/about"],
             ["Contribuisci", "/contribute"],
             ["Contatto", `mailto:${contactAddresses.general}`],
           ],

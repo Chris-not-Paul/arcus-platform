@@ -120,7 +120,7 @@ function AboutPage() {
         title={content.title}
         description={
           language === "it"
-            ? "Identita e visione strategica di ARCUS, osservatorio scientifico dedicato ai cedimenti infrastrutturali."
+            ? "Identità e visione strategica di ARCUS, osservatorio scientifico dedicato ai cedimenti infrastrutturali."
             : "ARCUS identity and strategic vision, a scientific observatory dedicated to infrastructure failure intelligence."
         }
       />

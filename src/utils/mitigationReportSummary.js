@@ -87,7 +87,7 @@ export function buildMitigationReportSummary(
         ? ` Sono stati dichiarati ${projectProfileDescriptiveFieldCount} campi solo descrittivi, non usati nel retrieval.`
         : ` ${projectProfileDescriptiveFieldCount} descriptive-only fields were declared and are not used for retrieval.`
     : it
-      ? " Nessuna caratteristica del ponte e stata dichiarata: il retrieval usa soltanto la firma hazard ufficiale."
+      ? " Nessuna caratteristica del ponte è stata dichiarata: il recupero usa soltanto la firma di pericolosità ufficiale."
       : " No bridge characteristic was declared: retrieval uses the official hazard signature only.";
   const registryQuality = evidence.episode_registry_quality || {};
   const sourceLinkedEpisodes = numericEvidence(
@@ -120,7 +120,7 @@ export function buildMitigationReportSummary(
         : `Cohort: ${analogueCount} national analogues selected by current official signature; the province remains local context. Causes and processes are read after retrieval.${projectProfileSuffix}`
       : pointIntersectionRequired
         ? it
-          ? "Coorte: nessun retrieval nazionale attivato, perche il punto non interseca una classe idraulica ufficiale. I casi provinciali restano solo contesto storico territoriale."
+          ? "Coorte: nessun recupero nazionale attivato, perché il punto non interseca una classe idraulica ufficiale. I casi provinciali restano soltanto contesto storico territoriale."
           : "Cohort: national retrieval was not activated because the point does not intersect an official hydraulic class. Provincial cases remain territorial historical context only."
       : it
         ? `Coorte: fallback provinciale controllato; copertura delle firme idrauliche nazionali ${signatureCoverage}% (minimo operativo 80%).`
@@ -137,7 +137,7 @@ export function buildMitigationReportSummary(
           ? `Profilo ponte v1: campi solo descrittivi ${projectProfileDescriptiveFields.map(displayReason).join(", ")}; non usati nel retrieval; nessun valore mancante imputato.`
           : `Bridge profile v1: descriptive-only fields ${projectProfileDescriptiveFields.map(displayReason).join(", ")}; not used for retrieval; no missing value imputed.`
       : it
-        ? "Profilo ponte v1: non fornito; nessuna caratteristica del ponte e stata inferita."
+        ? "Profilo ponte v1: non fornito; nessuna caratteristica del ponte è stata inferita."
         : "Bridge profile v1: not provided; no bridge characteristic was inferred.",
     landslideSupportText: landslideSupport
       ? it
@@ -154,7 +154,7 @@ export function buildMitigationReportSummary(
         ? "Supporto sismico: non disponibile."
         : "Seismic support: not available.",
     registryQualityText: it
-      ? `Qualita del registro episodi nella coorte: ${curatedEpisodes} assegnati con override curato; ${sourceLinkedEpisodes} supportati da fonti condivise; ${reviewRequiredEpisodes} da revisionare; ${reviewRecommendedEpisodes} con revisione raccomandata.`
+      ? `Qualità del registro degli episodi nella coorte: ${curatedEpisodes} assegnati con revisione editoriale; ${sourceLinkedEpisodes} supportati da fonti condivise; ${reviewRequiredEpisodes} da revisionare; ${reviewRecommendedEpisodes} con revisione raccomandata.`
       : `Episode-registry quality in the cohort: ${curatedEpisodes} assigned by curated override; ${sourceLinkedEpisodes} supported by shared sources; ${reviewRequiredEpisodes} requiring review; ${reviewRecommendedEpisodes} with review recommended.`,
     retrievalRobustnessText: retrievalRobustness.applied
       ? it
@@ -162,7 +162,7 @@ export function buildMitigationReportSummary(
         : `Retrieval robustness 15/20/25: process consensus ${consensusProcesses.join(", ") || "none"}; at least ${retrievalRobustness.minimum_supporting_windows || 2} windows are required.`
       : pointIntersectionRequired
         ? it
-          ? "Robustezza retrieval: non applicabile, perche non e stata attivata alcuna coorte senza intersezione idraulica del punto."
+          ? "Robustezza del recupero: non applicabile, perché non è stata attivata alcuna coorte in assenza di intersezione idraulica del punto."
           : "Retrieval robustness: not applicable because no cohort was activated without a point-level hydraulic intersection."
       : it
         ? "Robustezza retrieval: non applicabile al fallback provinciale."
@@ -186,7 +186,7 @@ export function buildMitigationReportSummary(
         ? `Copertura ISPRA: parziale; layer non completati: ${failedLayers.join(", ") || "non specificati"}. ${provenanceText}`
         : `ISPRA coverage: partial; incomplete layers: ${failedLayers.join(", ") || "not specified"}. ${provenanceText}`,
     warningText: it
-      ? "Output non prescrittivo: le strategie non stimano la probabilita di collasso, non classificano il ponte come sicuro o non sicuro, non assegnano priorita automatiche di intervento e richiedono la validazione di professionisti qualificati."
+      ? "Risultato non prescrittivo: le strategie non stimano la probabilità di collasso, non classificano il ponte come sicuro o non sicuro, non assegnano priorità automatiche di intervento e richiedono la validazione di professionisti qualificati."
       : "Non-prescriptive output: strategies do not estimate collapse probability, classify the bridge as safe or unsafe, assign automatic intervention priorities, and require validation by qualified professionals.",
   };
 }

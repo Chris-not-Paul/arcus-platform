@@ -42,11 +42,11 @@ export default function EnterprisePage() {
           assets: "Inventario asset",
           consulting: "Consulenza custom",
           description:
-            "ARCUS Enterprise/Government mostra come l'intelligence sui cedimenti puo entrare nei processi decisionali di enti, ministeri, protezione civile, assicurazioni e grandi operatori.",
+            "ARCUS Enterprise/Government mostra come la conoscenza dei cedimenti può entrare nei processi decisionali di enti, ministeri, protezione civile, assicurazioni e grandi operatori.",
           heroLabel:
             "ENTERPRISE / GOVERNMENT",
           heroTitle:
-            "Dashboard istituzionale per priorita, scenari e integrazioni.",
+            "Pannello istituzionale per priorità, scenari e integrazioni.",
           integrations:
             "Integrazioni private",
           maintenance:
@@ -58,7 +58,7 @@ export default function EnterprisePage() {
           deploymentTitle:
             "Come ARCUS entra nei processi di un ente.",
           deploymentText:
-            "Enterprise e Government funzionano come un livello controllato: dati interni, inventari, ispezioni e priorita vengono integrati senza confondere dataset pubblico, analisi professionale e informazioni riservate.",
+            "Enterprise e Government funzionano come un livello controllato: dati interni, inventari, ispezioni e priorità vengono integrati senza confondere il dataset pubblico, l’analisi professionale e le informazioni riservate.",
           scenario:
             "Scenario planning",
           score:
@@ -120,8 +120,8 @@ export default function EnterprisePage() {
     language === "it"
       ? [
           ["Controlled workspace", "Ambiente dedicato per ente, territorio o gestore.", "Tenant dedicato"],
-          ["Private data join", "Inventari, ispezioni e criticita interne collegati agli eventi ARCUS.", "ETL controllato"],
-          ["Governance & audit", "Model cards, release dati, ruoli e tracciabilita delle decisioni.", "Audit trail"],
+          ["Integrazione dei dati riservati", "Inventari, ispezioni e criticità interne collegati agli eventi ARCUS.", "Integrazione controllata"],
+          ["Governance e verifica", "Schede dei modelli, versioni dei dati, ruoli e tracciabilità delle decisioni.", "Registro delle verifiche"],
           ["Institutional outputs", "Dashboard, report periodici, API e briefing esecutivi.", "Report/API"],
         ]
       : [

@@ -3,7 +3,7 @@
   "event_id": "IT11.11.03",
   "event_date": "2011-11-22",
   "status": "context_available",
-  "display_badge": "Autorita di Bacino del Distretto Idrografico della Sicilia",
+  "display_badge": "Autorità di Bacino del Distretto Idrografico della Sicilia",
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Longano stream",
@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Relazione metodologica sulla valutazione preliminare del rischio alluvioni",
-      "summary_it": "La fonte dell'Autorita di Bacino documenta la piena dei torrenti Longano e Idria e la pioggia eccezionale del 22 novembre 2011, ma non pubblica un livello o una portata evento-specifici per il ponte di Calderà. La precipitazione non viene convertita in idrometria.",
+      "summary_it": "La fonte dell’Autorità di Bacino documenta la piena dei torrenti Longano e Idria e la pioggia eccezionale del 22 novembre 2011, ma non pubblica un livello o una portata riferibili all’evento per il ponte di Calderà. La precipitazione non viene convertita in un dato idrometrico.",
       "summary_en": "The River Basin Authority source documents flooding on the Longano and Idria and exceptional rainfall on 22 November 2011 but publishes no event-specific stage or discharge for the Caldera bridge. Rainfall is not converted into hydrometry."
     }
   },
@@ -38,7 +38,7 @@
   "sources": [
     {
       "source_id": "sicilia-flood-risk-methodology-2011-event",
-      "provider": "Autorita di Bacino del Distretto Idrografico della Sicilia",
+      "provider": "Autorità di Bacino del Distretto Idrografico della Sicilia",
       "title": "Relazione metodologica sulla valutazione preliminare del rischio alluvioni",
       "role": "event_identification_and_monitoring_review",
       "source_class": "Official/Technical",
@@ -68,7 +68,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte dell'Autorita di Bacino documenta la piena dei torrenti Longano e Idria e la pioggia eccezionale del 22 novembre 2011, ma non pubblica un livello o una portata evento-specifici per il ponte di Calderà. La precipitazione non viene convertita in idrometria.",
+    "it": "La fonte dell’Autorità di Bacino documenta la piena dei torrenti Longano e Idria e la pioggia eccezionale del 22 novembre 2011, ma non pubblica un livello o una portata riferibili all’evento per il ponte di Calderà. La precipitazione non viene convertita in un dato idrometrico.",
     "en": "The River Basin Authority source documents flooding on the Longano and Idria and exceptional rainfall on 22 November 2011 but publishes no event-specific stage or discharge for the Caldera bridge. Rainfall is not converted into hydrometry."
   },
   "provenance": {

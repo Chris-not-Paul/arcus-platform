@@ -25,7 +25,7 @@ export default function NotFoundPage() {
       title:
         "Questa rotta non fa parte dell'osservatorio.",
       text:
-        "La pagina richiesta non e disponibile o e stata spostata. Torna all'ingresso di ARCUS oppure apri l'Atlante per continuare a esplorare il dataset.",
+        "La pagina richiesta non è disponibile o è stata spostata. Torna alla pagina iniziale di ARCUS oppure apri l’Atlante per continuare a esplorare il dataset.",
       home: "Torna ad ARCUS",
       atlas: "Apri l'Atlante",
       meta:

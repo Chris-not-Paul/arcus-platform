@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Progetto di ricostruzione del ponte sul Tanaro a Monchiero",
-      "summary_it": "La fonte provinciale documenta cedimenti fondazionali gia rilevati in aprile, portate elevate durante maggio e giugno e il collasso della pila il 27 giugno 2010. Non identifica un singolo colmo evento-specifico ne pubblica un valore: il degrado progressivo resta distinto dall'idrometria.",
+      "summary_it": "La fonte provinciale documenta cedimenti fondazionali già rilevati in aprile, portate elevate nei mesi di maggio e giugno e il collasso della pila il 27 giugno 2010. Non identifica un singolo colmo riferibile all’evento né ne pubblica il valore: il degrado progressivo resta distinto dai dati idrometrici.",
       "summary_en": "The provincial source documents foundation settlement already observed in April, high flows during May and June and pier collapse on 27 June 2010. It identifies no single event-specific peak and publishes no value, so progressive degradation remains distinct from hydrometry."
     }
   },
@@ -70,7 +70,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte provinciale documenta cedimenti fondazionali gia rilevati in aprile, portate elevate durante maggio e giugno e il collasso della pila il 27 giugno 2010. Non identifica un singolo colmo evento-specifico ne pubblica un valore: il degrado progressivo resta distinto dall'idrometria.",
+    "it": "La fonte provinciale documenta cedimenti fondazionali già rilevati in aprile, portate elevate nei mesi di maggio e giugno e il collasso della pila il 27 giugno 2010. Non identifica un singolo colmo riferibile all’evento né ne pubblica il valore: il degrado progressivo resta distinto dai dati idrometrici.",
     "en": "The provincial source documents foundation settlement already observed in April, high flows during May and June and pier collapse on 27 June 2010. It identifies no single event-specific peak and publishes no value, so progressive degradation remains distinct from hydrometry."
   },
   "provenance": {

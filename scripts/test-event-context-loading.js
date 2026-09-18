@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { contextMatchesEvent, loadContextJson, loadEventContext, invalidateContextResource } from "../src/utils/eventContextResource.js";
-import { localizedBridgeDisplayName, publicRecordDescription } from "../src/utils/eventDisplayLabels.js";
+import { localizedBridgeDisplayName, localizedEventDescription, publicRecordDescription } from "../src/utils/eventDisplayLabels.js";
 
 const originalFetch = globalThis.fetch;
 try {
@@ -49,6 +49,9 @@ try {
     for (const event of events) {
       const result = await loadEventContext(kind, event.event_id);
       if (result) counts[kind]++;
+      if (kind === "media" && result) {
+        assert.equal(result.every((asset) => asset.file && asset.rights_status === "cleared_open"), true);
+      }
       assert.ok(contextMatchesEvent(kind, result, event), `Context matches current event: ${kind}/${event.event_id}`);
       if (result?.event_date) assert.equal(result.event_date, event.date);
       if (kind === "hazard-history" && event.exact_location === false) assert.equal(result, null);
@@ -56,9 +59,27 @@ try {
   }
   assert.equal(counts.territorial, events.length);
   assert.equal(counts["hazard-history"], events.filter((event) => event.exact_location).length);
+  assert.equal(counts.media, 12, "Only events with publishable images reach the Atlas media surface");
   assert.equal(localizedBridgeDisplayName({ bridge_name: "Barberino bridge" }, "it"), "Ponte di Barberino");
   assert.equal(localizedBridgeDisplayName({ bridge_name: "Barberino bridge" }, "en"), "Barberino bridge");
   assert.equal(publicRecordDescription("Vedi B00.10.22 e IT20.10.18."), "Vedi IT00.10.22 e IT20.10.18.");
+  assert.equal(
+    localizedEventDescription({
+      bridge_name: "Ponte di prova",
+      collapse_severity: "TC",
+      component_involved: "Pier / foundation",
+      date: "2020-04-08",
+      failure_cause_evidence: "Documented",
+      failure_process: "Scour",
+      failure_trigger: "Flood",
+      injuries: 1,
+      municipality: "Aulla",
+      province: "Massa-Carrara",
+      specific_cause: "Hydraulic",
+      victims: 0,
+    }, "it"),
+    "In data 8 aprile 2020, nel territorio di Aulla (provincia di Massa-Carrara), si è verificato un crollo totale che ha interessato l’opera «Ponte di prova». La causa è classificata come idraulica. Il record identifica come evento innescante una piena. Il processo osservato è scalzamento. La componente coinvolta è una pila o la fondazione. Il record riporta 0 vittime e 1 ferito. L’attribuzione causale è documentata."
+  );
   assert.equal(contextMatchesEvent("rainfall", { event_date: "2020-10-03", requested_location: { latitude: 45, longitude: 8 } }, { date: "2020-10-03", latitude: 45, longitude: 9 }), false);
   assert.equal(contextMatchesEvent("hydraulic", { event_date: "2000-01-01" }, { date: "2020-01-01" }), false);
   console.log("Context loading: cache, retry, timeout, malformed/absent/incorrect identity and full catalogue passed", counts);

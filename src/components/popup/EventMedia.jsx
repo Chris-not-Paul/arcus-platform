@@ -13,10 +13,9 @@ function phaseLabel(phase, it) {
 
 function EventMedia({ assets, featured = false, language = "it" }) {
   const it = language === "it";
-  const hasEmbeddedMedia = assets.some((asset) => Boolean(asset.file));
-  const hasSourceLinks = assets.some((asset) => !asset.file);
+  const publishedAssets = assets.filter((asset) => Boolean(asset.file));
 
-  if (!assets.length) {
+  if (!publishedAssets.length) {
     return null;
   }
 
@@ -27,52 +26,23 @@ function EventMedia({ assets, featured = false, language = "it" }) {
           <span>{it ? "Indice visivo documentato" : "Documented visual index"}</span>
           <h3>{it ? "Immagini e fonti visive" : "Imagery and visual sources"}</h3>
           <p>
-            {hasEmbeddedMedia && hasSourceLinks
-              ? it
-                ? "ARCUS incorpora i contenuti con riuso verificato e, negli altri casi, rimanda alla fonte senza riprodurne l’anteprima."
-                : "ARCUS embeds media with verified reuse terms and otherwise links to the source without reproducing a preview."
-              : hasEmbeddedMedia
-                ? it
-                  ? "Contenuti pubblicati soltanto quando autore, fonte e condizioni di riuso sono verificabili."
-                  : "Media are published only when creator, source and reuse terms can be verified."
-                : it
-                  ? "Le fonti visive sono collegate senza riprodurne l’anteprima quando i diritti di riuso non sono verificati o non sono compatibili con la pubblicazione ARCUS."
-                  : "Visual sources are linked without reproducing a preview when reuse rights are not stated."}
+            {it
+              ? "Contenuti pubblicati soltanto quando autore, fonte e condizioni di riuso sono verificabili."
+              : "Media are published only when creator, source and reuse terms can be verified."}
           </p>
         </header>
       )}
 
       <div className="arcus-event-media-grid">
-        {assets.map((asset) => (
+        {publishedAssets.map((asset) => (
           <figure key={asset.media_id}>
-            <div
-              className={`arcus-event-media-frame ${asset.file ? "" : "is-link-only"}`}
-            >
-              {asset.file ? (
-                <img
-                  alt={it ? asset.alt_it : asset.alt_en}
-                  decoding="async"
-                  loading="lazy"
-                  src={asset.file}
-                />
-              ) : (
-                <a href={asset.source_page_url} target="_blank" rel="noreferrer">
-                  <strong>
-                    {asset.type === "video_link"
-                      ? it
-                        ? "Video nella fonte"
-                        : "Video at source"
-                      : it
-                        ? "Fotografia nella fonte"
-                        : "Photograph at source"}
-                  </strong>
-                  <small>
-                    {it
-                      ? "Anteprima non riprodotta: il riuso in ARCUS non è autorizzato o verificato."
-                      : "Preview not reproduced: reuse rights are not stated."}
-                  </small>
-                </a>
-              )}
+            <div className="arcus-event-media-frame">
+              <img
+                alt={it ? asset.alt_it : asset.alt_en}
+                decoding="async"
+                loading="lazy"
+                src={asset.file}
+              />
               <span>{phaseLabel(asset.event_phase, it)}</span>
             </div>
             <figcaption>
@@ -109,13 +79,9 @@ function EventMedia({ assets, featured = false, language = "it" }) {
                 </dl>
               )}
               <small>
-                {asset.file
-                  ? it
-                    ? "L’immagine documenta il contesto storico, ma non dimostra da sola il meccanismo o la causa del collasso."
-                    : "The image documents historical context but does not by itself establish the collapse mechanism or cause."
-                  : it
-                    ? "ARCUS collega la fonte ma non riproduce il contenuto finché non esiste un’autorizzazione di riuso verificabile."
-                    : "ARCUS links to the source but does not reproduce the content until verifiable reuse permission exists."}
+                {it
+                  ? "L’immagine documenta il contesto storico, ma non dimostra da sola il meccanismo o la causa del collasso."
+                  : "The image documents historical context but does not by itself establish the collapse mechanism or cause."}
               </small>
             </figcaption>
           </figure>

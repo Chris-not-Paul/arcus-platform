@@ -91,7 +91,7 @@ function DataAccessPage() {
             ],
             [
               "Lessons from Failures",
-              "Collassi comparabili, forza dell'evidenza, priorita d'indagine oppure astensione.",
+              "Collassi comparabili, forza dell’evidenza, priorità d’indagine oppure astensione.",
             ],
             [
               "Export controllati",

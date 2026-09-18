@@ -16,11 +16,11 @@ export default function WhySection() {
         "Infrastructure failures are rarely isolated anomalies.",
     },
     it: {
-      label: "Perche ARCUS conta",
+      label: "Perché ARCUS conta",
       paragraphs: [
         "I crolli dei ponti spesso emergono da dinamiche territoriali ricorrenti, sollecitazioni idrauliche, processi di degrado strutturale e vulnerabilita sistemiche sovrapposte.",
         "ARCUS trasforma registri frammentati di cedimento in un framework coerente di intelligence geospaziale, capace di leggere ricorrenze spaziali nei sistemi infrastrutturali.",
-        "Integrando fonti tecniche, meccanismi di collasso e contesto territoriale, la piattaforma supporta una comprensione piu analitica dell'evoluzione del rischio infrastrutturale.",
+        "Integrando fonti tecniche, meccanismi di collasso e contesto territoriale, la piattaforma supporta una comprensione più analitica dell’evoluzione del rischio infrastrutturale.",
       ],
       title:
         "I cedimenti infrastrutturali raramente sono anomalie isolate.",

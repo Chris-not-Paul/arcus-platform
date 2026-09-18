@@ -66,10 +66,14 @@ export async function loadEventContext(kind, eventId) {
       cache.delete(indexUrl);
       throw new Error("Invalid media catalogue");
     }
-    const assets = index.assets.filter((asset) => asset.event_id === eventId && (
-      (asset.rights_status === "cleared_open" && asset.file) ||
-      (asset.rights_status === "link_only" && !asset.file)
-    )).sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
+    // The Atlas media surface contains only images ARCUS can actually publish.
+    // Source-only references remain available through the event sources and do
+    // not create an empty visual card or a misleading Media tab.
+    const assets = index.assets.filter((asset) =>
+      asset.event_id === eventId &&
+      asset.rights_status === "cleared_open" &&
+      Boolean(asset.file)
+    ).sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
     return assets.length ? assets : null;
   }
   if (!index.events || typeof index.events !== "object" || Array.isArray(index.events)) {

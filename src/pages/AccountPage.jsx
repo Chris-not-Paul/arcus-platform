@@ -75,11 +75,11 @@ export default function AccountPage() {
         requestOrganization: "Ente o organizzazione",
         requestRole: "Ruolo",
         requestSent:
-          "Richiesta inviata. Sara visibile nel pannello Admin ARCUS.",
+          "Richiesta inviata. Sarà visibile nel pannello di amministrazione ARCUS.",
         requestSubmit: "Invia richiesta",
         requestTitle: "Accesso Professional",
         signed:
-          "Il tuo account e attivo. Il livello Open resta separato dagli output Professional.",
+          "Il tuo account è attivo. Il livello Open resta separato dai risultati Professional.",
         submitLogin: "Accedi all'account",
         submitRegister: "Crea account",
         title: "Account free per il layer Open.",
@@ -283,7 +283,7 @@ export default function AccountPage() {
                   <input
                     name="organization"
                     onChange={handleAccessRequestChange}
-                    placeholder="Comune / Universita / Gestore"
+                    placeholder="Comune / Università / Gestore"
                     value={accessRequest.organization}
                   />
                 </label>
@@ -301,7 +301,7 @@ export default function AccountPage() {
                   <textarea
                     name="message"
                     onChange={handleAccessRequestChange}
-                    placeholder="Screening territoriale, priorita di intervento, analisi inventario..."
+                    placeholder="Analisi territoriale, priorità di intervento, analisi dell’inventario..."
                     rows="4"
                     value={accessRequest.message}
                   />

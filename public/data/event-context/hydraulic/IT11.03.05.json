@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Ingenio: 'Ponti a struttura mista: la complessa messa in sicurezza di uno dei ponti storici del Po'",
-      "summary_it": "La fonte tecnica descrive l'instabilita della pila gia gestita con presidi urgenti dal novembre 2010 e il suo collasso nel marzo 2011, senza associare il cedimento a una piena specifica o pubblicare idrometria. Il dissesto fondazionale differito non viene ricondotto a un colmo arbitrario del Po.",
+      "summary_it": "La fonte tecnica descrive l’instabilità della pila, già gestita con interventi urgenti dal novembre 2010, e il suo collasso nel marzo 2011, senza associare il cedimento a una piena specifica né pubblicare dati idrometrici. Il dissesto fondazionale differito non viene ricondotto arbitrariamente a un colmo del Po.",
       "summary_en": "The technical source describes pier instability already managed with emergency works from November 2010 and its collapse in March 2011 without associating failure with a specific flood or publishing hydrometry. The delayed foundation failure is not assigned an arbitrary Po peak."
     }
   },
@@ -70,7 +70,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte tecnica descrive l'instabilita della pila gia gestita con presidi urgenti dal novembre 2010 e il suo collasso nel marzo 2011, senza associare il cedimento a una piena specifica o pubblicare idrometria. Il dissesto fondazionale differito non viene ricondotto a un colmo arbitrario del Po.",
+    "it": "La fonte tecnica descrive l’instabilità della pila, già gestita con interventi urgenti dal novembre 2010, e il suo collasso nel marzo 2011, senza associare il cedimento a una piena specifica né pubblicare dati idrometrici. Il dissesto fondazionale differito non viene ricondotto arbitrariamente a un colmo del Po.",
     "en": "The technical source describes pier instability already managed with emergency works from November 2010 and its collapse in March 2011 without associating failure with a specific flood or publishing hydrometry. The delayed foundation failure is not assigned an arbitrary Po peak."
   },
   "provenance": {

@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "IdeAmbiente - alluvione in Sardegna del dicembre 2004",
-      "summary_it": "La fonte ISPRA colloca il ponte crollato sulla SS129 al bivio per Galtelli, mentre il record lo attribuisce al Taloro presso Nuoro. Il rapporto descrive nello stesso evento le piene di Cedrino e Posada ma non conferma il Taloro: nessuna misura puo essere trasferita finche l'attraversamento non e riallineato.",
+      "summary_it": "La fonte ISPRA colloca il ponte crollato sulla SS129 al bivio per Galtellì, mentre il record lo attribuisce al Taloro presso Nuoro. Il rapporto descrive, nello stesso evento, le piene del Cedrino e del Posada, ma non conferma il Taloro: nessuna misura può essere trasferita finché l’attraversamento non viene riallineato.",
       "summary_en": "The ISPRA source locates the collapsed SS129 bridge at the Galtelli junction, while the record assigns it to the Taloro near Nuoro. The report describes Cedrino and Posada flooding in the same event but does not confirm the Taloro, so no measurement can be transferred until the crossing is reconciled."
     }
   },
@@ -68,7 +68,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte ISPRA colloca il ponte crollato sulla SS129 al bivio per Galtelli, mentre il record lo attribuisce al Taloro presso Nuoro. Il rapporto descrive nello stesso evento le piene di Cedrino e Posada ma non conferma il Taloro: nessuna misura puo essere trasferita finche l'attraversamento non e riallineato.",
+    "it": "La fonte ISPRA colloca il ponte crollato sulla SS129 al bivio per Galtellì, mentre il record lo attribuisce al Taloro presso Nuoro. Il rapporto descrive, nello stesso evento, le piene del Cedrino e del Posada, ma non conferma il Taloro: nessuna misura può essere trasferita finché l’attraversamento non viene riallineato.",
     "en": "The ISPRA source locates the collapsed SS129 bridge at the Galtelli junction, while the record assigns it to the Taloro near Nuoro. The report describes Cedrino and Posada flooding in the same event but does not confirm the Taloro, so no measurement can be transferred until the crossing is reconciled."
   },
   "provenance": {

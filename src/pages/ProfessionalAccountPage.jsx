@@ -125,7 +125,7 @@ export default function ProfessionalAccountPage() {
           "La richiesta viene registrata per l'organizzazione. L'accesso resta attivo fino alla data di rinnovo o alla verifica contrattuale da parte di ARCUS.",
         cancellationActive: "Disdetta programmata",
         cancellationHelp:
-          "La richiesta di disdetta e stata registrata. Puoi annullarla finche il piano e attivo.",
+          "La richiesta di disdetta è stata registrata. Puoi annullarla finché il piano è attivo.",
         confirmCancel:
           "Vuoi registrare la richiesta di disdetta per questa organizzazione?",
         exports: "Limite output per richiesta",
@@ -166,13 +166,13 @@ export default function ProfessionalAccountPage() {
         role: "Ruolo",
         security: "Sicurezza",
         securityText:
-          "La sessione usa un cookie HttpOnly e puo essere revocata dagli amministratori dell'organizzazione.",
+          "La sessione usa un cookie HttpOnly e può essere revocata dagli amministratori dell’organizzazione.",
         sessions: "Sessioni attive",
         sessionsCurrent: "Corrente",
         sessionsEmpty: "Nessuna sessione attiva rilevata.",
         sessionsExpires: "Scade",
         sessionsText:
-          "Controlla gli accessi aperti e chiudi quelli non piu necessari.",
+          "Controlla gli accessi aperti e chiudi quelli non più necessari.",
         signOut: "Esci dall'account",
         signedInAs: "Accesso attivo come",
         synced: "Sincronizzato",

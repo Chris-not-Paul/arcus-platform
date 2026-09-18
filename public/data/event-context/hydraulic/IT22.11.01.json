@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Laino Castello, crollato il ponte in località San Liguori a causa del maltempo",
-      "summary_it": "La fonte identifica il cedimento del ponte in localita San Liguori durante il maltempo, ma non pubblica livello, portata o stazione sul Paraturo. ARCUS mantiene l'evidenza descrittiva senza attribuire valori al corso d'acqua.",
+      "summary_it": "La fonte identifica il cedimento del ponte in località San Liguori durante il maltempo, ma non pubblica livello, portata o stazione sul Paraturo. ARCUS mantiene l’evidenza descrittiva senza attribuire valori al corso d’acqua.",
       "summary_en": "The source identifies failure of the San Liguori bridge during severe weather but publishes no Paraturo stage, discharge or station. ARCUS retains the descriptive evidence without assigning values to the watercourse."
     }
   },
@@ -58,7 +58,7 @@
     }
   ],
   "curation_note": {
-    "it": "La fonte identifica il cedimento del ponte in localita San Liguori durante il maltempo, ma non pubblica livello, portata o stazione sul Paraturo. ARCUS mantiene l'evidenza descrittiva senza attribuire valori al corso d'acqua.",
+    "it": "La fonte identifica il cedimento del ponte in località San Liguori durante il maltempo, ma non pubblica livello, portata o stazione sul Paraturo. ARCUS mantiene l’evidenza descrittiva senza attribuire valori al corso d’acqua.",
     "en": "The source identifies failure of the San Liguori bridge during severe weather but publishes no Paraturo stage, discharge or station. ARCUS retains the descriptive evidence without assigning values to the watercourse."
   },
   "provenance": {

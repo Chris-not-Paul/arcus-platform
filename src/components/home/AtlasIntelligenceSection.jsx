@@ -46,7 +46,7 @@ export default function AtlasIntelligenceSection() {
       panels: [
         [
           "RICORRENZA IDRAULICA",
-          "I sistemi di ponti prossimi ai corsi d'acqua mostrano la piu alta concentrazione di eventi ricorrenti nel dataset.",
+          "I sistemi di ponti prossimi ai corsi d’acqua mostrano la più alta concentrazione di eventi ricorrenti nel dataset.",
         ],
         [
           "DEGRADO STRUTTURALE",

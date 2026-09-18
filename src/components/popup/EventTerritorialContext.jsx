@@ -50,6 +50,14 @@ function statusCopy(result, language) {
 
 function hydraulicValue(result, language) {
   if (result?.status === "available") {
+    const highestClass = result.highest_class;
+
+    if (highestClass) {
+      return language === "it"
+        ? `Classe ${highestClass}`
+        : `Class ${highestClass}`;
+    }
+
     return language === "it" ? "Intersezione registrata" : "Intersection recorded";
   }
 
@@ -93,9 +101,17 @@ function detailCopy(key, result, language) {
 
   if (key === "hydraulic") {
     if (result.status === "available") {
+      const matchedClasses = Array.isArray(result.matched_classes)
+        ? result.matched_classes.filter(Boolean)
+        : [];
+      const classes = matchedClasses.length > 0
+        ? matchedClasses.join(", ")
+        : (it ? "non specificate" : "not specified");
+      const highestClass = result.highest_class || (it ? "non specificata" : "not specified");
+
       return it
-        ? "Il punto ricade nel mosaico ufficiale consultato. La classe non viene pubblicata nella scheda Atlas."
-        : "The point intersects the consulted official mosaic. The class is not published in the Atlas dossier.";
+        ? `Classi ufficiali rilevate al punto: ${classes}. Classe più elevata rilevata: ${highestClass}.`
+        : `Official classes recorded at the point: ${classes}. Highest recorded class: ${highestClass}.`;
     }
 
     if (result.status === "no_intersection") {
@@ -174,7 +190,7 @@ function EventTerritorialContext({ cause, context }) {
       <header>
         <div>
           <span>{it ? "Contesto territoriale attuale" : "Current territorial context"}</span>
-          <h3>{it ? "Layer pertinente alla causa documentata" : "Layer relevant to the documented cause"}</h3>
+          <h3>{it ? "Livello informativo pertinente alla causa documentata" : "Layer relevant to the documented cause"}</h3>
         </div>
         <strong>
           {it ? "Catalogo" : "Catalogue"} {dateLabel(context.snapshot_latest_query_at, language)}
@@ -193,7 +209,7 @@ function EventTerritorialContext({ cause, context }) {
           <strong>{causeLabel}</strong>
         </div>
         <div>
-          <span>{it ? "Layer corrente pertinente" : "Relevant current layer"}</span>
+          <span>{it ? "Livello corrente pertinente" : "Relevant current layer"}</span>
           <strong>{currentStatus}</strong>
         </div>
         <div>
@@ -228,8 +244,8 @@ function EventTerritorialContext({ cause, context }) {
         <strong>{it ? "Separazione delle evidenze" : "Evidence separation"}</strong>
         <p>
           {it
-            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Le classi cartografiche restano escluse dalla scheda Atlas e nessun valore produce un punteggio o una valutazione di sicurezza."
-            : "Current territorial context, not historical event evidence. Map classes remain outside the Atlas dossier and no value produces a score or safety assessment."}
+            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Le classi mostrate descrivono l’intersezione cartografica attuale al punto; non ricostruiscono la classe alla data del collasso e non producono un punteggio o una valutazione di sicurezza."
+            : "Current territorial context, not historical event evidence. The displayed classes describe the current map intersection at the point; they do not reconstruct the class at the collapse date or produce a score or safety assessment."}
         </p>
       </div>
 

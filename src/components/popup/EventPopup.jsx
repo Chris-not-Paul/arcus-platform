@@ -5,7 +5,7 @@ import useLanguage from "../../context/useLanguage";
 import {
   localizedBridgeDisplayName,
   localizedCrossingName,
-  publicRecordDescription,
+  localizedEventDescription,
 } from "../../utils/eventDisplayLabels";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 import {
@@ -300,7 +300,7 @@ function EventPopup({
     crossing: it ? "Attraversamento" : "Crossing",
     crossingType: it ? "Tipo di attraversamento" : "Crossing type",
     curationLevel: it ? "Livello di curatela" : "Curation level",
-    description: it ? "Testo del record · lingua originale" : "Record text · original language",
+    description: it ? "Descrizione del collasso" : "Record text · original language",
     eventDriven: it ? "Evento innescato" : "Event-driven",
     fatalities: it ? "Vittime" : "Fatalities",
     historicalEvidence: it
@@ -434,9 +434,7 @@ function EventPopup({
   const rainfallContext = rainfallResource.data;
   const territorialContext = territorialResource.data;
   const title = eventTitle(event, language);
-  const descriptionText = publicRecordDescription(
-    event.description || ""
-  );
+  const descriptionText = localizedEventDescription(event, language);
   const descriptionLimit = 230;
   const hasLongDescription =
     descriptionText.length > descriptionLimit;
@@ -659,8 +657,8 @@ function EventPopup({
       id: "bridge",
       label: it ? "Ponte" : "Bridge",
     },
-    ...(mediaResource.status !== "absent"
-      ? [{ count: eventMedia.length || undefined, id: "media", label: it ? "Immagini" : "Media" }]
+    ...(eventMedia.length > 0
+      ? [{ count: eventMedia.length, id: "media", label: it ? "Immagini" : "Media" }]
       : []),
     {
       count: sourceCount,
@@ -927,7 +925,7 @@ function EventPopup({
         </section>
       )}
 
-      {event.description && (
+      {descriptionText && (
         <section className="arcus-event-description is-preview">
           <span>{text.description}</span>
           <p>{previewDescription}</p>
@@ -1088,7 +1086,7 @@ function EventPopup({
                             : "This record requires documentary review. Read the notes and sources before using its description or cause attribution."}
                         </p>
                       )}
-                      {event.description ? (
+                      {descriptionText ? (
                         <section className="arcus-event-description">
                           <span>{text.description}</span>
                           <p>{visibleDescription}</p>
@@ -1285,7 +1283,6 @@ function EventPopup({
 
               {visibleDossierTab === "media" && (
                 <div className="arcus-event-tab-panel is-media">
-                  <EventResourceState resource={mediaResource} language={language} absentMessage={it ? "Nessuna immagine o fonte visiva pubblicata per questo evento." : "No image or visual source is published for this event."} />
                   {eventMedia.length > 0 && <EventMedia assets={eventMedia} language={language} />}
                 </div>
               )}

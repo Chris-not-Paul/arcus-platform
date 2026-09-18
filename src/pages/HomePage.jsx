@@ -803,7 +803,7 @@ export default function HomePage() {
         "ARCUS rende esplorabili, scaricabili e verificabili le evidenze documentate sui crolli, mantenendo separate osservazione e interpretazione.",
       definitionLabels: {
         is: "Cosa e ARCUS",
-        isNot: "Cosa non e ARCUS",
+        isNot: "Cosa non è ARCUS",
       },
       definitionIs: [
         "Una base verificata di eventi di crollo dei ponti in Italia.",
@@ -829,24 +829,24 @@ export default function HomePage() {
         {
           label: "02",
           title: "Indagine sui collassi comparabili",
-          text: "Partire da un punto progetto, recuperare collassi comparabili su scala nazionale e verificare perche ogni caso entra nella coorte evidenziale.",
+          text: "Partire da un punto di progetto, recuperare collassi comparabili su scala nazionale e verificare perché ogni caso entra nella coorte evidenziale.",
         },
         {
           label: "03",
-          title: "Assessment preliminare per societa di ingegneria",
+          title: "Valutazione preliminare per società di ingegneria",
           text: "Usare precedenti collegati alle fonti e contesto hazard per preparare note tecniche, report cliente e narrative di rischio iniziali.",
         },
         {
           label: "04",
           title: "Analisi ricerca e policy",
-          text: "Esplorare pattern di cedimento per tempo, territorio, cause e affidabilita delle fonti senza perdere la traccia documentale.",
+          text: "Esplorare gli schemi di cedimento nel tempo e nel territorio, per causa e affidabilità delle fonti, senza perdere la traccia documentale.",
         },
       ],
       domainsLabel: "Domini di rischio",
       domainsTitle:
         "Il modello di rischio e esplicito, non decorativo.",
       domainsText:
-        "ARCUS presenta i segnali separatamente, cosi il cliente capisce la base tecnica di ogni lettura.",
+        "ARCUS presenta i segnali separatamente, così l’utente può comprendere la base tecnica di ogni lettura.",
       domains: [
         {
           code: "HYD",
@@ -866,17 +866,17 @@ export default function HomePage() {
         {
           code: "DEG",
           domain: "Degrado e meccanismi di cedimento",
-          role: "Materiali, eta, deterioramento e cause classificate di collasso.",
+          role: "Materiali, età, deterioramento e cause classificate di collasso.",
         },
         {
           code: "EXP",
           domain: "Esposizione territoriale",
-          role: "Densita dei crolli, ricorrenza, corridoi interessati e criticita locale.",
+          role: "Densità dei crolli, ricorrenza, corridoi interessati e criticità locale.",
         },
         {
           code: "LES",
           domain: "Lessons from failures",
-          role: "Priorita d'indagine collegate alle fonti, temi di controllo e astensione esplicita quando il supporto e insufficiente.",
+          role: "Priorità d’indagine collegate alle fonti, temi di controllo e astensione esplicita quando il supporto è insufficiente.",
         },
       ],
       outputsLabel: "Layer prodotto",
@@ -891,8 +891,8 @@ export default function HomePage() {
           text: "Il layer pubblico per esplorare eventi di crollo verificati e il metodo dietro al database.",
           points: [
             "Eventi georeferenziati di crollo",
-            "Filtri per causa, gravita e periodo",
-            "Tracciabilita fonti per record",
+            "Filtri per causa, gravità e periodo",
+            "Tracciabilità delle fonti per ciascun record",
           ],
           action: "Apri l'Atlante",
           path: "/atlas",
@@ -904,13 +904,13 @@ export default function HomePage() {
           points: [
             "Esposizione ufficiale ISPRA e INGV al punto",
             "Retrieval nazionale di analoghi con limiti dichiarati",
-            "Priorita d'indagine sostenute oppure astensione",
+            "Priorità d’indagine supportate oppure astensione",
           ],
           action: "Apri Professional",
           path: "/professional",
         },
       ],
-      methodLabel: "Affidabilita scientifica",
+      methodLabel: "Affidabilità scientifica",
       methodTitle:
         "Metodo tracciabile, limiti dichiarati, output difendibili.",
       methodText:
@@ -923,9 +923,9 @@ export default function HomePage() {
           text: "Gli eventi sono controllati su fonti documentali e classificati con tassonomia coerente.",
         },
         {
-          label: "Riproducibilita",
+          label: "Riproducibilità",
           title: "Logica di classificazione esplicita",
-          text: "Localizzazione, causa, gravita e affidabilita restano leggibili e revisionabili.",
+          text: "Localizzazione, causa, gravità e affidabilità restano leggibili e revisionabili.",
         },
         {
           label: "Limite d'uso",

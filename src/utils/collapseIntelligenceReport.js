@@ -326,7 +326,7 @@ export function buildCollapseIntelligenceReportModel({
           ? "Output non prescrittivo soggetto a validazione professionale."
           : "Non-prescriptive output subject to professional validation."),
       it
-        ? "La firma hazard attuale supporta la comparabilita; non ricostruisce automaticamente la pericolosita all'anno del collasso e non dimostra la causa."
+        ? "La firma di pericolosità attuale supporta la comparabilità; non ricostruisce automaticamente la pericolosità nell’anno del collasso e non ne dimostra la causa."
         : "The current hazard signature supports comparability; it does not automatically reconstruct hazard at collapse time or prove causation.",
       it
         ? "L'assenza di intersezione ufficiale al punto non certifica assenza di rischio reale."
@@ -441,7 +441,7 @@ export async function downloadCollapseIntelligencePdf(model) {
   writer.keyValue(it ? "Generato" : "Generated", model.generatedAt);
 
   writer.section("Project Bridge Profile v1");
-  writer.keyValue(it ? "Modalita" : "Mode", model.projectBridgeProfile.matchingMode);
+  writer.keyValue(it ? "Modalità" : "Mode", model.projectBridgeProfile.matchingMode);
   writer.keyValue(
     it ? "Campi di matching" : "Matching fields",
     model.projectBridgeProfile.matchFields
@@ -478,7 +478,7 @@ export async function downloadCollapseIntelligencePdf(model) {
 
   writer.section(it ? "Base evidenziale" : "Evidence basis");
   writer.keyValue(it ? "Stato finale" : "Final status", model.intelligence.status);
-  writer.keyValue(it ? "Modalita coorte" : "Cohort mode", model.intelligence.selectionMode);
+  writer.keyValue(it ? "Modalità della coorte" : "Cohort mode", model.intelligence.selectionMode);
   writer.keyValue(it ? "Evidenza raw" : "Raw evidence", model.intelligence.rawEvidence);
   writer.keyValue(it ? "Evidenza effective" : "Effective evidence", model.intelligence.effectiveEvidence);
   writer.keyValue(it ? "Episodi indipendenti" : "Independent episodes", model.intelligence.independentEpisodes);
@@ -492,7 +492,7 @@ export async function downloadCollapseIntelligencePdf(model) {
   writer.keyValue(it ? "Stato matrice" : "Matrix status", model.failureLearning.status);
   writer.keyValue(it ? "Versione" : "Version", model.failureLearning.version);
   writer.keyValue(
-    it ? "Priorita qualificate" : "Qualified priorities",
+    it ? "Priorità qualificate" : "Qualified priorities",
     model.failureLearning.qualifiedPriorityCount
   );
   writer.keyValue(
@@ -539,7 +539,7 @@ export async function downloadCollapseIntelligencePdf(model) {
       );
       if (row.investigationPriority) {
         writer.line(
-          `${it ? "Priorita sostenuta" : "Supported priority"}: ${row.investigationPriority}`,
+          `${it ? "Priorità supportata" : "Supported priority"}: ${row.investigationPriority}`,
           { color: [166, 107, 29], size: 8.5, style: "bold", gap: 1 }
         );
       }
@@ -553,7 +553,7 @@ export async function downloadCollapseIntelligencePdf(model) {
   }
   if (model.failureLearning.genericInvestigationPriority) {
     writer.keyValue(
-      it ? "Priorita generica" : "Generic priority",
+      it ? "Priorità generica" : "Generic priority",
       model.failureLearning.genericInvestigationPriority
     );
   }
@@ -562,7 +562,7 @@ export async function downloadCollapseIntelligencePdf(model) {
     size: 8,
   });
 
-  writer.section(it ? "Lezioni e priorita d'indagine" : "Lessons and investigation priorities");
+  writer.section(it ? "Lezioni e priorità d’indagine" : "Lessons and investigation priorities");
   if (!model.strategies.length) {
     writer.line(it ? "ASTENSIONE - ZERO STRATEGIE" : "ABSTAINED - ZERO STRATEGIES", {
       color: [154, 55, 44],

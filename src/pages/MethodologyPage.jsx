@@ -304,11 +304,11 @@ function MethodologyPage() {
       relatedPublication:
         "PUBBLICAZIONE CORRELATA",
       contextLabel: "CONTESTO",
-      contextTitle: "Perche esiste ARCUS",
+      contextTitle: "Perché esiste ARCUS",
       contextParagraphs: [
         "Le informazioni sui crolli dei ponti sono spesso disperse tra archivi istituzionali, pubblicazioni scientifiche, relazioni tecniche e fonti giornalistiche.",
-        "ARCUS nasce per costruire un'infrastruttura di ricerca strutturata e in continua evoluzione, capace di rendere piu accessibili, coerenti e interpretabili le informazioni sui collassi dei ponti in Italia.",
-        "Il framework armonizza registri storici, classificazioni tecniche, tracciabilita delle fonti e informazione geospaziale in un'architettura dati unificata, pensata per ricerca, analisi e infrastructure intelligence.",
+        "ARCUS nasce per costruire un’infrastruttura di ricerca strutturata e in continua evoluzione, capace di rendere più accessibili, coerenti e interpretabili le informazioni sui crolli dei ponti in Italia.",
+        "Il quadro metodologico armonizza registri storici, classificazioni tecniche, tracciabilità delle fonti e informazioni geospaziali in un’architettura dei dati unificata, pensata per la ricerca, l’analisi e la conoscenza infrastrutturale.",
       ],
       scopeLabel: "COME LEGGERE IL METODO",
       scopeTitle:
@@ -322,7 +322,7 @@ function MethodologyPage() {
         },
         {
           title: "Classificazione database",
-          text: "Gravita, trigger, causa, confidenza spaziale e affidabilita delle fonti sono campi ARCUS espliciti.",
+          text: "Gravità, evento innescante, causa, attendibilità spaziale e affidabilità delle fonti sono campi ARCUS espliciti.",
         },
         {
           title: "Intersezione layer",
@@ -351,7 +351,7 @@ function MethodologyPage() {
         [
           "03",
           "Validazione multi-fonte",
-          "Verifica attraverso report tecnici, autorita, pubblicazioni scientifiche e fonti indipendenti.",
+          "Verifica attraverso rapporti tecnici, autorità, pubblicazioni scientifiche e fonti indipendenti.",
         ],
         [
           "04",
@@ -361,17 +361,17 @@ function MethodologyPage() {
         [
           "05",
           "Classificazione evento",
-          "Attribuzione di gravita, meccanismo di innesco e causa specifica del collasso.",
+          "Attribuzione della gravità, del meccanismo di innesco e della causa specifica del crollo.",
         ],
         [
           "06",
           "Revisione continua",
-          "Aggiornamento iterativo e arricchimento dei metadati attraverso attivita di ricerca.",
+          "Aggiornamento iterativo e arricchimento dei metadati attraverso attività di ricerca.",
         ],
       ],
       taxonomyLabel: "TASSONOMIA EVENTI",
       taxonomyTitle: "Sistema di classificazione",
-      severity: "Gravita",
+      severity: "Gravità",
       mechanism: "Meccanismo",
       generalCause: "Causa generale",
       specificCauses: "Cause specifiche",
@@ -379,11 +379,11 @@ function MethodologyPage() {
       classificationLogicTitle:
         "Il database separa cio che e accaduto dal contesto territoriale intorno all'evento.",
       classificationLogicText:
-        "ARCUS classifica prima ogni crollo come record di evidenza. Causa, trigger, gravita e localizzazione sono attributi del database prima dell'applicazione di qualunque overlay Professional.",
+        "ARCUS classifica innanzitutto ogni crollo come record di evidenza. Causa, evento innescante, gravità e localizzazione sono attributi del database precedenti all’applicazione di qualsiasi livello informativo Professional.",
       classificationAxes: [
         {
           code: "DB.01",
-          title: "Gravita evento",
+          title: "Gravità dell’evento",
           text: "Collasso totale o parziale, per distinguere perdita strutturale da cedimento o danno localizzato.",
         },
         {
@@ -399,7 +399,7 @@ function MethodologyPage() {
         {
           code: "DB.04",
           title: "Confidenza spaziale",
-          text: "Precisione delle coordinate, attribuzione comunale e affidabilita della georeferenziazione restano campi separati.",
+          text: "Precisione delle coordinate, attribuzione comunale e affidabilità della georeferenziazione restano campi separati.",
         },
         {
           code: "DB.05",
@@ -421,31 +421,31 @@ function MethodologyPage() {
       layerMatrixRows: [
         [
           "Causa idraulica / trigger di piena",
-          "WMS ISPRA IdroGEO per pericolosita alluvionale, reticolo idrografico, contesto idrografico",
+          "WMS ISPRA IdroGEO per pericolosità alluvionale, reticolo idrografico e contesto idrografico",
           "Esposizione al punto e processi di collasso idraulico comparabili",
-          "Priorita d'indagine sostenute oppure astensione",
+          "Priorità d’indagine supportate oppure astensione",
         ],
         [
           "Causa frana / instabilita di versante",
           "WMS ISPRA IdroGEO frane e contesto geomorfologico",
           "Ambiente di cedimento legato a dinamiche di versante",
-          "Stato del supporto e astensione finche il contratto evidenziale non e soddisfatto",
+          "Stato del supporto e astensione finché i requisiti evidenziali non sono soddisfatti",
         ],
         [
           "Terremoto / azione sismica",
-          "Layer INGV per pericolosita sismica e classificazione territoriale",
+          "Livello INGV per pericolosità sismica e classificazione territoriale",
           "Contesto di esposizione sismica al punto selezionato",
-          "Valore di riferimento e stato esplicito del supporto dai collassi",
+          "Valore di riferimento e stato esplicito del supporto derivato dai collassi",
         ],
         [
-          "Materiale, degrado, eta, tipologia",
+          "Materiale, degrado, età e tipologia",
           "Attributi degli eventi ARCUS",
           "Similarita tecnica con precedenti documentati",
           "Evidenza analoga spiegabile",
         ],
         [
-          "Localizzazione, gravita, affidabilita fonte",
-          "Comune, provincia, rete e densita eventi",
+          "Localizzazione, gravità e affidabilità della fonte",
+          "Comune, provincia, rete e densità degli eventi",
           "Forza dell'evidenza ed episodi indipendenti",
           "Evidence package Lessons from Failures tracciabile",
         ],
@@ -454,14 +454,14 @@ function MethodologyPage() {
         "Le fonti pubbliche e istituzionali usate per l'esposizione ufficiale, incluse ISPRA e INGV, sono dichiarate con stato e provenienza. Il contesto vicino non viene mai assegnato al punto e l'indisponibilita della sorgente non viene interpretata come rischio zero.",
       sourceLabel: "FRAMEWORK DI VALIDAZIONE",
       sourceTitle:
-        "Gerarchia e tracciabilita delle fonti",
+        "Gerarchia e tracciabilità delle fonti",
       sourceText:
-        "Ogni evento viene sottoposto a verifiche incrociate tra documentazione tecnica, scientifica, istituzionale e giornalistica. I metadati di tracciabilita sono conservati nell'architettura ARCUS per migliorare trasparenza, riproducibilita e future revisioni del database.",
+        "Ogni evento viene sottoposto a verifiche incrociate tra documentazione tecnica, scientifica, istituzionale e giornalistica. I metadati di tracciabilità sono conservati nell’architettura ARCUS per migliorare trasparenza, riproducibilità e future revisioni del database.",
       extensionLabel: "ESTENSIONI ARCUS",
       extensionTitle:
         "Oltre il dataset originario",
       extensions: [
-        "Architettura di tracciabilita delle fonti",
+        "Architettura per la tracciabilità delle fonti",
         "Sistema di arricchimento dei metadati",
         "Documentazione multi-fonte degli eventi",
         "Standardizzazione geospaziale",
@@ -471,14 +471,14 @@ function MethodologyPage() {
       limitsLabel: "LIMITI E INCERTEZZA",
       limitsTitle: "Completezza dei dati",
       limitsText:
-        "I registri storici sui crolli dei ponti sono per natura eterogenei e spesso condizionati da documentazione incompleta, qualita di reporting non uniforme e livelli variabili di dettaglio tecnico. I periodi meno recenti possono presentare bias di sottorappresentazione, soprattutto per eventi locali fuori dai principali centri urbani. In alcuni casi l'informazione spaziale resta limitata alla scala comunale per assenza di documentazione georeferenziata affidabile. Analoghi e intersezioni con layer ufficiali supportano apprendimento e indagine; non sono prova causale, probabilita di collasso o certificazione di sicurezza.",
+        "I registri storici sui crolli dei ponti sono per natura eterogenei e spesso condizionati da documentazione incompleta, qualità della registrazione non uniforme e livelli variabili di dettaglio tecnico. I periodi meno recenti possono presentare distorsioni dovute alla sottorappresentazione, soprattutto per gli eventi locali avvenuti lontano dai principali centri urbani. In alcuni casi l’informazione spaziale resta limitata alla scala comunale per l’assenza di documentazione georeferenziata affidabile. Gli eventi analoghi e le intersezioni con livelli ufficiali supportano l’apprendimento e l’indagine; non costituiscono una prova causale, una probabilità di collasso o una certificazione di sicurezza.",
       references: "RIFERIMENTI",
       researchFramework: "Framework di ricerca",
       outputLabel: "OUTPUT PIATTAFORMA",
       outputTitle:
         "Dal record validato agli strumenti operativi",
       outputText:
-        "Lo stesso nucleo metodologico alimenta l'osservatorio pubblico e il workspace Professional: trasparenza, analytics e output operativi spiegabili.",
+        "Lo stesso nucleo metodologico alimenta l’osservatorio pubblico e l’ambiente Professional: trasparenza, analisi e risultati operativi interpretabili.",
       outputs: [
         [
           "Open Atlas",
@@ -490,7 +490,7 @@ function MethodologyPage() {
         ],
       ],
       sourceTiers: [
-        ["TIER 01", "Autorita ufficiali"],
+        ["LIVELLO 01", "Autorità ufficiali"],
         ["TIER 02", "Report tecnici"],
         ["TIER 03", "Pubblicazioni scientifiche"],
         ["TIER 04", "Archivi stampa verificati"],
@@ -504,11 +504,11 @@ function MethodologyPage() {
       scoringModels: [
         [
           "Forza dell'evidenza",
-          "Descrive il supporto documentale usando ruolo della fonte, confidenza, precisione spaziale e tracciabilita.",
+          "Descrive il supporto documentale attraverso il ruolo della fonte, il grado di attendibilità, la precisione spaziale e la tracciabilità.",
         ],
         [
           "Episodi indipendenti",
-          "Evita che piu record dello stesso episodio di collasso gonfino il segnale di apprendimento.",
+          "Evita che più record dello stesso episodio di collasso amplifichino artificialmente il segnale di apprendimento.",
         ],
         [
           "Esposizione ufficiale",
