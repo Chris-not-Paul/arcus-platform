@@ -116,7 +116,32 @@ process in all five scenarios and in 100% of the leave-one-episode-out runs.
 This is a descriptive result and must not be generalized to the Italian bridge
 population.
 
-### 5. Reproducible Research Notebook
+### 5. Research Data Readiness
+
+The workbench reads the controlled Event Research profiles and recalculates
+field coverage for the active cohort. It separates:
+
+- record precision;
+- event and episode identity;
+- pre-event bridge configuration;
+- pre-collapse management history;
+- cause-specific event context;
+- post-event consequences and recovery.
+
+The module reports available and missing values, temporal phase, visibility
+class and the current Learning from Failures gate for each field. Completeness
+is not presented as evidence quality, asset condition or safety.
+
+It also lists the source-backed enrichment cases contained in the active
+cohort. The pilot status remains visible: structured evidence is not treated as
+domain validation and does not unlock a Learning feature automatically.
+
+Episode identity is available as an independence control. Bridge length and
+active-riverbed pier presence remain descriptive and experimental. Newly
+populated pilot fields remain candidates requiring a separate value audit;
+unpopulated fields remain explicitly blocked from the engine.
+
+### 6. Reproducible Research Notebook
 
 Researchers can save filters, episode thresholds, module state, analogue
 features, index case and methodological notes in the browser. A ZIP research
@@ -129,6 +154,8 @@ package contains:
 - `failure-chains.csv`;
 - `analogues.csv`, including feature-level comparison;
 - `robustness.csv`;
+- `research-field-coverage.csv`;
+- `research-profiles.json`;
 - `methods.md`.
 
 SHA-256 checksums cover every package file created before the manifest. The

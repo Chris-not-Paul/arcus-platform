@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   compareProjectBridgeProfile,
   normalizeProjectBridgeProfile,
+  PROJECT_BRIDGE_PROFILE_OPTIONS,
   PROJECT_BRIDGE_PROFILE_VERSION,
 } from "../src/utils/projectBridgeProfile.js";
 
@@ -68,6 +69,18 @@ const invalid = normalizeProjectBridgeProfile({
 
 assert.equal(invalid.provided_field_count, 0);
 assert.equal(invalid.invalid_fields.length, 3);
+
+const invalidStructuralLabel = normalizeProjectBridgeProfile({
+  structural_type: "Viaduct",
+});
+
+assert.equal(invalidStructuralLabel.provided_field_count, 0);
+assert.deepEqual(invalidStructuralLabel.invalid_fields, [{
+  field: "structural_type",
+  reason: "value_outside_v1_vocabulary",
+}]);
+assert.equal(PROJECT_BRIDGE_PROFILE_OPTIONS.structural_type.includes("Overpass"), false);
+assert.equal(PROJECT_BRIDGE_PROFILE_OPTIONS.structural_type.includes("Masonry"), false);
 
 console.log(JSON.stringify({
   complete_fields: complete.provided_field_count,

@@ -119,10 +119,16 @@ assert.match(page, /EPISODE INTELLIGENCE/);
 assert.match(page, /FAILURE CHAIN EXPLORER/);
 assert.match(page, /ANALOGUE CASE LAB/);
 assert.match(page, /ROBUSTNESS & SENSITIVITY/);
+assert.match(page, /RESEARCH DATA READINESS/);
 assert.match(page, /REPRODUCIBLE RESEARCH NOTEBOOK/);
 assert.match(page, /METHOD CONCORDANCE/);
 assert.match(page, /LEAVE-ONE-FEATURE-OUT/);
 assert.match(page, /professionalResource\("professional-events"\)/);
+assert.match(page, /professionalResource\("event-research-profiles"\)/);
+assert.match(page, /professionalResource\("event-research-readiness-audit"\)/);
+assert.match(page, /research-field-coverage\.csv/);
+assert.match(page, /CONTROLLED ENRICHMENT PILOT/);
+assert.match(page, /enrichment_summary\.applied_field_count/);
 assert.doesNotMatch(page, /vulnerability/i);
 assert.doesNotMatch(page, /probability score/i);
 

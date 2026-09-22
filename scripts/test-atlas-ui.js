@@ -26,7 +26,7 @@ async function waitFor(check, label) {
 }
 async function screenshot(page, name) {
   await page.evaluate(() => document.fonts.ready);
-  if (!(await page.getByRole("dialog").count())) {
+  if (!(await page.locator(".arcus-event-dossier").count())) {
     await waitFor(() => page.locator(".leaflet-tile").evaluateAll((tiles) =>
       tiles.length > 0 && tiles.every((tile) => tile.complete) && tiles.some((tile) => tile.naturalWidth > 0)
     ), "Map tiles loaded for screenshot");
@@ -38,7 +38,8 @@ async function screenshot(page, name) {
 async function openDossier(page, event) {
   await page.goto(`${base}/atlas?event=${event.event_slug}`);
   await page.getByRole("button", { name: /Apri scheda completa/ }).click();
-  await page.getByRole("dialog").waitFor();
+  await page.waitForURL(`**/atlas/events/${event.event_slug}`);
+  await page.locator(".arcus-event-dossier.is-page").waitFor();
 }
 async function assertVisibleSelectedMarker(page) {
   await waitFor(async () => {
@@ -56,7 +57,7 @@ async function noHorizontalOverflow(page) {
   const dimensions = await page.evaluate(() => ({
     viewport: innerWidth,
     document: document.documentElement.scrollWidth,
-    dialog: document.querySelector('[role="dialog"]')?.getBoundingClientRect().toJSON(),
+    dialog: document.querySelector(".arcus-event-dossier")?.getBoundingClientRect().toJSON(),
     content: document.querySelector(".arcus-event-dossier-content") && {
       width: document.querySelector(".arcus-event-dossier-content").clientWidth,
       scroll: document.querySelector(".arcus-event-dossier-content").scrollWidth,
@@ -126,7 +127,16 @@ try {
   await assertVisibleSelectedMarker(page);
   assert.equal(contextRequests.size, 0, "Marker preview defers dossier data");
   await page.getByRole("button", { name: /Apri scheda completa/ }).click();
-  const dialog = page.getByRole("dialog");
+  await page.waitForURL(`**/atlas/events/${event.event_slug}`);
+  const dialog = page.locator(".arcus-event-dossier.is-page");
+  await dialog.waitFor();
+  const sharedEpisode = dialog.locator(".arcus-event-shared-episode");
+  await sharedEpisode.waitFor();
+  assert.match(await sharedEpisode.innerText(), /Episodio alluvionale[\s\S]*5 crolli/i);
+  assert.match(await sharedEpisode.innerText(), /Fonti documentali condivise/i);
+  await sharedEpisode.locator("summary").click();
+  assert.equal(await sharedEpisode.locator(".arcus-event-shared-episode-list a").count(), 4);
+  await screenshot(page, "desktop-shared-episode");
   await dialog.getByRole("tab", { name: "Contesto", exact: true }).click();
   await dialog.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
   await dialog.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
@@ -141,24 +151,30 @@ try {
   await dialog.getByRole("tab", { name: "Ponte", exact: true }).click();
   await dialog.getByRole("heading", { name: "Il ponte documentato" }).waitFor();
   await dialog.getByRole("tab", { name: /Fonti e qualità/ }).click();
+  await dialog.getByText("Copertura del record", { exact: true }).waitFor();
+  assert.equal(await dialog.locator(".arcus-event-record-coverage-grid article").count(), 4);
+  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), new RegExp(event.event_id.replaceAll(".", "\\.")));
+  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.5/);
+  await screenshot(page, "desktop-research-quality");
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: /Esporta record e fonti/ }).click();
   const dossierDownload = await download;
   const dossier = JSON.parse(await fs.readFile(await dossierDownload.path(), "utf8"));
   assert.equal(dossier.event.event_id, event.event_id);
   assert.ok(dossier.sources.length > 0);
-  assert.ok(dossier.permalink.endsWith(`event=${event.event_slug}`));
-  for (let index = 0; index < 30; index++) {
-    await page.keyboard.press("Tab");
-    assert.ok(await dialog.evaluate((element) => element.contains(document.activeElement)), "Keyboard focus remains inside the dossier");
-  }
-  await page.keyboard.press("Escape");
-  await dialog.waitFor({ state: "hidden" });
-  assert.ok(await page.getByRole("button", { name: /Apri scheda completa/ }).evaluate((element) => element === document.activeElement));
-  await page.getByRole("button", { name: "Chiudi scheda evento", exact: true }).click();
-  await page.getByRole("button", { name: /Ricerca e download/ }).click();
-  const marker = page.locator('.arcus-marker-icon[title="Ponte sul Torrente Fersina"]');
-  await marker.click();
+  assert.ok(dossier.permalink.endsWith(`/atlas/events/${event.event_slug}`));
+  assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
+  assert.equal(dossier.shared_episode.event_count, 5);
+  assert.equal(dossier.shared_episode.episode_type, "flood");
+  assert.equal(dossier.research_metadata.completeness.groups.length, 4);
+  assert.equal(
+    Object.values(dossier.research_metadata.documentary_basis.source_composition)
+      .reduce((total, value) => total + value, 0),
+    dossier.sources.length
+  );
+  await page.getByRole("link", { name: /Torna all.At[l]?ante/i }).click();
+  await page.waitForURL(`**/atlas?event=${event.event_slug}`);
+  await page.getByRole("button", { name: /Apri scheda completa/ }).waitFor();
   await assertVisibleSelectedMarker(page);
   const tileZoom = () => page.locator(".leaflet-tile").evaluateAll((tiles) => Math.max(...tiles.map((tile) => Number(tile.src.match(/\/tile\/(\d+)/)?.[1] || 0))));
   const zoomBefore = await tileZoom();
@@ -166,12 +182,13 @@ try {
   await waitFor(async () => (await tileZoom()) > zoomBefore, "User zoom changes displayed tile level");
   await page.waitForTimeout(700);
   const userZoom = await tileZoom();
-  await page.getByRole("button", { name: "Chiudi controlli Atlas", exact: true }).click();
   await page.getByRole("button", { name: "Apri controlli Atlas", exact: true }).click();
   await page.waitForTimeout(700);
+  await page.getByRole("button", { name: "Chiudi controlli Atlas", exact: true }).click();
+  await page.waitForTimeout(700);
   assert.equal(await tileZoom(), userZoom, "Sidebar changes preserve user zoom for the selected bridge");
-  checks.push("Direct marker selection and user zoom preserved while toggling sidebar");
-  checks.push("Sidebar selection, highlighted marker, cause-relevant context, bridge/sources tabs, JSON identity, keyboard focus and Escape");
+  checks.push("Returned Atlas selection and user zoom preserved while toggling sidebar");
+  checks.push("Sidebar selection, highlighted marker, dedicated record URL, cause-relevant context, bridge/sources tabs, JSON identity and return to Atlas");
 
   // Change to another distant bridge within the same SPA: the index files must be shared.
   const second = byId("IT13.02.01");
@@ -181,6 +198,8 @@ try {
   await page.locator(".atlas-sidebar-result-list button").filter({ hasText: second.event_id }).click();
   await page.locator(".arcus-event-card").filter({ hasText: second.event_id }).waitFor();
   await page.getByRole("button", { name: /Apri scheda completa/ }).click();
+  await page.waitForURL(`**/atlas/events/${second.event_slug}`);
+  await page.locator(".arcus-event-dossier.is-page").waitFor();
   await page.getByRole("tab", { name: "Contesto", exact: true }).click();
   await page.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
   await page.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
@@ -203,13 +222,22 @@ try {
     await assertVisibleSelectedMarker(page);
     await screenshot(page, `${name}-selection`);
     await page.getByRole("button", { name: /Apri scheda completa/ }).click();
+    await page.waitForURL(`**/atlas/events/${event.event_slug}`);
+    await page.locator(".arcus-event-dossier.is-page").waitFor();
+    await page.locator(".arcus-event-shared-episode").waitFor();
+    await noHorizontalOverflow(page);
+    await screenshot(page, `${name}-shared-episode`);
     await page.getByRole("tab", { name: "Contesto", exact: true }).click();
     await page.getByRole("button", { name: /Contesto idraulico attuale/ }).click();
     await page.getByText("Contesto territoriale attuale", { exact: true }).waitFor();
     assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
     await noHorizontalOverflow(page);
     await screenshot(page, `${name}-territorial`);
-    checks.push(`${name} (${width}×${height}): overview, dossier, cause-relevant context, no horizontal overflow`);
+    await page.getByRole("tab", { name: /Fonti e qualità/ }).click();
+    await page.getByText("Copertura del record", { exact: true }).waitFor();
+    await noHorizontalOverflow(page);
+    await screenshot(page, `${name}-research-quality`);
+    checks.push(`${name} (${width}×${height}): overview, shared episode, cause-relevant context, research quality and no horizontal overflow`);
   }
 
   const reviewEvent = byId("IT00.10.23");
@@ -217,7 +245,7 @@ try {
   await openDossier(page, reviewEvent);
   await page.getByText("Record in verifica", { exact: true }).waitFor();
   await page.getByRole("button", { name: /Leggi di più/ }).click();
-  assert.ok(!(await page.getByRole("dialog").locator(".arcus-event-description").innerText()).includes("B00.10.22"));
+  assert.ok(!(await page.locator(".arcus-event-dossier.is-page .arcus-event-description").innerText()).includes("B00.10.22"));
   checks.push("Review status precedes disputed narrative; legacy reference is displayed as IT00.10.22");
 
   const landslideEvent = byId("IT15.04.01");
@@ -226,8 +254,9 @@ try {
   await page.getByText("Livello informativo pertinente alla causa documentata", { exact: true }).waitFor();
   assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
   assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), /Pericolosità da frana/i);
-  assert.doesNotMatch(await page.locator(".arcus-event-territorial").innerText(), /Pericolosità idraulica|Pericolosità sismica|P1|P2|P3/i);
-  checks.push("Landslide dossier exposes only cause-relevant context and withholds map classes");
+  assert.match(await page.locator(".arcus-event-territorial").innerText(), /Classe P2[\s\S]*Classi ufficiali rilevate al punto: P2/i);
+  assert.doesNotMatch(await page.locator(".arcus-event-territorial").innerText(), /Pericolosità idraulica|Pericolosità sismica/i);
+  checks.push("Landslide dossier exposes only cause-relevant context and publishes the current official PAI class");
 
   const materialEvent = byId("IT11.05.01");
   await openDossier(page, materialEvent);
@@ -262,6 +291,12 @@ try {
       assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
       assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), expectedCopy);
       assert.match(await page.locator(".arcus-event-causal-separation").innerText(), /Non inferito/i);
+      if (cause === "Earthquake") {
+        const seismicText = await page.locator(".arcus-event-territorial-grid article").innerText();
+        assert.match(seismicText, /\d\.\d{3} g/);
+        assert.doesNotMatch(seismicText, /(?:^|\n)Classe\s+[A-Z0-9]/i);
+        assert.match(seismicText, /non una classe sismica inventata da ARCUS/i);
+      }
     }
   }
   checks.push("Cause-stratified dossier audit covers all eight ARCUS cause families");

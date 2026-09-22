@@ -860,6 +860,20 @@ function AtlasPage() {
     }
   };
 
+  const handleAtlasEventOpenDossier = (event) => {
+    const eventSlug = event?.event_slug || researchEventId(event);
+
+    if (!eventSlug) {
+      return;
+    }
+
+    navigate(`/atlas/events/${encodeURIComponent(eventSlug)}`, {
+      state: {
+        atlasReturn: `/atlas?event=${encodeURIComponent(event.event_slug || eventSlug)}`,
+      },
+    });
+  };
+
   const handleDownloadFilteredCsv = () => {
     const headers = [
       "event_id",
@@ -909,11 +923,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.3",
+      release: openRelease?.version || "arcus-open-2026.5",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.3"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.5"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );
@@ -1840,6 +1854,8 @@ function AtlasPage() {
           mapStyle={mapStyle}
 
           openRelease={openRelease}
+
+          onEventOpenDossier={handleAtlasEventOpenDossier}
 
           onEventSelect={handleAtlasEventSelect}
 

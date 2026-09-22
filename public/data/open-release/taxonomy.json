@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.3",
+  "release": "arcus-open-2026.5",
   "taxonomy": [
     {
       "field": "NOTE",
@@ -65,6 +65,36 @@
       "field": "specific_cause",
       "value": "Unspecified",
       "definition_it": "Famiglia causale non ricostruibile."
+    },
+    {
+      "field": "structural_type",
+      "value": "Beam bridge",
+      "definition_it": "Sistema resistente principale a travata, con impalcato sostenuto prevalentemente da travi o cassoni."
+    },
+    {
+      "field": "structural_type",
+      "value": "Arch bridge",
+      "definition_it": "Sistema resistente principale ad arco, con trasferimento prevalente dei carichi per compressione."
+    },
+    {
+      "field": "structural_type",
+      "value": "Truss",
+      "definition_it": "Sistema resistente reticolare composto da aste connesse in nodi."
+    },
+    {
+      "field": "structural_type",
+      "value": "Frame",
+      "definition_it": "Sistema resistente a telaio con continuità strutturale tra impalcato e sostegni."
+    },
+    {
+      "field": "structural_type",
+      "value": "Cable-stayed",
+      "definition_it": "Sistema resistente con impalcato sostenuto da stralli collegati a uno o più piloni."
+    },
+    {
+      "field": "structural_type",
+      "value": "Suspension",
+      "definition_it": "Sistema resistente sospeso mediante cavi principali e pendini."
     },
     {
       "field": "failure_trigger",

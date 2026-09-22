@@ -1,6 +1,6 @@
 {
-  "version": "arcus-open-2026.3",
-  "generated_at": "2026-09-08T07:22:36.626Z",
+  "version": "arcus-open-2026.5",
+  "generated_at": "2026-09-22T12:41:29.063Z",
   "data_cutoff": "2026-04-02",
   "event_count": 261,
   "source_count": 716,
@@ -12,16 +12,18 @@
     "scope": "ARCUS-authored event metadata and taxonomy definitions. Linked third-party sources remain subject to their original rights and terms.",
     "url": "https://creativecommons.org/licenses/by/4.0/"
   },
-  "citation": "ARCUS Open Research (arcus-open-2026.3). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.3.",
+  "citation": "ARCUS Open Research (arcus-open-2026.5). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.5.",
   "changelog": "changelog.json",
   "known_limitations": [
     "The database describes documented historical events and cannot estimate the probability of future collapse.",
     "Source coverage and location precision vary across records.",
     "Needs review is retained as a distinct editorial evidence class.",
     "Third-party source content is not redistributed; links and bibliographic metadata remain subject to provider terms.",
-    "Province mismatches are flagged and never silently corrected."
+    "Province mismatches are flagged and never silently corrected.",
+    "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges.",
+    "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges."
   ],
-  "source_workbook_fingerprint": "sha256:ef988607f46b4d01cc91b85f650afa6f7c921d3b1ce6899f03e1c7d8ad7c54de",
+  "source_workbook_fingerprint": "sha256:0d530b1aad24735d3b9de38256eca735850dc7e6bd5dc3494ff88acb3040ec22",
   "access": "public_read_only_no_account_required",
   "resources": {
     "events": "events.json",
@@ -33,6 +35,9 @@
     "quality_audit": "quality-audit.json",
     "id_mapping": "id-mapping.json",
     "csv": "events.csv",
-    "geojson": "events.geojson"
-  }
+    "geojson": "events.geojson",
+    "episodes": "episodes.json"
+  },
+  "shared_episode_count": 14,
+  "shared_episode_event_count": 108
 }

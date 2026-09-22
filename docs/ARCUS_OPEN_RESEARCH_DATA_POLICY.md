@@ -1,10 +1,12 @@
 # ARCUS Open Research Data Policy
 
-ARCUS Open Research makes the validated scientific database useful without a mandatory account. The active release is `arcus-open-2026.3`, covers 2000-2026, and contains 261 events, 716 publishable source records and 57 taxonomy definitions.
+ARCUS Open Research makes the validated scientific database useful without a mandatory account. The active release is `arcus-open-2026.5`, covers 2000-2026, and contains 261 events, 716 publishable source records and 63 taxonomy definitions.
 
 ## Public data
 
 Open includes the canonical `ITxx.xx.xx` scientific event identifier, stable slug, date, coordinates, municipality/province/region, bridge and infrastructure attributes, severity, casualties, general and specific cause, trigger, observed process, involved component, evidence level, source confidence, location quality, publishable curation level, description, taxonomy, dictionary, methodology metadata, limitations, citation, changelog, audit, aggregate statistics, CSV and GeoJSON. Legacy `B` identifiers are confined to the versioned migration mapping.
+
+`structural_type` records only the documented load-bearing system. Terms such as viaduct and overpass remain in names or crossing context and are not treated as structural systems. When the structural system is not supported by the available evidence, the value remains unavailable rather than being inferred from the asset name.
 
 Source links are published only when valid HTTP/HTTPS URLs. Text references are retained in `source_reference` and are never rendered as links. The release does not redistribute third-party articles or reports.
 

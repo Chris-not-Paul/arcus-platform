@@ -30,6 +30,7 @@ const headers = read("public/_headers");
 const redirects = read("public/_redirects");
 const manifest = JSON.parse(read("public/data/open-release/manifest.json"));
 const events = JSON.parse(read("public/data/open-release/events.json"));
+const episodes = JSON.parse(read("public/data/open-release/episodes.json"));
 const sources = JSON.parse(read("public/data/open-release/sources.json"));
 
 check("open release feature boundary", () => {
@@ -115,11 +116,14 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.3");
+  assert.equal(manifest.version, "arcus-open-2026.5");
   assert.equal(events.events.length, manifest.event_count);
   assert.equal(sources.sources.length, manifest.source_count);
   assert.equal(events.events.length, 261);
   assert.equal(sources.sources.length, 716);
+  assert.equal(episodes.summary.episode_count, 14);
+  assert.equal(episodes.summary.grouped_event_count, 108);
+  assert.equal(manifest.resources.episodes, "episodes.json");
 });
 
 check("production build artifacts", () => {
@@ -134,6 +138,7 @@ check("production build artifacts", () => {
     "dist/fonts/ibm-plex/IBMPlexMono-Regular.woff2",
     "dist/fonts/ibm-plex/LICENSE.txt",
     "dist/data/open-release/events.json",
+    "dist/data/open-release/episodes.json",
     "dist/data/open-release/sources.json",
   ]) {
     assert.equal(fs.existsSync(path.resolve(file)), true, `${file} missing`);

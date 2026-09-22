@@ -67,7 +67,9 @@ const component = fs.readFileSync(
 assert.match(component, /Contesto territoriale attuale/);
 assert.match(component, /non ricostruisce la pericolosità alla data dell.evento/i);
 assert.match(component, /non certifica assenza di pericolo idraulico/i);
-assert.match(component, /non assegna una classe sostitutiva/i);
-assert.match(component, /Nessun valore modifica il record del collasso/i);
+assert.match(component, /matched_hazard_classes/);
+assert.match(component, /highest_hazard_class/);
+assert.match(component, /non una classe sismica inventata da ARCUS/i);
+assert.match(component, /Nessun valore ricostruisce la condizione alla data del collasso/i);
 
 console.log(`Validated ${Object.keys(context.events).length} territorial context records`);

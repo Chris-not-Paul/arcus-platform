@@ -5,6 +5,7 @@ import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
 import { professionalResource } from "../utils/apiClient";
 import createStoredZip from "../utils/createStoredZip";
+import { researchFieldValue } from "../utils/eventResearchProfile";
 import {
   ANALOGUE_FEATURES,
   buildAnalogueSensitivity,
@@ -90,6 +91,8 @@ function PremiumAnalyticsPage() {
   const [events, setEvents] = useState([]);
   const [sources, setSources] = useState([]);
   const [release, setRelease] = useState(null);
+  const [researchProfiles, setResearchProfiles] = useState([]);
+  const [researchAudit, setResearchAudit] = useState(null);
   const [loadError, setLoadError] = useState(false);
   const [module, setModule] = useState("episodes");
   const [filters, setFilters] = useState({
@@ -124,11 +127,17 @@ function PremiumAnalyticsPage() {
       professionalResource("professional-events"),
       professionalResource("professional-sources"),
       professionalResource("data-release"),
+      professionalResource("event-research-profiles"),
+      professionalResource("event-research-readiness-audit"),
     ])
-      .then(([eventResource, sourceResource, dataRelease]) => {
+      .then(([eventResource, sourceResource, dataRelease, profileResource, readinessAudit]) => {
         setEvents(Array.isArray(eventResource) ? eventResource : eventResource?.events || []);
         setSources(Array.isArray(sourceResource) ? sourceResource : sourceResource?.sources || []);
         setRelease(dataRelease?.release || dataRelease || null);
+        setResearchProfiles(
+          Array.isArray(profileResource) ? profileResource : profileResource?.profiles || []
+        );
+        setResearchAudit(readinessAudit || null);
       })
       .catch(() => setLoadError(true));
   }, []);
@@ -206,6 +215,37 @@ function PremiumAnalyticsPage() {
     const ids = new Set(filteredEvents.map((event) => event.event_id));
     return sources.filter((source) => ids.has(source.event_id));
   }, [filteredEvents, sources]);
+  const filteredResearchProfiles = useMemo(() => {
+    const ids = new Set(filteredEvents.map(publicEventId));
+    return researchProfiles.filter((profile) => ids.has(profile.event_id));
+  }, [filteredEvents, researchProfiles]);
+  const researchCoverageRows = useMemo(() =>
+    (researchAudit?.fields || []).map((field) => {
+      const available = filteredResearchProfiles.filter((profile) => {
+        const value = researchFieldValue(profile, field.field);
+        return value !== null && value !== undefined && String(value).trim() !== "";
+      }).length;
+
+      return {
+        ...field,
+        available,
+        coverage: filteredResearchProfiles.length
+          ? Math.round((available / filteredResearchProfiles.length) * 1000) / 10
+          : 0,
+        missing: filteredResearchProfiles.length - available,
+      };
+    }),
+  [filteredResearchProfiles, researchAudit]);
+  const enrichedResearchProfiles = useMemo(() => {
+    const eventsById = new Map(filteredEvents.map((event) => [publicEventId(event), event]));
+    return filteredResearchProfiles
+      .filter((profile) => profile.enrichment_summary?.applied_field_count > 0)
+      .map((profile) => ({
+        event: eventsById.get(profile.event_id) || null,
+        profile,
+      }))
+      .sort((a, b) => a.profile.event_id.localeCompare(b.profile.event_id));
+  }, [filteredEvents, filteredResearchProfiles]);
 
   const setFilter = (key, value) => setFilters((current) => ({
     ...current,
@@ -348,6 +388,17 @@ function PremiumAnalyticsPage() {
         retention_percent: row.retention,
         top_k: analogueSensitivity.topK,
       }));
+      const coverageRows = researchCoverageRows.map((field) => ({
+        analytics_use: field.analytics_use,
+        available: field.available,
+        coverage_percent: field.coverage,
+        field: field.field,
+        group: field.group,
+        learning_gate: field.learning_gate,
+        missing: field.missing,
+        phase: field.phase,
+        visibility: field.visibility,
+      }));
       const files = [
         {
           name: "episodes.csv",
@@ -380,6 +431,17 @@ function PremiumAnalyticsPage() {
         {
           name: "analogue-sensitivity.csv",
           content: rowsToCsv(["removed_feature", "top_k", "retained_top_k", "retention_percent"], analogueSensitivityRows),
+        },
+        {
+          name: "research-field-coverage.csv",
+          content: rowsToCsv(["group", "field", "phase", "available", "missing", "coverage_percent", "visibility", "analytics_use", "learning_gate"], coverageRows),
+        },
+        {
+          name: "research-profiles.json",
+          content: `${JSON.stringify({
+            schema_version: researchAudit?.schema_version || null,
+            profiles: filteredResearchProfiles,
+          }, null, 2)}\n`,
         },
         {
           name: "notebook.json",
@@ -429,7 +491,8 @@ function PremiumAnalyticsPage() {
     { id: "chains", index: "02", label: t("Catene", "Chains") },
     { id: "analogues", index: "03", label: t("Casi analoghi", "Analogues") },
     { id: "robustness", index: "04", label: t("Robustezza", "Robustness") },
-    { id: "notebook", index: "05", label: "Notebook" },
+    { id: "coverage", index: "05", label: t("Copertura dati", "Data coverage") },
+    { id: "notebook", index: "06", label: "Notebook" },
   ];
 
   return (
@@ -693,6 +756,96 @@ function PremiumAnalyticsPage() {
                 </div>
                 <p className="research-method-note">{t("“Stabile” significa soltanto che rimane la categoria più frequente nel database sotto lo scenario indicato. Non costituisce validazione statistica o ingegneristica.", "“Stable” only means that the category remains the most frequent in the database under the stated scenario. It is not statistical or engineering validation.")}</p>
               </> : <EmptyState>{t("Nessun record da sottoporre a sensibilità.", "No records are available for sensitivity checks.")}</EmptyState>}
+            </section>
+          )}
+
+          {module === "coverage" && (
+            <section className="research-module" data-research-module="coverage">
+              <ModuleHeading
+                eyebrow="RESEARCH DATA READINESS"
+                title={t("Cosa è davvero confrontabile nella coorte", "What is genuinely comparable in the cohort")}
+                text={t(
+                  "Misura la disponibilità dei campi strutturati senza trasformare la completezza in una valutazione delle condizioni o della sicurezza del ponte.",
+                  "Measure structured field availability without turning completeness into an asset-condition or safety assessment."
+                )}
+              />
+              {researchAudit && filteredResearchProfiles.length ? <>
+                <div className="research-kpi-grid">
+                  <article><strong>{filteredResearchProfiles.length}</strong><span>{t("profili nella coorte", "profiles in cohort")}</span></article>
+                  <article><strong>{researchCoverageRows.filter((field) => field.coverage >= 80).length}</strong><span>{t("campi con copertura ≥80%", "fields with ≥80% coverage")}</span></article>
+                  <article><strong>{researchCoverageRows.filter((field) => field.available === 0).length}</strong><span>{t("campi non ancora strutturati", "fields not yet structured")}</span></article>
+                  <article><strong>{researchCoverageRows.find((field) => field.field === "episode_id")?.available || 0}</strong><span>{t("record con controllo episodio", "records with episode control")}</span></article>
+                </div>
+                <div className="research-table-wrap research-robustness-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>{t("Gruppo", "Group")}</th>
+                        <th>{t("Campo", "Field")}</th>
+                        <th>{t("Fase", "Phase")}</th>
+                        <th>{t("Disponibili", "Available")}</th>
+                        <th>{t("Copertura", "Coverage")}</th>
+                        <th>{t("Uso nel learning", "Learning use")}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {researchCoverageRows.map((field) => (
+                        <tr key={field.field}>
+                          <th>{field.group}</th>
+                          <td>{field.field}</td>
+                          <td>{field.phase}</td>
+                          <td>{field.available}/{filteredResearchProfiles.length}</td>
+                          <td><strong>{field.coverage}%</strong></td>
+                          <td>{field.learning_gate}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="research-enrichment-heading">
+                  <span>CONTROLLED ENRICHMENT PILOT</span>
+                  <h4>{t("Casi con nuova strutturazione documentale", "Cases with newly structured evidence")}</h4>
+                  <p>{t(
+                    "Sono mostrati soltanto i casi compresi nella coorte attiva. I valori sono collegati alle fonti ma restano esclusi dal learning di produzione fino alla revisione specialistica.",
+                    "Only cases in the active cohort are shown. Values are source-linked but remain outside production learning until domain review."
+                  )}</p>
+                </div>
+                {enrichedResearchProfiles.length ? (
+                  <div className="research-table-wrap research-enrichment-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t("Evento", "Event")}</th>
+                          <th>{t("Ponte", "Bridge")}</th>
+                          <th>{t("Causa", "Cause")}</th>
+                          <th>{t("Campi strutturati", "Structured fields")}</th>
+                          <th>{t("Revisione", "Review")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {enrichedResearchProfiles.map(({ event, profile }) => (
+                          <tr key={profile.event_id}>
+                            <th>{profile.event_id}</th>
+                            <td>{event ? eventName(event) : "—"}</td>
+                            <td>{event?.specific_cause || "—"}</td>
+                            <td>{profile.enrichment_summary.applied_field_count}</td>
+                            <td>{t("fonti strutturate · revisione specialistica richiesta", "source-structured · domain review required")}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="research-empty research-enrichment-empty">{t(
+                    "La coorte attiva non contiene ancora casi del pilota documentale.",
+                    "The active cohort does not yet include documentary pilot cases."
+                  )}</p>
+                )}
+                <p className="research-method-note">{t(
+                  "Solo l’identificativo di episodio è già ammesso come controllo di indipendenza. Lunghezza e presenza di pile in alveo restano descrittive e sperimentali; gli altri nuovi campi non entreranno nel motore finché non saranno popolati, verificati e sottoposti a un value audit separato.",
+                  "Only episode identity is currently admitted as an independence control. Bridge length and active-riverbed pier presence remain descriptive and experimental; other new fields will not enter the engine until they are populated, verified and pass a separate value audit."
+                )}</p>
+              </> : <EmptyState>{t("Il profilo di readiness della ricerca non è disponibile.", "The research readiness profile is unavailable.")}</EmptyState>}
             </section>
           )}
 

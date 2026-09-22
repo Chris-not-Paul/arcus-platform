@@ -18,7 +18,9 @@ import useLanguage from "../context/useLanguage";
 
 import extractYear from "../utils/extractYear";
 import createStoredZip from "../utils/createStoredZip";
+import { classifyOpenSource } from "../utils/openEventDossier";
 import {
+  openEpisodes,
   openEvents,
   openManifest,
   openSources,
@@ -38,6 +40,17 @@ function formatValue(value) {
   return new Intl.NumberFormat("en-US").format(
     value
   );
+}
+
+function formatEpisodeDate(value, language) {
+  const parts = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!parts) return value || "—";
+  return new Intl.DateTimeFormat(language === "it" ? "it-IT" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+    year: "numeric",
+  }).format(new Date(Date.UTC(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]))));
 }
 
 function uniqueValues(items, key) {
@@ -142,6 +155,19 @@ function derivedDimension(event, dimension, language) {
     if (age < 75) return { key: "50-74", label: "50–74", order: 3 };
     if (age < 100) return { key: "75-99", label: "75–99", order: 4 };
     return { key: "100-plus", label: "≥100", order: 5 };
+  }
+  if (dimension === "failure_trigger" && event.failure_trigger) {
+    const labelsIt = {
+      Earthquake: "Sisma",
+      Flood: "Alluvione / piena",
+      "Landslide / slope failure": "Frana / instabilità di versante",
+      "Rainfall-induced landslide": "Frana indotta da precipitazioni",
+    };
+    return {
+      key: String(event.failure_trigger),
+      label: language === "it" ? labelsIt[event.failure_trigger] || String(event.failure_trigger) : String(event.failure_trigger),
+      order: null,
+    };
   }
   return null;
 }
@@ -254,10 +280,28 @@ function crossTabDiagnostics(crossTab) {
 }
 
 function sourceDepthDiagnostics(cohortEvents, cohortSources) {
-  if (!cohortEvents.length) return { median: null, singleSourceShare: null, sourceTypes: 0, threePlusShare: null };
+  const emptyResult = {
+    eventCoverage: { noSources: 0, official: 0, scientific: 0 },
+    median: null,
+    roleCounts: { news: 0, official: 0, other: 0, scientific: 0 },
+    singleSourceShare: null,
+    sourceTypes: 0,
+    threePlusShare: null,
+  };
+  if (!cohortEvents.length) return emptyResult;
   const counts = new Map(cohortEvents.map((event) => [event.event_id, 0]));
+  const eventsByRole = {
+    news: new Set(),
+    official: new Set(),
+    other: new Set(),
+    scientific: new Set(),
+  };
+  const roleCounts = { ...emptyResult.roleCounts };
   cohortSources.forEach((source) => {
     if (counts.has(source.event_id)) counts.set(source.event_id, counts.get(source.event_id) + 1);
+    const role = classifyOpenSource(source);
+    roleCounts[role] += 1;
+    if (counts.has(source.event_id)) eventsByRole[role].add(source.event_id);
   });
   const sortedCounts = [...counts.values()].sort((a, b) => a - b);
   const middle = Math.floor(sortedCounts.length / 2);
@@ -266,7 +310,13 @@ function sourceDepthDiagnostics(cohortEvents, cohortSources) {
     : (sortedCounts[middle - 1] + sortedCounts[middle]) / 2;
 
   return {
+    eventCoverage: {
+      noSources: sortedCounts.filter((value) => value === 0).length,
+      official: eventsByRole.official.size,
+      scientific: eventsByRole.scientific.size,
+    },
     median: roundMetric(median, 1),
+    roleCounts,
     singleSourceShare: roundMetric(sortedCounts.filter((value) => value === 1).length / sortedCounts.length),
     sourceTypes: new Set(cohortSources.map((source) => source.source_type).filter(Boolean)).size,
     threePlusShare: roundMetric(sortedCounts.filter((value) => value >= 3).length / sortedCounts.length),
@@ -445,6 +495,7 @@ const CHART_DIMENSION_KEYS = Object.freeze([
   "five_year_period",
   "decade",
   "specific_cause",
+  "failure_trigger",
   "region",
   "collapse_severity",
   "structural_type",
@@ -472,6 +523,15 @@ const RESEARCH_PRESETS = Object.freeze([
     description: { it: "Collassi idraulici per stagione meteorologica, con date non complete separate.", en: "Hydraulic collapses by meteorological season, with incomplete dates kept separate." },
     analysisMode: "distribution",
     chartDimension: "season",
+    chartView: "bars",
+    filters: { ...DEFAULT_FILTERS, cause: "Hydraulic" },
+  },
+  {
+    id: "hydraulic-shared-episodes",
+    title: { it: "Episodi alluvionali", en: "Flood episodes" },
+    description: { it: "Raggruppa i crolli idraulici e attiva il controllo degli episodi multi-crollo documentati.", en: "Groups hydraulic collapses and activates the documented multi-collapse episode control." },
+    analysisMode: "distribution",
+    chartDimension: "failure_trigger",
     chartView: "bars",
     filters: { ...DEFAULT_FILTERS, cause: "Hydraulic" },
   },
@@ -601,6 +661,7 @@ function AnalyticsPage() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
+  const [episodes, setEpisodes] = useState(null);
   const [sources, setSources] = useState([]);
   const [manifest, setManifest] = useState(null);
   const [loadState, setLoadState] = useState("loading");
@@ -641,12 +702,13 @@ function AnalyticsPage() {
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([openEvents(), openSources(), openManifest()])
-      .then(([nextEvents, nextSources, nextManifest]) => {
+    Promise.all([openEvents(), openSources(), openManifest(), openEpisodes().catch(() => null)])
+      .then(([nextEvents, nextSources, nextManifest, nextEpisodes]) => {
         if (cancelled) return;
         setEvents(nextEvents);
         setSources(nextSources);
         setManifest(nextManifest);
+        setEpisodes(nextEpisodes);
         setLoadState("available");
       })
       .catch(() => {
@@ -654,6 +716,7 @@ function AnalyticsPage() {
         setEvents([]);
         setSources([]);
         setManifest(null);
+        setEpisodes(null);
         setLoadState("error");
       });
 
@@ -819,6 +882,7 @@ function AnalyticsPage() {
     { key: "five_year_period", label: language === "it" ? "Periodo quinquennale" : "Five-year period", definition: language === "it" ? "Intervalli di calendario consecutivi, non medie mobili." : "Consecutive calendar intervals, not rolling averages." },
     { key: "decade", label: language === "it" ? "Decennio" : "Decade", definition: language === "it" ? "Intervalli di calendario di dieci anni." : "Ten-year calendar intervals." },
     { key: "specific_cause", label: language === "it" ? "Causa" : "Cause" },
+    { key: "failure_trigger", label: language === "it" ? "Evento innescante" : "Triggering event" },
     { key: "region", label: language === "it" ? "Regione" : "Region" },
     { key: "collapse_severity", label: language === "it" ? "Severità" : "Severity" },
     { key: "structural_type", label: language === "it" ? "Tipologia strutturale" : "Structural type" },
@@ -884,6 +948,38 @@ function AnalyticsPage() {
       totalRecords: filteredEvents.length,
     };
   }, [analysisMode, chartMissingLabel, chartRows, filteredEvents, language, validChartDimension]);
+  const sharedEpisodeSensitivity = useMemo(() => {
+    if (!episodes?.episodes?.length || !filteredEvents.length) return null;
+
+    const selectedIds = new Set(filteredEvents.map((event) => event.event_id));
+    const rows = episodes.episodes
+      .map((episode) => ({
+        ...episode,
+        cohort_event_ids: (episode.event_ids || []).filter((eventId) => selectedIds.has(eventId)),
+      }))
+      .filter((episode) => episode.cohort_event_ids.length > 1)
+      .map((episode) => ({
+        ...episode,
+        cohort_event_count: episode.cohort_event_ids.length,
+      }))
+      .sort((left, right) =>
+        right.cohort_event_count - left.cohort_event_count ||
+        String(left.date_start || "").localeCompare(String(right.date_start || ""))
+      );
+
+    if (!rows.length) return null;
+
+    const groupedRecords = rows.reduce((total, episode) => total + episode.cohort_event_count, 0);
+    const duplicateRecords = rows.reduce((total, episode) => total + episode.cohort_event_count - 1, 0);
+
+    return {
+      collapsedUnitCount: filteredEvents.length - duplicateRecords,
+      episodeCount: rows.length,
+      groupedRecords,
+      largestEpisode: Math.max(...rows.map((episode) => episode.cohort_event_count)),
+      rows,
+    };
+  }, [episodes, filteredEvents]);
   const chartTitle = language === "it"
     ? `Distribuzione per ${selectedChartDimension.label.toLowerCase()}`
     : `Distribution by ${selectedChartDimension.label.toLowerCase()}`;
@@ -1245,6 +1341,22 @@ function AnalyticsPage() {
           maximum_records_on_one_date: row.maxRecordsSameDate,
         })),
       } : null,
+      shared_episode_sensitivity: sharedEpisodeSensitivity ? {
+        unit: "published_shared_hazard_episode",
+        independent_mechanism_claim: false,
+        grouped_records: sharedEpisodeSensitivity.groupedRecords,
+        published_episode_count: sharedEpisodeSensitivity.episodeCount,
+        units_after_grouping: sharedEpisodeSensitivity.collapsedUnitCount,
+        rows: sharedEpisodeSensitivity.rows.map((episode) => ({
+          date_end: episode.date_end,
+          date_start: episode.date_start,
+          episode_id: episode.episode_id,
+          episode_type: episode.episode_type,
+          records_in_cohort: episode.cohort_event_count,
+          event_ids: episode.cohort_event_ids,
+          regions: episode.regions,
+        })),
+      } : null,
       groups: chartRows.map((row) => ({
         key: row.key,
         label: row.label,
@@ -1277,6 +1389,7 @@ function AnalyticsPage() {
         "Advanced diagnostics describe the curated database only; no population inference or hypothesis test is performed.",
         "Source counts measure documentary volume, not source independence, reliability or causal certainty.",
         ...(temporalSensitivity ? ["Distinct documented dates are a clustering sensitivity measure and are not asserted to be independent hazard episodes."] : []),
+        ...(sharedEpisodeSensitivity ? ["Published shared episodes are a clustering control; they do not establish an identical structural failure mechanism across member records."] : []),
         ...(analysisMode === "comparison" && comparisonOverlap > 0
           ? [`Cohorts overlap by ${comparisonOverlap} records and must not be interpreted as independent samples.`]
           : []),
@@ -1383,7 +1496,7 @@ function AnalyticsPage() {
       const aggregateCsv = csvRows(chartDataRows());
       const recordsCsv = objectsCsv(packageEvents);
       const sourcesCsv = objectsCsv(packageSources);
-      const readme = `# ARCUS Open Research Package\n\nGenerated: ${generatedAt.toISOString()}\nRelease: ${manifest?.version || "not declared"}\nAnalysis: ${analysisMode}\nRecord scope: ${selectedSlice ? "selected analytical result" : analysisMode === "comparison" ? "union of cohorts A and B" : "cohort A"}\nRecords included: ${packageEvents.length}\nSources included: ${packageSources.length}\n\n## Contents\n\n- manifest.json — query, denominators, completeness, limitations and SHA-256 checksums.\n- aggregate.csv — values represented by the current analysis.\n- figure-caption.txt — generated descriptive caption with interpretation boundary.\n- records.csv — public ARCUS records behind the current result, including cohort membership.\n- sources.csv — public source records linked to the included events.\n- citation.txt — release and citation guidance.\n${chartSvgRef.current && analysisMode !== "crosstab" && chartView === "bars" ? "- figure.svg — current vector figure.\n" : ""}\n## Interpretation boundary\n\nThese files describe documented ARCUS collapse records. They do not represent the Italian bridge inventory and must not be used as estimates of collapse risk, probability or national prevalence. Missing values are retained and are not imputed. A/B percentage-point differences are descriptive; overlapping cohorts are not independent samples. Source counts measure documentary volume, not source independence, reliability or causal certainty.\n`;
+      const readme = `# ARCUS Open Research Package\n\nGenerated: ${generatedAt.toISOString()}\nRelease: ${manifest?.version || "not declared"}\nAnalysis: ${analysisMode}\nRecord scope: ${selectedSlice ? "selected analytical result" : analysisMode === "comparison" ? "union of cohorts A and B" : "cohort A"}\nRecords included: ${packageEvents.length}\nSources included: ${packageSources.length}\n\n## Contents\n\n- manifest.json — query, denominators, completeness, limitations and SHA-256 checksums.\n- aggregate.csv — values represented by the current analysis.\n- figure-caption.txt — generated descriptive caption with interpretation boundary.\n- records.csv — public ARCUS records behind the current result, including cohort membership.\n- sources.csv — public source records linked to the included events.\n${sharedEpisodeSensitivity ? "- shared-episodes.json — published multi-collapse episode groups intersecting the current cohort.\n" : ""}- citation.txt — release and citation guidance.\n${chartSvgRef.current && analysisMode !== "crosstab" && chartView === "bars" ? "- figure.svg — current vector figure.\n" : ""}\n## Interpretation boundary\n\nThese files describe documented ARCUS collapse records. They do not represent the Italian bridge inventory and must not be used as estimates of collapse risk, probability or national prevalence. Missing values are retained and are not imputed. A/B percentage-point differences are descriptive; overlapping cohorts are not independent samples. Source counts measure documentary volume, not source independence, reliability or causal certainty. Published shared episodes control clustering but do not prove an identical failure mechanism.\n`;
       const citation = `ARCUS Open Research Release ${manifest?.version || "version not declared"}.\nResearch package generated ${generatedAt.toISOString()}.\nUse the formal dataset citation supplied on the ARCUS Data Access page; this query package does not replace the canonical release citation.\n`;
       const packageFiles = [
         { name: "README.md", content: readme },
@@ -1393,6 +1506,25 @@ function AnalyticsPage() {
         { name: "sources.csv", content: sourcesCsv },
         { name: "citation.txt", content: citation },
       ];
+
+      if (sharedEpisodeSensitivity) {
+        packageFiles.push({
+          name: "shared-episodes.json",
+          content: `${JSON.stringify({
+            caveat: episodes?.methodology?.caveat || null,
+            episodes: sharedEpisodeSensitivity.rows.map((episode) => ({
+              assignment_status: episode.assignment_status,
+              date_end: episode.date_end,
+              date_start: episode.date_start,
+              episode_id: episode.episode_id,
+              episode_type: episode.episode_type,
+              event_ids_in_cohort: episode.cohort_event_ids,
+              regions: episode.regions,
+            })),
+            release: episodes?.release || manifest?.version || null,
+          }, null, 2)}\n`,
+        });
+      }
 
       if (chartSvgRef.current && analysisMode !== "crosstab" && chartView === "bars") {
         packageFiles.push({
@@ -1732,7 +1864,11 @@ function AnalyticsPage() {
               <div className="analytics-unit-control" aria-label={language === "it" ? "Unità di analisi" : "Unit of analysis"}>
                 <span>{language === "it" ? "Unità di analisi" : "Unit of analysis"}</span>
                 <strong>{language === "it" ? "Record documentati" : "Documented records"}</strong>
-                <small>{language === "it" ? "Gli episodi indipendenti non sono pubblicati nella release Open." : "Independent episodes are not published in the Open release."}</small>
+                <small>
+                  {language === "it"
+                    ? "Gli episodi multi-crollo supportati sono pubblicati come controllo di clustering, non come sostituti automatici dei record."
+                    : "Supported multi-collapse episodes are published as a clustering control, not as automatic record replacements."}
+                </small>
               </div>
             </div>
 
@@ -2306,6 +2442,63 @@ function AnalyticsPage() {
                 </details>
               )}
 
+              {sharedEpisodeSensitivity && hasAnalyticalOutput && (
+                <details className="analytics-shared-episodes analytics-result-disclosure" open>
+                  <summary className="analytics-shared-episodes-heading">
+                    <div>
+                      <span>DOCUMENTED EPISODE CONTROL</span>
+                      <h5>
+                        {language === "it"
+                          ? "Crolli riconducibili allo stesso episodio"
+                          : "Collapses linked to the same episode"}
+                      </h5>
+                    </div>
+                    <strong data-shared-episode-count>
+                      {sharedEpisodeSensitivity.episodeCount} {language === "it" ? "episodi" : "episodes"}
+                    </strong>
+                  </summary>
+                  <div className="analytics-shared-episodes-metrics">
+                    <div>
+                      <span>{language === "it" ? "Record raggruppati" : "Grouped records"}</span>
+                      <strong>{sharedEpisodeSensitivity.groupedRecords}</strong>
+                    </div>
+                    <div>
+                      <span>{language === "it" ? "Unità dopo il controllo" : "Units after control"}</span>
+                      <strong>{sharedEpisodeSensitivity.collapsedUnitCount}</strong>
+                    </div>
+                    <div>
+                      <span>{language === "it" ? "Gruppo più esteso" : "Largest group"}</span>
+                      <strong>{sharedEpisodeSensitivity.largestEpisode}</strong>
+                    </div>
+                  </div>
+                  <div className="analytics-shared-episode-list">
+                    {sharedEpisodeSensitivity.rows.map((episode) => (
+                      <article data-episode-type={episode.episode_type} key={episode.episode_id}>
+                        <div>
+                          <span>
+                            {episode.episode_type === "flood"
+                              ? (language === "it" ? "Alluvione" : "Flood")
+                              : episode.episode_type === "earthquake"
+                                ? (language === "it" ? "Sisma" : "Earthquake")
+                                : episode.episode_type === "landslide"
+                                  ? (language === "it" ? "Frana" : "Landslide")
+                                  : (language === "it" ? "Evento naturale" : "Natural hazard")}
+                          </span>
+                          <strong>{formatEpisodeDate(episode.date_start, language)}</strong>
+                          <small>{episode.regions.join(" · ")}</small>
+                        </div>
+                        <b>{episode.cohort_event_count} {language === "it" ? "record" : "records"}</b>
+                      </article>
+                    ))}
+                  </div>
+                  <p>
+                    {language === "it"
+                      ? `Nella coorte selezionata i ${filteredEvents.length} record corrispondono a ${sharedEpisodeSensitivity.collapsedUnitCount} unità se ciascun episodio pubblicato viene contato una sola volta. È una lettura di sensibilità: il raggruppamento è limitato a episodi multi-crollo supportati da fonti condivise o da registri curati e non dimostra uno stesso meccanismo strutturale.`
+                      : `In the selected cohort, ${filteredEvents.length} records correspond to ${sharedEpisodeSensitivity.collapsedUnitCount} units when each published episode is counted once. This is a sensitivity reading: grouping is limited to multi-collapse episodes supported by shared sources or curated registries and does not demonstrate an identical structural mechanism.`}
+                  </p>
+                </details>
+              )}
+
               {hasAnalyticalOutput && (
                 <details className="analytics-advanced-diagnostics analytics-result-disclosure" aria-labelledby="analytics-advanced-diagnostics-title">
                   <summary className="analytics-advanced-diagnostics-heading">
@@ -2415,7 +2608,53 @@ function AnalyticsPage() {
               <AnalyticsCoverageList fields={analytics.coverageFields} language={language} />
             </details>
 
-            <details className="analytics-panel analytics-cohort-records analytics-result-disclosure">
+            <details className="analytics-panel analytics-documentary-basis analytics-result-disclosure">
+              <summary className="analytics-panel-heading">
+                <div>
+                  <span>{language === "it" ? "Base documentale" : "Documentary basis"}</span>
+                  <h3>{language === "it" ? "Provenienza delle fonti nella coorte" : "Source provenance in the cohort"}</h3>
+                </div>
+                <b>n={formatValue(analytics.totalSources)}</b>
+              </summary>
+              <div className="analytics-source-role-grid">
+                {[
+                  ["official", language === "it" ? "Ufficiali / tecniche" : "Official / technical"],
+                  ["scientific", language === "it" ? "Scientifiche" : "Scientific"],
+                  ["news", language === "it" ? "Notizie" : "News"],
+                  ["other", language === "it" ? "Altre" : "Other"],
+                ].map(([role, label]) => (
+                  <article key={role}>
+                    <span>{label}</span>
+                    <strong>{formatValue(sourceDepthA.roleCounts[role])}</strong>
+                    <small>{percentage(sourceDepthA.roleCounts[role], analytics.totalSources)}% {language === "it" ? "delle fonti" : "of sources"}</small>
+                  </article>
+                ))}
+              </div>
+              <div className="analytics-source-event-coverage">
+                <div>
+                  <span>{language === "it" ? "Record con fonte ufficiale / tecnica" : "Records with official / technical source"}</span>
+                  <strong>{sourceDepthA.eventCoverage.official}/{analytics.totalEvents}</strong>
+                  <b>{percentage(sourceDepthA.eventCoverage.official, analytics.totalEvents)}%</b>
+                </div>
+                <div>
+                  <span>{language === "it" ? "Record con fonte scientifica" : "Records with scientific source"}</span>
+                  <strong>{sourceDepthA.eventCoverage.scientific}/{analytics.totalEvents}</strong>
+                  <b>{percentage(sourceDepthA.eventCoverage.scientific, analytics.totalEvents)}%</b>
+                </div>
+                <div>
+                  <span>{language === "it" ? "Record senza fonti collegate" : "Records without linked sources"}</span>
+                  <strong>{sourceDepthA.eventCoverage.noSources}/{analytics.totalEvents}</strong>
+                  <b>{percentage(sourceDepthA.eventCoverage.noSources, analytics.totalEvents)}%</b>
+                </div>
+              </div>
+              <p className="analytics-source-boundary">
+                {language === "it"
+                  ? "Le categorie descrivono la provenienza editoriale. Il numero di fonti non misura indipendenza, affidabilità o certezza causale e non viene trasformato in un punteggio."
+                  : "Categories describe editorial provenance. Source counts do not measure independence, reliability or causal certainty and are not converted into a score."}
+              </p>
+            </details>
+
+            <details className="analytics-panel analytics-cohort-records analytics-result-disclosure is-wide">
               <summary className="analytics-panel-heading">
                 <div>
                   <span>ARCUS ATLAS</span>

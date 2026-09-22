@@ -15,6 +15,9 @@ import {
   HYDRAULIC_GEOMETRY_SOURCE_URL,
 } from "../src/utils/hydraulicGeometry.js";
 import {
+  STRUCTURAL_TYPE_VALUES,
+} from "../src/utils/structuralTaxonomy.js";
+import {
   localizedBridgeDisplayName,
   localizedEventDescription,
   localizedCrossingName,
@@ -23,6 +26,7 @@ import {
 import {
   buildOpenEventCitation,
   buildOpenEventDossier,
+  buildOpenEventResearchSummary,
 } from "../src/utils/openEventDossier.js";
 
 const checks = [];
@@ -35,6 +39,7 @@ async function check(name, assertion) {
 const events = await getOpenEvents();
 const sources = await getOpenSources();
 const manifest = await getOpenResource("manifest");
+const episodes = await getOpenResource("episodes");
 const taxonomy = await getOpenResource("taxonomy");
 const audit = await getOpenResource("quality-audit");
 const idMapping = await getOpenResource("id-mapping");
@@ -64,12 +69,40 @@ await check("static-open-release-fallback-matches-promoted-release", () => {
   const publicManifest = JSON.parse(
     fs.readFileSync("public/data/open-release/manifest.json", "utf8")
   );
+  const publicEpisodes = JSON.parse(
+    fs.readFileSync("public/data/open-release/episodes.json", "utf8")
+  );
 
   assert.equal(publicManifest.version, manifest.version);
   assert.equal(publicEvents.release, manifest.version);
   assert.equal(publicSources.release, manifest.version);
   assert.deepEqual(publicEvents.events, events);
   assert.deepEqual(publicSources.sources, sources);
+  assert.deepEqual(publicEpisodes, episodes);
+});
+
+await check("shared-episodes-are-source-supported-and-public-safe", () => {
+  const eventIds = new Set(events.map((event) => event.event_id));
+  const memberships = episodes.episodes.flatMap((episode) => episode.event_ids);
+
+  assert.equal(episodes.release, manifest.version);
+  assert.equal(episodes.summary.episode_count, 14);
+  assert.equal(episodes.summary.grouped_event_count, 108);
+  assert.equal(episodes.summary.by_type.flood, 13);
+  assert.equal(episodes.summary.by_type.earthquake, 1);
+  assert.equal(manifest.resources.episodes, "episodes.json");
+  assert.equal(manifest.shared_episode_count, 14);
+  assert.equal(manifest.shared_episode_event_count, 108);
+  assert.equal(new Set(memberships).size, memberships.length);
+  assert.equal(memberships.every((eventId) => eventIds.has(eventId)), true);
+  assert.equal(episodes.episodes.every((episode) => episode.event_count > 1), true);
+  assert.equal(episodes.episodes.every((episode) => [
+    "curated_hazard_registry",
+    "supported_by_shared_sources",
+  ].includes(episode.assignment_status)), true);
+  assert.equal(episodes.episodes.some((episode) =>
+    episode.grouping_basis.includes("temporal_regional_inference")
+  ), false);
 });
 
 await check("professional-hydraulic-geometry-is-source-backed-and-private", () => {
@@ -109,7 +142,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.3");
+  assert.equal(manifest.version, "arcus-open-2026.5");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v2");
 });
@@ -161,7 +194,7 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 });
 
 await check("taxonomy-and-evidence-classes", () => {
-  assert.equal(taxonomy.taxonomy.length, 57);
+  assert.equal(taxonomy.taxonomy.length, 63);
   assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 4);
   assert.equal(events.filter((event) => event.failure_process).length, 213);
   assert.equal(events.filter((event) => event.component_involved).length, 211);
@@ -170,6 +203,27 @@ await check("taxonomy-and-evidence-classes", () => {
       .every((event) => event.hydraulic_intelligence?.failure_process === null || !event.hydraulic_intelligence),
     true
   );
+});
+
+await check("structural-types-use-resistant-systems-only", () => {
+  const publishedValues = new Set(
+    events.map((event) => event.structural_type).filter(Boolean)
+  );
+  const taxonomyValues = taxonomy.taxonomy
+    .filter((item) => item.field === "structural_type")
+    .map((item) => item.value);
+
+  assert.deepEqual(taxonomyValues, STRUCTURAL_TYPE_VALUES);
+  assert.equal(
+    [...publishedValues].every((value) => STRUCTURAL_TYPE_VALUES.includes(value)),
+    true
+  );
+  assert.equal(events.filter((event) => event.structural_type === null).length, 6);
+  assert.equal(events.filter((event) => event.structural_type === "Beam bridge").length, 225);
+  assert.equal(events.filter((event) => event.structural_type === "Arch bridge").length, 21);
+  assert.equal(publishedValues.has("Viaduct"), false);
+  assert.equal(publishedValues.has("Overpass"), false);
+  assert.equal(publishedValues.has("Masonry"), false);
 });
 
 await check("url-reference-separation", () => {
@@ -337,7 +391,9 @@ await check("single-event-dossier-respects-open-boundary", () => {
     releaseVersion: manifest.version,
   });
   const dossier = buildOpenEventDossier({
+    dataCutoff: manifest.data_cutoff,
     event,
+    license: manifest.license,
     permalink,
     releaseCitation: manifest.citation,
     releaseVersion: manifest.version,
@@ -345,13 +401,32 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.3/);
+  assert.match(citation, /arcus-open-2026\.5/);
   assert.equal(dossier.release, manifest.version);
+  assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
+  assert.equal(dossier.shared_episode, null);
+  assert.equal(dossier.release_metadata.data_cutoff, manifest.data_cutoff);
+  assert.equal(dossier.release_metadata.license.id, "CC-BY-4.0");
   assert.equal(dossier.permalink, permalink);
   assert.equal(dossier.event.event_id, event.event_id);
   assert.equal(Object.hasOwn(dossier.event, "customer_project_id"), false);
   assert.equal(Object.hasOwn(dossier.event, "normalized_mitigation_score"), false);
   assert.equal(Object.hasOwn(dossier.sources[0], "notes"), false);
+  assert.equal(dossier.research_metadata.documentary_basis.linked_sources, 1);
+  assert.equal(
+    Object.values(dossier.research_metadata.documentary_basis.source_composition)
+      .reduce((total, value) => total + value, 0),
+    1
+  );
+
+  const zeroOutcomeSummary = buildOpenEventResearchSummary({
+    event: { ...event, injuries: 0, victims: 0 },
+    sources: [source],
+  });
+  const outcome = zeroOutcomeSummary.completeness.groups
+    .find((group) => group.id === "observed_outcome");
+  assert.equal(outcome.missing_fields.includes("victims"), false);
+  assert.equal(outcome.missing_fields.includes("injuries"), false);
 });
 
 await check("frontend-product-boundary", () => {

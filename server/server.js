@@ -2476,7 +2476,7 @@ async function routeRequest(request, response) {
   }
 
   const openResourceMatch = url.pathname.match(
-    /^\/api\/open\/(manifest|taxonomy|data-dictionary|changelog|statistics|quality-audit|id-mapping)$/
+    /^\/api\/open\/(manifest|taxonomy|data-dictionary|changelog|statistics|quality-audit|id-mapping|episodes)$/
   );
 
   if (openResourceMatch) {

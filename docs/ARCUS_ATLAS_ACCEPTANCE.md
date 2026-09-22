@@ -42,7 +42,7 @@ The rainfall builder now rejects null, non-numeric, negative or incomplete/incor
 
 `npm run test:atlas-ui` uses Chromium against the running local server (`ARCUS_TEST_BASE_URL`, default `http://127.0.0.1:5173`). It covers desktop 1280×800, tablet 768×1024, mobile 390×844 and small mobile 360×640; overview/selection/dossier layout; marker and sidebar selection; current/history/bridge/source tabs; cache reuse across distant events; CSV and event JSON downloads; keyboard focus and Escape; review/approximate-coordinate states; explicit HTTP 503 failures followed by retry and recovery. The failure cases are deliberately intercepted test responses; normal scenarios use real local published data.
 
-Final result: **passed** for the implemented scope. All 11 browser scenarios passed, with 12 screenshots, no unexpected local request failures or uncaught browser errors, and no external request failures in the final network-enabled run. Manual screenshot inspection covered the national overview, visible selected marker, dossier layout and current/history controls. User zoom is preserved while toggling the sidebar.
+Final result: **passed** for the implemented scope. All 16 browser checks passed, with 20 screenshots, no unexpected local request failures or uncaught browser errors, and no external request failures in the final network-enabled run. Manual screenshot inspection covered the national overview, visible selected marker, shared-episode panel, dossier layout and current/history controls. User zoom is preserved while toggling the sidebar.
 
 Checks passed: `test:event-context-loading`, `test:event-weather-context`, `test:event-hydraulic-context`, `test:event-territorial-context`, `test:event-hazard-history`, `test:event-media`, `test:open-release`, `test:atlas-ui`, `lint`, `build`, and `git diff --check`. Build emitted a plugin-timing advisory without build errors.
 
@@ -55,3 +55,53 @@ Screenshots and machine-readable results are generated in `outputs/atlas-accepta
 - Cache reuse is verified by request counts, not a claimed performance percentile or external load test.
 - Basemap/font availability still depends on their external providers. A successful test run does not guarantee future provider uptime.
 - The Open release's 74 historical warnings remain in its audit; this work neither republishes the release nor edits the master.
+
+## Research legibility refinement — 21 September 2026
+
+The full event page now exposes a field-level compilation summary in the
+**Sources and quality** tab. Identity/location, failure mechanism, bridge
+profile and observed outcome are reported separately, with available and
+missing fields made explicit. Numeric zero and boolean false remain valid
+observations and are not counted as missing.
+
+The same surface publishes the stable event identifier, Open release version,
+data cutoff, licence and full record citation. The downloadable event dossier
+uses `arcus-open-event-dossier-v3` and includes these release metadata plus the
+machine-readable completeness and source-composition summary. The calculation
+is descriptive only: it is not a quality, reliability, safety or model-readiness
+score.
+
+The dedicated record page uses a persistent section navigator. On wide screens,
+record quality is presented as a compact horizontal audit, completeness and
+citation share one editorial row, and documentary sources use the full page
+width. Tablet and mobile layouts collapse progressively without hiding fields
+or introducing horizontal scrolling.
+
+Open Analytics now exposes documentary provenance for every filtered cohort:
+source counts by official/technical, scientific, news and other roles, together
+with event-level official/scientific coverage and records without linked
+sources. Documentary volume remains explicitly separated from source
+independence, reliability and causal certainty.
+
+Verification passed: `test:open-release`, `test:open-production`,
+`test:backend`, `test:atlas-ui`, `test:analytics-ui`, `lint`, `build` and
+`git diff --check`. Dedicated visual checks are generated as
+`outputs/atlas-acceptance/desktop-research-quality.png` and
+`outputs/atlas-acceptance/desktop-shared-episode.png`.
+
+## Shared hazard episode control — 22 September 2026
+
+The Open release now includes `episodes.json`, a deliberately conservative
+projection of shared hazard episodes. Publication is limited to multi-collapse
+groups supported by shared documentary sources or a curated hazard registry;
+singletons, date-only matches and unsupported temporal-regional inferences are
+excluded. The current release publishes 14 groups (13 flood episodes and one
+earthquake episode), covering 108 event records.
+
+For member records, the Atlas dossier identifies the shared episode, its date,
+territorial coverage and other linked records. The interface explicitly states
+that episode membership controls clustering and does not establish an identical
+structural failure mechanism. Open Analytics reports the number of records,
+published episodes and the sensitivity count obtained when every published
+episode is counted once. The same data and caveat are included in event dossiers
+and reproducible research packages.

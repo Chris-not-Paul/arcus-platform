@@ -1,3 +1,5 @@
+import { STRUCTURAL_TYPE_VALUES } from "./structuralTaxonomy.js";
+
 export const PROJECT_BRIDGE_PROFILE_VERSION =
   "arcus-project-bridge-profile-v1";
 
@@ -36,17 +38,7 @@ export const PROJECT_BRIDGE_PROFILE_OPTIONS = Object.freeze({
     "Masonry",
     "Timber",
   ]),
-  structural_type: Object.freeze([
-    "Beam bridge",
-    "Arch bridge",
-    "Truss",
-    "Frame",
-    "Viaduct",
-    "Overpass",
-    "Masonry",
-    "Cable-stayed",
-    "Suspension",
-  ]),
+  structural_type: STRUCTURAL_TYPE_VALUES,
 });
 
 function normalizedKey(value) {

@@ -6,12 +6,28 @@ import { chromium } from "playwright";
 const base = process.env.ARCUS_TEST_BASE_URL || "http://127.0.0.1:5173";
 const events = (await (await fetch(`${base}/api/open/events`)).json()).events;
 const sources = (await (await fetch(`${base}/api/open/sources`)).json()).sources;
+const episodesResponse = await fetch(`${base}/api/open/episodes`);
+const episodesPayload = episodesResponse.ok
+  ? episodesResponse
+  : await fetch(`${base}/data/open-release/episodes.json`);
+const episodes = await episodesPayload.json();
 const commonHydraulic = events.filter((event) => {
   const year = Number(String(event.date || "").slice(0, 4));
   return year >= 2000 && year <= 2022 && event.specific_cause === "Hydraulic";
 });
 const commonHydraulicIds = new Set(commonHydraulic.map((event) => event.event_id));
 const commonHydraulicSources = sources.filter((source) => commonHydraulicIds.has(source.event_id));
+const sourceRole = (source) => {
+  const role = String(source.source_role || "").toLowerCase();
+  if (role.includes("official") || role.includes("technical") || role === "primary") return "official";
+  if (role.includes("scientific")) return "scientific";
+  if (role.includes("news") || role === "secondary") return "news";
+  return "other";
+};
+const commonHydraulicRoleCounts = commonHydraulicSources.reduce((counts, source) => {
+  counts[sourceRole(source)] += 1;
+  return counts;
+}, { news: 0, official: 0, other: 0, scientific: 0 });
 const hydraulicEvents = events.filter((event) => event.specific_cause === "Hydraulic");
 const hydraulicSeasonCounts = hydraulicEvents.reduce((counts, event) => {
   const month = Number(String(event.date || "").slice(5, 7));
@@ -89,9 +105,13 @@ try {
   await goToWorkspaceStep(3);
   assert.match(await page.locator(".analytics-cohort-boundary").innerText(), /non costituisce una stima di rischio/i);
   await page.locator(".analytics-explorer-detail-grid details").nth(0).locator("summary").click();
-  await page.locator(".analytics-explorer-detail-grid details").nth(1).locator("summary").click();
+  await page.locator(".analytics-documentary-basis > summary").click();
   const constructionCoverage = page.locator(".analytics-coverage-row").filter({ hasText: "Anno di costruzione" });
   assert.match(await constructionCoverage.innerText(), /mancanti/);
+  const officialSources = page.locator(".analytics-source-role-grid article").filter({ hasText: "Ufficiali / tecniche" });
+  assert.match(await officialSources.innerText(), new RegExp(`\\b${commonHydraulicRoleCounts.official}\\b`));
+  assert.match(await page.locator(".analytics-documentary-basis").innerText(), /non misura indipendenza, affidabilità o certezza causale/i);
+  await page.locator(".analytics-cohort-records > summary").click();
   assert.ok(await page.locator(".analytics-record-links a").count() > 0);
 
   await goToWorkspaceStep(2);
@@ -126,6 +146,8 @@ try {
   assert.equal(Number(await autumnSensitivity.locator("td").nth(0).innerText()), hydraulicSeasonCounts.get("Autunno"));
   assert.equal(Number(await autumnSensitivity.locator("td").nth(2).innerText()), hydraulicSeasonDates.get("autumn").size);
   assert.match(await chartBuilder.locator("[data-temporal-total-dates]").innerText(), new RegExp(`^${hydraulicDistinctDates.size} date`, "i"));
+  assert.equal(Number(await chartBuilder.locator("[data-shared-episode-count]").innerText().then((value) => value.split(" ")[0])), episodes.summary.episode_count - 1);
+  assert.match(await chartBuilder.locator(".analytics-shared-episodes > p").innerText(), /non dimostra uno stesso meccanismo strutturale/i);
   assert.match(await chartBuilder.locator("[data-figure-caption]").innerText(), new RegExp(`${hydraulicSeasonDates.get("autumn").size}/${hydraulicDistinctDates.size} date`));
 
   const seasonManifestPromise = page.waitForEvent("download");
@@ -213,13 +235,14 @@ try {
   const packageDownload = await packageDownloadPromise;
   const archive = new AdmZip(await packageDownload.path());
   const archiveNames = archive.getEntries().map((entry) => entry.entryName).sort();
-  assert.deepEqual(archiveNames, ["README.md", "aggregate.csv", "citation.txt", "figure-caption.txt", "figure.svg", "manifest.json", "records.csv", "sources.csv"]);
+  assert.deepEqual(archiveNames, ["README.md", "aggregate.csv", "citation.txt", "figure-caption.txt", "figure.svg", "manifest.json", "records.csv", "shared-episodes.json", "sources.csv"]);
   const packageManifest = JSON.parse(archive.readAsText("manifest.json"));
   assert.equal(packageManifest.package.format, "ARCUS Open Research Package 1.0");
   assert.equal(packageManifest.package.records_included, events.length);
-  assert.equal(packageManifest.package.files.length, 7);
+  assert.equal(packageManifest.package.files.length, 8);
   assert.ok(packageManifest.package.files.every((file) => /^[a-f0-9]{64}$/.test(file.sha256)));
   assert.match(archive.readAsText("README.md"), /must not be used as estimates of collapse risk/i);
+  assert.match(archive.readAsText("shared-episodes.json"), /published_shared_hazard_episode|episode_id/);
   assert.equal(archive.readAsText("figure-caption.txt").trim(), figureCaption);
 
   await goToWorkspaceStep(2);
@@ -331,6 +354,7 @@ try {
       "dynamic verifiable figure caption",
       "interpretation checks",
       "entropy and documentary-depth diagnostics",
+      "source-role composition and event-level documentary coverage",
       "checksummed ZIP research package",
       "two-variable contingency table",
       "Cramer's V with sparsity diagnostics",

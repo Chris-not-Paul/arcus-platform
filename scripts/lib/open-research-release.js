@@ -13,9 +13,13 @@ import {
   HYDRAULIC_TAXONOMY_VERSION,
   normalizeHydraulicIntelligence,
 } from "../../src/utils/hydraulicIntelligence.js";
+import {
+  STRUCTURAL_TYPE_VALUES,
+  STRUCTURAL_TYPE_VALUE_SET,
+} from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.3";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.5";
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
@@ -592,6 +596,35 @@ export function normalizeResearchDataset({
     }
   }));
 
+  eventRows.forEach((row) => {
+    const value = cleanString(row.structural_type);
+
+    if (value && !STRUCTURAL_TYPE_VALUE_SET.has(value)) {
+      errors.push({
+        code: "invalid_structural_type",
+        event_id: arcusEventId(row.event_id),
+        field: "structural_type",
+        value,
+      });
+    }
+  });
+
+  const structuralTaxonomy = taxonomyIndex.get("structural_type") || new Set();
+  STRUCTURAL_TYPE_VALUES
+    .filter((value) => !structuralTaxonomy.has(value))
+    .forEach((value) => errors.push({
+      code: "missing_structural_taxonomy_value",
+      field: "structural_type",
+      value,
+    }));
+  [...structuralTaxonomy]
+    .filter((value) => !STRUCTURAL_TYPE_VALUE_SET.has(value))
+    .forEach((value) => errors.push({
+      code: "invalid_structural_taxonomy_value",
+      field: "structural_type",
+      value,
+    }));
+
   const legacyEvents = legacyEventsPath && fs.existsSync(legacyEventsPath)
     ? JSON.parse(fs.readFileSync(legacyEventsPath, "utf8"))
     : [];
@@ -830,10 +863,9 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Applied the September 2026 editorial corrections from MASTER_RESEARCH.xlsx.",
-      "Excluded two records that source review determined were not bridge-collapse events.",
-      "Expanded the public source registry while preserving canonical ITxx.xx.xx identifiers.",
-      "Aligned taxonomy validation with the canonical master field names while retaining legacy alias compatibility.",
+      "Expanded documented structural-system coverage in the revised master while retaining the controlled load-bearing-system vocabulary.",
+      "Reduced unavailable structural_type values from 22 to 6 through source-supported editorial classification.",
+      "Retained the release gate that rejects non-structural labels and taxonomy drift.",
     ],
     delta,
   };

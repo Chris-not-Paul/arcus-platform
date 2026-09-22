@@ -26,7 +26,7 @@ and is not represented as an active public service in the initial Open release.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.3`: 261 events and 716 documentary sources. It does not include
+`arcus-open-2026.5`: 261 events and 716 documentary sources. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 

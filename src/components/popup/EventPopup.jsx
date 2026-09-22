@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import { causeColors } from "../../utils/colors";
 import useLanguage from "../../context/useLanguage";
 import {
@@ -11,6 +12,8 @@ import taxonomyLabel from "../../utils/taxonomyLabels";
 import {
   buildOpenEventCitation,
   buildOpenEventDossier,
+  buildOpenEventResearchSummary,
+  classifyOpenSource,
 } from "../../utils/openEventDossier";
 import { researchEventId } from "../../utils/eventIdentity";
 import EventHydraulicContext from "./EventHydraulicContext";
@@ -20,6 +23,30 @@ import EventTerritorialContext from "./EventTerritorialContext";
 import useEventContextResource from "./useEventContextResource";
 import EventResourceState from "./EventResourceState";
 import "./EventPopup.css";
+
+function DossierSurface({ children, closeLabel, onClose, standalone }) {
+  if (standalone) {
+    return (
+      <main className="arcus-event-dossier-page-shell" id="main-content">
+        {children}
+      </main>
+    );
+  }
+
+  return createPortal(
+    <div className="arcus-event-dossier-layer">
+      <button
+        aria-label={closeLabel}
+        className="arcus-event-dossier-backdrop"
+        tabIndex="-1"
+        type="button"
+        onClick={onClose}
+      />
+      {children}
+    </div>,
+    document.body
+  );
+}
 
 function eventTitle(event, language) {
   const documentedName = localizedBridgeDisplayName(event, language);
@@ -60,21 +87,7 @@ function sourceHost(source) {
 }
 
 function sourceCategory(source) {
-  const role = String(source?.source_role || "").trim().toLowerCase();
-
-  if (role.includes("official") || role.includes("technical") || role === "primary") {
-    return "official";
-  }
-
-  if (role.includes("scientific")) {
-    return "scientific";
-  }
-
-  if (role.includes("news") || role === "secondary") {
-    return "news";
-  }
-
-  return "other";
+  return classifyOpenSource(source);
 }
 
 function sourceCategoryPriority(source) {
@@ -155,7 +168,16 @@ function localizedValue(group, value, language) {
       },
       location: {
         approximate: "Approximate",
+        "Approximate / frazione-level": "Approximate · hamlet level",
+        "Approximate / locality-level": "Approximate · locality level",
+        "Approximate / site-level": "Approximate · site level",
+        "Approximate / unresolved": "Approximate · unresolved",
         exact: "Exact",
+        "Exact / curated": "Exact · curated",
+        "Exact / external reference": "Exact · external reference",
+        "Exact / same structure": "Exact · same structure",
+        "Grouped / collective location": "Grouped · collective location",
+        "High-confidence source match": "High-confidence source match",
         unspecified: "Unspecified",
       },
       provinceStatus: {
@@ -208,7 +230,16 @@ function localizedValue(group, value, language) {
     },
     location: {
       approximate: "Approssimata",
+      "Approximate / frazione-level": "Approssimata · livello frazione",
+      "Approximate / locality-level": "Approssimata · livello località",
+      "Approximate / site-level": "Approssimata · livello sito",
+      "Approximate / unresolved": "Approssimata · sito non risolto",
       exact: "Esatta",
+      "Exact / curated": "Esatta · verificata da ARCUS",
+      "Exact / external reference": "Esatta · riferimento esterno",
+      "Exact / same structure": "Esatta · stessa struttura",
+      "Grouped / collective location": "Raggruppata · localizzazione collettiva",
+      "High-confidence source match": "Corrispondenza con fonte ad alta confidenza",
       unspecified: "Non specificata",
     },
     process: {
@@ -266,19 +297,23 @@ function localizedValue(group, value, language) {
 function EventPopup({
   atlasMode = "open",
   event,
+  episodeEvents = [],
   hazardProfile = null,
+  onOpenDossier = null,
   openRelease = null,
   professionalMode = false,
   reliability = null,
   relatedSources = [],
+  sharedEpisode = null,
   sourcesStatus = "available",
+  standalone = false,
   vulnerability = null,
 }) {
   const { language } = useLanguage();
   const [descriptionExpanded, setDescriptionExpanded] =
     useState(false);
   const [dossierExpanded, setDossierExpanded] =
-    useState(false);
+    useState(standalone);
   const [activeDossierTab, setActiveDossierTab] =
     useState("event");
   const [activeContextTab, setActiveContextTab] =
@@ -336,6 +371,16 @@ function EventPopup({
     bridgeCoverageNote: it
       ? "La copertura descrive la compilazione del record, non la qualità o la sicurezza dell’opera."
       : "Coverage describes record completion, not asset quality or safety.",
+    recordCoverage: it ? "Copertura del record" : "Record coverage",
+    recordCoverageNote: it
+      ? "La percentuale indica soltanto quanti campi del tracciato di ricerca sono compilati. Non è un voto di qualità, affidabilità o sicurezza."
+      : "The percentage only states how many research fields are populated. It is not a quality, reliability or safety score.",
+    availableFields: it ? "campi disponibili" : "fields available",
+    missingFields: it ? "Mancanti" : "Missing",
+    citableIdentity: it ? "Identità citabile" : "Citable identity",
+    dataCutoff: it ? "Dati aggiornati al" : "Data cutoff",
+    license: it ? "Licenza" : "Licence",
+    citationLabel: it ? "Citazione del record" : "Record citation",
     priorityEvent: it ? "Evento prioritario" : "Priority event",
     professionalLayer:
       atlasMode === "enterprise"
@@ -392,6 +437,16 @@ function EventPopup({
     language
   );
   const sourceCount = relatedSources.length;
+  const relatedEpisodeEvents = episodeEvents.filter(
+    (item) => item.event_id !== event.event_id
+  );
+  const episodeTypeLabel = sharedEpisode?.episode_type === "flood"
+    ? (it ? "Episodio alluvionale" : "Flood episode")
+    : sharedEpisode?.episode_type === "earthquake"
+      ? (it ? "Episodio sismico" : "Seismic episode")
+      : sharedEpisode?.episode_type === "landslide"
+        ? (it ? "Episodio franoso" : "Landslide episode")
+        : (it ? "Episodio naturale condiviso" : "Shared natural-hazard episode");
   const sourceGroups = [
     {
       id: "official",
@@ -422,7 +477,40 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.3";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.5";
+  const researchSummary = buildOpenEventResearchSummary({
+    event,
+    sources: orderedSources,
+  });
+  const researchGroupLabels = {
+    identity: it ? "Identità e localizzazione" : "Identity and location",
+    failure_mechanism: it ? "Meccanismo di cedimento" : "Failure mechanism",
+    bridge_profile: it ? "Profilo del ponte" : "Bridge profile",
+    observed_outcome: it ? "Esito osservato" : "Observed outcome",
+  };
+  const researchFieldLabels = {
+    bridge_crossing_name: it ? "nome attraversamento" : "crossing name",
+    bridge_crossing_type: it ? "tipo attraversamento" : "crossing type",
+    collapse_severity: it ? "severità del collasso" : "collapse severity",
+    component_involved: it ? "componente coinvolta" : "component involved",
+    construction_year_numeric: it ? "anno di costruzione" : "construction year",
+    date: it ? "data" : "date",
+    destination_use: it ? "uso infrastrutturale" : "infrastructure use",
+    event_id: "ID",
+    failure_cause_evidence: it ? "evidenza della causa" : "cause evidence",
+    failure_process: it ? "processo di cedimento" : "failure process",
+    failure_trigger: it ? "innesco" : "trigger",
+    injuries: it ? "feriti" : "injuries",
+    latitude: it ? "latitudine" : "latitude",
+    longitude: it ? "longitudine" : "longitude",
+    material_type: it ? "materiale" : "material",
+    municipality: it ? "comune" : "municipality",
+    province: it ? "provincia" : "province",
+    region: it ? "regione" : "region",
+    specific_cause: it ? "causa specifica" : "specific cause",
+    structural_type: it ? "tipologia strutturale" : "structural type",
+    victims: it ? "vittime" : "fatalities",
+  };
   const isHydraulicEvent = event.specific_cause === "Hydraulic";
   const hasCauseRelevantTerritorialContext = ["Hydraulic", "Landslide", "Earthquake"].includes(event.specific_cause);
   const hydraulicResource = useEventContextResource("hydraulic", recordId, dossierExpanded && isHydraulicEvent, event);
@@ -599,11 +687,11 @@ function EventPopup({
       label: text.locationQuality,
       value: localizedValue(
         "location",
-        event.exact_location === true
+        event.location_precision || (event.exact_location === true
           ? "exact"
           : event.exact_location === false
             ? "approximate"
-            : "unspecified",
+            : "unspecified"),
         language
       ),
     },
@@ -708,7 +796,7 @@ function EventPopup({
   const selectedContext = contextTabs.find((tab) => tab.id === visibleContextTab);
 
   useEffect(() => {
-    if (!dossierExpanded) {
+    if (!dossierExpanded || standalone) {
       return undefined;
     }
 
@@ -745,7 +833,7 @@ function EventPopup({
       document.removeEventListener("keydown", closeOnEscape);
       dossierToggle?.focus();
     };
-  }, [dossierExpanded]);
+  }, [dossierExpanded, standalone]);
 
   useEffect(() => {
     if (!researchActionStatus) {
@@ -763,6 +851,11 @@ function EventPopup({
   const eventPermalink = () => {
     const url = new URL(window.location.href);
     url.hash = "";
+
+    if (standalone) {
+      return url.toString();
+    }
+
     url.search = "";
     url.searchParams.set("event", event.event_slug || recordId);
     return url.toString();
@@ -795,10 +888,13 @@ function EventPopup({
   const exportEventDossier = () => {
     const permalink = eventPermalink();
     const dossier = buildOpenEventDossier({
+      dataCutoff: openRelease?.data_cutoff,
       event,
+      license: openRelease?.license,
       permalink,
       releaseCitation: openRelease?.citation,
       releaseVersion,
+      sharedEpisode,
       sources: orderedSources,
     });
     const blob = new Blob(
@@ -815,6 +911,13 @@ function EventPopup({
     URL.revokeObjectURL(objectUrl);
     setResearchActionStatus(text.dossierExported);
   };
+
+  const researchCitation = buildOpenEventCitation({
+    event,
+    permalink: eventPermalink(),
+    releaseCitation: openRelease?.citation,
+    releaseVersion,
+  });
 
   const selectDossierTab = (tabId, tabIndex) => {
     setActiveDossierTab(tabId);
@@ -844,8 +947,10 @@ function EventPopup({
     <article
       className={`arcus-event-card ${
         professionalMode ? "is-professional" : ""
-      }`}
+      } ${standalone ? "is-standalone" : ""}`}
     >
+      {!standalone && (
+        <>
       <header className="arcus-event-layerbar">
         <span>
           {professionalMode
@@ -938,6 +1043,11 @@ function EventPopup({
         ref={dossierToggleRef}
         type="button"
         onClick={() => {
+          if (typeof onOpenDossier === "function") {
+            onOpenDossier(event);
+            return;
+          }
+
           if (dossierExpanded) {
             setDossierExpanded(false);
             return;
@@ -958,23 +1068,22 @@ function EventPopup({
           {dossierExpanded ? "−" : "+"}
         </strong>
       </button>
+        </>
+      )}
 
-      {dossierExpanded && createPortal(
-        <div className="arcus-event-dossier-layer">
-          <button
-            aria-label={text.closeDossier}
-            className="arcus-event-dossier-backdrop"
-            tabIndex="-1"
-            type="button"
-            onClick={() => setDossierExpanded(false)}
-          />
+      {dossierExpanded && (
+        <DossierSurface
+          closeLabel={text.closeDossier}
+          onClose={() => setDossierExpanded(false)}
+          standalone={standalone}
+        >
           <aside
             aria-label={`${text.publicRecord}: ${title}`}
             aria-labelledby={dossierTitleId}
-            aria-modal="true"
-            className="arcus-event-dossier"
+            aria-modal={standalone ? undefined : "true"}
+            className={`arcus-event-dossier ${standalone ? "is-page" : ""}`}
             ref={dossierRef}
-            role="dialog"
+            role={standalone ? "region" : "dialog"}
           >
             <header className="arcus-event-dossier-header">
               <div>
@@ -992,13 +1101,15 @@ function EventPopup({
                   {event.province ? `, ${event.province}` : ""}
                 </p>
               </div>
-              <button
-                aria-label={text.closeDossier}
-                type="button"
-                onClick={() => setDossierExpanded(false)}
-              >
-                ×
-              </button>
+              {!standalone && (
+                <button
+                  aria-label={text.closeDossier}
+                  type="button"
+                  onClick={() => setDossierExpanded(false)}
+                >
+                  ×
+                </button>
+              )}
             </header>
 
             {!professionalMode && (
@@ -1155,6 +1266,70 @@ function EventPopup({
                     <p>{text.evidenceNote}</p>
                   </section>
 
+                  {sharedEpisode && (
+                    <section className="arcus-event-shared-episode" data-shared-episode={sharedEpisode.episode_id}>
+                      <header>
+                        <div>
+                          <span>{it ? "Controllo di indipendenza" : "Independence control"}</span>
+                          <h3>{episodeTypeLabel}</h3>
+                        </div>
+                        <strong>{sharedEpisode.event_count} {it ? "crolli" : "collapses"}</strong>
+                      </header>
+                      <div className="arcus-event-shared-episode-summary">
+                        <div>
+                          <span>{it ? "Intervallo documentato" : "Documented interval"}</span>
+                          <strong>
+                            {formatDate(sharedEpisode.date_start, language) || text.na}
+                            {sharedEpisode.date_end && sharedEpisode.date_end !== sharedEpisode.date_start
+                              ? ` – ${formatDate(sharedEpisode.date_end, language)}`
+                              : ""}
+                          </strong>
+                        </div>
+                        <div>
+                          <span>{it ? "Territori coinvolti" : "Territories involved"}</span>
+                          <strong>{sharedEpisode.regions?.join(" · ") || text.na}</strong>
+                        </div>
+                        <div>
+                          <span>{it ? "Base del raggruppamento" : "Grouping basis"}</span>
+                          <strong>
+                            {sharedEpisode.assignment_status === "curated_hazard_registry"
+                              ? (it ? "Registro curato" : "Curated registry")
+                              : (it ? "Fonti documentali condivise" : "Shared documentary sources")}
+                          </strong>
+                        </div>
+                      </div>
+                      {relatedEpisodeEvents.length > 0 && (
+                        <details>
+                          <summary>
+                            {it
+                              ? `Apri gli altri ${relatedEpisodeEvents.length} record dell’episodio`
+                              : `Open the other ${relatedEpisodeEvents.length} episode records`}
+                          </summary>
+                          <div className="arcus-event-shared-episode-list">
+                            {relatedEpisodeEvents.map((relatedEvent) => (
+                              <Link
+                                key={relatedEvent.event_id}
+                                to={`/atlas/events/${encodeURIComponent(relatedEvent.event_slug || researchEventId(relatedEvent))}`}
+                              >
+                                <span>{researchEventId(relatedEvent)}</span>
+                                <strong>{eventTitle(relatedEvent, language)}</strong>
+                                <small>
+                                  {formatDate(relatedEvent.date, language)} · {relatedEvent.municipality || text.na}
+                                  {relatedEvent.province ? `, ${relatedEvent.province}` : ""}
+                                </small>
+                              </Link>
+                            ))}
+                          </div>
+                        </details>
+                      )}
+                      <p>
+                        {it
+                          ? "Questi record sono letti come parte dello stesso episodio ai fini del controllo del clustering. Il raggruppamento non implica che i ponti abbiano avuto lo stesso meccanismo di cedimento e non costituisce una stima di rischio."
+                          : "These records are treated as part of the same episode for clustering control. The grouping does not imply an identical bridge failure mechanism and is not a risk estimate."}
+                      </p>
+                    </section>
+                  )}
+
                   {professionalMode && (
                     <section className="arcus-event-risk">
                       <span>{text.riskReading}</span>
@@ -1306,6 +1481,64 @@ function EventPopup({
                           </div>
                         ))}
                       </div>
+                      <div className="arcus-event-record-coverage">
+                        <div className="arcus-event-record-coverage-heading">
+                          <div>
+                            <span>{text.recordCoverage}</span>
+                            <strong>
+                              {researchSummary.completeness.available_fields}/
+                              {researchSummary.completeness.total_fields}
+                            </strong>
+                          </div>
+                          <b>{researchSummary.completeness.coverage_percent}%</b>
+                        </div>
+                        <p>{text.recordCoverageNote}</p>
+                        <div className="arcus-event-record-coverage-grid">
+                          {researchSummary.completeness.groups.map((group) => (
+                            <article key={group.id}>
+                              <header>
+                                <strong>{researchGroupLabels[group.id]}</strong>
+                                <b>{group.available}/{group.total}</b>
+                              </header>
+                              <progress
+                                aria-label={`${researchGroupLabels[group.id]}: ${group.coverage_percent}%`}
+                                max="100"
+                                value={group.coverage_percent}
+                              />
+                              <small>
+                                {group.missing_fields.length > 0
+                                  ? `${text.missingFields}: ${group.missing_fields.map((field) => researchFieldLabels[field] || field).join(", ")}`
+                                  : `${group.available} ${text.availableFields}`}
+                              </small>
+                            </article>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="arcus-event-citable-identity">
+                        <span>{text.citableIdentity}</span>
+                        <dl>
+                          <div>
+                            <dt>ID</dt>
+                            <dd>{recordId}</dd>
+                          </div>
+                          <div>
+                            <dt>Release</dt>
+                            <dd>{releaseVersion}</dd>
+                          </div>
+                          <div>
+                            <dt>{text.dataCutoff}</dt>
+                            <dd>{openRelease?.data_cutoff || text.na}</dd>
+                          </div>
+                          <div>
+                            <dt>{text.license}</dt>
+                            <dd>{openRelease?.license?.id || "CC BY 4.0"}</dd>
+                          </div>
+                        </dl>
+                        <div>
+                          <strong>{text.citationLabel}</strong>
+                          <p>{researchCitation}</p>
+                        </div>
+                      </div>
                     </section>
                   )}
 
@@ -1399,8 +1632,7 @@ function EventPopup({
               )}
             </div>
           </aside>
-        </div>,
-        document.body
+        </DossierSurface>
       )}
     </article>
   );

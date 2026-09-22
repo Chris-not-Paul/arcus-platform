@@ -212,6 +212,24 @@ export function openSources() {
   });
 }
 
+export function openEpisodes() {
+  return withTimeout(async (signal) => {
+    const response = await fetch(`${openReleaseBaseUrl}/episodes.json`, {
+      credentials: "same-origin",
+      signal,
+    });
+    if (!response.ok) {
+      throw new Error(`ARCUS Open episodes failed: ${response.status}`);
+    }
+    return response.json();
+  }, 15000).then((data) => {
+    if (!Array.isArray(data.episodes) || !data.event_to_episode) {
+      throw new Error("Invalid Open episodes response");
+    }
+    return data;
+  });
+}
+
 export function openResource(resource) {
   return openReleaseJson(`/api/open/${resource}`, `${resource}.json`);
 }
@@ -231,6 +249,7 @@ export const openDownloadUrls = Object.freeze({
 export const openResourceUrls = Object.freeze({
   changelog: `${openReleaseBaseUrl}/changelog.json`,
   dataDictionary: `${openReleaseBaseUrl}/data-dictionary.json`,
+  episodes: `${openReleaseBaseUrl}/episodes.json`,
   idMapping: `${openReleaseBaseUrl}/id-mapping.json`,
   manifest: `${openReleaseBaseUrl}/manifest.json`,
   qualityAudit: `${openReleaseBaseUrl}/quality-audit.json`,

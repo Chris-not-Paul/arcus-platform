@@ -22,9 +22,9 @@
         {
           "field": "bridge_name",
           "type": "string",
-          "populated": 66,
-          "missing": 195,
-          "coverage": 0.2529
+          "populated": 67,
+          "missing": 194,
+          "coverage": 0.2567
         },
         {
           "field": "cause_category",
@@ -50,23 +50,23 @@
         {
           "field": "construction_year",
           "type": "string",
-          "populated": 32,
-          "missing": 229,
-          "coverage": 0.1226
+          "populated": 33,
+          "missing": 228,
+          "coverage": 0.1264
         },
         {
           "field": "construction_year_numeric",
           "type": "number",
-          "populated": 31,
-          "missing": 230,
-          "coverage": 0.1188
+          "populated": 32,
+          "missing": 229,
+          "coverage": 0.1226
         },
         {
           "field": "construction_year_raw",
           "type": "string",
-          "populated": 32,
-          "missing": 229,
-          "coverage": 0.1226
+          "populated": 33,
+          "missing": 228,
+          "coverage": 0.1264
         },
         {
           "field": "curation_level",
@@ -239,9 +239,9 @@
         {
           "field": "structural_type",
           "type": "string",
-          "populated": 261,
-          "missing": 0,
-          "coverage": 1
+          "populated": 255,
+          "missing": 6,
+          "coverage": 0.977
         },
         {
           "field": "triggered",
@@ -337,26 +337,26 @@
     },
     {
       "name": "taxonomy",
-      "record_count": 57,
+      "record_count": 63,
       "fields": [
         {
           "field": "definition_it",
           "type": "string",
-          "populated": 57,
+          "populated": 63,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "field",
           "type": "string",
-          "populated": 57,
+          "populated": 63,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "value",
           "type": "string",
-          "populated": 57,
+          "populated": 63,
           "missing": 0,
           "coverage": 1
         }

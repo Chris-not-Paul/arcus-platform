@@ -1,0 +1,259 @@
+{
+  "registry_version": "arcus-event-research-enrichment-2026.09.21-pilot1",
+  "schema_version": "arcus-event-research-schema-v1",
+  "status": "source_backed_pilot_pending_domain_review",
+  "rules": [
+    "Only information explicitly supported by a reviewable source is populated.",
+    "A source-backed value remains outside production learning until domain review and a separate value audit are complete.",
+    "Post-event recovery fields are outcomes and cannot be used as pre-event matching inputs.",
+    "The research registry extends the canonical master without adding sparse experimental columns to the EVENTS sheet."
+  ],
+  "records": [
+    {
+      "event_id": "IT13.02.01",
+      "review_status": "source_backed_pending_domain_review",
+      "review_note": "The official parliamentary response supports a multi-span configuration and the recovery sequence. Total span count and foundation characteristics remain unpopulated.",
+      "fields": {
+        "bridge_configuration.span_configuration": {
+          "value": "multi_span",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "Risposta parlamentare sul ponte sul fiume Verdura",
+              "url": "https://www.senato.it/show-doc?id=813519&leg=17&part=doc_dc-ressten_rs-gentit_200180cvipda&tipodoc=Resaula",
+              "locator": "Seduta n. 352 del 13 novembre 2014: crollo di due campate"
+            }
+          ]
+        },
+        "consequences_and_recovery.recovery_action": {
+          "value": "replacement",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "Risposta parlamentare sul ponte sul fiume Verdura",
+              "url": "https://www.senato.it/show-doc?id=813519&leg=17&part=doc_dc-ressten_rs-gentit_200180cvipda&tipodoc=Resaula",
+              "locator": "ANAS definitive replacement project"
+            }
+          ]
+        },
+        "consequences_and_recovery.service_disruption_summary": {
+          "value": "A provisional bridge opened on 13 May 2013 restored two-way traffic while the definitive replacement followed a separate approval process.",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "Risposta parlamentare sul ponte sul fiume Verdura",
+              "url": "https://www.senato.it/show-doc?id=813519&leg=17&part=doc_dc-ressten_rs-gentit_200180cvipda&tipodoc=Resaula",
+              "locator": "Recovery chronology"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "IT18.08.01",
+      "review_status": "source_backed_pending_domain_review",
+      "review_note": "Initial controlled structuring from the official ministerial investigation. Exact inspection and intervention dates remain unpopulated pending field-level review.",
+      "fields": {
+        "bridge_configuration.span_configuration": {
+          "value": "multi_span",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/node/8978",
+              "locator": "Relazione, descrizione generale dell'opera"
+            }
+          ]
+        },
+        "bridge_configuration.span_count": {
+          "value": 11,
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/node/8978",
+              "locator": "Relazione, descrizione generale dell'opera"
+            }
+          ]
+        },
+        "bridge_configuration.maximum_span_m": {
+          "value": 210,
+          "evidence_state": "reported",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/node/8978",
+              "locator": "Relazione, geometria del sistema bilanciato"
+            }
+          ],
+          "note": "Published dimensions vary slightly with the adopted structural reference; retain for descriptive research pending engineering review."
+        },
+        "pre_collapse_management.pre_collapse_condition": {
+          "value": "Documented deterioration and corrosion-related defects affecting multiple structural elements in the inspection history reviewed by the ministerial commission.",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/sites/default/files/media/notizia/2018-09/Comm_Isp_Mit%20Relaz_Viadotto_Polcevera_%20parte%203.pdf",
+              "locator": "Annex 1, inspection tables 1986-2018"
+            }
+          ]
+        },
+        "pre_collapse_management.documented_warning_before_collapse": {
+          "value": true,
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/sites/default/files/media/notizia/2018-09/Comm_Isp_Mit%20Relaz_Viadotto_Polcevera_%20parte%203.pdf",
+              "locator": "Annex 1, pre-collapse inspection findings"
+            }
+          ],
+          "note": "The flag records documented pre-collapse anomaly reporting; it does not assign responsibility or establish collapse causation."
+        },
+        "consequences_and_recovery.recovery_action": {
+          "value": "replacement",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "Cerimonia di inaugurazione Ponte Genova San Giorgio",
+              "url": "https://www.commissario.ricostruzione.genova.it/node/1884",
+              "locator": "Official reconstruction commissioner notice, 3 August 2020"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "IT15.04.01",
+      "review_status": "source_backed_pending_domain_review",
+      "review_note": "The official emergency programme supports the bridge configuration and event chronology. Foundation and pre-collapse management fields remain unpopulated.",
+      "fields": {
+        "bridge_configuration.span_configuration": {
+          "value": "multi_span",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0306",
+              "title": "Dossier Himera",
+              "url": "https://www.mit.gov.it/node/149",
+              "locator": "Piano-cronoprogramma degli interventi, premise"
+            }
+          ]
+        },
+        "bridge_configuration.span_count": {
+          "value": 41,
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0306",
+              "title": "Piano-cronoprogramma degli interventi - Emergenza Himera I",
+              "url": "https://www.mit.gov.it/nfsmitgov/files/media/notizia/2016-02/Piano_cronoprogramma_degli_interventi____OCPC_30_5_2015_.pdf",
+              "locator": "Premessa: km 57+150-km 59+300, two separate carriageways over 41 spans"
+            }
+          ]
+        },
+        "consequences_and_recovery.reopening_date": {
+          "value": "2020-07-31",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "La Ministra De Micheli inaugura apertura viadotto Imera I",
+              "url": "https://www.mit.gov.it/comunicazione/news/la-ministra-de-micheli-inaugura-apertura-viadotto-imera-i",
+              "locator": "Official opening-to-traffic notice"
+            }
+          ]
+        },
+        "consequences_and_recovery.recovery_action": {
+          "value": "replacement",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "La Ministra De Micheli inaugura apertura viadotto Imera I",
+              "url": "https://www.mit.gov.it/comunicazione/news/la-ministra-de-micheli-inaugura-apertura-viadotto-imera-i",
+              "locator": "Official opening-to-traffic notice"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "IT20.04.02",
+      "review_status": "source_backed_pending_domain_review",
+      "review_note": "Configuration and reconstruction history are documented. Foundation classification is intentionally withheld until the historic foundation system is reviewed against the controlled taxonomy.",
+      "fields": {
+        "bridge_configuration.span_configuration": {
+          "value": "multi_span",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "PIARC Italia - Rapporto finale CT 1.5 Gestione delle catastrofi",
+              "url": "https://piarc-italia.it/wp-content/uploads/2023/11/Quaderno-CT-1.5-56-pp.pdf",
+              "locator": "Case study Albiano Magra, page 25"
+            }
+          ]
+        },
+        "bridge_configuration.span_count": {
+          "value": 5,
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "PIARC Italia - Rapporto finale CT 1.5 Gestione delle catastrofi",
+              "url": "https://piarc-italia.it/wp-content/uploads/2023/11/Quaderno-CT-1.5-56-pp.pdf",
+              "locator": "Case study Albiano Magra, page 25"
+            }
+          ]
+        },
+        "bridge_configuration.maximum_span_m": {
+          "value": 51.5,
+          "evidence_state": "reported",
+          "sources": [
+            {
+              "title": "Nuovo Ponte sul Magra",
+              "url": "https://www.politecnica.it/portfolio/nuovo-ponte-sul-magra-mobilita-sostenibile-politecnica/",
+              "locator": "Historic bridge description"
+            }
+          ]
+        },
+        "pre_collapse_management.prior_intervention_summary": {
+          "value": "Post-war reconstruction in 1949 retained the pre-existing foundations, abutments and piers; the superstructure was rebuilt as five statically determinate three-hinged arches.",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "PIARC Italia - Rapporto finale CT 1.5 Gestione delle catastrofi",
+              "url": "https://piarc-italia.it/wp-content/uploads/2023/11/Quaderno-CT-1.5-56-pp.pdf",
+              "locator": "Case study Albiano Magra, page 25"
+            }
+          ]
+        },
+        "consequences_and_recovery.reopening_date": {
+          "value": "2022-04-30",
+          "evidence_state": "reported",
+          "sources": [
+            {
+              "title": "Albiano ha di nuovo il suo ponte - press review archived by the Extraordinary Commissioner",
+              "url": "https://www.commissarioalbiano.gov.it/sites/default/files/2022-05/20220430-LaVoceApuana-1.pdf",
+              "locator": "Opening-to-traffic report dated 30 April 2022"
+            }
+          ]
+        },
+        "consequences_and_recovery.recovery_action": {
+          "value": "replacement",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "title": "Ricostruzione Viadotto",
+              "url": "https://commissarioalbiano.gov.it/attuazione/ricostruzione-viadotto",
+              "locator": "Official reconstruction programme"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

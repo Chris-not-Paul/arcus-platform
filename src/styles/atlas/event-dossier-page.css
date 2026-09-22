@@ -1,0 +1,215 @@
+.event-dossier-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(82, 115, 109, 0.08), transparent 210px),
+    var(--arcus-paper-soft);
+  color: var(--arcus-ink);
+}
+
+.event-dossier-page__bar {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 58px;
+  padding: 9px clamp(16px, 3vw, 42px);
+
+  border-bottom: 1px solid rgba(32, 40, 38, 0.16);
+  background: rgba(252, 251, 247, 0.95);
+  backdrop-filter: blur(12px);
+}
+
+.event-dossier-page__brand,
+.event-dossier-page__back {
+  color: var(--arcus-night);
+  text-decoration: none;
+}
+
+.event-dossier-page__brand {
+  display: grid;
+  grid-template-columns: 24px auto;
+  align-items: center;
+  column-gap: 9px;
+}
+
+.event-dossier-page__brand img {
+  grid-row: 1 / 3;
+  width: 22px;
+  height: 22px;
+}
+
+.event-dossier-page__brand span {
+  font-family: var(--arcus-font-sans);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+}
+
+.event-dossier-page__brand small,
+.event-dossier-page__back {
+  font-family: var(--arcus-font-mono);
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.event-dossier-page__brand small {
+  color: var(--arcus-ink-muted);
+}
+
+.event-dossier-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid rgba(32, 40, 38, 0.17);
+  background: var(--arcus-paper-warm);
+}
+
+.event-dossier-page__back:hover,
+.event-dossier-page__back:focus-visible {
+  border-color: var(--arcus-bronze);
+  color: var(--arcus-bronze);
+}
+
+.event-dossier-page__state {
+  display: grid;
+  justify-items: start;
+  width: min(720px, calc(100% - 32px));
+  margin: clamp(70px, 12vh, 140px) auto;
+  padding: clamp(28px, 5vw, 58px);
+  border: 1px solid rgba(32, 40, 38, 0.16);
+  background: var(--arcus-paper-warm);
+}
+
+.event-dossier-page__state > span {
+  color: var(--arcus-bronze);
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.13em;
+}
+
+.event-dossier-page__state h1 {
+  margin: 12px 0;
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-display);
+  font-size: clamp(30px, 5vw, 54px);
+  font-weight: 400;
+}
+
+.event-dossier-page__state p {
+  max-width: 58ch;
+  color: var(--arcus-ink-soft);
+  line-height: 1.65;
+}
+
+.event-dossier-page__state button,
+.event-dossier-page__state a {
+  margin-top: 18px;
+  padding: 10px 15px;
+  border: 1px solid var(--arcus-night);
+  background: var(--arcus-night);
+  color: var(--arcus-paper-warm);
+  cursor: pointer;
+  font-family: var(--arcus-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.arcus-event-card.is-standalone {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.arcus-event-dossier-page-shell {
+  width: 100%;
+  padding: clamp(14px, 2.4vw, 34px);
+}
+
+.arcus-event-dossier.is-page {
+  position: relative;
+  top: auto;
+  left: auto;
+
+  width: min(1440px, 100%);
+  height: auto;
+  min-height: calc(100vh - 58px - clamp(28px, 4.8vw, 68px));
+  margin: 0 auto;
+  overflow: visible;
+
+  transform: none;
+  animation: none;
+}
+
+.arcus-event-dossier.is-page .arcus-event-dossier-header {
+  padding: clamp(24px, 2.4vw, 34px) clamp(24px, 2.4vw, 34px) 24px;
+}
+
+.arcus-event-dossier.is-page .arcus-event-dossier-header h2 {
+  font-size: clamp(30px, 2.6vw, 39px);
+}
+
+.arcus-event-dossier.is-page .arcus-event-dossier-tabs {
+  position: sticky;
+  z-index: 30;
+  top: 58px;
+  box-shadow: 0 9px 24px rgba(23, 63, 66, 0.07);
+}
+
+.arcus-event-dossier.is-page .arcus-event-dossier-content {
+  min-height: 480px;
+  overflow: visible;
+}
+
+@media (max-width: 680px) {
+  .event-dossier-page__bar {
+    gap: 10px;
+    min-height: 54px;
+    padding: 8px 12px;
+  }
+
+  .event-dossier-page__brand small {
+    display: none;
+  }
+
+  .event-dossier-page__back {
+    padding: 8px 9px;
+    letter-spacing: 0.06em;
+  }
+
+  .arcus-event-dossier-page-shell {
+    padding: 0;
+  }
+
+  .arcus-event-dossier.is-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 54px);
+    height: auto;
+  }
+
+  .arcus-event-dossier.is-page .arcus-event-dossier-header {
+    padding: 20px;
+  }
+
+  .arcus-event-dossier.is-page .arcus-event-dossier-header h2 {
+    font-size: 27px;
+  }
+
+  .arcus-event-dossier.is-page .arcus-event-dossier-tabs {
+    top: 54px;
+  }
+}

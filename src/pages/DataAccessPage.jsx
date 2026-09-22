@@ -199,7 +199,7 @@ function DataAccessPage() {
     : copy.text;
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.3";
+    manifest?.version || "arcus-open-2026.5";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -226,6 +226,7 @@ function DataAccessPage() {
         ["DATI", "Eventi CSV", "Tabella completa per analisi statistiche e riuso.", openDownloadUrls.csv],
         ["DATI", "Eventi GeoJSON", "Record georeferenziati per GIS e analisi spaziali.", openDownloadUrls.geojson],
         ["DATI", "Fonti JSON", "Metadati delle fonti collegati agli ID degli eventi.", openResourceUrls.sources],
+        ["DATI", "Episodi condivisi JSON", "Gruppi multi-crollo supportati da fonti condivise o da registri curati, per il controllo del clustering.", openResourceUrls.episodes],
         ["VERSIONE", "Manifest", "Identità, data di rilascio, licenza e risorse della release.", openResourceUrls.manifest],
         ["SCHEMA", "Dizionario dati", "Campi, tipi, copertura e note di interpretazione.", openResourceUrls.dataDictionary],
         ["SCHEMA", "Tassonomia", "Valori controllati e definizioni operative pubblicate.", openResourceUrls.taxonomy],
@@ -237,6 +238,7 @@ function DataAccessPage() {
         ["DATA", "Events CSV", "Complete table for statistical analysis and reuse.", openDownloadUrls.csv],
         ["DATA", "Events GeoJSON", "Georeferenced records for GIS and spatial analysis.", openDownloadUrls.geojson],
         ["DATA", "Sources JSON", "Source metadata linked to event identifiers.", openResourceUrls.sources],
+        ["DATA", "Shared episodes JSON", "Multi-collapse groups supported by shared sources or curated registries for clustering control.", openResourceUrls.episodes],
         ["VERSION", "Manifest", "Release identity, date, license and resource inventory.", openResourceUrls.manifest],
         ["SCHEMA", "Data dictionary", "Fields, types, coverage and interpretation notes.", openResourceUrls.dataDictionary],
         ["SCHEMA", "Taxonomy", "Published controlled values and operational definitions.", openResourceUrls.taxonomy],

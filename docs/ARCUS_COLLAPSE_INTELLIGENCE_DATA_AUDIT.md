@@ -13,10 +13,10 @@ private-data/professional/ainop-bridge-index.json
 
 | Metric | Value |
 |---|---:|
-| Events | 253 |
-| Sources | 688 |
+| Events | 261 |
+| Sources | 716 |
 | Source coverage | 100% |
-| Events with valid coordinates | 253 |
+| Events with valid coordinates | 261 |
 | Enrichable with official hazard providers | 100% |
 
 ## Usable Fields
@@ -59,22 +59,38 @@ bridge_name
 construction_year
 ```
 
-Missing or not available as structured fields:
+The current master also contains complete structured location-precision labels,
+157 validated Hydraulic bridge-length records, 154 validated records for pier
+presence in the active riverbed and 291 curation-log entries. These resources
+are governed by the Event Research Schema rather than being flattened into the
+Open event table.
+
+Still absent from the canonical master or available only in a sparse Research
+pilot:
 
 ```text
-failure_mechanism
-component_involved
 span_count
 foundation_concept
-indicative_length_m
 ownership
-waterway as structured field
-source_quality beyond current reliability model
+pre-collapse inspection and condition
+documented prior warnings
+recovery duration and reopening outcome
 ```
 
-`span_count` remains unavailable. The Professional dataset now includes a
-separate, non-equivalent hydraulic geometry object for source-backed bridge
-length and presence of piers in the active riverbed.
+The first controlled Research enrichment pilot now structures span
+configuration for 4 cases, span count for 3, maximum span for 2, selected
+pre-collapse evidence for 1 and recovery outcomes for 4. These values remain
+outside the master and are marked as pending domain review. Their sparse
+availability does not unlock them as Learning features.
+
+The Professional dataset also includes a separate, non-equivalent Hydraulic
+geometry object for source-backed bridge length and presence of piers in the
+active riverbed. These fields remain descriptive and experimental after their
+episode-held-out value audit; they do not enter production analogue retrieval
+or strategy qualification.
+
+The controlled cross-domain profile and its current coverage are documented in
+`docs/ARCUS_EVENT_RESEARCH_SCHEMA_V1.md`.
 
 ## Input / Outcome / Evidence Split
 
@@ -123,14 +139,12 @@ Current audit:
 
 | Metric | Value |
 |---|---:|
-| Hydraulic events | 202 |
-| Trigger available | 202 |
-| Specific process available | 29 |
-| Specific component available | 0 |
-| Documented evidence | 9 |
-| Probable evidence | 18 |
-| Unspecified evidence | 175 |
-| Validation warnings | 4 |
+| Hydraulic events | 211 |
+| Trigger available | 211 |
+| Specific process available | 172 |
+| Specific component available | 166 |
+| Process unspecified | 39 |
+| Component unspecified | 45 |
 
 These fields are outcome features. They may be used for cohort interpretation after analogue retrieval, but not for retrieval, filtering, ranking, HCI, hazard signatures or route activation.
 
@@ -141,11 +155,11 @@ conservatively to ARCUS without filling gaps by inference:
 
 | Metric | Value |
 |---|---:|
-| Accepted unique ARCUS/S3 pairs | 158 |
+| Accepted unique Hydraulic ARCUS/S3 profiles | 157 |
 | Explicit source-record matches | 112 |
 | Unique coordinate + year matches | 46 |
-| Bridge length available | 158 |
-| Piers-in-active-riverbed available | 155 |
+| Bridge length available | 157 |
+| Piers-in-active-riverbed available | 154 |
 | Rejected spatial inconsistencies | 5 |
 | Rejected duplicate assignments | 3 |
 
@@ -175,8 +189,12 @@ discarding audit provenance.
 - `specific_cause` is usable but coarse.
 - `description` contains useful mechanism hints but is unstructured.
 - `construction_year` coverage is too low for primary matching.
-- component-level and failure-mechanism fields should be added as curated structured fields.
-- Hydraulic mechanism fields now exist for Hydraulic cases, but most remain unspecified and must stay outcome-only.
+- component-level and failure-process fields are now structured, with 50 and 48
+  records respectively remaining explicitly unspecified;
+- Hydraulic mechanism fields remain outcome-only and must not be used as if
+  they were pre-collapse asset characteristics;
+- the next evidence priority is bridge configuration and pre-collapse
+  management history, not additional synthetic scores.
 
 ## Analog Matching Criticalities
 

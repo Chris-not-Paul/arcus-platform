@@ -72,6 +72,16 @@ function hydraulicValue(result, language) {
 
 function landslideValue(result, language) {
   if (result?.status === "available") {
+    if (result.highest_hazard_class) {
+      return language === "it"
+        ? `Classe ${result.highest_hazard_class}`
+        : `Class ${result.highest_hazard_class}`;
+    }
+
+    if (result.attention_area) {
+      return language === "it" ? "Area di attenzione" : "Attention area";
+    }
+
     return language === "it" ? "Intersezione registrata" : "Intersection recorded";
   }
 
@@ -127,9 +137,20 @@ function detailCopy(key, result, language) {
 
   if (key === "landslide") {
     if (result.status === "available") {
+      const matchedClasses = Array.isArray(result.matched_hazard_classes)
+        ? result.matched_hazard_classes.filter(Boolean)
+        : [];
+      const classes = matchedClasses.length > 0
+        ? matchedClasses.join(", ")
+        : (it ? "non specificate" : "not specified");
+      const highestClass = result.highest_hazard_class || (it ? "non specificata" : "not specified");
+      const attention = result.attention_area
+        ? (it ? " Il punto ricade inoltre in un’area di attenzione." : " The point also intersects an attention area.")
+        : "";
+
       return it
-        ? "Il punto ricade nel mosaico PAI consultato. La classe non viene pubblicata nella scheda Atlas."
-        : "The point intersects the consulted PAI mosaic. The class is not published in the Atlas dossier.";
+        ? `Classi ufficiali rilevate al punto: ${classes}. Classe più elevata rilevata: ${highestClass}.${attention}`
+        : `Official classes recorded at the point: ${classes}. Highest recorded class: ${highestClass}.${attention}`;
     }
 
     if (result.status === "no_intersection") {
@@ -145,8 +166,8 @@ function detailCopy(key, result, language) {
 
   return result.status === "available"
     ? (it
-        ? "PGA mediana MPS04, 10% di probabilità di superamento in 50 anni."
-        : "MPS04 median PGA, 10% probability of exceedance in 50 years.")
+        ? "PGA mediana MPS04, 10% di probabilità di superamento in 50 anni. È un valore puntuale di riferimento, non una classe sismica inventata da ARCUS."
+        : "MPS04 median PGA, 10% probability of exceedance in 50 years. It is a point reference value, not a seismic class invented by ARCUS.")
     : (it
         ? "Il valore non viene sostituito con uno zero o con una stima ARCUS."
         : "The value is not replaced by zero or an ARCUS estimate.");
@@ -244,8 +265,8 @@ function EventTerritorialContext({ cause, context }) {
         <strong>{it ? "Separazione delle evidenze" : "Evidence separation"}</strong>
         <p>
           {it
-            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Le classi mostrate descrivono l’intersezione cartografica attuale al punto; non ricostruiscono la classe alla data del collasso e non producono un punteggio o una valutazione di sicurezza."
-            : "Current territorial context, not historical event evidence. The displayed classes describe the current map intersection at the point; they do not reconstruct the class at the collapse date or produce a score or safety assessment."}
+            ? "Contesto territoriale corrente, non evidenza storica dell’evento. Le classi idrauliche e da frana descrivono l’intersezione cartografica attuale; per il sisma è riportata la PGA MPS04. Nessun valore ricostruisce la condizione alla data del collasso, modifica il record storico o produce una valutazione di sicurezza."
+            : "Current territorial context, not historical event evidence. Hydraulic and landslide classes describe the current map intersection; seismic context is reported as MPS04 PGA. No value reconstructs conditions at the collapse date, modifies the historical record or produces a safety assessment."}
         </p>
       </div>
 

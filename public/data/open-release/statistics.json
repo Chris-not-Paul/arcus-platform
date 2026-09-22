@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.3",
+  "release": "arcus-open-2026.5",
   "sample_size": 261,
   "source_count": 716,
   "interpretation": "Counts and percentages are observed frequencies in the ARCUS Open Research database, not collapse probabilities or causal estimates.",
@@ -7,7 +7,7 @@
     "failure_process": 48,
     "component_involved": 50,
     "failure_cause_evidence": 0,
-    "construction_year_numeric": 230
+    "construction_year_numeric": 229
   },
   "temporal": {
     "2000": 46,
@@ -185,22 +185,20 @@
     "PC": 55
   },
   "structures": {
-    "Beam bridge": 206,
-    "Arch bridge": 15,
-    "Viaduct": 14,
-    "Overpass": 13,
+    "Beam bridge": 225,
+    "Arch bridge": 21,
     "Truss": 7,
-    "Frame": 3,
-    "Masonry": 1,
-    "Cable-stayed": 1,
-    "Suspension": 1
+    "Unspecified": 6,
+    "Cable-stayed": 2
   },
   "materials": {
-    "Reinforced concrete": 224,
-    "Steel": 18,
-    "Masonry": 15,
-    "Prestressed concrete": 2,
-    "Timber": 2
+    "Reinforced concrete": 207,
+    "Steel": 19,
+    "Masonry": 19,
+    "Prestressed concrete": 12,
+    "Timber": 2,
+    "Plain concrete": 1,
+    "Steel-concrete composite": 1
   },
   "evidence_level": {
     "Documented": 127,

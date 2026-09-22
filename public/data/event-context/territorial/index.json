@@ -1,6 +1,6 @@
 {
   "schema_version": "arcus-open-territorial-context-v1",
-  "release": "arcus-open-2026.3",
+  "release": "arcus-open-2026.5",
   "context_role": "current_official_context_at_documented_collapse_location",
   "caveat": "Current official hazard context at the documented collapse location; not retrospective causal proof, a safety classification or a risk score.",
   "rights_note": "ARCUS publishes a release-bound contextual synthesis. Underlying official datasets remain subject to the respective provider terms and attribution requirements.",

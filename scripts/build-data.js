@@ -2,10 +2,12 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 import { readXlsxSheet } from "./lib/xlsx-reader.js";
+import { buildEventResearchArtifacts } from "./build-event-research-profiles.js";
 import {
   buildOpenResearchRelease,
   normalizeResearchDataset,
 } from "./lib/open-research-release.js";
+import { buildOpenSharedEpisodes } from "./lib/open-shared-episodes.js";
 import {
   buildSourceReliabilityByEvent,
   buildTerritoryProfiles,
@@ -901,6 +903,18 @@ function saveProfessionalApiData() {
       },
       {
         description:
+          "Controlled event research profiles separating record precision, pre-event configuration, episode identity and post-event consequences.",
+        access: "controlled_research_workflow",
+        resource: "event_research_profiles",
+      },
+      {
+        description:
+          "Field-level availability and learning-use gates for the Event Research Schema.",
+        access: "controlled_research_workflow",
+        resource: "event_research_readiness_audit",
+      },
+      {
+        description:
           "Professional analogue retrieval, historical outcome summaries and mitigation evidence workbench.",
         access: "controlled_professional_workflow",
         resource: "collapse_intelligence",
@@ -1749,14 +1763,45 @@ async function buildData() {
       outputRoot: openReleaseRoot,
       provinceGeoJsonPath,
     });
+    const openSharedEpisodes = buildOpenSharedEpisodes({
+      events: openRelease.events,
+      landslideRegistry: JSON.parse(fs.readFileSync(landslideOutcomeRegistryPath, "utf8")),
+      release: openRelease.manifest.version,
+      seismicRegistry: JSON.parse(fs.readFileSync(seismicOutcomeRegistryPath, "utf8")),
+      sources: openRelease.sources,
+    });
+
+    fs.writeFileSync(
+      path.join(openRelease.releaseDirectory, "episodes.json"),
+      `${JSON.stringify(openSharedEpisodes, null, 2)}\n`,
+      "utf8"
+    );
+    openRelease.manifest.resources.episodes = "episodes.json";
+    openRelease.manifest.shared_episode_count = openSharedEpisodes.summary.episode_count;
+    openRelease.manifest.shared_episode_event_count = openSharedEpisodes.summary.grouped_event_count;
+    openRelease.manifest.known_limitations = [
+      ...openRelease.manifest.known_limitations,
+      "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges.",
+    ];
+    fs.writeFileSync(
+      path.join(openRelease.releaseDirectory, "manifest.json"),
+      `${JSON.stringify(openRelease.manifest, null, 2)}\n`,
+      "utf8"
+    );
 
     console.log(
-      `Open Research release ${openRelease.manifest.version}: ${openRelease.events.length} events, ${openRelease.sources.length} sources`
+      `Open Research release ${openRelease.manifest.version}: ${openRelease.events.length} events, ${openRelease.sources.length} sources, ${openSharedEpisodes.summary.episode_count} shared episodes`
     );
 
     saveJson();
 
     saveProfessionalApiData();
+
+    const researchArtifacts = buildEventResearchArtifacts();
+
+    console.log(
+      `Event Research profiles: ${researchArtifacts.profiles.length} events, ${researchArtifacts.audit.summary.events_with_episode_control} episode controls`
+    );
 
     console.log(
       "ARCUS dataset successfully updated"

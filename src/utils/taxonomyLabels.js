@@ -55,20 +55,14 @@ const labels = {
     Frame: {
       it: "Telaio",
     },
-    Masonry: {
-      it: "Muratura",
-    },
-    Overpass: {
-      it: "Sovrappasso",
-    },
     Suspension: {
       it: "Ponte sospeso",
     },
     Truss: {
       it: "Reticolare",
     },
-    Viaduct: {
-      it: "Viadotto",
+    Unspecified: {
+      it: "Non documentata",
     },
   },
   use: {

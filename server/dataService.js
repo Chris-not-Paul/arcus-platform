@@ -15,6 +15,8 @@ const professionalResources = new Map([
   ["data-release", "data-release.json"],
   ["professional-sources", "professional-sources.json"],
   ["professional-events", "professional-events.json"],
+  ["event-research-profiles", "event-research-profiles.json"],
+  ["event-research-readiness-audit", "event-research-readiness-audit.json"],
   ["external-hazard-layers", "external-hazard-layers.json"],
   ["hazard-exposure-preview", "hazard-exposure-preview.json"],
   ["hydraulic-intelligence-audit", "hydraulic-intelligence-audit.json"],
@@ -33,6 +35,7 @@ const professionalResources = new Map([
 const openResources = new Map([
   ["manifest", "manifest.json"],
   ["events", "events.json"],
+  ["episodes", "episodes.json"],
   ["sources", "sources.json"],
   ["taxonomy", "taxonomy.json"],
   ["data-dictionary", "data-dictionary.json"],

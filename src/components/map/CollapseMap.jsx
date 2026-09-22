@@ -292,8 +292,10 @@ function MapFitController({
           map.unproject([target.x + offsetX, target.y + offsetY], targetZoom),
           targetZoom,
           {
-            animate: true,
-            duration: 0.65,
+            // The event dossier is a real route. A synchronous camera update
+            // keeps Leaflet teardown safe when the user opens that route while
+            // preserving the animated selected-marker treatment.
+            animate: false,
           }
         );
         return;
@@ -604,6 +606,7 @@ function CollapseMap({
   height = "100vh",
   mapStyle = "voyager",
   openRelease = null,
+  onEventOpenDossier,
   onEventSelect,
   professionalMode = false,
   publicWmsOverlays = [],
@@ -625,6 +628,7 @@ function CollapseMap({
   watchlistMarkers = [],
 }) {
   const [selectedEvent, setSelectedEvent] = useState(undefined);
+  const mapRef = useRef(null);
   const hasControlledSelection = controlledSelectedEvent !== undefined;
   const selectedEventCandidate =
     hasControlledSelection
@@ -645,6 +649,13 @@ function CollapseMap({
     }
 
     onEventSelect?.(event);
+  };
+  const handleEventOpenDossier = (event) => {
+    // End the selected-event pan while Leaflet still owns its panes. This
+    // prevents a pending animation frame from touching a removed map after
+    // React switches to the dedicated record route.
+    mapRef.current?.stop();
+    onEventOpenDossier?.(event);
   };
 
   const mapStyles = {
@@ -689,6 +700,8 @@ function CollapseMap({
 
       <MapContainer
         center={ITALY_VIEW_CENTER}
+
+        ref={mapRef}
 
         fadeAnimation={false}
 
@@ -962,6 +975,7 @@ function CollapseMap({
             atlasMode={atlasMode}
             event={activeSelectedEvent}
             hazardProfile={eventHazards[activeSelectedEvent.province] || null}
+            onOpenDossier={handleEventOpenDossier}
             openRelease={openRelease}
             professionalMode={professionalMode}
             reliability={eventReliability[activeSelectedEvent.event_id] || null}

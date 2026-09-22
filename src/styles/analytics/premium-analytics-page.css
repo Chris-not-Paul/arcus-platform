@@ -264,6 +264,12 @@
 .research-table-wrap td { padding: 11px 9px; border-bottom: 1px solid var(--research-line); text-align: left; vertical-align: top; }
 .research-table-wrap thead th { color: var(--research-muted); font-family: var(--arcus-font-mono, monospace); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
 .research-table-wrap tbody th { font-weight: 700; }
+.research-enrichment-heading { margin: 34px 0 14px; max-width: 760px; }
+.research-enrichment-heading > span { color: var(--research-accent); font-family: var(--arcus-font-mono, monospace); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.research-enrichment-heading h4 { color: var(--research-ink); font-family: var(--arcus-font-serif, serif); font-size: clamp(24px, 2.7vw, 36px); font-weight: 500; line-height: 1.05; margin: 9px 0; }
+.research-enrichment-heading p { color: var(--research-muted); line-height: 1.65; margin: 0; }
+.research-enrichment-table { border-top: 1px solid var(--research-line); }
+.research-enrichment-empty { margin-bottom: 24px; }
 
 .research-episode-list { display: grid; }
 .research-episode-list > div { display: grid; grid-template-columns: 78px 1fr; gap: 3px 12px; padding: 10px 0; border-bottom: 1px solid var(--research-line); }

@@ -13,6 +13,7 @@ import {
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AtlasPage = lazy(() => import("./pages/AtlasPage"));
+const EventDossierPage = lazy(() => import("./pages/EventDossierPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
@@ -93,6 +94,11 @@ function App() {
           <Route
             path="/atlas"
             element={<AtlasPage />}
+          />
+
+          <Route
+            path="/atlas/events/:eventSlug"
+            element={<EventDossierPage />}
           />
 
           {/* METHODOLOGY */}

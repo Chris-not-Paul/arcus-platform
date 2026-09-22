@@ -1,0 +1,294 @@
+{
+  "schema_version": "arcus-event-research-schema-v1",
+  "purpose": "Controlled research enrichment for documented bridge-collapse records. It separates pre-event characteristics, event observations and post-event consequences without converting missing or inferred information into facts.",
+  "missing_value_states": [
+    "not_assessed",
+    "not_found",
+    "not_applicable",
+    "conflicting_sources",
+    "withheld"
+  ],
+  "evidence_states": [
+    "documented",
+    "reported",
+    "inferred_reviewed",
+    "inferred_unreviewed",
+    "unknown"
+  ],
+  "visibility_levels": {
+    "O1": "Public event data approved for the Open release",
+    "R1": "Controlled Research data",
+    "P1": "Professional project output",
+    "I1": "Internal editorial evidence"
+  },
+  "rules": [
+    "Every value must retain event identity, temporal phase and evidence state.",
+    "Inferred values must never be displayed or exported as documented facts.",
+    "Post-event information is excluded from pre-event matching and predictive experiments.",
+    "Fields with insufficient coverage remain nullable and are not imputed.",
+    "Episode membership is an independence control, not proof of common causation.",
+    "A field may enter production learning only after a separate value audit and versioned approval."
+  ],
+  "fields": [
+    {
+      "key": "location_precision",
+      "group": "record_precision",
+      "phase": "record_metadata",
+      "type": "controlled_string",
+      "source": "EVENTS.location_precision",
+      "visibility": "O1",
+      "atlas_use": "sources_and_quality",
+      "analytics_use": "filter_and_completeness",
+      "learning_use": "quality_control_only"
+    },
+    {
+      "key": "coordinate_source_url",
+      "group": "record_precision",
+      "phase": "record_metadata",
+      "type": "url",
+      "source": "EVENTS.coordinate_source_url",
+      "visibility": "O1_after_source_review",
+      "atlas_use": "sources_and_quality",
+      "analytics_use": "none",
+      "learning_use": "excluded"
+    },
+    {
+      "key": "coordinate_uncertainty_m",
+      "group": "record_precision",
+      "phase": "record_metadata",
+      "type": "non_negative_number",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "dossier",
+      "analytics_use": "filter_and_sensitivity",
+      "learning_use": "quality_control_only"
+    },
+    {
+      "key": "event_date_precision",
+      "group": "record_precision",
+      "phase": "record_metadata",
+      "type": "enum",
+      "allowed_values": ["day", "month", "year", "range", "unknown"],
+      "source": "research_extension",
+      "visibility": "O1",
+      "atlas_use": "sources_and_quality",
+      "analytics_use": "filter_and_completeness",
+      "learning_use": "quality_control_only"
+    },
+    {
+      "key": "episode_id",
+      "group": "event_episode",
+      "phase": "event",
+      "type": "stable_identifier",
+      "source": "curated_or_versioned_episode_registry",
+      "visibility": "R1",
+      "atlas_use": "hidden",
+      "analytics_use": "independence_control",
+      "learning_use": "grouped_holdout_control"
+    },
+    {
+      "key": "episode_assignment_status",
+      "group": "event_episode",
+      "phase": "event",
+      "type": "controlled_string",
+      "source": "curated_or_versioned_episode_registry",
+      "visibility": "R1",
+      "atlas_use": "hidden",
+      "analytics_use": "sensitivity_and_review",
+      "learning_use": "grouped_holdout_control"
+    },
+    {
+      "key": "span_configuration",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "enum",
+      "allowed_values": ["single_span", "multi_span", "unknown"],
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "span_count",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "positive_integer",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "bridge_length_m",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "positive_number",
+      "unit": "m",
+      "source": "hydraulic_geometry",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier_research",
+      "analytics_use": "descriptive_only",
+      "learning_use": "experiment_only_pending_value_audit"
+    },
+    {
+      "key": "maximum_span_m",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "positive_number",
+      "unit": "m",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "foundation_type",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "enum",
+      "allowed_values": ["shallow", "deep", "mixed", "unknown"],
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "piers_in_active_riverbed",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "boolean",
+      "source": "hydraulic_geometry",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier_research",
+      "analytics_use": "descriptive_only",
+      "learning_use": "experiment_only_pending_value_audit"
+    },
+    {
+      "key": "active_riverbed_pier_count",
+      "group": "bridge_configuration",
+      "phase": "pre_event",
+      "type": "non_negative_integer",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "bridge_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "last_inspection_date",
+      "group": "pre_collapse_management",
+      "phase": "pre_event",
+      "type": "iso_date",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "management_dossier",
+      "analytics_use": "filter_and_timeline",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "pre_collapse_condition",
+      "group": "pre_collapse_management",
+      "phase": "pre_event",
+      "type": "controlled_string",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "management_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "documented_warning_before_collapse",
+      "group": "pre_collapse_management",
+      "phase": "pre_event",
+      "type": "boolean",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "management_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "prior_intervention_summary",
+      "group": "pre_collapse_management",
+      "phase": "pre_event",
+      "type": "string",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "management_dossier",
+      "analytics_use": "coded_categories_only",
+      "learning_use": "excluded_until_coded"
+    },
+    {
+      "key": "protective_measure_present",
+      "group": "pre_collapse_management",
+      "phase": "pre_event",
+      "type": "boolean",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "management_dossier",
+      "analytics_use": "filter_and_comparison",
+      "learning_use": "candidate_feature"
+    },
+    {
+      "key": "event_intensity_summary",
+      "group": "event_context",
+      "phase": "event",
+      "type": "structured_cause_specific_object",
+      "source": "event_context_catalogues",
+      "visibility": "O1_or_R1_by_source_rights",
+      "atlas_use": "cause_specific_context",
+      "analytics_use": "cause_specific_descriptive",
+      "learning_use": "candidate_feature_after_homogeneity_review"
+    },
+    {
+      "key": "closure_duration_days",
+      "group": "consequences_and_recovery",
+      "phase": "post_event",
+      "type": "non_negative_number",
+      "unit": "day",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "consequences_dossier",
+      "analytics_use": "resilience_analysis",
+      "learning_use": "excluded_from_pre_event_matching"
+    },
+    {
+      "key": "reopening_date",
+      "group": "consequences_and_recovery",
+      "phase": "post_event",
+      "type": "iso_date",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "consequences_dossier",
+      "analytics_use": "resilience_analysis",
+      "learning_use": "excluded_from_pre_event_matching"
+    },
+    {
+      "key": "recovery_action",
+      "group": "consequences_and_recovery",
+      "phase": "post_event",
+      "type": "enum",
+      "allowed_values": ["repair", "replacement", "demolition", "not_reopened", "unknown"],
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "consequences_dossier",
+      "analytics_use": "resilience_analysis",
+      "learning_use": "lesson_output_only"
+    },
+    {
+      "key": "service_disruption_summary",
+      "group": "consequences_and_recovery",
+      "phase": "post_event",
+      "type": "string",
+      "source": "research_extension",
+      "visibility": "R1",
+      "atlas_use": "consequences_dossier",
+      "analytics_use": "coded_categories_only",
+      "learning_use": "lesson_output_only"
+    }
+  ]
+}
