@@ -1779,10 +1779,10 @@ async function buildData() {
     openRelease.manifest.resources.episodes = "episodes.json";
     openRelease.manifest.shared_episode_count = openSharedEpisodes.summary.episode_count;
     openRelease.manifest.shared_episode_event_count = openSharedEpisodes.summary.grouped_event_count;
-    openRelease.manifest.known_limitations = [
+    openRelease.manifest.known_limitations = [...new Set([
       ...openRelease.manifest.known_limitations,
       "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges.",
-    ];
+    ])];
     fs.writeFileSync(
       path.join(openRelease.releaseDirectory, "manifest.json"),
       `${JSON.stringify(openRelease.manifest, null, 2)}\n`,

@@ -3,7 +3,7 @@
   "event_id": "IT24.10.02",
   "event_date": "2024-10-21",
   "status": "context_available",
-  "display_badge": "Autorità di Bacino Distrettuale dell’Appennino Meridionale",
+  "display_badge": "Autorita di Bacino Distrettuale dell'Appennino Meridionale",
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Cottola stream",
@@ -38,7 +38,7 @@
   "sources": [
     {
       "source_id": "southern-apennines-cottola-2024-event-catalogue",
-      "provider": "Autorità di Bacino Distrettuale dell’Appennino Meridionale",
+      "provider": "Autorita di Bacino Distrettuale dell'Appennino Meridionale",
       "title": "Valutazione preliminare del rischio alluvioni - eventi 2024",
       "role": "event_identification_and_hydrometric_coverage_review",
       "source_class": "Official/Technical",

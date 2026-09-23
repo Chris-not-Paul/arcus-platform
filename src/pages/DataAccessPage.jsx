@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
+import ArcusPageMark from "../components/brand/ArcusPageMark";
 
 import useLanguage from "../context/useLanguage";
 import {
@@ -50,7 +51,7 @@ function DataAccessPage() {
           openProfessional: "Apri Professional",
           publicTitle: "Layer Open",
           publicText:
-            "ARCUS Open Research pubblica la base scientifica validata senza account, con tassonomia, metodologia, audit e download completi.",
+            "ARCUS Open Research pubblica una base scientifica curata senza account, con tassonomia, metodologia, audit e download completi.",
           resourcesTitle: "Pacchetto scientifico della release",
           resourcesText:
             "Dati, fonti, schema, tassonomia e controlli di qualità sono accessibili separatamente per rendere verificabile ogni analisi.",
@@ -123,7 +124,7 @@ function DataAccessPage() {
           openProfessional: "Open Professional",
           publicTitle: "Open layer",
           publicText:
-            "ARCUS Open Research publishes the validated scientific baseline without an account, with taxonomy, methodology, audit and complete downloads.",
+            "ARCUS Open Research publishes a curated scientific baseline without an account, with taxonomy, methodology, audit and complete downloads.",
           resourcesTitle: "Scientific release package",
           resourcesText:
             "Data, sources, schema, taxonomy and quality controls are available separately so that every analysis can be verified.",
@@ -199,7 +200,7 @@ function DataAccessPage() {
     : copy.text;
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.5";
+    manifest?.version || "arcus-open-2026.6";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -260,6 +261,7 @@ function DataAccessPage() {
       <Navbar />
 
       <section className="data-access-hero">
+        <ArcusPageMark />
         <div className="data-access-container">
           <div className="data-access-label">
             {copy.label}

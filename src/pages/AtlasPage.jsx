@@ -923,11 +923,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.5",
+      release: openRelease?.version || "arcus-open-2026.6",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.5"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.6"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );
@@ -1301,11 +1301,11 @@ function AtlasPage() {
       id="main-content"
     >
       <PageMeta
-        title="Atlas"
+        title={language === "it" ? "Atlante dei cedimenti" : "Bridge Collapse Atlas"}
         description={
           language === "it"
-            ? "Atlante geospaziale ARCUS dei crolli dei ponti, con eventi verificati, tassonomie, timeline e fonti documentate."
-            : "ARCUS geospatial atlas of bridge collapses, with verified events, taxonomies, timeline and documented sources."
+            ? "Atlante geospaziale ARCUS dei crolli dei ponti, con eventi documentati, tassonomie, cronologia e fonti consultabili."
+            : "ARCUS geospatial atlas of documented bridge collapses, with taxonomies, timeline and inspectable sources."
         }
       />
 

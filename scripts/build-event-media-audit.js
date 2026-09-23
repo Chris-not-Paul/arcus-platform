@@ -59,7 +59,9 @@ const records = events
     const id = eventId(event);
     const eventMedia = mediaByEvent.get(id) || [];
     const embeddedMedia = eventMedia.filter(
-      (asset) => asset.rights_status === "cleared_open" && asset.file
+      (asset) =>
+        ["cleared_open", "cleared_permission"].includes(asset.rights_status) &&
+        asset.file
     );
     const linkedMedia = eventMedia.filter((asset) => asset.rights_status === "link_only");
     const decision = decisionsByEvent.get(id) || null;

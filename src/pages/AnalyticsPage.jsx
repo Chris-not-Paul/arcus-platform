@@ -13,6 +13,7 @@ import {
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
+import ArcusPageMark from "../components/brand/ArcusPageMark";
 
 import useLanguage from "../context/useLanguage";
 
@@ -363,10 +364,10 @@ function AnalyticsResearchChart({
       >
         <title>{`${title}. n=${total}`}</title>
         <rect fill="#ffffff" height={height} width={width} />
-        <text fill="#173b3c" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="700" x="18" y="30">
+        <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="20" fontWeight="700" x="18" y="30">
           {title}
         </text>
-        <text fill="#5f6f70" fontFamily="Arial, sans-serif" fontSize="12" x="18" y="51">
+        <text fill="#4d5955" fontFamily="IBM Plex Sans, sans-serif" fontSize="12" x="18" y="51">
           {language === "it" ? `Record documentati · n=${total}` : `Documented records · n=${total}`}
         </text>
 
@@ -388,15 +389,15 @@ function AnalyticsResearchChart({
               tabIndex="0"
             >
               <title>{`${row.label}: ${row.value} (${percentage(row.value, total)}%)`}</title>
-              <text fill="#263b3c" fontFamily="Arial, sans-serif" fontSize="13" x="18" y={y + 17}>
+              <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="13" x="18" y={y + 17}>
                 {label}
               </text>
-              <rect fill="#e5ecea" height="18" rx="2" width={chartWidth} x={labelWidth} y={y + 2} />
-              <rect fill="#c49040" height="18" rx="2" width={Math.max(2, barWidth)} x={labelWidth} y={y + 2} />
-              <text fill="#263b3c" fontFamily="Arial, sans-serif" fontSize="12" fontWeight="700" x={labelWidth + chartWidth + 18} y={y + 16}>
+              <rect fill="#e8e2d6" height="18" rx="2" width={chartWidth} x={labelWidth} y={y + 2} />
+              <rect fill="#a76532" height="18" rx="2" width={Math.max(2, barWidth)} x={labelWidth} y={y + 2} />
+              <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="12" fontWeight="700" x={labelWidth + chartWidth + 18} y={y + 16}>
                 {formatValue(row.value)}
               </text>
-              <text fill="#637576" fontFamily="Arial, sans-serif" fontSize="11" x={labelWidth + chartWidth + 70} y={y + 16}>
+              <text fill="#6d7772" fontFamily="IBM Plex Sans, sans-serif" fontSize="11" x={labelWidth + chartWidth + 70} y={y + 16}>
                 {percentage(row.value, total)}%
               </text>
             </g>
@@ -437,21 +438,21 @@ function AnalyticsComparisonChart({ language, onSelectRow, rows, selectedSlice, 
       >
         <title>{title}</title>
         <rect fill="#ffffff" height={height} width={width} />
-        <text fill="#173b3c" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="700" x="18" y="30">{title}</text>
-        <rect fill="#c49040" height="8" rx="2" width="24" x="18" y="49" />
-        <text fill="#5f6f70" fontFamily="Arial, sans-serif" fontSize="11" x="50" y="57">{language === "it" ? "Coorte A" : "Cohort A"}</text>
-        <rect fill="#76918b" height="8" rx="2" width="24" x="122" y="49" />
-        <text fill="#5f6f70" fontFamily="Arial, sans-serif" fontSize="11" x="154" y="57">{language === "it" ? "Coorte B" : "Cohort B"}</text>
+        <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="20" fontWeight="700" x="18" y="30">{title}</text>
+        <rect fill="#a76532" height="8" rx="2" width="24" x="18" y="49" />
+        <text fill="#4d5955" fontFamily="IBM Plex Sans, sans-serif" fontSize="11" x="50" y="57">{language === "it" ? "Coorte A" : "Cohort A"}</text>
+        <rect fill="#52736d" height="8" rx="2" width="24" x="122" y="49" />
+        <text fill="#4d5955" fontFamily="IBM Plex Sans, sans-serif" fontSize="11" x="154" y="57">{language === "it" ? "Coorte B" : "Cohort B"}</text>
 
         {rows.map((row, index) => {
           const y = 78 + index * rowHeight;
           const label = row.label.length > 32 ? `${row.label.slice(0, 29)}…` : row.label;
           return (
             <g key={row.key}>
-              <text fill="#263b3c" fontFamily="Arial, sans-serif" fontSize="13" x="18" y={y + 25}>{label}</text>
+              <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="13" x="18" y={y + 25}>{label}</text>
               {[
-                { cohort: "A", color: "#c49040", count: row.a, share: row.aShare, y: y + 3 },
-                { cohort: "B", color: "#76918b", count: row.b, share: row.bShare, y: y + 28 },
+                { cohort: "A", color: "#a76532", count: row.a, share: row.aShare, y: y + 3 },
+                { cohort: "B", color: "#52736d", count: row.b, share: row.bShare, y: y + 28 },
               ].map((bar) => (
                 <g
                   className={selectedSlice?.cohort === bar.cohort && selectedSlice?.rowKey === row.key ? "is-selected" : ""}
@@ -466,10 +467,10 @@ function AnalyticsComparisonChart({ language, onSelectRow, rows, selectedSlice, 
                   tabIndex="0"
                 >
                   <title>{`${bar.cohort}: ${row.label}, ${bar.count} (${bar.share}%)`}</title>
-                  <rect fill="#e5ecea" height="17" rx="2" width={chartWidth} x={labelWidth} y={bar.y} />
+                  <rect fill="#e8e2d6" height="17" rx="2" width={chartWidth} x={labelWidth} y={bar.y} />
                   <rect fill={bar.color} height="17" rx="2" width={Math.max(bar.count ? 2 : 0, (bar.share / maxShare) * chartWidth)} x={labelWidth} y={bar.y} />
-                  <text fill="#263b3c" fontFamily="Arial, sans-serif" fontSize="11" fontWeight="700" x={labelWidth + chartWidth + 16} y={bar.y + 13}>{formatValue(bar.count)}</text>
-                  <text fill="#637576" fontFamily="Arial, sans-serif" fontSize="10" x={labelWidth + chartWidth + 64} y={bar.y + 13}>{bar.share}%</text>
+                  <text fill="#202826" fontFamily="IBM Plex Sans, sans-serif" fontSize="11" fontWeight="700" x={labelWidth + chartWidth + 16} y={bar.y + 13}>{formatValue(bar.count)}</text>
+                  <text fill="#6d7772" fontFamily="IBM Plex Sans, sans-serif" fontSize="10" x={labelWidth + chartWidth + 64} y={bar.y + 13}>{bar.share}%</text>
                 </g>
               ))}
             </g>
@@ -1690,6 +1691,7 @@ function AnalyticsPage() {
       )}
 
       <section className="analytics-hero analytics-section">
+        <ArcusPageMark />
         <div className="analytics-hero-grid" />
         <div className="analytics-hero-overlay" />
 

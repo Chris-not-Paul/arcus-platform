@@ -13,7 +13,13 @@ const DECISIONS_PATH = path.join(
   "professional",
   "event-media-review-decisions.json"
 );
-const ALLOWED_RIGHTS = new Set(["cleared_open", "cleared_restricted", "link_only", "rejected_unknown"]);
+const ALLOWED_RIGHTS = new Set([
+  "cleared_open",
+  "cleared_permission",
+  "cleared_restricted",
+  "link_only",
+  "rejected_unknown",
+]);
 const ALLOWED_OPEN_LICENSES = new Set([
   "CC0-1.0",
   "CC-BY-2.0",
@@ -23,6 +29,7 @@ const ALLOWED_OPEN_LICENSES = new Set([
   "CC-BY-SA-4.0",
   "PDM-1.0",
 ]);
+const AUTHOR_PERMISSION_LICENSE = "ARR-AUTHOR-PERMISSION";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -89,13 +96,22 @@ for (const asset of catalog.assets) {
   }
 
   if (asset.publication_scope.includes("open") && asset.file) {
-    assert.equal(asset.rights_status, "cleared_open");
-    assert.ok(ALLOWED_OPEN_LICENSES.has(asset.license_id));
+    assert.ok(
+      ["cleared_open", "cleared_permission"].includes(asset.rights_status),
+      `${asset.media_id}: public binary requires open terms or direct publication permission`
+    );
+    if (asset.rights_status === "cleared_open") {
+      assert.ok(ALLOWED_OPEN_LICENSES.has(asset.license_id));
+    } else {
+      assert.equal(asset.license_id, AUTHOR_PERMISSION_LICENSE);
+      assert.equal(asset.license_url, null);
+      assert.ok(asset.rights_note?.trim());
+    }
     assert.ok(asset.file, `${asset.media_id}: public asset requires a local file`);
   }
 
   if (asset.file) {
-    assert.equal(asset.rights_status, "cleared_open");
+    assert.ok(["cleared_open", "cleared_permission"].includes(asset.rights_status));
     const filePath = localPath(asset.file);
     assert.ok(fs.existsSync(filePath), `${asset.media_id}: missing local file`);
     assert.equal(sha256(filePath), asset.checksum_sha256);
@@ -123,6 +139,20 @@ for (const asset of vvfWebsiteAssets) {
   assert.equal(asset.file, null);
   assert.equal(asset.original_media_url, null);
 }
+
+const directPermissionAssets = catalog.assets.filter(
+  (asset) => asset.rights_status === "cleared_permission"
+);
+assert.equal(directPermissionAssets.length, 4);
+assert.equal(
+  directPermissionAssets.every(
+    (asset) =>
+      asset.creator === "Manuel D’Angelo" &&
+      asset.license_id === AUTHOR_PERMISSION_LICENSE &&
+      asset.rights_holder === "Manuel D’Angelo"
+  ),
+  true
+);
 console.log(
   `Event media checks passed (${embeddedCount} embedded assets; ${linkOnlyCount} source-only links).`
 );

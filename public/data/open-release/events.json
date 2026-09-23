@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.5",
+  "release": "arcus-open-2026.6",
   "events": [
     {
       "event_id": "IT00.01.01",
@@ -10975,7 +10975,7 @@
       "event_id": "IT25.04.01",
       "event_slug": "mongrado-2025",
       "date": "2025-04-17",
-      "municipality": "Mongrado",
+      "municipality": "Mongrando",
       "province": "Biella",
       "province_code": "96",
       "province_key": "biella",
@@ -11013,7 +11013,7 @@
       "construction_year_numeric": 1970,
       "construction_year_raw": "1970",
       "curation_level": "Standard",
-      "description": "Total collapse of Ponte Gilino, a municipal bridge near Mongrado (Piedmont), on 17 April 2025 following severe hydraulic phenomena associated with intense rainfall and flooding of the Elvo stream. No fatalities or injuries were reported. Piena documentata; meccanismo di dettaglio non ricostruibile dalle fonti disponibili."
+      "description": "Total collapse of Ponte Gilino, a municipal bridge near Mongrando (Piedmont), on 17 April 2025 following severe hydraulic phenomena associated with intense rainfall and flooding of the Elvo stream. No fatalities or injuries were reported. Piena documentata; meccanismo di dettaglio non ricostruibile dalle fonti disponibili."
     },
     {
       "event_id": "IT25.04.02",

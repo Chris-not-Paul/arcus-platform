@@ -19,7 +19,7 @@ import {
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.5";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.6";
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
@@ -863,9 +863,9 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Expanded documented structural-system coverage in the revised master while retaining the controlled load-bearing-system vocabulary.",
-      "Reduced unavailable structural_type values from 22 to 6 through source-supported editorial classification.",
-      "Retained the release gate that rejects non-structural labels and taxonomy drift.",
+      "Corrected the municipality spelling for event IT25.04.01 from Mongrado to Mongrando in the event record and linked source note.",
+      "Retained the canonical event identifier and stable event slug so published citations and permalinks remain valid.",
+      "Preserved the source-supported structural-system coverage and controlled load-bearing-system vocabulary introduced in the previous release.",
     ],
     delta,
   };

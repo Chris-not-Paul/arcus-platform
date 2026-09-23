@@ -50,7 +50,14 @@ try {
       const result = await loadEventContext(kind, event.event_id);
       if (result) counts[kind]++;
       if (kind === "media" && result) {
-        assert.equal(result.every((asset) => asset.file && asset.rights_status === "cleared_open"), true);
+        assert.equal(
+          result.every(
+            (asset) =>
+              asset.file &&
+              ["cleared_open", "cleared_permission"].includes(asset.rights_status)
+          ),
+          true
+        );
       }
       assert.ok(contextMatchesEvent(kind, result, event), `Context matches current event: ${kind}/${event.event_id}`);
       if (result?.event_date) assert.equal(result.event_date, event.date);
@@ -59,7 +66,7 @@ try {
   }
   assert.equal(counts.territorial, events.length);
   assert.equal(counts["hazard-history"], events.filter((event) => event.exact_location).length);
-  assert.equal(counts.media, 12, "Only events with publishable images reach the Atlas media surface");
+  assert.equal(counts.media, 15, "Only events with publishable images reach the Atlas media surface");
   assert.equal(localizedBridgeDisplayName({ bridge_name: "Barberino bridge" }, "it"), "Ponte di Barberino");
   assert.equal(localizedBridgeDisplayName({ bridge_name: "Barberino bridge" }, "en"), "Barberino bridge");
   assert.equal(publicRecordDescription("Vedi B00.10.22 e IT20.10.18."), "Vedi IT00.10.22 e IT20.10.18.");

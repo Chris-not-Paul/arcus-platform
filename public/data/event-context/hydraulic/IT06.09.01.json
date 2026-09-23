@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
-      "summary_it": "Le fonti documentano la piena improvvisa del Verbone, noto anche come Crosia, e la perdita della pila centrale di un ponte a Vallecrosia, ma non pubblicano il livello o la portata. La denominazione alternativa del torrente è conservata senza attribuire un valore di colmo non documentato.",
+      "summary_it": "Le fonti documentano la piena improvvisa del Verbone, noto anche come Crosia, e la perdita della pila centrale di un ponte a Vallecrosia, ma non pubblicano livello o portata. L'identita alternativa del torrente e conservata senza inventare un colmo numerico.",
       "summary_en": "The sources document the flash flood of the Verbone, also known as Crosia, and loss of a central bridge pier at Vallecrosia but publish no stage or discharge. The alternative stream name is retained without inventing a numerical peak."
     }
   },
@@ -58,7 +58,7 @@
     }
   ],
   "curation_note": {
-    "it": "Le fonti documentano la piena improvvisa del Verbone, noto anche come Crosia, e la perdita della pila centrale di un ponte a Vallecrosia, ma non pubblicano il livello o la portata. La denominazione alternativa del torrente è conservata senza attribuire un valore di colmo non documentato.",
+    "it": "Le fonti documentano la piena improvvisa del Verbone, noto anche come Crosia, e la perdita della pila centrale di un ponte a Vallecrosia, ma non pubblicano livello o portata. L'identita alternativa del torrente e conservata senza inventare un colmo numerico.",
     "en": "The sources document the flash flood of the Verbone, also known as Crosia, and loss of a central bridge pier at Vallecrosia but publish no stage or discharge. The alternative stream name is retained without inventing a numerical peak."
   },
   "provenance": {

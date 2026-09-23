@@ -1823,7 +1823,7 @@
 
   border: 1px solid rgba(252,251,247,0.48);
   background: rgba(23,63,66,0.9);
-  color: #fff;
+  color: var(--arcus-text-on-dark);
 
   font-size: 8px;
   font-weight: 700;
@@ -3840,7 +3840,7 @@
 .arcus-event-resource-state button {
   padding: 10px 18px;
   background: var(--arcus-night, #173f42);
-  color: #fff;
+  color: var(--arcus-text-on-dark);
   border: 0;
   border-radius: 3px;
   cursor: pointer;

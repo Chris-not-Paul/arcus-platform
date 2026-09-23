@@ -21,7 +21,7 @@
     "hydrograph": null,
     "network_status": {
       "network": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
-      "summary_it": "Il record indica genericamente la SS647 a Campobasso, ma le fonti disponibili non permettono di identificare con certezza il ponte, il corso d’acqua e la sezione del presunto cedimento del 25 gennaio 2000. Senza un’identità verificabile, ARCUS non associa dati idrometrici.",
+      "summary_it": "Il record indica genericamente la SS647 a Campobasso, ma le fonti disponibili non permettono di identificare con certezza ponte, corso d'acqua e sezione del presunto cedimento del 25 gennaio 2000. Senza un'identita verificabile ARCUS non associa idrometria.",
       "summary_en": "The record generically identifies SS647 near Campobasso, but the available sources do not establish the bridge, watercourse and section of the reported 25 January 2000 failure with confidence. ARCUS assigns no hydrometry without a verifiable identity."
     }
   },
@@ -58,7 +58,7 @@
     }
   ],
   "curation_note": {
-    "it": "Il record indica genericamente la SS647 a Campobasso, ma le fonti disponibili non permettono di identificare con certezza il ponte, il corso d’acqua e la sezione del presunto cedimento del 25 gennaio 2000. Senza un’identità verificabile, ARCUS non associa dati idrometrici.",
+    "it": "Il record indica genericamente la SS647 a Campobasso, ma le fonti disponibili non permettono di identificare con certezza ponte, corso d'acqua e sezione del presunto cedimento del 25 gennaio 2000. Senza un'identita verificabile ARCUS non associa idrometria.",
     "en": "The record generically identifies SS647 near Campobasso, but the available sources do not establish the bridge, watercourse and section of the reported 25 January 2000 failure with confidence. ARCUS assigns no hydrometry without a verifiable identity."
   },
   "provenance": {

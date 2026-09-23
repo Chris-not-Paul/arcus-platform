@@ -51,7 +51,13 @@ function EventMedia({ assets, featured = false, language = "it" }) {
                 <span>{asset.credit_line}</span>
                 <span aria-hidden="true">·</span>
                 <a href={asset.source_page_url} target="_blank" rel="noreferrer">
-                  {it ? "Scheda originale" : "Original record"}
+                  {asset.identity_relation === "direct_asset"
+                    ? it
+                      ? "Contributo diretto"
+                      : "Direct contribution"
+                    : it
+                      ? "Scheda originale"
+                      : "Original record"}
                 </a>
                 <span aria-hidden="true">·</span>
                 {asset.license_url ? (
@@ -59,7 +65,15 @@ function EventMedia({ assets, featured = false, language = "it" }) {
                     {asset.license_id}
                   </a>
                 ) : (
-                  <span>{it ? "Solo collegamento" : "Link only"}</span>
+                  <span>
+                    {asset.file
+                      ? it
+                        ? "Copyright dell’autore · uso autorizzato ad ARCUS"
+                        : "Author copyright · ARCUS use authorised"
+                      : it
+                        ? "Solo collegamento"
+                        : "Link only"}
+                  </span>
                 )}
               </div>
               {!featured && (

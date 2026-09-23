@@ -1,6 +1,6 @@
 # ARCUS Open Research Data Policy
 
-ARCUS Open Research makes the validated scientific database useful without a mandatory account. The active release is `arcus-open-2026.5`, covers 2000-2026, and contains 261 events, 716 publishable source records and 63 taxonomy definitions.
+ARCUS Open Research makes the validated scientific database useful without a mandatory account. The active release is `arcus-open-2026.6`, covers 2000-2026, and contains 261 events, 716 publishable source records and 63 taxonomy definitions.
 
 ## Public data
 

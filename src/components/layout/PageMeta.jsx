@@ -53,8 +53,8 @@ export default function PageMeta({
   useEffect(() => {
     const fullTitle =
       title === "ARCUS"
-        ? "ARCUS Atlas"
-        : `${title} | ARCUS Atlas`;
+        ? "ARCUS"
+        : `${title} | ARCUS`;
 
     document.title = fullTitle;
 
@@ -64,7 +64,7 @@ export default function PageMeta({
       : location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteOrigin}${canonicalPath}`;
 
-    setMeta("theme-color", "#f2f0eb");
+    setMeta("theme-color", "#f3f0e8");
     setMeta("robots", noIndex ? "noindex, nofollow" : "index, follow");
     setMeta("twitter:card", "summary");
     setMeta("twitter:title", fullTitle);
@@ -72,7 +72,7 @@ export default function PageMeta({
     setProperty("og:title", fullTitle);
     setProperty("og:description", description);
     setProperty("og:type", "website");
-    setProperty("og:site_name", "ARCUS Atlas");
+    setProperty("og:site_name", "ARCUS");
     setProperty("og:url", canonicalUrl);
     setProperty("og:locale", document.documentElement.lang === "it" ? "it_IT" : "en_GB");
     setLink("canonical", canonicalUrl);

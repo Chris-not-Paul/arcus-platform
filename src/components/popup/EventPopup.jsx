@@ -477,7 +477,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.5";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.6";
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,

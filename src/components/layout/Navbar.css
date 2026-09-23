@@ -182,6 +182,29 @@
   right: 11px;
 }
 
+.navbar-link.coming-soon {
+  display: inline-grid;
+  align-content: center;
+  min-width: 94px;
+  cursor: default;
+  opacity: 0.72;
+}
+
+.navbar-link.coming-soon small {
+  display: block;
+  margin-top: 1px;
+  color: var(--arcus-bronze-soft);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.navbar-link.coming-soon::after {
+  display: none;
+}
+
 /* ================================= */
 /* ACCOUNT */
 /* ================================= */
@@ -443,6 +466,11 @@
 
 .navbar-mobile-link.prominent {
   color: var(--arcus-bronze-soft);
+}
+
+.navbar-mobile-link.coming-soon {
+  cursor: default;
+  opacity: 0.74;
 }
 
 .navbar-mobile-link.account {

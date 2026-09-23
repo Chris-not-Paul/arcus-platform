@@ -71,7 +71,7 @@ export async function loadEventContext(kind, eventId) {
     // not create an empty visual card or a misleading Media tab.
     const assets = index.assets.filter((asset) =>
       asset.event_id === eventId &&
-      asset.rights_status === "cleared_open" &&
+      ["cleared_open", "cleared_permission"].includes(asset.rights_status) &&
       Boolean(asset.file)
     ).sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
     return assets.length ? assets : null;

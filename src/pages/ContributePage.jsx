@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -168,6 +169,12 @@ export default function ContributePage() {
             <a href={`mailto:${contactAddresses.contributions}?subject=${contributionSubject}`}>
               {contactAddresses.contributions}
             </a>
+            <p className="contribute-privacy-note">
+              {it
+                ? "Prima dell’invio, consulta come ARCUS tratta i dati contenuti nei messaggi e negli allegati."
+                : "Before sending, review how ARCUS handles data contained in messages and attachments."}{" "}
+              <Link to="/privacy">{it ? "Informativa privacy" : "Privacy notice"}</Link>
+            </p>
           </div>
           <aside>
             <strong>{it ? "Cosa includere" : "What to include"}</strong>

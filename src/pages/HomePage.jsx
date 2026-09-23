@@ -539,9 +539,9 @@ export default function HomePage() {
       atlasCta: "Open Atlas",
       dataCta: "Access the data",
       mapLabel: "Georeferenced evidence",
-      mapTitle: "Italian bridge-collapse records, rendered from ARCUS data.",
-      mapStatus: "Live dataset",
-      mapCalloutLabel: "Verified events",
+      mapTitle: "Italian bridge-collapse records, visualised from ARCUS data.",
+      mapStatus: "Open release",
+      mapCalloutLabel: "Documented events",
       mapCalloutText:
         "Each point is positioned from latitude and longitude stored in the ARCUS event record.",
       mapStats: [
@@ -552,17 +552,17 @@ export default function HomePage() {
       mapNote:
         "The map is a homepage projection of the ARCUS evidence base, not a decorative illustration.",
       heroProof:
-        `${formatValue(metrics.events)} verified events · source-linked records · Italian territorial layer`,
+        `${formatValue(metrics.events)} documented events · source-linked records · Italian territorial layer`,
       metrics: [
-        ["Verified events", metrics.events],
+        ["Documented events", metrics.events],
         ["Documented sources", metrics.sources],
         ["Observed period", metrics.years],
         ["Total collapses", metrics.totalCollapse],
       ],
       accessLabel: "Open research access",
-      accessTitle: "Evidence, data and method.",
+      accessTitle: "Explore, analyse, reuse and verify.",
       accessText:
-        "Three public entry points to explore, reuse and verify the ARCUS evidence base.",
+        "Four public entry points to work with the same versioned ARCUS evidence base.",
       accessCards: [
         {
           code: "01",
@@ -573,13 +573,20 @@ export default function HomePage() {
         },
         {
           code: "02",
+          title: "Build an analysis",
+          text: "Define a cohort, examine descriptive patterns and export results with explicit denominators and limitations.",
+          action: "Open Analytics",
+          path: "/analytics",
+        },
+        {
+          code: "03",
           title: "Access research data",
           text: "Download the versioned public release, data dictionary and citation information.",
           action: "Access data",
           path: "/data-access",
         },
         {
-          code: "03",
+          code: "04",
           title: "Review the method",
           text: "Read the taxonomy, evidence classes, quality controls and declared limitations.",
           action: "Read methodology",
@@ -732,6 +739,10 @@ export default function HomePage() {
         "Start from the evidence, inspect the sources, reproduce the analysis.",
       finalText:
         "Explore the Atlas or download the current ARCUS Open Research release with its citation, schema and declared limitations.",
+      documentaryLabel: "Documented event",
+      documentaryTitle: "The evidence is visible before it becomes data.",
+      documentaryText: "Ponte Lenzino over the Trebbia river after the October 2020 collapse. The image remains linked to the event record, its sources and its classification.",
+      documentaryAction: "Open the event dossier",
     },
     it: {
       meta:
@@ -744,30 +755,30 @@ export default function HomePage() {
       atlasCta: "Apri l'Atlante",
       dataCta: "Accedi ai dati",
       mapLabel: "Evidenza georeferenziata",
-      mapTitle: "Crolli dei ponti in Italia, renderizzati dai dati ARCUS.",
-      mapStatus: "Dataset attivo",
-      mapCalloutLabel: "Eventi verificati",
+      mapTitle: "Crolli dei ponti in Italia, visualizzati a partire dai dati ARCUS.",
+      mapStatus: "Release Open",
+      mapCalloutLabel: "Eventi documentati",
       mapCalloutText:
-        "Ogni punto e posizionato da latitudine e longitudine presenti nel record ARCUS.",
+        "Ogni punto è posizionato in base a latitudine e longitudine registrate nel record ARCUS.",
       mapStats: [
         ["Eventi", metrics.events],
         ["Collassi totali", metrics.totalCollapse],
         ["Fonti", metrics.sources],
       ],
       mapNote:
-        "La mappa e una proiezione homepage della base di evidenza ARCUS, non un'illustrazione decorativa.",
+        "La mappa è una rappresentazione della base di evidenza ARCUS, non un’illustrazione decorativa.",
       heroProof:
-        `${formatValue(metrics.events)} eventi verificati · record collegati alle fonti · layer territoriale Italia`,
+        `${formatValue(metrics.events)} eventi documentati · record collegati alle fonti · layer territoriale Italia`,
       metrics: [
-        ["Eventi verificati", metrics.events],
+        ["Eventi documentati", metrics.events],
         ["Fonti documentate", metrics.sources],
         ["Periodo osservato", metrics.years],
         ["Collassi totali", metrics.totalCollapse],
       ],
       accessLabel: "Accesso Open Research",
-      accessTitle: "Evidenze, dati e metodo.",
+      accessTitle: "Esplora, analizza, riutilizza e verifica.",
       accessText:
-        "Tre ingressi pubblici per esplorare, riutilizzare e verificare la base di evidenza ARCUS.",
+        "Quattro accessi pubblici per lavorare sulla stessa base di evidenza ARCUS versionata.",
       accessCards: [
         {
           code: "01",
@@ -778,13 +789,20 @@ export default function HomePage() {
         },
         {
           code: "02",
+          title: "Costruisci un’analisi",
+          text: "Definisci una coorte, esamina pattern descrittivi ed esporta risultati con denominatori e limiti espliciti.",
+          action: "Apri Analytics",
+          path: "/analytics",
+        },
+        {
+          code: "03",
           title: "Accedi ai dati di ricerca",
           text: "Scarica la release pubblica versionata, il dizionario dati e le informazioni di citazione.",
           action: "Accedi ai dati",
           path: "/data-access",
         },
         {
-          code: "03",
+          code: "04",
           title: "Verifica il metodo",
           text: "Consulta tassonomia, classi di evidenza, controlli di qualità e limitazioni dichiarate.",
           action: "Leggi la metodologia",
@@ -937,6 +955,10 @@ export default function HomePage() {
         "Parti dall'evidenza, verifica le fonti, riproduci l'analisi.",
       finalText:
         "Esplora l'Atlante oppure scarica la release ARCUS Open Research corrente con citazione, schema e limiti dichiarati.",
+      documentaryLabel: "Evento documentato",
+      documentaryTitle: "L’evidenza è visibile prima di diventare dato.",
+      documentaryText: "Il Ponte Lenzino sul fiume Trebbia dopo il crollo dell’ottobre 2020. L’immagine resta collegata alla scheda evento, alle fonti e alla classificazione.",
+      documentaryAction: "Apri la scheda evento",
     },
   };
 
@@ -1029,6 +1051,36 @@ export default function HomePage() {
             <p>{text.boundaryText}</p>
             <Link to="/methodology">
               {text.boundaryAction} →
+            </Link>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="home-documentary-section">
+        <div className="home-container home-documentary-grid">
+          <ScrollReveal className="home-documentary-copy">
+            <span>{text.documentaryLabel}</span>
+            <h2>{text.documentaryTitle}</h2>
+            <p>{text.documentaryText}</p>
+            <Link to="/atlas/events/piacenza-2020">
+              {text.documentaryAction} →
+            </Link>
+            <small>Fotografia: Manuel D’Angelo · uso autorizzato ad ARCUS</small>
+          </ScrollReveal>
+          <ScrollReveal
+            as="figure"
+            className="home-documentary-figure"
+            delay={90}
+            variant="soft"
+          >
+            <Link to="/atlas/events/piacenza-2020">
+              <img
+                alt={language === "it"
+                  ? "Ponte Lenzino sul fiume Trebbia dopo il crollo del 2020"
+                  : "Ponte Lenzino over the Trebbia river after the 2020 collapse"}
+                loading="lazy"
+                src="/data/event-media/IT20.10.04-lenzino-post-collapse.jpg"
+              />
             </Link>
           </ScrollReveal>
         </div>

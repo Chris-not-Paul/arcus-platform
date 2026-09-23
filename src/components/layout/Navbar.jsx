@@ -55,7 +55,12 @@ function Navbar() {
           group: "core",
           prominent: true,
         }]
-      : []),
+      : [{
+          label: t("professional"),
+          group: "core",
+          prominent: true,
+          comingSoon: true,
+        }]),
 
     {
       label: t("methodology"),
@@ -159,7 +164,7 @@ function Navbar() {
       <Link
         to="/"
         className="navbar-brand"
-        aria-label="ARCUS Atlas"
+        aria-label="ARCUS"
       >
         <img
           className="navbar-logo"
@@ -176,8 +181,9 @@ function Navbar() {
       >
         {links.map((link, index) => {
           const isAnchor =
-            link.path.includes("#");
+            link.path?.includes("#");
           const isActive =
+            !link.comingSoon && (
             location.pathname === link.path ||
             (
               link.path === "/analytics" &&
@@ -190,7 +196,7 @@ function Navbar() {
               location.pathname.startsWith(
                 "/professional"
               )
-            );
+            ));
           const previousLink =
             links[index - 1];
           const startsGroup =
@@ -201,11 +207,21 @@ function Navbar() {
             isActive ? "active" : "",
             startsGroup ? "group-start" : "",
             link.prominent ? "prominent" : "",
+            link.comingSoon ? "coming-soon" : "",
           ]
             .filter(Boolean)
             .join(" ");
 
-          return isAnchor ? (
+          return link.comingSoon ? (
+            <span
+              aria-disabled="true"
+              className={linkClassName}
+              key="professional-coming-soon"
+            >
+              {link.label}
+              <small>{language === "it" ? "Prossimamente" : "Coming soon"}</small>
+            </span>
+          ) : isAnchor ? (
             <a
               key={link.path}
               href={link.path}
@@ -434,7 +450,16 @@ function Navbar() {
               )
             );
 
-          return (
+          return link.comingSoon ? (
+            <span
+              aria-disabled="true"
+              className="navbar-mobile-link prominent coming-soon"
+              key="professional-coming-soon"
+            >
+              <span>{language === "it" ? "Prossimamente" : "Coming soon"}</span>
+              {link.label}
+            </span>
+          ) : (
             <Link
               className={`navbar-mobile-link ${
                 isActive ? "active" : ""

@@ -1,0 +1,22 @@
+.arcus-page-mark {
+  position: absolute;
+  top: 50%;
+  right: clamp(28px, 7vw, 120px);
+  z-index: 1;
+  width: clamp(170px, 21vw, 340px);
+  height: auto;
+  opacity: 0.075;
+  pointer-events: none;
+  transform: translateY(-47%);
+  user-select: none;
+}
+
+@media (max-width: 760px) {
+  .arcus-page-mark {
+    top: 118px;
+    right: -36px;
+    width: 190px;
+    opacity: 0.055;
+    transform: none;
+  }
+}

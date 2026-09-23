@@ -17,6 +17,7 @@ const footer = read("src/components/layout/Footer.jsx");
 const contribute = read("src/pages/ContributePage.jsx");
 const dataAccess = read("src/pages/DataAccessPage.jsx");
 const publications = read("src/pages/PublicationsPage.jsx");
+const privacy = read("src/pages/PrivacyPage.jsx");
 const siteConfig = read("src/config/site.js");
 const logoHorizontalLight = read("src/assets/logo/logo-horizontal.svg");
 const logoHorizontalDark = read("src/assets/logo/logo-horizontal-dark.svg");
@@ -24,6 +25,8 @@ const logoMark = read("src/assets/logo/logo-mark.svg");
 const favicon = read("public/favicon.svg");
 const globalStyles = read("src/index.css");
 const pageMeta = read("src/components/layout/PageMeta.jsx");
+const analytics = read("src/pages/AnalyticsPage.jsx");
+const contributeStyles = read("src/styles/contribute-page.css");
 const robots = read("public/robots.txt");
 const sitemap = read("public/sitemap.xml");
 const headers = read("public/_headers");
@@ -57,6 +60,8 @@ check("operational contact channels", () => {
   assert.match(footer, /contactAddresses\.research/);
   assert.match(dataAccess, /contactAddresses\.research/);
   assert.match(publications, /contactAddresses\.research/);
+  assert.match(privacy, /contactAddresses\.privacy/);
+  assert.match(privacy, /Christian Paolini/);
 });
 
 check("portable ARCUS brand assets", () => {
@@ -88,6 +93,16 @@ check("self-hosted ARCUS typography system", () => {
       `${file} missing`
     );
   }
+  assert.doesNotMatch(analytics, /fontFamily="Arial/);
+  assert.match(analytics, /fontFamily="IBM Plex Sans, sans-serif"/);
+});
+
+check("shared ARCUS interface palette", () => {
+  assert.match(contributeStyles, /background: var\(--arcus-paper\)/);
+  assert.match(contributeStyles, /background: var\(--arcus-night\)/);
+  assert.match(contributeStyles, /color: var\(--arcus-ink\)/);
+  assert.doesNotMatch(contributeStyles, /#f2f0eb|#173f41|#c58b39/i);
+  assert.match(pageMeta, /theme-color", "#f3f0e8"/);
 });
 
 check("canonical metadata", () => {
@@ -100,7 +115,7 @@ check("canonical metadata", () => {
 check("crawlable public surface", () => {
   for (const route of [
     "/atlas", "/analytics", "/methodology", "/data-access",
-    "/publications", "/contribute", "/about",
+    "/publications", "/contribute", "/about", "/privacy",
   ]) {
     assert.match(sitemap, new RegExp(`<loc>https://www\\.arcusbridges\\.org${route}</loc>`));
   }
@@ -116,9 +131,14 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.5");
+  assert.equal(manifest.version, "arcus-open-2026.6");
   assert.equal(events.events.length, manifest.event_count);
   assert.equal(sources.sources.length, manifest.source_count);
+  assert.equal(
+    new Set(manifest.known_limitations || []).size,
+    (manifest.known_limitations || []).length,
+    "Manifest limitations must not contain duplicate statements"
+  );
   assert.equal(events.events.length, 261);
   assert.equal(sources.sources.length, 716);
   assert.equal(episodes.summary.episode_count, 14);

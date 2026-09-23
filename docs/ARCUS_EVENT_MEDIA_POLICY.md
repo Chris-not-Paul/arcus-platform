@@ -13,6 +13,7 @@ ARCUS may embed an image only when its creator or rights holder, source page and
 Accepted embedded-media states are:
 
 - `cleared_open`: public-domain, CC0 or explicitly identified open licence compatible with the declared publication scope;
+- `cleared_permission`: direct permission from the creator or rights holder for public ARCUS publication while copyright and downstream reuse rights remain reserved;
 - `cleared_restricted`: written or contractual permission for named, non-public ARCUS scopes.
 
 Non-embedded states are:
@@ -20,7 +21,7 @@ Non-embedded states are:
 - `link_only`: the source may be linked, but ARCUS has not established a right to reproduce the image;
 - `rejected_unknown`: author, rights holder, licence or event identity cannot be verified.
 
-Only `cleared_open` binary assets can be delivered under `public/data/event-media`. The public catalogue may also contain `link_only` metadata records, but they must not contain a copied file, direct media URL or rendered preview. The ARCUS dataset licence never overrides or replaces the licence of an individual image.
+Only `cleared_open` or `cleared_permission` binary assets can be delivered under `public/data/event-media`. A permission-cleared asset must identify the rights holder, permission scope and retained-copyright status; it is not presented as openly licensed for downstream reuse. The public catalogue may also contain `link_only` metadata records, but they must not contain a copied file, direct media URL or rendered preview. The ARCUS dataset licence never overrides or replaces the licence of an individual image.
 
 ## Preferred sources
 
@@ -62,7 +63,7 @@ Images should be delivered locally in a web-appropriate size. Hotlinking is avoi
 
 ## Curated release
 
-The current curated release contains thirteen embedded records across twelve events:
+The current curated release contains seventeen embedded records across fifteen events:
 
 | Event | Subject | Rights status | Licence |
 | --- | --- | --- | --- |
@@ -78,8 +79,12 @@ The current curated release contains thirteen embedded records across twelve eve
 | `IT20.10.08` | Passerella Squarciafichi before the 2020 collapse | `cleared_open` | CC BY 3.0 |
 | `IT21.10.01` | Ponte dell’Industria before the 2021 fire | `cleared_open` | CC BY-SA 4.0 |
 | `IT23.05.02` | Ponte della Motta on the event day | `cleared_open` | CC BY-SA 4.0 |
+| `IT20.10.04` | Ponte Lenzino three days after collapse | `cleared_permission` | Copyright retained; author permission |
+| `IT23.05.02` | Aerial post-event view of Ponte della Motta and the Idice channel | `cleared_permission` | Copyright retained; author permission |
+| `IT24.10.01` | Post-event condition of the Olivetta crossing at Sasso Marconi | `cleared_permission` | Copyright retained; author permission |
+| `IT25.04.01` | Post-event condition of Ponte Gilino over the Elvo | `cleared_permission` | Copyright retained; author permission |
 
-Twenty-eight source-only records across twenty-seven events expose links because the linked pages contain relevant imagery or video but do not grant rights compatible with unrestricted ARCUS publication. The set is enumerated by the generated private audit under `source_link_only`; it includes event-day, post-event and impact-damage documentation and keeps that phase explicit. No preview, direct media URL or third-party media file is reproduced.
+Twenty-seven source-only records across twenty-six events expose links because the linked pages contain relevant imagery or video but do not grant rights compatible with unrestricted ARCUS publication. The set is enumerated by the generated private audit under `source_link_only`; it includes event-day, post-event and impact-damage documentation and keeps that phase explicit. No preview, direct media URL or third-party media file is reproduced.
 
 Institutional origin is not treated as an open licence by itself. For example, the Italian National Fire Brigade permits website images for informational, non-commercial use but requires prior authorisation for editorial publications and prohibits commercial promotion. Its separate CC BY-ND 3.0 statement applies to original content published through its social channels. Unless the specific asset is supplied through a compatible channel or written permission is obtained, ARCUS exposes only the official page link.
 

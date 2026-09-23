@@ -154,7 +154,7 @@ try {
   await dialog.getByText("Copertura del record", { exact: true }).waitFor();
   assert.equal(await dialog.locator(".arcus-event-record-coverage-grid article").count(), 4);
   assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.5/);
+  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.6/);
   await screenshot(page, "desktop-research-quality");
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: /Esporta record e fonti/ }).click();
@@ -347,7 +347,9 @@ try {
   await errorPage.goto(`${base}/`);
   const homeMetrics = errorPage.locator(".home-metric strong");
   await homeMetrics.nth(0).getByText(String(events.length), { exact: true }).waitFor();
-  assert.equal(await homeMetrics.nth(1).innerText(), String((await (await fetch(`${base}/api/open/sources`)).json()).sources.length));
+  const expectedSourceCount = String((await (await fetch(`${base}/api/open/sources`)).json()).sources.length);
+  await waitFor(async () => (await homeMetrics.nth(1).innerText()) === expectedSourceCount, "mobile home source metric animation");
+  assert.equal(await homeMetrics.nth(1).innerText(), expectedSourceCount);
   assert.notEqual(await homeMetrics.nth(0).innerText(), "0");
   checks.push("Mobile home: API failure falls back to the public release and never presents unloaded data as zero");
   await errorPage.close();

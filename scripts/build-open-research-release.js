@@ -35,10 +35,10 @@ fs.writeFileSync(
 result.manifest.resources.episodes = "episodes.json";
 result.manifest.shared_episode_count = sharedEpisodes.summary.episode_count;
 result.manifest.shared_episode_event_count = sharedEpisodes.summary.grouped_event_count;
-result.manifest.known_limitations = [
+result.manifest.known_limitations = [...new Set([
   ...result.manifest.known_limitations,
   "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges.",
-];
+])];
 fs.writeFileSync(
   path.join(result.releaseDirectory, "manifest.json"),
   `${JSON.stringify(result.manifest, null, 2)}\n`,

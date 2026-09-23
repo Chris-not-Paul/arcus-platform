@@ -40,10 +40,11 @@ function Footer() {
           ],
         },
         {
-          label: "About",
+          label: "Progetto",
           links: [
             ["Identity", "/about"],
             ["Contribute", "/contribute"],
+            ["Privacy", "/privacy"],
             ["Contact", `mailto:${contactAddresses.general}`],
           ],
         },
@@ -80,6 +81,7 @@ function Footer() {
           links: [
             ["Identità", "/about"],
             ["Contribuisci", "/contribute"],
+            ["Privacy", "/privacy"],
             ["Contatto", `mailto:${contactAddresses.general}`],
           ],
         },

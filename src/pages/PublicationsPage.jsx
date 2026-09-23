@@ -44,6 +44,7 @@ function PublicationsPage() {
       paperTitle:
         "Dataset of bridge collapses in Italy from 2000 to 2025",
       paperMeta: "Data in Brief - Elsevier",
+      paperAuthors: "Paolini et al.",
       paperText:
         "The article documents the original Italian bridge-collapse dataset and its harmonisation framework. ARCUS Open continues that research object through explicit versions, source traceability and quality controls.",
       openPaper: "Open DOI",
@@ -79,6 +80,7 @@ function PublicationsPage() {
       paperTitle:
         "Dataset of bridge collapses in Italy from 2000 to 2025",
       paperMeta: "Data in Brief - Elsevier",
+      paperAuthors: "Paolini et al.",
       paperText:
         "L’articolo documenta il dataset originario sui collassi dei ponti italiani e il relativo quadro di armonizzazione. ARCUS Open prosegue quell’oggetto di ricerca attraverso versioni esplicite, tracciabilità delle fonti e controlli di qualità.",
       openPaper: "Apri DOI",
@@ -116,7 +118,7 @@ function PublicationsPage() {
         paperText: baseContent.paperText,
       };
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.5";
+    manifest?.version || "arcus-open-2026.6";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -132,8 +134,8 @@ function PublicationsPage() {
         title={content.title}
         description={
           language === "it"
-            ? "Pubblicazioni, presentazioni e materiali scientifici collegati alla piattaforma ARCUS."
-            : "Publications, presentations and scientific material connected to the ARCUS platform."
+            ? "Pubblicazioni, release e risorse scientifiche collegate alla piattaforma ARCUS."
+            : "Publications, releases and scientific resources connected to the ARCUS platform."
         }
       />
 
@@ -156,6 +158,7 @@ function PublicationsPage() {
             <p>{content.paperText}</p>
             <dl className="publications-paper-facts">
               <div><dt>{language === "it" ? "Anno" : "Year"}</dt><dd>2025</dd></div>
+              <div><dt>{language === "it" ? "Autori" : "Authors"}</dt><dd>{content.paperAuthors}</dd></div>
               <div><dt>{language === "it" ? "Tipo" : "Type"}</dt><dd>{language === "it" ? "Data article" : "Data article"}</dd></div>
               <div><dt>DOI</dt><dd>10.1016/j.dib.2025.112375</dd></div>
             </dl>

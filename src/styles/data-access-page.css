@@ -19,6 +19,11 @@
   color: var(--arcus-text-on-dark);
 }
 
+.data-access-hero .data-access-container {
+  position: relative;
+  z-index: 2;
+}
+
 .data-access-hero h1,
 .data-access-section h2 {
   max-width: 860px;

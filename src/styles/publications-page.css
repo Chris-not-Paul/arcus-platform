@@ -144,7 +144,7 @@
 
 .publications-paper-facts {
   display: grid;
-  grid-template-columns: 0.45fr 0.7fr 1.35fr;
+  grid-template-columns: 0.42fr 0.75fr 0.65fr 1.35fr;
   gap: 1px;
   margin: 26px 0 0;
   padding: 1px;
@@ -425,10 +425,6 @@
 
   .publications-paper-facts {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .publications-paper-facts div:last-child {
-    grid-column: 1 / -1;
   }
 
   .publications-citation-guide {

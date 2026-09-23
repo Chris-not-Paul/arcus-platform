@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
@@ -16,7 +18,7 @@ function AboutPage() {
   const copy = {
     en: {
       eyebrow: "ARCUS IDENTITY",
-      title: "A public research infrastructure for bridge-collapse evidence.",
+      title: "An open research infrastructure for bridge-collapse evidence.",
       lead:
         "ARCUS curates documented bridge-collapse events as a versioned, inspectable evidence base. It connects records, sources, geolocation, taxonomy and reproducible analysis without hiding uncertainty.",
       missionLabel: "What ARCUS Does",
@@ -47,6 +49,18 @@ function AboutPage() {
         "Infrastructure authorities and public institutions",
         "Educators, analysts and technical communicators",
       ],
+      stewardshipLabel: "Scientific stewardship",
+      stewardshipTitle: "A published foundation, an accountable curator.",
+      stewardshipName: "Christian Paolini",
+      stewardshipRole: "Scientific curator and ARCUS project lead",
+      stewardshipAffiliation:
+        "Member, IABSE Task Group 1.5 — Performance-Based Design Founded on Lessons from Bridge Failures",
+      stewardshipText:
+        "ARCUS develops the Italian bridge-collapse dataset published by Paolini et al. into a continuously curated, versioned research infrastructure. Editorial responsibility remains identifiable, while sources, revisions and limitations stay open to inspection.",
+      stewardshipIndependence:
+        "ARCUS is an independent research initiative. This personal scientific role does not imply IABSE sponsorship or endorsement of the platform.",
+      stewardshipAction: "Review the scientific lineage",
+      stewardshipGroupAction: "View the IABSE Task Group",
       principlesLabel: "Scientific Commitments",
       principlesTitle: "Credibility depends on restraint.",
       principlesLead: "ARCUS is designed to show what the records support, where they remain incomplete and which conclusions they cannot justify.",
@@ -58,7 +72,7 @@ function AboutPage() {
     },
     it: {
       eyebrow: "IDENTITÀ ARCUS",
-      title: "Un’infrastruttura pubblica di ricerca sulle evidenze di collasso dei ponti.",
+      title: "Un’infrastruttura aperta di ricerca sulle evidenze di collasso dei ponti.",
       lead:
         "ARCUS cura eventi documentati di collasso dei ponti come base di evidenza versionata e ispezionabile. Connette record, fonti, geolocalizzazione, tassonomia e analisi riproducibili senza nascondere l’incertezza.",
       missionLabel: "Cosa Fa ARCUS",
@@ -89,6 +103,18 @@ function AboutPage() {
         "Gestori infrastrutturali e istituzioni pubbliche",
         "Docenti, analisti e comunicatori tecnici",
       ],
+      stewardshipLabel: "Curatela scientifica",
+      stewardshipTitle: "Una base pubblicata, una responsabilità riconoscibile.",
+      stewardshipName: "Christian Paolini",
+      stewardshipRole: "Curatore scientifico e responsabile del progetto ARCUS",
+      stewardshipAffiliation:
+        "Membro dell’IABSE Task Group 1.5 — Performance-Based Design Founded on Lessons from Bridge Failures",
+      stewardshipText:
+        "ARCUS sviluppa il dataset italiano sui collassi dei ponti pubblicato da Paolini et al. in un’infrastruttura di ricerca versionata e sottoposta a curatela continua. La responsabilità editoriale resta identificabile, mentre fonti, revisioni e limiti rimangono verificabili.",
+      stewardshipIndependence:
+        "ARCUS è un’iniziativa di ricerca indipendente. Il ruolo scientifico personale non implica sponsorizzazione o approvazione della piattaforma da parte di IABSE.",
+      stewardshipAction: "Consulta la linea scientifica",
+      stewardshipGroupAction: "Consulta il Task Group IABSE",
       principlesLabel: "IMPEGNI SCIENTIFICI",
       principlesTitle: "La credibilità richiede misura.",
       principlesLead: "ARCUS è progettato per mostrare ciò che i record sostengono, dove rimangono incompleti e quali conclusioni non possono giustificare.",
@@ -120,8 +146,8 @@ function AboutPage() {
         title={content.title}
         description={
           language === "it"
-            ? "Identità e visione strategica di ARCUS, osservatorio scientifico dedicato ai cedimenti infrastrutturali."
-            : "ARCUS identity and strategic vision, a scientific observatory dedicated to infrastructure failure intelligence."
+            ? "Identità e visione di ARCUS, infrastruttura aperta di ricerca sui crolli documentati dei ponti."
+            : "ARCUS identity and vision, an open research infrastructure for documented bridge collapses."
         }
       />
 
@@ -151,6 +177,30 @@ function AboutPage() {
               <p>{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="about-section about-stewardship">
+        <div className="about-container about-split">
+          <div>
+            <div className="about-label">{content.stewardshipLabel}</div>
+            <h2>{content.stewardshipTitle}</h2>
+          </div>
+          <article className="about-stewardship-card">
+            <strong>{content.stewardshipName}</strong>
+            <span>{content.stewardshipRole}</span>
+            <a
+              className="about-stewardship-affiliation"
+              href="https://iabse.org/TG1.5"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {content.stewardshipAffiliation}
+            </a>
+            <p>{content.stewardshipText}</p>
+            <small>{content.stewardshipIndependence}</small>
+            <Link to="/publications">{content.stewardshipAction} →</Link>
+          </article>
         </div>
       </section>
 

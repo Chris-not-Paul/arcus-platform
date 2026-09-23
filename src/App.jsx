@@ -27,6 +27,7 @@ const ProfessionalAccountPage = lazy(() => import("./pages/ProfessionalAccountPa
 const AccountPage = lazy(() => import("./pages/AccountPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ContributePage = lazy(() => import("./pages/ContributePage"));
+const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -202,6 +203,11 @@ function App() {
           <Route
             path="/about"
             element={<AboutPage />}
+          />
+
+          <Route
+            path="/privacy"
+            element={<PrivacyPage />}
           />
 
           <Route

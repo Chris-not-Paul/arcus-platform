@@ -9,6 +9,7 @@
   background:
     radial-gradient(circle at 78% 18%, rgba(196,144,64,0.16), transparent 26%),
     linear-gradient(135deg, var(--arcus-night), var(--arcus-night-panel));
+  background-color: var(--arcus-night);
 }
 
 .atlas-page::before {
@@ -1191,7 +1192,7 @@
   padding: 8px 16px;
   border: 0;
   background: var(--arcus-night);
-  color: #fff;
+  color: var(--arcus-text-on-dark);
   cursor: pointer;
 }
 .atlas-research-actions button:disabled { opacity: 0.5; cursor: not-allowed; }

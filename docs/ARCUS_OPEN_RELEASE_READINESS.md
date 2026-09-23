@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: release candidate under final acceptance
+Status: release candidate — privacy review and staging acceptance pending
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -20,13 +20,18 @@ Output directory: `dist`
 - Identity and institutional contacts
 
 The Open build disables accounts, the server-backed contribution form and all
-Professional routes. Professional remains available in local/platform builds
-and is not represented as an active public service in the initial Open release.
+Professional routes. Professional remains available in local/platform builds.
+The public navigation identifies it only as a non-interactive
+`Coming soon / Prossimamente` workstream: no access, registration flow or
+feature promise is exposed.
+
+The domain mailboxes have passed inbound and outbound delivery checks and are
+considered operational for the release candidate.
 
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.5`: 261 events and 716 documentary sources. It does not include
+`arcus-open-2026.6`: 261 events and 716 documentary sources. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 
@@ -44,14 +49,13 @@ zero events or zero sources.
 
 ## Remaining launch gates
 
-1. Aruba must complete inbound provisioning for the domain mailboxes.
-2. The site owner must approve the final privacy notice and the public identity
-   of the data controller; personal details must not be inferred from account
-   screens or inserted automatically.
-3. A public social-sharing image should be approved before launch.
-4. Deploy the Open build to a temporary hosting URL and complete desktop/mobile
+1. The bilingual privacy notice is implemented at `/privacy`, with Christian
+   Paolini as the user-approved data-controller identity. The site owner must
+   complete a final content review before publication.
+2. A public social-sharing image should be approved before launch.
+3. Deploy the Open build to a temporary hosting URL and complete desktop/mobile
    acceptance before changing DNS.
-5. After acceptance, connect `www.arcusbridges.org`, enable HTTPS and configure
+4. After acceptance, connect `www.arcusbridges.org`, enable HTTPS and configure
    the root-domain redirect.
 
 ## Release checks

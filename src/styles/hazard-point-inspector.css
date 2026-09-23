@@ -93,7 +93,7 @@
   border: 1px solid #d9e2e5;
   border-left: 4px solid #3f6b78;
   border-radius: 10px;
-  background: #fff;
+  background: var(--arcus-paper-soft);
 }
 
 .point-hazard-card.hazard-landslide {

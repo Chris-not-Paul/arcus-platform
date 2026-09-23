@@ -1,9 +1,14 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import ArcusPageMark from "../components/brand/ArcusPageMark";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import { professionalEnabled } from "../config/site";
 import useLanguage from "../context/useLanguage";
+import { openManifest } from "../utils/apiClient";
 
 import "../styles/methodology/methodologypage.css";
 
@@ -57,6 +62,25 @@ function MethodologyScopeGrid({ items }) {
 
 function MethodologyPage() {
   const { language } = useLanguage();
+  const [manifest, setManifest] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    openManifest()
+      .then((data) => active && setManifest(data))
+      .catch(() => active && setManifest(null));
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const releasePeriod =
+    manifest?.citation?.match(/\b\d{4}-\d{4}\b/)?.[0] ||
+    "2000-2026";
+  const releaseEventCount = manifest?.event_count ?? 261;
+  const releaseSourceCount = manifest?.source_count ?? 716;
 
   const copy = {
     en: {
@@ -619,7 +643,7 @@ function MethodologyPage() {
         outputText:
           "Atlante, Analytics e pacchetto dati leggono la stessa release versionata e mantengono accessibili fonti, tassonomia e limiti.",
         outputs: [
-          ["Atlante", "Consultazione geografica dei 261 eventi, schede, coordinate e fonti documentate."],
+          ["Atlante", `Consultazione geografica dei ${releaseEventCount} eventi, schede, coordinate e fonti documentate.`],
           ["Analytics", "Esplorazione descrittiva con filtri dichiarati ed esportazioni adatte al riuso scientifico."],
           ["Pacchetto dati", "CSV, GeoJSON, fonti, dizionario, tassonomia, audit, statistiche e changelog senza account."],
         ],
@@ -700,7 +724,7 @@ function MethodologyPage() {
         outputTitle: "One method, three verifiable ways to use the release",
         outputText: "The Atlas, Analytics and data package read the same versioned release and keep sources, taxonomy and limitations accessible.",
         outputs: [
-          ["Atlas", "Geographic consultation of 261 events, records, coordinates and documented sources."],
+          ["Atlas", `Geographic consultation of ${releaseEventCount} events, records, coordinates and documented sources.`],
           ["Analytics", "Descriptive exploration with declared filters and exports suitable for scientific reuse."],
           ["Data package", "CSV, GeoJSON, sources, dictionary, taxonomy, audit, statistics and changelog without an account."],
         ],
@@ -738,6 +762,8 @@ function MethodologyPage() {
 
       <section className="methodology-hero methodology-section">
 
+        <ArcusPageMark />
+
         <div className="methodology-hero-overlay" />
 
         <div className="methodology-hero-grid" />
@@ -759,17 +785,17 @@ function MethodologyPage() {
           <div className="methodology-hero-evidence">
             <div className="methodology-hero-stats">
               <div className="methodology-stat">
-                <span className="methodology-stat-value">2000-2026</span>
+                <span className="methodology-stat-value">{releasePeriod}</span>
                 <span className="methodology-stat-label">{content.temporalCoverage}</span>
               </div>
 
               <div className="methodology-stat">
-                <span className="methodology-stat-value">261</span>
+                <span className="methodology-stat-value">{releaseEventCount}</span>
                 <span className="methodology-stat-label">{language === "it" ? "Eventi pubblicati" : "Published events"}</span>
               </div>
 
               <div className="methodology-stat">
-                <span className="methodology-stat-value">716</span>
+                <span className="methodology-stat-value">{releaseSourceCount}</span>
                 <span className="methodology-stat-label">{language === "it" ? "Fonti documentate" : "Documented sources"}</span>
               </div>
 
@@ -797,6 +823,42 @@ function MethodologyPage() {
             </a>
           </div>
 
+        </div>
+      </section>
+
+      <section className="methodology-documentary methodology-section">
+        <div className="methodology-container methodology-documentary-grid">
+          <Link
+            className="methodology-documentary-image"
+            to="/atlas/events/san-martino-in-argine-2023"
+          >
+            <img
+              alt={language === "it"
+                ? "Veduta aerea del cedimento del Ponte della Motta sul fiume Idice"
+                : "Aerial view of the Ponte della Motta failure over the Idice river"}
+              loading="lazy"
+              src="/data/event-media/IT23.05.02-motta-post-event-aerial.jpg"
+            />
+          </Link>
+          <div className="methodology-documentary-copy">
+            <div className="methodology-section-label">
+              {language === "it" ? "Evidenza sul campo" : "Field evidence"}
+            </div>
+            <h2>
+              {language === "it"
+                ? "Il metodo resta collegato al record osservabile."
+                : "The method stays connected to the observable record."}
+            </h2>
+            <p>
+              {language === "it"
+                ? "Fotografie, fonti e campi strutturati convivono nella stessa scheda evento. L’immagine documenta il Ponte della Motta dopo il cedimento del 2023."
+                : "Photographs, sources and structured fields coexist in the same event dossier. The image documents Ponte della Motta after the 2023 failure."}
+            </p>
+            <Link to="/atlas/events/san-martino-in-argine-2023">
+              {language === "it" ? "Apri la scheda documentata" : "Open the documented event"} →
+            </Link>
+            <small>Fotografia: Manuel D’Angelo · uso autorizzato ad ARCUS</small>
+          </div>
         </div>
       </section>
 
