@@ -2,6 +2,7 @@
   min-height: 100vh;
   background: var(--arcus-paper);
   color: var(--arcus-ink);
+  font-family: var(--arcus-font-sans);
 }
 
 .data-access-container {
@@ -13,9 +14,7 @@
   position: relative;
   overflow: hidden;
   padding: 150px 0 96px;
-  background:
-    radial-gradient(circle at 78% 18%, rgba(110,133,141,0.16), transparent 34%),
-    linear-gradient(135deg, var(--arcus-night), var(--arcus-night-panel));
+  background: var(--arcus-open-hero-background);
   color: var(--arcus-text-on-dark);
 }
 
@@ -29,25 +28,25 @@
   max-width: 860px;
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
-  font-size: clamp(42px, 6vw, 82px);
+  font-size: var(--arcus-open-hero-title-size);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: var(--arcus-open-hero-title-line);
 }
 
 .data-access-hero p {
   max-width: 720px;
   margin: 26px 0 0;
   color: var(--arcus-text-on-dark-soft);
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
 }
 
 .data-access-label {
   color: var(--arcus-bronze-soft);
   font-family: var(--arcus-font-mono);
-  font-size: 11px;
+  font-size: var(--arcus-open-label-size);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--arcus-open-label-tracking);
   text-transform: uppercase;
 }
 
@@ -98,7 +97,8 @@
 }
 
 .data-access-section h2 {
-  font-size: clamp(32px, 4vw, 56px);
+  font-size: var(--arcus-open-section-title-size);
+  line-height: var(--arcus-open-section-title-line);
 }
 
 .data-access-release-summary {

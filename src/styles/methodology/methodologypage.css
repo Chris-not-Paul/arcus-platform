@@ -227,8 +227,8 @@
 .methodology-section-title {
   font-family: var(--arcus-font-display);
   margin: 0;
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 0.96;
+  font-size: var(--arcus-open-section-title-size);
+  line-height: var(--arcus-open-section-title-line);
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -246,8 +246,8 @@
 .methodology-section-description {
   margin-top: 26px;
   max-width: 720px;
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
   color: rgba(226,218,209,0.72);
 }
 
@@ -282,29 +282,7 @@
 
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.22),
-      rgba(0,0,0,0.34)
-    ),
-    radial-gradient(
-      circle at top left,
-      rgba(163,126,92,0.16),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(110,133,141,0.10),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      var(--arcus-night),
-      var(--arcus-night-soft) 42%,
-      var(--arcus-night-panel) 72%,
-      var(--arcus-night-soft)
-    );
+  background: var(--arcus-open-hero-background);
 }
 
 .methodology-hero-grid {
@@ -361,13 +339,12 @@
   border-bottom: 1px solid rgba(192,139,79,0.46);
 
   font-family: var(--arcus-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: var(--arcus-open-label-size);
+  letter-spacing: var(--arcus-open-label-tracking);
   text-transform: uppercase;
   font-weight: 500;
 
-  color:
-    rgba(243,239,232,0.74);
+  color: var(--arcus-bronze-soft);
 
   margin-bottom: 24px;
 }
@@ -378,10 +355,9 @@
   max-width: 900px;
 
   font-family: var(--arcus-font-display);
-  font-size:
-    clamp(52px, 6vw, 82px);
+  font-size: var(--arcus-open-hero-title-size);
 
-  line-height: 0.95;
+  line-height: var(--arcus-open-hero-title-line);
 
   letter-spacing: 0;
 
@@ -395,11 +371,10 @@
 
   max-width: 800px;
 
-  font-size: 19px;
-  line-height: 1.72;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
 
-  color:
-    rgba(226,218,209,0.74);
+  color: var(--arcus-text-on-dark-soft);
 }
 
 /* ================================= */
@@ -1437,7 +1412,7 @@
   }
 
   .methodology-section-title {
-    font-size: 38px;
+    font-size: 36px;
     line-height: 1;
   }
 

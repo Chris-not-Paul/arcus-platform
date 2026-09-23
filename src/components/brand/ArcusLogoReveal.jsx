@@ -11,8 +11,8 @@ const logoMarkup = `
     </style>
   </defs>
 
-  <polygon id="leg-left"
-    points="119.7,132.2  160,55.9  160,70.1  133.3,132.2"
+  <path id="leg-left"
+    d="M119.7 132.2 149.8 75.1 153.9 82.6 133.3 132.2Z M151.8 71.4 160 55.9 160 70.1 155.4 78.8Z"
     fill="#C58A32" opacity="0"/>
 
   <polygon id="leg-right"

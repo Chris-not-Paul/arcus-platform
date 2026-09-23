@@ -1,9 +1,9 @@
 .contribute-page { min-height: 100vh; background: var(--arcus-paper); color: var(--arcus-ink); font-family: var(--arcus-font-sans); }
 .contribute-shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
-.contribute-hero { padding: 132px 0 64px; background: var(--arcus-night); color: var(--arcus-text-on-dark); }
-.contribute-hero span, .contribute-layout aside > span { font: 700 10px/1.2 var(--arcus-font-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--arcus-bronze-soft); }
-.contribute-hero h1 { max-width: 900px; margin: 18px 0; font: 400 clamp(44px, 6vw, 78px)/.98 var(--arcus-font-display); }
-.contribute-hero p { max-width: 820px; margin: 0; color: var(--arcus-text-on-dark-soft); font-size: 17px; line-height: 1.58; }
+.contribute-hero { padding: 150px 0 84px; background: var(--arcus-open-hero-background); color: var(--arcus-text-on-dark); }
+.contribute-hero span, .contribute-layout aside > span { font: 700 var(--arcus-open-label-size)/1.2 var(--arcus-font-mono); letter-spacing: var(--arcus-open-label-tracking); text-transform: uppercase; color: var(--arcus-bronze-soft); }
+.contribute-hero h1 { max-width: 900px; margin: 18px 0; font: 400 var(--arcus-open-hero-title-size)/var(--arcus-open-hero-title-line) var(--arcus-font-display); }
+.contribute-hero p { max-width: 820px; margin: 0; color: var(--arcus-text-on-dark-soft); font-size: var(--arcus-open-hero-copy-size); line-height: var(--arcus-open-hero-copy-line); }
 .contribute-process { display: grid; grid-template-columns: repeat(4, 1fr); border-right: 1px solid var(--arcus-border-light); border-bottom: 1px solid var(--arcus-border-light); background: var(--arcus-paper-soft); }
 .contribute-process article { min-height: 190px; padding: 26px 22px; border-left: 1px solid var(--arcus-border-light); }
 .contribute-process article > span { color: var(--arcus-bronze); font: 700 12px var(--arcus-font-mono); }
@@ -82,7 +82,7 @@
 @media (max-width: 620px) {
   .contribute-shell { width: min(100% - 28px, 1180px); }
   .contribute-hero { padding: 104px 0 42px; }
-  .contribute-hero h1 { font-size: 42px; }
+  .contribute-hero h1 { font-size: 43px; }
   .contribute-process, .contribute-grid.two { grid-template-columns: 1fr; }
   .contribute-recognition ul { grid-template-columns: 1fr; }
   .contribute-process article { min-height: auto; }

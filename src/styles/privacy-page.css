@@ -3,6 +3,7 @@
   overflow-x: hidden;
   background: var(--arcus-paper);
   color: var(--arcus-ink);
+  font-family: var(--arcus-font-sans);
 }
 
 .privacy-container {
@@ -13,9 +14,7 @@
 .privacy-hero {
   padding: 154px 0 76px;
   border-bottom: 1px solid var(--arcus-border-light);
-  background:
-    radial-gradient(circle at 82% 30%, rgba(167, 101, 50, 0.13), transparent 30%),
-    linear-gradient(135deg, rgba(37, 50, 55, 0.97), rgba(24, 28, 30, 0.99));
+  background: var(--arcus-open-hero-background);
   color: var(--arcus-text-on-dark);
 }
 
@@ -24,9 +23,9 @@
 .privacy-data-grid dt {
   color: var(--arcus-bronze-soft);
   font-family: var(--arcus-font-mono);
-  font-size: 10px;
+  font-size: var(--arcus-open-label-size);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--arcus-open-label-tracking);
   text-transform: uppercase;
 }
 
@@ -34,17 +33,17 @@
   max-width: 900px;
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
-  font-size: clamp(42px, 6vw, 76px);
+  font-size: var(--arcus-open-hero-title-size);
   font-weight: 400;
-  line-height: 1;
+  line-height: var(--arcus-open-hero-title-line);
 }
 
 .privacy-hero p {
   max-width: 790px;
   margin: 26px 0 0;
   color: var(--arcus-text-on-dark-soft);
-  font-size: 18px;
-  line-height: 1.72;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
 }
 
 .privacy-hero small {
@@ -255,7 +254,7 @@
   }
 
   .privacy-hero h1 {
-    font-size: 42px;
+    font-size: 43px;
   }
 
   .privacy-hero p {

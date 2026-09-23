@@ -101,8 +101,8 @@
 .analytics-section-title {
   font-family: var(--arcus-font-display);
   margin: 0;
-  font-size: clamp(42px, 5.4vw, 76px);
-  line-height: 0.98;
+  font-size: var(--arcus-open-section-title-size);
+  line-height: var(--arcus-open-section-title-line);
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -110,8 +110,8 @@
 .analytics-section-description {
   margin: 26px 0 0;
   max-width: 760px;
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
   color: rgba(226,218,209,0.72);
 }
 
@@ -131,36 +131,15 @@
 
 .analytics-hero {
   min-height: auto;
-  padding-top: 128px;
-  padding-bottom: 56px;
+  padding-top: 150px;
+  padding-bottom: 84px;
 
   display: flex;
   align-items: flex-start;
 
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.20),
-      rgba(0,0,0,0.34)
-    ),
-    radial-gradient(
-      circle at top left,
-      rgba(196,144,64,0.14),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(71,92,104,0.14),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      var(--arcus-night),
-      var(--arcus-night-soft) 46%,
-      var(--arcus-night)
-    );
+  background: var(--arcus-open-hero-background);
 }
 
 .analytics-hero-grid {
@@ -213,19 +192,13 @@
   display: inline-flex;
   align-items: center;
 
-  padding: 10px 16px;
+  padding: 0 0 10px;
   margin-bottom: 22px;
 
-  border-radius: 8px;
-
-  border:
-    1px solid
-    rgba(140,115,93,0.18);
-
-  background:
-    rgba(255,248,242,0.04);
-
-  color: var(--arcus-ivory-dim);
+  border-bottom: 1px solid rgba(197,138,50,0.46);
+  border-radius: 0;
+  background: transparent;
+  color: var(--arcus-bronze-soft);
 }
 
 .analytics-title {
@@ -233,8 +206,8 @@
   margin: 0;
   max-width: 700px;
 
-  font-size: clamp(46px, 4.8vw, 70px);
-  line-height: 0.96;
+  font-size: var(--arcus-open-hero-title-size);
+  line-height: var(--arcus-open-hero-title-line);
   letter-spacing: 0;
   font-weight: 400;
 
@@ -245,8 +218,8 @@
   margin: 20px 0 0;
   max-width: 660px;
 
-  font-size: 17px;
-  line-height: 1.62;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
 
   color: var(--arcus-text-on-dark-soft);
 }
@@ -2433,7 +2406,7 @@
 .analytics-section-header.compact
 .analytics-section-title {
   max-width: 920px;
-  font-size: clamp(42px, 5vw, 64px);
+  font-size: var(--arcus-open-section-title-size);
 }
 
 .analytics-tier-grid {
@@ -2855,6 +2828,12 @@
   color: var(--arcus-text-on-dark);
 }
 
+/* The hero is also an analytics section. Keep the shared Open editorial
+   treatment after the broad dark-section normalization above. */
+.analytics-page .analytics-hero.analytics-section {
+  background: var(--arcus-open-hero-background);
+}
+
 .analytics-page .analytics-panel,
 .analytics-page .analytics-panel.light,
 .analytics-page .analytics-kpi-card,
@@ -2926,6 +2905,15 @@
   color: var(--arcus-ivory-faint);
   font-family: var(--arcus-font-mono);
   font-weight: 500;
+}
+
+.analytics-page .analytics-label {
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--arcus-bronze);
+  background: transparent;
+  color: var(--arcus-bronze-soft);
+  font-size: var(--arcus-open-label-size);
+  letter-spacing: var(--arcus-open-label-tracking);
 }
 
 .analytics-page .analytics-kpi-value,
@@ -3498,16 +3486,17 @@
   }
 
   .analytics-title {
-    font-size: 46px;
+    font-size: 43px;
     line-height: 1;
   }
 
   .analytics-section-title {
-    font-size: 37px;
+    font-size: 36px;
   }
 
   .analytics-subtitle {
-    font-size: 18px;
+    font-size: 15px;
+    line-height: 1.65;
   }
 
   .analytics-hero-stats,

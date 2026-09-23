@@ -2,7 +2,7 @@
   <title id="title">ARCUS</title>
   <desc id="description">ARCUS Bridge Failure Observatory.</desc>
   <g transform="translate(160 80) scale(.6)" fill="#C58A32">
-    <path d="M-65 68 0-55v19L-43 68Z"/>
+    <path d="M-65 68-16.4-24-9.9-12-43 68Z M-13.2-30 0-55v19L-7.4-18Z"/>
     <path d="M0-55 65 68H43L0-36Z"/>
     <rect x="-33" y="17" width="66" height="6" rx="1"/>
     <rect x="-65" y="61" width="130" height="7" rx="1"/>

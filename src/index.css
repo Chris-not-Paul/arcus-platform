@@ -150,6 +150,28 @@
   --arcus-shadow-overlay: 0 26px 64px rgba(27,36,34,0.18);
   --arcus-duration-fast: 160ms;
   --arcus-duration-base: 220ms;
+
+  /* Shared Open-page editorial scale */
+  --arcus-open-hero-background:
+    radial-gradient(
+      circle at 82% 24%,
+      color-mix(in srgb, var(--arcus-steel) 24%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      var(--arcus-night),
+      var(--arcus-night-soft) 48%,
+      var(--arcus-night-panel)
+    );
+  --arcus-open-hero-title-size: clamp(48px, 6vw, 82px);
+  --arcus-open-hero-title-line: 0.98;
+  --arcus-open-hero-copy-size: 18px;
+  --arcus-open-hero-copy-line: 1.72;
+  --arcus-open-section-title-size: clamp(34px, 4.2vw, 56px);
+  --arcus-open-section-title-line: 1.04;
+  --arcus-open-label-size: 11px;
+  --arcus-open-label-tracking: 0.14em;
 }
 
 html {

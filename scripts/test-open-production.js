@@ -69,9 +69,13 @@ check("portable ARCUS brand assets", () => {
     assert.doesNotMatch(logo, /<text/);
     assert.match(logo, /aria-labelledby="title description"/);
     assert.match(logo, /M107\.44 54 105\.1 46\.96/);
+    assert.match(logo, /M-65 68-16\.4-24-9\.9-12-43 68Z/);
+    assert.match(logo, /M-13\.2-30 0-55v19L-7\.4-18Z/);
   }
   assert.match(logoMark, /#A76532/);
+  assert.match(logoMark, /M-13\.2-30 0-55v19L-7\.4-18Z/);
   assert.match(favicon, /#A76532/);
+  assert.match(favicon, /M-13\.2-30 0-55v19L-7\.4-18Z/);
   assert.doesNotMatch(favicon, /<rect width="160" height="160"/);
 });
 

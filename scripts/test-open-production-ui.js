@@ -113,6 +113,51 @@ try {
   }
   checks.push("shared typography and palette across every Open page");
 
+  const sharedEditorialPages = [
+    ["/analytics", ".analytics-hero", ".analytics-title", ".analytics-subtitle", ".analytics-label"],
+    ["/methodology", ".methodology-hero", ".methodology-title", ".methodology-subtitle", ".methodology-label"],
+    ["/data-access", ".data-access-hero", ".data-access-hero h1", ".data-access-hero p", ".data-access-label"],
+    ["/publications", ".publications-hero", ".publications-hero h1", ".publications-hero p", ".publications-label"],
+    ["/contribute", ".contribute-hero", ".contribute-hero h1", ".contribute-hero p", ".contribute-hero span"],
+    ["/about", ".about-hero", ".about-hero h1", ".about-hero p", ".about-label"],
+    ["/privacy", ".privacy-hero", ".privacy-hero h1", ".privacy-hero p", ".privacy-eyebrow"],
+  ];
+  let editorialReference = null;
+
+  for (const [path, heroSelector, titleSelector, copySelector, labelSelector] of sharedEditorialPages) {
+    await page.goto(`${base}${path}`);
+    await page.locator(titleSelector).waitFor();
+    const editorialSystem = await page.evaluate(
+      ({ heroSelector: hero, titleSelector: title, copySelector: copy, labelSelector: label }) => {
+        const heroStyle = getComputedStyle(document.querySelector(hero));
+        const titleStyle = getComputedStyle(document.querySelector(title));
+        const copyStyle = getComputedStyle(document.querySelector(copy));
+        const labelStyle = getComputedStyle(document.querySelector(label));
+        return {
+          heroBackground: heroStyle.backgroundImage,
+          titleFont: titleStyle.fontFamily,
+          titleSize: titleStyle.fontSize,
+          titleLineHeight: titleStyle.lineHeight,
+          copyFont: copyStyle.fontFamily,
+          copySize: copyStyle.fontSize,
+          copyLineHeight: copyStyle.lineHeight,
+          labelFont: labelStyle.fontFamily,
+          labelSize: labelStyle.fontSize,
+          labelColor: labelStyle.color,
+          labelTracking: labelStyle.letterSpacing,
+        };
+      },
+      { heroSelector, titleSelector, copySelector, labelSelector }
+    );
+
+    if (!editorialReference) {
+      editorialReference = editorialSystem;
+    } else {
+      assert.deepEqual(editorialSystem, editorialReference, path);
+    }
+  }
+  checks.push("shared Open editorial hero palette and type scale");
+
   await page.goto(`${base}/contribute`);
   await page.locator('a[href^="mailto:contribute@arcusbridges.org"]').waitFor();
   assert.equal(await page.locator("form.contribute-form").count(), 0);

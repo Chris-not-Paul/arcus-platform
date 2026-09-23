@@ -3,6 +3,7 @@
   overflow-x: hidden;
   background: var(--arcus-paper);
   color: var(--arcus-ink);
+  font-family: var(--arcus-font-sans);
 }
 
 .about-container {
@@ -12,18 +13,16 @@
 
 .about-hero {
   padding: 158px 0 94px;
-  background:
-    radial-gradient(circle at 82% 24%, color-mix(in srgb, var(--arcus-steel) 24%, transparent), transparent 34%),
-    linear-gradient(135deg, var(--arcus-night-soft), var(--arcus-night));
+  background: var(--arcus-open-hero-background);
   color: var(--arcus-text-on-dark);
 }
 
 .about-label {
   color: var(--arcus-bronze-soft);
   font-family: var(--arcus-font-mono);
-  font-size: 11px;
+  font-size: var(--arcus-open-label-size);
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--arcus-open-label-tracking);
   text-transform: uppercase;
 }
 
@@ -32,9 +31,9 @@
   max-width: 980px;
   margin: 18px 0 0;
   font-family: var(--arcus-font-display);
-  font-size: clamp(42px, 6vw, 82px);
+  font-size: var(--arcus-open-hero-title-size);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: var(--arcus-open-hero-title-line);
   letter-spacing: 0;
 }
 
@@ -42,8 +41,8 @@
   max-width: 820px;
   margin: 28px 0 0;
   color: var(--arcus-text-on-dark-soft);
-  font-size: 19px;
-  line-height: 1.76;
+  font-size: var(--arcus-open-hero-copy-size);
+  line-height: var(--arcus-open-hero-copy-line);
 }
 
 .about-section {
@@ -58,7 +57,8 @@
 }
 
 .about-section h2 {
-  font-size: clamp(34px, 4.2vw, 58px);
+  font-size: var(--arcus-open-section-title-size);
+  line-height: var(--arcus-open-section-title-line);
 }
 
 .about-split > p {
