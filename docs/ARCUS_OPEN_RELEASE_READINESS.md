@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: locally verified release candidate — owner review and staging acceptance pending
+Status: private staging verified — owner review, repository connection and domain activation pending
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -52,12 +52,13 @@ zero events or zero sources.
 1. The bilingual privacy notice is implemented at `/privacy`, with Christian
    Paolini as the user-approved data-controller identity. The site owner must
    complete a final content review before publication.
-2. The permanent public social-sharing image is implemented at
-   `/arcus-social-card.png`; owner approval is still required before launch.
-3. Deploy the Open build to a temporary hosting URL and complete desktop/mobile
-   acceptance before changing DNS.
-4. After acceptance, connect `www.arcusbridges.org`, enable HTTPS and configure
-   the root-domain redirect.
+2. The permanent public social-sharing image is implemented and approved at
+   `/arcus-social-card.png`.
+3. The Open build is deployed privately at
+   `https://arcus-open-staging.netlify.app` and has passed initial online
+   acceptance. Connect the repository before production activation.
+4. After final acceptance, make the Netlify project public, connect
+   `www.arcusbridges.org`, enable HTTPS and configure the root-domain redirect.
 
 ## Release checks
 
@@ -90,5 +91,6 @@ git diff --check
 - `test:product-scope`: passed.
 - `git diff --check`: passed.
 
-The remaining release gates require the real hosting environment: staging URL,
-DNS, HTTPS, root-domain redirect, final owner review and external acceptance.
+The remaining release gates are repository connection, final owner and external
+acceptance, public visibility, DNS, HTTPS and the root-domain redirect. Aruba
+DNS and mail records remain unchanged during private staging.

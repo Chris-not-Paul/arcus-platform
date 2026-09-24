@@ -28,11 +28,14 @@ may enter the launch branch.
 
 ## Hosting and domain — next gate
 
-- [ ] Connect the Git repository to the selected static hosting service.
+- [ ] Connect the Git repository to Netlify for controlled repeatable deploys.
 - [ ] Build command: `npm run build:open`.
 - [ ] Publish directory: `dist`.
-- [ ] Deploy to a temporary provider URL before changing DNS.
-- [ ] Repeat acceptance against the temporary HTTPS URL.
+- [x] Deploy privately to `https://arcus-open-staging.netlify.app` before
+  changing DNS.
+- [x] Complete initial acceptance against the temporary HTTPS URL: Home,
+  Atlas, direct event dossier, Analytics, Data Access, CSV download and private
+  route boundary.
 - [ ] Connect `www.arcusbridges.org`.
 - [ ] Redirect `arcusbridges.org` permanently to the `www` address.
 - [ ] Confirm a valid HTTPS certificate on both host names.
