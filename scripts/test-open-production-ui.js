@@ -82,7 +82,7 @@ try {
     ["/", ".home-page", ".home-hero h1", "rgb(243, 240, 232)"],
     ["/atlas", ".atlas-page", ".atlas-sidebar-brand h1", "rgb(243, 240, 232)"],
     ["/atlas/events/campobasso-2000", ".event-dossier-page", ".arcus-event-dossier-header h2", "rgb(252, 251, 247)"],
-    ["/analytics", ".analytics-page", ".analytics-title", "rgb(23, 63, 66)"],
+    ["/analytics", ".analytics-page", ".analytics-title", "rgb(243, 240, 232)"],
     ["/methodology", ".methodology-page", ".methodology-title", "rgb(243, 240, 232)"],
     ["/data-access", ".data-access-page", ".data-access-hero h1", "rgb(243, 240, 232)"],
     ["/publications", ".publications-page", ".publications-hero h1", "rgb(243, 240, 232)"],
@@ -167,6 +167,18 @@ try {
     }
   }
   checks.push("shared Open editorial hero palette and type scale");
+
+  await page.goto(`${base}/analytics`);
+  const analyticsDarkSection = await page.locator(".analytics-research-boundary").evaluate(
+    (element) => getComputedStyle(element).backgroundImage
+  );
+  await page.goto(`${base}/methodology`);
+  const methodologyDarkSection = await page.locator(".methodology-dark").first().evaluate(
+    (element) => getComputedStyle(element).backgroundImage
+  );
+  assert.equal(methodologyDarkSection, analyticsDarkSection);
+  assert.match(analyticsDarkSection, /rgb\(23, 63, 66\)/);
+  checks.push("shared ARCUS dark-section palette");
 
   await page.goto(`${base}/contribute`);
   await page.locator('a[href^="mailto:contribute@arcusbridges.org"]').waitFor();

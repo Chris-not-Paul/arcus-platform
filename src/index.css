@@ -164,6 +164,7 @@
       var(--arcus-night-soft) 48%,
       var(--arcus-night-panel)
     );
+  --arcus-open-dark-section-background: var(--arcus-open-hero-background);
   --arcus-open-hero-title-size: clamp(48px, 6vw, 82px);
   --arcus-open-hero-title-line: 0.98;
   --arcus-open-hero-copy-size: 18px;

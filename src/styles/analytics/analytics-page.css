@@ -4,8 +4,8 @@
 
 .analytics-page {
   width: 100%;
-  background: var(--arcus-night);
-  color: var(--arcus-text-on-dark);
+  background: var(--arcus-paper);
+  color: var(--arcus-ink);
   font-family: var(--arcus-font-sans);
   overflow-x: hidden;
 }
@@ -53,22 +53,7 @@
 }
 
 .analytics-dark {
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(142,113,86,0.16),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(71,92,104,0.12),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      var(--arcus-night),
-      var(--arcus-night-soft)
-    );
+  background: var(--arcus-open-dark-section-background);
 
   color: var(--arcus-text-on-dark);
 }
@@ -463,7 +448,7 @@
 .analytics-research-boundary {
   padding: 54px 0 62px;
   border-top: 1px solid var(--arcus-border-dark);
-  background: var(--arcus-night-soft);
+  background: var(--arcus-open-dark-section-background);
 }
 
 .analytics-research-boundary-inner {
@@ -885,7 +870,7 @@
   gap: 7px;
   min-height: 96px;
   padding: 13px;
-  background: #153738;
+  background: var(--arcus-night);
 }
 
 .analytics-interpretation-check-grid article.is-caution {
@@ -1111,7 +1096,7 @@
 }
 
 .analytics-comparison-summary > div.is-overlapping strong {
-  color: #d4a15b;
+  color: var(--arcus-bronze-soft);
 }
 
 .analytics-comparison-summary small {
@@ -1287,8 +1272,8 @@
   max-height: 540px;
   overflow: auto;
   border: 1px solid rgba(82,115,109,0.30);
-  background: #193f40;
-  scrollbar-color: #52736d #193f40;
+  background: var(--arcus-night);
+  scrollbar-color: var(--arcus-steel) var(--arcus-night);
   scrollbar-width: thin;
 }
 
@@ -1300,28 +1285,28 @@
 
 .analytics-chart-scroll::-webkit-scrollbar-track,
 .analytics-chart-table-wrap::-webkit-scrollbar-track {
-  background: #193f40;
+  background: var(--arcus-night);
 }
 
 .analytics-chart-scroll::-webkit-scrollbar-thumb,
 .analytics-chart-table-wrap::-webkit-scrollbar-thumb {
-  border: 2px solid #193f40;
+  border: 2px solid var(--arcus-night);
   border-radius: 10px;
-  background: #52736d;
+  background: var(--arcus-steel);
 }
 
 .analytics-chart-scroll {
-  background: #ffffff;
-  scrollbar-color: #91a29e #edf1ef;
+  background: var(--arcus-paper-soft);
+  scrollbar-color: var(--arcus-steel) var(--arcus-paper-warm);
 }
 
 .analytics-chart-scroll::-webkit-scrollbar-track {
-  background: #edf1ef;
+  background: var(--arcus-paper-warm);
 }
 
 .analytics-chart-scroll::-webkit-scrollbar-thumb {
-  border-color: #edf1ef;
-  background: #91a29e;
+  border-color: var(--arcus-paper-warm);
+  background: var(--arcus-steel);
 }
 
 .analytics-research-chart {
@@ -1371,7 +1356,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #214a4b;
+  background: var(--arcus-night-soft);
   color: var(--arcus-ivory-faint);
   font-family: var(--arcus-font-mono);
   font-size: 9px;
@@ -1453,7 +1438,7 @@
 .analytics-crosstab tfoot {
   position: sticky;
   bottom: 0;
-  background: #214a4b;
+  background: var(--arcus-night-soft);
   color: var(--arcus-bronze-soft);
   font-family: var(--arcus-font-mono);
   font-size: 10px;
@@ -1870,7 +1855,7 @@
 
 .analytics-figure-caption > small {
   grid-column: 2 / -1;
-  color: #8f522b;
+  color: var(--arcus-clay);
 }
 
 .analytics-chart-actions .analytics-package-download {
@@ -1881,7 +1866,7 @@
 
 .analytics-package-error {
   margin: 10px 0 0;
-  color: #e0ad70;
+  color: var(--arcus-bronze-soft);
   font-size: 10px;
 }
 
@@ -2824,7 +2809,7 @@
 .analytics-page .analytics-light,
 .analytics-page .analytics-section,
 .analytics-page .analytics-report-section {
-  background: var(--arcus-night);
+  background: var(--arcus-open-dark-section-background);
   color: var(--arcus-text-on-dark);
 }
 
@@ -3542,7 +3527,7 @@
     padding: 8px;
     border: 1px solid rgba(196,144,64,0.42);
     border-radius: 5px;
-    background: rgba(15,45,46,0.97);
+    background: color-mix(in srgb, var(--arcus-night) 97%, transparent);
     box-shadow: 0 16px 40px rgba(7,25,26,0.34);
     backdrop-filter: blur(12px);
     opacity: 0;

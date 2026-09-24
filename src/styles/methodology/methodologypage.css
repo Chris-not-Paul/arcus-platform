@@ -185,22 +185,7 @@
 }
 
 .methodology-dark {
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(122,100,80,0.14),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(110,133,141,0.08),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      var(--arcus-night-soft),
-      var(--arcus-night-panel)
-    );
+  background: var(--arcus-open-dark-section-background);
 
   color: var(--arcus-text-on-dark);
 }
