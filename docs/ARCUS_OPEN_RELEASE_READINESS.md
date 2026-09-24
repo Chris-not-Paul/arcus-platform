@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: private staging verified — owner review, repository connection and domain activation pending
+Status: private continuous-deployment staging verified — owner review and domain activation pending
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -56,7 +56,8 @@ zero events or zero sources.
    `/arcus-social-card.png`.
 3. The Open build is deployed privately at
    `https://arcus-open-staging.netlify.app` and has passed initial online
-   acceptance. Connect the repository before production activation.
+   acceptance. Netlify is connected to `main`, runs `npm run build:open` and
+   publishes `dist` through controlled continuous deployment.
 4. After final acceptance, make the Netlify project public, connect
    `www.arcusbridges.org`, enable HTTPS and configure the root-domain redirect.
 
@@ -90,7 +91,12 @@ git diff --check
   denominators and advanced descriptive diagnostics.
 - `test:product-scope`: passed.
 - `git diff --check`: passed.
+- Netlify continuous deployment: passed from commit `81c8095`; build and deploy
+  completed in 20 seconds, with one redirect rule and three header rules
+  processed without errors.
+- Post-deploy online acceptance: passed — Atlas reports 261 events and 716
+  documentary sources; Netlify visibility remains private.
 
-The remaining release gates are repository connection, final owner and external
-acceptance, public visibility, DNS, HTTPS and the root-domain redirect. Aruba
-DNS and mail records remain unchanged during private staging.
+The remaining release gates are final owner and external acceptance, public
+visibility, DNS, HTTPS and the root-domain redirect. Aruba DNS and mail records
+remain unchanged during private staging.
