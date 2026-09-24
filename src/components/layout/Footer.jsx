@@ -40,7 +40,7 @@ function Footer() {
           ],
         },
         {
-          label: "Progetto",
+          label: "About",
           links: [
             ["Identity", "/about"],
             ["Contribute", "/contribute"],
@@ -78,7 +78,7 @@ function Footer() {
           ],
         },
         {
-          label: "About",
+          label: "Progetto",
           links: [
             ["Identità", "/about"],
             ["Contribuisci", "/contribute"],
