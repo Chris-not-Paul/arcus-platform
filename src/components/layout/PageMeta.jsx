@@ -3,6 +3,9 @@ import { useLocation } from "react-router-dom";
 
 import { siteOrigin } from "../../config/site";
 
+const socialImageUrl = `${siteOrigin}/arcus-social-card.png`;
+const socialImageAlt = "ARCUS — Bridge Failure Research";
+
 function setMeta(name, content) {
   let tag = document.querySelector(
     `meta[name="${name}"]`
@@ -66,15 +69,23 @@ export default function PageMeta({
 
     setMeta("theme-color", "#f3f0e8");
     setMeta("robots", noIndex ? "noindex, nofollow" : "index, follow");
-    setMeta("twitter:card", "summary");
+    setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", fullTitle);
     setMeta("twitter:description", description);
+    setMeta("twitter:image", socialImageUrl);
+    setMeta("twitter:image:alt", socialImageAlt);
     setProperty("og:title", fullTitle);
     setProperty("og:description", description);
     setProperty("og:type", "website");
     setProperty("og:site_name", "ARCUS");
     setProperty("og:url", canonicalUrl);
     setProperty("og:locale", document.documentElement.lang === "it" ? "it_IT" : "en_GB");
+    setProperty("og:image", socialImageUrl);
+    setProperty("og:image:secure_url", socialImageUrl);
+    setProperty("og:image:type", "image/png");
+    setProperty("og:image:width", "1200");
+    setProperty("og:image:height", "630");
+    setProperty("og:image:alt", socialImageAlt);
     setLink("canonical", canonicalUrl);
   }, [description, location.pathname, noIndex, title]);
 

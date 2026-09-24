@@ -23,6 +23,8 @@ const logoHorizontalLight = read("src/assets/logo/logo-horizontal.svg");
 const logoHorizontalDark = read("src/assets/logo/logo-horizontal-dark.svg");
 const logoMark = read("src/assets/logo/logo-mark.svg");
 const favicon = read("public/favicon.svg");
+const socialCard = read("public/arcus-social-card.svg");
+const documentShell = read("index.html");
 const globalStyles = read("src/index.css");
 const pageMeta = read("src/components/layout/PageMeta.jsx");
 const analytics = read("src/pages/AnalyticsPage.jsx");
@@ -112,8 +114,11 @@ check("shared ARCUS interface palette", () => {
 check("canonical metadata", () => {
   assert.match(pageMeta, /canonical/);
   assert.match(pageMeta, /og:url/);
+  assert.match(pageMeta, /og:image/);
   assert.match(pageMeta, /robots/);
-  assert.match(pageMeta, /twitter:card/);
+  assert.match(pageMeta, /summary_large_image/);
+  assert.match(documentShell, /arcus-social-card\.png/);
+  assert.match(socialCard, /ARCUS — Bridge Failure Research/);
 });
 
 check("crawlable public surface", () => {
@@ -157,6 +162,7 @@ check("production build artifacts", () => {
     "dist/_redirects",
     "dist/robots.txt",
     "dist/sitemap.xml",
+    "dist/arcus-social-card.png",
     "dist/fonts/ibm-plex/IBMPlexSans-Regular.woff2",
     "dist/fonts/ibm-plex/IBMPlexSerif-Regular.woff2",
     "dist/fonts/ibm-plex/IBMPlexMono-Regular.woff2",

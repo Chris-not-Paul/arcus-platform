@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: release candidate — privacy review and staging acceptance pending
+Status: locally verified release candidate — owner review and staging acceptance pending
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -52,7 +52,8 @@ zero events or zero sources.
 1. The bilingual privacy notice is implemented at `/privacy`, with Christian
    Paolini as the user-approved data-controller identity. The site owner must
    complete a final content review before publication.
-2. A public social-sharing image should be approved before launch.
+2. The permanent public social-sharing image is implemented at
+   `/arcus-social-card.png`; owner approval is still required before launch.
 3. Deploy the Open build to a temporary hosting URL and complete desktop/mobile
    acceptance before changing DNS.
 4. After acceptance, connect `www.arcusbridges.org`, enable HTTPS and configure
@@ -70,3 +71,24 @@ npm run test:analytics-ui
 npm run lint
 git diff --check
 ```
+
+## Verification log
+
+### 24 September 2026
+
+- `test:open-release`: passed — 261 events, 716 sources, canonical identifiers,
+  source integrity, translations, downloads and public/private boundary.
+- `lint`: passed.
+- `test:open-production`: passed — `arcus-open-2026.6` and deployable Open
+  artifacts verified.
+- `test:open-production-ui`: passed on desktop and mobile across the complete
+  public surface.
+- `test:atlas-ui`: passed on desktop, tablet, mobile and small mobile, including
+  controlled API/fallback failures.
+- `test:analytics-ui`: passed, including exports, reproducibility packages,
+  denominators and advanced descriptive diagnostics.
+- `test:product-scope`: passed.
+- `git diff --check`: passed.
+
+The remaining release gates require the real hosting environment: staging URL,
+DNS, HTTPS, root-domain redirect, final owner review and external acceptance.

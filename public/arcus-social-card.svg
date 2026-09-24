@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">ARCUS — Bridge Failure Research</title>
+  <desc id="description">ARCUS social sharing card in the official ivory, copper and deep green palette.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fcfbf7"/>
+      <stop offset="1" stop-color="#f3f0e8"/>
+    </linearGradient>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#214f50"/>
+      <stop offset="1" stop-color="#173f42"/>
+    </linearGradient>
+    <clipPath id="right-panel">
+      <path d="M690 0H1200V630H690C790 500 790 130 690 0Z"/>
+    </clipPath>
+    <style>
+      .sans { font-family: "IBM Plex Sans", Arial, sans-serif; }
+      .serif { font-family: "IBM Plex Serif", Georgia, serif; }
+      .mono { font-family: "IBM Plex Mono", Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <path d="M0 0H8V630H0Z" fill="#a76532"/>
+
+  <g opacity=".42" fill="none" stroke="#c7bda9" stroke-width="1">
+    <path d="M-10 474C110 400 172 424 238 486S396 592 575 514"/>
+    <path d="M-18 496C105 422 169 446 235 508S393 614 574 536"/>
+    <path d="M-26 518C99 444 166 468 232 530S390 636 572 558"/>
+    <path d="M77 -20C171 54 209 129 190 205S173 366 276 428"/>
+    <path d="M105 -22C199 52 237 127 218 203S201 364 304 426"/>
+  </g>
+
+  <g transform="translate(93 92) scale(.42)" fill="#a76532">
+    <path d="M-65 68-16.4-24-9.9-12-43 68Z M-13.2-30 0-55v19L-7.4-18Z"/>
+    <path d="M0-55 65 68H43L0-36Z"/>
+    <rect x="-33" y="17" width="66" height="6" rx="1"/>
+    <rect x="-65" y="61" width="130" height="7" rx="1"/>
+  </g>
+  <text x="142" y="108" class="sans" fill="#202826" font-size="35" font-weight="600" letter-spacing="11">ARCUS</text>
+  <text x="65" y="166" class="mono" fill="#5f6b68" font-size="14" letter-spacing="3">BRIDGE FAILURE RESEARCH</text>
+
+  <text x="65" y="278" class="serif" fill="#173f42" font-size="55">Documenting events.</text>
+  <text x="65" y="340" class="serif" fill="#173f42" font-size="55">Connecting evidence.</text>
+  <text x="65" y="402" class="serif" fill="#173f42" font-size="55">Supporting research.</text>
+
+  <path d="M65 472H126" stroke="#a76532" stroke-width="4"/>
+  <text x="65" y="526" class="sans" fill="#202826" font-size="22" letter-spacing="2.5">arcusbridges.org</text>
+  <text x="65" y="573" class="mono" fill="#6e7875" font-size="13" letter-spacing="2">OPEN RESEARCH INFRASTRUCTURE</text>
+
+  <g clip-path="url(#right-panel)">
+    <rect x="690" width="510" height="630" fill="url(#night)"/>
+    <g opacity=".22" fill="none" stroke="#e9dfcd" stroke-width="1.2">
+      <path d="M655 92C761 24 880 40 929 112S1057 225 1238 139"/>
+      <path d="M645 118C758 51 875 64 925 136S1052 249 1237 163"/>
+      <path d="M638 146C752 80 870 88 920 160S1047 273 1235 187"/>
+      <path d="M678 501C780 429 872 458 933 526S1074 637 1241 548"/>
+      <path d="M668 526C776 454 868 482 929 550S1070 661 1240 572"/>
+    </g>
+    <g fill="none" stroke="#fcfbf7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M689 277H1218" stroke-width="8"/>
+      <path d="M689 265H1218" stroke-width="2" opacity=".8"/>
+      <path d="M741 277V333M1157 277V333" stroke-width="5"/>
+      <path d="M762 442C823 306 884 287 953 287S1083 306 1144 442" stroke-width="6"/>
+      <path d="M762 442C824 335 885 316 953 316S1082 335 1144 442" stroke-width="2" opacity=".72"/>
+      <path d="M763 442H1143" stroke-width="5"/>
+      <path d="M794 389V277M839 337V277M884 306V277M930 288V277M976 288V277M1022 306V277M1067 337V277M1112 389V277" stroke-width="3" opacity=".9"/>
+      <path d="M738 333V498M1160 333V498" stroke-width="7"/>
+      <path d="M720 498H758M1140 498H1178" stroke-width="8"/>
+    </g>
+    <g fill="#c98450">
+      <circle cx="785" cy="193" r="7"/>
+      <circle cx="858" cy="131" r="5"/>
+      <circle cx="1029" cy="175" r="6"/>
+      <circle cx="1112" cy="103" r="4"/>
+    </g>
+  </g>
+</svg>

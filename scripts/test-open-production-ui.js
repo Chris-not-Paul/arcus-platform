@@ -45,6 +45,14 @@ try {
     await page.locator('link[rel="canonical"]').getAttribute("href"),
     "https://www.arcusbridges.org/about"
   );
+  assert.equal(
+    await page.locator('meta[property="og:image"]').getAttribute("content"),
+    "https://www.arcusbridges.org/arcus-social-card.png"
+  );
+  assert.equal(
+    await page.locator('meta[name="twitter:card"]').getAttribute("content"),
+    "summary_large_image"
+  );
   checks.push("public navigation and canonical contact surface");
 
   await page.goto(`${base}/privacy`);
