@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
 import { startArcusApiServer } from './server/server.js'
 import {
   ARCUS_API_CONTRACT_VERSION,
@@ -78,8 +79,42 @@ const arcusApiPlugin = {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), arcusApiPlugin],
+  resolve: {
+    alias: {
+      '#arcus-app': fileURLToPath(
+        new URL(
+          mode === 'open' ? './src/OpenApp.jsx' : './src/App.jsx',
+          import.meta.url,
+        ),
+      ),
+      '#arcus-professional-client': fileURLToPath(
+        new URL(
+          mode === 'open'
+            ? './src/utils/openProfessionalClient.js'
+            : './src/utils/professionalApiClient.js',
+          import.meta.url,
+        ),
+      ),
+      '#arcus-session-client': fileURLToPath(
+        new URL(
+          mode === 'open'
+            ? './src/utils/openSessionClient.js'
+            : './src/utils/sessionClient.js',
+          import.meta.url,
+        ),
+      ),
+      '#arcus-contribution-client': fileURLToPath(
+        new URL(
+          mode === 'open'
+            ? './src/utils/openContributionClient.js'
+            : './src/utils/contributionClient.js',
+          import.meta.url,
+        ),
+      ),
+    },
+  },
   server: {
     host: "127.0.0.1",
     port: 5173,
@@ -88,4 +123,4 @@ export default defineConfig({
     },
     strictPort: true,
   },
-})
+}))

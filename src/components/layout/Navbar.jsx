@@ -14,7 +14,7 @@ import logoMark from "../../assets/logo/logo-mark.svg";
 import {
   getSession,
   logoutProfessional,
-} from "../../utils/apiClient";
+} from "#arcus-session-client";
 import {
   accountsEnabled,
   professionalEnabled,

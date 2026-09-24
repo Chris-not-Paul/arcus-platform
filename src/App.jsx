@@ -28,6 +28,7 @@ const AccountPage = lazy(() => import("./pages/AccountPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ContributePage = lazy(() => import("./pages/ContributePage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
+const RightsPage = lazy(() => import("./pages/RightsPage"));
 
 import LanguageProvider from "./context/LanguageProvider";
 
@@ -208,6 +209,11 @@ function App() {
           <Route
             path="/privacy"
             element={<PrivacyPage />}
+          />
+
+          <Route
+            path="/rights"
+            element={<RightsPage />}
           />
 
           <Route

@@ -89,6 +89,7 @@ try {
     ["/contribute", ".contribute-page", ".contribute-hero h1", "rgb(243, 240, 232)"],
     ["/about", ".about-page", ".about-hero h1", "rgb(243, 240, 232)"],
     ["/privacy", ".privacy-page", ".privacy-hero h1", "rgb(243, 240, 232)"],
+    ["/rights", ".privacy-page", ".privacy-hero h1", "rgb(243, 240, 232)"],
     ["/route-not-found", ".not-found-page", ".not-found-content h1", "rgb(23, 63, 66)"],
   ];
 
@@ -129,6 +130,7 @@ try {
     ["/contribute", ".contribute-hero", ".contribute-hero h1", ".contribute-hero p", ".contribute-hero span"],
     ["/about", ".about-hero", ".about-hero h1", ".about-hero p", ".about-label"],
     ["/privacy", ".privacy-hero", ".privacy-hero h1", ".privacy-hero p", ".privacy-eyebrow"],
+    ["/rights", ".privacy-hero", ".privacy-hero h1", ".privacy-hero p", ".privacy-eyebrow"],
   ];
   let editorialReference = null;
 
@@ -223,6 +225,20 @@ try {
   assert.equal(await mobile.locator(".privacy-data-grid > article").count(), 4);
   assert.match(await mobile.locator("body").innerText(), /profilazione|profiling/i);
   checks.push("mobile privacy notice");
+
+  await mobile.goto(`${base}/rights`);
+  await mobile.locator(".privacy-summary").waitFor();
+  await noHorizontalOverflow(mobile);
+  assert.match(await mobile.locator("body").innerText(), /CC BY 4\.0/);
+  assert.match(
+    await mobile.locator("body").innerText(),
+    /software[\s\S]*riservat|software[\s\S]*remain reserved/i
+  );
+  assert.equal(
+    await mobile.locator('a[href="https://creativecommons.org/licenses/by/4.0/"]').count(),
+    1
+  );
+  checks.push("public rights and reuse boundary");
 
   await mobile.goto(`${base}/methodology`);
   await mobile.getByRole("heading", { name: /Come ARCUS costruisce l.evidenza|How ARCUS builds evidence/ }).waitFor();

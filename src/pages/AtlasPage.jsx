@@ -25,8 +25,9 @@ import {
   openDownloadUrls,
   openManifest,
   openSources,
-  professionalResource,
 } from "../utils/apiClient";
+import { professionalResource } from "#arcus-professional-client";
+import { isOpenRelease } from "../config/site";
 
 /* LAYOUT */
 
@@ -164,8 +165,8 @@ function AtlasPage() {
   const isEnterpriseMode =
     atlasMode === "enterprise";
   const isEnhancedMode =
-    isProfessionalMode ||
-    isEnterpriseMode;
+    !isOpenRelease &&
+    (isProfessionalMode || isEnterpriseMode);
 
   const homeLabel =
     language === "it"

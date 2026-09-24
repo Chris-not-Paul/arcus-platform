@@ -1,0 +1,1 @@
+export { professionalResource } from "./apiClient";

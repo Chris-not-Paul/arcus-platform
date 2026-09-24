@@ -12,9 +12,9 @@ import {
 import {
   contributionAcknowledgements,
   getExpertContributionStatus,
-  openEvents,
   submitExpertContribution,
-} from "../utils/apiClient";
+} from "#arcus-contribution-client";
+import { openEvents } from "../utils/apiClient";
 
 import "../styles/contribute-page.css";
 

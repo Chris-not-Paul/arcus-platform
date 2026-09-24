@@ -17,11 +17,15 @@ may enter the launch branch.
 - [x] Public data package: 261 events and 716 sources.
 - [x] Canonical `ITxx.xx.xx` identifiers across UI and downloads.
 - [x] Open/Professional boundary and unavailable private routes.
+- [x] Compile-time Open/Professional separation and automatic public-bundle
+  inspection for reserved routes, implementation signatures and source maps.
 - [x] Production Open build.
 - [x] Desktop and mobile public-page acceptance.
 - [x] Atlas desktop, tablet and mobile acceptance.
 - [x] Analytics workflow, downloads and reproducibility checks.
 - [x] Privacy route and controller identity implemented.
+- [x] Bilingual Rights & Reuse page plus separate code, data and identity
+  notices implemented.
 - [x] Sitemap, robots, SPA fallback, security and cache headers.
 - [x] Permanent 1200 × 630 social-sharing image and metadata.
 - [x] Domain email channels implemented in the public interface.
@@ -44,6 +48,7 @@ may enter the launch branch.
 ## Owner review
 
 - [ ] Approve the final bilingual Privacy page.
+- [ ] Approve the final bilingual Rights & Reuse page and licence wording.
 - [ ] Approve `/arcus-social-card.png` as the permanent sharing preview.
 - [ ] Confirm final wording on Home, Identity and Publications.
 - [ ] Confirm that all four domain mailboxes still receive external messages.

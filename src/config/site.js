@@ -12,19 +12,17 @@ export const siteOrigin = String(
   import.meta.env.VITE_ARCUS_SITE_ORIGIN || "https://www.arcusbridges.org"
 ).replace(/\/$/, "");
 
-export const isOpenRelease = releaseChannel === "open";
-export const accountsEnabled = enabled(
-  "VITE_ARCUS_ENABLE_ACCOUNTS",
-  !isOpenRelease
-);
-export const contributionFormEnabled = enabled(
-  "VITE_ARCUS_ENABLE_CONTRIBUTION_FORM",
-  !isOpenRelease
-);
-export const professionalEnabled = enabled(
-  "VITE_ARCUS_ENABLE_PROFESSIONAL",
-  !isOpenRelease
-);
+export const isOpenRelease =
+  import.meta.env.MODE === "open" || releaseChannel === "open";
+export const accountsEnabled =
+  !isOpenRelease &&
+  enabled("VITE_ARCUS_ENABLE_ACCOUNTS", true);
+export const contributionFormEnabled =
+  !isOpenRelease &&
+  enabled("VITE_ARCUS_ENABLE_CONTRIBUTION_FORM", true);
+export const professionalEnabled =
+  !isOpenRelease &&
+  enabled("VITE_ARCUS_ENABLE_PROFESSIONAL", true);
 
 export const contactAddresses = Object.freeze({
   general: "info@arcusbridges.org",

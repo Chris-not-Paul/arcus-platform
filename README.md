@@ -60,3 +60,13 @@ The repository contains the public Open release required by the static site.
 Authentication stores, editorial submissions, expert feedback, client data,
 backups and other operational material belong under ignored private storage and
 must never be added to the public build.
+
+## Rights and licences
+
+- Platform software and code: proprietary; see `LICENSE-CODE.md`.
+- ARCUS Open scientific data release: CC BY 4.0 within the scope stated in
+  `LICENSE-DATA.md` and the versioned release manifest.
+- ARCUS name, logo and project identity: not included in the data licence; see
+  `TRADEMARKS.md`.
+- Linked sources, photographs, dependencies and third-party assets retain
+  their individual licences or permissions.

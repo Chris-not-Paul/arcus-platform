@@ -25,6 +25,11 @@ The public navigation identifies it only as a non-interactive
 `Coming soon / Prossimamente` workstream: no access, registration flow or
 feature promise is exposed.
 
+The Open and platform products also have separate compile-time entry points.
+The deployable Open bundle excludes Professional, administration and account
+pages, reserved API routes, contribution-processing logic and source maps. This
+boundary is checked automatically after every Open production build.
+
 The domain mailboxes have passed inbound and outbound delivery checks and are
 considered operational for the release candidate.
 
@@ -47,6 +52,18 @@ zero events or zero sources.
 - `sitemap.xml` lists only the public release surface.
 - Per-page canonical and social metadata use `www.arcusbridges.org`.
 
+## Rights and reuse boundary
+
+- `/rights` states the bilingual public boundary between Open data, software,
+  third-party material and ARCUS identity assets.
+- `LICENSE-DATA.md` identifies CC BY 4.0 as the licence for the exact Open data
+  package described by its release manifest.
+- `LICENSE-CODE.md` reserves the software and source-code rights.
+- `TRADEMARKS.md` reserves the ARCUS name, symbol, wordmark and domain identity
+  without representing them as registered marks.
+- Source documents and photographs retain their own rights unless an item is
+  explicitly released under a compatible licence.
+
 ## Remaining launch gates
 
 1. The bilingual privacy notice is implemented at `/privacy`, with Christian
@@ -68,6 +85,7 @@ Run:
 ```text
 npm run test:open-release
 npm run test:open-production
+npm run test:open-production-ui
 npm run test:atlas-ui
 npm run test:analytics-ui
 npm run lint
@@ -83,8 +101,11 @@ git diff --check
 - `lint`: passed.
 - `test:open-production`: passed — `arcus-open-2026.6` and deployable Open
   artifacts verified.
+- Open code-boundary inspection: passed — 4,153 deploy files inspected;
+  reserved routes, endpoints, implementation signatures and source maps are
+  absent from the Open package.
 - `test:open-production-ui`: passed on desktop and mobile across the complete
-  public surface.
+  public surface, including the public rights-and-reuse boundary.
 - `test:atlas-ui`: passed on desktop, tablet, mobile and small mobile, including
   controlled API/fallback failures.
 - `test:analytics-ui`: passed, including exports, reproducibility packages,

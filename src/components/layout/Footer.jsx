@@ -17,7 +17,7 @@ function Footer() {
       description:
         "A scientific observatory for documented bridge-collapse records, sources and reproducible research.",
       copyright:
-        "(c) 2026 ARCUS - Italian Bridge Collapse Database",
+        "© 2026 Christian Paolini · ARCUS software and identity rights reserved · Open data CC BY 4.0",
       evidencePeriod: "Evidence period 2000-2026",
       groups: [
         {
@@ -45,6 +45,7 @@ function Footer() {
             ["Identity", "/about"],
             ["Contribute", "/contribute"],
             ["Privacy", "/privacy"],
+            ["Rights & reuse", "/rights"],
             ["Contact", `mailto:${contactAddresses.general}`],
           ],
         },
@@ -54,7 +55,7 @@ function Footer() {
       description:
         "Un osservatorio scientifico per record documentati di collasso, fonti verificabili e ricerca riproducibile.",
       copyright:
-        "(c) 2026 ARCUS - Italian Bridge Collapse Database",
+        "© 2026 Christian Paolini · Software e identità ARCUS riservati · Dati Open CC BY 4.0",
       evidencePeriod: "Periodo evidenza 2000-2026",
       groups: [
         {
@@ -82,6 +83,7 @@ function Footer() {
             ["Identità", "/about"],
             ["Contribuisci", "/contribute"],
             ["Privacy", "/privacy"],
+            ["Diritti e riuso", "/rights"],
             ["Contatto", `mailto:${contactAddresses.general}`],
           ],
         },
