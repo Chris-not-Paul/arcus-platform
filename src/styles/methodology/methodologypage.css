@@ -301,12 +301,8 @@
   position: absolute;
   inset: 0;
 
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.08),
-      rgba(0,0,0,0.28)
-    );
+  /* Keep the rendered hero hue identical to the shared Open-page palette. */
+  background: transparent;
 
   pointer-events: none;
 }

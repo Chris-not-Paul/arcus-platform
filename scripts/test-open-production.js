@@ -29,6 +29,9 @@ const globalStyles = read("src/index.css");
 const pageMeta = read("src/components/layout/PageMeta.jsx");
 const analytics = read("src/pages/AnalyticsPage.jsx");
 const contributeStyles = read("src/styles/contribute-page.css");
+const analyticsStyles = read("src/styles/analytics/analytics-page.css");
+const methodologyStyles = read("src/styles/methodology/methodologypage.css");
+const aboutStyles = read("src/styles/about-page.css");
 const robots = read("public/robots.txt");
 const sitemap = read("public/sitemap.xml");
 const headers = read("public/_headers");
@@ -108,6 +111,13 @@ check("shared ARCUS interface palette", () => {
   assert.match(contributeStyles, /background: var\(--arcus-night\)/);
   assert.match(contributeStyles, /color: var\(--arcus-ink\)/);
   assert.doesNotMatch(contributeStyles, /#f2f0eb|#173f41|#c58b39/i);
+  for (const styles of [aboutStyles, analyticsStyles, methodologyStyles]) {
+    assert.match(styles, /background: var\(--arcus-open-hero-background\)/);
+  }
+  for (const styles of [analyticsStyles, methodologyStyles]) {
+    assert.match(styles, /hero-overlay\s*\{[^}]*background: transparent;/);
+    assert.doesNotMatch(styles, /hero-overlay\s*\{[^}]*rgba\(0,0,0,0\.28\)/);
+  }
   assert.match(pageMeta, /theme-color", "#f3f0e8"/);
 });
 
