@@ -91,11 +91,11 @@ assert.equal(
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "bridge_length_m") !== null).length,
-  157
+  159
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "piers_in_active_riverbed") !== null).length,
-  154
+  156
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "episode_id")).length,

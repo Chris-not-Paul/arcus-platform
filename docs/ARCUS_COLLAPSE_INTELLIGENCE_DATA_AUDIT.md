@@ -60,8 +60,8 @@ construction_year
 ```
 
 The current master also contains complete structured location-precision labels,
-157 validated Hydraulic bridge-length records, 154 validated records for pier
-presence in the active riverbed and 291 curation-log entries. These resources
+159 validated Hydraulic bridge-length records, 156 validated records for pier
+presence in the active riverbed and 295 curation-log entries. These resources
 are governed by the Event Research Schema rather than being flattened into the
 Open event table.
 
@@ -155,11 +155,11 @@ conservatively to ARCUS without filling gaps by inference:
 
 | Metric | Value |
 |---|---:|
-| Accepted unique Hydraulic ARCUS/S3 profiles | 157 |
-| Explicit source-record matches | 112 |
+| Accepted unique Hydraulic ARCUS/S3 profiles | 159 |
+| Explicit source-record matches | 114 |
 | Unique coordinate + year matches | 46 |
-| Bridge length available | 157 |
-| Piers-in-active-riverbed available | 154 |
+| Bridge length available | 159 |
+| Piers-in-active-riverbed available | 156 |
 | Rejected spatial inconsistencies | 5 |
 | Rejected duplicate assignments | 3 |
 
@@ -170,7 +170,7 @@ fields. This prevents an unvalidated feature from changing production outputs
 and avoids double counting correlated basin/river-size information.
 
 The master workbook uses a normalized structure: `EVENTS` contains only
-`bridge_length_m` and `piers_in_active_riverbed`; the 158 accepted joins are in
+`bridge_length_m` and `piers_in_active_riverbed`; the 160 accepted joins are in
 `HYDRAULIC_GEOMETRY_LINKS`; the S3 citation, DOI, archive path and checksum occur
 once in `DATASETS`. This keeps the event table flat and analysis-ready without
 discarding audit provenance.

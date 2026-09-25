@@ -98,7 +98,7 @@ assert.equal(
   forbiddenEventHeaders.every((header) => !eventHeaders.includes(header)),
   true
 );
-assert.equal(linkRows.length, 158);
+assert.equal(linkRows.length, 160);
 assert.equal(
   new Set(linkRows.map((row) => row.source_record_id)).size,
   linkRows.length

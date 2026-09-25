@@ -6,7 +6,7 @@
 MASTER_RESEARCH.xlsx (internal, read-only)
   -> common header-based validation and lossless normalization
      -> Open release candidate + quality gate
-        -> private-data/open/releases/arcus-open-2026.6 (immutable)
+        -> private-data/open/releases/arcus-open-2026.8 (immutable)
         -> public read-only API and downloads
      -> Professional live superset
         -> professional-events.json + professional-sources.json
@@ -16,7 +16,7 @@ MASTER_RESEARCH.xlsx (internal, read-only)
 
 `npm run build:open-release` builds only the next Open candidate without rewriting Professional data. `npm run build-data` builds both products without serving the workbook. The Open release directory contains `manifest.json`, `events.json`, `sources.json`, `taxonomy.json`, `data-dictionary.json`, `changelog.json`, `statistics.json`, `quality-audit.json`, `id-mapping.json`, `events.csv` and `events.geojson`. `current.json` selects the active immutable snapshot.
 
-If the selected release already exists, the build verifies normalized events, sources and taxonomy, reads the existing files and does not rewrite the directory. Any content difference requires a new Open version. `arcus-open-2026.1` remains unchanged as the reproducible legacy-ID release; `arcus-open-2026.2` is the first schema-v2 release with canonical `IT` identifiers; `arcus-open-2026.3` applies the September 2026 master correction, including two documented non-collapse exclusions and the revised source registry; `arcus-open-2026.4` restricts structural typology to documented load-bearing systems and leaves unsupported systems explicitly unavailable; `arcus-open-2026.5` expands source-supported structural-system coverage while preserving that controlled vocabulary; `arcus-open-2026.6` corrects the municipality spelling for `IT25.04.01` while retaining its canonical identifier and stable permalink.
+If the selected release already exists, the build verifies normalized events, sources and taxonomy, reads the existing files and does not rewrite the directory. Any content difference requires a new Open version. `arcus-open-2026.1` remains unchanged as the reproducible legacy-ID release; `arcus-open-2026.2` is the first schema-v2 release with canonical `IT` identifiers; `arcus-open-2026.3` applies the September 2026 master correction, including two documented non-collapse exclusions and the revised source registry; `arcus-open-2026.4` restricts structural typology to documented load-bearing systems and leaves unsupported systems explicitly unavailable; `arcus-open-2026.5` expands source-supported structural-system coverage while preserving that controlled vocabulary; `arcus-open-2026.6` corrects the municipality spelling for `IT25.04.01` while retaining its canonical identifier and stable permalink; `arcus-open-2026.7` expands the controlled vocabulary used for data entry and replaces the ambiguous `Frame` label with `Rigid-frame bridge` without altering the event population; `arcus-open-2026.8` applies the final pre-release material correction from reinforced concrete to masonry for the affected record while preserving the event population and identifiers.
 
 The manifest declares version, generation time, data cutoff, counts, taxonomy and schema versions, license, citation, changelog, limitations and SHA-256 workbook fingerprint.
 

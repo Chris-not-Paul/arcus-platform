@@ -118,7 +118,7 @@ function PublicationsPage() {
         paperText: baseContent.paperText,
       };
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.6";
+    manifest?.version || "arcus-open-2026.8";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;

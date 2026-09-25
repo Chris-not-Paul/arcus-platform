@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.6",
+  "release": "arcus-open-2026.8",
   "events": [
     {
       "event_id": "IT00.01.01",
@@ -2182,7 +2182,7 @@
       "exact_location": true,
       "bridge_name": null,
       "structural_type": "Arch bridge",
-      "material_type": "Reinforced concrete",
+      "material_type": "Masonry",
       "construction_year": null,
       "construction_year_numeric": null,
       "construction_year_raw": null,

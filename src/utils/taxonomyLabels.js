@@ -52,8 +52,8 @@ const labels = {
     "Cable-stayed": {
       it: "Ponte strallato",
     },
-    Frame: {
-      it: "Telaio",
+    "Rigid-frame bridge": {
+      it: "Ponte a telaio rigido",
     },
     Suspension: {
       it: "Ponte sospeso",

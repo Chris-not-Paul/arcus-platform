@@ -2,7 +2,7 @@
 
 Target publication: 1 October 2026
 
-Release: `arcus-open-2026.6`
+Release: `arcus-open-2026.8`
 
 Canonical address: `https://www.arcusbridges.org`
 

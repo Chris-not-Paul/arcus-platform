@@ -1,11 +1,11 @@
 {
-  "release": "arcus-open-2026.6",
-  "generated_at": "2026-09-22T14:22:20.344Z",
+  "release": "arcus-open-2026.8",
+  "generated_at": "2026-09-25T11:57:51.197Z",
   "status": "passed",
   "counts": {
     "events": 261,
     "sources": 716,
-    "taxonomy_entries": 63,
+    "taxonomy_entries": 100,
     "warnings": 74,
     "errors": 0,
     "needs_review": 4,
@@ -441,10 +441,10 @@
     }
   ],
   "delta": {
-    "previous_release": "arcus-open-2026.5",
+    "previous_release": "arcus-open-2026.7",
     "new_events": [],
     "updated_events": [
-      "IT25.04.01"
+      "IT02.06.02"
     ],
     "removed_events": [],
     "new_sources": [],

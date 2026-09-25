@@ -36,7 +36,7 @@ considered operational for the release candidate.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.6`: 261 events and 716 documentary sources. It does not include
+`arcus-open-2026.8`: 261 events and 716 documentary sources. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 
@@ -99,7 +99,7 @@ git diff --check
 - `test:open-release`: passed — 261 events, 716 sources, canonical identifiers,
   source integrity, translations, downloads and public/private boundary.
 - `lint`: passed.
-- `test:open-production`: passed — `arcus-open-2026.6` and deployable Open
+- `test:open-production`: passed — `arcus-open-2026.8` and deployable Open
   artifacts verified.
 - Open code-boundary inspection: passed — 4,153 deploy files inspected;
   reserved routes, endpoints, implementation signatures and source maps are

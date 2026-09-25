@@ -337,26 +337,26 @@
     },
     {
       "name": "taxonomy",
-      "record_count": 63,
+      "record_count": 100,
       "fields": [
         {
           "field": "definition_it",
           "type": "string",
-          "populated": 63,
+          "populated": 100,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "field",
           "type": "string",
-          "populated": 63,
+          "populated": 100,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "value",
           "type": "string",
-          "populated": 63,
+          "populated": 100,
           "missing": 0,
           "coverage": 1
         }

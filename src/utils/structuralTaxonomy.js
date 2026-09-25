@@ -2,7 +2,7 @@ export const STRUCTURAL_TYPE_VALUES = Object.freeze([
   "Beam bridge",
   "Arch bridge",
   "Truss",
-  "Frame",
+  "Rigid-frame bridge",
   "Cable-stayed",
   "Suspension",
 ]);

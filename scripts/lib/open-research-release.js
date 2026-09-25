@@ -19,7 +19,7 @@ import {
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.6";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.8";
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {

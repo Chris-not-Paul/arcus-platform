@@ -924,11 +924,11 @@ function AtlasPage() {
       injuries: event.injuries ?? 0,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.6",
+      release: openRelease?.version || "arcus-open-2026.8",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.6"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.8"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );

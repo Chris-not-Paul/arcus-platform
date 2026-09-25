@@ -1,6 +1,6 @@
 # ARCUS Data Quality Audit
 
-The active `arcus-open-2026.6` release passed its structural gate with 261 unique events, 261 unique slugs, 716 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
+The active `arcus-open-2026.8` release passed its structural gate with 261 unique events, 261 unique slugs, 716 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
 
 The current Professional live build contains 261 events and 716 sources. All 261 Open events and all 716 Open source IDs are present in Professional after explicit identifier translation, and shared public fields are equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
 
@@ -21,9 +21,9 @@ Territorial warnings include administrative-name variants and coordinate/provinc
 
 Hydraulic coverage remains 211 events, with 172 specific processes and 166 specific components. Evidence classes are 126 Documented, 46 Probable, 2 Needs review and 37 Unspecified. Missing values remain visible in Open statistics.
 
-The structural-type audit removed 14 `Viaduct`, 13 `Overpass` and one `Masonry` value from the structural-system field. The revised master extends source-supported editorial classification: 225 records are now identified as beam bridges, 21 as arch bridges and only 6 structural systems remain unavailable. The release gate continues to accept only Beam bridge, Arch bridge, Truss, Frame, Cable-stayed and Suspension.
+The structural-type audit removed 14 `Viaduct`, 13 `Overpass` and one `Masonry` value from the structural-system field. The revised master extends source-supported editorial classification: 225 records are now identified as beam bridges, 21 as arch bridges and only 6 structural systems remain unavailable. The release gate accepts only Beam bridge, Arch bridge, Truss, Rigid-frame bridge, Cable-stayed and Suspension.
 
-The machine-readable source is `private-data/open/releases/arcus-open-2026.6/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
+The machine-readable source is `private-data/open/releases/arcus-open-2026.8/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
 
 Open immutability is checked with a complete release-directory fingerprint before and after Professional regeneration. Professional derived resources use `professional-events.json` and `professional-sources.json`; tests reject a fallback to processed legacy files. Hydraulic outcome fields remain excluded from FPI, Path 02, incidence, official exposure, territory profiles, asset screening and analogue retrieval.
 

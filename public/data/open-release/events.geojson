@@ -1,9 +1,9 @@
 {
   "type": "FeatureCollection",
-  "name": "arcus-open-2026.6",
+  "name": "arcus-open-2026.8",
   "metadata": {
-    "version": "arcus-open-2026.6",
-    "generated_at": "2026-09-22T14:22:20.344Z",
+    "version": "arcus-open-2026.8",
+    "generated_at": "2026-09-25T11:57:51.197Z",
     "data_cutoff": "2026-04-02",
     "event_count": 261
   },
@@ -2638,7 +2638,7 @@
         "exact_location": true,
         "bridge_name": null,
         "structural_type": "Arch bridge",
-        "material_type": "Reinforced concrete",
+        "material_type": "Masonry",
         "construction_year": null,
         "construction_year_numeric": null,
         "construction_year_raw": null,

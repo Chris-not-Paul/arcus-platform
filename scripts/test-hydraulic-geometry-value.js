@@ -31,9 +31,9 @@ const repeated = buildHydraulicGeometryValueAudit({
 });
 
 assert.equal(audit.audit_version, HYDRAULIC_GEOMETRY_VALUE_AUDIT_VERSION);
-assert.equal(audit.dataset.geometry_event_count, 158);
-assert.equal(audit.dataset.length_available, 158);
-assert.equal(audit.dataset.piers_available, 155);
+assert.equal(audit.dataset.geometry_event_count, 159);
+assert.equal(audit.dataset.length_available, 159);
+assert.equal(audit.dataset.piers_available, 156);
 assert.deepEqual(audit, repeated);
 assert.equal(audit.boundaries.production_feature_authorized, false);
 assert.equal(audit.decision.production_status, "not_authorized");
@@ -66,7 +66,6 @@ for (const task of Object.values(audit.tasks)) {
 [
   "scripts/analyze-collapse-intelligence.js",
   "scripts/analyze-hazard-gated-collapse-intelligence.js",
-  "server/mitigationIntelligenceService.js",
 ].forEach((filePath) => {
   const productionCode = fs.readFileSync(filePath, "utf8");
   assert.equal(
@@ -75,6 +74,20 @@ for (const task of Object.values(audit.tasks)) {
     `${filePath} must not consume experimental geometry`
   );
 });
+
+const mitigationService = fs.readFileSync(
+  "server/mitigationIntelligenceService.js",
+  "utf8"
+);
+assert.equal(mitigationService.includes("hydraulic_geometry"), true);
+assert.equal(
+  mitigationService.includes('role: "post_retrieval_descriptive_evidence_only"'),
+  true
+);
+assert.equal(
+  mitigationService.includes('production_validation_status: "exploratory_signal_only"'),
+  true
+);
 
 console.log(JSON.stringify({
   judgement: audit.decision.judgement,

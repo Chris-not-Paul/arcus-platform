@@ -154,7 +154,7 @@ try {
   await dialog.getByText("Copertura del record", { exact: true }).waitFor();
   assert.equal(await dialog.locator(".arcus-event-record-coverage-grid article").count(), 4);
   assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.6/);
+  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.8/);
   await screenshot(page, "desktop-research-quality");
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: /Esporta record e fonti/ }).click();

@@ -70,11 +70,14 @@ The locally archived source is
 `private-data/raw/source-material/dangelo-ballio-ravazzani-2025-s3.xlsx`
 (SHA-256 `7AC68D484FFF2402AF7DE185CAD936741FCAA1E4AF02546C624DAE272B288F71`).
 
-Current accepted coverage is 158 unique ARCUS/S3 pairs: 112 use an explicit S3
-record already cited in the ARCUS description and 46 use a unique coordinate +
-event-year match. Bridge length is available for all 158; active-riverbed pier
-presence is available for 155. Five spatially inconsistent explicit references
-and three duplicate candidate assignments abstain and remain blank.
+The normalized link table contains 160 unique ARCUS/S3 pairs: 114 use an
+explicit S3 record already cited in the ARCUS description and 46 use a unique
+coordinate + event-year match. Bridge length is available for all 160;
+active-riverbed pier presence is available for 157. The Hydraulic-only value
+audit uses 159 profiles (159 lengths and 156 pier-presence values), because one
+linked event is classified as Landslide and is not admitted to Hydraulic
+modelling. Five spatially inconsistent explicit references and three duplicate
+candidate assignments abstain and remain blank.
 
 `piers_in_active_riverbed = false` is a documented negative value. A blank value
 means unavailable or rejected mapping and must never be converted to `false`.

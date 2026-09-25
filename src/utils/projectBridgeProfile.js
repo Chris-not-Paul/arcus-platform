@@ -34,7 +34,9 @@ export const PROJECT_BRIDGE_PROFILE_OPTIONS = Object.freeze({
   material_type: Object.freeze([
     "Reinforced concrete",
     "Prestressed concrete",
+    "Plain concrete",
     "Steel",
+    "Steel-concrete composite",
     "Masonry",
     "Timber",
   ]),

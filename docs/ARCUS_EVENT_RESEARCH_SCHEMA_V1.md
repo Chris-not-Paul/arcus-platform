@@ -73,15 +73,15 @@ The first generated profile contains all 261 current controlled events.
 |---|---:|---|
 | Location precision | 261 | dossier quality and analytical filtering |
 | Episode control | 217 | grouped holdout and evidence independence |
-| Hydraulic bridge length | 157 | controlled descriptive research only |
-| Piers in the active riverbed | 154 | controlled descriptive research only |
+| Hydraulic bridge length | 159 | controlled descriptive research only |
+| Piers in the active riverbed | 156 | controlled descriptive research only |
 | Span configuration / count | 4 / 3 | source-backed pilot; domain review required |
 | Maximum span | 2 | source-backed pilot; descriptive only |
 | Foundation type | 0 | awaiting curation |
 | Pre-collapse condition / warning / intervention | 1 / 1 / 1 | source-backed pilot; excluded from production learning |
 | Recovery action / reopening / service disruption | 4 / 2 / 1 | post-event outcomes only |
 
-The master also contains 291 curation-log entries. Research profiles publish a
+The master also contains 295 curation-log entries. Research profiles publish a
 traceability summary, not internal rationales, rejected values or editorial
 working notes.
 

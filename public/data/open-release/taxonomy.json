@@ -1,15 +1,15 @@
 {
-  "release": "arcus-open-2026.6",
+  "release": "arcus-open-2026.8",
   "taxonomy": [
     {
       "field": "NOTE",
       "value": "Operational taxonomy",
-      "definition_it": "Vocabolario operativo del MASTER_RESEARCH dopo QA finale; non costituisce ancora la proposta definitiva TG1.5."
+      "definition_it": "Vocabolario controllato del MASTER_RESEARCH e della release ARCUS Open. structural_type descrive esclusivamente il sistema resistente principale e non include termini funzionali o geometrici come viadotto e cavalcavia."
     },
     {
       "field": "cause_category",
       "value": "Natural",
-      "definition_it": "Origine prevalente naturale/ambientale dell'evento o del processo causale."
+      "definition_it": "Origine prevalente naturale o ambientale dell’evento o del processo causale."
     },
     {
       "field": "cause_category",
@@ -24,7 +24,7 @@
     {
       "field": "specific_cause",
       "value": "Hydraulic",
-      "definition_it": "Causa riconducibile a fenomeni idraulici/fluviali o torrentizi."
+      "definition_it": "Causa riconducibile a fenomeni idraulici, fluviali o torrentizi."
     },
     {
       "field": "specific_cause",
@@ -34,7 +34,7 @@
     {
       "field": "specific_cause",
       "value": "Material",
-      "definition_it": "Degrado, difetti o perdita di prestazione dei materiali/componenti."
+      "definition_it": "Degrado, difetti o perdita di prestazione dei materiali o dei componenti."
     },
     {
       "field": "specific_cause",
@@ -49,7 +49,7 @@
     {
       "field": "specific_cause",
       "value": "Fire and Explosion",
-      "definition_it": "Azione termica/incendio o esplosione."
+      "definition_it": "Azione termica, incendio o esplosione."
     },
     {
       "field": "specific_cause",
@@ -67,39 +67,139 @@
       "definition_it": "Famiglia causale non ricostruibile."
     },
     {
+      "field": "collapse_severity",
+      "value": "TC",
+      "definition_it": "Collasso totale dell’opera o perdita sostanziale della continuità strutturale."
+    },
+    {
+      "field": "collapse_severity",
+      "value": "PC",
+      "definition_it": "Collasso parziale limitato a una porzione dell’opera o a uno o più elementi."
+    },
+    {
       "field": "structural_type",
       "value": "Beam bridge",
-      "definition_it": "Sistema resistente principale a travata, con impalcato sostenuto prevalentemente da travi o cassoni."
+      "definition_it": "Ponte a travata: sistema resistente principale con impalcato sostenuto prevalentemente da travi o cassoni."
     },
     {
       "field": "structural_type",
       "value": "Arch bridge",
-      "definition_it": "Sistema resistente principale ad arco, con trasferimento prevalente dei carichi per compressione."
+      "definition_it": "Ponte ad arco: sistema resistente principale con trasferimento prevalente dei carichi per compressione."
     },
     {
       "field": "structural_type",
       "value": "Truss",
-      "definition_it": "Sistema resistente reticolare composto da aste connesse in nodi."
+      "definition_it": "Ponte reticolare: sistema resistente composto da aste connesse in nodi."
     },
     {
       "field": "structural_type",
-      "value": "Frame",
-      "definition_it": "Sistema resistente a telaio con continuità strutturale tra impalcato e sostegni."
+      "value": "Rigid-frame bridge",
+      "definition_it": "Ponte a telaio rigido: impalcato e sostegni sono collegati con continuità resistente e trasferimento dei momenti attraverso i nodi."
     },
     {
       "field": "structural_type",
       "value": "Cable-stayed",
-      "definition_it": "Sistema resistente con impalcato sostenuto da stralli collegati a uno o più piloni."
+      "definition_it": "Ponte strallato: impalcato sostenuto da stralli collegati a uno o più piloni."
     },
     {
       "field": "structural_type",
       "value": "Suspension",
-      "definition_it": "Sistema resistente sospeso mediante cavi principali e pendini."
+      "definition_it": "Ponte sospeso: impalcato sostenuto mediante cavi principali e pendini."
+    },
+    {
+      "field": "material_type",
+      "value": "Reinforced concrete",
+      "definition_it": "Calcestruzzo armato ordinario come materiale strutturale principale."
+    },
+    {
+      "field": "material_type",
+      "value": "Prestressed concrete",
+      "definition_it": "Calcestruzzo armato precompresso come materiale strutturale principale."
+    },
+    {
+      "field": "material_type",
+      "value": "Plain concrete",
+      "definition_it": "Calcestruzzo non armato come materiale strutturale principale."
+    },
+    {
+      "field": "material_type",
+      "value": "Steel",
+      "definition_it": "Acciaio come materiale strutturale principale."
+    },
+    {
+      "field": "material_type",
+      "value": "Steel-concrete composite",
+      "definition_it": "Sistema strutturale composto acciaio-calcestruzzo."
+    },
+    {
+      "field": "material_type",
+      "value": "Masonry",
+      "definition_it": "Muratura come materiale strutturale principale."
+    },
+    {
+      "field": "material_type",
+      "value": "Timber",
+      "definition_it": "Legno come materiale strutturale principale."
+    },
+    {
+      "field": "bridge_crossing_type",
+      "value": "waterway",
+      "definition_it": "Attraversamento di un corso d’acqua, canale o altro elemento idrografico."
+    },
+    {
+      "field": "bridge_crossing_type",
+      "value": "road",
+      "definition_it": "Attraversamento di una strada o di un’altra infrastruttura viaria."
+    },
+    {
+      "field": "bridge_crossing_type",
+      "value": "railway",
+      "definition_it": "Attraversamento di una linea o infrastruttura ferroviaria."
+    },
+    {
+      "field": "bridge_crossing_type",
+      "value": "urban area",
+      "definition_it": "Attraversamento in contesto urbano quando l’ostacolo specifico non è documentato."
+    },
+    {
+      "field": "bridge_crossing_type",
+      "value": "valley",
+      "definition_it": "Attraversamento di una valle, forra o depressione morfologica."
+    },
+    {
+      "field": "destination_use",
+      "value": "Motorway",
+      "definition_it": "Infrastruttura appartenente alla rete autostradale."
+    },
+    {
+      "field": "destination_use",
+      "value": "National",
+      "definition_it": "Infrastruttura stradale appartenente alla rete nazionale."
+    },
+    {
+      "field": "destination_use",
+      "value": "Provincial/Regional",
+      "definition_it": "Infrastruttura stradale appartenente alla rete provinciale o regionale."
+    },
+    {
+      "field": "destination_use",
+      "value": "Municipal",
+      "definition_it": "Infrastruttura appartenente alla viabilità comunale o locale."
+    },
+    {
+      "field": "destination_use",
+      "value": "Railway",
+      "definition_it": "Infrastruttura destinata al traffico ferroviario."
+    },
+    {
+      "field": "destination_use",
+      "value": "Cycle-pedestrian",
+      "definition_it": "Infrastruttura destinata prevalentemente a pedoni e ciclisti."
     },
     {
       "field": "failure_trigger",
       "value": "Flood",
-      "definition_it": "Piena fluviale/torrentizia o flash flood come evento innescante."
+      "definition_it": "Piena fluviale, torrentizia o improvvisa come evento innescante."
     },
     {
       "field": "failure_trigger",
@@ -109,7 +209,7 @@
     {
       "field": "failure_trigger",
       "value": "Landslide / slope failure",
-      "definition_it": "Movimento di versante/frana identificabile come evento innescante."
+      "definition_it": "Movimento di versante o frana identificabile come evento innescante."
     },
     {
       "field": "failure_trigger",
@@ -124,7 +224,7 @@
     {
       "field": "failure_trigger",
       "value": "Exceptional overload",
-      "definition_it": "Applicazione/transito di carico eccezionale."
+      "definition_it": "Applicazione o transito di un carico eccezionale."
     },
     {
       "field": "failure_trigger",
@@ -139,7 +239,7 @@
     {
       "field": "failure_trigger",
       "value": "Movable bridge operation",
-      "definition_it": "Operazione di apertura/chiusura/sollevamento di ponte mobile."
+      "definition_it": "Operazione di apertura, chiusura o sollevamento di un ponte mobile."
     },
     {
       "field": "failure_trigger",
@@ -159,7 +259,7 @@
     {
       "field": "failure_trigger",
       "value": "Water leakage / local washout",
-      "definition_it": "Perdita/azione idrica locale non riconducibile a piena fluviale."
+      "definition_it": "Perdita o azione idrica locale non riconducibile a una piena fluviale."
     },
     {
       "field": "failure_trigger",
@@ -169,17 +269,17 @@
     {
       "field": "failure_trigger",
       "value": "Unspecified",
-      "definition_it": "Trigger non ricostruibile."
+      "definition_it": "Evento innescante non ricostruibile."
     },
     {
       "field": "failure_process",
       "value": "Scour",
-      "definition_it": "Scalzamento/erosione verticale con perdita di supporto fondale."
+      "definition_it": "Scalzamento o erosione verticale con perdita di supporto fondale."
     },
     {
       "field": "failure_process",
       "value": "Bank erosion / embankment failure",
-      "definition_it": "Erosione laterale e/o cedimento del rilevato/rampa di accesso."
+      "definition_it": "Erosione laterale e/o cedimento del rilevato o della rampa di accesso."
     },
     {
       "field": "failure_process",
@@ -189,7 +289,7 @@
     {
       "field": "failure_process",
       "value": "Debris accumulation / obstruction",
-      "definition_it": "Accumulo/occlusione da materiale flottante con incremento delle azioni."
+      "definition_it": "Accumulo o occlusione da materiale flottante con incremento delle azioni."
     },
     {
       "field": "failure_process",
@@ -204,12 +304,12 @@
     {
       "field": "failure_process",
       "value": "Bending",
-      "definition_it": "Collasso/flessione governante di elemento primario."
+      "definition_it": "Collasso o flessione governante di un elemento primario."
     },
     {
       "field": "failure_process",
       "value": "Fracture",
-      "definition_it": "Rottura/frattura di elemento, connessione o componente resistente."
+      "definition_it": "Rottura o frattura di un elemento, connessione o componente resistente."
     },
     {
       "field": "failure_process",
@@ -219,7 +319,7 @@
     {
       "field": "failure_process",
       "value": "Overstress",
-      "definition_it": "Domanda resistente superiore alla capacità senza meccanismo più specifico disponibile."
+      "definition_it": "Domanda resistente superiore alla capacità senza un meccanismo più specifico disponibile."
     },
     {
       "field": "failure_process",
@@ -229,7 +329,7 @@
     {
       "field": "failure_process",
       "value": "Knocked down by external action",
-      "definition_it": "Abbattimento/spostamento della struttura per azione esterna diretta."
+      "definition_it": "Abbattimento o spostamento della struttura per azione esterna diretta."
     },
     {
       "field": "failure_process",
@@ -259,12 +359,12 @@
     {
       "field": "component_involved",
       "value": "Approach embankment",
-      "definition_it": "Rilevato/rampa di accesso."
+      "definition_it": "Rilevato o rampa di accesso."
     },
     {
       "field": "component_involved",
       "value": "Deck / superstructure",
-      "definition_it": "Impalcato/sovrastruttura, incluse arcate."
+      "definition_it": "Impalcato o sovrastruttura, incluse le arcate."
     },
     {
       "field": "component_involved",
@@ -279,12 +379,12 @@
     {
       "field": "component_involved",
       "value": "Temporary works",
-      "definition_it": "Opera provvisionale/temporanea."
+      "definition_it": "Opera provvisionale o temporanea."
     },
     {
       "field": "component_involved",
       "value": "Entire structure",
-      "definition_it": "Struttura coinvolta/distrutta nel complesso."
+      "definition_it": "Struttura coinvolta o distrutta nel complesso."
     },
     {
       "field": "component_involved",
@@ -299,7 +399,7 @@
     {
       "field": "failure_cause_evidence",
       "value": "Documented",
-      "definition_it": "Causa/processo supportato esplicitamente da fonte tecnica, giudiziaria, scientifica o documentazione equivalente."
+      "definition_it": "Causa o processo supportato esplicitamente da una fonte tecnica, giudiziaria, scientifica o documentazione equivalente."
     },
     {
       "field": "failure_cause_evidence",
@@ -309,12 +409,97 @@
     {
       "field": "failure_cause_evidence",
       "value": "Needs review",
-      "definition_it": "Informazioni confliggenti o identità/classificazione dell'evento ancora da verificare."
+      "definition_it": "Informazioni confliggenti oppure identità o classificazione dell’evento ancora da verificare."
     },
     {
       "field": "failure_cause_evidence",
       "value": "Unspecified",
-      "definition_it": "Dettaglio non ricostruibile dalle fonti; valore intenzionale, non backlog di revisione."
+      "definition_it": "Dettaglio non ricostruibile dalle fonti; valore intenzionale e non arretrato di revisione."
+    },
+    {
+      "field": "source_confidence",
+      "value": "High",
+      "definition_it": "Record supportato da fonti primarie, tecniche, scientifiche o da più fonti concordanti."
+    },
+    {
+      "field": "source_confidence",
+      "value": "Medium",
+      "definition_it": "Record supportato da fonti attendibili ma con dettaglio, accessibilità o triangolazione limitati."
+    },
+    {
+      "field": "source_confidence",
+      "value": "Low",
+      "definition_it": "Record basato su evidenza documentaria debole o non ancora sufficientemente triangolata."
+    },
+    {
+      "field": "source_role",
+      "value": "Official/Technical",
+      "definition_it": "Fonte istituzionale, tecnica, amministrativa, giudiziaria o professionale."
+    },
+    {
+      "field": "source_role",
+      "value": "Scientific",
+      "definition_it": "Pubblicazione scientifica, dataset di ricerca o contributo accademico."
+    },
+    {
+      "field": "source_role",
+      "value": "News",
+      "definition_it": "Fonte giornalistica o di cronaca utilizzata come evidenza documentaria."
+    },
+    {
+      "field": "curation_level",
+      "value": "Standard",
+      "definition_it": "Record validato secondo il flusso editoriale ordinario di ARCUS."
+    },
+    {
+      "field": "curation_level",
+      "value": "Flagship",
+      "definition_it": "Record con approfondimento editoriale, documentario o contestuale superiore al livello ordinario."
+    },
+    {
+      "field": "location_precision",
+      "value": "Exact / curated",
+      "definition_it": "Coordinata puntuale verificata durante la curatela ARCUS."
+    },
+    {
+      "field": "location_precision",
+      "value": "Exact / external reference",
+      "definition_it": "Coordinata puntuale fornita da una fonte esterna identificata."
+    },
+    {
+      "field": "location_precision",
+      "value": "Exact / same structure",
+      "definition_it": "Coordinata riferita con sicurezza alla medesima struttura documentata."
+    },
+    {
+      "field": "location_precision",
+      "value": "High-confidence source match",
+      "definition_it": "Corrispondenza ad alta confidenza con una fonte o un dataset esterno."
+    },
+    {
+      "field": "location_precision",
+      "value": "Approximate / site-level",
+      "definition_it": "Posizione approssimata al sito dell’opera, senza individuazione puntuale verificata."
+    },
+    {
+      "field": "location_precision",
+      "value": "Approximate / locality-level",
+      "definition_it": "Posizione approssimata alla località documentata."
+    },
+    {
+      "field": "location_precision",
+      "value": "Approximate / frazione-level",
+      "definition_it": "Posizione approssimata alla frazione o al nucleo abitato documentato."
+    },
+    {
+      "field": "location_precision",
+      "value": "Approximate / unresolved",
+      "definition_it": "Posizione approssimata; l’attraversamento esatto non è stato risolto."
+    },
+    {
+      "field": "location_precision",
+      "value": "Grouped / collective location",
+      "definition_it": "Più opere documentate collettivamente condividono intenzionalmente la stessa posizione."
     }
   ]
 }
