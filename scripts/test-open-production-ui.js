@@ -182,9 +182,44 @@ try {
 
   await page.goto(`${base}/contribute`);
   await page.locator('a[href^="mailto:contribute@arcusbridges.org"]').waitFor();
-  assert.equal(await page.locator("form.contribute-form").count(), 0);
+  const contributionForm = page.locator("form.contribute-form");
+  await contributionForm.waitFor();
+  assert.equal(await contributionForm.count(), 1);
+  assert.equal(await contributionForm.locator("fieldset").count(), 4);
+  assert.equal(await contributionForm.locator('input[name="form-name"]').getAttribute("value"), "arcus-evidence-contribution");
   assert.equal(await page.locator('a[href^="mailto:contribute@arcusbridges.org"]').count(), 1);
-  checks.push("static editorial contribution channel");
+  await page.route(
+    "**/*",
+    async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({ body: "ok", status: 200 });
+      } else {
+        await route.continue();
+      }
+    }
+  );
+  await contributionForm.locator("fieldset").nth(0).locator("input").nth(0).fill("Test ARCUS");
+  await contributionForm.locator('input[type="email"]').fill("test@example.org");
+  await contributionForm.locator("fieldset").nth(1).locator("select").selectOption({ index: 1 });
+  await contributionForm.locator("textarea").fill("Test editoriale ARCUS con una descrizione sufficientemente lunga e documentata.");
+  await contributionForm.locator(".contribute-consent > input").last().check();
+  assert.deepEqual(
+    await contributionForm.locator(":invalid").evaluateAll((elements) => elements.map((element) => ({
+      name: element.getAttribute("name"),
+      tag: element.tagName,
+      type: element.getAttribute("type"),
+    }))),
+    []
+  );
+  await contributionForm.locator('button[type="submit"]').click();
+  await page.waitForTimeout(1500);
+  const contributionState = {
+    button: await contributionForm.locator('button[type="submit"]').innerText(),
+    messages: await contributionForm.locator(".contribute-message").allInnerTexts(),
+    success: await contributionForm.locator(".contribute-message.success").count(),
+  };
+  assert.equal(contributionState.success, 1, JSON.stringify(contributionState));
+  checks.push("working Open contribution form with Netlify-compatible submission");
 
   await page.goto(`${base}/data-access`);
   await page.getByRole("link", { name: "CSV", exact: true }).waitFor();
@@ -213,8 +248,9 @@ try {
   const mobile = await context.newPage();
   await mobile.setViewportSize({ width: 390, height: 844 });
   await mobile.goto(`${base}/contribute`);
-  await mobile.locator('a[href^="mailto:contribute@arcusbridges.org"]').waitFor();
+  await mobile.locator("form.contribute-form").waitFor();
   await noHorizontalOverflow(mobile);
+  assert.equal(await mobile.locator("form.contribute-form fieldset").count(), 4);
   assert.equal(await mobile.locator('a[href^="mailto:contribute@arcusbridges.org"]').count(), 1);
   checks.push("mobile Open contribution surface");
 
@@ -222,7 +258,7 @@ try {
   await mobile.locator(".data-access-release-summary").waitFor();
   await noHorizontalOverflow(mobile);
   assert.match(await mobile.locator(".data-access-release-summary").innerText(), /261/);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /716/);
+  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /718/);
   assert.equal(await mobile.locator(".data-access-resource-card").count(), 10);
 
   await mobile.goto(`${base}/about`);
@@ -287,19 +323,22 @@ try {
   checks.push("publication lineage and citation guidance");
 
   await mobile.goto(`${base}/contribute`);
-  await mobile.locator(".contribute-editorial-boundary").waitFor();
+  await mobile.locator("form.contribute-form").waitFor();
   await noHorizontalOverflow(mobile);
-  assert.equal(await mobile.locator(".contribute-editorial-boundary > div").count(), 2);
+  assert.equal(await mobile.locator("form.contribute-form fieldset").count(), 4);
   assert.equal(await mobile.locator('a[href="/privacy"]').count() > 0, true);
-  checks.push("editorial contribution boundary");
+  checks.push("editorial contribution form boundary");
 
+  await mobile.evaluate(() => localStorage.setItem("arcus-language", "it"));
   await mobile.goto(base);
+  await mobile.locator(".intro-caption").waitFor();
+  assert.equal(await mobile.locator(".intro-caption").innerText(), "CARICAMENTO DELLE EVIDENZE");
   await mobile.locator(".home-access-grid").waitFor();
   await noHorizontalOverflow(mobile);
   assert.equal(await mobile.locator(".home-access-card").count(), 4);
   assert.equal(await mobile.locator('.home-access-card a[href="/analytics"]').count(), 1);
   assert.equal((await mobile.locator("body").innerText()).includes("Professional"), false);
-  checks.push("Open homepage scope and mobile layout");
+  checks.push("Open homepage scope, localised intro and mobile layout");
 
   const sitemapResponse = await page.request.get(`${base}/sitemap.xml`);
   assert.equal(sitemapResponse.ok(), true);

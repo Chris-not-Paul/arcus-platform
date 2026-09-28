@@ -127,9 +127,9 @@
         {
           "field": "failure_process",
           "type": "string",
-          "populated": 213,
-          "missing": 48,
-          "coverage": 0.8161
+          "populated": 214,
+          "missing": 47,
+          "coverage": 0.8199
         },
         {
           "field": "failure_trigger",
@@ -261,40 +261,40 @@
     },
     {
       "name": "sources",
-      "record_count": 716,
+      "record_count": 718,
       "fields": [
         {
           "field": "access_date",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "event_id",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "language",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "publication_date",
           "type": "string",
-          "populated": 704,
+          "populated": 706,
           "missing": 12,
-          "coverage": 0.9832
+          "coverage": 0.9833
         },
         {
           "field": "source_id",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
@@ -302,34 +302,34 @@
           "field": "source_reference",
           "type": "null",
           "populated": 0,
-          "missing": 716,
+          "missing": 718,
           "coverage": 0
         },
         {
           "field": "source_role",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_title",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_type",
           "type": "string",
-          "populated": 716,
+          "populated": 718,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_url",
           "type": "string",
-          "populated": 711,
+          "populated": 713,
           "missing": 5,
           "coverage": 0.993
         }

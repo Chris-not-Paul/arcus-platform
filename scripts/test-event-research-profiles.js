@@ -91,11 +91,11 @@ assert.equal(
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "bridge_length_m") !== null).length,
-  159
+  160
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "piers_in_active_riverbed") !== null).length,
-  156
+  157
 );
 assert.equal(
   profiles.filter((profile) => researchFieldValue(profile, "episode_id")).length,
@@ -119,7 +119,11 @@ assert.equal(
 );
 
 const morandi = profiles.find((profile) => profile.event_id === "IT18.08.01");
+assert.equal(morandi.bridge_configuration.active_riverbed_pier_count.value, 0);
+assert.equal(morandi.bridge_configuration.bridge_length_m.value, 1102);
+assert.equal(morandi.bridge_configuration.piers_in_active_riverbed.value, false);
 assert.equal(morandi.bridge_configuration.span_count.value, 11);
+assert.equal(morandi.record_precision.event_date_precision.value, "day");
 assert.equal(
   morandi.pre_collapse_management.documented_warning_before_collapse.value,
   true

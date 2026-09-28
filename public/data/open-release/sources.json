@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.8",
+  "release": "arcus-open-2026.9",
   "sources": [
     {
       "source_id": "SRC0001",
@@ -8592,6 +8592,30 @@
       "publication_date": "2014-04-24",
       "access_date": "2026-09-08",
       "language": "IT"
+    },
+    {
+      "source_id": "SRC0723",
+      "event_id": "IT18.08.01",
+      "source_role": "Official/Technical",
+      "source_type": "Court press release",
+      "source_title": "Comunicato stampa a seguito di lettura del dispositivo nel processo per il crollo del Viadotto Polcevera",
+      "source_url": "https://www.tribunalegenova.it/news.aspx?id=57286",
+      "source_reference": null,
+      "publication_date": "2026-07-17",
+      "access_date": "2026-09-28",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC0724",
+      "event_id": "IT18.08.01",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "Forensic estimation of the residual capacity and imposed demand on a ruptured concrete bridge stay at the time of collapse",
+      "source_url": "https://doi.org/10.1016/j.istruc.2023.05.114",
+      "source_reference": null,
+      "publication_date": "2023-07-03",
+      "access_date": "2026-09-28",
+      "language": "EN"
     }
   ]
 }

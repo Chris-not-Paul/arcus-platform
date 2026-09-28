@@ -10,6 +10,9 @@ import "./IntroOverlay.css";
 export default function IntroOverlay({ onFinish }) {
 
   const overlayRef = useRef(null);
+  const preferredLanguage = typeof window !== "undefined"
+    ? window.localStorage.getItem("arcus-language") || document.documentElement.lang
+    : "en";
 
   useEffect(() => {
 
@@ -51,7 +54,9 @@ export default function IntroOverlay({ onFinish }) {
         </div>
 
         <p className="intro-caption">
-          Infrastructure Failure Observatory
+          {preferredLanguage === "it"
+            ? "Caricamento delle evidenze"
+            : "Loading research evidence"}
         </p>
 
       </div>

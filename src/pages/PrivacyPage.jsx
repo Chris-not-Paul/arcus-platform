@@ -22,8 +22,8 @@ function PrivacyPage() {
         eyebrow: "PRIVACY E TRASPARENZA",
         title: "Informativa sul trattamento dei dati personali",
         lead:
-          "Questa informativa descrive in modo concreto quali dati può trattare ARCUS Open durante la consultazione del sito, l’uso dell’Atlante e i contatti volontari via e-mail.",
-        updated: "Ultimo aggiornamento: 23 settembre 2026",
+          "Questa informativa descrive in modo concreto quali dati può trattare ARCUS Open durante la consultazione del sito, l’uso dell’Atlante e l’invio volontario di comunicazioni o contributi.",
+        updated: "Ultimo aggiornamento: 28 settembre 2026",
         controllerLabel: "Titolare del trattamento",
         controller: "Christian Paolini — Italia",
         contactLabel: "Contatto privacy",
@@ -34,7 +34,7 @@ function PrivacyPage() {
             title: "1. In sintesi",
             paragraphs: [
               "ARCUS è un osservatorio scientifico dedicato ai cedimenti dei ponti. La versione Open è consultabile senza registrazione e non utilizza i dati di navigazione per creare profili, inviare pubblicità o assumere decisioni automatizzate.",
-              "Il trattamento è limitato ai dati tecnici necessari a rendere disponibile e proteggere il sito, alla preferenza linguistica salvata sul dispositivo e alle informazioni che l’utente sceglie di inviare via e-mail.",
+              "Il trattamento è limitato ai dati tecnici necessari a rendere disponibile e proteggere il sito, alla preferenza linguistica salvata sul dispositivo e alle informazioni che l’utente sceglie di inviare tramite il modulo Contribuisci o via e-mail.",
             ],
           },
           data: {
@@ -59,9 +59,9 @@ function PrivacyPage() {
                   "Funzionalità tecnica richiesta dall’utente. La preferenza non è usata per profilazione.",
               },
               {
-                data: "Comunicazioni volontarie",
+                data: "Comunicazioni e contributi volontari",
                 detail:
-                  "Indirizzo e-mail, nome, contenuto del messaggio ed eventuali allegati inviati agli indirizzi ARCUS.",
+                  "Indirizzo e-mail, nome, ruolo, affiliazione, contenuto della proposta, riferimenti documentali ed eventuali allegati inviati tramite il modulo Contribuisci o agli indirizzi ARCUS.",
                 purpose:
                   "Rispondere alle richieste, gestire contatti scientifici ed esaminare contributi documentali o fotografici.",
                 basis:
@@ -103,7 +103,7 @@ function PrivacyPage() {
           sharing: {
             title: "5. Destinatari e trasferimenti",
             paragraphs: [
-              "I dati possono essere trattati dai fornitori tecnici strettamente necessari al funzionamento del sito e della posta elettronica, in qualità di responsabili o titolari autonomi secondo il servizio prestato. Possono inoltre essere comunicati alle autorità quando previsto dalla legge.",
+              "I dati possono essere trattati dai fornitori tecnici strettamente necessari al funzionamento del sito, del modulo di contribuzione e della posta elettronica, incluso Netlify per hosting e ricezione tecnica dei moduli, in qualità di responsabili o titolari autonomi secondo il servizio prestato. Possono inoltre essere comunicati alle autorità quando previsto dalla legge.",
               "I servizi cartografici esterni possono comportare trattamenti nel Regno Unito, negli Stati Uniti o in altri Paesi indicati dai rispettivi fornitori. Le relative condizioni e garanzie sono descritte nelle informative collegate sopra.",
               "ARCUS non vende dati personali e non li cede per finalità pubblicitarie.",
             ],
@@ -144,8 +144,8 @@ function PrivacyPage() {
         eyebrow: "PRIVACY AND TRANSPARENCY",
         title: "Privacy notice",
         lead:
-          "This notice explains in practical terms which personal data ARCUS Open may process when the website and Atlas are used or when someone contacts the project voluntarily by email.",
-        updated: "Last updated: 23 September 2026",
+          "This notice explains in practical terms which personal data ARCUS Open may process when the website and Atlas are used or when someone voluntarily sends a communication or contribution.",
+        updated: "Last updated: 28 September 2026",
         controllerLabel: "Data controller",
         controller: "Christian Paolini — Italy",
         contactLabel: "Privacy contact",
@@ -156,7 +156,7 @@ function PrivacyPage() {
             title: "1. Overview",
             paragraphs: [
               "ARCUS is a scientific observatory for bridge-collapse evidence. Its Open release can be consulted without registration and does not use browsing data to build profiles, deliver advertising or make automated decisions.",
-              "Processing is limited to technical data required to deliver and protect the website, a language preference stored on the device, and information that a user chooses to send by email.",
+              "Processing is limited to technical data required to deliver and protect the website, a language preference stored on the device, and information that a user chooses to send through the Contribute form or by email.",
             ],
           },
           data: {
@@ -181,9 +181,9 @@ function PrivacyPage() {
                   "A technical function requested by the user. The preference is not used for profiling.",
               },
               {
-                data: "Voluntary communications",
+                data: "Voluntary communications and contributions",
                 detail:
-                  "Email address, name, message content and any attachments sent to ARCUS addresses.",
+                  "Email address, name, role, affiliation, proposal content, documentary references and any attachments sent through the Contribute form or to ARCUS addresses.",
                 purpose:
                   "Reply to requests, manage scientific contacts and review documentary or photographic contributions.",
                 basis:
@@ -225,7 +225,7 @@ function PrivacyPage() {
           sharing: {
             title: "5. Recipients and international processing",
             paragraphs: [
-              "Data may be processed by technical suppliers strictly required to operate the website and email service, acting as processors or independent controllers according to the service. Data may also be disclosed to public authorities where required by law.",
+              "Data may be processed by technical suppliers strictly required to operate the website, contribution form and email service, including Netlify for hosting and technical form receipt, acting as processors or independent controllers according to the service. Data may also be disclosed to public authorities where required by law.",
               "External mapping services may involve processing in the United Kingdom, the United States or other countries identified by their providers. Their applicable terms and safeguards are described in the policies linked above.",
               "ARCUS does not sell personal data or disclose it for advertising.",
             ],

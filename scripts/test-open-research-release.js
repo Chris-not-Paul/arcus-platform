@@ -54,9 +54,9 @@ const professionalSourceRows = Array.isArray(professionalSources)
 
 await check("open-counts", () => {
   assert.equal(events.length, 261);
-  assert.equal(sources.length, 716);
+  assert.equal(sources.length, 718);
   assert.equal(manifest.event_count, 261);
-  assert.equal(manifest.source_count, 716);
+  assert.equal(manifest.source_count, 718);
 });
 
 await check("static-open-release-fallback-matches-promoted-release", () => {
@@ -142,7 +142,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.8");
+  assert.equal(manifest.version, "arcus-open-2026.9");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v2");
 });
@@ -195,8 +195,8 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 
 await check("taxonomy-and-evidence-classes", () => {
   assert.equal(taxonomy.taxonomy.length, 100);
-  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 4);
-  assert.equal(events.filter((event) => event.failure_process).length, 213);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 3);
+  assert.equal(events.filter((event) => event.failure_process).length, 214);
   assert.equal(events.filter((event) => event.component_involved).length, 211);
   assert.equal(
     events.filter((event) => event.failure_process === null)
@@ -254,7 +254,7 @@ await check("open-contains-no-private-customer-fields", () => {
 await check("professional-is-decoupled-live-resource", () => {
   assert.notEqual(professionalEvents.events, events);
   assert.equal(professionalEventRows.length >= 261, true);
-  assert.equal(professionalSourceRows.length >= 716, true);
+  assert.equal(professionalSourceRows.length >= 718, true);
   assert.equal(manifest.access, "public_read_only_no_account_required");
 });
 
@@ -401,7 +401,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.8/);
+  assert.match(citation, /arcus-open-2026\.9/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);

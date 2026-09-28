@@ -1,5 +1,5 @@
 {
-  "registry_version": "arcus-event-research-enrichment-2026.09.21-pilot1",
+  "registry_version": "arcus-event-research-enrichment-2026.09.28-pilot2",
   "schema_version": "arcus-event-research-schema-v1",
   "status": "source_backed_pilot_pending_domain_review",
   "rules": [
@@ -52,8 +52,46 @@
     {
       "event_id": "IT18.08.01",
       "review_status": "source_backed_pending_domain_review",
-      "review_note": "Initial controlled structuring from the official ministerial investigation. Exact inspection and intervention dates remain unpopulated pending field-level review.",
+      "review_note": "Controlled structuring from the official ministerial investigation, the 2026 first-instance court release and peer-reviewed forensic analysis. Exact inspection and intervention dates remain unpopulated pending field-level review.",
       "fields": {
+        "bridge_configuration.active_riverbed_pier_count": {
+          "value": 0,
+          "evidence_state": "reported",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/node/8978",
+              "locator": "Relazione, parte I, sezione 1.3 e schema generale dell'opera"
+            }
+          ],
+          "note": "Derived from the official structural layout: the active Polcevera channel was crossed by the main span without a pier in the active riverbed. This is descriptive context, not a causal attribution."
+        },
+        "bridge_configuration.bridge_length_m": {
+          "value": 1102,
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/sites/default/files/media/notizia/2018-09/Comm_Isp_Mit%20Relaz_Viadotto_Polcevera_%20parte1.pdf",
+              "locator": "Parte I, sezione 1.3: lunghezza complessiva pari a 1.102 m"
+            }
+          ]
+        },
+        "bridge_configuration.piers_in_active_riverbed": {
+          "value": false,
+          "evidence_state": "reported",
+          "sources": [
+            {
+              "source_id": "SRC0001",
+              "title": "Relazione della Commissione Ispettiva Ministeriale sul crollo del Viadotto Polcevera",
+              "url": "https://www.mit.gov.it/node/8978",
+              "locator": "Relazione, parte I, sezione 1.3 e schema generale dell'opera"
+            }
+          ],
+          "note": "Derived from the official structural layout; retained outside the canonical EVENTS hydraulic columns because the collapse is not classified as hydraulic."
+        },
         "bridge_configuration.span_configuration": {
           "value": "multi_span",
           "evidence_state": "documented",
@@ -124,6 +162,18 @@
               "title": "Cerimonia di inaugurazione Ponte Genova San Giorgio",
               "url": "https://www.commissario.ricostruzione.genova.it/node/1884",
               "locator": "Official reconstruction commissioner notice, 3 August 2020"
+            }
+          ]
+        },
+        "record_precision.event_date_precision": {
+          "value": "day",
+          "evidence_state": "documented",
+          "sources": [
+            {
+              "source_id": "SRC0723",
+              "title": "Comunicato stampa a seguito di lettura del dispositivo nel processo per il crollo del Viadotto Polcevera",
+              "url": "https://www.tribunalegenova.it/news.aspx?id=57286",
+              "locator": "Event date: 14 August 2018"
             }
           ]
         }

@@ -9,6 +9,16 @@
 .contribute-process article > span { color: var(--arcus-bronze); font: 700 12px var(--arcus-font-mono); }
 .contribute-process h2 { margin: 28px 0 10px; font: 500 23px/1.1 var(--arcus-font-display); }
 .contribute-process p, .contribute-layout aside p, .contribute-layout aside li { color: var(--arcus-ink-soft); font-size: 13px; line-height: 1.55; }
+.contribute-submission-guide { display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); gap: 64px; padding: 78px 0; border-bottom: 1px solid var(--arcus-border-light); }
+.contribute-guide-intro { align-self: start; padding-top: 5px; }
+.contribute-guide-intro > span { color: var(--arcus-bronze); font: 700 10px var(--arcus-font-mono); letter-spacing: .14em; }
+.contribute-guide-intro h2 { max-width: 470px; margin: 16px 0 18px; font: 500 clamp(36px, 4vw, 54px)/1.03 var(--arcus-font-display); }
+.contribute-guide-intro p { max-width: 510px; margin: 0; color: var(--arcus-ink-soft); font-size: 15px; line-height: 1.65; }
+.contribute-submission-steps { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--arcus-border-light); }
+.contribute-submission-steps li { display: grid; grid-template-columns: 54px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--arcus-border-light); }
+.contribute-submission-steps li > span { padding-top: 3px; color: var(--arcus-bronze); font: 700 11px var(--arcus-font-mono); letter-spacing: .08em; }
+.contribute-submission-steps h3 { margin: 0 0 8px; color: var(--arcus-ink); font: 500 23px/1.15 var(--arcus-font-display); }
+.contribute-submission-steps p { max-width: 720px; margin: 0; color: var(--arcus-ink-soft); font-size: 13px; line-height: 1.6; }
 .contribute-recognition { display: grid; grid-template-columns: .9fr 1.1fr; gap: 34px; padding: 34px 28px; border-bottom: 1px solid var(--arcus-border-light); background: var(--arcus-paper-warm); }
 .contribute-recognition > div > span { color: var(--arcus-bronze); font: 700 10px var(--arcus-font-mono); letter-spacing: .14em; }
 .contribute-recognition h2 { margin: 12px 0 0; font: 500 30px/1.08 var(--arcus-font-display); }
@@ -53,6 +63,9 @@
 .contribute-message.success { border-color: #4d826b; background: #e0eee7; }
 .contribute-message.error { border-color: #ad5c4b; background: #f2e2dd; }
 .contribute-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; }
+.contribute-form-fallback { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; margin-top: -52px; padding: 0 0 72px; color: var(--arcus-ink-soft); font-size: 13px; }
+.contribute-form-fallback p { margin: 0; }
+.contribute-form-fallback a { color: var(--arcus-bronze); font-weight: 700; }
 .contribute-email { display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; padding: 72px 0 96px; }
 .contribute-email > div { padding: 34px; border-top: 3px solid var(--arcus-bronze-soft); background: var(--arcus-paper-soft); }
 .contribute-email > div > span { color: var(--arcus-bronze); font: 700 10px var(--arcus-font-mono); letter-spacing: .14em; }
@@ -74,6 +87,7 @@
   .contribute-process { grid-template-columns: repeat(2, 1fr); }
   .contribute-layout { grid-template-columns: 1fr; }
   .contribute-email { grid-template-columns: 1fr; }
+  .contribute-submission-guide { grid-template-columns: 1fr; gap: 38px; }
   .contribute-recognition { grid-template-columns: 1fr; }
   .contribute-status { grid-template-columns: 1fr; }
   .contribute-layout aside { position: static; }
@@ -87,6 +101,10 @@
   .contribute-recognition ul { grid-template-columns: 1fr; }
   .contribute-process article { min-height: auto; }
   .contribute-layout { gap: 24px; padding: 38px 0 64px; }
+  .contribute-form-fallback { margin-top: -34px; padding-bottom: 52px; }
+  .contribute-submission-guide { gap: 28px; padding: 48px 0; }
+  .contribute-guide-intro h2 { font-size: 38px; }
+  .contribute-submission-steps li { grid-template-columns: 42px 1fr; gap: 10px; }
   .contribute-form fieldset { padding: 20px 16px; }
   .contribute-process article { padding: 24px 16px; }
   .contribute-process h2 { margin-top: 18px; }

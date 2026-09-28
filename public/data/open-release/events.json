@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.8",
+  "release": "arcus-open-2026.9",
   "events": [
     {
       "event_id": "IT00.01.01",
@@ -7250,8 +7250,8 @@
       "region": "Liguria",
       "latitude": 44.426,
       "longitude": 8.8885,
-      "bridge_crossing_type": "urban area",
-      "bridge_crossing_name": "Municipality of Genova",
+      "bridge_crossing_type": "waterway",
+      "bridge_crossing_name": "Torrente Polcevera",
       "destination_use": "Motorway",
       "collapse_severity": "TC",
       "victims": 43,
@@ -7260,9 +7260,9 @@
       "cause_category": "Human-induced",
       "specific_cause": "Material",
       "failure_trigger": "No identifiable external trigger",
-      "failure_process": null,
+      "failure_process": "Fracture",
       "component_involved": "Cable / hanger / pylon",
-      "failure_cause_evidence": "Needs review",
+      "failure_cause_evidence": "Documented",
       "hydraulic_intelligence": null,
       "source_confidence": "High",
       "exact_location": true,
@@ -7273,7 +7273,7 @@
       "construction_year_numeric": 1967,
       "construction_year_raw": "1967",
       "curation_level": "Flagship",
-      "description": "Total collapse of the Polcevera Viaduct (Morandi Bridge) in Genoa on 14 August 2018, involving multiple spans and causing 43 fatalities and 11 injuries. The collapse occurred without a clearly identifiable external trigger and is generally associated with structural deterioration and maintenance-related deficiencies."
+      "description": "On 14 August 2018 at 11:36, approximately 260 m of the Polcevera Viaduct (Morandi Bridge), including pylon 9 and adjacent deck sections, collapsed in Genoa, causing 43 fatalities and 11 injuries. The 1,102 m motorway viaduct was a prestressed-concrete cable-stayed structure opened in 1967. No discrete external trigger is identified in the ARCUS record. The press release following the first-instance judgment read on 16 July 2026 identified a system of defects in the upper part of the Genoa-sea stay of pylon 9 as the origin of the failure; the full written reasons were still pending at the curation date."
     },
     {
       "event_id": "IT18.08.02",

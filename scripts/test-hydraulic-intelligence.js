@@ -202,7 +202,7 @@ check("no-physical-value-invented", () => {
 check("event-and-source-counts", () => {
   assert.equal(events.length, 261);
   assert.equal(professional.length, 261);
-  assert.equal(sources.length, 716);
+  assert.equal(sources.length, 718);
 });
 check("audit-counts", () => {
   assert.equal(audit.hydraulic_events, 211);

@@ -80,7 +80,7 @@ function MethodologyPage() {
     manifest?.citation?.match(/\b\d{4}-\d{4}\b/)?.[0] ||
     "2000-2026";
   const releaseEventCount = manifest?.event_count ?? 261;
-  const releaseSourceCount = manifest?.source_count ?? 716;
+  const releaseSourceCount = manifest?.source_count ?? 718;
 
   const copy = {
     en: {

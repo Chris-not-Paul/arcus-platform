@@ -55,6 +55,14 @@ check("static contribution channel", () => {
   assert.match(contribute, /contributionFormEnabled/);
   assert.match(contribute, /contactAddresses\.contributions/);
   assert.match(contribute, /mailto:/);
+  assert.match(contribute, /submitOpenContribution/);
+  assert.match(contribute, /arcus-evidence-contribution/);
+  assert.match(contribute, /data-netlify/);
+  assert.match(documentShell, /data-netlify="true"/);
+  assert.match(documentShell, /name="arcus-evidence-contribution"/);
+  assert.match(documentShell, /name="document_attachment" type="file"/);
+  assert.match(documentShell, /name="image_attachment" type="file"/);
+  assert.match(privacy, /Netlify per hosting e ricezione tecnica dei moduli/);
 });
 
 check("operational contact channels", () => {
@@ -150,7 +158,7 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.8");
+  assert.equal(manifest.version, "arcus-open-2026.9");
   assert.equal(events.events.length, manifest.event_count);
   assert.equal(sources.sources.length, manifest.source_count);
   assert.equal(
@@ -159,7 +167,7 @@ check("public release integrity", () => {
     "Manifest limitations must not contain duplicate statements"
   );
   assert.equal(events.events.length, 261);
-  assert.equal(sources.sources.length, 716);
+  assert.equal(sources.sources.length, 718);
   assert.equal(episodes.summary.episode_count, 14);
   assert.equal(episodes.summary.grouped_event_count, 108);
   assert.equal(manifest.resources.episodes, "episodes.json");

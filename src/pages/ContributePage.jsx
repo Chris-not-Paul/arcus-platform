@@ -8,6 +8,7 @@ import useLanguage from "../context/useLanguage";
 import {
   contactAddresses,
   contributionFormEnabled,
+  isOpenRelease,
 } from "../config/site";
 import {
   contributionAcknowledgements,
@@ -35,6 +36,61 @@ function fileAsDataUrl(file) {
   });
 }
 
+function appendFormValue(target, name, value) {
+  if (value === undefined || value === null || value === "") return;
+  target.append(name, String(value));
+}
+
+async function appendDataUrlFile(target, name, attachment) {
+  if (!attachment?.dataUrl || !attachment?.filename) return;
+  const response = await fetch(attachment.dataUrl);
+  target.append(name, await response.blob(), attachment.filename);
+}
+
+async function submitOpenContribution(payload, language) {
+  const body = new FormData();
+  body.append("form-name", "arcus-evidence-contribution");
+  appendFormValue(body, "bot-field", payload.website);
+  appendFormValue(body, "language", language);
+  appendFormValue(body, "name", payload.name);
+  appendFormValue(body, "email", payload.email);
+  appendFormValue(body, "affiliation", payload.affiliation);
+  appendFormValue(body, "expert_role", payload.expertRole);
+  appendFormValue(body, "orcid", payload.orcid);
+  appendFormValue(body, "credit_preference", payload.creditPreference);
+  appendFormValue(body, "target_type", payload.targetType);
+  appendFormValue(body, "event_id", payload.eventId);
+  appendFormValue(body, "bridge_name", payload.bridgeName);
+  appendFormValue(body, "place", payload.place);
+  appendFormValue(body, "event_date", payload.eventDate);
+  appendFormValue(body, "latitude", payload.latitude);
+  appendFormValue(body, "longitude", payload.longitude);
+  appendFormValue(body, "contribution_types", payload.contributionTypes.join(", "));
+  appendFormValue(body, "evidence_basis", payload.evidenceBasis);
+  appendFormValue(body, "summary", payload.summary);
+  appendFormValue(body, "source_availability", payload.sourceAvailability);
+  appendFormValue(body, "source_url", payload.sources[0]);
+  appendFormValue(body, "document_title", payload.documentSource.title);
+  appendFormValue(body, "document_issuer", payload.documentSource.issuer);
+  appendFormValue(body, "document_type", payload.documentSource.documentType);
+  appendFormValue(body, "document_date", payload.documentSource.date);
+  appendFormValue(body, "document_pages", payload.documentSource.pages);
+  appendFormValue(body, "document_reference", payload.documentSource.reference);
+  appendFormValue(body, "document_access_basis", payload.documentSource.accessBasis);
+  appendFormValue(body, "document_rights_confirmed", payload.documentAttachment?.rightsConfirmed ? "yes" : "no");
+  appendFormValue(body, "image_creator", payload.attachment?.creator);
+  appendFormValue(body, "image_credit_line", payload.attachment?.creditLine);
+  appendFormValue(body, "image_rights_basis", payload.attachment?.rightsBasis);
+  appendFormValue(body, "image_source_url", payload.attachment?.sourceUrl);
+  appendFormValue(body, "image_caption", payload.attachment?.caption);
+  appendFormValue(body, "terms_accepted", payload.termsAccepted ? "yes" : "no");
+  await appendDataUrlFile(body, "document_attachment", payload.documentAttachment);
+  await appendDataUrlFile(body, "image_attachment", payload.attachment);
+
+  const response = await fetch("/", { method: "POST", body });
+  if (!response.ok) throw new Error(`Contribution submission failed: ${response.status}`);
+}
+
 export default function ContributePage() {
   const { language } = useLanguage();
   const it = language === "it";
@@ -50,9 +106,8 @@ export default function ContributePage() {
   const set = (key, value) => setForm((current) => ({ ...current, [key]: value }));
 
   useEffect(() => {
-    if (!contributionFormEnabled) return undefined;
-
     openEvents().then(setEvents).catch(() => setEvents([]));
+    if (!contributionFormEnabled) return undefined;
     contributionAcknowledgements().then(setAcknowledgements).catch(() => setAcknowledgements([]));
   }, []);
 
@@ -73,33 +128,44 @@ export default function ContributePage() {
       setStatus("file_error");
       return;
     }
-    setAttachment({ caption: "", creator: "", creditLine: "", dataUrl: await fileAsDataUrl(file), filename: file.name, rightsBasis: "", sourceUrl: "" });
+    setAttachment({ caption: "", creator: "", creditLine: "", dataUrl: await fileAsDataUrl(file), filename: file.name, rightsBasis: "", size: file.size, sourceUrl: "" });
     setStatus("idle");
   };
 
   const handleDocumentFile = async (event) => {
     const file = event.target.files?.[0];
     if (!file) { setDocumentAttachment(null); return; }
-    if (file.size > 10 * 1024 * 1024 || file.type !== "application/pdf") {
+    const maximumDocumentSize = contributionFormEnabled ? 10 : 7;
+    if (file.size > maximumDocumentSize * 1024 * 1024 || file.type !== "application/pdf") {
       event.target.value = "";
       setStatus("document_error");
       return;
     }
-    setDocumentAttachment({ dataUrl: await fileAsDataUrl(file), filename: file.name, rightsConfirmed: false });
+    setDocumentAttachment({ dataUrl: await fileAsDataUrl(file), filename: file.name, rightsConfirmed: false, size: file.size });
     setStatus("idle");
   };
 
   const submit = async (event) => {
     event.preventDefault();
+    const submittedForm = event.currentTarget;
+    if (!contributionFormEnabled && (attachment?.size || 0) + (documentAttachment?.size || 0) > 7 * 1024 * 1024) {
+      setStatus("total_file_error");
+      return;
+    }
     setStatus("submitting");
     try {
-      const contribution = await submitExpertContribution({ ...form, attachment, documentAttachment });
-      setReceipt(contribution);
-      setLookupId(contribution.id);
+      if (contributionFormEnabled) {
+        const contribution = await submitExpertContribution({ ...form, attachment, documentAttachment });
+        setReceipt(contribution);
+        setLookupId(contribution.id);
+      } else {
+        await submitOpenContribution({ ...form, attachment, documentAttachment }, language);
+      setReceipt(null);
+      }
       setForm(emptyForm);
       setAttachment(null);
       setDocumentAttachment(null);
-      event.currentTarget.reset();
+      submittedForm.reset();
       setStatus("success");
     } catch {
       setStatus("error");
@@ -123,7 +189,7 @@ export default function ContributePage() {
     ["photo_media", it ? "Fotografia o media" : "Photo or media"],
   ];
 
-  if (!contributionFormEnabled) {
+  if (!contributionFormEnabled && !isOpenRelease) {
     const contributionSubject = encodeURIComponent(
       it ? "Proposta di contributo ARCUS" : "ARCUS evidence contribution"
     );
@@ -159,6 +225,63 @@ export default function ContributePage() {
               <p>{text}</p>
             </article>
           ))}
+        </section>
+
+        <section className="contribute-submission-guide contribute-shell" aria-labelledby="contribution-guide-title">
+          <div className="contribute-guide-intro">
+            <span>{it ? "PREPARA IL CONTRIBUTO" : "PREPARE THE CONTRIBUTION"}</span>
+            <h2 id="contribution-guide-title">
+              {it ? "Tutto ciò che serve, passo dopo passo." : "Everything needed, step by step."}
+            </h2>
+            <p>
+              {it
+                ? "In questa prima release Open l’invio avviene via email. Segui i cinque passaggi: la checklist riproduce le informazioni richieste dal modulo ARCUS e permette una revisione più rapida."
+                : "In this first Open release, submissions are sent by email. Follow the five steps: the checklist mirrors the information requested by the ARCUS form and supports a faster review."}
+            </p>
+          </div>
+
+          <ol className="contribute-submission-steps">
+            {[
+              [
+                it ? "Chi contribuisce" : "Contributor",
+                it
+                  ? "Indica nome, email, ruolo o competenza e, se pertinente, affiliazione e ORCID. Specifica se desideri il credito pubblico oppure l’anonimato."
+                  : "Provide your name, email, role or expertise and, where relevant, affiliation and ORCID. State whether you prefer public credit or anonymity.",
+              ],
+              [
+                it ? "Ponte o evento" : "Bridge or event",
+                it
+                  ? "Per un caso già presente inserisci l’ID ARCUS. Per un evento mancante indica nome del ponte, località, data e, se disponibili, coordinate."
+                  : "For an existing case, provide its ARCUS ID. For a missing event, include the bridge name, location, date and coordinates where available.",
+              ],
+              [
+                it ? "Evidenza proposta" : "Proposed evidence",
+                it
+                  ? "Spiega chiaramente se proponi una correzione, una nuova fonte, contesto tecnico, un evento mancante oppure materiale fotografico. Distingui fatti documentati e interpretazioni."
+                  : "Clearly state whether you are proposing a correction, new source, technical context, a missing event or photographic material. Separate documented facts from interpretation.",
+              ],
+              [
+                it ? "Fonte e provenienza" : "Source and provenance",
+                it
+                  ? "Aggiungi URL o citazione completa: titolo, autore o ente, data, pagine e riferimento archivistico. Se il documento non è online, indica come ARCUS può verificarlo."
+                  : "Add a URL or full citation: title, author or issuing body, date, pages and archive reference. If the document is not online, explain how ARCUS can verify it.",
+              ],
+              [
+                it ? "File, immagini e diritti" : "Files, images and rights",
+                it
+                  ? "Per fotografie o allegati indica autore, didascalia, credito e autorizzazione alla condivisione. Non inviare materiale riservato o dati personali non necessari."
+                  : "For photographs or attachments, provide the creator, caption, credit and permission to share. Do not send confidential material or unnecessary personal data.",
+              ],
+            ].map(([title, text], index) => (
+              <li key={title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section className="contribute-email contribute-shell">
@@ -218,7 +341,11 @@ export default function ContributePage() {
 
       <section className="contribute-process contribute-shell" aria-label={it ? "Processo editoriale" : "Editorial process"}>
         {[
-          ["01", it ? "Invio tracciato" : "Traceable submission", it ? "Ricevi un ID univoco per la proposta." : "Receive a unique submission ID."],
+          ["01", contributionFormEnabled
+            ? (it ? "Invio tracciato" : "Traceable submission")
+            : (it ? "Invio del modulo" : "Form submission"), contributionFormEnabled
+            ? (it ? "Ricevi un ID univoco per la proposta." : "Receive a unique submission ID.")
+            : (it ? "Compila i campi e invia la proposta direttamente al centro editoriale ARCUS." : "Complete the fields and send the proposal directly to the ARCUS editorial centre.")],
           ["02", it ? "Verifica" : "Verification", it ? "ARCUS controlla identità dell’evento, fonti, coerenza e diritti." : "ARCUS checks event identity, sources, consistency and rights."],
           ["03", it ? "Decisione motivata" : "Reasoned decision", it ? "La proposta può richiedere chiarimenti, essere accettata o respinta." : "The proposal may need clarification, be accepted or rejected."],
           ["04", it ? "Release e credito" : "Release and credit", it ? "Gli elementi accettati entrano in una release versionata con credito concordato." : "Accepted evidence enters a versioned release with agreed credit."],
@@ -231,7 +358,9 @@ export default function ContributePage() {
           <h2>{it ? "Un contributo riconoscibile, citabile e utile." : "A recognisable, citable and useful contribution."}</h2>
         </div>
         <ul>
-          <li>{it ? "ID stabile della proposta e tracciabilità editoriale" : "Stable submission ID and editorial traceability"}</li>
+          <li>{contributionFormEnabled
+            ? (it ? "ID stabile della proposta e tracciabilità editoriale" : "Stable submission ID and editorial traceability")
+            : (it ? "Ricezione registrata nel centro editoriale ARCUS" : "Submission recorded in the ARCUS editorial centre")}</li>
           <li>{it ? "Credito con nome, affiliazione e ORCID nelle release, se desiderato" : "Name, affiliation and ORCID credit in releases, if requested"}</li>
           <li>{it ? "Riconoscimento pubblico solo dopo accettazione e consenso" : "Public acknowledgement only after acceptance and consent"}</li>
           <li>{it ? "Possibilità di correggere o integrare il record nel tempo" : "Ability to correct or extend the record over time"}</li>
@@ -242,11 +371,11 @@ export default function ContributePage() {
         </div>}
       </section>
 
-      <section className="contribute-status contribute-shell">
+      {contributionFormEnabled && <section className="contribute-status contribute-shell">
         <div><span>{it ? "SEGUI LA PROPOSTA" : "TRACK A SUBMISSION"}</span><p>{it ? "L’ID consente di verificare lo stato senza esporre contenuto, email o note editoriali." : "The ID checks status without exposing content, email or editorial notes."}</p></div>
         <form onSubmit={checkStatus}><input aria-label={it ? "ID contributo" : "Contribution ID"} onChange={(event) => setLookupId(event.target.value)} placeholder="contribution-…" required value={lookupId} /><button type="submit">{it ? "Verifica stato" : "Check status"}</button></form>
         {lookupResult && <strong>{lookupResult.status === "not_found" ? (it ? "ID non trovato" : "ID not found") : `${it ? "Stato" : "Status"}: ${lookupResult.status}`}</strong>}
-      </section>
+      </section>}
 
       <section className="contribute-layout contribute-shell">
         <aside>
@@ -256,12 +385,21 @@ export default function ContributePage() {
           <ul>
             <li>{it ? "Fonti primarie o verificabili preferite" : "Primary or verifiable sources preferred"}</li>
             <li>{it ? "Immagini solo con autore, credito e base giuridica" : "Images require creator, credit and rights basis"}</li>
-            <li>{it ? "Massimo 5 MB; JPG, PNG o WebP" : "Maximum 5 MB; JPG, PNG or WebP"}</li>
+            <li>{it ? "Immagini: JPG, PNG o WebP; allegati complessivi fino a 7 MB" : "Images: JPG, PNG or WebP; combined attachments up to 7 MB"}</li>
             <li>{it ? "Dati sensibili e accuse personali non sono accettati" : "Sensitive data and personal allegations are not accepted"}</li>
           </ul>
         </aside>
 
-        <form className="contribute-form" onSubmit={submit}>
+        <form
+          className="contribute-form"
+          data-netlify={isOpenRelease ? "true" : undefined}
+          data-netlify-honeypot={isOpenRelease ? "bot-field" : undefined}
+          encType={isOpenRelease ? "multipart/form-data" : undefined}
+          method={isOpenRelease ? "POST" : undefined}
+          name={isOpenRelease ? "arcus-evidence-contribution" : undefined}
+          onSubmit={submit}
+        >
+          {isOpenRelease && <input name="form-name" type="hidden" value="arcus-evidence-contribution" />}
           <fieldset>
             <legend>1 — {it ? "Chi contribuisce" : "Contributor"}</legend>
             <div className="contribute-grid two">
@@ -310,7 +448,7 @@ export default function ContributePage() {
                 <label><span>{it ? "Segnatura / riferimento archivistico" : "Archive reference"}</span><input value={form.documentSource.reference} onChange={(e) => set("documentSource", { ...form.documentSource, reference: e.target.value })} /></label>
                 <label className="wide"><span>{it ? "Modalità di verifica" : "Verification access"}</span><select value={form.documentSource.accessBasis} onChange={(e) => set("documentSource", { ...form.documentSource, accessBasis: e.target.value })}><option value="reference_only">{it ? "Posso fornire solo il riferimento" : "Reference only"}</option><option value="inspection_on_request">{it ? "Consultabile su richiesta" : "Available for inspection on request"}</option><option value="share_copy">{it ? "Posso condividere una copia privata" : "Private copy can be shared"}</option></select></label>
               </div>
-              <label><span>{it ? "PDF privato facoltativo, massimo 10 MB" : "Optional private PDF, maximum 10 MB"}</span><input accept="application/pdf" onChange={handleDocumentFile} type="file" /></label>
+              <label><span>{it ? `PDF privato facoltativo, massimo ${contributionFormEnabled ? 10 : 7} MB` : `Optional private PDF, maximum ${contributionFormEnabled ? 10 : 7} MB`}</span><input accept="application/pdf" onChange={handleDocumentFile} type="file" /></label>
               {documentAttachment && <label className="contribute-consent compact"><input required checked={documentAttachment.rightsConfirmed} onChange={(e) => setDocumentAttachment({ ...documentAttachment, rightsConfirmed: e.target.checked })} type="checkbox" /><span>{it ? "Confermo di poter condividere questa copia privatamente con il centro editoriale ARCUS. Il file non sarà pubblicato senza una successiva autorizzazione esplicita." : "I confirm that I may share this copy privately with the ARCUS editorial centre. It will not be published without further explicit permission."}</span></label>}
             </div>}
           </fieldset>
@@ -328,14 +466,26 @@ export default function ContributePage() {
           </fieldset>
 
           <label className="contribute-consent"><input required checked={form.termsAccepted} onChange={(e) => set("termsAccepted", e.target.checked)} type="checkbox" /><span>{it ? "Confermo l’accuratezza in buona fede, il diritto a condividere i materiali e accetto la revisione editoriale ARCUS. L’invio non garantisce pubblicazione." : "I confirm good-faith accuracy, the right to share the material and accept ARCUS editorial review. Submission does not guarantee publication."}</span></label>
-          <input aria-hidden="true" autoComplete="off" className="contribute-honeypot" tabIndex="-1" value={form.website} onChange={(e) => set("website", e.target.value)} />
+          <input aria-hidden="true" autoComplete="off" className="contribute-honeypot" name="bot-field" tabIndex="-1" value={form.website} onChange={(e) => set("website", e.target.value)} />
           {status === "file_error" && <p className="contribute-message error">{it ? "Immagine non valida: usa JPG, PNG o WebP fino a 5 MB." : "Invalid image: use JPG, PNG or WebP up to 5 MB."}</p>}
-          {status === "document_error" && <p className="contribute-message error">{it ? "Documento non valido: usa un PDF fino a 10 MB." : "Invalid document: use a PDF up to 10 MB."}</p>}
+          {status === "document_error" && <p className="contribute-message error">{it ? `Documento non valido: usa un PDF fino a ${contributionFormEnabled ? 10 : 7} MB.` : `Invalid document: use a PDF up to ${contributionFormEnabled ? 10 : 7} MB.`}</p>}
+          {status === "total_file_error" && <p className="contribute-message error">{it ? "Gli allegati superano complessivamente 7 MB. Riduci le dimensioni dei file e riprova." : "The attachments exceed 7 MB in total. Reduce the file size and try again."}</p>}
           {status === "error" && <p className="contribute-message error">{it ? "Invio non riuscito. Controlla i campi, le fonti e i diritti dell’immagine." : "Submission failed. Check fields, sources and image rights."}</p>}
-          {status === "success" && <p className="contribute-message success">{it ? `Proposta ricevuta. Conserva l’ID ${receipt?.id}.` : `Submission received. Keep ID ${receipt?.id}.`}</p>}
+          {status === "success" && <p className="contribute-message success">{contributionFormEnabled
+            ? (it ? `Proposta ricevuta. Conserva l’ID ${receipt?.id}.` : `Submission received. Keep ID ${receipt?.id}.`)
+            : (it ? "Proposta inviata al centro editoriale ARCUS. Riceverai un riscontro all’indirizzo indicato." : "Submission sent to the ARCUS editorial centre. A response will be sent to the email address provided.")}</p>}
           <button className="contribute-submit" disabled={status === "submitting"} type="submit">{status === "submitting" ? (it ? "Invio in corso…" : "Submitting…") : (it ? "Invia alla revisione ARCUS" : "Submit for ARCUS review")}</button>
         </form>
       </section>
+      {!contributionFormEnabled && <section className="contribute-form-fallback contribute-shell">
+        <p>
+          {it ? "Se il modulo non dovesse funzionare, puoi inviare lo stesso materiale a" : "If the form does not work, you can send the same material to"}{" "}
+          <a href={`mailto:${contactAddresses.contributions}`}>{contactAddresses.contributions}</a>.
+        </p>
+        <p>
+          <Link to="/privacy">{it ? "Consulta l’informativa privacy prima dell’invio" : "Read the privacy notice before submitting"}</Link>.
+        </p>
+      </section>}
       <Footer />
     </main>
   );
