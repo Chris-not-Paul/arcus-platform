@@ -1,17 +1,17 @@
 {
-  "release": "arcus-open-2026.9",
-  "generated_at": "2026-09-28T06:33:13.520Z",
+  "release": "arcus-open-2026.10",
+  "generated_at": "2026-09-29T09:39:14.675Z",
   "status": "passed",
   "counts": {
     "events": 261,
     "sources": 718,
     "taxonomy_entries": 100,
-    "warnings": 74,
+    "warnings": 79,
     "errors": 0,
     "needs_review": 3,
-    "process_available": 214,
-    "component_available": 211,
-    "evidence_available": 221
+    "process_available": 216,
+    "component_available": 213,
+    "evidence_available": 223
   },
   "errors": [],
   "warnings": [
@@ -56,6 +56,16 @@
     {
       "code": "non_hydraulic_with_hydraulic_fields",
       "event_id": "IT01.03.01"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT03.01.01",
+      "municipality": "Montenero",
+      "province_raw": "Campobasso",
+      "declared_official": "Campobasso",
+      "coordinate_province": "Chieti",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
     },
     {
       "code": "non_hydraulic_with_hydraulic_fields",
@@ -202,6 +212,16 @@
       "coordinate_province": "Reggio di Calabria",
       "coordinate_error": null,
       "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT16.11.04",
+      "municipality": "Monesi di Triora",
+      "province_raw": "Imperia",
+      "declared_official": "Imperia",
+      "coordinate_province": "Cuneo",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
     },
     {
       "code": "non_hydraulic_with_hydraulic_fields",
@@ -392,6 +412,16 @@
       "event_id": "IT22.12.01"
     },
     {
+      "code": "province_validation_warning",
+      "event_id": "IT22.12.03",
+      "municipality": "Chiusa Sclafani",
+      "province_raw": "Palermo",
+      "declared_official": "Palermo",
+      "coordinate_province": "Agrigento",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
       "code": "non_hydraulic_with_hydraulic_fields",
       "event_id": "IT22.12.03"
     },
@@ -426,6 +456,16 @@
       "event_id": "IT24.05.01"
     },
     {
+      "code": "hydraulic_failure_process_unrecognized",
+      "event_id": "IT24.10.02",
+      "field": "hydraulic_failure_process",
+      "source_value": "Washout / hydraulic action"
+    },
+    {
+      "code": "component_specific_but_process_unspecified",
+      "event_id": "IT24.10.02"
+    },
+    {
       "code": "province_validation_warning",
       "event_id": "IT26.03.01",
       "municipality": "Pisa",
@@ -441,16 +481,44 @@
     }
   ],
   "delta": {
-    "previous_release": "arcus-open-2026.8",
+    "previous_release": "arcus-open-2026.9",
     "new_events": [],
     "updated_events": [
-      "IT18.08.01"
+      "IT00.10.15",
+      "IT00.11.01",
+      "IT02.07.03",
+      "IT03.01.01",
+      "IT06.09.01",
+      "IT09.02.01",
+      "IT09.04.04",
+      "IT13.09.01",
+      "IT14.04.01",
+      "IT15.03.03",
+      "IT15.04.01",
+      "IT16.10.01",
+      "IT16.11.04",
+      "IT17.12.01",
+      "IT18.02.02",
+      "IT18.08.02",
+      "IT19.03.01",
+      "IT20.10.14",
+      "IT20.10.15",
+      "IT20.10.16",
+      "IT20.10.18",
+      "IT22.12.02",
+      "IT22.12.03",
+      "IT23.09.01",
+      "IT23.10.01",
+      "IT24.10.02",
+      "IT24.10.03",
+      "IT25.04.01",
+      "IT25.04.02",
+      "IT25.07.01",
+      "IT26.03.01",
+      "IT26.04.01"
     ],
     "removed_events": [],
-    "new_sources": [
-      "SRC0723",
-      "SRC0724"
-    ],
+    "new_sources": [],
     "removed_sources": []
   },
   "id_mapping": [
@@ -2306,6 +2374,16 @@
     },
     {
       "code": "province_validation_warning",
+      "event_id": "IT03.01.01",
+      "municipality": "Montenero",
+      "province_raw": "Campobasso",
+      "declared_official": "Campobasso",
+      "coordinate_province": "Chieti",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
       "event_id": "IT09.01.01",
       "municipality": "Taurianova",
       "province_raw": "Reggio Calabria",
@@ -2373,6 +2451,16 @@
       "coordinate_province": "Reggio di Calabria",
       "coordinate_error": null,
       "status": "name_mismatch_coordinates_resolved"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT16.11.04",
+      "municipality": "Monesi di Triora",
+      "province_raw": "Imperia",
+      "declared_official": "Imperia",
+      "coordinate_province": "Cuneo",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
     },
     {
       "code": "province_validation_warning",
@@ -2461,6 +2549,16 @@
       "province_raw": "Cosenza",
       "declared_official": "Cosenza",
       "coordinate_province": "Potenza",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
+      "event_id": "IT22.12.03",
+      "municipality": "Chiusa Sclafani",
+      "province_raw": "Palermo",
+      "declared_official": "Palermo",
+      "coordinate_province": "Agrigento",
       "coordinate_error": null,
       "status": "coordinate_mismatch"
     },

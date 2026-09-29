@@ -1,22 +1,50 @@
 {
-  "version": "arcus-open-2026.9",
-  "generated_at": "2026-09-28T06:33:13.520Z",
+  "version": "arcus-open-2026.10",
+  "generated_at": "2026-09-29T09:39:14.675Z",
   "changes": [
     "Corrected the municipality spelling for event IT25.04.01 from Mongrado to Mongrando in the event record and linked source note.",
     "Retained the canonical event identifier and stable event slug so published citations and permalinks remain valid.",
     "Preserved the source-supported structural-system coverage and controlled load-bearing-system vocabulary introduced in the previous release."
   ],
   "delta": {
-    "previous_release": "arcus-open-2026.8",
+    "previous_release": "arcus-open-2026.9",
     "new_events": [],
     "updated_events": [
-      "IT18.08.01"
+      "IT00.10.15",
+      "IT00.11.01",
+      "IT02.07.03",
+      "IT03.01.01",
+      "IT06.09.01",
+      "IT09.02.01",
+      "IT09.04.04",
+      "IT13.09.01",
+      "IT14.04.01",
+      "IT15.03.03",
+      "IT15.04.01",
+      "IT16.10.01",
+      "IT16.11.04",
+      "IT17.12.01",
+      "IT18.02.02",
+      "IT18.08.02",
+      "IT19.03.01",
+      "IT20.10.14",
+      "IT20.10.15",
+      "IT20.10.16",
+      "IT20.10.18",
+      "IT22.12.02",
+      "IT22.12.03",
+      "IT23.09.01",
+      "IT23.10.01",
+      "IT24.10.02",
+      "IT24.10.03",
+      "IT25.04.01",
+      "IT25.04.02",
+      "IT25.07.01",
+      "IT26.03.01",
+      "IT26.04.01"
     ],
     "removed_events": [],
-    "new_sources": [
-      "SRC0723",
-      "SRC0724"
-    ],
+    "new_sources": [],
     "removed_sources": []
   }
 }

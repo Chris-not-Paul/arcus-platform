@@ -1,9 +1,9 @@
 {
   "type": "FeatureCollection",
-  "name": "arcus-open-2026.9",
+  "name": "arcus-open-2026.10",
   "metadata": {
-    "version": "arcus-open-2026.9",
-    "generated_at": "2026-09-28T06:33:13.520Z",
+    "version": "arcus-open-2026.10",
+    "generated_at": "2026-09-29T09:39:14.675Z",
     "data_cutoff": "2026-04-02",
     "event_count": 261
   },
@@ -809,8 +809,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.71108119476556,
-          45.3590443263878
+          7.7285,
+          45.3444
         ]
       },
       "properties": {
@@ -2346,8 +2346,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.909742,
-          44.349968
+          9.9482,
+          44.3414
         ]
       },
       "properties": {
@@ -2970,8 +2970,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.53252380688468,
-          44.355413820189
+          7.5621,
+          44.3644
         ]
       },
       "properties": {
@@ -3006,7 +3006,7 @@
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
-        "exact_location": false,
+        "exact_location": true,
         "bridge_name": null,
         "structural_type": "Beam bridge",
         "material_type": "Reinforced concrete",
@@ -3076,8 +3076,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          14.8,
-          42.06
+          14.7709,
+          42.0298
         ]
       },
       "properties": {
@@ -3089,7 +3089,7 @@
         "province_code": "70",
         "province_key": "campobasso",
         "province_raw": "Campobasso",
-        "province_validation_status": "validated",
+        "province_validation_status": "coordinate_mismatch",
         "region": "Molise",
         "bridge_crossing_type": "waterway",
         "bridge_crossing_name": "Trigno river",
@@ -3688,8 +3688,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.640638,
-          43.786557
+          7.6406,
+          43.7884
         ]
       },
       "properties": {
@@ -4165,8 +4165,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          14.286408,
-          37.569478
+          14.2709,
+          37.5705
         ]
       },
       "properties": {
@@ -4359,8 +4359,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.7045,
-          45.0625
+          9.7042,
+          45.0628
         ]
       },
       "properties": {
@@ -5990,8 +5990,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          12.605197,
-          41.933981
+          12.6015,
+          41.9312
         ]
       },
       "properties": {
@@ -6667,8 +6667,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          10.3058,
-          43.5838
+          10.3052469,
+          43.5826669
         ]
       },
       "properties": {
@@ -7320,8 +7320,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          14.286953,
-          37.571078
+          14.2709,
+          37.5705
         ]
       },
       "properties": {
@@ -7373,8 +7373,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          13.906,
-          37.857
+          13.9142,
+          37.8384
         ]
       },
       "properties": {
@@ -7897,8 +7897,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.333,
-          45.791
+          9.3323,
+          45.8042
         ]
       },
       "properties": {
@@ -8103,8 +8103,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.7457,
-          44.0784
+          7.7516,
+          44.0811
         ]
       },
       "properties": {
@@ -8116,7 +8116,7 @@
         "province_code": "8",
         "province_key": "imperia",
         "province_raw": "Imperia",
-        "province_validation_status": "validated",
+        "province_validation_status": "coordinate_mismatch",
         "region": "Liguria",
         "bridge_crossing_type": "waterway",
         "bridge_crossing_name": "Rio Bevera",
@@ -8562,8 +8562,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          15.924839,
-          39.911542
+          15.9386,
+          39.9242
         ]
       },
       "properties": {
@@ -8709,8 +8709,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          12.8577849009686,
-          37.8067121849219
+          12.831,
+          37.8225
         ]
       },
       "properties": {
@@ -8745,7 +8745,7 @@
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
-        "exact_location": true,
+        "exact_location": false,
         "bridge_name": null,
         "structural_type": "Arch bridge",
         "material_type": "Masonry",
@@ -8809,8 +8809,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          11.347,
-          44.535
+          11.2758,
+          44.5147
         ]
       },
       "properties": {
@@ -9227,8 +9227,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.11201,
-          45.693
+          9.1091,
+          45.6983
         ]
       },
       "properties": {
@@ -10245,8 +10245,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.215,
-          45.828
+          8.2831,
+          45.8239
         ]
       },
       "properties": {
@@ -10281,7 +10281,7 @@
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
-        "exact_location": false,
+        "exact_location": true,
         "bridge_name": null,
         "structural_type": "Beam bridge",
         "material_type": "Reinforced concrete",
@@ -10289,7 +10289,7 @@
         "construction_year_numeric": null,
         "construction_year_raw": null,
         "curation_level": "Standard",
-        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente e non sono distinguibili singolarmente nel rapporto: questa scheda e' uno dei tre record (B20.10.14-B20.10.16); tipologia strutturale, materiale e coordinate puntuali non desumibili (posizione approssimata sul tratto Camasco-Corte e Costa, exact_location FALSE)."
+        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente nel rapporto; il punto del primo ponte è stato confermato durante la curatela ARCUS pre-release."
       }
     },
     {
@@ -10298,8 +10298,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.215,
-          45.828
+          8.2858,
+          45.8315
         ]
       },
       "properties": {
@@ -10334,7 +10334,7 @@
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
-        "exact_location": false,
+        "exact_location": true,
         "bridge_name": null,
         "structural_type": "Beam bridge",
         "material_type": "Reinforced concrete",
@@ -10342,7 +10342,7 @@
         "construction_year_numeric": null,
         "construction_year_raw": null,
         "curation_level": "Standard",
-        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente e non sono distinguibili singolarmente nel rapporto: questa scheda e' uno dei tre record (B20.10.14-B20.10.16); tipologia strutturale, materiale e coordinate puntuali non desumibili (posizione approssimata sul tratto Camasco-Corte e Costa, exact_location FALSE)."
+        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente nel rapporto; questo record rappresenta il secondo ponte. Il secondo e il terzo manufatto sono molto vicini e condividono la coordinata curata disponibile, pur restando strutture e record distinti."
       }
     },
     {
@@ -10351,8 +10351,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.215,
-          45.828
+          8.2858,
+          45.8315
         ]
       },
       "properties": {
@@ -10387,7 +10387,7 @@
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
-        "exact_location": false,
+        "exact_location": true,
         "bridge_name": null,
         "structural_type": "Beam bridge",
         "material_type": "Reinforced concrete",
@@ -10395,7 +10395,7 @@
         "construction_year_numeric": null,
         "construction_year_raw": null,
         "curation_level": "Standard",
-        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente e non sono distinguibili singolarmente nel rapporto: questa scheda e' uno dei tre record (B20.10.14-B20.10.16); tipologia strutturale, materiale e coordinate puntuali non desumibili (posizione approssimata sul tratto Camasco-Corte e Costa, exact_location FALSE)."
+        "description": "Total collapse (washout) of one of three bridges over the Pianale stream between the hamlets of Camasco and Corte e Costa in Varallo (Vercelli, Piemonte) on 2-3 October 2020, during the record-breaking Sesia basin flood. The three bridges were washed away by the flood of the Pianale stream and Nono torrent, in a sector where the ARPA Piemonte event report describes hyperconcentrated flows and debris flows along the entire minor network. The three collapses are documented collectively in the report (see B20.10.14-B20.10.16); structural details are not available. No fatalities attributed to these collapses. Rapporto ARPA Piemonte 'Evento del 2-3 ottobre 2020' (rev 1.1, 14/10/2020, p. 70, Fig. 57b e 58): la piena del Rio Pianale e del T. Nono provoco' l'asportazione di tre ponti sul rio Pianale tra Camasco e la frazione Corte e Costa (comune di Varallo). Il rapporto inquadra i processi sui tributari del medio-basso Sesia come trasporto iperconcentrato (piene con elevato trasporto di fondo) e colate detritiche lungo tutto il reticolato minore, con effetti parossistici proprio sui torrenti Nono e Mastallone (p. 69): l'attribuzione 'Debris flow / solid transport' e' inferita da questo contesto documentato, non dichiarata per il singolo manufatto - evidenza 'Probable'. I tre ponti sono documentati collettivamente nel rapporto; questo record rappresenta il terzo ponte. Il secondo e il terzo manufatto sono molto vicini e condividono la coordinata curata disponibile, pur restando strutture e record distinti."
       }
     },
     {
@@ -10457,8 +10457,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.911,
-          44.15
+          7.9405,
+          44.1481
         ]
       },
       "properties": {
@@ -11999,8 +11999,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          15.1652,
-          38.1372
+          15.1582,
+          38.1257
         ]
       },
       "properties": {
@@ -12052,8 +12052,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          13.2721,
-          37.6785
+          13.3105,
+          37.5959
         ]
       },
       "properties": {
@@ -12065,7 +12065,7 @@
         "province_code": "282",
         "province_key": "palermo",
         "province_raw": "Palermo",
-        "province_validation_status": "validated",
+        "province_validation_status": "coordinate_mismatch",
         "region": "Sicilia",
         "bridge_crossing_type": "waterway",
         "bridge_crossing_name": "Sosio river",
@@ -12664,8 +12664,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          11.718159,
-          44.273694
+          11.6713,
+          44.2618
         ]
       },
       "properties": {
@@ -12711,8 +12711,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          10.1218,
-          44.649
+          10.0932,
+          44.6617
         ]
       },
       "properties": {
@@ -13182,8 +13182,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          16.3263,
-          38.8751
+          16.3475,
+          38.8576
         ]
       },
       "properties": {
@@ -13207,13 +13207,13 @@
         "cause_category": "Natural",
         "specific_cause": "Hydraulic",
         "failure_trigger": "Flood",
-        "failure_process": null,
-        "component_involved": null,
-        "failure_cause_evidence": "Unspecified",
+        "failure_process": "Washout / hydraulic action",
+        "component_involved": "Pier / foundation",
+        "failure_cause_evidence": "Documented",
         "hydraulic_intelligence": {
           "trigger": "flood",
           "failure_process": null,
-          "component_involved": null,
+          "component_involved": "pier_foundation",
           "evidence_level": "unspecified",
           "taxonomy_version": "hydraulic-v2"
         },
@@ -13235,8 +13235,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2901,
-          44.3584
+          8.28970363276012,
+          44.3577805364288
         ]
       },
       "properties": {
@@ -13260,14 +13260,14 @@
         "cause_category": "Natural",
         "specific_cause": "Hydraulic",
         "failure_trigger": "Flood",
-        "failure_process": null,
-        "component_involved": null,
-        "failure_cause_evidence": "Unspecified",
+        "failure_process": "Debris accumulation / obstruction",
+        "component_involved": "Multiple components",
+        "failure_cause_evidence": "Documented",
         "hydraulic_intelligence": {
           "trigger": "flood",
-          "failure_process": null,
-          "component_involved": null,
-          "evidence_level": "unspecified",
+          "failure_process": "debris_accumulation_or_obstruction",
+          "component_involved": "multiple_components",
+          "evidence_level": "documented",
           "taxonomy_version": "hydraulic-v2"
         },
         "source_confidence": "High",
@@ -13288,8 +13288,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.0249,
-          45.5126
+          8.02479575,
+          45.5125672
         ]
       },
       "properties": {
@@ -13341,8 +13341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          11.308,
-          45.6321
+          11.30818462,
+          45.63209168
         ]
       },
       "properties": {
@@ -13394,8 +13394,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          11.2134,
-          46.7697
+          11.2134207,
+          46.7696823
         ]
       },
       "properties": {
@@ -13447,8 +13447,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          10.3058,
-          43.5838
+          10.3052469,
+          43.5826669
         ]
       },
       "properties": {
@@ -13494,8 +13494,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          14.7961973412529,
-          42.0589065018491
+          14.7951476,
+          42.059248033333326
         ]
       },
       "properties": {

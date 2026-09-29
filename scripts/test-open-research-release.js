@@ -142,7 +142,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.9");
+  assert.equal(manifest.version, "arcus-open-2026.10");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v2");
 });
@@ -196,8 +196,8 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 await check("taxonomy-and-evidence-classes", () => {
   assert.equal(taxonomy.taxonomy.length, 100);
   assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 3);
-  assert.equal(events.filter((event) => event.failure_process).length, 214);
-  assert.equal(events.filter((event) => event.component_involved).length, 211);
+  assert.equal(events.filter((event) => event.failure_process).length, 216);
+  assert.equal(events.filter((event) => event.component_involved).length, 213);
   assert.equal(
     events.filter((event) => event.failure_process === null)
       .every((event) => event.hydraulic_intelligence?.failure_process === null || !event.hydraulic_intelligence),
@@ -401,7 +401,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.9/);
+  assert.match(citation, /arcus-open-2026\.10/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);

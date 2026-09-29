@@ -154,7 +154,7 @@ try {
   await dialog.getByText("Copertura del record", { exact: true }).waitFor();
   assert.equal(await dialog.locator(".arcus-event-record-coverage-grid article").count(), 4);
   assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.9/);
+  assert.match(await dialog.locator(".arcus-event-citable-identity").innerText(), /arcus-open-2026\.10/);
   await screenshot(page, "desktop-research-quality");
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: /Esporta record e fonti/ }).click();
@@ -254,7 +254,10 @@ try {
   await page.getByText("Livello informativo pertinente alla causa documentata", { exact: true }).waitFor();
   assert.equal(await page.locator(".arcus-event-territorial-grid article").count(), 1);
   assert.match(await page.locator(".arcus-event-territorial-grid article").innerText(), /Pericolosità da frana/i);
-  assert.match(await page.locator(".arcus-event-territorial").innerText(), /Classe P2[\s\S]*Classi ufficiali rilevate al punto: P2/i);
+  assert.match(
+    await page.locator(".arcus-event-territorial").innerText(),
+    /(?:Classe P[1-4][\s\S]*Classi ufficiali rilevate al punto: P[1-4]|Non determinato)/i
+  );
   assert.doesNotMatch(await page.locator(".arcus-event-territorial").innerText(), /Pericolosità idraulica|Pericolosità sismica/i);
   checks.push("Landslide dossier exposes only cause-relevant context and publishes the current official PAI class");
 

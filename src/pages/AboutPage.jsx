@@ -190,6 +190,12 @@ function AboutPage() {
             <strong>{content.stewardshipName}</strong>
             <span>{content.stewardshipRole}</span>
             <a
+              className="about-stewardship-contact"
+              href={`mailto:${contactAddresses.personal}`}
+            >
+              {contactAddresses.personal}
+            </a>
+            <a
               className="about-stewardship-affiliation"
               href="https://iabse.org/TG1.5"
               rel="noreferrer"

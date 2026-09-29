@@ -158,7 +158,7 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.9");
+  assert.equal(manifest.version, "arcus-open-2026.10");
   assert.equal(events.events.length, manifest.event_count);
   assert.equal(sources.sources.length, manifest.source_count);
   assert.equal(

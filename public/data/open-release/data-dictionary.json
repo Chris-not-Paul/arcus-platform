@@ -43,9 +43,9 @@
         {
           "field": "component_involved",
           "type": "string",
-          "populated": 211,
-          "missing": 50,
-          "coverage": 0.8084
+          "populated": 213,
+          "missing": 48,
+          "coverage": 0.8161
         },
         {
           "field": "construction_year",
@@ -127,9 +127,9 @@
         {
           "field": "failure_process",
           "type": "string",
-          "populated": 214,
-          "missing": 47,
-          "coverage": 0.8199
+          "populated": 216,
+          "missing": 45,
+          "coverage": 0.8276
         },
         {
           "field": "failure_trigger",

@@ -24,7 +24,7 @@ function RightsPage() {
         owner: "Christian Paolini — Italia",
         contactLabel: "Contatto per licenze e riuso",
         releaseLabel: "Release Open corrente",
-        release: "arcus-open-2026.9 · CC BY 4.0",
+        release: "arcus-open-2026.10 · CC BY 4.0",
         sections: [
           {
             title: "1. Software della piattaforma",
@@ -74,7 +74,7 @@ function RightsPage() {
         owner: "Christian Paolini — Italy",
         contactLabel: "Licensing and reuse contact",
         releaseLabel: "Current Open release",
-        release: "arcus-open-2026.9 · CC BY 4.0",
+        release: "arcus-open-2026.10 · CC BY 4.0",
         sections: [
           {
             title: "1. Platform software",
@@ -145,8 +145,8 @@ function RightsPage() {
           </div>
           <div>
             <span>{content.contactLabel}</span>
-            <a href={`mailto:${contactAddresses.research}`}>
-              {contactAddresses.research}
+            <a href={`mailto:${contactAddresses.general}`}>
+              {contactAddresses.general}
             </a>
           </div>
           <div>

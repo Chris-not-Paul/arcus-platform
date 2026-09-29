@@ -1,11 +1,11 @@
 {
-  "release": "arcus-open-2026.9",
+  "release": "arcus-open-2026.10",
   "sample_size": 261,
   "source_count": 718,
   "interpretation": "Counts and percentages are observed frequencies in the ARCUS Open Research database, not collapse probabilities or causal estimates.",
   "missing": {
-    "failure_process": 47,
-    "component_involved": 50,
+    "failure_process": 45,
+    "component_involved": 48,
     "failure_cause_evidence": 0,
     "construction_year_numeric": 229
   },
@@ -155,7 +155,7 @@
   "processes": {
     "Scour": 74,
     "Bank erosion / embankment failure": 53,
-    "Unspecified": 47,
+    "Unspecified": 45,
     "Overtopping / hydrodynamic action": 32,
     "Knocked down by external action": 15,
     "Other documented mode": 15,
@@ -163,16 +163,17 @@
     "Overstress": 5,
     "Other documented hydraulic process": 4,
     "Fracture": 4,
-    "Debris accumulation / obstruction": 2,
+    "Debris accumulation / obstruction": 3,
     "Bending": 1,
     "Falsework / temporary works collapse": 1,
-    "Fatigue": 1
+    "Fatigue": 1,
+    "Washout / hydraulic action": 1
   },
   "components": {
-    "Multiple components": 84,
-    "Unspecified": 50,
+    "Multiple components": 85,
+    "Unspecified": 48,
     "Deck / superstructure": 38,
-    "Pier / foundation": 34,
+    "Pier / foundation": 35,
     "Entire structure": 21,
     "Approach embankment": 16,
     "Abutment": 13,
@@ -201,9 +202,9 @@
     "Steel-concrete composite": 1
   },
   "evidence_level": {
-    "Documented": 127,
+    "Documented": 129,
     "Probable": 46,
-    "Unspecified": 36,
+    "Unspecified": 34,
     "Needs review": 2
   },
   "source_coverage": {

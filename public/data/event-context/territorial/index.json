@@ -1,14 +1,14 @@
 {
   "schema_version": "arcus-open-territorial-context-v1",
-  "release": "arcus-open-2026.8",
+  "release": "arcus-open-2026.10",
   "context_role": "current_official_context_at_documented_collapse_location",
   "caveat": "Current official hazard context at the documented collapse location; not retrospective causal proof, a safety classification or a risk score.",
   "rights_note": "ARCUS publishes a release-bound contextual synthesis. Underlying official datasets remain subject to the respective provider terms and attribution requirements.",
-  "snapshot_latest_query_at": "2026-09-08T07:23:30.846Z",
+  "snapshot_latest_query_at": "2026-09-29T09:44:16.941Z",
   "coverage": {
     "events": 261,
-    "fully_resolved_events": 256,
-    "unresolved_events": 5
+    "fully_resolved_events": 225,
+    "unresolved_events": 36
   },
   "sources": {
     "hydraulic": {
@@ -565,30 +565,26 @@
     },
     "IT00.10.15": {
       "coordinates": {
-        "latitude": 45.3590443263878,
-        "longitude": 7.71108119476556
+        "latitude": 45.3444,
+        "longitude": 7.7285
       },
       "event_id": "IT00.10.15",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "service_unreachable",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:23:38.072Z"
+        "queried_at": "2026-09-29T09:44:13.727Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "service_unreachable",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:23:38.943Z"
+        "queried_at": "2026-09-29T09:44:13.797Z"
       },
       "seismic": {
         "status": "available",
@@ -596,7 +592,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:23:37.507Z"
+        "queried_at": "2026-09-29T09:44:13.444Z"
       }
     },
     "IT00.10.16": {
@@ -1604,8 +1600,8 @@
     },
     "IT00.11.01": {
       "coordinates": {
-        "latitude": 44.349968,
-        "longitude": 9.909742
+        "latitude": 44.3414,
+        "longitude": 9.9482
       },
       "event_id": "IT00.11.01",
       "hydraulic": {
@@ -1614,7 +1610,7 @@
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-09-08T07:23:29.448Z"
+        "queried_at": "2026-09-29T09:44:13.757Z"
       },
       "landslide": {
         "status": "service_unreachable",
@@ -1623,7 +1619,7 @@
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-09-08T07:23:29.447Z"
+        "queried_at": "2026-09-29T09:44:13.799Z"
       },
       "seismic": {
         "status": "available",
@@ -1631,7 +1627,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-09-08T07:23:29.293Z"
+        "queried_at": "2026-09-29T09:44:13.499Z"
       }
     },
     "IT00.12.01": {
@@ -2030,37 +2026,34 @@
     },
     "IT02.07.03": {
       "coordinates": {
-        "latitude": 44.355413820189,
-        "longitude": 7.53252380688468
+        "latitude": 44.3644,
+        "longitude": 7.5621
       },
       "event_id": "IT02.07.03",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P2",
-        "matched_classes": [
-          "P1",
-          "P2"
-        ],
+        "status": "service_unreachable",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:24:15.317Z"
+        "queried_at": "2026-09-29T09:44:13.800Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "service_unreachable",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:24:16.239Z"
+        "queried_at": "2026-09-29T09:44:13.797Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.1339,
+        "pga_p50_g": 0.1288,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:24:14.842Z"
+        "queried_at": "2026-09-29T09:44:13.565Z"
       }
     },
     "IT02.11.01": {
@@ -2101,38 +2094,34 @@
     },
     "IT03.01.01": {
       "coordinates": {
-        "latitude": 42.06,
-        "longitude": 14.8
+        "latitude": 42.0298,
+        "longitude": 14.7709
       },
       "event_id": "IT03.01.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:24:16.568Z"
+        "queried_at": "2026-09-29T09:44:14.053Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:24:17.970Z"
+        "queried_at": "2026-09-29T09:44:14.053Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0952,
+        "pga_p50_g": 0.103,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:24:16.543Z"
+        "queried_at": "2026-09-29T09:44:14.111Z"
       }
     },
     "IT03.08.01": {
@@ -2511,30 +2500,26 @@
     },
     "IT06.09.01": {
       "coordinates": {
-        "latitude": 43.786557,
-        "longitude": 7.640638
+        "latitude": 43.7884,
+        "longitude": 7.6406
       },
       "event_id": "IT06.09.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:24:27.761Z"
+        "queried_at": "2026-09-29T09:44:14.053Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:24:28.909Z"
+        "queried_at": "2026-09-29T09:44:14.053Z"
       },
       "seismic": {
         "status": "available",
@@ -2542,7 +2527,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:24:27.488Z"
+        "queried_at": "2026-09-29T09:44:14.205Z"
       }
     },
     "IT08.05.01": {
@@ -2842,34 +2827,34 @@
     },
     "IT09.02.01": {
       "coordinates": {
-        "latitude": 37.569478,
-        "longitude": 14.286408
+        "latitude": 37.5705,
+        "longitude": 14.2709
       },
       "event_id": "IT09.02.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:24:36.873Z"
+        "queried_at": "2026-09-29T09:44:14.056Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:24:38.190Z"
+        "queried_at": "2026-09-29T09:44:14.057Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0889,
+        "pga_p50_g": 0.0869,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:24:36.626Z"
+        "queried_at": "2026-09-29T09:44:14.157Z"
       }
     },
     "IT09.04.01": {
@@ -2977,30 +2962,26 @@
     },
     "IT09.04.04": {
       "coordinates": {
-        "latitude": 45.0625,
-        "longitude": 9.7045
+        "latitude": 45.0628,
+        "longitude": 9.7042
       },
       "event_id": "IT09.04.04",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:24:40.781Z"
+        "queried_at": "2026-09-29T09:44:14.363Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:24:41.753Z"
+        "queried_at": "2026-09-29T09:44:14.363Z"
       },
       "seismic": {
         "status": "available",
@@ -3008,7 +2989,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:24:40.346Z"
+        "queried_at": "2026-09-29T09:44:14.409Z"
       }
     },
     "IT09.05.01": {
@@ -4068,28 +4049,26 @@
     },
     "IT13.09.01": {
       "coordinates": {
-        "latitude": 41.933981,
-        "longitude": 12.605197
+        "latitude": 41.9312,
+        "longitude": 12.6015
       },
       "event_id": "IT13.09.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P1",
-        "matched_classes": [
-          "P1"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:08.702Z"
+        "queried_at": "2026-09-29T09:44:14.411Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:10.089Z"
+        "queried_at": "2026-09-29T09:44:14.411Z"
       },
       "seismic": {
         "status": "available",
@@ -4097,7 +4076,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:08.651Z"
+        "queried_at": "2026-09-29T09:44:14.459Z"
       }
     },
     "IT13.10.01": {
@@ -4533,29 +4512,26 @@
     },
     "IT14.04.01": {
       "coordinates": {
-        "latitude": 43.5838,
-        "longitude": 10.3058
+        "latitude": 43.5826669,
+        "longitude": 10.3052469
       },
       "event_id": "IT14.04.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P2",
-        "matched_classes": [
-          "P1",
-          "P2"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:20.283Z"
+        "queried_at": "2026-09-29T09:44:14.464Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:21.226Z"
+        "queried_at": "2026-09-29T09:44:14.464Z"
       },
       "seismic": {
         "status": "available",
@@ -4563,7 +4539,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:19.803Z"
+        "queried_at": "2026-09-29T09:44:14.519Z"
       }
     },
     "IT14.05.01": {
@@ -4973,60 +4949,58 @@
     },
     "IT15.03.03": {
       "coordinates": {
-        "latitude": 37.571078,
-        "longitude": 14.286953
+        "latitude": 37.5705,
+        "longitude": 14.2709
       },
       "event_id": "IT15.03.03",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:31.587Z"
+        "queried_at": "2026-09-29T09:44:14.676Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:32.998Z"
+        "queried_at": "2026-09-29T09:44:14.676Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0889,
+        "pga_p50_g": 0.0869,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:31.567Z"
+        "queried_at": "2026-09-29T09:44:14.723Z"
       }
     },
     "IT15.04.01": {
       "coordinates": {
-        "latitude": 37.857,
-        "longitude": 13.906
+        "latitude": 37.8384,
+        "longitude": 13.9142
       },
       "event_id": "IT15.04.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:31.995Z"
+        "queried_at": "2026-09-29T09:44:14.723Z"
       },
       "landslide": {
-        "status": "available",
+        "status": "circuit_open",
         "attention_area": false,
-        "highest_hazard_class": "P2",
-        "matched_hazard_classes": [
-          "P2"
-        ],
+        "highest_hazard_class": null,
+        "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:33.413Z"
+        "queried_at": "2026-09-29T09:44:14.724Z"
       },
       "seismic": {
         "status": "available",
@@ -5034,7 +5008,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:31.963Z"
+        "queried_at": "2026-09-29T09:44:14.773Z"
       }
     },
     "IT15.09.01": {
@@ -5348,26 +5322,26 @@
     },
     "IT16.10.01": {
       "coordinates": {
-        "latitude": 45.791,
-        "longitude": 9.333
+        "latitude": 45.8042,
+        "longitude": 9.3323
       },
       "event_id": "IT16.10.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:41.155Z"
+        "queried_at": "2026-09-29T09:44:14.779Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:42.339Z"
+        "queried_at": "2026-09-29T09:44:14.779Z"
       },
       "seismic": {
         "status": "available",
@@ -5375,7 +5349,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:40.885Z"
+        "queried_at": "2026-09-29T09:44:14.822Z"
       }
     },
     "IT16.11.01": {
@@ -5488,26 +5462,26 @@
     },
     "IT16.11.04": {
       "coordinates": {
-        "latitude": 44.0784,
-        "longitude": 7.7457
+        "latitude": 44.0811,
+        "longitude": 7.7516
       },
       "event_id": "IT16.11.04",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:44.681Z"
+        "queried_at": "2026-09-29T09:44:14.986Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:45.831Z"
+        "queried_at": "2026-09-29T09:44:14.986Z"
       },
       "seismic": {
         "status": "available",
@@ -5515,7 +5489,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:44.410Z"
+        "queried_at": "2026-09-29T09:44:15.030Z"
       }
     },
     "IT16.11.05": {
@@ -5801,38 +5775,34 @@
     },
     "IT17.12.01": {
       "coordinates": {
-        "latitude": 39.911542,
-        "longitude": 15.924839
+        "latitude": 39.9242,
+        "longitude": 15.9386
       },
       "event_id": "IT17.12.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:52.685Z"
+        "queried_at": "2026-09-29T09:44:15.031Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:53.910Z"
+        "queried_at": "2026-09-29T09:44:15.031Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.2305,
+        "pga_p50_g": 0.2504,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:52.521Z"
+        "queried_at": "2026-09-29T09:44:15.079Z"
       }
     },
     "IT18.01.01": {
@@ -5905,34 +5875,34 @@
     },
     "IT18.02.02": {
       "coordinates": {
-        "latitude": 37.8067121849219,
-        "longitude": 12.8577849009686
+        "latitude": 37.8225,
+        "longitude": 12.831
       },
       "event_id": "IT18.02.02",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:54.764Z"
+        "queried_at": "2026-09-29T09:44:15.086Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:56.116Z"
+        "queried_at": "2026-09-29T09:44:15.086Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.116,
+        "pga_p50_g": 0.1083,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:54.698Z"
+        "queried_at": "2026-09-29T09:44:15.141Z"
       }
     },
     "IT18.08.01": {
@@ -5969,37 +5939,34 @@
     },
     "IT18.08.02": {
       "coordinates": {
-        "latitude": 44.535,
-        "longitude": 11.347
+        "latitude": 44.5147,
+        "longitude": 11.2758
       },
       "event_id": "IT18.08.02",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P2",
-        "matched_classes": [
-          "P1",
-          "P2"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:56.868Z"
+        "queried_at": "2026-09-29T09:44:15.284Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:57.887Z"
+        "queried_at": "2026-09-29T09:44:15.284Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.1637,
+        "pga_p50_g": 0.1615,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:56.413Z"
+        "queried_at": "2026-09-29T09:44:15.326Z"
       }
     },
     "IT18.10.01": {
@@ -6255,26 +6222,26 @@
     },
     "IT19.03.01": {
       "coordinates": {
-        "latitude": 45.693,
-        "longitude": 9.11201
+        "latitude": 45.6983,
+        "longitude": 9.1091
       },
       "event_id": "IT19.03.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:04.437Z"
+        "queried_at": "2026-09-29T09:44:15.345Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:05.657Z"
+        "queried_at": "2026-09-29T09:44:15.345Z"
       },
       "seismic": {
         "status": "available",
@@ -6282,7 +6249,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:04.154Z"
+        "queried_at": "2026-09-29T09:44:15.400Z"
       }
     },
     "IT19.10.01": {
@@ -6947,98 +6914,98 @@
     },
     "IT20.10.14": {
       "coordinates": {
-        "latitude": 45.828,
-        "longitude": 8.215
+        "latitude": 45.8239,
+        "longitude": 8.2831
       },
       "event_id": "IT20.10.14",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:23.432Z"
+        "queried_at": "2026-09-29T09:44:15.408Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:24.620Z"
+        "queried_at": "2026-09-29T09:44:15.408Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0515,
+        "pga_p50_g": 0.049,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:23.162Z"
+        "queried_at": "2026-09-29T09:44:15.453Z"
       }
     },
     "IT20.10.15": {
       "coordinates": {
-        "latitude": 45.828,
-        "longitude": 8.215
+        "latitude": 45.8315,
+        "longitude": 8.2858
       },
       "event_id": "IT20.10.15",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:24.152Z"
+        "queried_at": "2026-09-29T09:44:15.580Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:24.620Z"
+        "queried_at": "2026-09-29T09:44:15.580Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0515,
+        "pga_p50_g": 0.049,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:24.199Z"
+        "queried_at": "2026-09-29T09:44:15.627Z"
       }
     },
     "IT20.10.16": {
       "coordinates": {
-        "latitude": 45.828,
-        "longitude": 8.215
+        "latitude": 45.8315,
+        "longitude": 8.2858
       },
       "event_id": "IT20.10.16",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:24.152Z"
+        "queried_at": "2026-09-29T09:44:15.656Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:24.620Z"
+        "queried_at": "2026-09-29T09:44:15.656Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.0515,
+        "pga_p50_g": 0.049,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:24.199Z"
+        "queried_at": "2026-09-29T09:44:15.703Z"
       }
     },
     "IT20.10.17": {
@@ -7075,26 +7042,26 @@
     },
     "IT20.10.18": {
       "coordinates": {
-        "latitude": 44.15,
-        "longitude": 7.911
+        "latitude": 44.1481,
+        "longitude": 7.9405
       },
       "event_id": "IT20.10.18",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:25.556Z"
+        "queried_at": "2026-09-29T09:44:15.709Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:26.660Z"
+        "queried_at": "2026-09-29T09:44:15.710Z"
       },
       "seismic": {
         "status": "available",
@@ -7102,7 +7069,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:25.212Z"
+        "queried_at": "2026-09-29T09:44:15.764Z"
       }
     },
     "IT20.10.19": {
@@ -8080,26 +8047,26 @@
     },
     "IT22.12.02": {
       "coordinates": {
-        "latitude": 38.1372,
-        "longitude": 15.1652
+        "latitude": 38.1257,
+        "longitude": 15.1582
       },
       "event_id": "IT22.12.02",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:52.521Z"
+        "queried_at": "2026-09-29T09:44:15.888Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:53.897Z"
+        "queried_at": "2026-09-29T09:44:15.888Z"
       },
       "seismic": {
         "status": "available",
@@ -8107,39 +8074,39 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:52.483Z"
+        "queried_at": "2026-09-29T09:44:15.933Z"
       }
     },
     "IT22.12.03": {
       "coordinates": {
-        "latitude": 37.6785,
-        "longitude": 13.2721
+        "latitude": 37.5959,
+        "longitude": 13.3105
       },
       "event_id": "IT22.12.03",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:26:54.142Z"
+        "queried_at": "2026-09-29T09:44:15.966Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:26:55.570Z"
+        "queried_at": "2026-09-29T09:44:15.966Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.1043,
+        "pga_p50_g": 0.0873,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:26:54.122Z"
+        "queried_at": "2026-09-29T09:44:16.019Z"
       }
     },
     "IT22.12.04": {
@@ -8527,74 +8494,66 @@
     },
     "IT23.09.01": {
       "coordinates": {
-        "latitude": 44.273694,
-        "longitude": 11.718159
+        "latitude": 44.2618,
+        "longitude": 11.6713
       },
       "event_id": "IT23.09.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:05.543Z"
+        "queried_at": "2026-09-29T09:44:16.027Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:06.343Z"
+        "queried_at": "2026-09-29T09:44:16.027Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.2089,
+        "pga_p50_g": 0.2092,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:04.791Z"
+        "queried_at": "2026-09-29T09:44:16.080Z"
       }
     },
     "IT23.10.01": {
       "coordinates": {
-        "latitude": 44.649,
-        "longitude": 10.1218
+        "latitude": 44.6617,
+        "longitude": 10.0932
       },
       "event_id": "IT23.10.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:05.624Z"
+        "queried_at": "2026-09-29T09:44:16.198Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:06.492Z"
+        "queried_at": "2026-09-29T09:44:16.198Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.158,
+        "pga_p50_g": 0.157,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:05.039Z"
+        "queried_at": "2026-09-29T09:44:16.244Z"
       }
     },
     "IT23.11.01": {
@@ -8879,66 +8838,58 @@
     },
     "IT24.10.02": {
       "coordinates": {
-        "latitude": 38.8751,
-        "longitude": 16.3263
+        "latitude": 38.8576,
+        "longitude": 16.3475
       },
       "event_id": "IT24.10.02",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:14.013Z"
+        "queried_at": "2026-09-29T09:44:16.276Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:15.308Z"
+        "queried_at": "2026-09-29T09:44:16.276Z"
       },
       "seismic": {
         "status": "available",
-        "pga_p50_g": 0.2704,
+        "pga_p50_g": 0.2675,
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:13.796Z"
+        "queried_at": "2026-09-29T09:44:16.326Z"
       }
     },
     "IT24.10.03": {
       "coordinates": {
-        "latitude": 44.3584,
-        "longitude": 8.2901
+        "latitude": 44.3577805364288,
+        "longitude": 8.28970363276012
       },
       "event_id": "IT24.10.03",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:14.400Z"
+        "queried_at": "2026-09-29T09:44:16.337Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:15.410Z"
+        "queried_at": "2026-09-29T09:44:16.337Z"
       },
       "seismic": {
         "status": "available",
@@ -8946,35 +8897,31 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:13.977Z"
+        "queried_at": "2026-09-29T09:44:16.384Z"
       }
     },
     "IT25.04.01": {
       "coordinates": {
-        "latitude": 45.5126,
-        "longitude": 8.0249
+        "latitude": 45.5125672,
+        "longitude": 8.02479575
       },
       "event_id": "IT25.04.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P3",
-        "matched_classes": [
-          "P1",
-          "P2",
-          "P3"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:16.250Z"
+        "queried_at": "2026-09-29T09:44:16.509Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:17.068Z"
+        "queried_at": "2026-09-29T09:44:16.509Z"
       },
       "seismic": {
         "status": "available",
@@ -8982,31 +8929,31 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:15.619Z"
+        "queried_at": "2026-09-29T09:44:16.556Z"
       }
     },
     "IT25.04.02": {
       "coordinates": {
-        "latitude": 45.6321,
-        "longitude": 11.308
+        "latitude": 45.63209168,
+        "longitude": 11.30818462
       },
       "event_id": "IT25.04.02",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:16.135Z"
+        "queried_at": "2026-09-29T09:44:16.587Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:17.219Z"
+        "queried_at": "2026-09-29T09:44:16.587Z"
       },
       "seismic": {
         "status": "available",
@@ -9014,31 +8961,31 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:15.726Z"
+        "queried_at": "2026-09-29T09:44:16.634Z"
       }
     },
     "IT25.07.01": {
       "coordinates": {
-        "latitude": 46.7697,
-        "longitude": 11.2134
+        "latitude": 46.7696823,
+        "longitude": 11.2134207
       },
       "event_id": "IT25.07.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:17.413Z"
+        "queried_at": "2026-09-29T09:44:16.639Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:18.809Z"
+        "queried_at": "2026-09-29T09:44:16.639Z"
       },
       "seismic": {
         "status": "available",
@@ -9046,34 +8993,31 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:17.380Z"
+        "queried_at": "2026-09-29T09:44:16.697Z"
       }
     },
     "IT26.03.01": {
       "coordinates": {
-        "latitude": 43.5838,
-        "longitude": 10.3058
+        "latitude": 43.5826669,
+        "longitude": 10.3052469
       },
       "event_id": "IT26.03.01",
       "hydraulic": {
-        "status": "available",
-        "highest_class": "P2",
-        "matched_classes": [
-          "P1",
-          "P2"
-        ],
+        "status": "circuit_open",
+        "highest_class": null,
+        "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:25:20.283Z"
+        "queried_at": "2026-09-29T09:44:16.819Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:25:21.226Z"
+        "queried_at": "2026-09-29T09:44:16.819Z"
       },
       "seismic": {
         "status": "available",
@@ -9081,31 +9025,31 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:25:19.803Z"
+        "queried_at": "2026-09-29T09:44:16.862Z"
       }
     },
     "IT26.04.01": {
       "coordinates": {
-        "latitude": 42.0589065018491,
-        "longitude": 14.7961973412529
+        "latitude": 42.059248033333326,
+        "longitude": 14.7951476
       },
       "event_id": "IT26.04.01",
       "hydraulic": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "highest_class": null,
         "matched_classes": [],
         "provider_version": "ispra-flood-wfs-v2",
         "source_dataset_version": null,
-        "queried_at": "2026-08-03T06:27:17.869Z"
+        "queried_at": "2026-09-29T09:44:16.898Z"
       },
       "landslide": {
-        "status": "no_intersection",
+        "status": "circuit_open",
         "attention_area": false,
         "highest_hazard_class": null,
         "matched_hazard_classes": [],
         "provider_version": "ispra-landslide-pai-wfs-v2",
         "source_dataset_version": "5.0",
-        "queried_at": "2026-08-03T06:27:19.235Z"
+        "queried_at": "2026-09-29T09:44:16.898Z"
       },
       "seismic": {
         "status": "available",
@@ -9113,7 +9057,7 @@
         "sampling_method": "nearest_grid_node",
         "provider_version": "ingv-mps04-grid-v1",
         "source_dataset_version": "MPS04-OPCM3519-1B-ag-005",
-        "queried_at": "2026-08-03T06:27:17.797Z"
+        "queried_at": "2026-09-29T09:44:16.941Z"
       }
     }
   }

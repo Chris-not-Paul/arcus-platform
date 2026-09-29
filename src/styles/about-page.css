@@ -178,6 +178,15 @@
   text-transform: uppercase;
 }
 
+.about-stewardship-card .about-stewardship-contact {
+  margin-top: 0;
+  font-family: var(--arcus-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
 .about-stewardship-card .about-stewardship-affiliation {
   width: auto;
   margin: 2px 0 0;
