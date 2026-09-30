@@ -4,8 +4,8 @@
   "event_date": "2025-04-17",
   "status": "context_available",
   "requested_location": {
-    "latitude": 45.5126,
-    "longitude": 8.0249
+    "latitude": 45.5125672,
+    "longitude": 8.02479575
   },
   "grid_location": {
     "elevation_m": 313,
@@ -94,21 +94,21 @@
     "upstream_provider": "Copernicus Climate Change Service / ECMWF",
     "upstream_url": "https://cds.climate.copernicus.eu/"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:14:31.815Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2025-04-17&latitude=45.5126&longitude=8.0249&models=era5&start_date=2025-04-04&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "coarse_reanalysis_context_only",
     "severity": "caution",
     "assessment_method": "dataset_resolution_rule",
     "rationale_it": "La rianalisi descrive la cella di modello al punto del ponte. La risoluzione non consente di rappresentare affidabilmente massimi convettivi locali o precipitazione areale a monte.",
     "rationale_en": "The reanalysis describes the model cell at the bridge point. Its resolution cannot reliably represent local convective maxima or upstream areal precipitation."
-  }
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-30T08:54:09.314Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2025-04-17&latitude=45.5125672&longitude=8.02479575&models=era5&start_date=2025-04-04&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }

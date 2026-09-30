@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Enna's panoramic road",
-    "latitude": 37.571078,
-    "longitude": 14.286953,
+    "latitude": 37.5705,
+    "longitude": 14.2709,
     "municipality": "Enna",
     "hydrographic_context": "Enna's panoramic road",
     "location_precision": "exact"

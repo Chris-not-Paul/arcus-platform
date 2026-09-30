@@ -2,7 +2,7 @@
 
 Target publication: 1 October 2026
 
-Release: `arcus-open-2026.8`
+Release: `arcus-open-2026.10`
 
 Canonical address: `https://www.arcusbridges.org`
 
@@ -12,9 +12,13 @@ From 24 September onward, ARCUS Open is under feature freeze. Only release
 blockers, factual corrections, accessibility fixes and deployment corrections
 may enter the launch branch.
 
-## Completed locally — 24 September
+## Completed locally — updated 30 September
 
-- [x] Public data package: 261 events and 716 sources.
+- [x] Public data package: 261 events and 718 sources.
+- [x] Shared-event registry: 14 documented episodes covering 108 event
+  records, with operational definitions separated from the public taxonomy.
+- [x] Coordinate-dependent rainfall, hydraulic and historical hazard context
+  regenerated or checked against the final release coordinates.
 - [x] Canonical `ITxx.xx.xx` identifiers across UI and downloads.
 - [x] Open/Professional boundary and unavailable private routes.
 - [x] Compile-time Open/Professional separation and automatic public-bundle
@@ -40,9 +44,9 @@ may enter the launch branch.
 - [x] Complete initial acceptance against the temporary HTTPS URL: Home,
   Atlas, direct event dossier, Analytics, Data Access, CSV download and private
   route boundary.
-- [ ] Connect `www.arcusbridges.org`.
+- [x] Connect `www.arcusbridges.org`.
 - [ ] Redirect `arcusbridges.org` permanently to the `www` address.
-- [ ] Confirm a valid HTTPS certificate on both host names.
+- [x] Confirm a valid HTTPS certificate on both host names.
 - [x] Verify that `_headers` and `_redirects` are applied by the provider.
 
 ## Owner review
@@ -73,10 +77,12 @@ may enter the launch branch.
 
 ## Final rehearsal — 30 September
 
-- [ ] Repeat every command in `ARCUS_OPEN_RELEASE_READINESS.md`.
+- [x] Repeat every command in `ARCUS_OPEN_RELEASE_READINESS.md`.
 - [ ] Verify canonical URLs, sitemap, social preview and 404 on production.
-- [ ] Create a Git release tag for the approved commit.
-- [ ] Record the last known-good commit and provider rollback procedure.
+- [x] Create a Git release tag for the approved commit:
+  `arcus-open-2026.10` at `873b8843a9d79f7e8e71a59aea1bce4306b5e19b`.
+- [x] Record the last known-good commit and provider rollback procedure:
+  restore the tagged deploy from Netlify Deploys if the public activation fails.
 - [ ] Prepare screenshots and links using the real HTTPS domain, not localhost.
 - [ ] Confirm launch copy and first comment links.
 

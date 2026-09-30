@@ -1,15 +1,15 @@
 {
   "schema_version": "arcus-event-hazard-history-public-v1",
-  "generated_at": "2026-09-25T11:58:49.325Z",
-  "open_release": "arcus-open-2026.8",
+  "generated_at": "2026-09-30T08:47:25.769Z",
+  "open_release": "arcus-open-2026.10",
   "observation_role": "official_class_membership_at_documented_event_coordinate",
   "caveat": "Each observation reports polygon membership at the same documented coordinate in the named official release. It is not a causal interpretation of the collapse.",
   "coverage": {
-    "events": 250,
-    "hydraulic_events": 250,
-    "landslide_events": 250,
+    "events": 253,
+    "hydraulic_events": 253,
+    "landslide_events": 253,
     "catalogue_events": 261,
-    "excluded_approximate_coordinates": 11,
+    "excluded_approximate_coordinates": 8,
     "releases_processed": 4
   },
   "sources": {
@@ -2001,8 +2001,8 @@
     },
     "IT00.10.15": {
       "coordinates": {
-        "latitude": 45.3590443263878,
-        "longitude": 7.71108119476556
+        "latitude": 45.3444,
+        "longitude": 7.7285
       },
       "event_date": "2000-10-13",
       "event_id": "IT00.10.15",
@@ -2067,15 +2067,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -2107,21 +2099,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -7117,6 +7094,100 @@
         }
       }
     },
+    "IT02.07.03": {
+      "coordinates": {
+        "latitude": 44.3644,
+        "longitude": 7.5621
+      },
+      "event_date": "2002-07-15",
+      "event_id": "IT02.07.03",
+      "hazards": {
+        "hydraulic": {
+          "comparison_summary": {
+            "current_classes": [],
+            "current_release": "ispra-hydraulic-2020-v5",
+            "current_reference_period": {
+              "start_year": 2020,
+              "end_year": 2020,
+              "precision": "year",
+              "label": "2020"
+            },
+            "reason": "no_pre_event_release",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-hydraulic-2017-v4",
+              "temporal_relation_to_event": "after_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2020,
+                "precision": "year",
+                "label": "2020"
+              },
+              "release_id": "ispra-hydraulic-2020-v5",
+              "temporal_relation_to_event": "after_event"
+            }
+          ]
+        },
+        "landslide": {
+          "comparison_summary": {
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-landslide-2017-v3",
+              "temporal_relation_to_event": "after_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2021,
+                "precision": "multi_year",
+                "label": "2020-2021"
+              },
+              "release_id": "ispra-landslide-2020-2021-v4",
+              "temporal_relation_to_event": "after_event"
+            }
+          ]
+        }
+      }
+    },
     "IT02.11.01": {
       "coordinates": {
         "latitude": 44.6886,
@@ -7248,19 +7319,15 @@
     },
     "IT03.01.01": {
       "coordinates": {
-        "latitude": 42.06,
-        "longitude": 14.8
+        "latitude": 42.0298,
+        "longitude": 14.7709
       },
       "event_date": "2003-01-25",
       "event_id": "IT03.01.01",
       "hazards": {
         "hydraulic": {
           "comparison_summary": {
-            "current_classes": [
-              "P1",
-              "P2",
-              "P3"
-            ],
+            "current_classes": [],
             "current_release": "ispra-hydraulic-2020-v5",
             "current_reference_period": {
               "start_year": 2020,
@@ -7273,15 +7340,11 @@
           },
           "observations": [
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 49.24,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -7292,15 +7355,11 @@
               "temporal_relation_to_event": "after_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 48.93,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -7314,15 +7373,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -7354,21 +7405,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -8591,8 +8627,8 @@
     },
     "IT06.09.01": {
       "coordinates": {
-        "latitude": 43.786557,
-        "longitude": 7.640638
+        "latitude": 43.7884,
+        "longitude": 7.6406
       },
       "event_date": "2006-09-15",
       "event_id": "IT06.09.01",
@@ -8600,9 +8636,7 @@
         "hydraulic": {
           "comparison_summary": {
             "current_classes": [
-              "P1",
-              "P2",
-              "P3"
+              "P1"
             ],
             "current_release": "ispra-hydraulic-2020-v5",
             "current_reference_period": {
@@ -8617,12 +8651,10 @@
           "observations": [
             {
               "classes": [
-                "P1",
-                "P2",
-                "P3"
+                "P1"
               ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 8.78,
+              "highest_class": "P1",
+              "minimum_boundary_distance_m": 30.34,
               "point_status": "intersection",
               "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
@@ -8636,14 +8668,12 @@
             },
             {
               "classes": [
-                "P1",
-                "P2",
-                "P3"
+                "P1"
               ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": null,
+              "highest_class": "P1",
+              "minimum_boundary_distance_m": 30.05,
               "point_status": "intersection",
-              "positional_assessment": "interior_intersection",
+              "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -8657,15 +8687,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -8697,21 +8719,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -9773,8 +9780,8 @@
     },
     "IT09.02.01": {
       "coordinates": {
-        "latitude": 37.569478,
-        "longitude": 14.286408
+        "latitude": 37.5705,
+        "longitude": 14.2709
       },
       "event_date": "2009-02-01",
       "event_id": "IT09.02.01",
@@ -9827,22 +9834,14 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 22.85,
+              "minimum_boundary_distance_m": 34.3,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -9857,7 +9856,7 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 22.74,
+              "minimum_boundary_distance_m": 34.25,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -9867,21 +9866,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -10262,8 +10246,8 @@
     },
     "IT09.04.04": {
       "coordinates": {
-        "latitude": 45.0625,
-        "longitude": 9.7045
+        "latitude": 45.0628,
+        "longitude": 9.7042
       },
       "event_date": "2009-04-30",
       "event_id": "IT09.04.04",
@@ -10293,7 +10277,7 @@
                 "P3"
               ],
               "highest_class": "P3",
-              "minimum_boundary_distance_m": 67.68,
+              "minimum_boundary_distance_m": 51.8,
               "point_status": "intersection",
               "positional_assessment": "interior_intersection",
               "reference_period": {
@@ -10328,15 +10312,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -10368,21 +10344,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -14164,8 +14125,8 @@
     },
     "IT13.09.01": {
       "coordinates": {
-        "latitude": 41.933981,
-        "longitude": 12.605197
+        "latitude": 41.9312,
+        "longitude": 12.6015
       },
       "event_date": "2013-09-26",
       "event_id": "IT13.09.01",
@@ -14189,9 +14150,9 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 49.4,
+              "minimum_boundary_distance_m": null,
               "point_status": "no_intersection",
-              "positional_assessment": "boundary_adjacent_no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -14222,15 +14183,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -14262,21 +14215,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -15831,18 +15769,15 @@
     },
     "IT14.04.01": {
       "coordinates": {
-        "latitude": 43.5838,
-        "longitude": 10.3058
+        "latitude": 43.5826669,
+        "longitude": 10.3052469
       },
       "event_date": "2014-04-23",
       "event_id": "IT14.04.01",
       "hazards": {
         "hydraulic": {
           "comparison_summary": {
-            "current_classes": [
-              "P1",
-              "P2"
-            ],
+            "current_classes": [],
             "current_release": "ispra-hydraulic-2020-v5",
             "current_reference_period": {
               "start_year": 2020,
@@ -15855,14 +15790,11 @@
           },
           "observations": [
             {
-              "classes": [
-                "P1",
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": 17.18,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": 14.27,
+              "point_status": "no_intersection",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -15873,14 +15805,11 @@
               "temporal_relation_to_event": "after_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": 17.15,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": 14.31,
+              "point_status": "no_intersection",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -15894,15 +15823,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -15934,21 +15855,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -17427,8 +17333,8 @@
     },
     "IT15.03.03": {
       "coordinates": {
-        "latitude": 37.571078,
-        "longitude": 14.286953
+        "latitude": 37.5705,
+        "longitude": 14.2709
       },
       "event_date": "2015-03-28",
       "event_id": "IT15.03.03",
@@ -17481,22 +17387,14 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 45.45,
+              "minimum_boundary_distance_m": 34.3,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -17511,7 +17409,7 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 17.46,
+              "minimum_boundary_distance_m": 34.25,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -17522,21 +17420,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
             }
           ]
         }
@@ -17544,8 +17427,8 @@
     },
     "IT15.04.01": {
       "coordinates": {
-        "latitude": 37.857,
-        "longitude": 13.906
+        "latitude": 37.8384,
+        "longitude": 13.9142
       },
       "event_date": "2015-04-10",
       "event_id": "IT15.04.01",
@@ -17598,28 +17481,16 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [
-              "P2"
-            ],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
             {
-              "classes": [
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": 30.4,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -17632,9 +17503,9 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 30.26,
+              "minimum_boundary_distance_m": null,
               "point_status": "no_intersection",
-              "positional_assessment": "boundary_adjacent_no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2021,
@@ -17642,23 +17513,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": null,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -18783,8 +18637,8 @@
     },
     "IT16.10.01": {
       "coordinates": {
-        "latitude": 45.791,
-        "longitude": 9.333
+        "latitude": 45.8042,
+        "longitude": 9.3323
       },
       "event_date": "2016-10-28",
       "event_id": "IT16.10.01",
@@ -18837,15 +18691,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -18877,21 +18723,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -19287,8 +19118,8 @@
     },
     "IT16.11.04": {
       "coordinates": {
-        "latitude": 44.0784,
-        "longitude": 7.7457
+        "latitude": 44.0811,
+        "longitude": 7.7516
       },
       "event_date": "2016-11-24",
       "event_id": "IT16.11.04",
@@ -19341,24 +19172,18 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
             {
-              "classes": [],
-              "highest_class": null,
+              "classes": [
+                "P4"
+              ],
+              "highest_class": "P4",
               "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "point_status": "intersection",
+              "positional_assessment": "interior_intersection",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -19381,21 +19206,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -20285,19 +20095,15 @@
     },
     "IT17.12.01": {
       "coordinates": {
-        "latitude": 39.911542,
-        "longitude": 15.924839
+        "latitude": 39.9242,
+        "longitude": 15.9386
       },
       "event_date": "2017-12-07",
       "event_id": "IT17.12.01",
       "hazards": {
         "hydraulic": {
           "comparison_summary": {
-            "current_classes": [
-              "P1",
-              "P2",
-              "P3"
-            ],
+            "current_classes": [],
             "current_release": "ispra-hydraulic-2020-v5",
             "current_reference_period": {
               "start_year": 2020,
@@ -20325,15 +20131,11 @@
               "temporal_relation_to_event": "same_or_overlapping_reference_period"
             },
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 7.47,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -20347,15 +20149,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_pre_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -20387,21 +20181,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -20686,137 +20465,6 @@
         }
       }
     },
-    "IT18.02.02": {
-      "coordinates": {
-        "latitude": 37.8067121849219,
-        "longitude": 12.8577849009686
-      },
-      "event_date": "2018-02-08",
-      "event_id": "IT18.02.02",
-      "hazards": {
-        "hydraulic": {
-          "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-hydraulic-2017-v4",
-            "baseline_reference_period": {
-              "start_year": 2017,
-              "end_year": 2017,
-              "precision": "month",
-              "label": "December 2017"
-            },
-            "current_classes": [],
-            "current_release": "ispra-hydraulic-2020-v5",
-            "current_reference_period": {
-              "start_year": 2020,
-              "end_year": 2020,
-              "precision": "year",
-              "label": "2020"
-            },
-            "status": "unchanged"
-          },
-          "observations": [
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
-              "reference_period": {
-                "start_year": 2017,
-                "end_year": 2017,
-                "precision": "month",
-                "label": "December 2017"
-              },
-              "release_id": "ispra-hydraulic-2017-v4",
-              "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
-              "reference_period": {
-                "start_year": 2020,
-                "end_year": 2020,
-                "precision": "year",
-                "label": "2020"
-              },
-              "release_id": "ispra-hydraulic-2020-v5",
-              "temporal_relation_to_event": "after_event"
-            }
-          ]
-        },
-        "landslide": {
-          "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2017-v3",
-            "baseline_reference_period": {
-              "start_year": 2017,
-              "end_year": 2017,
-              "precision": "month",
-              "label": "December 2017"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
-          },
-          "observations": [
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
-              "reference_period": {
-                "start_year": 2017,
-                "end_year": 2017,
-                "precision": "month",
-                "label": "December 2017"
-              },
-              "release_id": "ispra-landslide-2017-v3",
-              "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
-              "reference_period": {
-                "start_year": 2020,
-                "end_year": 2021,
-                "precision": "multi_year",
-                "label": "2020-2021"
-              },
-              "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
-            }
-          ]
-        }
-      }
-    },
     "IT18.08.01": {
       "coordinates": {
         "latitude": 44.426,
@@ -20950,8 +20598,8 @@
     },
     "IT18.08.02": {
       "coordinates": {
-        "latitude": 44.535,
-        "longitude": 11.347
+        "latitude": 44.5147,
+        "longitude": 11.2758
       },
       "event_date": "2018-08-06",
       "event_id": "IT18.08.02",
@@ -21023,23 +20671,8 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2017-v3",
-            "baseline_reference_period": {
-              "start_year": 2017,
-              "end_year": 2017,
-              "precision": "month",
-              "label": "December 2017"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
@@ -21070,21 +20703,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -22092,15 +21710,17 @@
     },
     "IT19.03.01": {
       "coordinates": {
-        "latitude": 45.693,
-        "longitude": 9.11201
+        "latitude": 45.6983,
+        "longitude": 9.1091
       },
       "event_date": "2019-03-18",
       "event_id": "IT19.03.01",
       "hazards": {
         "hydraulic": {
           "comparison_summary": {
-            "baseline_classes": [],
+            "baseline_classes": [
+              "P1"
+            ],
             "baseline_release": "ispra-hydraulic-2017-v4",
             "baseline_reference_period": {
               "start_year": 2017,
@@ -22108,7 +21728,9 @@
               "precision": "month",
               "label": "December 2017"
             },
-            "current_classes": [],
+            "current_classes": [
+              "P1"
+            ],
             "current_release": "ispra-hydraulic-2020-v5",
             "current_reference_period": {
               "start_year": 2020,
@@ -22120,11 +21742,13 @@
           },
           "observations": [
             {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "classes": [
+                "P1"
+              ],
+              "highest_class": "P1",
+              "minimum_boundary_distance_m": 14.91,
+              "point_status": "intersection",
+              "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -22135,11 +21759,13 @@
               "temporal_relation_to_event": "before_event"
             },
             {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "classes": [
+                "P1"
+              ],
+              "highest_class": "P1",
+              "minimum_boundary_distance_m": 14.93,
+              "point_status": "intersection",
+              "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -22153,23 +21779,8 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2017-v3",
-            "baseline_reference_period": {
-              "start_year": 2017,
-              "end_year": 2017,
-              "precision": "month",
-              "label": "December 2017"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
@@ -22200,21 +21811,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "after_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
             }
           ]
@@ -24708,6 +24304,285 @@
               },
               "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "after_event"
+            }
+          ]
+        }
+      }
+    },
+    "IT20.10.14": {
+      "coordinates": {
+        "latitude": 45.8239,
+        "longitude": 8.2831
+      },
+      "event_date": "2020-10-03",
+      "event_id": "IT20.10.14",
+      "hazards": {
+        "hydraulic": {
+          "comparison_summary": {
+            "current_release": "ispra-hydraulic-2020-v5",
+            "current_reference_period": {
+              "start_year": 2020,
+              "end_year": 2020,
+              "precision": "year",
+              "label": "2020"
+            },
+            "reason": "no_post_event_release",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-hydraulic-2017-v4",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2020,
+                "precision": "year",
+                "label": "2020"
+              },
+              "release_id": "ispra-hydraulic-2020-v5",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
+            }
+          ]
+        },
+        "landslide": {
+          "comparison_summary": {
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-landslide-2017-v3",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2021,
+                "precision": "multi_year",
+                "label": "2020-2021"
+              },
+              "release_id": "ispra-landslide-2020-2021-v4",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
+            }
+          ]
+        }
+      }
+    },
+    "IT20.10.15": {
+      "coordinates": {
+        "latitude": 45.8315,
+        "longitude": 8.2858
+      },
+      "event_date": "2020-10-03",
+      "event_id": "IT20.10.15",
+      "hazards": {
+        "hydraulic": {
+          "comparison_summary": {
+            "current_release": "ispra-hydraulic-2020-v5",
+            "current_reference_period": {
+              "start_year": 2020,
+              "end_year": 2020,
+              "precision": "year",
+              "label": "2020"
+            },
+            "reason": "no_post_event_release",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-hydraulic-2017-v4",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2020,
+                "precision": "year",
+                "label": "2020"
+              },
+              "release_id": "ispra-hydraulic-2020-v5",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
+            }
+          ]
+        },
+        "landslide": {
+          "comparison_summary": {
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-landslide-2017-v3",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2021,
+                "precision": "multi_year",
+                "label": "2020-2021"
+              },
+              "release_id": "ispra-landslide-2020-2021-v4",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
+            }
+          ]
+        }
+      }
+    },
+    "IT20.10.16": {
+      "coordinates": {
+        "latitude": 45.8315,
+        "longitude": 8.2858
+      },
+      "event_date": "2020-10-03",
+      "event_id": "IT20.10.16",
+      "hazards": {
+        "hydraulic": {
+          "comparison_summary": {
+            "current_release": "ispra-hydraulic-2020-v5",
+            "current_reference_period": {
+              "start_year": 2020,
+              "end_year": 2020,
+              "precision": "year",
+              "label": "2020"
+            },
+            "reason": "no_post_event_release",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-hydraulic-2017-v4",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2020,
+                "precision": "year",
+                "label": "2020"
+              },
+              "release_id": "ispra-hydraulic-2020-v5",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
+            }
+          ]
+        },
+        "landslide": {
+          "comparison_summary": {
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
+          },
+          "observations": [
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2017,
+                "end_year": 2017,
+                "precision": "month",
+                "label": "December 2017"
+              },
+              "release_id": "ispra-landslide-2017-v3",
+              "temporal_relation_to_event": "before_event"
+            },
+            {
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "reference_period": {
+                "start_year": 2020,
+                "end_year": 2021,
+                "precision": "multi_year",
+                "label": "2020-2021"
+              },
+              "release_id": "ispra-landslide-2020-2021-v4",
+              "temporal_relation_to_event": "same_or_overlapping_reference_period"
             }
           ]
         }
@@ -28277,8 +28152,8 @@
     },
     "IT22.12.02": {
       "coordinates": {
-        "latitude": 38.1372,
-        "longitude": 15.1652
+        "latitude": 38.1257,
+        "longitude": 15.1582
       },
       "event_date": "2022-12-03",
       "event_id": "IT22.12.02",
@@ -28330,23 +28205,8 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2020-2021-v4",
-            "baseline_reference_period": {
-              "start_year": 2020,
-              "end_year": 2021,
-              "precision": "multi_year",
-              "label": "2020-2021"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
@@ -28378,21 +28238,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
             }
           ]
         }
@@ -28400,8 +28245,8 @@
     },
     "IT22.12.03": {
       "coordinates": {
-        "latitude": 37.6785,
-        "longitude": 13.2721
+        "latitude": 37.5959,
+        "longitude": 13.3105
       },
       "event_date": "2022-12-16",
       "event_id": "IT22.12.03",
@@ -28453,23 +28298,8 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2020-2021-v4",
-            "baseline_reference_period": {
-              "start_year": 2020,
-              "end_year": 2021,
-              "precision": "multi_year",
-              "label": "2020-2021"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
@@ -28501,21 +28331,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
             }
           ]
         }
@@ -29811,8 +29626,8 @@
     },
     "IT23.09.01": {
       "coordinates": {
-        "latitude": 44.273694,
-        "longitude": 11.718159
+        "latitude": 44.2618,
+        "longitude": 11.6713
       },
       "event_date": "2023-09-09",
       "event_id": "IT23.09.01",
@@ -29831,15 +29646,11 @@
           },
           "observations": [
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
+              "classes": [],
+              "highest_class": null,
               "minimum_boundary_distance_m": null,
-              "point_status": "intersection",
-              "positional_assessment": "interior_intersection",
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -29850,15 +29661,11 @@
               "temporal_relation_to_event": "before_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
+              "classes": [],
+              "highest_class": null,
               "minimum_boundary_distance_m": null,
-              "point_status": "intersection",
-              "positional_assessment": "interior_intersection",
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -29872,23 +29679,8 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2020-2021-v4",
-            "baseline_reference_period": {
-              "start_year": 2020,
-              "end_year": 2021,
-              "precision": "multi_year",
-              "label": "2020-2021"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
@@ -29920,21 +29712,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
             }
           ]
         }
@@ -29942,8 +29719,8 @@
     },
     "IT23.10.01": {
       "coordinates": {
-        "latitude": 44.649,
-        "longitude": 10.1218
+        "latitude": 44.6617,
+        "longitude": 10.0932
       },
       "event_date": "2023-10-30",
       "event_id": "IT23.10.01",
@@ -29962,15 +29739,11 @@
           },
           "observations": [
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 16.21,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -29981,15 +29754,11 @@
               "temporal_relation_to_event": "before_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 16.24,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -30003,31 +29772,18 @@
         },
         "landslide": {
           "comparison_summary": {
-            "baseline_classes": [],
-            "baseline_release": "ispra-landslide-2020-2021-v4",
-            "baseline_reference_period": {
-              "start_year": 2020,
-              "end_year": 2021,
-              "precision": "multi_year",
-              "label": "2020-2021"
-            },
-            "current_classes": [],
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "status": "unchanged"
+            "reason": "current_release_observation_unavailable",
+            "status": "not_comparable"
           },
           "observations": [
             {
-              "classes": [],
-              "highest_class": null,
+              "classes": [
+                "P4"
+              ],
+              "highest_class": "P4",
               "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "point_status": "intersection",
+              "positional_assessment": "interior_intersection",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -30040,9 +29796,9 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": null,
+              "minimum_boundary_distance_m": 44.84,
               "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2021,
@@ -30051,21 +29807,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "after_event"
             }
           ]
         }
@@ -31059,8 +30800,8 @@
     },
     "IT24.10.02": {
       "coordinates": {
-        "latitude": 38.8751,
-        "longitude": 16.3263
+        "latitude": 38.8576,
+        "longitude": 16.3475
       },
       "event_date": "2024-10-21",
       "event_id": "IT24.10.02",
@@ -31094,15 +30835,11 @@
               "temporal_relation_to_event": "before_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2",
-                "P3"
-              ],
-              "highest_class": "P3",
-              "minimum_boundary_distance_m": 13.95,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": null,
+              "point_status": "no_intersection",
+              "positional_assessment": "no_intersection_not_boundary_adjacent",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -31116,14 +30853,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31156,21 +30886,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "same_or_overlapping_reference_period"
             }
           ]
         }
@@ -31178,8 +30893,8 @@
     },
     "IT24.10.03": {
       "coordinates": {
-        "latitude": 44.3584,
-        "longitude": 8.2901
+        "latitude": 44.3577805364288,
+        "longitude": 8.28970363276012
       },
       "event_date": "2024-10-27",
       "event_id": "IT24.10.03",
@@ -31204,7 +30919,7 @@
                 "P3"
               ],
               "highest_class": "P3",
-              "minimum_boundary_distance_m": 17.63,
+              "minimum_boundary_distance_m": 7.83,
               "point_status": "intersection",
               "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
@@ -31223,7 +30938,7 @@
                 "P3"
               ],
               "highest_class": "P3",
-              "minimum_boundary_distance_m": 17.33,
+              "minimum_boundary_distance_m": 7.46,
               "point_status": "intersection",
               "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
@@ -31239,14 +30954,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31279,21 +30987,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "same_or_overlapping_reference_period"
             }
           ]
         }
@@ -31301,8 +30994,8 @@
     },
     "IT25.04.01": {
       "coordinates": {
-        "latitude": 45.5126,
-        "longitude": 8.0249
+        "latitude": 45.5125672,
+        "longitude": 8.02479575
       },
       "event_date": "2025-04-17",
       "event_id": "IT25.04.01",
@@ -31327,7 +31020,7 @@
                 "P3"
               ],
               "highest_class": "P3",
-              "minimum_boundary_distance_m": 44.31,
+              "minimum_boundary_distance_m": 37.67,
               "point_status": "intersection",
               "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
@@ -31346,7 +31039,7 @@
                 "P3"
               ],
               "highest_class": "P3",
-              "minimum_boundary_distance_m": 44.39,
+              "minimum_boundary_distance_m": 37.73,
               "point_status": "intersection",
               "positional_assessment": "boundary_sensitive_intersection",
               "reference_period": {
@@ -31362,14 +31055,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31402,21 +31088,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "before_event"
             }
           ]
         }
@@ -31424,8 +31095,8 @@
     },
     "IT25.04.02": {
       "coordinates": {
-        "latitude": 45.6321,
-        "longitude": 11.308
+        "latitude": 45.63209168,
+        "longitude": 11.30818462
       },
       "event_date": "2025-04-18",
       "event_id": "IT25.04.02",
@@ -31461,9 +31132,9 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 53.14,
+              "minimum_boundary_distance_m": 40.26,
               "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_not_boundary_adjacent",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -31477,14 +31148,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31517,21 +31181,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "before_event"
             }
           ]
         }
@@ -31539,8 +31188,8 @@
     },
     "IT25.07.01": {
       "coordinates": {
-        "latitude": 46.7697,
-        "longitude": 11.2134
+        "latitude": 46.7696823,
+        "longitude": 11.2134207
       },
       "event_date": "2025-07-24",
       "event_id": "IT25.07.01",
@@ -31592,14 +31241,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31632,21 +31274,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "before_event"
             }
           ]
         }
@@ -31654,8 +31281,8 @@
     },
     "IT26.03.01": {
       "coordinates": {
-        "latitude": 43.5838,
-        "longitude": 10.3058
+        "latitude": 43.5826669,
+        "longitude": 10.3052469
       },
       "event_date": "2026-03-06",
       "event_id": "IT26.03.01",
@@ -31674,14 +31301,11 @@
           },
           "observations": [
             {
-              "classes": [
-                "P1",
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": 17.18,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": 14.27,
+              "point_status": "no_intersection",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2017,
                 "end_year": 2017,
@@ -31692,14 +31316,11 @@
               "temporal_relation_to_event": "before_event"
             },
             {
-              "classes": [
-                "P1",
-                "P2"
-              ],
-              "highest_class": "P2",
-              "minimum_boundary_distance_m": 17.15,
-              "point_status": "intersection",
-              "positional_assessment": "boundary_sensitive_intersection",
+              "classes": [],
+              "highest_class": null,
+              "minimum_boundary_distance_m": 14.31,
+              "point_status": "no_intersection",
+              "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
                 "start_year": 2020,
                 "end_year": 2020,
@@ -31713,14 +31334,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31753,21 +31367,6 @@
               },
               "release_id": "ispra-landslide-2020-2021-v4",
               "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
-              "temporal_relation_to_event": "before_event"
             }
           ]
         }
@@ -31775,8 +31374,8 @@
     },
     "IT26.04.01": {
       "coordinates": {
-        "latitude": 42.0589065018491,
-        "longitude": 14.7961973412529
+        "latitude": 42.059248033333326,
+        "longitude": 14.7951476
       },
       "event_date": "2026-04-02",
       "event_id": "IT26.04.01",
@@ -31797,7 +31396,7 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 4.73,
+              "minimum_boundary_distance_m": 7.62,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -31812,7 +31411,7 @@
             {
               "classes": [],
               "highest_class": null,
-              "minimum_boundary_distance_m": 4.54,
+              "minimum_boundary_distance_m": 7.42,
               "point_status": "no_intersection",
               "positional_assessment": "boundary_adjacent_no_intersection",
               "reference_period": {
@@ -31828,14 +31427,7 @@
         },
         "landslide": {
           "comparison_summary": {
-            "current_release": "ispra-landslide-2024-v5",
-            "current_reference_period": {
-              "start_year": 2024,
-              "end_year": 2024,
-              "precision": "year",
-              "label": "2024"
-            },
-            "reason": "no_post_event_release",
+            "reason": "current_release_observation_unavailable",
             "status": "not_comparable"
           },
           "observations": [
@@ -31867,21 +31459,6 @@
                 "label": "2020-2021"
               },
               "release_id": "ispra-landslide-2020-2021-v4",
-              "temporal_relation_to_event": "before_event"
-            },
-            {
-              "classes": [],
-              "highest_class": null,
-              "minimum_boundary_distance_m": null,
-              "point_status": "no_intersection",
-              "positional_assessment": "no_intersection_boundary_distance_not_available",
-              "reference_period": {
-                "start_year": 2024,
-                "end_year": 2024,
-                "precision": "year",
-                "label": "2024"
-              },
-              "release_id": "ispra-landslide-2024-v5",
               "temporal_relation_to_event": "before_event"
             }
           ]

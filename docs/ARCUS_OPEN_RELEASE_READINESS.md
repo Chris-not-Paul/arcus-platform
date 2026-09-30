@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: private continuous-deployment staging verified — owner review and domain activation pending
+Status: private continuous-deployment staging verified — final owner review and public activation pending
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -36,7 +36,7 @@ considered operational for the release candidate.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.8`: 261 events and 716 documentary sources. It does not include
+`arcus-open-2026.10`: 261 events and 718 documentary sources. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 
@@ -75,8 +75,10 @@ zero events or zero sources.
    `https://arcus-open-staging.netlify.app` and has passed initial online
    acceptance. Netlify is connected to `main`, runs `npm run build:open` and
    publishes `dist` through controlled continuous deployment.
-4. After final acceptance, make the Netlify project public, connect
-   `www.arcusbridges.org`, enable HTTPS and configure the root-domain redirect.
+4. `www.arcusbridges.org` and the apex domain are connected and covered by the
+   HTTPS certificate. Before public activation, confirm that `www` is the
+   primary domain and the apex redirects permanently to it; then make the
+   Netlify project public.
 
 ## Release checks
 
@@ -93,6 +95,22 @@ git diff --check
 ```
 
 ## Verification log
+
+### 30 September 2026
+
+- `test:open-release`: passed — `arcus-open-2026.10`, 261 events, 718 sources,
+  14 shared episodes and 100 public taxonomy entries.
+- Master workbook verification: passed — the Open taxonomy remains stable;
+  shared-episode definitions are maintained in a separate operational sheet;
+  no formula errors were found.
+- Coordinate-dependent public context was aligned with the final release:
+  199 rainfall records, 211 hydraulic records, 261 territorial records and 253
+  exact-location historical hazard records pass identity checks.
+- Final Open production, Atlas, Analytics, contribution, product-scope, lint
+  and whitespace checks: passed.
+- DNS and HTTPS: both canonical hosts resolve through Netlify and the
+  certificate covers `arcusbridges.org` and `www.arcusbridges.org`.
+- The site remains intentionally private until the 1 October activation.
 
 ### 24 September 2026
 
@@ -118,6 +136,6 @@ git diff --check
 - Post-deploy online acceptance: passed — Atlas reports 261 events and 716
   documentary sources; Netlify visibility remains private.
 
-The remaining release gates are final owner and external acceptance, public
-visibility, DNS, HTTPS and the root-domain redirect. Aruba DNS and mail records
-remain unchanged during private staging.
+The remaining release gates are final owner acceptance, the `www` primary-domain
+check, public visibility and the first live smoke test. Aruba mail records remain
+unchanged during private staging.

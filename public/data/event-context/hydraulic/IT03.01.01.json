@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Trigno river",
-    "latitude": 42.06,
-    "longitude": 14.8,
+    "latitude": 42.0298,
+    "longitude": 14.7709,
     "municipality": "Montenero",
     "hydrographic_context": "Trigno river",
     "location_precision": "exact"

@@ -7,8 +7,8 @@
   "coverage_level": "official_annual_report_event_observation",
   "event_section": {
     "crossing_name": "Agno stream",
-    "latitude": 45.6321,
-    "longitude": 11.308,
+    "latitude": 45.63209168,
+    "longitude": 11.30818462,
     "municipality": "Valdagno",
     "hydrographic_context": "Agno stream",
     "location_precision": "exact"

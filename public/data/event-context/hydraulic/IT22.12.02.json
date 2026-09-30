@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Mazzarrà stream",
-    "latitude": 38.1372,
-    "longitude": 15.1652,
+    "latitude": 38.1257,
+    "longitude": 15.1582,
     "municipality": "Terme Vigliatore",
     "hydrographic_context": "Mazzarrà stream",
     "location_precision": "exact"

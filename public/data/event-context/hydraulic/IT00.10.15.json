@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_observation",
   "event_section": {
     "crossing_name": "Orco stream",
-    "latitude": 45.3590443263878,
-    "longitude": 7.71108119476556,
+    "latitude": 45.3444,
+    "longitude": 7.7285,
     "municipality": "Castellamonte",
     "hydrographic_context": "Orco stream",
     "location_precision": "exact"

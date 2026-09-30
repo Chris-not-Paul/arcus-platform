@@ -7,11 +7,11 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Mazaro dry riverbed",
-    "latitude": 37.8067121849219,
-    "longitude": 12.8577849009686,
+    "latitude": 37.8225,
+    "longitude": 12.831,
     "municipality": "Salemi",
     "hydrographic_context": "Mazaro dry riverbed",
-    "location_precision": "exact"
+    "location_precision": "approximate_or_unverified"
   },
   "event_hydrometry": {
     "observation_status": "not_available",

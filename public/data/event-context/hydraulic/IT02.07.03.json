@@ -7,11 +7,11 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Gesso stream",
-    "latitude": 44.355413820189,
-    "longitude": 7.53252380688468,
+    "latitude": 44.3644,
+    "longitude": 7.5621,
     "municipality": "Boves",
     "hydrographic_context": "Gesso stream",
-    "location_precision": "approximate_or_unverified"
+    "location_precision": "exact"
   },
   "event_hydrometry": {
     "observation_status": "not_available",

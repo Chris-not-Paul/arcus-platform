@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Crosia stream",
-    "latitude": 43.786557,
-    "longitude": 7.640638,
+    "latitude": 43.7884,
+    "longitude": 7.6406,
     "municipality": "Vallecrosia",
     "hydrographic_context": "Crosia stream",
     "location_precision": "exact"

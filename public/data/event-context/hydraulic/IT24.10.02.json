@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Cottola stream",
-    "latitude": 38.8751,
-    "longitude": 16.3263,
+    "latitude": 38.8576,
+    "longitude": 16.3475,
     "municipality": "San Pietro e Maida",
     "hydrographic_context": "Cottola stream",
     "location_precision": "exact"
@@ -30,7 +30,7 @@
   "modelled_reference_section": null,
   "process_evidence": {
     "failure_process": null,
-    "component_involved": null,
+    "component_involved": "pier_foundation",
     "evidence_level": "unspecified",
     "taxonomy_version": "hydraulic-v2"
   },

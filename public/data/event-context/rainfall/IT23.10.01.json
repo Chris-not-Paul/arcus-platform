@@ -4,14 +4,14 @@
   "event_date": "2023-10-30",
   "status": "context_available",
   "requested_location": {
-    "latitude": 44.649,
-    "longitude": 10.1218
+    "latitude": 44.6617,
+    "longitude": 10.0932
   },
   "grid_location": {
-    "elevation_m": 228,
+    "elevation_m": 283,
     "latitude": 44.75,
     "longitude": 10,
-    "distance_from_event_km": 14.8
+    "distance_from_event_km": 12.3
   },
   "period": {
     "end_date": "2023-10-30",
@@ -94,21 +94,21 @@
     "upstream_provider": "Copernicus Climate Change Service / ECMWF",
     "upstream_url": "https://cds.climate.copernicus.eu/"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:14:50.135Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2023-10-30&latitude=44.649&longitude=10.1218&models=era5&start_date=2023-10-17&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "coarse_reanalysis_context_only",
     "severity": "caution",
     "assessment_method": "dataset_resolution_rule",
     "rationale_it": "La rianalisi descrive la cella di modello al punto del ponte. La risoluzione non consente di rappresentare affidabilmente massimi convettivi locali o precipitazione areale a monte.",
     "rationale_en": "The reanalysis describes the model cell at the bridge point. Its resolution cannot reliably represent local convective maxima or upstream areal precipitation."
-  }
+  },
+  "provenance": {
+    "retrieved_at": "2026-09-30T08:54:11.000Z",
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2023-10-30&latitude=44.6617&longitude=10.0932&models=era5&start_date=2023-10-17&timezone=Europe%2FRome",
+    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
+  },
+  "caveats": [
+    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
+    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }

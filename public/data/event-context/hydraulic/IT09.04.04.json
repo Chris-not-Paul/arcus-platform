@@ -7,8 +7,8 @@
   "coverage_level": "official_event_report_peak_discharge_assessment",
   "event_section": {
     "crossing_name": "Po river",
-    "latitude": 45.0625,
-    "longitude": 9.7045,
+    "latitude": 45.0628,
+    "longitude": 9.7042,
     "municipality": "Piacenza",
     "hydrographic_context": "Po river",
     "location_precision": "exact"

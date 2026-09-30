@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_downstream_observation",
   "event_section": {
     "crossing_name": "Elvo stream",
-    "latitude": 45.5126,
-    "longitude": 8.0249,
+    "latitude": 45.5125672,
+    "longitude": 8.02479575,
     "municipality": "Mongrando",
     "hydrographic_context": "Elvo stream",
     "location_precision": "exact"

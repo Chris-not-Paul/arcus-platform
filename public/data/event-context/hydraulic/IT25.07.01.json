@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Valclava stream",
-    "latitude": 46.7697,
-    "longitude": 11.2134,
+    "latitude": 46.7696823,
+    "longitude": 11.2134207,
     "municipality": "San Martino in Passiria",
     "hydrographic_context": "Valclava stream",
     "location_precision": "exact"

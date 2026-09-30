@@ -7,8 +7,8 @@
   "coverage_level": "validated_event_report_review",
   "event_section": {
     "crossing_name": "Trigno",
-    "latitude": 42.0589065018491,
-    "longitude": 14.7961973412529,
+    "latitude": 42.059248033333326,
+    "longitude": 14.7951476,
     "municipality": "Montenero di Bisaccia",
     "hydrographic_context": "Trigno",
     "location_precision": "exact"
