@@ -45,7 +45,7 @@ may enter the launch branch.
   Atlas, direct event dossier, Analytics, Data Access, CSV download and private
   route boundary.
 - [x] Connect `www.arcusbridges.org`.
-- [ ] Redirect `arcusbridges.org` permanently to the `www` address.
+- [x] Redirect `arcusbridges.org` automatically to the primary `www` address.
 - [x] Confirm a valid HTTPS certificate on both host names.
 - [x] Verify that `_headers` and `_redirects` are applied by the provider.
 

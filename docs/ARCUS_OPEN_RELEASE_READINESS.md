@@ -75,10 +75,9 @@ zero events or zero sources.
    `https://arcus-open-staging.netlify.app` and has passed initial online
    acceptance. Netlify is connected to `main`, runs `npm run build:open` and
    publishes `dist` through controlled continuous deployment.
-4. `www.arcusbridges.org` and the apex domain are connected and covered by the
-   HTTPS certificate. Before public activation, confirm that `www` is the
-   primary domain and the apex redirects permanently to it; then make the
-   Netlify project public.
+4. `www.arcusbridges.org` is the verified primary domain; the apex redirects
+   automatically to it and both names are covered by the HTTPS certificate.
+   The remaining hosting action is to make the Netlify project public.
 
 ## Release checks
 
@@ -108,8 +107,8 @@ git diff --check
   exact-location historical hazard records pass identity checks.
 - Final Open production, Atlas, Analytics, contribution, product-scope, lint
   and whitespace checks: passed.
-- DNS and HTTPS: both canonical hosts resolve through Netlify and the
-  certificate covers `arcusbridges.org` and `www.arcusbridges.org`.
+- DNS and HTTPS: `www.arcusbridges.org` is primary, the apex redirects to it
+  automatically and the certificate covers both host names.
 - The site remains intentionally private until the 1 October activation.
 
 ### 24 September 2026
@@ -136,6 +135,6 @@ git diff --check
 - Post-deploy online acceptance: passed — Atlas reports 261 events and 716
   documentary sources; Netlify visibility remains private.
 
-The remaining release gates are final owner acceptance, the `www` primary-domain
-check, public visibility and the first live smoke test. Aruba mail records remain
-unchanged during private staging.
+The remaining release gates are final owner acceptance, public visibility and
+the first live smoke test. Aruba mail records remain unchanged during private
+staging.
