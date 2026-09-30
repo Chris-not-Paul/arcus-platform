@@ -55,7 +55,8 @@ may enter the launch branch.
 - [ ] Approve the final bilingual Rights & Reuse page and licence wording.
 - [ ] Approve `/arcus-social-card.png` as the permanent sharing preview.
 - [ ] Confirm final wording on Home, Identity and Publications.
-- [ ] Confirm that all four domain mailboxes still receive external messages.
+- [x] Confirm that all four domain mailboxes still receive external messages:
+  `info`, `research`, `contribute` and `christian.paolini`.
 - [ ] Confirm publication rights and attribution for every local event image.
 
 ## Scientific publication gate
