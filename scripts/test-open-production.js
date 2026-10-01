@@ -158,7 +158,9 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.10");
+  assert.equal(manifest.version, "arcus-open-2026.11");
+  assert.equal(manifest.license.id, "CC-BY-NC-4.0");
+  assert.equal(manifest.license.url, "https://creativecommons.org/licenses/by-nc/4.0/");
   assert.equal(events.events.length, manifest.event_count);
   assert.equal(sources.sources.length, manifest.source_count);
   assert.equal(
@@ -171,6 +173,9 @@ check("public release integrity", () => {
   assert.equal(episodes.summary.episode_count, 14);
   assert.equal(episodes.summary.grouped_event_count, 108);
   assert.equal(manifest.resources.episodes, "episodes.json");
+  const morandi = events.events.find((event) => event.event_id === "IT18.08.01");
+  assert.equal(morandi?.bridge_crossing_type, "urban area");
+  assert.equal(morandi?.bridge_crossing_name, "Municipality of Genova");
 });
 
 check("production build artifacts", () => {

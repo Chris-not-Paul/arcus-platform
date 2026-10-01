@@ -38,8 +38,8 @@ assert.equal(context.schema_version, "arcus-open-territorial-context-v1");
 assert.equal(context.release, current.version);
 assert.equal(Object.keys(context.events).length, openEvents.length);
 assert.equal(context.coverage.events, openEvents.length);
-assert.equal(context.coverage.fully_resolved_events, 256);
-assert.equal(context.coverage.unresolved_events, 5);
+assert.equal(context.coverage.fully_resolved_events, 225);
+assert.equal(context.coverage.unresolved_events, 36);
 assert.match(context.caveat, /not retrospective causal proof/i);
 assert.match(context.rights_note, /provider terms/i);
 

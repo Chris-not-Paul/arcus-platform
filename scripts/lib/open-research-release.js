@@ -19,15 +19,15 @@ import {
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.10";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.11";
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
-  id: "CC-BY-4.0",
-  name: "Creative Commons Attribution 4.0 International",
+  id: "CC-BY-NC-4.0",
+  name: "Creative Commons Attribution-NonCommercial 4.0 International",
   scope:
     "ARCUS-authored event metadata and taxonomy definitions. Linked third-party sources remain subject to their original rights and terms.",
-  url: "https://creativecommons.org/licenses/by/4.0/",
+  url: "https://creativecommons.org/licenses/by-nc/4.0/",
 };
 
 const EVENT_REQUIRED_FIELDS = [
@@ -479,7 +479,7 @@ function readPreviousRelease(openRoot, version) {
   const versions = fs.readdirSync(openRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name !== version)
     .map((entry) => entry.name)
-    .sort()
+    .sort(new Intl.Collator("en", { numeric: true, sensitivity: "base" }).compare)
     .reverse();
   const previousVersion = versions.find((item) =>
     fs.existsSync(path.join(openRoot, item, "events.json"))
@@ -863,9 +863,9 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Corrected the municipality spelling for event IT25.04.01 from Mongrado to Mongrando in the event record and linked source note.",
-      "Retained the canonical event identifier and stable event slug so published citations and permalinks remain valid.",
-      "Preserved the source-supported structural-system coverage and controlled load-bearing-system vocabulary introduced in the previous release.",
+      "Changed the licence for ARCUS-authored event metadata and taxonomy definitions from CC BY 4.0 to CC BY-NC 4.0; linked third-party sources retain their original rights and terms.",
+      "Classified event IT18.08.01 (Ponte Morandi) by its dominant urban crossing context while retaining the Polcevera in the documented description and sources.",
+      "Revised the IT18.08.01 narrative to retain only facts and findings explicitly supported by the linked official and scientific sources.",
     ],
     delta,
   };

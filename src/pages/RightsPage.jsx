@@ -7,7 +7,7 @@ import { contactAddresses } from "../config/site";
 
 import "../styles/privacy-page.css";
 
-const CC_BY_URL = "https://creativecommons.org/licenses/by/4.0/";
+const CC_BY_NC_URL = "https://creativecommons.org/licenses/by-nc/4.0/";
 
 function RightsPage() {
   const { language } = useLanguage();
@@ -19,12 +19,12 @@ function RightsPage() {
         title: "Un confine chiaro tra software, dati e identità ARCUS",
         lead:
           "ARCUS rende riutilizzabile la propria release scientifica senza trasformare il codice della piattaforma, il motore Professional o il marchio in risorse liberamente replicabili.",
-        updated: "Ultimo aggiornamento: 24 settembre 2026",
+        updated: "Ultimo aggiornamento: 1 ottobre 2026",
         ownerLabel: "Titolare del software e dell’identità",
         owner: "Christian Paolini — Italia",
         contactLabel: "Contatto per licenze e riuso",
         releaseLabel: "Release Open corrente",
-        release: "arcus-open-2026.10 · CC BY 4.0",
+        release: "arcus-open-2026.11 · CC BY-NC 4.0",
         sections: [
           {
             title: "1. Software della piattaforma",
@@ -36,10 +36,10 @@ function RightsPage() {
           {
             title: "2. Release scientifica Open",
             paragraphs: [
-              "I metadati degli eventi e le definizioni tassonomiche prodotti da ARCUS, nei limiti indicati nel manifesto della release, sono pubblicati con licenza Creative Commons Attribution 4.0 International.",
-              "La licenza consente condivisione e adattamento, anche commerciale, purché siano indicati correttamente ARCUS, la versione della release, la citazione richiesta, la licenza e le modifiche effettuate. Il riuso non può suggerire approvazione, affiliazione o status ufficiale da parte di ARCUS.",
+              "I metadati degli eventi e le definizioni tassonomiche prodotti da ARCUS, nei limiti indicati nel manifesto della release, sono pubblicati con licenza Creative Commons Attribution-NonCommercial 4.0 International.",
+              "La licenza consente condivisione e adattamento per finalità non commerciali, purché siano indicati correttamente ARCUS, la versione della release, la citazione richiesta, la licenza e le modifiche effettuate. Gli usi commerciali richiedono un’autorizzazione separata. Il riuso non può suggerire approvazione, affiliazione o status ufficiale da parte di ARCUS.",
             ],
-            ccLink: "Consulta la licenza CC BY 4.0",
+            ccLink: "Consulta la licenza CC BY-NC 4.0",
           },
           {
             title: "3. Fonti, fotografie e materiali di terzi",
@@ -51,7 +51,7 @@ function RightsPage() {
           {
             title: "4. Nome, logo e presentazione del progetto",
             paragraphs: [
-              "Il nome ARCUS, il logo, gli elementi identificativi e il dominio arcusbridges.org non sono compresi nella licenza CC BY 4.0 della release dati.",
+              "Il nome ARCUS, il logo, gli elementi identificativi e il dominio arcusbridges.org non sono compresi nella licenza CC BY-NC 4.0 della release dati.",
               "Non è consentito utilizzarli in modo da far apparire un prodotto, un servizio o una banca dati derivata come ufficiale, approvata o gestita da ARCUS. Le citazioni scientifiche e le attribuzioni corrette restano naturalmente consentite.",
             ],
           },
@@ -69,12 +69,12 @@ function RightsPage() {
         title: "A clear boundary between ARCUS software, data and identity",
         lead:
           "ARCUS makes its scientific release reusable without making the platform code, Professional engine or brand freely replicable resources.",
-        updated: "Last updated: 24 September 2026",
+        updated: "Last updated: 1 October 2026",
         ownerLabel: "Software and identity rights holder",
         owner: "Christian Paolini — Italy",
         contactLabel: "Licensing and reuse contact",
         releaseLabel: "Current Open release",
-        release: "arcus-open-2026.10 · CC BY 4.0",
+        release: "arcus-open-2026.11 · CC BY-NC 4.0",
         sections: [
           {
             title: "1. Platform software",
@@ -86,10 +86,10 @@ function RightsPage() {
           {
             title: "2. Open scientific release",
             paragraphs: [
-              "ARCUS-authored event metadata and taxonomy definitions, within the scope stated in the release manifest, are published under the Creative Commons Attribution 4.0 International licence.",
-              "The licence permits sharing and adaptation, including commercial reuse, provided ARCUS, the release version, required citation, licence and any changes are properly identified. Reuse must not imply endorsement, affiliation or official status from ARCUS.",
+              "ARCUS-authored event metadata and taxonomy definitions, within the scope stated in the release manifest, are published under the Creative Commons Attribution-NonCommercial 4.0 International licence.",
+              "The licence permits sharing and adaptation for non-commercial purposes, provided ARCUS, the release version, required citation, licence and any changes are properly identified. Commercial use requires separate permission. Reuse must not imply endorsement, affiliation or official status from ARCUS.",
             ],
-            ccLink: "Read the CC BY 4.0 licence",
+            ccLink: "Read the CC BY-NC 4.0 licence",
           },
           {
             title: "3. Sources, photographs and third-party material",
@@ -101,7 +101,7 @@ function RightsPage() {
           {
             title: "4. Project name, logo and presentation",
             paragraphs: [
-              "The ARCUS name, logo, identifiers and arcusbridges.org domain are not included in the CC BY 4.0 data-release licence.",
+              "The ARCUS name, logo, identifiers and arcusbridges.org domain are not included in the CC BY-NC 4.0 data-release licence.",
               "They may not be used in a way that presents a derivative product, service or database as official, endorsed or operated by ARCUS. Accurate scientific citation and attribution remain permitted.",
             ],
           },
@@ -164,7 +164,7 @@ function RightsPage() {
               ))}
               {section.ccLink && (
                 <div className="privacy-links">
-                  <a href={CC_BY_URL} rel="license noreferrer" target="_blank">
+                  <a href={CC_BY_NC_URL} rel="license noreferrer" target="_blank">
                     {section.ccLink}
                   </a>
                 </div>

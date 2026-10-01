@@ -1,6 +1,6 @@
 # ARCUS Data Quality Audit
 
-The active `arcus-open-2026.10` release passed its structural gate with 261 unique events, 261 unique slugs, 718 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
+The active `arcus-open-2026.11` release passed its structural gate with 261 unique events, 261 unique slugs, 718 unique sources, at least one source per event, no orphan sources, valid taxonomy values and canonical `ITxx.xx.xx` identifiers across events and sources. Legacy `Bxx.xx.xx` identifiers exist only in the migration mapping.
 
 The current Professional live build contains 261 events and 718 sources. All 261 Open events and all 718 Open source IDs are present in Professional after explicit identifier translation, and shared public fields are equivalent after JSON normalization. The dedicated Professional source registry contains no orphan source, no duplicate `source_id` and no event without a source.
 
@@ -23,7 +23,7 @@ Hydraulic coverage remains 211 events. Across the full release, 216 records prov
 
 The structural-type audit removed 14 `Viaduct`, 13 `Overpass` and one `Masonry` value from the structural-system field. The revised master extends source-supported editorial classification: 225 records are now identified as beam bridges, 21 as arch bridges and only 6 structural systems remain unavailable. The release gate accepts only Beam bridge, Arch bridge, Truss, Rigid-frame bridge, Cable-stayed and Suspension.
 
-The machine-readable source is `private-data/open/releases/arcus-open-2026.10/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
+The machine-readable source is `private-data/open/releases/arcus-open-2026.11/quality-audit.json`; it is also available through the read-only Open quality-audit endpoint. Warnings require editorial review and must not trigger automatic deletion or invented corrections.
 
 The release also publishes 14 source-supported shared hazard episodes covering
 108 event records. Episode membership prevents those records from being treated

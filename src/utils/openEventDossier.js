@@ -216,6 +216,6 @@ export function buildOpenEventDossier({
     ),
     research_metadata: buildOpenEventResearchSummary({ event, sources }),
     rights_note:
-      "ARCUS-authored metadata is CC BY 4.0. Linked third-party sources retain their original rights and terms.",
+      "ARCUS-authored metadata is CC BY-NC 4.0. Linked third-party sources retain their original rights and terms.",
   };
 }

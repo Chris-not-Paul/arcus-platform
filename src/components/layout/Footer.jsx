@@ -17,7 +17,7 @@ function Footer() {
       description:
         "A scientific observatory for documented bridge-collapse records, sources and reproducible research.",
       copyright:
-        "© 2026 Christian Paolini · ARCUS software and identity rights reserved · Open data CC BY 4.0",
+        "© 2026 Christian Paolini · ARCUS software and identity rights reserved · Open data CC BY-NC 4.0",
       evidencePeriod: "Evidence period 2000-2026",
       groups: [
         {
@@ -55,7 +55,7 @@ function Footer() {
       description:
         "Un osservatorio scientifico per record documentati di collasso, fonti verificabili e ricerca riproducibile.",
       copyright:
-        "© 2026 Christian Paolini · Software e identità ARCUS riservati · Dati Open CC BY 4.0",
+        "© 2026 Christian Paolini · Software e identità ARCUS riservati · Dati Open CC BY-NC 4.0",
       evidencePeriod: "Periodo evidenza 2000-2026",
       groups: [
         {

@@ -277,13 +277,13 @@ try {
   await mobile.goto(`${base}/rights`);
   await mobile.locator(".privacy-summary").waitFor();
   await noHorizontalOverflow(mobile);
-  assert.match(await mobile.locator("body").innerText(), /CC BY 4\.0/);
+  assert.match(await mobile.locator("body").innerText(), /CC BY-NC 4\.0/);
   assert.match(
     await mobile.locator("body").innerText(),
     /software[\s\S]*riservat|software[\s\S]*remain reserved/i
   );
   assert.equal(
-    await mobile.locator('a[href="https://creativecommons.org/licenses/by/4.0/"]').count(),
+    await mobile.locator('a[href="https://creativecommons.org/licenses/by-nc/4.0/"]').count(),
     1
   );
   checks.push("public rights and reuse boundary");

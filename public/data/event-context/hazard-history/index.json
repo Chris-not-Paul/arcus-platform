@@ -1,7 +1,7 @@
 {
   "schema_version": "arcus-event-hazard-history-public-v1",
-  "generated_at": "2026-09-30T08:47:25.769Z",
-  "open_release": "arcus-open-2026.10",
+  "generated_at": "2026-10-01T06:58:55.525Z",
+  "open_release": "arcus-open-2026.11",
   "observation_role": "official_class_membership_at_documented_event_coordinate",
   "caveat": "Each observation reports polygon membership at the same documented coordinate in the named official release. It is not a causal interpretation of the collapse.",
   "coverage": {

@@ -477,7 +477,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.10";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.11";
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,
@@ -1131,7 +1131,7 @@ function EventPopup({
                   </button>
                 </div>
                 <small aria-live="polite" role="status">
-                  {researchActionStatus || `${releaseVersion} · CC BY 4.0`}
+                  {researchActionStatus || `${releaseVersion} · CC BY-NC 4.0`}
                 </small>
               </div>
             )}
@@ -1531,7 +1531,7 @@ function EventPopup({
                           </div>
                           <div>
                             <dt>{text.license}</dt>
-                            <dd>{openRelease?.license?.id || "CC BY 4.0"}</dd>
+                            <dd>{openRelease?.license?.id || "CC-BY-NC-4.0"}</dd>
                           </div>
                         </dl>
                         <div>

@@ -142,9 +142,25 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.10");
+  assert.equal(manifest.version, "arcus-open-2026.11");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v2");
+  assert.equal(manifest.license.id, "CC-BY-NC-4.0");
+  assert.equal(
+    manifest.license.url,
+    "https://creativecommons.org/licenses/by-nc/4.0/"
+  );
+});
+
+await check("morandi-record-is-curated-and-documentary", () => {
+  const morandi = events.find((event) => event.event_id === "IT18.08.01");
+
+  assert.ok(morandi, "Morandi record must be present in the Open release");
+  assert.equal(morandi.bridge_crossing_type, "urban area");
+  assert.equal(morandi.bridge_crossing_name, "Municipality of Genova");
+  assert.equal(morandi.failure_cause_evidence, "Documented");
+  assert.match(morandi.description, /first-instance court press release/i);
+  assert.doesNotMatch(morandi.description, /No discrete external trigger/i);
 });
 
 await check("complete-source-integrity", () => {
@@ -401,12 +417,12 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.10/);
+  assert.match(citation, /arcus-open-2026\.11/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);
   assert.equal(dossier.release_metadata.data_cutoff, manifest.data_cutoff);
-  assert.equal(dossier.release_metadata.license.id, "CC-BY-4.0");
+  assert.equal(dossier.release_metadata.license.id, "CC-BY-NC-4.0");
   assert.equal(dossier.permalink, permalink);
   assert.equal(dossier.event.event_id, event.event_id);
   assert.equal(Object.hasOwn(dossier.event, "customer_project_id"), false);

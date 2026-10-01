@@ -2,7 +2,7 @@
 
 Target publication: 1 October 2026
 
-Release: `arcus-open-2026.10`
+Release: `arcus-open-2026.11`
 
 Canonical address: `https://www.arcusbridges.org`
 
@@ -12,7 +12,7 @@ From 24 September onward, ARCUS Open is under feature freeze. Only release
 blockers, factual corrections, accessibility fixes and deployment corrections
 may enter the launch branch.
 
-## Completed locally — updated 30 September
+## Completed locally — updated 1 October
 
 - [x] Public data package: 261 events and 718 sources.
 - [x] Shared-event registry: 14 documented episodes covering 108 event
@@ -52,7 +52,7 @@ may enter the launch branch.
 ## Owner review
 
 - [ ] Approve the final bilingual Privacy page.
-- [ ] Approve the final bilingual Rights & Reuse page and licence wording.
+- [x] Approve the final bilingual Rights & Reuse page and CC BY-NC 4.0 wording.
 - [ ] Approve `/arcus-social-card.png` as the permanent sharing preview.
 - [ ] Confirm final wording on Home, Identity and Publications.
 - [x] Confirm that all four domain mailboxes still receive external messages:
@@ -61,7 +61,7 @@ may enter the launch branch.
 
 ## Scientific publication gate
 
-- [ ] Confirm release citation, license and known limitations.
+- [x] Confirm release citation, licence and known limitations.
 - [ ] Decide whether to publish the release deposit before launch or mark its
   persistent identifier as forthcoming.
 - [ ] If deposited, record the persistent identifier without publishing the
@@ -82,6 +82,8 @@ may enter the launch branch.
 - [ ] Verify canonical URLs, sitemap, social preview and 404 on production.
 - [x] Create a Git release tag for the approved commit:
   `arcus-open-2026.10` at `873b8843a9d79f7e8e71a59aea1bce4306b5e19b`.
+- [x] Prepare the follow-up immutable release `arcus-open-2026.11` for the
+  licence and Morandi documentary correction.
 - [x] Record the last known-good commit and provider rollback procedure:
   restore the tagged deploy from Netlify Deploys if the public activation fails.
 - [ ] Prepare screenshots and links using the real HTTPS domain, not localhost.
@@ -89,7 +91,7 @@ may enter the launch branch.
 
 ## Launch — 1 October
 
-- [ ] Verify Home, Atlas, one event record, Analytics and one download.
+- [x] Verify Home, Atlas, one event record, Analytics and one download.
 - [ ] Verify the site from a mobile network.
 - [ ] Publish the launch communication only after the live checks pass.
 - [ ] Monitor errors, broken links, email and user reports during the first day.

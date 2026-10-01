@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: private continuous-deployment staging verified — final owner review and public activation pending
+Status: public production release active — `arcus-open-2026.11`
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -36,7 +36,7 @@ considered operational for the release candidate.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.10`: 261 events and 718 documentary sources. It does not include
+`arcus-open-2026.11`: 261 events and 718 documentary sources. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 
@@ -56,7 +56,7 @@ zero events or zero sources.
 
 - `/rights` states the bilingual public boundary between Open data, software,
   third-party material and ARCUS identity assets.
-- `LICENSE-DATA.md` identifies CC BY 4.0 as the licence for the exact Open data
+- `LICENSE-DATA.md` identifies CC BY-NC 4.0 as the licence for the exact Open data
   package described by its release manifest.
 - `LICENSE-CODE.md` reserves the software and source-code rights.
 - `TRADEMARKS.md` reserves the ARCUS name, symbol, wordmark and domain identity
@@ -76,8 +76,8 @@ zero events or zero sources.
    acceptance. Netlify is connected to `main`, runs `npm run build:open` and
    publishes `dist` through controlled continuous deployment.
 4. `www.arcusbridges.org` is the verified primary domain; the apex redirects
-   automatically to it and both names are covered by the HTTPS certificate.
-   The remaining hosting action is to make the Netlify project public.
+   automatically to it, both names are covered by the HTTPS certificate and
+   the Netlify project is public.
 
 ## Release checks
 
@@ -94,6 +94,17 @@ git diff --check
 ```
 
 ## Verification log
+
+### 1 October 2026
+
+- Public production activation and canonical-domain smoke test: passed.
+- `arcus-open-2026.11`: 261 events, 718 sources and 14 shared episodes;
+  licence changed to CC BY-NC 4.0 without relicensing third-party content.
+- Event `IT18.08.01` was reviewed: dominant crossing context set to urban area
+  and the narrative restricted to facts and findings supported by linked
+  official and scientific sources.
+- Open release, production bundle, public UI, Atlas, territorial context,
+  hazard-history context, lint and whitespace checks: passed.
 
 ### 30 September 2026
 

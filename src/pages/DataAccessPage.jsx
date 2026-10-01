@@ -61,7 +61,7 @@ function DataAccessPage() {
           researchContact: "Domande sulla release o sul riuso scientifico",
           licenseTitle: "Licenza e diritti",
           licenseText:
-            "I metadati e le tassonomie prodotti da ARCUS sono rilasciati CC BY 4.0. I contenuti collegati di terze parti mantengono i rispettivi diritti.",
+            "I metadati e le tassonomie prodotti da ARCUS sono rilasciati CC BY-NC 4.0 per il riuso non commerciale. Gli usi commerciali richiedono un’autorizzazione separata; i contenuti collegati di terze parti mantengono i rispettivi diritti.",
           professionalTitle: "Layer Professional",
           professionalText:
             "Il database ARCUS aggiornato alimenta Collapse Intelligence, retrieval di analoghi e evidence package contestuali. Non viene distribuito come copia integrale del DB.",
@@ -134,7 +134,7 @@ function DataAccessPage() {
           researchContact: "Questions about the release or scientific reuse",
           licenseTitle: "License and rights",
           licenseText:
-            "ARCUS-authored metadata and taxonomies are released under CC BY 4.0. Linked third-party content retains its original rights.",
+            "ARCUS-authored metadata and taxonomies are released under CC BY-NC 4.0 for non-commercial reuse. Commercial use requires separate permission; linked third-party content retains its original rights.",
           professionalTitle: "Professional layer",
           professionalText:
             "The updated ARCUS database powers Collapse Intelligence, analogue retrieval and contextual evidence packages. It is not distributed as a full database copy.",
@@ -200,7 +200,7 @@ function DataAccessPage() {
     : copy.text;
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.10";
+    manifest?.version || "arcus-open-2026.11";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -363,14 +363,14 @@ function DataAccessPage() {
             <article className="data-access-release">
               <span>{copy.licenseTitle}</span>
               <strong>
-                {manifest?.license?.id || "CC BY 4.0"}
+                {manifest?.license?.id || "CC-BY-NC-4.0"}
               </strong>
               <p>{copy.licenseText}</p>
               <a
                 className="data-access-resource-link"
                 href={
                   manifest?.license?.url ||
-                  "https://creativecommons.org/licenses/by/4.0/"
+                  "https://creativecommons.org/licenses/by-nc/4.0/"
                 }
                 rel="noreferrer"
                 target="_blank"
