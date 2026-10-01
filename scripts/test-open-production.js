@@ -155,6 +155,10 @@ check("portable hosting controls", () => {
   assert.match(headers, /X-Content-Type-Options: nosniff/);
   assert.match(headers, /X-Frame-Options: DENY/);
   assert.match(headers, /Permissions-Policy:/);
+  assert.match(
+    headers,
+    /\/data\/open-release\/\*[\s\S]*Cache-Control: public, max-age=0, must-revalidate/
+  );
 });
 
 check("public release integrity", () => {

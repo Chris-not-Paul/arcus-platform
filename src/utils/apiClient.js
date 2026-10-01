@@ -180,7 +180,7 @@ async function openReleaseJson(apiPath, staticFileName) {
       return await withTimeout(async (signal) => {
         const response = await fetch(
           `${openReleaseBaseUrl}/${staticFileName}`,
-          { credentials: "same-origin", signal }
+          { cache: "no-cache", credentials: "same-origin", signal }
         );
 
         if (!response.ok) {
@@ -215,6 +215,7 @@ export function openSources() {
 export function openEpisodes() {
   return withTimeout(async (signal) => {
     const response = await fetch(`${openReleaseBaseUrl}/episodes.json`, {
+      cache: "no-cache",
       credentials: "same-origin",
       signal,
     });
