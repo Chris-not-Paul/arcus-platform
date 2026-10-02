@@ -19,6 +19,11 @@ import {
   openEvents,
   openSources,
 } from "../utils/apiClient";
+import {
+  arcusOrganization,
+  arcusWebsite,
+  asJsonLdGraph,
+} from "../utils/structuredData";
 
 import "../styles/home/HomePage.css";
 
@@ -972,6 +977,7 @@ export default function HomePage() {
       <PageMeta
         title="ARCUS"
         description={text.meta}
+        structuredData={asJsonLdGraph(arcusWebsite, arcusOrganization)}
       />
 
       <Navbar />

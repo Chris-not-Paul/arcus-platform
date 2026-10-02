@@ -1,0 +1,65 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "@id": "https://www.arcusbridges.org/data-access#dataset",
+  "name": "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
+  "alternateName": "arcus-open-2026.11",
+  "description": "Versioned research dataset of 261 documented bridge-collapse events in Italy, connected to 718 documentary sources, explicit classifications and geospatial records.",
+  "url": "https://www.arcusbridges.org/data-access",
+  "version": "arcus-open-2026.11",
+  "dateModified": "2026-10-01T07:00:23.163Z",
+  "temporalCoverage": "2000/2026",
+  "spatialCoverage": {
+    "@type": "Place",
+    "name": "Italy"
+  },
+  "creator": {
+    "@type": "Person",
+    "@id": "https://www.arcusbridges.org/about#christian-paolini",
+    "name": "Christian Paolini",
+    "url": "https://www.arcusbridges.org/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://www.arcusbridges.org/#organization",
+    "name": "ARCUS — Bridge Failure Research",
+    "url": "https://www.arcusbridges.org/"
+  },
+  "isBasedOn": "https://doi.org/10.1016/j.dib.2025.112375",
+  "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "conditionsOfAccess": "Public read-only access; no account required. Non-commercial reuse under CC BY-NC 4.0.",
+  "keywords": [
+    "bridge collapse",
+    "bridge failure",
+    "structural engineering",
+    "infrastructure safety",
+    "Italy",
+    "open research data"
+  ],
+  "distribution": [
+    {
+      "@type": "DataDownload",
+      "name": "ARCUS events — CSV",
+      "contentUrl": "https://www.arcusbridges.org/data/open-release/events.csv",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "ARCUS events — GeoJSON",
+      "contentUrl": "https://www.arcusbridges.org/data/open-release/events.geojson",
+      "encodingFormat": "application/geo+json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "ARCUS documentary sources — JSON",
+      "contentUrl": "https://www.arcusbridges.org/data/open-release/sources.json",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "ARCUS release manifest — JSON",
+      "contentUrl": "https://www.arcusbridges.org/data/open-release/manifest.json",
+      "encodingFormat": "application/json"
+    }
+  ]
+}

@@ -9,6 +9,11 @@ import {
   contactAddresses,
   professionalEnabled,
 } from "../config/site";
+import {
+  arcusOrganization,
+  asJsonLdGraph,
+  christianPaolini,
+} from "../utils/structuredData";
 
 import "../styles/about-page.css";
 
@@ -149,6 +154,7 @@ function AboutPage() {
             ? "Identità e visione di ARCUS, infrastruttura aperta di ricerca sui crolli documentati dei ponti."
             : "ARCUS identity and vision, an open research infrastructure for documented bridge collapses."
         }
+        structuredData={asJsonLdGraph(arcusOrganization, christianPaolini)}
       />
 
       <Navbar />

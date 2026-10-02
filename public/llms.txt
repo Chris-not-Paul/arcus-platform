@@ -1,0 +1,48 @@
+# ARCUS — Bridge Failure Research
+
+> ARCUS is an independent open research infrastructure for documented bridge-collapse events in Italy. It connects event records, documentary sources, geolocation, explicit classifications, methodology and versioned research data. Historical records do not predict future collapse, certify bridge safety or replace inspection and structural assessment.
+
+Canonical site: https://www.arcusbridges.org/
+Public Atlas: https://www.arcusbridges.org/atlas
+Methodology: https://www.arcusbridges.org/methodology
+Data and citation: https://www.arcusbridges.org/data-access
+Publications: https://www.arcusbridges.org/publications
+Project identity: https://www.arcusbridges.org/about
+Contribution route: https://www.arcusbridges.org/contribute
+Rights and reuse: https://www.arcusbridges.org/rights
+
+## Current public research object
+
+- Release: arcus-open-2026.11
+- Coverage: 261 documented events in Italy, 2000–2026
+- Documentary sources: 718
+- Licence: CC BY-NC 4.0 for ARCUS-authored event metadata and taxonomy definitions
+- Manifest: https://www.arcusbridges.org/data/open-release/manifest.json
+- Events CSV: https://www.arcusbridges.org/data/open-release/events.csv
+- Events GeoJSON: https://www.arcusbridges.org/data/open-release/events.geojson
+- Events JSON: https://www.arcusbridges.org/data/open-release/events.json
+- Sources JSON: https://www.arcusbridges.org/data/open-release/sources.json
+- Data dictionary: https://www.arcusbridges.org/data/open-release/data-dictionary.json
+- Taxonomy: https://www.arcusbridges.org/data/open-release/taxonomy.json
+- Quality audit: https://www.arcusbridges.org/data/open-release/quality-audit.json
+- Changelog: https://www.arcusbridges.org/data/open-release/changelog.json
+- Dataset metadata (JSON-LD): https://www.arcusbridges.org/dataset.json
+- Citation metadata: https://www.arcusbridges.org/CITATION.cff
+
+## Scientific lineage
+
+The original peer-reviewed dataset is documented in:
+
+Christian Paolini, Marco Civera, Manuel D’Angelo, Pier Francesco Giordano, Paolo Borlenghi, Francesco Ballio, Bernardino Chiaia, and Maria Pina Limongelli. “Dataset of Bridge Collapses in Italy Spanning more than 25 years (2000–2025).” Data in Brief 64 (2026). https://doi.org/10.1016/j.dib.2025.112375
+
+ARCUS Open continues this research object through explicit versions, source traceability, quality controls and event-level dossiers. Cite the peer-reviewed paper for the original dataset and methodology; cite the precise ARCUS release when using current ARCUS records, coordinates, counts, classifications or exports.
+
+## Interpretation rules
+
+- Treat every event dossier as an evidence record, not as a safety judgement.
+- Preserve the ARCUS event identifier and release version when citing or comparing records.
+- Distinguish documented, probable, unspecified and needs-review evidence classes.
+- Do not infer missing facts from absent values.
+- Linked third-party sources retain their original rights and terms.
+- For corrections or new evidence, use https://www.arcusbridges.org/contribute or contribute@arcusbridges.org.
+- For scientific and citation enquiries, contact research@arcusbridges.org.

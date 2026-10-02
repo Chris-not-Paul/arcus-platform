@@ -15,6 +15,11 @@ import {
   professionalEnabled,
 } from "../config/site";
 import { openManifest } from "../utils/apiClient";
+import {
+  arcusDataset,
+  asJsonLdGraph,
+  dataInBriefArticle,
+} from "../utils/structuredData";
 
 import "../styles/publications-page.css";
 
@@ -137,6 +142,10 @@ function PublicationsPage() {
             ? "Pubblicazioni, release e risorse scientifiche collegate alla piattaforma ARCUS."
             : "Publications, releases and scientific resources connected to the ARCUS platform."
         }
+        structuredData={asJsonLdGraph(
+          dataInBriefArticle,
+          arcusDataset(manifest || {})
+        )}
       />
 
       <Navbar />

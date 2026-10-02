@@ -49,9 +49,13 @@ function setLink(rel, href) {
 export default function PageMeta({
   description,
   noIndex = false,
+  structuredData = null,
   title,
 }) {
   const location = useLocation();
+  const structuredDataJson = structuredData
+    ? JSON.stringify(structuredData)
+    : "";
 
   useEffect(() => {
     const fullTitle =
@@ -87,7 +91,28 @@ export default function PageMeta({
     setProperty("og:image:height", "630");
     setProperty("og:image:alt", socialImageAlt);
     setLink("canonical", canonicalUrl);
-  }, [description, location.pathname, noIndex, title]);
+
+    // The build exposes a complete static schema to crawlers and no-JS users.
+    // Once React takes over, replace it with the schema for the active route so
+    // client-side navigation never leaves stale event metadata in the page.
+    document.getElementById("arcus-static-structured-data")?.remove();
+
+    let structuredDataTag = document.getElementById(
+      "arcus-page-structured-data"
+    );
+
+    if (structuredDataJson) {
+      if (!structuredDataTag) {
+        structuredDataTag = document.createElement("script");
+        structuredDataTag.id = "arcus-page-structured-data";
+        structuredDataTag.type = "application/ld+json";
+        document.head.appendChild(structuredDataTag);
+      }
+      structuredDataTag.textContent = structuredDataJson;
+    } else if (structuredDataTag) {
+      structuredDataTag.remove();
+    }
+  }, [description, location.pathname, noIndex, structuredDataJson, title]);
 
   return null;
 }

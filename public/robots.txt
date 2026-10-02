@@ -1,3 +1,14 @@
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# ARCUS supports discovery and citation in ChatGPT search, while opting out
+# of OpenAI model-training crawl through the separate GPTBot control.
+User-agent: GPTBot
+Disallow: /
+
 User-agent: *
 Allow: /
 Disallow: /account

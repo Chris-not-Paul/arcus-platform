@@ -20,6 +20,10 @@ import {
   openManifest,
   openResourceUrls,
 } from "../utils/apiClient";
+import {
+  arcusDataset,
+  asJsonLdGraph,
+} from "../utils/structuredData";
 
 import "../styles/data-access-page.css";
 
@@ -256,6 +260,7 @@ function DataAccessPage() {
       <PageMeta
         title="ARCUS Data Access"
         description={pageText}
+        structuredData={asJsonLdGraph(arcusDataset(manifest || {}))}
       />
 
       <Navbar />

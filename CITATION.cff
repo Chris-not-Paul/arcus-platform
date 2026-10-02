@@ -1,0 +1,47 @@
+cff-version: 1.2.0
+message: "If you use ARCUS data, cite the exact ARCUS release and the peer-reviewed dataset article as appropriate."
+title: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026"
+type: dataset
+version: "arcus-open-2026.11"
+date-released: 2026-10-01
+authors:
+  - family-names: Paolini
+    given-names: Christian
+    email: research@arcusbridges.org
+url: "https://www.arcusbridges.org/data-access"
+license: CC-BY-NC-4.0
+abstract: "A versioned research dataset of documented bridge-collapse events in Italy, connected to documentary sources, explicit classifications and geospatial records."
+keywords:
+  - bridge collapse
+  - bridge failure
+  - structural engineering
+  - infrastructure safety
+  - open research data
+identifiers:
+  - type: url
+    value: "https://www.arcusbridges.org/data/open-release/manifest.json"
+    description: "Machine-readable manifest for release arcus-open-2026.11"
+references:
+  - type: article
+    title: "Dataset of Bridge Collapses in Italy Spanning more than 25 years (2000–2025)"
+    doi: 10.1016/j.dib.2025.112375
+    journal: Data in Brief
+    volume: 64
+    year: 2026
+    authors:
+      - family-names: Paolini
+        given-names: Christian
+      - family-names: Civera
+        given-names: Marco
+      - family-names: D'Angelo
+        given-names: Manuel
+      - family-names: Giordano
+        given-names: Pier Francesco
+      - family-names: Borlenghi
+        given-names: Paolo
+      - family-names: Ballio
+        given-names: Francesco
+      - family-names: Chiaia
+        given-names: Bernardino
+      - family-names: Limongelli
+        given-names: Maria Pina

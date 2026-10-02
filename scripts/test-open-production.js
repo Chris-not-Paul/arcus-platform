@@ -151,7 +151,11 @@ check("crawlable public surface", () => {
 });
 
 check("portable hosting controls", () => {
-  assert.equal(redirects.trim(), "/* /index.html 200");
+  assert.match(
+    redirects,
+    /\/atlas\/events\/:eventSlug \/atlas\/events\/:eventSlug\/index\.html 200/
+  );
+  assert.equal(redirects.trim().split(/\r?\n/).at(-1), "/* /index.html 200");
   assert.match(headers, /X-Content-Type-Options: nosniff/);
   assert.match(headers, /X-Frame-Options: DENY/);
   assert.match(headers, /Permissions-Policy:/);

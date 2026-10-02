@@ -8,6 +8,10 @@ import useLanguage from "../context/useLanguage";
 import { openEpisodes, openEvents, openManifest, openSources } from "../utils/apiClient";
 import { localizedBridgeDisplayName } from "../utils/eventDisplayLabels";
 import { researchEventId } from "../utils/eventIdentity";
+import {
+  asJsonLdGraph,
+  eventDossierStructuredData,
+} from "../utils/structuredData";
 
 import "../styles/atlas/event-dossier-page.css";
 
@@ -144,6 +148,9 @@ function EventDossierPage() {
             : "ARCUS scientific record for a documented bridge failure event."
         }
         noIndex={status !== "available"}
+        structuredData={asJsonLdGraph(
+          eventDossierStructuredData(event, relatedSources)
+        )}
         title={title}
       />
 
