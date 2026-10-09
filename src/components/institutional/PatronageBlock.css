@@ -17,7 +17,75 @@
 }
 
 .arcus-patronage.is-compact .arcus-patronage-inner {
-  padding-block: clamp(1rem, 2vw, 1.45rem);
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.65fr);
+  padding-block: clamp(2.6rem, 5vw, 4.5rem);
+}
+
+.arcus-patronage-story {
+  align-content: center;
+  display: grid;
+  max-width: 680px;
+}
+
+.arcus-patronage-story > span,
+.arcus-patronage-mark > span {
+  color: var(--arcus-bronze);
+  font-family: var(--arcus-font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.arcus-patronage-story h2 {
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-display);
+  font-size: clamp(1.85rem, 3.2vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  margin: 1rem 0 0;
+  max-width: 620px;
+}
+
+.arcus-patronage-story p {
+  color: var(--arcus-ink-muted);
+  font-size: 0.96rem;
+  line-height: 1.7;
+  margin: 1.15rem 0 0;
+  max-width: 610px;
+}
+
+.arcus-patronage-story > a {
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-mono);
+  font-size: 0.69rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.arcus-patronage-story > a:hover,
+.arcus-patronage-story > a:focus-visible {
+  color: var(--arcus-bronze);
+}
+
+.arcus-patronage-mark {
+  align-content: center;
+  border-left: 1px solid var(--patronage-border);
+  display: grid;
+  gap: 1.15rem;
+  justify-items: center;
+  padding-left: clamp(2rem, 5vw, 4.5rem);
+  text-align: center;
+}
+
+.arcus-patronage-mark > span {
+  color: var(--arcus-ink-muted);
 }
 
 .arcus-patronage-heading {
@@ -60,7 +128,7 @@
 }
 
 .arcus-patronage.is-compact .arcus-patronage-logo {
-  width: clamp(190px, 21vw, 250px);
+  width: clamp(190px, 20vw, 245px);
 }
 
 .arcus-patronage-logo-link:hover .arcus-patronage-logo,
@@ -77,6 +145,10 @@
   align-items: start;
   grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1.2fr);
   padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+.arcus-patronage.is-detailed {
+  scroll-margin-top: 110px;
 }
 
 .arcus-patronage.is-detailed .arcus-patronage-heading {
@@ -120,8 +192,23 @@
 
 @media (max-width: 760px) {
   .arcus-patronage-heading,
+  .arcus-patronage.is-compact .arcus-patronage-inner,
   .arcus-patronage.is-detailed .arcus-patronage-inner {
     grid-template-columns: 1fr;
+  }
+
+  .arcus-patronage.is-compact .arcus-patronage-inner {
+    gap: 2.25rem;
+    padding-block: 2.8rem;
+  }
+
+  .arcus-patronage-mark {
+    border-left: 0;
+    border-top: 1px solid var(--patronage-border);
+    justify-items: start;
+    padding-left: 0;
+    padding-top: 2rem;
+    text-align: left;
   }
 
   .arcus-patronage-logo {

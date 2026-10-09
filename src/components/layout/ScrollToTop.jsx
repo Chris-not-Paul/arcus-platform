@@ -4,16 +4,32 @@ import { useLocation } from "react-router-dom";
 
 function ScrollToTop() {
 
-  const { pathname } = useLocation();
+  const { hash, pathname } = useLocation();
 
   useEffect(() => {
 
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
+    const frame = window.requestAnimationFrame(() => {
+      const anchor = hash
+        ? document.getElementById(decodeURIComponent(hash.slice(1)))
+        : null;
+
+      if (anchor) {
+        anchor.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
+        return;
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "instant",
+      });
     });
 
-  }, [pathname]);
+    return () => window.cancelAnimationFrame(frame);
+
+  }, [hash, pathname]);
 
   return null;
 }
