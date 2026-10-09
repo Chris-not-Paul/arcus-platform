@@ -20,9 +20,6 @@ export const accountsEnabled =
 export const contributionFormEnabled =
   !isOpenRelease &&
   enabled("VITE_ARCUS_ENABLE_CONTRIBUTION_FORM", true);
-export const professionalEnabled =
-  !isOpenRelease &&
-  enabled("VITE_ARCUS_ENABLE_PROFESSIONAL", true);
 
 export const contactAddresses = Object.freeze({
   general: "info@arcusbridges.org",

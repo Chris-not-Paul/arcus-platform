@@ -6,7 +6,6 @@ import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
-import { professionalEnabled } from "../config/site";
 import useLanguage from "../context/useLanguage";
 import { openManifest } from "../utils/apiClient";
 
@@ -20,26 +19,6 @@ function MethodologyAxisGrid({ items }) {
           <span>{item.code}</span>
           <strong>{item.title}</strong>
           <p>{item.text}</p>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function LayerIntersectionMatrix({ columns, rows }) {
-  return (
-    <div className="methodology-layer-matrix">
-      <div className="methodology-layer-matrix-head">
-        {columns.map((column) => (
-          <span key={column}>{column}</span>
-        ))}
-      </div>
-
-      {rows.map((row) => (
-        <article key={row[0]}>
-          {row.map((cell) => (
-            <p key={cell}>{cell}</p>
-          ))}
         </article>
       ))}
     </div>
@@ -734,9 +713,7 @@ function MethodologyPage() {
         paperRelation: "The publication is the original scientific foundation; the ARCUS Open release is subsequent, versioned and continuously reviewed.",
       };
 
-  const content = professionalEnabled
-    ? baseContent
-    : { ...baseContent, ...openContent };
+  const content = { ...baseContent, ...openContent };
 
   return (
     <main
@@ -746,13 +723,9 @@ function MethodologyPage() {
       <PageMeta
         title={content.title}
         description={
-          !professionalEnabled
-            ? language === "it"
-              ? "Metodo ARCUS per identificare, verificare, classificare e pubblicare record di collasso dei ponti come evidenza scientifica versionata."
-              : "ARCUS method for identifying, verifying, classifying and publishing bridge-collapse records as versioned scientific evidence."
-            : language === "it"
-              ? "Metodo ARCUS per validare e classificare eventi di collasso dei ponti e intersecarli con layer territoriali per output Professional."
-              : "ARCUS methodology for validating and classifying bridge collapse events and intersecting them with territorial layers for Professional outputs."
+          language === "it"
+            ? "Metodo ARCUS per identificare, verificare, classificare e pubblicare record di collasso dei ponti come evidenza scientifica versionata."
+            : "ARCUS method for identifying, verifying, classifying and publishing bridge-collapse records as versioned scientific evidence."
         }
       />
 
@@ -1105,41 +1078,6 @@ function MethodologyPage() {
         </div>
 
       </section>
-
-      {/* PROFESSIONAL LAYER MATRIX */}
-
-      {professionalEnabled && <section className="methodology-section methodology-dark">
-
-        <div className="methodology-container">
-
-          <div className="methodology-section-header">
-
-            <div className="methodology-section-label">
-              {content.layerMatrixLabel}
-            </div>
-
-            <h2 className="methodology-section-title">
-              {content.layerMatrixTitle}
-            </h2>
-
-            <p className="methodology-section-description">
-              {content.layerMatrixText}
-            </p>
-
-          </div>
-
-          <LayerIntersectionMatrix
-            columns={content.layerMatrixColumns}
-            rows={content.layerMatrixRows}
-          />
-
-          <p className="methodology-layer-note">
-            {content.layerMatrixNote}
-          </p>
-
-        </div>
-
-      </section>}
 
       {/* SOURCE VALIDATION */}
 

@@ -10,10 +10,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import {
-  contactAddresses,
-  professionalEnabled,
-} from "../config/site";
+import { contactAddresses } from "../config/site";
 import { openManifest } from "../utils/apiClient";
 import {
   arcusDataset,
@@ -114,14 +111,7 @@ function PublicationsPage() {
     },
   };
 
-  const baseContent = copy[language] || copy.en;
-  const content = professionalEnabled
-    ? baseContent
-    : {
-        ...baseContent,
-        text: baseContent.text,
-        paperText: baseContent.paperText,
-      };
+  const content = copy[language] || copy.en;
   const releaseVersion =
     manifest?.version || "arcus-open-2026.11";
   const releaseCitation =

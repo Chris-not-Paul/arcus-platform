@@ -2,10 +2,7 @@ import { Link } from "react-router-dom";
 
 import useLanguage from "../../context/useLanguage";
 import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
-import {
-  contactAddresses,
-  professionalEnabled,
-} from "../../config/site";
+import { contactAddresses } from "../../config/site";
 
 import "./Footer.css";
 
@@ -25,9 +22,6 @@ function Footer() {
           links: [
             ["Atlas", "/atlas"],
             ["Analytics", "/analytics"],
-            ...(professionalEnabled
-              ? [["Professional", "/professional"]]
-              : []),
           ],
         },
         {
@@ -63,9 +57,6 @@ function Footer() {
           links: [
             ["Atlante", "/atlas"],
             ["Analytics", "/analytics"],
-            ...(professionalEnabled
-              ? [["Professional", "/professional"]]
-              : []),
           ],
         },
         {

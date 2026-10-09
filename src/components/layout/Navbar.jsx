@@ -15,10 +15,7 @@ import {
   getSession,
   logoutProfessional,
 } from "#arcus-session-client";
-import {
-  accountsEnabled,
-  professionalEnabled,
-} from "../../config/site";
+import { accountsEnabled } from "../../config/site";
 
 import "./Navbar.css";
 
@@ -47,20 +44,6 @@ function Navbar() {
       path: "/analytics",
       group: "core",
     },
-
-    ...(professionalEnabled
-      ? [{
-          label: t("professional"),
-          path: "/professional",
-          group: "core",
-          prominent: true,
-        }]
-      : [{
-          label: t("professional"),
-          group: "core",
-          prominent: true,
-          comingSoon: true,
-        }]),
 
     {
       label: t("methodology"),
@@ -134,15 +117,10 @@ function Navbar() {
   const authenticated = Boolean(session?.authenticated);
   const hasWildcard =
     session?.permissions?.includes("*");
-  const isProfessional =
-    hasWildcard ||
-    session?.permissions?.includes("professional:read");
   const isAdmin =
     hasWildcard ||
     session?.permissions?.includes("admin:access");
-  const accountBadge = isProfessional
-    ? "Professional"
-    : "Open";
+  const accountBadge = "Open";
 
   const handleSignOut = () => {
     logoutProfessional()
@@ -183,20 +161,13 @@ function Navbar() {
           const isAnchor =
             link.path?.includes("#");
           const isActive =
-            !link.comingSoon && (
             location.pathname === link.path ||
             (
               link.path === "/analytics" &&
               location.pathname.startsWith(
                 "/analytics/"
               )
-            ) ||
-            (
-              link.path === "/professional" &&
-              location.pathname.startsWith(
-                "/professional"
-              )
-            ));
+            );
           const previousLink =
             links[index - 1];
           const startsGroup =
@@ -207,21 +178,11 @@ function Navbar() {
             isActive ? "active" : "",
             startsGroup ? "group-start" : "",
             link.prominent ? "prominent" : "",
-            link.comingSoon ? "coming-soon" : "",
           ]
             .filter(Boolean)
             .join(" ");
 
-          return link.comingSoon ? (
-            <span
-              aria-disabled="true"
-              className={linkClassName}
-              key="professional-coming-soon"
-            >
-              {link.label}
-              <small>{language === "it" ? "Prossimamente" : "Coming soon"}</small>
-            </span>
-          ) : isAnchor ? (
+          return isAnchor ? (
             <a
               key={link.path}
               href={link.path}
@@ -274,35 +235,20 @@ function Navbar() {
                 </p>
                 <Link
                   onClick={() => setAccountOpen(false)}
-                  to={
-                    isProfessional
-                      ? "/professional/account"
-                      : "/account"
-                  }
+                  to="/account"
                 >
                   {language === "it"
                     ? "Account"
                     : "Account"}
                 </Link>
-                {isProfessional ? (
-                  <Link
-                    onClick={() => setAccountOpen(false)}
-                    to="/professional"
-                  >
-                    {language === "it"
-                      ? "Console"
-                      : "Console"}
-                  </Link>
-                ) : (
-                  <Link
-                    onClick={() => setAccountOpen(false)}
-                    to="/atlas"
-                  >
-                    {language === "it"
-                      ? "Atlas Open"
-                      : "Open Atlas"}
-                  </Link>
-                )}
+                <Link
+                  onClick={() => setAccountOpen(false)}
+                  to="/atlas"
+                >
+                  {language === "it"
+                    ? "Atlas Open"
+                    : "Open Atlas"}
+                </Link>
                 {isAdmin && (
                   <Link
                     onClick={() => setAccountOpen(false)}
@@ -340,17 +286,6 @@ function Navbar() {
                     ? "Account free"
                     : "Free account"}
                 </Link>
-                {professionalEnabled && (
-                  <Link
-                    onClick={() => setAccountOpen(false)}
-                    to="/professional/login"
-                  >
-                    <span>Professional</span>
-                    {language === "it"
-                      ? "Accesso controllato"
-                      : "Controlled access"}
-                  </Link>
-                )}
               </div>
             )}
           </>
@@ -398,11 +333,7 @@ function Navbar() {
           <Link
             className="navbar-mobile-link account"
             onClick={() => setIsMenuOpen(false)}
-            to={
-              isProfessional
-                ? "/professional/account"
-                : "/account"
-            }
+            to="/account"
           >
             <span>{accountBadge}</span>
             {session.username}
@@ -419,18 +350,6 @@ function Navbar() {
                 ? "Account free"
                 : "Free account"}
             </Link>
-            {professionalEnabled && (
-              <Link
-                className="navbar-mobile-link account"
-                onClick={() => setIsMenuOpen(false)}
-                to="/professional/login"
-              >
-                <span>Professional</span>
-                {language === "it"
-                  ? "Accesso controllato"
-                  : "Controlled access"}
-              </Link>
-            )}
           </>
         ))}
 
@@ -442,24 +361,9 @@ function Navbar() {
               location.pathname.startsWith(
                 "/analytics/"
               )
-            ) ||
-            (
-              link.path === "/professional" &&
-              location.pathname.startsWith(
-                "/professional"
-              )
             );
 
-          return link.comingSoon ? (
-            <span
-              aria-disabled="true"
-              className="navbar-mobile-link prominent coming-soon"
-              key="professional-coming-soon"
-            >
-              <span>{language === "it" ? "Prossimamente" : "Coming soon"}</span>
-              {link.label}
-            </span>
-          ) : (
+          return (
             <Link
               className={`navbar-mobile-link ${
                 isActive ? "active" : ""

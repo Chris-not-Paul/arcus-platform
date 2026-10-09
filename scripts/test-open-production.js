@@ -46,9 +46,13 @@ check("open release feature boundary", () => {
   assert.match(environment, /VITE_ARCUS_ENABLE_ACCOUNTS=false/);
   assert.match(environment, /VITE_ARCUS_ENABLE_CONTRIBUTION_FORM=false/);
   assert.match(environment, /VITE_ARCUS_ENABLE_PROFESSIONAL=false/);
-  assert.match(app, /professionalEnabled/);
+  assert.doesNotMatch(app, /professionalEnabled/);
+  assert.match(app, /path="\/professional\/\*"/);
+  assert.match(app, /<Navigate replace to="\/data-access" \/>/);
   assert.match(navbar, /accountsEnabled/);
-  assert.match(footer, /professionalEnabled/);
+  assert.doesNotMatch(navbar, /professionalEnabled/);
+  assert.doesNotMatch(footer, /professionalEnabled/);
+  assert.doesNotMatch(siteConfig, /professionalEnabled/);
 });
 
 check("static contribution channel", () => {

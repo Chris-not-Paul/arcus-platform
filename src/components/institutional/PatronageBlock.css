@@ -1,0 +1,131 @@
+.arcus-patronage {
+  --patronage-border: color-mix(in srgb, var(--arcus-bronze) 42%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--arcus-bronze) 7%, transparent), transparent 34%),
+    var(--arcus-paper);
+  border-block: 1px solid var(--patronage-border);
+  color: var(--arcus-night);
+}
+
+.arcus-patronage-inner {
+  align-items: center;
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin: 0 auto;
+  max-width: 1240px;
+  padding: clamp(1.45rem, 3vw, 2.25rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.arcus-patronage-heading {
+  align-items: baseline;
+  display: grid;
+  gap: 0.42rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.arcus-patronage-heading > span {
+  color: var(--arcus-bronze);
+  font-family: var(--arcus-font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  grid-column: 1 / -1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.arcus-patronage-heading > p {
+  color: var(--arcus-ink-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.arcus-patronage-heading > a {
+  align-items: baseline;
+  color: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+  text-decoration: none;
+}
+
+.arcus-patronage-heading strong {
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-display);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.arcus-patronage-heading small {
+  color: var(--arcus-ink-muted);
+  font-family: var(--arcus-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.arcus-patronage-heading > a:hover strong,
+.arcus-patronage-heading > a:focus-visible strong,
+.arcus-patronage-detail > a:hover,
+.arcus-patronage-detail > a:focus-visible {
+  color: var(--arcus-bronze);
+}
+
+.arcus-patronage.is-detailed .arcus-patronage-inner {
+  align-items: start;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1.2fr);
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+.arcus-patronage.is-detailed .arcus-patronage-heading {
+  grid-template-columns: 1fr;
+}
+
+.arcus-patronage-detail {
+  border-left: 1px solid var(--patronage-border);
+  display: grid;
+  gap: 1rem;
+  padding-left: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.arcus-patronage-detail p,
+.arcus-patronage-detail small {
+  line-height: 1.7;
+  margin: 0;
+}
+
+.arcus-patronage-detail p {
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-display);
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+}
+
+.arcus-patronage-detail small {
+  color: var(--arcus-ink-muted);
+  font-size: 0.86rem;
+}
+
+.arcus-patronage-detail > a {
+  color: var(--arcus-night);
+  font-family: var(--arcus-font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-top: 0.35rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .arcus-patronage-heading,
+  .arcus-patronage.is-detailed .arcus-patronage-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .arcus-patronage-detail {
+    border-left: 0;
+    border-top: 1px solid var(--patronage-border);
+    padding-left: 0;
+    padding-top: 1.5rem;
+  }
+}

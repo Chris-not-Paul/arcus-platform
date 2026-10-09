@@ -17,13 +17,9 @@ const EventDossierPage = lazy(() => import("./pages/EventDossierPage"));
 const MethodologyPage = lazy(() => import("./pages/MethodologyPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
-const PremiumAnalyticsPage = lazy(() => import("./pages/PremiumAnalyticsPage"));
 const DataAccessPage = lazy(() => import("./pages/DataAccessPage"));
 const PublicationsPage = lazy(() => import("./pages/PublicationsPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const CollapseIntelligencePage = lazy(() => import("./pages/CollapseIntelligencePage"));
-const ProfessionalLoginPage = lazy(() => import("./pages/ProfessionalLoginPage"));
-const ProfessionalAccountPage = lazy(() => import("./pages/ProfessionalAccountPage"));
 const AccountPage = lazy(() => import("./pages/AccountPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ContributePage = lazy(() => import("./pages/ContributePage"));
@@ -35,10 +31,7 @@ import LanguageProvider from "./context/LanguageProvider";
 import IntroOverlay from "./components/layout/IntroOverlay";
 import ProfessionalGate from "./components/auth/ProfessionalGate";
 import ScrollToTop from "./components/layout/ScrollToTop";
-import {
-  accountsEnabled,
-  professionalEnabled,
-} from "./config/site";
+import { accountsEnabled } from "./config/site";
 
 import "leaflet/dist/leaflet.css";
 
@@ -115,16 +108,10 @@ function App() {
             element={<AnalyticsPage />}
           />
 
-          {professionalEnabled && (
-            <Route
-              path="/analytics/pro"
-              element={
-                <ProfessionalGate>
-                  <PremiumAnalyticsPage />
-                </ProfessionalGate>
-              }
-            />
-          )}
+          <Route
+            path="/analytics/pro"
+            element={<Navigate replace to="/analytics" />}
+          />
 
           <Route
             path="/data-access"
@@ -138,40 +125,13 @@ function App() {
 
           <Route
             path="/plans"
-            element={
-              <Navigate
-                replace
-                to={professionalEnabled ? "/professional" : "/data-access"}
-              />
-            }
+            element={<Navigate replace to="/data-access" />}
           />
 
-          {professionalEnabled && (
-            <>
-              <Route
-                path="/professional"
-                element={
-                  <ProfessionalGate>
-                    <CollapseIntelligencePage />
-                  </ProfessionalGate>
-                }
-              />
-
-              <Route
-                path="/professional/login"
-                element={<ProfessionalLoginPage />}
-              />
-
-              <Route
-                path="/professional/account"
-                element={
-                  <ProfessionalGate>
-                    <ProfessionalAccountPage />
-                  </ProfessionalGate>
-                }
-              />
-            </>
-          )}
+          <Route
+            path="/professional/*"
+            element={<Navigate replace to="/data-access" />}
+          />
 
           {accountsEnabled && (
             <Route
@@ -180,7 +140,7 @@ function App() {
             />
           )}
 
-          {accountsEnabled && professionalEnabled && (
+          {accountsEnabled && (
             <Route
               path="/admin"
               element={

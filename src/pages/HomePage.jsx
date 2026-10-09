@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import PageMeta from "../components/layout/PageMeta";
+import PatronageBlock from "../components/institutional/PatronageBlock";
 import ScrollReveal from "../components/motion/ScrollReveal";
 
 import useLanguage from "../context/useLanguage";
@@ -1019,6 +1020,8 @@ export default function HomePage() {
           <Metrics items={text.metrics} />
         </div>
       </section>
+
+      <PatronageBlock />
 
       <section className="home-access-section">
         <div className="home-container">

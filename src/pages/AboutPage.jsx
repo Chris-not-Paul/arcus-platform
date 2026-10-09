@@ -3,12 +3,10 @@ import { Link } from "react-router-dom";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
+import PatronageBlock from "../components/institutional/PatronageBlock";
 
 import useLanguage from "../context/useLanguage";
-import {
-  contactAddresses,
-  professionalEnabled,
-} from "../config/site";
+import { contactAddresses } from "../config/site";
 import {
   arcusOrganization,
   asJsonLdGraph,
@@ -132,18 +130,15 @@ function AboutPage() {
   };
 
   const baseContent = copy[language] || copy.en;
-  const content = professionalEnabled
-    ? baseContent
-    : {
-        ...baseContent,
-        lead: baseContent.lead,
-        pillars: [
-          ...baseContent.pillars,
-          language === "it"
-            ? ["Strumenti Open", "Atlante, Analytics e release scaricabile rendono consultabili record, pattern e limiti senza richiedere un account."]
-            : ["Open tools", "The Atlas, Analytics and downloadable release make records, patterns and limitations accessible without an account."],
-        ],
-      };
+  const content = {
+    ...baseContent,
+    pillars: [
+      ...baseContent.pillars,
+      language === "it"
+        ? ["Strumenti Open", "Atlante, Analytics e release scaricabile rendono consultabili record, pattern e limiti senza richiedere un account."]
+        : ["Open tools", "The Atlas, Analytics and downloadable release make records, patterns and limitations accessible without an account."],
+    ],
+  };
 
   return (
     <main className="about-page" id="main-content">
@@ -185,6 +180,8 @@ function AboutPage() {
           ))}
         </div>
       </section>
+
+      <PatronageBlock detailed />
 
       <section className="about-section about-stewardship">
         <div className="about-container about-split">

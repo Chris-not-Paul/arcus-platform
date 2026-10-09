@@ -18,7 +18,7 @@ function RightsPage() {
         eyebrow: "DIRITTI E RIUSO",
         title: "Un confine chiaro tra software, dati e identità ARCUS",
         lead:
-          "ARCUS rende riutilizzabile la propria release scientifica senza trasformare il codice della piattaforma, il motore Professional o il marchio in risorse liberamente replicabili.",
+          "ARCUS rende riutilizzabile la propria release scientifica senza trasformare il codice della piattaforma, i moduli applicativi o il marchio in risorse liberamente replicabili.",
         updated: "Ultimo aggiornamento: 1 ottobre 2026",
         ownerLabel: "Titolare del software e dell’identità",
         owner: "Christian Paolini — Italia",
@@ -29,7 +29,7 @@ function RightsPage() {
           {
             title: "1. Software della piattaforma",
             paragraphs: [
-              "Il codice sorgente e compilato di ARCUS, l’architettura applicativa, gli script, i componenti dell’interfaccia e il motore Professional sono protetti dal diritto d’autore e restano riservati, salvo i componenti di terze parti disciplinati dalle rispettive licenze.",
+              "Il codice sorgente e compilato di ARCUS, l’architettura applicativa, gli script, i moduli analitici e i componenti dell’interfaccia sono protetti dal diritto d’autore e restano riservati, salvo i componenti di terze parti disciplinati dalle rispettive licenze.",
               "La consultazione del sito non concede il diritto di copiare, distribuire, sublicenziare o realizzare una piattaforma derivata dal software ARCUS. Metodologia pubblica e trasparenza scientifica non equivalgono alla concessione del codice.",
             ],
           },
@@ -68,7 +68,7 @@ function RightsPage() {
         eyebrow: "RIGHTS AND REUSE",
         title: "A clear boundary between ARCUS software, data and identity",
         lead:
-          "ARCUS makes its scientific release reusable without making the platform code, Professional engine or brand freely replicable resources.",
+          "ARCUS makes its scientific release reusable without making the platform code, application modules or brand freely replicable resources.",
         updated: "Last updated: 1 October 2026",
         ownerLabel: "Software and identity rights holder",
         owner: "Christian Paolini — Italy",
@@ -79,7 +79,7 @@ function RightsPage() {
           {
             title: "1. Platform software",
             paragraphs: [
-              "ARCUS source and compiled code, application architecture, scripts, interface components and the Professional engine are protected by copyright and remain reserved, except for third-party components governed by their own licences.",
+              "ARCUS source and compiled code, application architecture, scripts, analytical modules and interface components are protected by copyright and remain reserved, except for third-party components governed by their own licences.",
               "Access to the website does not grant permission to copy, distribute, sublicense or create a derivative platform from ARCUS software. Public methodology and scientific transparency do not amount to a software licence.",
             ],
           },

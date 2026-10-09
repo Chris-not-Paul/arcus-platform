@@ -11,10 +11,7 @@ import PageMeta from "../components/layout/PageMeta";
 import ArcusPageMark from "../components/brand/ArcusPageMark";
 
 import useLanguage from "../context/useLanguage";
-import {
-  contactAddresses,
-  professionalEnabled,
-} from "../config/site";
+import { contactAddresses } from "../config/site";
 import {
   openDownloadUrls,
   openManifest,
@@ -48,11 +45,10 @@ function DataAccessPage() {
       ? {
           label: "ARCUS DATA ACCESS",
           title:
-            "Accesso ai dati, release pubblica e livello Professional.",
+            "Accesso ai dati e release pubblica di ricerca.",
           text:
-            "ARCUS separa la base scientifica pubblica dalla base dati operativa aggiornata. Il layer Open consente consultazione, citazione e analisi trasparente; il livello Professional produce output tecnici controllati senza esporre il database live in bulk.",
+            "ARCUS Open pubblica una base scientifica versionata per consultazione, citazione, didattica e analisi riproducibile, con dati, fonti, tassonomia e controlli di qualità accessibili senza account.",
           openAtlas: "Apri Atlante",
-          openProfessional: "Apri Professional",
           publicTitle: "Layer Open",
           publicText:
             "ARCUS Open Research pubblica una base scientifica curata senza account, con tassonomia, metodologia, audit e download completi.",
@@ -66,15 +62,7 @@ function DataAccessPage() {
           licenseTitle: "Licenza e diritti",
           licenseText:
             "I metadati e le tassonomie prodotti da ARCUS sono rilasciati CC BY-NC 4.0 per il riuso non commerciale. Gli usi commerciali richiedono un’autorizzazione separata; i contenuti collegati di terze parti mantengono i rispettivi diritti.",
-          professionalTitle: "Layer Professional",
-          professionalText:
-            "Il database ARCUS aggiornato alimenta Collapse Intelligence, retrieval di analoghi e evidence package contestuali. Non viene distribuito come copia integrale del DB.",
-          policyTitle: "Regola di accesso",
-          policyText:
-            "Open rende verificabile la base scientifica. Professional applica quella base a un punto progetto, con export contestuali di esposizione ufficiale, analoghi, lezioni e limiti.",
           releaseTitle: "Release pubblica",
-          liveTitle: "Evidence base live",
-          outputTitle: "Output Professional",
           publicItems: [
             [
               "Periodo citabile",
@@ -89,43 +77,14 @@ function DataAccessPage() {
               "Ricerca, citazione, didattica, verifica metodologica e consultazione pubblica.",
             ],
           ],
-          professionalItems: [
-            [
-              "Punto progetto verificato",
-              "Provincia derivata dal punto ed esposizione ufficiale ISPRA/INGV separata dal contesto vicino.",
-            ],
-            [
-              "Lessons from Failures",
-              "Collassi comparabili, forza dell’evidenza, priorità d’indagine oppure astensione.",
-            ],
-            [
-              "Export controllati",
-              "Evidence package contestuale con fonti, provenienza, limiti e avvertenza non prescrittiva.",
-            ],
-          ],
-          policyItems: [
-            [
-              "Nessun bulk dump del live DB",
-              "La release Open e completa; il dataset live inter-release, gli inventari cliente e i risultati operativi restano separati.",
-            ],
-            [
-              "Estratti contestuali",
-              "Gli export Professional sono legati a un punto progetto e alla relativa coorte evidenziale, non alla replica completa del database.",
-            ],
-            [
-              "Fonti dichiarate",
-              "Le fonti pubbliche e i layer territoriali dichiarabili restano tracciabili nel metodo e nei report.",
-            ],
-          ],
         }
       : {
           label: "ARCUS DATA ACCESS",
           title:
-            "Data access, public release and Professional layer.",
+            "Data access and public research release.",
           text:
-            "ARCUS separates the public scientific baseline from the updated operational evidence base. The Open layer supports consultation, citation and transparent analysis; Professional produces controlled technical outputs without exposing the live database in bulk.",
+            "ARCUS Open publishes a versioned scientific baseline for consultation, citation, teaching and reproducible analysis, with data, sources, taxonomy and quality controls available without an account.",
           openAtlas: "Open Atlas",
-          openProfessional: "Open Professional",
           publicTitle: "Open layer",
           publicText:
             "ARCUS Open Research publishes a curated scientific baseline without an account, with taxonomy, methodology, audit and complete downloads.",
@@ -139,15 +98,7 @@ function DataAccessPage() {
           licenseTitle: "License and rights",
           licenseText:
             "ARCUS-authored metadata and taxonomies are released under CC BY-NC 4.0 for non-commercial reuse. Commercial use requires separate permission; linked third-party content retains its original rights.",
-          professionalTitle: "Professional layer",
-          professionalText:
-            "The updated ARCUS database powers Collapse Intelligence, analogue retrieval and contextual evidence packages. It is not distributed as a full database copy.",
-          policyTitle: "Access rule",
-          policyText:
-            "Open makes the scientific base verifiable. Professional applies it to a project point, with contextual exports covering official exposure, analogues, lessons and limitations.",
           releaseTitle: "Public release",
-          liveTitle: "Live evidence base",
-          outputTitle: "Professional outputs",
           publicItems: [
             [
               "Citable period",
@@ -162,46 +113,10 @@ function DataAccessPage() {
               "Research, citation, teaching, methodological review and public consultation.",
             ],
           ],
-          professionalItems: [
-            [
-              "Verified project point",
-              "Point-derived province and official ISPRA/INGV exposure kept separate from nearby context.",
-            ],
-            [
-              "Lessons from Failures",
-              "Comparable collapses, evidence strength, investigation priorities or abstention.",
-            ],
-            [
-              "Controlled exports",
-              "Contextual evidence package with sources, provenance, limits and a non-prescriptive warning.",
-            ],
-          ],
-          policyItems: [
-            [
-              "No live DB bulk dump",
-              "The Open release is complete; the inter-release live dataset, client inventories and operational results remain separate.",
-            ],
-            [
-              "Contextual extracts",
-              "Professional exports are tied to a project point and its evidence cohort, not to a complete database replica.",
-            ],
-            [
-              "Declared sources",
-              "Public sources and declared territorial layers remain traceable in the method and reports.",
-            ],
-          ],
         };
 
-  const pageTitle = !professionalEnabled
-    ? language === "it"
-      ? "Accesso ai dati e release pubblica di ricerca."
-      : "Data access and public research release."
-    : copy.title;
-  const pageText = !professionalEnabled
-    ? language === "it"
-      ? "ARCUS Open pubblica una base scientifica versionata per consultazione, citazione, didattica e analisi riproducibile, con dati, fonti, tassonomia e controlli di qualità accessibili senza account."
-      : "ARCUS Open publishes a versioned scientific baseline for consultation, citation, teaching and reproducible analysis, with data, sources, taxonomy and quality controls available without an account."
-    : copy.text;
+  const pageTitle = copy.title;
+  const pageText = copy.text;
 
   const releaseVersion =
     manifest?.version || "arcus-open-2026.11";
@@ -279,11 +194,6 @@ function DataAccessPage() {
             <Link to="/atlas">{copy.openAtlas}</Link>
             <a href={openDownloadUrls.csv}>CSV</a>
             <a href={openDownloadUrls.geojson}>GeoJSON</a>
-            {professionalEnabled && (
-              <Link to="/professional">
-                {copy.openProfessional}
-              </Link>
-            )}
           </div>
         </div>
       </section>
@@ -386,48 +296,6 @@ function DataAccessPage() {
           </div>
         </div>
       </section>
-
-      {professionalEnabled && <section className="data-access-section dark">
-        <div className="data-access-container data-access-split">
-          <div>
-            <div className="data-access-label">
-              {copy.professionalTitle}
-            </div>
-            <h2>{copy.professionalText}</h2>
-          </div>
-
-          <div className="data-access-card-list data-access-dark-list">
-            {copy.professionalItems.map(([title, text]) => (
-              <article key={title}>
-                <span>{copy.liveTitle}</span>
-                <strong>{title}</strong>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>}
-
-      {professionalEnabled && <section className="data-access-section">
-        <div className="data-access-container data-access-split">
-          <div>
-            <div className="data-access-label">
-              {copy.policyTitle}
-            </div>
-            <h2>{copy.policyText}</h2>
-          </div>
-
-          <div className="data-access-card-list">
-            {copy.policyItems.map(([title, text]) => (
-              <article key={title}>
-                <span>{copy.outputTitle}</span>
-                <strong>{title}</strong>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>}
 
       <Footer />
     </main>
