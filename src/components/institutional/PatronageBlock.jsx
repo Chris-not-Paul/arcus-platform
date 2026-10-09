@@ -11,7 +11,7 @@ function PatronageBlock({ detailed = false }) {
   const copy = language === "it"
     ? {
         label: "Patrocinio istituzionale",
-        prefix: "Con il patrocinio dell’Associazione",
+        prefix: "Con il patrocinio di",
         name: "MASTER",
         fullName: "Materials and Structures, Testing and Research",
         text:
@@ -22,7 +22,7 @@ function PatronageBlock({ detailed = false }) {
       }
     : {
         label: "Institutional patronage",
-        prefix: "Under the patronage of the",
+        prefix: "With the institutional patronage of",
         name: "MASTER Association",
         fullName: "Materials and Structures, Testing and Research",
         text:

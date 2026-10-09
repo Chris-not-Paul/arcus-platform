@@ -16,6 +16,10 @@
   padding: clamp(1.45rem, 3vw, 2.25rem) clamp(1.25rem, 4vw, 3rem);
 }
 
+.arcus-patronage.is-compact .arcus-patronage-inner {
+  padding-block: clamp(1rem, 2vw, 1.45rem);
+}
+
 .arcus-patronage-heading {
   align-items: center;
   display: grid;
@@ -52,7 +56,11 @@
   height: auto;
   max-width: 100%;
   transition: opacity 180ms ease;
-  width: clamp(230px, 28vw, 340px);
+  width: clamp(230px, 28vw, 320px);
+}
+
+.arcus-patronage.is-compact .arcus-patronage-logo {
+  width: clamp(190px, 21vw, 250px);
 }
 
 .arcus-patronage-logo-link:hover .arcus-patronage-logo,

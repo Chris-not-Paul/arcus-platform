@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import useLanguage from "../../context/useLanguage";
 import logoHorizontal from "../../assets/logo/logo-horizontal.svg";
+import masterLogo from "../../assets/institutional/master-logo-transparent.png";
 import { contactAddresses } from "../../config/site";
 
 import "./Footer.css";
@@ -16,6 +17,9 @@ function Footer() {
       copyright:
         "© 2026 Christian Paolini · ARCUS software and identity rights reserved · Open data CC BY-NC 4.0",
       evidencePeriod: "Evidence period 2000-2026",
+      patronage: "Institutional patronage",
+      masterAlt:
+        "MASTER Association — Materials and Structures, Testing and Research",
       groups: [
         {
           label: "Platform",
@@ -51,6 +55,9 @@ function Footer() {
       copyright:
         "© 2026 Christian Paolini · Software e identità ARCUS riservati · Dati Open CC BY-NC 4.0",
       evidencePeriod: "Periodo evidenza 2000-2026",
+      patronage: "Patrocinio istituzionale",
+      masterAlt:
+        "Associazione MASTER — Materials and Structures, Testing and Research",
       groups: [
         {
           label: "Piattaforma",
@@ -100,6 +107,18 @@ function Footer() {
               />
             </Link>
             <p>{text.description}</p>
+
+            <div className="site-footer-patronage">
+              <span>{text.patronage}</span>
+              <a
+                aria-label={text.masterAlt}
+                href="https://associazionemaster.it/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <img alt={text.masterAlt} src={masterLogo} />
+              </a>
+            </div>
           </div>
 
           <nav
