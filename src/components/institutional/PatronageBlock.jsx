@@ -1,4 +1,5 @@
 import useLanguage from "../../context/useLanguage";
+import masterLogo from "../../assets/institutional/master-logo-transparent.png";
 
 import "./PatronageBlock.css";
 
@@ -40,9 +41,18 @@ function PatronageBlock({ detailed = false }) {
         <div className="arcus-patronage-heading">
           <span>{copy.label}</span>
           <p>{copy.prefix}</p>
-          <a href={MASTER_URL} rel="noreferrer" target="_blank">
-            <strong>{copy.name}</strong>
-            <small>{copy.fullName}</small>
+          <a
+            aria-label={`${copy.name} — ${copy.fullName}`}
+            className="arcus-patronage-logo-link"
+            href={MASTER_URL}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              alt={`${copy.name} — ${copy.fullName}`}
+              className="arcus-patronage-logo"
+              src={masterLogo}
+            />
           </a>
         </div>
 

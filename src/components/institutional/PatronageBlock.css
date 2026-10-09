@@ -17,7 +17,7 @@
 }
 
 .arcus-patronage-heading {
-  align-items: baseline;
+  align-items: center;
   display: grid;
   gap: 0.42rem;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -40,32 +40,26 @@
 }
 
 .arcus-patronage-heading > a {
-  align-items: baseline;
+  align-items: center;
   color: inherit;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.85rem;
+  justify-content: flex-start;
   text-decoration: none;
 }
 
-.arcus-patronage-heading strong {
-  color: var(--arcus-night);
-  font-family: var(--arcus-font-display);
-  font-size: clamp(1.35rem, 2vw, 1.8rem);
-  font-weight: 500;
-  letter-spacing: 0.06em;
+.arcus-patronage-logo {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  transition: opacity 180ms ease;
+  width: clamp(230px, 28vw, 340px);
 }
 
-.arcus-patronage-heading small {
-  color: var(--arcus-ink-muted);
-  font-family: var(--arcus-font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.arcus-patronage-logo-link:hover .arcus-patronage-logo,
+.arcus-patronage-logo-link:focus-visible .arcus-patronage-logo {
+  opacity: 0.78;
 }
 
-.arcus-patronage-heading > a:hover strong,
-.arcus-patronage-heading > a:focus-visible strong,
 .arcus-patronage-detail > a:hover,
 .arcus-patronage-detail > a:focus-visible {
   color: var(--arcus-bronze);
@@ -120,6 +114,10 @@
   .arcus-patronage-heading,
   .arcus-patronage.is-detailed .arcus-patronage-inner {
     grid-template-columns: 1fr;
+  }
+
+  .arcus-patronage-logo {
+    width: min(100%, 320px);
   }
 
   .arcus-patronage-detail {
