@@ -17,9 +17,9 @@ function PatronageBlock({ detailed = false }) {
         name: "MASTER",
         fullName: "Materials and Structures, Testing and Research",
         compactTitle:
-          "Un progetto indipendente, con riconoscimento istituzionale.",
+          "Un’infrastruttura di ricerca con riconoscimento istituzionale.",
         compactText:
-          "L’Associazione MASTER patrocina l’intera piattaforma ARCUS. La curatela scientifica e la responsabilità editoriale restano indipendenti.",
+          "Il patrocinio dell’Associazione MASTER riguarda l’intera piattaforma ARCUS e ne riconosce la coerenza con la promozione della sicurezza e della ricerca nell’ingegneria civile.",
         compactAction: "Approfondisci il patrocinio",
         text:
           "Il patrocinio riguarda l’intera piattaforma ARCUS e ne riconosce la coerenza con la promozione della sicurezza e della ricerca nell’ingegneria civile.",
@@ -33,9 +33,9 @@ function PatronageBlock({ detailed = false }) {
         name: "MASTER Association",
         fullName: "Materials and Structures, Testing and Research",
         compactTitle:
-          "An independent project with institutional recognition.",
+          "A research infrastructure with institutional recognition.",
         compactText:
-          "The MASTER Association grants its patronage to the ARCUS platform as a whole. Scientific stewardship and editorial responsibility remain independent.",
+          "The patronage of the MASTER Association covers the ARCUS platform as a whole and recognises its alignment with the promotion of safety and research in civil engineering.",
         compactAction: "About the patronage",
         text:
           "The patronage covers the ARCUS platform as a whole and recognises its alignment with the promotion of safety and research in civil engineering.",
