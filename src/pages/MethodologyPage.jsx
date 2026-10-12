@@ -807,10 +807,10 @@ function MethodologyPage() {
           >
             <img
               alt={language === "it"
-                ? "Veduta aerea del cedimento del Ponte della Motta sul fiume Idice"
-                : "Aerial view of the Ponte della Motta failure over the Idice river"}
+                ? "Ponte della Motta interrotto durante la piena del 17 maggio 2023"
+                : "Ponte della Motta interrupted during the flood of 17 May 2023"}
               loading="lazy"
-              src="/data/event-media/IT23.05.02-motta-post-event-aerial.jpg"
+              src="/data/event-media/IT23.05.02-motta-collapse.jpg"
             />
           </Link>
           <div className="methodology-documentary-copy">
@@ -824,13 +824,13 @@ function MethodologyPage() {
             </h2>
             <p>
               {language === "it"
-                ? "Fotografie, fonti e campi strutturati convivono nella stessa scheda evento. L’immagine documenta il Ponte della Motta dopo il cedimento del 2023."
-                : "Photographs, sources and structured fields coexist in the same event dossier. The image documents Ponte della Motta after the 2023 failure."}
+                ? "Fotografie, fonti e campi strutturati convivono nella stessa scheda evento. L’immagine documenta il Ponte della Motta nel giorno del cedimento del 2023."
+                : "Photographs, sources and structured fields coexist in the same event dossier. The image documents Ponte della Motta on the day of the 2023 failure."}
             </p>
             <Link to="/atlas/events/san-martino-in-argine-2023">
               {language === "it" ? "Apri la scheda documentata" : "Open the documented event"} →
             </Link>
-            <small>Fotografia: Manuel D’Angelo · uso autorizzato ad ARCUS</small>
+            <small>Fotografia: Nick.mon, via Wikimedia Commons, CC BY-SA 4.0</small>
           </div>
         </div>
       </section>

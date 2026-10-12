@@ -140,18 +140,10 @@ for (const asset of vvfWebsiteAssets) {
   assert.equal(asset.original_media_url, null);
 }
 
-const directPermissionAssets = catalog.assets.filter(
-  (asset) => asset.rights_status === "cleared_permission"
-);
-assert.equal(directPermissionAssets.length, 4);
 assert.equal(
-  directPermissionAssets.every(
-    (asset) =>
-      asset.creator === "Manuel D’Angelo" &&
-      asset.license_id === AUTHOR_PERMISSION_LICENSE &&
-      asset.rights_holder === "Manuel D’Angelo"
-  ),
-  true
+  catalog.assets.some((asset) => /Manuel D[’']Angelo/i.test(asset.creator)),
+  false,
+  "Withdrawn photographs must not appear in the public catalog"
 );
 console.log(
   `Event media checks passed (${embeddedCount} embedded assets; ${linkOnlyCount} source-only links).`

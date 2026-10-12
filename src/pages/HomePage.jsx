@@ -747,7 +747,7 @@ export default function HomePage() {
         "Explore the Atlas or download the current ARCUS Open Research release with its citation, schema and declared limitations.",
       documentaryLabel: "Documented event",
       documentaryTitle: "The evidence is visible before it becomes data.",
-      documentaryText: "Ponte Lenzino over the Trebbia river after the October 2020 collapse. The image remains linked to the event record, its sources and its classification.",
+      documentaryText: "The Annone overpass after its October 2016 collapse. The image remains linked to the event record, its sources and its classification.",
       documentaryAction: "Open the event dossier",
     },
     it: {
@@ -963,7 +963,7 @@ export default function HomePage() {
         "Esplora l'Atlante oppure scarica la release ARCUS Open Research corrente con citazione, schema e limiti dichiarati.",
       documentaryLabel: "Evento documentato",
       documentaryTitle: "L’evidenza è visibile prima di diventare dato.",
-      documentaryText: "Il Ponte Lenzino sul fiume Trebbia dopo il crollo dell’ottobre 2020. L’immagine resta collegata alla scheda evento, alle fonti e alla classificazione.",
+      documentaryText: "Il cavalcavia di Annone dopo il crollo dell’ottobre 2016. L’immagine resta collegata alla scheda evento, alle fonti e alla classificazione.",
       documentaryAction: "Apri la scheda evento",
     },
   };
@@ -1071,10 +1071,10 @@ export default function HomePage() {
             <span>{text.documentaryLabel}</span>
             <h2>{text.documentaryTitle}</h2>
             <p>{text.documentaryText}</p>
-            <Link to="/atlas/events/piacenza-2020">
+            <Link to="/atlas/events/annone-ss36-2016">
               {text.documentaryAction} →
             </Link>
-            <small>Fotografia: Manuel D’Angelo · uso autorizzato ad ARCUS</small>
+            <small>Fotografia: Ministero delle infrastrutture e dei trasporti, CC BY 3.0</small>
           </ScrollReveal>
           <ScrollReveal
             as="figure"
@@ -1082,13 +1082,13 @@ export default function HomePage() {
             delay={90}
             variant="soft"
           >
-            <Link to="/atlas/events/piacenza-2020">
+            <Link to="/atlas/events/annone-ss36-2016">
               <img
                 alt={language === "it"
-                  ? "Ponte Lenzino sul fiume Trebbia dopo il crollo del 2020"
-                  : "Ponte Lenzino over the Trebbia river after the 2020 collapse"}
+                  ? "Cavalcavia di Annone dopo il crollo del 2016"
+                  : "Annone overpass after its 2016 collapse"}
                 loading="lazy"
-                src="/data/event-media/IT20.10.04-lenzino-post-collapse.jpg"
+                src="/data/event-media/IT16.10.01-annone-post-collapse.jpg"
               />
             </Link>
           </ScrollReveal>
