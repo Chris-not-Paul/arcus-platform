@@ -35,7 +35,8 @@ const translations = {
 
 function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("arcus-language") || "en";
+    const savedLanguage = localStorage.getItem("arcus-language");
+    return savedLanguage === "en" ? "en" : "it";
   });
 
   useEffect(() => {
@@ -49,7 +50,7 @@ function LanguageProvider({ children }) {
 
   const value = useMemo(() => {
     const dictionary =
-      translations[language] || translations.en;
+      translations[language] || translations.it;
 
     return {
       language,

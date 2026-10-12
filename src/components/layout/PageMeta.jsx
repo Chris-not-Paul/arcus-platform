@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { siteOrigin } from "../../config/site";
+import useLanguage from "../../context/useLanguage";
 
 const socialImageUrl = `${siteOrigin}/arcus-social-card.png`;
 const socialImageAlt = "ARCUS — Bridge Failure Research";
@@ -53,6 +54,7 @@ export default function PageMeta({
   title,
 }) {
   const location = useLocation();
+  const { language } = useLanguage();
   const structuredDataJson = structuredData
     ? JSON.stringify(structuredData)
     : "";
@@ -83,7 +85,7 @@ export default function PageMeta({
     setProperty("og:type", "website");
     setProperty("og:site_name", "ARCUS");
     setProperty("og:url", canonicalUrl);
-    setProperty("og:locale", document.documentElement.lang === "it" ? "it_IT" : "en_GB");
+    setProperty("og:locale", language === "it" ? "it_IT" : "en_GB");
     setProperty("og:image", socialImageUrl);
     setProperty("og:image:secure_url", socialImageUrl);
     setProperty("og:image:type", "image/png");
@@ -112,7 +114,7 @@ export default function PageMeta({
     } else if (structuredDataTag) {
       structuredDataTag.remove();
     }
-  }, [description, location.pathname, noIndex, structuredDataJson, title]);
+  }, [description, language, location.pathname, noIndex, structuredDataJson, title]);
 
   return null;
 }

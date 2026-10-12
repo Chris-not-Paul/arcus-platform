@@ -10,9 +10,10 @@ import "./IntroOverlay.css";
 export default function IntroOverlay({ onFinish }) {
 
   const overlayRef = useRef(null);
-  const preferredLanguage = typeof window !== "undefined"
-    ? window.localStorage.getItem("arcus-language") || document.documentElement.lang
-    : "en";
+  const preferredLanguage = typeof window !== "undefined" &&
+    window.localStorage.getItem("arcus-language") === "en"
+    ? "en"
+    : "it";
 
   useEffect(() => {
 
