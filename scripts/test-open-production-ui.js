@@ -258,7 +258,7 @@ try {
   await mobile.locator(".data-access-release-summary").waitFor();
   await noHorizontalOverflow(mobile);
   assert.match(await mobile.locator(".data-access-release-summary").innerText(), /261/);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /718/);
+  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /929/);
   assert.equal(await mobile.locator(".data-access-resource-card").count(), 10);
 
   await mobile.goto(`${base}/about`);

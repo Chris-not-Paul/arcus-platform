@@ -170,7 +170,7 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.11");
+  assert.equal(manifest.version, "arcus-open-2026.12");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
   assert.equal(manifest.license.url, "https://creativecommons.org/licenses/by-nc/4.0/");
   assert.equal(events.events.length, manifest.event_count);
@@ -181,7 +181,7 @@ check("public release integrity", () => {
     "Manifest limitations must not contain duplicate statements"
   );
   assert.equal(events.events.length, 261);
-  assert.equal(sources.sources.length, 718);
+  assert.equal(sources.sources.length, 929);
   assert.equal(episodes.summary.episode_count, 14);
   assert.equal(episodes.summary.grouped_event_count, 108);
   assert.equal(manifest.resources.episodes, "episodes.json");

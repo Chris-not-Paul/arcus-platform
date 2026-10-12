@@ -271,6 +271,7 @@ function localizedValue(group, value, language) {
       "Official/Technical": "Ufficiale/Tecnica",
       News: "Notizia",
       Scientific: "Scientifica",
+      "Scientific context": "Contesto scientifico",
       primary: "Primaria",
       secondary: "Secondaria",
     },
@@ -477,7 +478,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.11";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.12";
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,

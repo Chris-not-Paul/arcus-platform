@@ -42,10 +42,10 @@ export const christianPaolini = Object.freeze({
 });
 
 export function arcusDataset(manifest = {}) {
-  const version = manifest.version || "arcus-open-2026.11";
+  const version = manifest.version || "arcus-open-2026.12";
   const generatedAt = manifest.generated_at || "2026-10-01T07:00:23.163Z";
   const eventCount = manifest.event_count || 261;
-  const sourceCount = manifest.source_count || 718;
+  const sourceCount = manifest.source_count || 929;
 
   return {
     "@type": "Dataset",

@@ -261,40 +261,40 @@
     },
     {
       "name": "sources",
-      "record_count": 718,
+      "record_count": 929,
       "fields": [
         {
           "field": "access_date",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "event_id",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "language",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "publication_date",
           "type": "string",
-          "populated": 706,
+          "populated": 917,
           "missing": 12,
-          "coverage": 0.9833
+          "coverage": 0.9871
         },
         {
           "field": "source_id",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
@@ -302,36 +302,36 @@
           "field": "source_reference",
           "type": "null",
           "populated": 0,
-          "missing": 718,
+          "missing": 929,
           "coverage": 0
         },
         {
           "field": "source_role",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_title",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_type",
           "type": "string",
-          "populated": 718,
+          "populated": 929,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_url",
           "type": "string",
-          "populated": 713,
+          "populated": 924,
           "missing": 5,
-          "coverage": 0.993
+          "coverage": 0.9946
         }
       ]
     },

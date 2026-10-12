@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: public production release active — `arcus-open-2026.11`
+Status: public production release active — `arcus-open-2026.12`
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -36,7 +36,7 @@ considered operational for the release candidate.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.11`: 261 events and 718 documentary sources. It does not include
+`arcus-open-2026.12`: 261 events and 929 documentary and scientific-context source records. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 

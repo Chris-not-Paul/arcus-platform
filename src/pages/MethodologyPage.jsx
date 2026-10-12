@@ -59,7 +59,7 @@ function MethodologyPage() {
     manifest?.citation?.match(/\b\d{4}-\d{4}\b/)?.[0] ||
     "2000-2026";
   const releaseEventCount = manifest?.event_count ?? 261;
-  const releaseSourceCount = manifest?.source_count ?? 718;
+  const releaseSourceCount = manifest?.source_count ?? 929;
 
   const copy = {
     en: {
@@ -769,7 +769,7 @@ function MethodologyPage() {
 
               <div className="methodology-stat">
                 <span className="methodology-stat-value">{releaseSourceCount}</span>
-                <span className="methodology-stat-label">{language === "it" ? "Fonti documentate" : "Documented sources"}</span>
+                <span className="methodology-stat-label">{language === "it" ? "Record di fonte" : "Source records"}</span>
               </div>
 
               <div className="methodology-stat">

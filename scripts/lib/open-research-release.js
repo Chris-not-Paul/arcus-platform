@@ -19,7 +19,17 @@ import {
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.11";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.12";
+
+const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
+  source_role: "Scientific context",
+  source_type: "Journal Paper",
+  source_title: "Geomorphological risk factors for river bridges",
+  source_url: "https://doi.org/10.1016/j.ijdrr.2025.105607",
+  publication_date: "2025-05-27",
+  access_date: "2026-10-12",
+  language: "EN",
+});
 export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
 
 const OPEN_LICENSE = {
@@ -554,7 +564,18 @@ export function normalizeResearchDataset({
     provinceRegistry,
   }));
   const events = normalizedEvents.map((item) => item.event);
-  const normalizedSources = sourceRows.map((row) => normalizeSource(row, mapping));
+  const articleEventIds = new Set(sourceRows
+    .filter((row) => cleanString(row.source_url)?.toLowerCase().includes("10.1016/j.ijdrr.2025.105607"))
+    .map((row) => cleanString(row.event_id)));
+  const contextualSourceRows = events
+    .filter((event) => event.specific_cause === "Hydraulic" && !articleEventIds.has(event.research_event_id))
+    .map((event) => ({
+      ...HYDRAULIC_CONTEXT_ARTICLE,
+      source_id: `CTX-HYD-${event.research_event_id}`,
+      event_id: event.research_event_id,
+    }));
+  const normalizedSources = [...sourceRows, ...contextualSourceRows]
+    .map((row) => normalizeSource(row, mapping));
   const sources = normalizedSources.map((item) => item.source);
   const warnings = [
     ...normalizedEvents.flatMap((item) => item.warnings),
@@ -819,6 +840,7 @@ export function buildOpenResearchRelease({
       "Source coverage and location precision vary across records.",
       "Needs review is retained as a distinct editorial evidence class.",
       "Third-party source content is not redistributed; links and bibliographic metadata remain subject to provider terms.",
+      "The D'Angelo, Ballio and Ravazzani (2025) article is linked to Hydraulic records as scientific context. Its 2000-2023 study scope does not make it event-specific evidence for every linked record, particularly later events.",
       "Province mismatches are flagged and never silently corrected.",
     ],
     source_workbook_fingerprint: `sha256:${fingerprint}`,
