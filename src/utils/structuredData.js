@@ -1,4 +1,5 @@
 import { siteOrigin } from "../config/site";
+import { canonicalPageUrl } from "./publicPageUrl";
 
 const paperDoi = "https://doi.org/10.1016/j.dib.2025.112375";
 const releaseBaseUrl = `${siteOrigin}/data/open-release`;
@@ -38,7 +39,7 @@ export const christianPaolini = Object.freeze({
     "@type": "Organization",
     name: "IABSE Task Group 1.5 — Performance-Based Design Founded on Lessons from Bridge Failures",
   },
-  url: `${siteOrigin}/about`,
+  url: canonicalPageUrl(siteOrigin, "/about"),
 });
 
 export function arcusDataset(manifest = {}) {
@@ -53,7 +54,7 @@ export function arcusDataset(manifest = {}) {
     name: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
     alternateName: version,
     description: `Versioned research dataset of ${eventCount} documented bridge-collapse events in Italy, including separately identified approach-embankment collapses, connected to ${sourceCount} documentary and scientific-context source records, explicit classifications and geospatial records.`,
-    url: `${siteOrigin}/data-access`,
+    url: canonicalPageUrl(siteOrigin, "/data-access"),
     version,
     dateModified: generatedAt,
     temporalCoverage: "2000/2026",
@@ -133,7 +134,7 @@ export function eventDossierStructuredData(event, relatedSources = []) {
   const name = event.bridge_name
     || (event.bridge_crossing_name ? `Bridge over ${event.bridge_crossing_name}` : null)
     || `Bridge-collapse event in ${event.municipality || event.province || "Italy"}`;
-  const pageUrl = `${siteOrigin}/atlas/events/${encodeURIComponent(event.event_slug)}`;
+  const pageUrl = canonicalPageUrl(siteOrigin, `/atlas/events/${encodeURIComponent(event.event_slug)}`);
   const properties = [
     ["ARCUS event identifier", event.event_id],
     ["Collapse severity", event.collapse_severity],

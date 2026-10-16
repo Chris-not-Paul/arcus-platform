@@ -2,6 +2,12 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { canonicalPagePath, canonicalPageUrl } from "../src/utils/publicPageUrl.js";
+
+assert.equal(canonicalPagePath('/'), '/');
+assert.equal(canonicalPagePath('/atlas'), '/atlas/');
+assert.equal(canonicalPagePath('/atlas/'), '/atlas/');
+assert.equal(canonicalPageUrl('https://www.arcusbridges.org/', '/atlas'), 'https://www.arcusbridges.org/atlas/');
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputRoot = path.join(repositoryRoot, "dist");
@@ -24,6 +30,7 @@ for (const { event, path: eventPath } of eventPages) {
   const html = fs.readFileSync(eventPath, "utf8");
   assert.match(html, new RegExp(event.event_id.replaceAll(".", "\\.")), `missing event ID for ${event.event_slug}`);
   assert.ok(html.includes(`https://www.arcusbridges.org/atlas/events/${event.event_slug}`), `missing canonical URL for ${event.event_slug}`);
+  assert.ok(html.includes(`<link rel="canonical" href="https://www.arcusbridges.org/atlas/events/${event.event_slug}/"`), `canonical must match the served directory URL for ${event.event_slug}`);
   assert.ok(html.includes('id="arcus-static-structured-data"'), `missing JSON-LD for ${event.event_slug}`);
   assert.ok(html.includes('data-arcus-prerendered="true"'), `missing static research content for ${event.event_slug}`);
 }
@@ -31,6 +38,17 @@ for (const { event, path: eventPath } of eventPages) {
 const sitemap = fs.readFileSync(path.join(outputRoot, "sitemap.xml"), "utf8");
 const sitemapUrlCount = (sitemap.match(/<url>/g) || []).length;
 assert.equal(sitemapUrlCount, manifest.event_count + 10, "sitemap must include core pages and every event dossier");
+const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+const atlasHtml = fs.readFileSync(path.join(outputRoot, 'atlas', 'index.html'), 'utf8');
+for (const location of sitemapLocations) {
+  const route = new URL(location).pathname;
+  assert.ok(route.endsWith('/'), `sitemap URL must not point to a slash redirect: ${location}`);
+  const html = fs.readFileSync(path.join(outputRoot, route, 'index.html'), 'utf8');
+  assert.ok(html.includes(`<link rel="canonical" href="${location}"`), `sitemap and canonical disagree: ${location}`);
+  if (route.startsWith('/atlas/events/')) {
+    assert.ok(atlasHtml.includes(`href="${route}"`), `Atlas must link directly to the canonical dossier: ${location}`);
+  }
+}
 
 const robots = fs.readFileSync(path.join(outputRoot, "robots.txt"), "utf8");
 assert.match(robots, /User-agent: OAI-SearchBot\s+Allow: \//);

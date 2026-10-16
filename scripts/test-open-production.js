@@ -148,7 +148,7 @@ check("crawlable public surface", () => {
     "/atlas", "/analytics", "/methodology", "/data-access",
     "/publications", "/contribute", "/about", "/privacy",
   ]) {
-    assert.match(sitemap, new RegExp(`<loc>https://www\\.arcusbridges\\.org${route}</loc>`));
+    assert.match(sitemap, new RegExp(`<loc>https://www\\.arcusbridges\\.org${route}/</loc>`));
   }
   assert.match(robots, /Sitemap: https:\/\/www\.arcusbridges\.org\/sitemap\.xml/);
   assert.match(robots, /Disallow: \/professional/);

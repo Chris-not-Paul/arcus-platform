@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import { siteOrigin } from "../../config/site";
 import useLanguage from "../../context/useLanguage";
+import { canonicalPageUrl } from "../../utils/publicPageUrl";
 
 const socialImageUrl = `${siteOrigin}/arcus-social-card.png`;
 const socialImageAlt = "ARCUS — Bridge Failure Research";
@@ -68,10 +69,7 @@ export default function PageMeta({
     document.title = fullTitle;
 
     setMeta("description", description);
-    const canonicalPath = location.pathname === "/"
-      ? "/"
-      : location.pathname.replace(/\/$/, "");
-    const canonicalUrl = `${siteOrigin}${canonicalPath}`;
+    const canonicalUrl = canonicalPageUrl(siteOrigin, location.pathname);
 
     setMeta("theme-color", "#f3f0e8");
     setMeta("robots", noIndex ? "noindex, nofollow" : "index, follow");

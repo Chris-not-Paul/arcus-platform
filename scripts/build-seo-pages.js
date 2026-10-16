@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../src/config/researchCredits.js";
+import { canonicalPagePath, canonicalPageUrl } from "../src/utils/publicPageUrl.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFile), "..");
@@ -102,7 +103,7 @@ const person = {
   name: "Christian Paolini",
   jobTitle: "Scientific curator and ARCUS project lead",
   email: "research@arcusbridges.org",
-  url: `${siteOrigin}/about`,
+  url: canonicalPageUrl(siteOrigin, "/about"),
 };
 
 const dataset = {
@@ -111,7 +112,7 @@ const dataset = {
   name: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
   alternateName: manifest.version,
   description: `Versioned research dataset of ${manifest.event_count} documented bridge-collapse events in Italy, connected to ${manifest.source_count} documentary sources, explicit classifications and geospatial records.`,
-  url: `${siteOrigin}/data-access`,
+  url: canonicalPageUrl(siteOrigin, "/data-access"),
   version: manifest.version,
   dateModified: manifest.generated_at,
   temporalCoverage: "2000/2026",
@@ -175,8 +176,8 @@ const fallbackStyle = `
 
 function navigation() {
   return `<nav aria-label="Primary">
-    <a href="/atlas">Atlas</a><a href="/analytics">Analytics</a><a href="/methodology">Methodology</a>
-    <a href="/publications">Publications</a><a href="/data-access">Data</a><a href="/contribute">Contribute</a><a href="/about">About</a>
+    <a href="/atlas/">Atlas</a><a href="/analytics/">Analytics</a><a href="/methodology/">Methodology</a>
+    <a href="/publications/">Publications</a><a href="/data-access/">Data</a><a href="/contribute/">Contribute</a><a href="/about/">About</a>
   </nav>`;
 }
 
@@ -189,7 +190,7 @@ function staticShell(content) {
 }
 
 function pageDocument({ canonicalPath, description, graph = [], content, title, type = "website" }) {
-  const canonicalUrl = canonicalPath === "/" ? `${siteOrigin}/` : `${siteOrigin}${canonicalPath}`;
+  const canonicalUrl = canonicalPageUrl(siteOrigin, canonicalPath);
   const fullTitle = title === "ARCUS" ? title : `${title} | ARCUS`;
   let html = template.replace(/<html\s+lang=["'][^"']+["']/, '<html lang="en"');
 
@@ -230,7 +231,7 @@ function webPage(pathname, name, description) {
     "@id": `${siteOrigin}${pathname}#webpage`,
     name,
     description,
-    url: `${siteOrigin}${pathname}`,
+    url: canonicalPageUrl(siteOrigin, pathname),
     isPartOf: { "@id": `${siteOrigin}/#website` },
     publisher: { "@id": `${siteOrigin}/#organization` },
   };
@@ -256,11 +257,11 @@ const corePages = [
       itemListElement: events.map((event, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `${siteOrigin}/atlas/events/${event.event_slug}`,
+        url: canonicalPageUrl(siteOrigin, `/atlas/events/${event.event_slug}`),
         name: eventName(event),
       })),
     }],
-    content: `<p>ARCUS Atlas</p><h1>Documented bridge-collapse events in Italy</h1><p>Browse ${events.length} event records. Each dossier preserves its ARCUS identifier, source links, classifications and declared limits.</p><ul class="arcus-static-grid">${events.map((event) => `<li><a href="/atlas/events/${escapeHtml(event.event_slug)}">${escapeHtml(eventName(event))}</a><br><small>${escapeHtml([event.date, event.municipality, event.province].filter(Boolean).join(" · "))}</small></li>`).join("")}</ul>`,
+    content: `<p>ARCUS Atlas</p><h1>Documented bridge-collapse events in Italy</h1><p>Browse ${events.length} event records. Each dossier preserves its ARCUS identifier, source links, classifications and declared limits.</p><ul class="arcus-static-grid">${events.map((event) => `<li><a href="${escapeHtml(canonicalPagePath(`/atlas/events/${event.event_slug}`))}">${escapeHtml(eventName(event))}</a><br><small>${escapeHtml([event.date, event.municipality, event.province].filter(Boolean).join(" · "))}</small></li>`).join("")}</ul>`,
   },
   {
     path: "/analytics",
@@ -322,7 +323,7 @@ function eventName(event) {
 }
 
 function eventGraph(event, eventSources) {
-  const pageUrl = `${siteOrigin}/atlas/events/${event.event_slug}`;
+  const pageUrl = canonicalPageUrl(siteOrigin, `/atlas/events/${event.event_slug}`);
   const properties = [
     ["ARCUS event identifier", event.event_id],
     ["Collapse severity", event.collapse_severity],
@@ -442,7 +443,7 @@ const sitemapRoutes = [
   ...events.map((event) => `/atlas/events/${event.event_slug}`),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes.map((route) => {
-  const location = route === "/" ? `${siteOrigin}/` : `${siteOrigin}${route}`;
+  const location = canonicalPageUrl(siteOrigin, route);
   return `  <url><loc>${escapeXml(location)}</loc><lastmod>${lastModified}</lastmod></url>`;
 }).join("\n")}\n</urlset>\n`;
 
