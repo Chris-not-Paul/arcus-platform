@@ -11,6 +11,7 @@ import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
 import { contactAddresses } from "../config/site";
+import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
 import { openManifest } from "../utils/apiClient";
 import {
   arcusDataset,
@@ -44,7 +45,7 @@ function PublicationsPage() {
         "The scientific lineage of ARCUS: the peer-reviewed dataset, the evolving Open release and the research objects required to reproduce an analysis.",
       primaryLabel: "Peer-reviewed dataset",
       paperTitle:
-        "Dataset of bridge collapses in Italy from 2000 to 2025",
+        originalDatasetCredits.title,
       paperMeta: "Data in Brief - Elsevier",
       paperAuthors: "Paolini et al.",
       paperText:
@@ -65,8 +66,15 @@ function PublicationsPage() {
       citationGuide: [
         ["Cite the paper", "When discussing the original dataset, its construction and the scientific framework."],
         ["Cite the release", "When using ARCUS records, counts, coordinates, taxonomy or exported files from a specific version."],
-        ["Cite both", "When an analysis uses the current release and also relies on the methodological lineage of the published dataset."],
+        ["Cite the source works", "When using data or classifications derived from earlier studies, cite those works as well as the ARCUS release. An ARCUS record identifier does not replace the original source citation."],
       ],
+      provenanceTitle: "Data provenance and scientific contributions",
+      provenanceOriginal: "Original dataset · collective research",
+      provenanceOriginalText: "The initial ARCUS evidence base draws on the Italian dataset published by the authors below. The underlying collection, analyses and earlier research incorporated into that dataset are collective contributions, not the exclusive work of the ARCUS curator.",
+      provenanceHydraulic: "Hydraulic research and supplementary dataset",
+      provenanceHydraulicText: "For records matched to the authors’ supplementary dataset S3, reused bridge lengths and hydraulic classifications are attributed to that dataset and its associated paper. They are not presented as new ARCUS analyses. A scientific-context citation alone does not confirm every detail of an event.",
+      provenancePlatform: "ARCUS development and curation",
+      provenancePlatformText: "Christian Paolini conceived and developed the ARCUS platform and curates its releases. Subsequent integrations, corrections and editorial reclassifications remain distinct from the source works. Responsibility for changes introduced by ARCUS rests with its curator; citing a work does not imply its authors’ involvement in, or approval of, those changes.",
       resources: [
         ["Methodology", "Validation, classification, taxonomy and known limitations.", "/methodology"],
         ["Public Atlas", "Geospatial reading of documented collapse events and source evidence.", "/atlas"],
@@ -80,7 +88,7 @@ function PublicationsPage() {
         "La linea scientifica di ARCUS: il dataset peer-reviewed, la release Open in evoluzione e gli oggetti di ricerca necessari per riprodurre un’analisi.",
       primaryLabel: "Dataset peer-reviewed",
       paperTitle:
-        "Dataset of bridge collapses in Italy from 2000 to 2025",
+        originalDatasetCredits.title,
       paperMeta: "Data in Brief - Elsevier",
       paperAuthors: "Paolini et al.",
       paperText:
@@ -101,8 +109,15 @@ function PublicationsPage() {
       citationGuide: [
         ["Cita il paper", "Quando descrivi il dataset originario, la sua costruzione e il quadro scientifico."],
         ["Cita la release", "Quando utilizzi record ARCUS, conteggi, coordinate, tassonomia o file esportati da una versione precisa."],
-        ["Cita entrambi", "Quando l’analisi usa la release corrente e richiama anche la linea metodologica del dataset pubblicato."],
+        ["Cita i lavori di provenienza", "Quando utilizzi dati o classificazioni derivati da studi precedenti, cita quei lavori oltre alla release ARCUS. L’identificativo di una scheda ARCUS non sostituisce la citazione della fonte originaria."],
       ],
+      provenanceTitle: "Provenienza dei dati e contributi scientifici",
+      provenanceOriginal: "Dataset originario · ricerca collettiva",
+      provenanceOriginalText: "La base informativa iniziale di ARCUS deriva dal dataset italiano pubblicato dagli autori indicati di seguito. La raccolta, le analisi e le ricerche pregresse confluite in quel dataset costituiscono contributi collettivi, non il lavoro esclusivo del curatore ARCUS.",
+      provenanceHydraulic: "Ricerca idraulica e dataset supplementare",
+      provenanceHydraulicText: "Nei record collegati al dataset supplementare S3 degli autori, le lunghezze e le classificazioni idrauliche riutilizzate sono attribuite a quel dataset e al relativo articolo. Non sono presentate come nuove analisi ARCUS. Una citazione di contesto scientifico, da sola, non conferma ogni dettaglio dell’evento.",
+      provenancePlatform: "Sviluppo e curatela ARCUS",
+      provenancePlatformText: "Christian Paolini ha ideato e sviluppato la piattaforma ARCUS e ne cura le release. Integrazioni, correzioni e riclassificazioni editoriali successive restano distinte dai lavori di provenienza. La responsabilità delle modifiche introdotte da ARCUS è del suo curatore; citare un lavoro non implica il coinvolgimento o l’approvazione dei suoi autori rispetto a tali modifiche.",
       resources: [
         ["Metodologia", "Validazione, classificazione, tassonomia e limiti dichiarati.", "/methodology"],
         ["Atlante pubblico", "Lettura geospaziale degli eventi documentati e delle fonti.", "/atlas"],
@@ -156,7 +171,7 @@ function PublicationsPage() {
             <strong>{content.paperMeta}</strong>
             <p>{content.paperText}</p>
             <dl className="publications-paper-facts">
-              <div><dt>{language === "it" ? "Anno" : "Year"}</dt><dd>2025</dd></div>
+              <div><dt>{language === "it" ? "Anno" : "Year"}</dt><dd>{originalDatasetCredits.year}</dd></div>
               <div><dt>{language === "it" ? "Autori" : "Authors"}</dt><dd>{content.paperAuthors}</dd></div>
               <div><dt>{language === "it" ? "Tipo" : "Type"}</dt><dd>{language === "it" ? "Data article" : "Data article"}</dd></div>
               <div><dt>DOI</dt><dd>10.1016/j.dib.2025.112375</dd></div>
@@ -174,6 +189,30 @@ function PublicationsPage() {
             <span>{content.relationLabel}</span>
             <p>{content.relationText}</p>
           </aside>
+        </div>
+      </section>
+
+      <section className="publications-section publications-provenance" id="scientific-provenance" aria-labelledby="provenance-heading">
+        <div className="publications-container">
+          <h2 id="provenance-heading">{content.provenanceTitle}</h2>
+          <div className="publications-provenance-grid">
+            <article>
+              <h3>{content.provenanceOriginal}</h3>
+              <p>{content.provenanceOriginalText}</p>
+              <p className="publications-provenance-authors">{originalDatasetCredits.authors.join(", ")}</p>
+              <a href={originalDatasetCredits.doi} target="_blank" rel="noreferrer">{originalDatasetCredits.title} ({originalDatasetCredits.year}) →</a>
+            </article>
+            <article>
+              <h3>{content.provenanceHydraulic}</h3>
+              <p className="publications-provenance-authors">{hydraulicResearchCredits.authors.join(", ")}</p>
+              <p>{content.provenanceHydraulicText}</p>
+              <a href={hydraulicResearchCredits.doi} target="_blank" rel="noreferrer">{hydraulicResearchCredits.title} ({hydraulicResearchCredits.year}) →</a>
+            </article>
+            <article>
+              <h3>{content.provenancePlatform}</h3>
+              <p>{content.provenancePlatformText}</p>
+            </article>
+          </div>
         </div>
       </section>
 

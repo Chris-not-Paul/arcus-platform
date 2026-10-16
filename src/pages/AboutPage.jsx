@@ -59,7 +59,7 @@ function AboutPage() {
       stewardshipAffiliation:
         "Member, IABSE Task Group 1.5 — Performance-Based Design Founded on Lessons from Bridge Failures",
       stewardshipText:
-        "ARCUS develops the Italian bridge-collapse dataset published by Paolini et al. into a continuously curated, versioned research infrastructure. Editorial responsibility remains identifiable, while sources, revisions and limitations stay open to inspection.",
+        "ARCUS builds on the collective Italian bridge-collapse dataset published by Paolini et al. and on explicitly credited scientific contributions. Christian Paolini’s role concerns platform development and subsequent ARCUS curation; it does not imply exclusive authorship of the underlying historical data. Sources, revisions and limitations remain open to inspection.",
       stewardshipIndependence:
         "ARCUS is an independent research initiative. This personal scientific role does not imply IABSE sponsorship or endorsement of the platform.",
       stewardshipAction: "Review the scientific lineage",
@@ -113,7 +113,7 @@ function AboutPage() {
       stewardshipAffiliation:
         "Membro dell’IABSE Task Group 1.5 — Performance-Based Design Founded on Lessons from Bridge Failures",
       stewardshipText:
-        "ARCUS sviluppa il dataset italiano sui collassi dei ponti pubblicato da Paolini et al. in un’infrastruttura di ricerca versionata e sottoposta a curatela continua. La responsabilità editoriale resta identificabile, mentre fonti, revisioni e limiti rimangono verificabili.",
+        "ARCUS si basa sul dataset collettivo italiano sui collassi dei ponti pubblicato da Paolini et al. e su contributi scientifici riconosciuti esplicitamente. Il ruolo di Christian Paolini riguarda lo sviluppo della piattaforma e la successiva curatela ARCUS, non la paternità esclusiva dei dati storici sottostanti. Fonti, revisioni e limiti rimangono verificabili.",
       stewardshipIndependence:
         "ARCUS è un’iniziativa di ricerca indipendente. Il ruolo scientifico personale non implica sponsorizzazione o approvazione della piattaforma da parte di IABSE.",
       stewardshipAction: "Consulta la linea scientifica",
@@ -208,7 +208,7 @@ function AboutPage() {
             </a>
             <p>{content.stewardshipText}</p>
             <small>{content.stewardshipIndependence}</small>
-            <Link to="/publications">{content.stewardshipAction} →</Link>
+            <Link to="/publications#scientific-provenance">{content.stewardshipAction} →</Link>
           </article>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { originalDatasetCredits, hydraulicResearchCredits } from "../src/config/researchCredits.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFile), "..");
@@ -285,7 +286,7 @@ const corePages = [
     title: "Publications and Scientific Basis",
     description: "Peer-reviewed publication, current ARCUS release and citation guidance for the ARCUS bridge-collapse research infrastructure.",
     graph: [article, dataset],
-    content: `<p>ARCUS Research</p><h1>Publications and scientific basis</h1><h2>${escapeHtml(article.headline)}</h2><p>Paolini et al. · Data in Brief 64 (2026)</p><p><a href="${paperDoi}">DOI 10.1016/j.dib.2025.112375</a></p><h2>Current Open release</h2><p>${escapeHtml(manifest.citation)}</p>`,
+    content: `<p>ARCUS Research</p><h1>Publications and scientific basis</h1><h2>${escapeHtml(article.headline)}</h2><p>${escapeHtml(originalDatasetCredits.authors.join(", "))} · Data in Brief 64 (2026)</p><p><a href="${paperDoi}">DOI 10.1016/j.dib.2025.112375</a></p><section id="scientific-provenance"><h2>Data provenance and scientific contributions</h2><p>The original dataset and the earlier research incorporated into it are collective contributions, not the exclusive work of the ARCUS curator.</p><h3>${escapeHtml(hydraulicResearchCredits.title)}</h3><p>${escapeHtml(hydraulicResearchCredits.authors.join(", "))} (2025). <a href="${hydraulicResearchCredits.doi}">Article and supplementary dataset S3</a>.</p><p>For matched records, reused lengths and hydraulic classifications are attributed to this work. Scientific-context citations alone do not confirm every event detail.</p><p>Christian Paolini conceived and developed ARCUS and curates its releases. Subsequent ARCUS changes remain distinct from the source works and do not imply their authors’ approval.</p></section><h2>Current Open release</h2><p>${escapeHtml(manifest.citation)}</p>`,
   },
   {
     path: "/contribute",

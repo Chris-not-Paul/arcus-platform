@@ -47,6 +47,12 @@ assert.ok(
 );
 
 const datasetMetadata = JSON.parse(fs.readFileSync(path.join(outputRoot, "dataset.json"), "utf8"));
+const publicationsHtml = fs.readFileSync(path.join(outputRoot, "publications", "index.html"), "utf8");
+for (const author of ["Marco Civera", "Manuel D’Angelo", "Pier Francesco Giordano", "Paolo Borlenghi", "Francesco Ballio", "Bernardino Chiaia", "Maria Pina Limongelli", "Giovanni Ravazzani"]) {
+  assert.ok(publicationsHtml.includes(author), `missing visible scientific credit: ${author}`);
+}
+assert.ok(publicationsHtml.includes('id="scientific-provenance"'), "missing crawlable provenance section");
+assert.ok(publicationsHtml.includes("10.1016/j.ijdrr.2025.105607"), "missing hydraulic research DOI");
 assert.equal(datasetMetadata["@type"], "Dataset");
 assert.equal(datasetMetadata.version, manifest.version);
 assert.ok(fs.existsSync(path.join(outputRoot, "llms.txt")), "llms.txt must be deployed");

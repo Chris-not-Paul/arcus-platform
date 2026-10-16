@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use ARCUS data, cite the exact ARCUS release and the peer-reviewed dataset article as appropriate."
+message: "Cite the exact ARCUS release and the original dataset or source studies relevant to the data used. The ARCUS release attribution identifies platform curation, not exclusive authorship of all underlying historical data."
 title: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026"
 type: dataset
 version: "arcus-open-2026.15"
@@ -45,3 +45,15 @@ references:
         given-names: Bernardino
       - family-names: Limongelli
         given-names: Maria Pina
+  - type: article
+    title: "Geomorphological risk factors for river bridges"
+    doi: 10.1016/j.ijdrr.2025.105607
+    journal: International Journal of Disaster Risk Reduction
+    year: 2025
+    authors:
+      - family-names: D'Angelo
+        given-names: Manuel
+      - family-names: Ballio
+        given-names: Francesco
+      - family-names: Ravazzani
+        given-names: Giovanni

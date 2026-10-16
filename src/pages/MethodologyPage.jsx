@@ -7,6 +7,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
+import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
 import { openManifest } from "../utils/apiClient";
 
 import "../styles/methodology/methodologypage.css";
@@ -1312,6 +1313,13 @@ function MethodologyPage() {
             {content.researchFramework}
           </h2>
 
+          <p className="methodology-body-text">
+            {language === "it"
+              ? "ARCUS distingue il lavoro collettivo del dataset originario, i dati e le classificazioni ripresi da studi successivi e la propria curatela editoriale. Il superamento dei controlli automatici non equivale a una validazione scientifica indipendente di ogni record."
+              : "ARCUS distinguishes the collective work behind the original dataset, data and classifications reused from subsequent studies, and its own editorial curation. Passing automated checks does not constitute independent scientific validation of every record."}
+            {" "}<Link to="/publications#scientific-provenance">{language === "it" ? "Provenienza dei dati e contributi scientifici →" : "Data provenance and scientific contributions →"}</Link>
+          </p>
+
           <a
             className="reference-card"
             href="https://doi.org/10.1016/j.dib.2025.112375"
@@ -1324,8 +1332,7 @@ function MethodologyPage() {
             </div>
 
             <div className="reference-paper-title">
-              Dataset of bridge collapses in Italy
-              from 2000 to 2025
+              {originalDatasetCredits.title}
             </div>
 
             <div className="reference-paper-meta">
@@ -1333,10 +1340,22 @@ function MethodologyPage() {
             </div>
 
             <div className="reference-authors">
-              Paolini et al.
+              {originalDatasetCredits.authors.join(", ")}
             </div>
 
           </a>
+
+          <a className="reference-card" href={hydraulicResearchCredits.doi} target="_blank" rel="noreferrer">
+            <div className="reference-paper-label">{language === "it" ? "Ricerca idraulica e supplemento S3" : "Hydraulic research and supplement S3"}</div>
+            <div className="reference-paper-title">{hydraulicResearchCredits.title}</div>
+            <div className="reference-paper-meta">International Journal of Disaster Risk Reduction · {hydraulicResearchCredits.year}</div>
+            <div className="reference-authors">{hydraulicResearchCredits.authors.join(", ")}</div>
+          </a>
+          <p className="methodology-body-text">
+            {language === "it"
+              ? "Nei casi collegati al dataset S3, lunghezze e classificazioni idrauliche riutilizzate provengono dal lavoro degli autori, non da nuove analisi ARCUS. Una citazione indicata come contesto scientifico non costituisce, da sola, conferma di ogni dettaglio del singolo evento."
+              : "For records matched to dataset S3, reused lengths and hydraulic classifications originate in the authors’ work, not in new ARCUS analyses. A scientific-context citation alone does not confirm every detail of an individual event."}
+          </p>
 
         </div>
 
