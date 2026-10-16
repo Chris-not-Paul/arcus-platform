@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "Cite the exact ARCUS release and the original dataset or source studies relevant to the data used. The ARCUS release attribution identifies platform curation, not exclusive authorship of all underlying historical data."
 title: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026"
 type: dataset
-version: "arcus-open-2026.16"
+version: "arcus-open-2026.17"
 date-released: 2026-10-16
 authors:
   - family-names: Paolini
@@ -20,7 +20,7 @@ keywords:
 identifiers:
   - type: url
     value: "https://www.arcusbridges.org/data/open-release/manifest.json"
-    description: "Machine-readable manifest for release arcus-open-2026.16"
+    description: "Machine-readable manifest for release arcus-open-2026.17"
 references:
   - type: article
     title: "Dataset of Bridge Collapses in Italy Spanning more than 25 years (2000–2025)"

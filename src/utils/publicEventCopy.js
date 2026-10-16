@@ -73,8 +73,8 @@ export function buildPublicEventCopy(event, rawDescription = event.description |
   if (uncertainTextMatches(text, /date|day|giorno/i) || /Date convention|conventional interval|stored .*beginning|day-level/i.test(text)) keys.add("date");
   if (event.exact_location !== true) keys.add("location");
   if (uncertainTextMatches(text, /boundary|municipality|administrative|comune|confine/i)) keys.add("boundary");
-  if (uncertainTextMatches(text, /structur(?:al|e)|configuration|span arrangement|two-span|original.*system|tipologia/i)) keys.add("structure");
-  if (uncertainTextMatches(text, /material|steel versus|concrete.*configuration/i)) keys.add("material");
+  if (uncertainTextMatches(text, /structural (?:type|system|configuration)|configuration|span arrangement|two.span|original.*system|tipologia/i)) keys.add("structure");
+  if (uncertainTextMatches(text, /material|steel versus/i)) keys.add("material");
   if (uncertainTextMatches(text, /mechanism|process|caus(?:e|al)|diagnos|meccanismo/i)) keys.add("process");
   if (/do not .*establish (?:TC|PC)|alone do not establish|not.*qualifying|qualifying.*not|primary.member.*not.*(?:establish|confirm)|(?:extent|passability).*not.*(?:establish|confirm)|not.*(?:extent|passability)|not.*complete.span|not.*severe.*(?:damage|deformation)/i.test(text)) keys.add("damage");
   if (/replacement|reconstructed|ricostruz|sostitutiv/i.test(text)) keys.add("replacement");
@@ -87,7 +87,9 @@ export function buildPublicEventCopy(event, rawDescription = event.description |
   const notes = { it: [], en: [] };
   const specific = specificNotes[event.event_id];
   if (specific) { notes.it.push(specific[0]); notes.en.push(specific[1]); }
-  for (const key of keys) { notes.it.push(noteCatalog[key][0]); notes.en.push(noteCatalog[key][1]); }
+  // A specifically written case note takes precedence over generic cautions;
+  // this avoids duplicating caveats or attributing a clause to the wrong subject.
+  if (!specific) for (const key of keys) { notes.it.push(noteCatalog[key][0]); notes.en.push(noteCatalog[key][1]); }
   const s3 = text.match(/S3 source attribution[^:]*:[\s\S]*?record (P\d+)/i)
     || text.match(/(?:S3|supplementary)[^.;]{0,90}\b(P\d+)\b/i);
   if (s3 && event.event_id !== "IT20.11.04") {

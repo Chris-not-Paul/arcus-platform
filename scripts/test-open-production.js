@@ -170,7 +170,7 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.16");
+  assert.equal(manifest.version, "arcus-open-2026.17");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
   assert.equal(manifest.license.url, "https://creativecommons.org/licenses/by-nc/4.0/");
   assert.equal(events.events.length, manifest.event_count);

@@ -42,7 +42,7 @@ export const christianPaolini = Object.freeze({
 });
 
 export function arcusDataset(manifest = {}) {
-  const version = manifest.version || "arcus-open-2026.16";
+  const version = manifest.version || "arcus-open-2026.17";
   const generatedAt = manifest.generated_at || "2026-10-16";
   const eventCount = manifest.event_count || 260;
   const sourceCount = manifest.source_count || 1057;

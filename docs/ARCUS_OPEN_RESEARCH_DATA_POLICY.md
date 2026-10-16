@@ -1,6 +1,6 @@
 # ARCUS Open Research Data Policy
 
-ARCUS Open Research exposes a curated, revisable evidence base without a mandatory account. The prepared release is `arcus-open-2026.16`, covers 2000-2026, and contains 260 events, 1057 source records, 9 source-supported shared episodes (72 events) and 105 taxonomy entries. Passing automated QA does not certify every historical claim: documentary limitations remain explicit.
+ARCUS Open Research exposes a curated, revisable evidence base without a mandatory account. The prepared release is `arcus-open-2026.17`, covers 2000-2026, and contains 260 events, 1057 source records, 9 source-supported shared episodes (72 events) and 105 taxonomy entries. Passing automated QA does not certify every historical claim: documentary limitations remain explicit.
 
 ## Public data
 

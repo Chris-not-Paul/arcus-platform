@@ -21,7 +21,7 @@ import { readXlsxSheet } from "./xlsx-reader.js";
 import { APPROACH_EXTENSION_STATUSES, collapseScope } from "../../src/utils/approachCollapsePolicy.js";
 import { buildPublicEventCopy } from "../../src/utils/publicEventCopy.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.16";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.17";
 
 const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   source_role: "Scientific context",

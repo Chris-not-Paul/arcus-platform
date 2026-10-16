@@ -4,7 +4,7 @@ import { buildPublicEventCopy } from "../src/utils/publicEventCopy.js";
 
 const read = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 const previous = read("private-data/open/releases/arcus-open-2026.15/events.json").events;
-const current = read("private-data/open/releases/arcus-open-2026.16/events.json").events;
+const current = read("private-data/open/releases/arcus-open-2026.17/events.json").events;
 const oldById = new Map(previous.map((e) => [e.event_id, e]));
 const textFields = new Set(["description", "description_it", "documentary_notes_it", "documentary_notes_en"]);
 assert.equal(current.length, 260);
@@ -20,7 +20,7 @@ for (const e of current) {
   }
   assert.doesNotMatch(e.documentary_notes_it, /\bThe (?:record|historic|bridge)|This record|These source classifications/);
 }
-assert.deepEqual(read("private-data/open/releases/arcus-open-2026.16/sources.json").sources, read("private-data/open/releases/arcus-open-2026.15/sources.json").sources);
+assert.deepEqual(read("private-data/open/releases/arcus-open-2026.17/sources.json").sources, read("private-data/open/releases/arcus-open-2026.15/sources.json").sources);
 const byId = new Map(current.map((e) => [e.event_id, e]));
 assert.match(byId.get("IT14.11.01").documentary_notes_it, /sormonto non è specificato/);
 assert.match(byId.get("IT14.11.01").documentary_notes_it, /giorno esatto.*due campate/);

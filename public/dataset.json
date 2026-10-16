@@ -3,10 +3,10 @@
   "@type": "Dataset",
   "@id": "https://www.arcusbridges.org/data-access#dataset",
   "name": "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
-  "alternateName": "arcus-open-2026.16",
+  "alternateName": "arcus-open-2026.17",
   "description": "Versioned research dataset of 260 documented bridge-collapse events in Italy, connected to 1057 documentary and scientific-context source records, explicit classifications and geospatial records.",
   "url": "https://www.arcusbridges.org/data-access",
-  "version": "arcus-open-2026.16",
+  "version": "arcus-open-2026.17",
   "dateModified": "2026-10-16",
   "temporalCoverage": "2000/2026",
   "spatialCoverage": {

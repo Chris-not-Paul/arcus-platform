@@ -1,6 +1,6 @@
 # ARCUS Data Quality Audit
 
-## Editorial correction — arcus-open-2026.16
+## Editorial correction — arcus-open-2026.17
 
 The scientific data and source registry are unchanged from 2026.15 (260 events, 1057 sources, zero blocking errors and 64 retained warnings). Only the four public prose fields change. `test:public-event-copy` verifies exact equality of all remaining attributes, source rows and event membership. Bilingual documentary notes replace working-log language; this edit does not resolve the retained scientific uncertainties or upgrade evidence classes.
 

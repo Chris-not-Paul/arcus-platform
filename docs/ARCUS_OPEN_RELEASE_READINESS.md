@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: editorial correction candidate — `arcus-open-2026.16` (260 events, 1057 sources; production verification required after publication)
+Status: editorial correction candidate — `arcus-open-2026.17` (260 events, 1057 sources; production verification required after publication)
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -93,7 +93,7 @@ git diff --check
 
 ## Verification log
 
-### 16 October 2026 — editorial correction 2026.16
+### 16 October 2026 — editorial correction 2026.17
 
 - Replaced mixed-language working logs with concise public summaries and separate bilingual documentary notes on every event.
 - No change to scientific fields, source records or the canonical Master; deterministic comparison against 2026.15 passed for all 260 events and 1057 sources.
