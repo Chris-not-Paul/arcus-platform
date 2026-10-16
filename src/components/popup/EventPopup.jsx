@@ -7,7 +7,6 @@ import {
   localizedBridgeDisplayName,
   localizedCrossingName,
   localizedEventDescription,
-  publicRecordDescription,
 } from "../../utils/eventDisplayLabels";
 import taxonomyLabel from "../../utils/taxonomyLabels";
 import { collapseScope, collapseScopeLabel, collapseScopeNote } from "../../utils/approachCollapsePolicy";
@@ -338,7 +337,7 @@ function EventPopup({
     crossing: it ? "Attraversamento" : "Crossing",
     crossingType: it ? "Tipo di attraversamento" : "Crossing type",
     curationLevel: it ? "Livello di curatela" : "Curation level",
-    description: it ? "Descrizione del collasso" : "Record text · original language",
+    description: it ? "Descrizione del record" : "Record description",
     eventDriven: it ? "Evento innescato" : "Event-driven",
     fatalities: it ? "Vittime" : "Fatalities",
     historicalEvidence: it
@@ -483,7 +482,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.15";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.16";
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,
@@ -529,9 +528,7 @@ function EventPopup({
   const territorialContext = territorialResource.data;
   const title = eventTitle(event, language);
   const descriptionText = localizedEventDescription(event, language);
-  const originalDocumentaryNotes = it && !event.description_it
-    ? publicRecordDescription(event.description)
-    : "";
+  const documentaryNotes = it ? event.documentary_notes_it : event.documentary_notes_en;
   const descriptionLimit = 230;
   const hasLongDescription =
     descriptionText.length > descriptionLimit;
@@ -646,6 +643,7 @@ function EventPopup({
     event.hydraulic_intelligence?.evidence_level;
   const evidenceLabel =
     localizedValue("evidence", rawEvidence, language) || text.na;
+  const documentaryReview = event.curation_level === "Needs review" || evidenceTone(rawEvidence) === "review";
   const causalSequence = [
     {
       id: "trigger",
@@ -1205,12 +1203,12 @@ function EventPopup({
                     )}
                     <div className="arcus-event-editorial-copy">
                       <div className="arcus-event-editorial-label">
-                        <span>{evidenceTone(rawEvidence) === "review"
+                        <span>{documentaryReview
                           ? (it ? "Record in verifica" : "Record under review")
                           : (it ? "Record storico" : "Historical record")}</span>
                         <strong>{cause || causeCategory || text.na}</strong>
                       </div>
-                      {evidenceTone(rawEvidence) === "review" && (
+                      {documentaryReview && (
                         <p className="arcus-event-editorial-review" role="note">
                           {it
                             ? "Il record richiede revisione documentale. Leggere le note e le fonti prima di utilizzare la descrizione o l’attribuzione della causa."
@@ -1252,10 +1250,10 @@ function EventPopup({
                           <strong>{event.injuries ?? text.na}</strong>
                         </div>
                       </div>
-                      {originalDocumentaryNotes && (
+                      {documentaryNotes && (
                         <section className="arcus-event-description">
-                          <span>Note documentali e limiti · testo originale</span>
-                          <p>{originalDocumentaryNotes}</p>
+                          <span>{it ? "Note documentali e limiti" : "Documentary notes and limitations"}</span>
+                          <p>{documentaryNotes}</p>
                         </section>
                       )}
                     </div>
@@ -1460,7 +1458,7 @@ function EventPopup({
                           <small className="arcus-event-field-status">
                             <i aria-hidden="true" />
                             {item.availability === "available"
-                              ? (it ? "Documentato" : "Documented")
+                              ? (it ? "Dato riportato" : "Recorded value")
                               : item.availability === "undocumented"
                                 ? text.missingData
                                 : text.notApplicable}

@@ -101,7 +101,8 @@ export function localizedEventDescription(event, language) {
   }
 
   if (event?.description_it) {
-    return [publicRecordDescription(event.description_it), scopeNote].filter(Boolean).join(" ");
+    const localized = publicRecordDescription(event.description_it);
+    return [localized, scopeNote && !localized.includes(scopeNote) ? scopeNote : null].filter(Boolean).join(" ");
   }
 
   const sentences = [];

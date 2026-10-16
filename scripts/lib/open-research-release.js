@@ -19,8 +19,9 @@ import {
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
 import { APPROACH_EXTENSION_STATUSES, collapseScope } from "../../src/utils/approachCollapsePolicy.js";
+import { buildPublicEventCopy } from "../../src/utils/publicEventCopy.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.15";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.16";
 
 const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   source_role: "Scientific context",
@@ -31,7 +32,7 @@ const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   access_date: "2026-10-12",
   language: "EN",
 });
-export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v3";
+export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v4";
 
 const OPEN_LICENSE = {
   id: "CC-BY-NC-4.0",
@@ -336,6 +337,7 @@ function buildDictionary(datasets) {
       "source_reference preserves non-URL source descriptions; source_url contains HTTP/HTTPS URLs only.",
       "approach_extension_status records applicability of ARCUS's operational extension only to documented physical collapse of an embankment directly connected to the bridge. It is not a NYSDOT structural classification, does not assign TC/PC automatically, and is not inferred from component_involved. Not assessed does not mean Not applicable.",
       "collapse_scope is a descriptive grouping derived from component_involved (with Applicable approach_extension_status as fallback only for an unknown component). Approach records remain included in all-event totals. Multiple components, temporary works and unspecified records are separate from bridge_structure. This field does not validate damage or change TC/PC.",
+      "description and description_it are concise public summaries of recorded attributes, not transcriptions of the private working log. documentary_notes_en and documentary_notes_it state source limitations and selected case-specific context in the reader's language. Historical working descriptions remain in the private Master and archived snapshots.",
     ],
   };
 }
@@ -449,6 +451,7 @@ function normalizeEvent(row, context) {
     warnings.push({ code: "invalid_coordinates", event_id: event.event_id });
   }
 
+  Object.assign(event, buildPublicEventCopy({ ...event, event_id: cleanString(row.event_id) }, event.description));
   return { event, warnings: [...warnings, ...hydraulic.warnings] };
 }
 
@@ -901,11 +904,10 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Supersedes earlier ARCUS public releases after curator-reviewed event, source, identity, coordinate and date corrections; excluded records remain in the private Master archive, not the public release.",
-      "Applied reviewed annual Word records and curator decisions; preserved unresolved documentary limitations and existing TC/PC decisions unless individually revised.",
-      "Linked D'Angelo, Ballio and Ravazzani research and dataset provenance to the relevant hydraulic records; scientific-context sources are not treated as independent event confirmation.",
-      "Added derived collapse_scope to distinguish approach embankments, bridge structures, multiple components, temporary works and unspecified scope without changing release membership or TC/PC.",
-      "Aligned bilingual Methodology and dossier presentation with operational approach-collapse criteria, uncertainty and source-specific attribution. Previous ARCUS versions are superseded, not evidence to erase; external DOI repositories are unchanged.",
+      "Editorial correction only: replaced mixed-language working-log descriptions with concise public summaries of recorded attributes and separate Italian/English documentary notes for all 260 records.",
+      "Removed personal review instructions, internal acceptance dates, question-mark placeholders and transcription history from public event text; original working descriptions remain unchanged in the private Master and archived release snapshots.",
+      "Retained documentary uncertainty about dates, crossing identity, damage extent, competing accounts and source-attributed hydraulic classifications in declarative public notes; unknown overtopping is stated as not specified, not silently converted to absence.",
+      "No event membership, identifiers, dates, coordinates, casualties, TC/PC codes, scientific classifications or source records changed from arcus-open-2026.15. Automated field-by-field comparison verifies this boundary.",
     ],
     delta,
   };

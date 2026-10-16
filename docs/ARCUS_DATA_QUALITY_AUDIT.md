@@ -1,5 +1,9 @@
 # ARCUS Data Quality Audit
 
+## Editorial correction — arcus-open-2026.16
+
+The scientific data and source registry are unchanged from 2026.15 (260 events, 1057 sources, zero blocking errors and 64 retained warnings). Only the four public prose fields change. `test:public-event-copy` verifies exact equality of all remaining attributes, source rows and event membership. Bilingual documentary notes replace working-log language; this edit does not resolve the retained scientific uncertainties or upgrade evidence classes.
+
 ## Current candidate — 16 October 2026
 
 `arcus-open-2026.15`: 260 unique events, 1057 unique sources, 105 taxonomy entries, 9 supported shared episodes covering 72 events. Automated structural QA: **0 errors, 64 warnings**. This is structural acceptance, not a blanket scientific validation.

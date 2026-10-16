@@ -87,6 +87,7 @@
     "test:seismic-intake": "node scripts/test-seismic-evidence-intake.js",
     "test:open-release": "node scripts/test-open-research-release.js",
     "test:collapse-scope": "node scripts/test-collapse-scope.js",
+    "test:public-event-copy": "node scripts/test-public-event-copy.js",
     "test:open-production": "npm run build:open && node scripts/test-open-code-boundary.js && node scripts/test-open-production.js && node scripts/test-seo-output.js",
     "test:open-code-boundary": "npm run build:open && node scripts/test-open-code-boundary.js",
     "test:open-production-ui": "node scripts/test-open-production-ui.js",

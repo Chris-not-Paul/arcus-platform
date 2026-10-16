@@ -182,9 +182,9 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.15");
+  assert.equal(manifest.version, "arcus-open-2026.16");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
-  assert.equal(manifest.schema_version, "arcus-open-schema-v3");
+  assert.equal(manifest.schema_version, "arcus-open-schema-v4");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
   assert.equal(
     manifest.license.url,
@@ -199,7 +199,7 @@ await check("morandi-record-is-curated-and-documentary", () => {
   assert.equal(morandi.bridge_crossing_type, "urban area");
   assert.equal(morandi.bridge_crossing_name, "Municipality of Genova");
   assert.equal(morandi.failure_cause_evidence, "Documented");
-  assert.match(morandi.description, /Tribunal of Genoa communication.*first-instance judgment/i);
+  assert.match(morandi.documentary_notes_en, /Tribunal of Genoa communication.*first-instance judgment/i);
   assert.doesNotMatch(morandi.description, /No discrete external trigger/i);
 });
 
@@ -423,7 +423,7 @@ await check("atlas-crossing-name-localization-is-display-only", () => {
 
 await check("italian-event-description-is-complete-and-accented", () => {
   const description = localizedEventDescription(events[0], "it");
-  assert.match(description, /si è verificato/);
+  assert.match(description, /il record descrive/);
   assert.match(description, /L’attribuzione causale/);
   assert.doesNotMatch(description, /\b(Total collapse|Partial collapse|bridge|failure)\b/i);
   assert.equal(localizedEventDescription(events[0], "en"), publicRecordDescription(events[0].description));
@@ -457,7 +457,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.15/);
+  assert.match(citation, /arcus-open-2026\.16/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);

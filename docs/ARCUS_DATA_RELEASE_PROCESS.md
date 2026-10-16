@@ -6,7 +6,7 @@
 MASTER_RESEARCH.xlsx (internal, read-only)
   -> common header-based validation and lossless normalization
      -> Open release candidate + quality gate
-        -> private-data/open/releases/arcus-open-2026.15 (immutable)
+        -> private-data/open/releases/arcus-open-2026.16 (immutable)
         -> public read-only API and downloads
      -> Professional live superset
         -> professional-events.json + professional-sources.json
@@ -27,6 +27,8 @@ Structural errors block publication: duplicate IDs/slugs/sources, orphan sources
 The Professional gate additionally requires Open ID subset integrity and equality of all shared public fields after the explicit `IT`-to-legacy internal ID translation. Professional may add live records or operational attributes without changing the pinned Open release.
 
 ## Versioning and changes
+
+`arcus-open-2026.16` is an editorial-only correction: public descriptions become concise recorded-attribute summaries, with `description_it`, `documentary_notes_en` and `documentary_notes_it`. Source uncertainties and key case-specific conflicts are stated in declarative bilingual notes. The original working descriptions stay unchanged in the private Master and archived 2026.15 snapshot. `test:public-event-copy` compares every scientific field and every source against 2026.15 and rejects any difference outside the four public text fields.
 
 Release `arcus-open-2026.15` is the current publication candidate (260 events, 1057 sources, schema v3). It supersedes earlier ARCUS versions for consultation; only the current static package is included in `dist`. Historical private snapshots and the pre-publication backup remain recoverable. Old hosted previews/deploys must be retired separately, and their retirement must be verified on Netlify. External DOI datasets are outside this process and remain untouched.
 

@@ -1,6 +1,6 @@
 # ARCUS Open Research Data Policy
 
-ARCUS Open Research exposes a curated, revisable evidence base without a mandatory account. The prepared release is `arcus-open-2026.15`, covers 2000-2026, and contains 260 events, 1057 source records, 9 source-supported shared episodes (72 events) and 105 taxonomy entries. Passing automated QA does not certify every historical claim: documentary limitations remain explicit.
+ARCUS Open Research exposes a curated, revisable evidence base without a mandatory account. The prepared release is `arcus-open-2026.16`, covers 2000-2026, and contains 260 events, 1057 source records, 9 source-supported shared episodes (72 events) and 105 taxonomy entries. Passing automated QA does not certify every historical claim: documentary limitations remain explicit.
 
 ## Public data
 
@@ -12,7 +12,7 @@ Source links are published only when valid HTTP/HTTPS URLs. Text references are 
 
 The D'Angelo, Ballio and Ravazzani (2025) article is retained for all 210 Hydraulic events, distinguishing scientific context from reviewed dataset provenance. The additional Lenzino citation is retained after its cause reclassification. Its 2000-2023 study scope is not event-specific evidence for every linked record, especially later events. Author-dataset length/process values may be accepted where crossing identity is matched, even if news sources omit those fields.
 
-`collapse_scope` separates bridge structures, multiple components, approach embankments, temporary works and unspecified scope. Approach collapses remain in the overall total; the operational extension is not literal NYSDOT span-collapse compliance. Unknown casualty counts are not rendered as zero. Italian summaries preserve access to original documentary notes.
+`collapse_scope` separates bridge structures, multiple components, approach embankments, temporary works and unspecified scope. Approach collapses remain in the overall total; the operational extension is not literal NYSDOT span-collapse compliance. Unknown casualty counts are not rendered as zero. Public descriptions are concise summaries of recorded attributes; documentary limitations and selected case context are stated separately in Italian and English. Working instructions, acceptance dates and transcription history remain private, not reader-facing prose. No scientific field or source changed in this editorial-only update from 2026.15.
 
 Earlier ARCUS releases are superseded for current consultation. They remain recoverable in the private archive; no external DOI dataset is modified by this release.
 

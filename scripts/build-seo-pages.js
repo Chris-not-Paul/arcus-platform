@@ -406,7 +406,7 @@ function eventContent(event, eventSources) {
       }).join("")}</ol>`
     : "<p>No documentary source is published for this record in the current release.</p>";
 
-  return `<p>ARCUS Atlas record</p><h1>${escapeHtml(eventName(event))}</h1><p>${escapeHtml(event.description || "Documented bridge-collapse event.")}</p><dl>${fields.map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd>`).join("")}</dl><h2>Sources and scientific context (${eventSources.length})</h2>${sourceItems}<p><a href="/atlas">Return to the Atlas</a> · <a href="/contribute">Propose a correction or new evidence</a></p>`;
+  return `<p>ARCUS Atlas record</p><h1>${escapeHtml(eventName(event))}</h1><p>${escapeHtml(event.description || "Documented bridge-collapse event.")}</p>${event.documentary_notes_en ? `<h2>Documentary notes and limitations</h2><p>${escapeHtml(event.documentary_notes_en)}</p>` : ""}<dl>${fields.map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd>`).join("")}</dl><h2>Sources and scientific context (${eventSources.length})</h2>${sourceItems}<p><a href="/atlas">Return to the Atlas</a> · <a href="/contribute">Propose a correction or new evidence</a></p>`;
 }
 
 for (const page of corePages) {

@@ -380,7 +380,7 @@
     "unit": "published_shared_hazard_episode",
     "version": "arcus-open-shared-episodes-v1"
   },
-  "release": "arcus-open-2026.15",
+  "release": "arcus-open-2026.16",
   "summary": {
     "episode_count": 9,
     "grouped_event_count": 72,

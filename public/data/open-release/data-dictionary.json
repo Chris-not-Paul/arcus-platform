@@ -1,5 +1,5 @@
 {
-  "schema_version": "arcus-open-schema-v3",
+  "schema_version": "arcus-open-schema-v4",
   "datasets": [
     {
       "name": "events",
@@ -104,11 +104,32 @@
           "coverage": 1
         },
         {
+          "field": "description_it",
+          "type": "string",
+          "populated": 260,
+          "missing": 0,
+          "coverage": 1
+        },
+        {
           "field": "destination_use",
           "type": "string",
           "populated": 257,
           "missing": 3,
           "coverage": 0.9885
+        },
+        {
+          "field": "documentary_notes_en",
+          "type": "string",
+          "populated": 251,
+          "missing": 9,
+          "coverage": 0.9654
+        },
+        {
+          "field": "documentary_notes_it",
+          "type": "string",
+          "populated": 251,
+          "missing": 9,
+          "coverage": 0.9654
         },
         {
           "field": "event_id",
@@ -382,6 +403,7 @@
     "construction_year preserves the source value; construction_year_numeric is populated only for an exact four-digit year.",
     "source_reference preserves non-URL source descriptions; source_url contains HTTP/HTTPS URLs only.",
     "approach_extension_status records applicability of ARCUS's operational extension only to documented physical collapse of an embankment directly connected to the bridge. It is not a NYSDOT structural classification, does not assign TC/PC automatically, and is not inferred from component_involved. Not assessed does not mean Not applicable.",
-    "collapse_scope is a descriptive grouping derived from component_involved (with Applicable approach_extension_status as fallback only for an unknown component). Approach records remain included in all-event totals. Multiple components, temporary works and unspecified records are separate from bridge_structure. This field does not validate damage or change TC/PC."
+    "collapse_scope is a descriptive grouping derived from component_involved (with Applicable approach_extension_status as fallback only for an unknown component). Approach records remain included in all-event totals. Multiple components, temporary works and unspecified records are separate from bridge_structure. This field does not validate damage or change TC/PC.",
+    "description and description_it are concise public summaries of recorded attributes, not transcriptions of the private working log. documentary_notes_en and documentary_notes_it state source limitations and selected case-specific context in the reader's language. Historical working descriptions remain in the private Master and archived snapshots."
   ]
 }

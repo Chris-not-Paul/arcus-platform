@@ -39,6 +39,9 @@ const OPEN_EVENT_FIELDS = [
   "construction_year_raw",
   "curation_level",
   "description",
+  "description_it",
+  "documentary_notes_en",
+  "documentary_notes_it",
 ];
 
 const OPEN_SOURCE_FIELDS = [
