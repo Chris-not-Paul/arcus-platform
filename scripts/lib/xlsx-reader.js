@@ -163,8 +163,16 @@ function rowsToObjects(rows) {
         const numericYear = /^\d{4}$/.test(rawText) ? Number(rawText) : null;
         const isYearOnly = numericYear >= 1800 && numericYear <= 2200;
 
-        item[header] = isDateField(header) && raw !== null && /^\d+(\.\d+)?$/.test(rawText) && !isYearOnly
-          ? excelDateToIso(raw)
+        // OOXML permits both numeric serials and native ISO date cells (t="d").
+        // Preserve the same calendar day for midnight timestamps exported by Excel
+        // or the workbook editor; do not reinterpret arbitrary non-midnight times.
+        const isMidnightIsoDate = /^\d{4}-\d{2}-\d{2}T00:00:00(?:\.0+)?(?:Z|\+00:00)?$/.test(rawText);
+        item[header] = isDateField(header) && raw !== null
+          ? /^\d+(\.\d+)?$/.test(rawText) && !isYearOnly
+            ? excelDateToIso(raw)
+            : isMidnightIsoDate
+              ? rawText.slice(0, 10)
+              : raw
           : raw;
       });
 

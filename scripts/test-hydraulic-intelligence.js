@@ -200,29 +200,27 @@ check("no-physical-value-invented", () => {
   assert.equal(unspecified.hydraulic_intelligence.component_involved, null);
 });
 check("event-and-source-counts", () => {
-  assert.equal(events.length, 261);
-  assert.equal(professional.length, 261);
-  assert.equal(sources.length, 929);
+  assert.equal(events.length, 260);
+  assert.equal(professional.length, 260);
+  assert.equal(sources.length, 1057);
 });
 check("audit-counts", () => {
-  assert.equal(audit.hydraulic_events, 211);
-  assert.equal(audit.summary.documented, 127);
-  assert.equal(audit.summary.probable, 46);
-  assert.equal(audit.summary.needs_review, 2);
-  assert.equal(audit.summary.unspecified, 36);
+  assert.equal(audit.hydraulic_events, 210);
+  assert.equal(audit.summary.documented, 145);
+  assert.equal(audit.summary.probable, 14);
+  assert.equal(audit.summary.needs_review, 22);
+  assert.equal(audit.summary.unspecified, 29);
 });
-check("verdura-professional-override-is-probable-and-auditable", () => {
+check("verdura-superseded-override-is-archived-not-applied", async () => {
   const verdura = professional.find((event) => event.event_id === "B13.02.01");
 
   assert.equal(validateHydraulicOutcomeOverrides(overrides).ok, true);
   assert.equal(verdura.hydraulic_intelligence.failure_process, "scour");
-  assert.equal(verdura.hydraulic_intelligence.component_involved, "pier_foundation");
-  assert.equal(verdura.hydraulic_intelligence.evidence_level, "probable");
-  assert.equal(verdura.hydraulic_outcome_curation.status, "accepted_probable_secondary");
-  assert.equal(
-    verdura.hydraulic_outcome_curation.previous_hydraulic_intelligence.failure_process,
-    "other_documented_hydraulic_process"
-  );
+  assert.equal(overrides.overrides.length, 0);
+  assert.equal(overrides.archived_overrides[0].event_id, "B13.02.01");
+  assert.equal(verdura.hydraulic_outcome_curation, undefined);
+  const openVerdura = (await getOpenEvents()).find((event) => event.event_id === "IT13.02.01");
+  assert.deepEqual(verdura.hydraulic_intelligence, openVerdura.hydraulic_intelligence);
 });
 check("hydraulic-override-rejects-source-drift", () => {
   assert.throws(
@@ -230,11 +228,11 @@ check("hydraulic-override-rejects-source-drift", () => {
       {
         event_id: "B13.02.01",
         hydraulic_intelligence: {
-          ...overrides.overrides[0].previous_hydraulic_intelligence,
+          ...overrides.archived_overrides[0].previous_hydraulic_intelligence,
           failure_process: "scour",
         },
       },
-    ], overrides),
+    ], { ...overrides, overrides: overrides.archived_overrides }),
     /source values changed/
   );
 });
@@ -256,10 +254,10 @@ check("open-scope-includes-historical-hydraulic-intelligence", async () => {
   const openEvents = await getOpenEvents();
   const openVerdura = openEvents.find((event) => event.event_id === "IT13.02.01");
 
-  assert.equal(openEvents.length, 261);
+  assert.equal(openEvents.length, 260);
   assert.equal(openEvents.some((event) => event.hydraulic_intelligence?.taxonomy_version === "hydraulic-v2"), true);
   assert.equal(openEvents.some((event) => event.hydraulic_outcome_curation), false);
-  assert.equal(openVerdura.hydraulic_intelligence.failure_process, "other_documented_hydraulic_process");
+  assert.equal(openVerdura.hydraulic_intelligence.failure_process, "scour");
 });
 check("matcher-feature-audit", () => {
   const result = auditMatcherFeatureExclusion();
@@ -271,13 +269,13 @@ check("matcher-feature-audit", () => {
 check("cohort-aggregation", () => {
   const cohort = summarizeHydraulicCohort(events);
 
-  assert.equal(cohort.total_cases, 211);
-  assert.equal(cohort.mechanism_documented_cases, 127);
-  assert.equal(cohort.mechanism_probable_cases, 46);
-  assert.equal(cohort.mechanism_needs_review_cases, 2);
-  assert.equal(cohort.mechanism_unspecified_cases, 36);
+  assert.equal(cohort.total_cases, 210);
+  assert.equal(cohort.mechanism_documented_cases, 145);
+  assert.equal(cohort.mechanism_probable_cases, 14);
+  assert.equal(cohort.mechanism_needs_review_cases, 22);
+  assert.equal(cohort.mechanism_unspecified_cases, 29);
   assert.equal(cohort.failure_processes.some((item) => item.raw_count > 0), true);
-  assert.equal(cohort.effective_evidence_count, 150);
+  assert.equal(cohort.effective_evidence_count, 152);
 });
 check("mitigation-draft-and-external-validation", () => {
   const knowledge = buildMitigationKnowledgeBase(

@@ -1,3 +1,5 @@
+import { collapseScope } from "./approachCollapsePolicy.js";
+
 const OPEN_EVENT_FIELDS = [
   "event_id",
   "event_slug",
@@ -15,6 +17,8 @@ const OPEN_EVENT_FIELDS = [
   "bridge_crossing_name",
   "destination_use",
   "collapse_severity",
+  "collapse_scope",
+  "approach_extension_status",
   "victims",
   "injuries",
   "triggered",
@@ -199,7 +203,7 @@ export function buildOpenEventDossier({
       releaseVersion,
     }),
     permalink,
-    event: selectFields(event, OPEN_EVENT_FIELDS),
+    event: selectFields({ ...event, collapse_scope: collapseScope(event) }, OPEN_EVENT_FIELDS),
     shared_episode: sharedEpisode ? {
       assignment_status: sharedEpisode.assignment_status,
       date_end: sharedEpisode.date_end,

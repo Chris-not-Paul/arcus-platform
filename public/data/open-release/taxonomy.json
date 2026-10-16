@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.12",
+  "release": "arcus-open-2026.15",
   "taxonomy": [
     {
       "field": "NOTE",
@@ -69,12 +69,12 @@
     {
       "field": "collapse_severity",
       "value": "TC",
-      "definition_it": "Collasso totale dell’opera o perdita sostanziale della continuità strutturale."
+      "definition_it": "TC: tutti gli elementi portanti principali di una o più campate hanno subito deformazioni gravi, tanto che nessuna corsia è transitabile. Non richiede il crollo di tutto il ponte. Criterio NYSDOT (2004). Per il solo crollo fisico documentato del rilevato d’accesso direttamente connesso al ponte esiste una distinta estensione operativa ARCUS: vedere la nota dedicata, non attribuirla al NYSDOT."
     },
     {
       "field": "collapse_severity",
       "value": "PC",
-      "definition_it": "Collasso parziale limitato a una porzione dell’opera o a uno o più elementi."
+      "definition_it": "PC: alcuni o tutti gli elementi portanti principali di una o più campate hanno subito deformazioni gravi, mettendo in pericolo chi transita sopra o sotto la struttura, senza soddisfare il criterio TC. Criterio NYSDOT (2004). Per il solo crollo fisico documentato del rilevato d’accesso direttamente connesso al ponte esiste una distinta estensione operativa ARCUS: vedere la nota dedicata, non attribuirla al NYSDOT."
     },
     {
       "field": "structural_type",
@@ -500,6 +500,31 @@
       "field": "location_precision",
       "value": "Grouped / collective location",
       "definition_it": "Più opere documentate collettivamente condividono intenzionalmente la stessa posizione."
+    },
+    {
+      "field": "approach_extension_status",
+      "value": "Applicable",
+      "definition_it": "Crollo fisico documentato del rilevato d’accesso direttamente connesso al ponte. Ammissibile nell’estensione operativa ARCUS, non nella sola definizione strutturale NYSDOT. Lo stato non convalida automaticamente TC/PC o transitabilità."
+    },
+    {
+      "field": "approach_extension_status",
+      "value": "Needs review",
+      "definition_it": "L’applicabilità richiede riscontro sul crollo fisico del rilevato, sul collegamento diretto al ponte o sull’identità della scheda. La sola indicazione Approach embankment non prova il crollo."
+    },
+    {
+      "field": "approach_extension_status",
+      "value": "Not applicable",
+      "definition_it": "Esaminato: non sussiste il crollo fisico del rilevato d’accesso direttamente connesso al ponte richiesto dall’estensione. Non indica necessariamente esclusione da ogni altro criterio strutturale."
+    },
+    {
+      "field": "approach_extension_status",
+      "value": "Not assessed",
+      "definition_it": "Applicabilità dell’estensione non ancora esaminata. Non equivale a Not applicable e non identifica automaticamente un collasso strutturale verificato."
+    },
+    {
+      "field": "NOTE",
+      "value": "Restricted ARCUS approach extension",
+      "definition_it": "Estensione ARCUS, distinta dal NYSDOT, esclusivamente per crollo fisico del rilevato d’accesso direttamente connesso al ponte. TC operativo: perdita totale del rilevato con interruzione fisica di tutte le corsie/intero passaggio, oppure immediato scalzamento e crollo distruttivo della spalla adiacente causato dal crollo del rilevato. PC operativo: crollo parziale, accessibilità fisica residua e pericolo evidente e immediato. Esclusi chiusure precauzionali, allagamenti, erosione senza crollo, danni a strade vicine e cedimento del solo muro di contenimento senza crollo del rilevato. Nessuna deduzione automatica del codice in assenza di prove su danno e transitabilità."
     }
   ]
 }

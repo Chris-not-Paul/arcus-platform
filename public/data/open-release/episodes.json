@@ -49,55 +49,19 @@
     "IT02.06.04": "OEP-FLOOD-20020605-fdc9f67e",
     "IT02.06.05": "OEP-FLOOD-20020623-5124dcd8",
     "IT02.06.06": "OEP-FLOOD-20020623-5124dcd8",
-    "IT02.07.01": "OEP-FLOOD-20020715-bb502b54",
-    "IT02.07.02": "OEP-FLOOD-20020715-bb502b54",
-    "IT02.07.03": "OEP-FLOOD-20020715-bb502b54",
-    "IT05.10.02": "OEP-FLOOD-20051023-f9f39e15",
-    "IT05.10.03": "OEP-FLOOD-20051023-f9f39e15",
-    "IT08.05.01": "OEP-FLOOD-20080528-1a15c824",
-    "IT08.05.02": "OEP-FLOOD-20080528-1a15c824",
+    "IT05.10.02": "OEP-FLOOD-20051022-f9f39e15",
+    "IT05.10.03": "OEP-FLOOD-20051022-f9f39e15",
+    "IT08.05.01": "OEP-FLOOD-20080529-1a15c824",
+    "IT08.05.02": "OEP-FLOOD-20080529-1a15c824",
+    "IT08.10.02": "OEP-FLOOD-20081127-dc6950dc",
+    "IT08.10.03": "OEP-FLOOD-20081127-dc6950dc",
+    "IT08.11.01": "OEP-FLOOD-20081127-dc6950dc",
     "IT09.04.01": "OEP-EARTHQUAKE-20090406-1a73acc8",
     "IT09.04.02": "OEP-EARTHQUAKE-20090406-1a73acc8",
-    "IT11.10.01": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.02": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.03": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.04": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.05": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.06": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.07": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT11.10.08": "OEP-FLOOD-20111025-69ad7c3d",
-    "IT13.11.01": "OEP-FLOOD-20131118-32652c04",
-    "IT13.11.02": "OEP-FLOOD-20131118-32652c04",
-    "IT13.11.03": "OEP-FLOOD-20131118-32652c04",
-    "IT13.11.04": "OEP-FLOOD-20131118-32652c04",
-    "IT13.11.05": "OEP-FLOOD-20131118-32652c04",
-    "IT13.11.06": "OEP-FLOOD-20131118-32652c04",
     "IT15.10.01": "OEP-FLOOD-20151015-df167b7b",
     "IT15.10.02": "OEP-FLOOD-20151015-df167b7b",
     "IT15.10.03": "OEP-FLOOD-20151015-df167b7b",
     "IT15.10.04": "OEP-FLOOD-20151015-df167b7b",
-    "IT17.09.01": "OEP-FLOOD-20170909-684d7088",
-    "IT17.09.02": "OEP-FLOOD-20170909-684d7088",
-    "IT18.10.03": "OEP-FLOOD-20181028-5a203276",
-    "IT18.10.04": "OEP-FLOOD-20181028-5a203276",
-    "IT18.10.05": "OEP-FLOOD-20181028-5a203276",
-    "IT18.10.06": "OEP-FLOOD-20181028-5a203276",
-    "IT18.10.07": "OEP-FLOOD-20181028-5a203276",
-    "IT20.10.01": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.02": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.03": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.05": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.06": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.07": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.08": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.09": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.10": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.14": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.15": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.16": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.17": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.18": "OEP-FLOOD-20201003-b44404d7",
-    "IT20.10.19": "OEP-FLOOD-20201003-b44404d7",
     "IT22.09.01": "OEP-FLOOD-20220915-1bfafb65",
     "IT22.09.02": "OEP-FLOOD-20220915-1bfafb65",
     "IT22.09.03": "OEP-FLOOD-20220915-1bfafb65",
@@ -179,7 +143,7 @@
       ],
       "source_linkage": {
         "linked_event_count": 43,
-        "shared_reference_count": 4
+        "shared_reference_count": 6
       }
     },
     {
@@ -207,7 +171,7 @@
       ],
       "source_linkage": {
         "linked_event_count": 4,
-        "shared_reference_count": 4
+        "shared_reference_count": 2
       }
     },
     {
@@ -238,36 +202,9 @@
     },
     {
       "assignment_status": "supported_by_shared_sources",
-      "date_end": "2002-07-15",
-      "date_start": "2002-07-15",
-      "episode_id": "OEP-FLOOD-20020715-bb502b54",
-      "episode_type": "flood",
-      "event_count": 3,
-      "event_ids": [
-        "IT02.07.01",
-        "IT02.07.02",
-        "IT02.07.03"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "Cuneo"
-      ],
-      "regions": [
-        "Piemonte"
-      ],
-      "source_linkage": {
-        "linked_event_count": 3,
-        "shared_reference_count": 4
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
-      "date_end": "2005-10-23",
-      "date_start": "2005-10-23",
-      "episode_id": "OEP-FLOOD-20051023-f9f39e15",
+      "date_end": "2005-10-22",
+      "date_start": "2005-10-22",
+      "episode_id": "OEP-FLOOD-20051022-f9f39e15",
       "episode_type": "flood",
       "event_count": 2,
       "event_ids": [
@@ -286,14 +223,14 @@
       ],
       "source_linkage": {
         "linked_event_count": 2,
-        "shared_reference_count": 1
+        "shared_reference_count": 6
       }
     },
     {
       "assignment_status": "supported_by_shared_sources",
       "date_end": "2008-05-29",
-      "date_start": "2008-05-28",
-      "episode_id": "OEP-FLOOD-20080528-1a15c824",
+      "date_start": "2008-05-29",
+      "episode_id": "OEP-FLOOD-20080529-1a15c824",
       "episode_type": "flood",
       "event_count": 2,
       "event_ids": [
@@ -313,6 +250,33 @@
       ],
       "source_linkage": {
         "linked_event_count": 2,
+        "shared_reference_count": 2
+      }
+    },
+    {
+      "assignment_status": "supported_by_shared_sources",
+      "date_end": "2008-11-28",
+      "date_start": "2008-11-27",
+      "episode_id": "OEP-FLOOD-20081127-dc6950dc",
+      "episode_type": "flood",
+      "event_count": 3,
+      "event_ids": [
+        "IT08.10.02",
+        "IT08.10.03",
+        "IT08.11.01"
+      ],
+      "grouping_basis": [
+        "documented_date_proximity",
+        "shared_documentary_sources"
+      ],
+      "provinces": [
+        "Nuoro"
+      ],
+      "regions": [
+        "Sardegna"
+      ],
+      "source_linkage": {
+        "linked_event_count": 3,
         "shared_reference_count": 4
       }
     },
@@ -340,72 +304,6 @@
     },
     {
       "assignment_status": "supported_by_shared_sources",
-      "date_end": "2011-10-25",
-      "date_start": "2011-10-25",
-      "episode_id": "OEP-FLOOD-20111025-69ad7c3d",
-      "episode_type": "flood",
-      "event_count": 8,
-      "event_ids": [
-        "IT11.10.01",
-        "IT11.10.02",
-        "IT11.10.03",
-        "IT11.10.04",
-        "IT11.10.05",
-        "IT11.10.06",
-        "IT11.10.07",
-        "IT11.10.08"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "La Spezia",
-        "Massa Carrara"
-      ],
-      "regions": [
-        "Liguria",
-        "Toscana"
-      ],
-      "source_linkage": {
-        "linked_event_count": 8,
-        "shared_reference_count": 4
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
-      "date_end": "2013-11-18",
-      "date_start": "2013-11-18",
-      "episode_id": "OEP-FLOOD-20131118-32652c04",
-      "episode_type": "flood",
-      "event_count": 6,
-      "event_ids": [
-        "IT13.11.01",
-        "IT13.11.02",
-        "IT13.11.03",
-        "IT13.11.04",
-        "IT13.11.05",
-        "IT13.11.06"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "Nuoro",
-        "Olbia",
-        "Sassari"
-      ],
-      "regions": [
-        "Sardegna"
-      ],
-      "source_linkage": {
-        "linked_event_count": 6,
-        "shared_reference_count": 7
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
       "date_end": "2015-10-15",
       "date_start": "2015-10-15",
       "episode_id": "OEP-FLOOD-20151015-df167b7b",
@@ -429,113 +327,7 @@
       ],
       "source_linkage": {
         "linked_event_count": 4,
-        "shared_reference_count": 6
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
-      "date_end": "2017-09-10",
-      "date_start": "2017-09-09",
-      "episode_id": "OEP-FLOOD-20170909-684d7088",
-      "episode_type": "flood",
-      "event_count": 2,
-      "event_ids": [
-        "IT17.09.01",
-        "IT17.09.02"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "Livorno"
-      ],
-      "regions": [
-        "Toscana"
-      ],
-      "source_linkage": {
-        "linked_event_count": 2,
-        "shared_reference_count": 4
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
-      "date_end": "2018-10-30",
-      "date_start": "2018-10-28",
-      "episode_id": "OEP-FLOOD-20181028-5a203276",
-      "episode_type": "flood",
-      "event_count": 5,
-      "event_ids": [
-        "IT18.10.03",
-        "IT18.10.04",
-        "IT18.10.05",
-        "IT18.10.06",
-        "IT18.10.07"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "Cremona",
-        "Trento",
-        "Udine"
-      ],
-      "regions": [
-        "Friuli-Venezia Giulia",
-        "Lombardia",
-        "Trentino-Alto Adige (Trentino-Südtirol)"
-      ],
-      "source_linkage": {
-        "linked_event_count": 5,
-        "shared_reference_count": 4
-      }
-    },
-    {
-      "assignment_status": "supported_by_shared_sources",
-      "date_end": "2020-10-03",
-      "date_start": "2020-10-03",
-      "episode_id": "OEP-FLOOD-20201003-b44404d7",
-      "episode_type": "flood",
-      "event_count": 15,
-      "event_ids": [
-        "IT20.10.01",
-        "IT20.10.02",
-        "IT20.10.03",
-        "IT20.10.05",
-        "IT20.10.06",
-        "IT20.10.07",
-        "IT20.10.08",
-        "IT20.10.09",
-        "IT20.10.10",
-        "IT20.10.14",
-        "IT20.10.15",
-        "IT20.10.16",
-        "IT20.10.17",
-        "IT20.10.18",
-        "IT20.10.19"
-      ],
-      "grouping_basis": [
-        "documented_date_proximity",
-        "shared_documentary_sources"
-      ],
-      "provinces": [
-        "Aosta",
-        "Biella",
-        "Cuneo",
-        "Imperia",
-        "Novara",
-        "Verbania",
-        "Vercelli"
-      ],
-      "regions": [
-        "Liguria",
-        "Piemonte",
-        "Valle d'Aosta (Valle d'Aoste)"
-      ],
-      "source_linkage": {
-        "linked_event_count": 15,
-        "shared_reference_count": 8
+        "shared_reference_count": 3
       }
     },
     {
@@ -588,13 +380,13 @@
     "unit": "published_shared_hazard_episode",
     "version": "arcus-open-shared-episodes-v1"
   },
-  "release": "arcus-open-2026.12",
+  "release": "arcus-open-2026.15",
   "summary": {
-    "episode_count": 14,
-    "grouped_event_count": 108,
+    "episode_count": 9,
+    "grouped_event_count": 72,
     "largest_episode_event_count": 43,
     "by_type": {
-      "flood": 13,
+      "flood": 8,
       "earthquake": 1
     }
   }

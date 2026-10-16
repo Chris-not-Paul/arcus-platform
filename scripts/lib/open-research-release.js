@@ -18,8 +18,9 @@ import {
   STRUCTURAL_TYPE_VALUE_SET,
 } from "../../src/utils/structuralTaxonomy.js";
 import { readXlsxSheet } from "./xlsx-reader.js";
+import { APPROACH_EXTENSION_STATUSES, collapseScope } from "../../src/utils/approachCollapsePolicy.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.12";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.15";
 
 const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   source_role: "Scientific context",
@@ -30,7 +31,7 @@ const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   access_date: "2026-10-12",
   language: "EN",
 });
-export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v2";
+export const OPEN_SCHEMA_VERSION = "arcus-open-schema-v3";
 
 const OPEN_LICENSE = {
   id: "CC-BY-NC-4.0",
@@ -333,6 +334,8 @@ function buildDictionary(datasets) {
       "hydraulic_intelligence describes observed historical outcomes and is not a prediction.",
       "construction_year preserves the source value; construction_year_numeric is populated only for an exact four-digit year.",
       "source_reference preserves non-URL source descriptions; source_url contains HTTP/HTTPS URLs only.",
+      "approach_extension_status records applicability of ARCUS's operational extension only to documented physical collapse of an embankment directly connected to the bridge. It is not a NYSDOT structural classification, does not assign TC/PC automatically, and is not inferred from component_involved. Not assessed does not mean Not applicable.",
+      "collapse_scope is a descriptive grouping derived from component_involved (with Applicable approach_extension_status as fallback only for an unknown component). Approach records remain included in all-event totals. Multiple components, temporary works and unspecified records are separate from bridge_structure. This field does not validate damage or change TC/PC.",
     ],
   };
 }
@@ -410,6 +413,8 @@ function normalizeEvent(row, context) {
         : cleanString(row.bridge_crossing_name),
     destination_use: cleanString(row.destination_use),
     collapse_severity: cleanString(row.collapse_severity),
+    collapse_scope: collapseScope(row),
+    approach_extension_status: cleanString(row.approach_extension_status) || "Not assessed",
     victims: normalizeNumber(row.victims, { integer: true }),
     injuries: normalizeNumber(row.injuries, { integer: true }),
     triggered: normalizeBoolean(row.triggered),
@@ -618,6 +623,10 @@ export function normalizeResearchDataset({
   }));
 
   eventRows.forEach((row) => {
+    const approachStatus = cleanString(row.approach_extension_status);
+    if (approachStatus && !APPROACH_EXTENSION_STATUSES.includes(approachStatus)) {
+      errors.push({ code: "invalid_approach_extension_status", event_id: arcusEventId(row.event_id), value: approachStatus });
+    }
     const value = cleanString(row.structural_type);
 
     if (value && !STRUCTURAL_TYPE_VALUE_SET.has(value)) {
@@ -784,7 +793,13 @@ export function buildOpenResearchRelease({
     causes: countBy(events, (event) => event.specific_cause),
     processes: countBy(events, (event) => event.failure_process),
     components: countBy(events, (event) => event.component_involved),
+    collapse_scope: countBy(events, (event) => event.collapse_scope),
     severity: countBy(events, (event) => event.collapse_severity),
+    approach_extension: {
+      interpretation: "Applicability is assessed separately from TC/PC. Applicable records document physical approach-embankment collapse directly connected to a bridge; they are not proof of structural span collapse. Not assessed records must not be treated as a verified structural-only comparison group.",
+      status: countBy(events, (event) => event.approach_extension_status),
+      applicable_severity: countBy(events.filter((event) => event.approach_extension_status === "Applicable"), (event) => event.collapse_severity),
+    },
     structures: countBy(events, (event) => event.structural_type),
     materials: countBy(events, (event) => event.material_type),
     evidence_level: countBy(
@@ -839,6 +854,7 @@ export function buildOpenResearchRelease({
       "The database describes documented historical events and cannot estimate the probability of future collapse.",
       "Source coverage and location precision vary across records.",
       "Needs review is retained as a distinct editorial evidence class.",
+      "A separately identified ARCUS operational extension covers documented physical collapse of directly connected bridge approach embankments only. It must not be described as literal compliance with NYSDOT structural definitions; applicability and retained TC/PC codes require separate interpretation.",
       "Third-party source content is not redistributed; links and bibliographic metadata remain subject to provider terms.",
       "The D'Angelo, Ballio and Ravazzani (2025) article is linked to Hydraulic records as scientific context. Its 2000-2023 study scope does not make it event-specific evidence for every linked record, particularly later events.",
       "Province mismatches are flagged and never silently corrected.",
@@ -885,9 +901,11 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Changed the licence for ARCUS-authored event metadata and taxonomy definitions from CC BY 4.0 to CC BY-NC 4.0; linked third-party sources retain their original rights and terms.",
-      "Classified event IT18.08.01 (Ponte Morandi) by its dominant urban crossing context while retaining the Polcevera in the documented description and sources.",
-      "Revised the IT18.08.01 narrative to retain only facts and findings explicitly supported by the linked official and scientific sources.",
+      "Supersedes earlier ARCUS public releases after curator-reviewed event, source, identity, coordinate and date corrections; excluded records remain in the private Master archive, not the public release.",
+      "Applied reviewed annual Word records and curator decisions; preserved unresolved documentary limitations and existing TC/PC decisions unless individually revised.",
+      "Linked D'Angelo, Ballio and Ravazzani research and dataset provenance to the relevant hydraulic records; scientific-context sources are not treated as independent event confirmation.",
+      "Added derived collapse_scope to distinguish approach embankments, bridge structures, multiple components, temporary works and unspecified scope without changing release membership or TC/PC.",
+      "Aligned bilingual Methodology and dossier presentation with operational approach-collapse criteria, uncertainty and source-specific attribution. Previous ARCUS versions are superseded, not evidence to erase; external DOI repositories are unchanged.",
     ],
     delta,
   };

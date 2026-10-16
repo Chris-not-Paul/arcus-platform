@@ -20,6 +20,7 @@ import useLanguage from "../context/useLanguage";
 import extractYear from "../utils/extractYear";
 import createStoredZip from "../utils/createStoredZip";
 import { classifyOpenSource } from "../utils/openEventDossier";
+import { collapseScope, collapseScopeLabel } from "../utils/approachCollapsePolicy";
 import {
   openEpisodes,
   openEvents,
@@ -125,6 +126,10 @@ function dateParts(dateValue) {
 }
 
 function derivedDimension(event, dimension, language) {
+  if (dimension === "collapse_scope") {
+    const key = collapseScope(event);
+    return key === "unspecified" ? null : { key, label: collapseScopeLabel(key, language), order: null };
+  }
   const { month, year } = dateParts(event.date);
   const months = language === "it"
     ? ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
@@ -505,6 +510,7 @@ const CHART_DIMENSION_KEYS = Object.freeze([
   "failure_cause_evidence",
   "failure_process",
   "component_involved",
+  "collapse_scope",
   "bridge_age",
 ]);
 
@@ -892,6 +898,7 @@ function AnalyticsPage() {
     { key: "failure_cause_evidence", label: language === "it" ? "Evidenza della causa" : "Cause evidence" },
     { key: "failure_process", label: language === "it" ? "Processo di cedimento" : "Failure process" },
     { key: "component_involved", label: language === "it" ? "Componente coinvolta" : "Component involved" },
+    { key: "collapse_scope", label: language === "it" ? "Ambito del cedimento" : "Failure scope", definition: language === "it" ? "I rilevati d’accesso restano inclusi nel totale. L’ambito distingue la componente registrata, non il livello di evidenza né TC/PC. I record senza componente nota non sono assegnati alla struttura del ponte." : "Approach embankments remain included in the total. Scope groups the recorded component, not evidence quality or TC/PC. Records with unknown components are not assigned to the bridge structure." },
     { key: "bridge_age", label: language === "it" ? "Età al collasso" : "Age at collapse", definition: language === "it" ? "Anno dell’evento meno anno di costruzione; classi in anni e mancanti espliciti." : "Event year minus construction year; age bands in years with explicit missing values." },
   ], [language]);
   const validChartDimension = chartDimensions.some((dimension) => dimension.key === chartDimension)
@@ -1488,7 +1495,7 @@ function AnalyticsPage() {
           filteredEventIds.has(event.event_id) ? "A" : null,
           analysisMode === "comparison" && comparisonEventIds.has(event.event_id) ? "B" : null,
         ].filter(Boolean).join("+");
-        eventMap.set(event.event_id, { cohort_membership: membership || "A", ...event });
+        eventMap.set(event.event_id, { cohort_membership: membership || "A", ...event, collapse_scope: collapseScope(event) });
       });
 
       const packageEvents = [...eventMap.values()];

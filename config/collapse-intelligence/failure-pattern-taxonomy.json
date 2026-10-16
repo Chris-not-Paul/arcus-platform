@@ -835,16 +835,16 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B08.10.02",
-      "failure_pattern": "hydraulic_unspecified",
+      "event_id": "B08.10.03",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
     },
     {
       "confidence": "probable",
-      "event_id": "B08.10.03",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "event_id": "B08.10.02",
+      "failure_pattern": "hydraulic_unspecified",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true
@@ -1491,7 +1491,7 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B16.11.05",
+      "event_id": "B16.11.06",
       "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
@@ -1499,7 +1499,7 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B16.11.06",
+      "event_id": "B16.11.05",
       "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
@@ -1587,19 +1587,19 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B18.08.01",
-      "failure_pattern": "deterioration_or_material_degradation",
-      "primary_cause_family": "deterioration_maintenance",
-      "raw_specific_cause": "Material",
-      "raw_triggered": false
-    },
-    {
-      "confidence": "probable",
       "event_id": "B18.08.02",
       "failure_pattern": "unspecified_total_collapse",
       "primary_cause_family": "unknown_unspecified",
       "raw_specific_cause": "Fire and Explosion",
       "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B18.08.01",
+      "failure_pattern": "deterioration_or_material_degradation",
+      "primary_cause_family": "deterioration_maintenance",
+      "raw_specific_cause": "Material",
+      "raw_triggered": false
     },
     {
       "confidence": "probable",
@@ -1811,14 +1811,6 @@
     },
     {
       "confidence": "probable",
-      "event_id": "B20.10.13",
-      "failure_pattern": "hydraulic_approach_or_embankment_damage",
-      "primary_cause_family": "hydraulic",
-      "raw_specific_cause": "Hydraulic",
-      "raw_triggered": true
-    },
-    {
-      "confidence": "probable",
       "event_id": "B20.10.14",
       "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
@@ -1860,6 +1852,14 @@
     {
       "confidence": "probable",
       "event_id": "B20.10.19",
+      "failure_pattern": "hydraulic_approach_or_embankment_damage",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
+      "event_id": "B20.10.13",
       "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
@@ -2100,9 +2100,9 @@
     {
       "confidence": "probable",
       "event_id": "B22.12.03",
-      "failure_pattern": "deterioration_or_material_degradation",
-      "primary_cause_family": "deterioration_maintenance",
-      "raw_specific_cause": "Material",
+      "failure_pattern": "unspecified_total_collapse",
+      "primary_cause_family": "unknown_unspecified",
+      "raw_specific_cause": "Unspecified",
       "raw_triggered": false
     },
     {
@@ -2147,6 +2147,14 @@
     },
     {
       "confidence": "probable",
+      "event_id": "B23.05.08",
+      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "primary_cause_family": "hydraulic",
+      "raw_specific_cause": "Hydraulic",
+      "raw_triggered": true
+    },
+    {
+      "confidence": "probable",
       "event_id": "B23.05.03",
       "failure_pattern": "hydraulic_approach_or_embankment_damage",
       "primary_cause_family": "hydraulic",
@@ -2172,14 +2180,6 @@
     {
       "confidence": "probable",
       "event_id": "B23.05.06",
-      "failure_pattern": "hydraulic_scour_or_foundation_loss",
-      "primary_cause_family": "hydraulic",
-      "raw_specific_cause": "Hydraulic",
-      "raw_triggered": true
-    },
-    {
-      "confidence": "probable",
-      "event_id": "B23.05.07",
       "failure_pattern": "hydraulic_scour_or_foundation_loss",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
@@ -2284,7 +2284,7 @@
     {
       "confidence": "probable",
       "event_id": "B24.10.03",
-      "failure_pattern": "hydraulic_flood_action_unspecified",
+      "failure_pattern": "hydraulic_debris_obstruction_or_solid_transport",
       "primary_cause_family": "hydraulic",
       "raw_specific_cause": "Hydraulic",
       "raw_triggered": true

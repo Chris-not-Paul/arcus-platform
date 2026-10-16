@@ -1,29 +1,30 @@
 {
-  "version": "arcus-open-2026.12",
-  "generated_at": "2026-10-12T06:43:06.050Z",
+  "version": "arcus-open-2026.15",
+  "generated_at": "2026-10-16T07:16:15.632Z",
   "data_cutoff": "2026-04-02",
-  "event_count": 261,
-  "source_count": 929,
+  "event_count": 260,
+  "source_count": 1057,
   "taxonomy_version": "hydraulic-v2",
-  "schema_version": "arcus-open-schema-v2",
+  "schema_version": "arcus-open-schema-v3",
   "license": {
     "id": "CC-BY-NC-4.0",
     "name": "Creative Commons Attribution-NonCommercial 4.0 International",
     "scope": "ARCUS-authored event metadata and taxonomy definitions. Linked third-party sources remain subject to their original rights and terms.",
     "url": "https://creativecommons.org/licenses/by-nc/4.0/"
   },
-  "citation": "ARCUS Open Research (arcus-open-2026.12). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.12.",
+  "citation": "ARCUS Open Research (arcus-open-2026.15). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.15.",
   "changelog": "changelog.json",
   "known_limitations": [
     "The database describes documented historical events and cannot estimate the probability of future collapse.",
     "Source coverage and location precision vary across records.",
     "Needs review is retained as a distinct editorial evidence class.",
+    "A separately identified ARCUS operational extension covers documented physical collapse of directly connected bridge approach embankments only. It must not be described as literal compliance with NYSDOT structural definitions; applicability and retained TC/PC codes require separate interpretation.",
     "Third-party source content is not redistributed; links and bibliographic metadata remain subject to provider terms.",
     "The D'Angelo, Ballio and Ravazzani (2025) article is linked to Hydraulic records as scientific context. Its 2000-2023 study scope does not make it event-specific evidence for every linked record, particularly later events.",
     "Province mismatches are flagged and never silently corrected.",
     "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges."
   ],
-  "source_workbook_fingerprint": "sha256:946ee2189a920832e68014bbf516ae4f285aa9eb45648d010b4fbd09745b9a39",
+  "source_workbook_fingerprint": "sha256:6123cdd7e3500cd04efc1f72f6f86190dbc276cf8f56ed84c9d2a0a85cb43cb8",
   "access": "public_read_only_no_account_required",
   "resources": {
     "events": "events.json",
@@ -38,6 +39,6 @@
     "geojson": "events.geojson",
     "episodes": "episodes.json"
   },
-  "shared_episode_count": 14,
-  "shared_episode_event_count": 108
+  "shared_episode_count": 9,
+  "shared_episode_event_count": 72
 }

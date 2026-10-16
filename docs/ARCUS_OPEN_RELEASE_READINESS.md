@@ -1,6 +1,6 @@
 # ARCUS Open — release readiness
 
-Status: public production release active — `arcus-open-2026.12`
+Status: local release candidate prepared — `arcus-open-2026.15` (260 events, 1057 sources; production verification required after publication)
 
 Canonical domain: `https://www.arcusbridges.org`
 
@@ -21,9 +21,7 @@ Output directory: `dist`
 
 The Open build disables accounts, the server-backed contribution form and all
 Professional routes. Professional remains available in local/platform builds.
-The public navigation identifies it only as a non-interactive
-`Coming soon / Prossimamente` workstream: no access, registration flow or
-feature promise is exposed.
+The public navigation does not advertise Professional; no access, registration flow or feature promise is exposed.
 
 The Open and platform products also have separate compile-time entry points.
 The deployable Open bundle excludes Professional, administration and account
@@ -36,7 +34,7 @@ considered operational for the release candidate.
 ## Data boundary
 
 The deployable build contains the immutable public release
-`arcus-open-2026.12`: 261 events and 929 documentary and scientific-context source records. It does not include
+`arcus-open-2026.15`: 260 events and 1057 documentary and scientific-context source records. It does not include
 `private-data`, authentication stores, editorial submissions, expert feedback,
 client workspaces or operational backups.
 
@@ -64,7 +62,7 @@ zero events or zero sources.
 - Source documents and photographs retain their own rights unless an item is
   explicitly released under a compatible licence.
 
-## Remaining launch gates
+## Original launch configuration (historical; site is already public)
 
 1. The bilingual privacy notice is implemented at `/privacy`, with Christian
    Paolini as the user-approved data-controller identity. The site owner must
@@ -94,6 +92,17 @@ git diff --check
 ```
 
 ## Verification log
+
+### 16 October 2026 — arcus-open-2026.15
+
+- Candidate: 260 events, 1057 source records, 105 taxonomy entries; 9 shared episodes covering 72 records.
+- Structural gate: zero errors, 64 retained warnings. Documentary review flags remain visible and do not imply technical certification.
+- Open release integrity, shared-field parity, hydraulic provenance, approach policy, scope grouping, production artifacts, SEO output and code boundary: passed.
+- Full public desktop/mobile UI suite: passed, including contribution flow with a mocked submission (not an external delivery test).
+- Targeted UI: approach dossier label, original documentary notes in Italian view, unknown scope, five-category Analytics export and mobile width: passed.
+- Lint and whitespace checks: passed. Canonical Master fingerprint remains unchanged from the accepted source workbook.
+- Earlier public package backed up privately before replacement; historical private release directories retained. Retirement of remote Netlify previews requires authenticated access and separate confirmation of the resulting state.
+- Git publication and live-domain verification must be recorded after deployment, not inferred from this local acceptance.
 
 ### 1 October 2026
 

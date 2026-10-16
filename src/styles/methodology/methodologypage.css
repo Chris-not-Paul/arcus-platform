@@ -826,6 +826,42 @@
   border: 1px solid transparent;
 }
 
+.severity-definitions {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(140,115,93,0.18);
+  color: var(--arcus-ink-soft);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.severity-definitions p {
+  margin: 0 0 10px;
+}
+
+.severity-definitions strong {
+  color: var(--arcus-ink);
+}
+
+.severity-definitions .severity-clarification {
+  color: var(--arcus-ink);
+  font-weight: 600;
+}
+
+.severity-definitions a {
+  color: var(--arcus-clay);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.approach-extension-note {
+  margin-top: 22px;
+}
+
+.approach-extension-note:hover {
+  transform: none;
+}
+
 .taxonomy-material {
   background: rgba(163,126,92,0.12);
   color: var(--arcus-clay);

@@ -1,3 +1,5 @@
+import { approachExtensionNote, collapseScope } from "./approachCollapsePolicy.js";
+
 export function publicRecordDescription(value) {
   // Canonical public references in prose; the source text stays in the release.
   return String(value || "").replace(/\bB(\d{2}\.\d{2}\.\d{2})\b/g, "IT$1");
@@ -92,13 +94,14 @@ function italianCount(value, singular, plural) {
 
 export function localizedEventDescription(event, language) {
   const original = publicRecordDescription(event?.description || "");
+  const scopeNote = approachExtensionNote(event?.approach_extension_status, language);
 
   if (language !== "it") {
-    return original;
+    return [original, scopeNote].filter(Boolean).join(" ");
   }
 
   if (event?.description_it) {
-    return publicRecordDescription(event.description_it);
+    return [publicRecordDescription(event.description_it), scopeNote].filter(Boolean).join(" ");
   }
 
   const sentences = [];
@@ -108,7 +111,11 @@ export function localizedEventDescription(event, language) {
     : event?.province
       ? `in provincia di ${event.province}`
       : "in una località non specificata nel record";
-  const severity = event?.collapse_severity === "TC"
+  const severity = collapseScope(event) === "approach_embankment"
+    ? "cedimento del rilevato d’accesso"
+    : event?.approach_extension_status === "Needs review"
+      ? "evento di cedimento con ambito da verificare"
+      : event?.collapse_severity === "TC"
     ? "crollo totale"
     : event?.collapse_severity === "PC"
       ? "crollo parziale"
@@ -119,6 +126,8 @@ export function localizedEventDescription(event, language) {
   sentences.push(
     `${opening}${bridgeName ? ` che ha interessato l’opera «${bridgeName}»` : " di un ponte"}.`
   );
+  if (scopeNote) sentences.push(scopeNote);
+  if (scopeNote && event?.collapse_severity) sentences.push(`Codice di esito registrato: ${event.collapse_severity}.`);
 
   const cause = italianDescriptionLabels.cause[event?.specific_cause];
   if (cause) {
@@ -143,13 +152,13 @@ export function localizedEventDescription(event, language) {
     sentences.push(`La componente coinvolta è ${component}.`);
   }
 
-  const victims = Number(event?.victims || 0);
-  const injuries = Number(event?.injuries || 0);
+  const victims = event?.victims == null || event.victims === "" ? null : Number(event.victims);
+  const injuries = event?.injuries == null || event.injuries === "" ? null : Number(event.injuries);
   if (victims === 0 && injuries === 0) {
     sentences.push("Nel record non risultano vittime o feriti.");
   } else {
     sentences.push(
-      `Il record riporta ${italianCount(victims, "vittima", "vittime")} e ${italianCount(injuries, "ferito", "feriti")}.`
+      `Il record riporta ${victims == null ? "un numero di vittime non documentato" : italianCount(victims, "vittima", "vittime")} e ${injuries == null ? "un numero di feriti non documentato" : italianCount(injuries, "ferito", "feriti")}.`
     );
   }
 

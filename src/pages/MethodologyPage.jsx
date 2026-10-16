@@ -58,8 +58,8 @@ function MethodologyPage() {
   const releasePeriod =
     manifest?.citation?.match(/\b\d{4}-\d{4}\b/)?.[0] ||
     "2000-2026";
-  const releaseEventCount = manifest?.event_count ?? 261;
-  const releaseSourceCount = manifest?.source_count ?? 929;
+  const releaseEventCount = manifest?.event_count ?? 260;
+  const releaseSourceCount = manifest?.source_count ?? 1057;
 
   const copy = {
     en: {
@@ -156,7 +156,7 @@ function MethodologyPage() {
         {
           code: "DB.01",
           title: "Event severity",
-          text: "Total or partial collapse, used to distinguish structural loss from localized failure or damage.",
+          text: "NYSDOT structural definitions apply to primary span members and passability. A separately identified ARCUS operational extension covers documented physical collapse of directly connected approach embankments only.",
         },
         {
           code: "DB.02",
@@ -387,7 +387,7 @@ function MethodologyPage() {
         {
           code: "DB.01",
           title: "Gravità dell’evento",
-          text: "Collasso totale o parziale, per distinguere perdita strutturale da cedimento o danno localizzato.",
+          text: "Le definizioni strutturali NYSDOT riguardano elementi portanti e transitabilità. Un’estensione operativa ARCUS, identificata separatamente, copre solo il crollo fisico documentato del rilevato d’accesso direttamente connesso al ponte.",
         },
         {
           code: "DB.02",
@@ -565,7 +565,7 @@ function MethodologyPage() {
           "Ogni record attraversa controlli progressivi prima di entrare in una release ARCUS citabile.",
         workflowSteps: [
           ["01", "Individuazione", "Ricerca mirata in fonti istituzionali, tecniche, scientifiche, giornalistiche e locali."],
-          ["02", "Ammissibilità", "Esclusione di demolizioni controllate, soli danneggiamenti e casi privi di riscontro sufficiente."],
+          ["02", "Ammissibilità", "Esclusione di demolizioni controllate, soli danneggiamenti e casi privi di riscontro sufficiente. Il crollo fisico del rilevato d’accesso direttamente connesso al ponte può rientrare nella distinta estensione operativa ARCUS."],
           ["03", "Risoluzione dell’identità", "Allineamento di data, ponte, località e fonti per evitare duplicazioni dello stesso episodio."],
           ["04", "Verifica documentale", "Confronto tra fonti indipendenti e attribuzione del ruolo svolto da ciascuna evidenza."],
           ["05", "Georeferenziazione e classi", "Coordinate WGS84, severità, causa, trigger, processo ed evidenza sono registrati in campi distinti."],
@@ -573,6 +573,19 @@ function MethodologyPage() {
         ],
         taxonomyTitle: "Una tassonomia leggibile e dichiarata",
         severity: "Esito del cedimento",
+        severityDefinitions: [
+          { code: "TC", text: "Tutti gli elementi portanti principali di una o più campate sono gravemente deformati e nessuna corsia è transitabile." },
+          { code: "PC", text: "Alcuni o tutti gli elementi portanti principali sono gravemente deformati e mettono in pericolo chi transita sopra o sotto il ponte, senza soddisfare il criterio TC." },
+        ],
+        severityClarification: "TC non significa necessariamente che sia crollato l'intero ponte. TC/PC è una classificazione editoriale: le decisioni del curatore non sostituiscono la prova tecnica e gli eventuali conflitti restano nelle note. Per intervalli documentati si registra il primo giorno e si conserva il range nella descrizione; mese e anno da soli non giustificano un giorno inventato.",
+        approachExtensionTitle: "Estensione operativa ARCUS: crollo del rilevato d’accesso",
+        approachExtensionDefinitions: [
+          "I crolli dei rilevati d’accesso sono inclusi nel totale ARCUS. L’ambito del cedimento li distingue dalla struttura del ponte nelle schede, nei raggruppamenti di Analytics e nei dati esportati, senza modificare il codice TC/PC.",
+          "Si applica esclusivamente al crollo fisico documentato del rilevato d’accesso direttamente connesso al ponte. Non estende le definizioni NYSDOT: identifica separatamente un esito operativo.",
+          "TC operativo: il crollo totale del rilevato interrompe fisicamente il transito su tutte le corsie o sull’intero passaggio pertinente, oppure provoca l’immediato scalzamento e crollo distruttivo della spalla adiacente.",
+          "PC operativo: il crollo del rilevato è parziale, il passaggio rimane fisicamente accessibile o parzialmente transitabile, ma la perdita dell’opera d’accesso comporta pericolo evidente e immediato per gli utenti.",
+          "Chiusure precauzionali, allagamenti, sola erosione senza crollo e danni a strade vicine non soddisfano il criterio. Il solo cedimento di un muro di contenimento non basta senza prova del crollo del rilevato d’accesso. In assenza di informazioni su danno e transitabilità, TC/PC non viene dedotto automaticamente.",
+        ],
         mechanism: "Presenza del trigger",
         generalCause: "Famiglia causale",
         specificCauses: "Causa specifica prevalente",
@@ -581,7 +594,7 @@ function MethodologyPage() {
         classificationLogicText:
           "Causa, trigger e processo non sono sinonimi. ARCUS conserva inoltre gravità, precisione spaziale e forza documentale per rendere ogni confronto auditabile.",
         classificationAxes: [
-          { code: "DB.01", title: "Esito", text: "Collasso totale o parziale, distinto dal solo danneggiamento non incluso nel perimetro del database." },
+          { code: "DB.01", title: "Esito", text: "Definizioni strutturali NYSDOT, con distinta estensione operativa ARCUS esclusivamente per il crollo fisico del rilevato d’accesso. Stato dell’estensione e TC/PC restano informazioni separate." },
           { code: "DB.02", title: "Trigger", text: "Evento immediato identificabile, come piena, frana, sisma, impatto o sovraccarico; può restare non specificato." },
           { code: "DB.03", title: "Causa e processo", text: "Famiglia causale prevalente e, quando documentato, meccanismo fisico e componente coinvolta." },
           { code: "DB.04", title: "Posizione", text: "Coordinate, territorio amministrativo, precisione e anomalie geografiche sono verificati senza correzioni silenziose." },
@@ -658,7 +671,7 @@ function MethodologyPage() {
         workflowDescription: "Each record passes progressive controls before entering a citable ARCUS release.",
         workflowSteps: [
           ["01", "Discovery", "Targeted searches across institutional, technical, scientific, journalistic and local sources."],
-          ["02", "Eligibility", "Controlled demolitions, damage-only cases and events without sufficient corroboration are excluded."],
+          ["02", "Eligibility", "Controlled demolitions, damage-only cases and events without sufficient corroboration are excluded. Physical collapse of a directly connected bridge approach embankment may qualify under the separately identified ARCUS operational extension."],
           ["03", "Identity resolution", "Date, bridge, place and sources are aligned to prevent duplicate records for the same episode."],
           ["04", "Evidence review", "Independent sources are compared and the role of each item of evidence is recorded."],
           ["05", "Geolocation and classes", "WGS84 coordinates, severity, cause, trigger, process and evidence are stored in separate fields."],
@@ -666,13 +679,26 @@ function MethodologyPage() {
         ],
         taxonomyTitle: "A declared, readable taxonomy",
         severity: "Failure outcome",
+        severityDefinitions: [
+          { code: "TC", text: "All primary load-bearing members of one or more affected spans are severely deformed, leaving no travel lane passable." },
+          { code: "PC", text: "All or some primary members are severely deformed, endangering people on or beneath the bridge, without meeting the TC criterion." },
+        ],
+        severityClarification: "TC does not require the entire bridge to collapse. TC/PC is an editorial classification: curator decisions do not replace technical evidence, and conflicts remain in the notes. For documented date ranges, the first day is stored and the range retained in the description; a month and year alone do not justify inventing a day.",
+        approachExtensionTitle: "ARCUS operational extension: approach-embankment collapse",
+        approachExtensionDefinitions: [
+          "Approach-embankment collapses are included in the ARCUS total. Failure scope distinguishes them from bridge-structure records in dossiers, Analytics groupings and exported data without changing TC/PC.",
+          "Applies exclusively to documented physical collapse of an approach embankment directly connected to the bridge. This is a separately identified operational outcome, not an extension of the NYSDOT definitions themselves.",
+          "Operational TC: complete embankment collapse physically interrupts all lanes or the entire relevant passage, or immediately undermines and destructively collapses the adjacent abutment.",
+          "Operational PC: partial embankment collapse leaves the crossing physically accessible or partly passable, but loss of the approach creates evident and immediate danger to users.",
+          "Precautionary closure, inundation, erosion without physical collapse and damage to nearby roads do not qualify. Retaining-wall failure alone is insufficient without evidence of approach-embankment collapse. TC/PC is not inferred automatically when damage extent or passability is unknown.",
+        ],
         mechanism: "Trigger presence",
         generalCause: "Cause family",
         specificCauses: "Prevalent specific cause",
         classificationLogicTitle: "Five axes prevent a complex event from being compressed into one label.",
         classificationLogicText: "Cause, trigger and process are not synonyms. ARCUS also preserves severity, spatial precision and documentary strength so comparisons remain auditable.",
         classificationAxes: [
-          { code: "DB.01", title: "Outcome", text: "Total or partial collapse, kept distinct from damage-only cases outside the database scope." },
+          { code: "DB.01", title: "Outcome", text: "NYSDOT structural definitions, with a separately identified ARCUS operational extension exclusively for physical approach-embankment collapse. Extension applicability and TC/PC remain separate information." },
           { code: "DB.02", title: "Trigger", text: "An identifiable immediate event such as flood, landslide, earthquake, impact or overload; it may remain unspecified." },
           { code: "DB.03", title: "Cause and process", text: "Prevalent cause family and, when documented, physical process and component involved." },
           { code: "DB.04", title: "Location", text: "Coordinates, administrative context, precision and geographic anomalies are checked without silent corrections." },
@@ -977,6 +1003,19 @@ function MethodologyPage() {
                 <span>{language === "it" ? "TC · Collasso totale" : "TC · Total collapse"}</span>
                 <span>{language === "it" ? "PC · Collasso parziale" : "PC · Partial collapse"}</span>
               </div>
+              <div className="severity-definitions">
+                {content.severityDefinitions.map((item) => (
+                  <p key={item.code}><strong>{item.code}</strong> {item.text}</p>
+                ))}
+                <p className="severity-clarification">{content.severityClarification}</p>
+                <a
+                  href="https://www.dot.ny.gov/portal/pls/portal/mexis_app.pa_ei_eb_admin_app.show_pdf?id=13447"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {language === "it" ? "Definizioni strutturali NYSDOT" : "NYSDOT structural definitions"}
+                </a>
+              </div>
             </div>
 
             <div className="classification-card">
@@ -1047,6 +1086,12 @@ function MethodologyPage() {
 
           </div>
 
+          <div className="classification-card approach-extension-note">
+            <h3 className="classification-title">{content.approachExtensionTitle}</h3>
+            <div className="severity-definitions">
+              {content.approachExtensionDefinitions.map((text) => <p key={text}>{text}</p>)}
+            </div>
+          </div>
         </div>
 
       </section>

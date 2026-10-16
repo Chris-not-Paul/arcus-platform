@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.12",
+  "release": "arcus-open-2026.15",
   "mappings": [
     {
       "event_id": "IT00.01.01",
@@ -576,9 +576,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT09.04.03",
-      "legacy_event_id": "B09.04.03",
-      "event_slug": "scoppito-2009",
+      "event_id": "IT26.04.01",
+      "legacy_event_id": "B26.04.01",
+      "event_slug": "montenero-di-bisaccia-2026",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
@@ -593,13 +593,6 @@
       "event_id": "IT09.05.01",
       "legacy_event_id": "B09.05.01",
       "event_slug": "gela-2009",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
-      "event_id": "IT09.12.01",
-      "legacy_event_id": "B09.12.01",
-      "event_slug": "palagano-2009",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
@@ -1164,9 +1157,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT18.02.01",
-      "legacy_event_id": "B18.02.01",
-      "event_slug": "forli-2018",
+      "event_id": "IT18.10.08",
+      "legacy_event_id": "B18.10.08",
+      "event_slug": "ravenna-san-bartolo-2018",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
@@ -1423,6 +1416,13 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
+      "event_id": "IT20.10.20",
+      "legacy_event_id": "B20.10.20",
+      "event_slug": "borghetto-ubaga-2020",
+      "legacy_compatible": true,
+      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
+    },
+    {
       "event_id": "IT20.11.01",
       "legacy_event_id": "B20.11.01",
       "event_slug": "pallanzeno-2020",
@@ -1591,13 +1591,6 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT22.10.01",
-      "legacy_event_id": "B22.10.01",
-      "event_slug": "novara-2022",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
       "event_id": "IT22.11.01",
       "legacy_event_id": "B22.11.01",
       "event_slug": "laino-castello-2022",
@@ -1696,9 +1689,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT23.05.07",
-      "legacy_event_id": "B23.05.07",
-      "event_slug": "fontanelice-santerno-2023",
+      "event_id": "IT23.05.08",
+      "legacy_event_id": "B23.05.08",
+      "event_slug": "riolo-terme-ponte-dei-crivellari-2023",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
@@ -1822,9 +1815,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT26.04.01",
-      "legacy_event_id": "B26.04.01",
-      "event_slug": "montenero-di-bisaccia-2026",
+      "event_id": "IT09.04.05",
+      "legacy_event_id": "B09.04.05",
+      "event_slug": "l-aquila-belvedere-2009",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     }

@@ -53,10 +53,37 @@ const professionalSourceRows = Array.isArray(professionalSources)
   : professionalSources.sources || [];
 
 await check("open-counts", () => {
-  assert.equal(events.length, 261);
-  assert.equal(sources.length, 929);
-  assert.equal(manifest.event_count, 261);
-  assert.equal(manifest.source_count, 929);
+  assert.equal(events.length, 260);
+  assert.equal(sources.length, 1057);
+  assert.equal(manifest.event_count, 260);
+  assert.equal(manifest.source_count, 1057);
+});
+
+await check("disputed-event-records-are-not-public", () => {
+  const excludedIds = new Set(["IT04.05.01", "IT19.08.01", "IT23.05.07", "IT22.10.01", "IT09.12.01", "IT18.02.01", "IT09.04.03"]);
+  assert.equal(events.some((event) => excludedIds.has(event.event_id)), false);
+  assert.equal(sources.some((source) => excludedIds.has(source.event_id)), false);
+  assert.equal(
+    events.some((event) => event.event_slug === "fontanelice-santerno-2023"),
+    false
+  );
+});
+
+await check("bavera-and-two-distinct-borgo-rivola-bridges", () => {
+  const bavera = events.find((event) => event.event_id === "IT16.11.04");
+  const crivellari = events.find((event) => event.event_id === "IT23.05.08");
+  const footbridge = events.find((event) => event.event_id === "IT23.09.01");
+
+  assert.equal(bavera?.collapse_severity, "PC");
+  assert.equal(crivellari?.date, "2023-05-17");
+  assert.equal(crivellari?.collapse_severity, "TC");
+  assert.equal(crivellari?.specific_cause, "Hydraulic");
+  assert.equal(crivellari?.exact_location, false);
+  assert.equal(footbridge?.date, "2023-09-07");
+  assert.equal(footbridge?.specific_cause, "Design and Construction");
+  assert.notEqual(crivellari?.event_slug, footbridge?.event_slug);
+  assert.equal(sources.some((source) => source.event_id === crivellari.event_id), true);
+  assert.equal(sources.some((source) => source.event_id === footbridge.event_id), true);
 });
 
 await check("hydraulic-article-linked-once-per-hydraulic-event", () => {
@@ -65,10 +92,11 @@ await check("hydraulic-article-linked-once-per-hydraulic-event", () => {
     .filter((event) => event.specific_cause === "Hydraulic")
     .map((event) => event.event_id));
   const articleSources = sources.filter((source) => source.source_url === doi);
-  assert.equal(articleSources.length, hydraulicIds.size);
-  assert.equal(new Set(articleSources.map((source) => source.event_id)).size, hydraulicIds.size);
-  assert.equal(articleSources.every((source) => hydraulicIds.has(source.event_id)), true);
-  assert.equal(articleSources.every((source) => source.source_role === "Scientific context"), true);
+  assert.equal(new Set(articleSources.map((source) => source.event_id)).size, articleSources.length);
+  assert.equal([...hydraulicIds].every((id) => articleSources.some((source) => source.event_id === id)), true);
+  assert.equal(articleSources.every((source) => ["Scientific context", "Scientific"].includes(source.source_role)), true);
+  assert.equal(articleSources.filter((source) => source.source_id.startsWith("CTX-HYD-")).every((source) => source.source_role === "Scientific context"), true);
+  assert.equal(articleSources.some((source) => source.event_id === "IT20.10.04" && source.source_role === "Scientific"), true, "Keep reviewed S3 provenance for reclassified Lenzino");
 });
 
 await check("static-open-release-fallback-matches-promoted-release", () => {
@@ -98,13 +126,13 @@ await check("shared-episodes-are-source-supported-and-public-safe", () => {
   const memberships = episodes.episodes.flatMap((episode) => episode.event_ids);
 
   assert.equal(episodes.release, manifest.version);
-  assert.equal(episodes.summary.episode_count, 14);
-  assert.equal(episodes.summary.grouped_event_count, 108);
-  assert.equal(episodes.summary.by_type.flood, 13);
+  assert.equal(episodes.summary.episode_count, 9);
+  assert.equal(episodes.summary.grouped_event_count, 72);
+  assert.equal(episodes.summary.by_type.flood, 8);
   assert.equal(episodes.summary.by_type.earthquake, 1);
   assert.equal(manifest.resources.episodes, "episodes.json");
-  assert.equal(manifest.shared_episode_count, 14);
-  assert.equal(manifest.shared_episode_event_count, 108);
+  assert.equal(manifest.shared_episode_count, 9);
+  assert.equal(manifest.shared_episode_event_count, 72);
   assert.equal(new Set(memberships).size, memberships.length);
   assert.equal(memberships.every((eventId) => eventIds.has(eventId)), true);
   assert.equal(episodes.episodes.every((episode) => episode.event_count > 1), true);
@@ -125,18 +153,18 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
     (event) => event.hydraulic_geometry.provenance.source_record_id
   );
 
-  assert.equal(geometryEvents.length, 159);
+  assert.equal(geometryEvents.length, 153);
   assert.equal(
     geometryEvents.filter(
       (event) => event.hydraulic_geometry.bridge_length_m !== null
     ).length,
-    159
+    153
   );
   assert.equal(
     geometryEvents.filter(
       (event) => event.hydraulic_geometry.piers_in_active_riverbed !== null
     ).length,
-    156
+    149
   );
   assert.equal(new Set(sourceRecordIds).size, sourceRecordIds.length);
   assert.equal(
@@ -154,9 +182,9 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.12");
+  assert.equal(manifest.version, "arcus-open-2026.15");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
-  assert.equal(manifest.schema_version, "arcus-open-schema-v2");
+  assert.equal(manifest.schema_version, "arcus-open-schema-v3");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
   assert.equal(
     manifest.license.url,
@@ -171,7 +199,7 @@ await check("morandi-record-is-curated-and-documentary", () => {
   assert.equal(morandi.bridge_crossing_type, "urban area");
   assert.equal(morandi.bridge_crossing_name, "Municipality of Genova");
   assert.equal(morandi.failure_cause_evidence, "Documented");
-  assert.match(morandi.description, /first-instance court press release/i);
+  assert.match(morandi.description, /Tribunal of Genoa communication.*first-instance judgment/i);
   assert.doesNotMatch(morandi.description, /No discrete external trigger/i);
 });
 
@@ -222,10 +250,10 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 });
 
 await check("taxonomy-and-evidence-classes", () => {
-  assert.equal(taxonomy.taxonomy.length, 100);
-  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 3);
-  assert.equal(events.filter((event) => event.failure_process).length, 216);
-  assert.equal(events.filter((event) => event.component_involved).length, 213);
+  assert.equal(taxonomy.taxonomy.length, 105);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 32);
+  assert.equal(events.filter((event) => event.failure_process).length, 207);
+  assert.equal(events.filter((event) => event.component_involved).length, 216);
   assert.equal(
     events.filter((event) => event.failure_process === null)
       .every((event) => event.hydraulic_intelligence?.failure_process === null || !event.hydraulic_intelligence),
@@ -246,9 +274,9 @@ await check("structural-types-use-resistant-systems-only", () => {
     [...publishedValues].every((value) => STRUCTURAL_TYPE_VALUES.includes(value)),
     true
   );
-  assert.equal(events.filter((event) => event.structural_type === null).length, 6);
-  assert.equal(events.filter((event) => event.structural_type === "Beam bridge").length, 225);
-  assert.equal(events.filter((event) => event.structural_type === "Arch bridge").length, 21);
+  assert.equal(events.filter((event) => event.structural_type === null).length, 34);
+  assert.equal(events.filter((event) => event.structural_type === "Beam bridge").length, 184);
+  assert.equal(events.filter((event) => event.structural_type === "Arch bridge").length, 33);
   assert.equal(publishedValues.has("Viaduct"), false);
   assert.equal(publishedValues.has("Overpass"), false);
   assert.equal(publishedValues.has("Masonry"), false);
@@ -256,7 +284,7 @@ await check("structural-types-use-resistant-systems-only", () => {
 
 await check("url-reference-separation", () => {
   assert.equal(sources.every((source) => !source.source_url || /^https?:\/\//.test(source.source_url)), true);
-  assert.equal(sources.filter((source) => source.source_reference).length, 0);
+  assert.equal(sources.filter((source) => source.source_reference).length, 1);
 });
 
 await check("year-only-publication-does-not-invent-date", () => {
@@ -270,7 +298,7 @@ await check("territorial-audit", () => {
   assert.equal(audit.status, "passed");
   assert.equal(audit.errors.length, 0);
   assert.equal(audit.territorial_warnings.some((item) => item.province_raw === "Ivrea"), true);
-  assert.equal(audit.territorial_warnings.some((item) => item.province_raw === "Caltanisetta"), true);
+  assert.equal(audit.territorial_warnings.some((item) => item.province_raw === "Caltanisetta"), false);
 });
 
 await check("open-contains-no-private-customer-fields", () => {
@@ -281,8 +309,8 @@ await check("open-contains-no-private-customer-fields", () => {
 
 await check("professional-is-decoupled-live-resource", () => {
   assert.notEqual(professionalEvents.events, events);
-  assert.equal(professionalEventRows.length >= 261, true);
-  assert.equal(professionalSourceRows.length >= 929, true);
+  assert.equal(professionalEventRows.length >= 260, true);
+  assert.equal(professionalSourceRows.length >= 1057, true);
   assert.equal(manifest.access, "public_read_only_no_account_required");
 });
 
@@ -429,7 +457,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.12/);
+  assert.match(citation, /arcus-open-2026\.15/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);
@@ -535,7 +563,7 @@ await check("downloads", async () => {
   assert.match(csv.content.toString("utf8").split("\n")[1], /"IT\d{2}\.\d{2}\.\d{2}"/);
   const parsed = JSON.parse(geojson.content.toString("utf8"));
   assert.equal(parsed.type, "FeatureCollection");
-  assert.equal(parsed.features.length, 261);
+  assert.equal(parsed.features.length, 260);
   assert.equal(parsed.features.every((feature) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(feature.id)), true);
 });
 

@@ -13,9 +13,9 @@ Rights and reuse: https://www.arcusbridges.org/rights
 
 ## Current public research object
 
-- Release: arcus-open-2026.12
-- Coverage: 261 documented events in Italy, 2000–2026
-- Documentary and scientific-context source records: 929
+- Release: arcus-open-2026.15
+- Coverage: 260 documented events in Italy, 2000–2026
+- Documentary and scientific-context source records: 1057
 - Licence: CC BY-NC 4.0 for ARCUS-authored event metadata and taxonomy definitions
 - Manifest: https://www.arcusbridges.org/data/open-release/manifest.json
 - Events CSV: https://www.arcusbridges.org/data/open-release/events.csv

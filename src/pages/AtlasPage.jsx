@@ -920,15 +920,15 @@ function AtlasPage() {
       cause_category: event.cause_category,
       specific_cause: event.specific_cause,
       triggered: event.triggered,
-      victims: event.victims ?? 0,
-      injuries: event.injuries ?? 0,
+      victims: event.victims ?? null,
+      injuries: event.injuries ?? null,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.12",
+      release: openRelease?.version || "arcus-open-2026.15",
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.12"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || "arcus-open-2026.15"}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );

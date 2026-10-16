@@ -216,7 +216,9 @@ function cleanSourceValue(value) {
 }
 
 function hasHydraulicSourceValues(event) {
-  return HYDRAULIC_INTELLIGENCE_FIELDS.some(
+  // The unprefixed failure fields describe every cause family in the Master.
+  // Only explicitly hydraulic fields are contradictory on a non-hydraulic event.
+  return HYDRAULIC_INTELLIGENCE_FIELDS.filter((field) => field.startsWith("hydraulic_")).some(
     (field) => cleanSourceValue(event?.[field]) !== null
   );
 }

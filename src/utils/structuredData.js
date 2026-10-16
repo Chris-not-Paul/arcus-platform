@@ -42,17 +42,17 @@ export const christianPaolini = Object.freeze({
 });
 
 export function arcusDataset(manifest = {}) {
-  const version = manifest.version || "arcus-open-2026.12";
-  const generatedAt = manifest.generated_at || "2026-10-01T07:00:23.163Z";
-  const eventCount = manifest.event_count || 261;
-  const sourceCount = manifest.source_count || 929;
+  const version = manifest.version || "arcus-open-2026.15";
+  const generatedAt = manifest.generated_at || "2026-10-16";
+  const eventCount = manifest.event_count || 260;
+  const sourceCount = manifest.source_count || 1057;
 
   return {
     "@type": "Dataset",
     "@id": `${siteOrigin}/data-access#dataset`,
     name: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
     alternateName: version,
-    description: `Versioned research dataset of ${eventCount} documented bridge-collapse events in Italy, connected to ${sourceCount} documentary sources, explicit classifications and geospatial records.`,
+    description: `Versioned research dataset of ${eventCount} documented bridge-collapse events in Italy, including separately identified approach-embankment collapses, connected to ${sourceCount} documentary and scientific-context source records, explicit classifications and geospatial records.`,
     url: `${siteOrigin}/data-access`,
     version,
     dateModified: generatedAt,
@@ -137,6 +137,7 @@ export function eventDossierStructuredData(event, relatedSources = []) {
   const properties = [
     ["ARCUS event identifier", event.event_id],
     ["Collapse severity", event.collapse_severity],
+    ["ARCUS approach-embankment extension status", event.approach_extension_status],
     ["Structural type", event.structural_type],
     ["Material", event.material_type],
     ["Cause category", event.cause_category],

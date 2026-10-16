@@ -1,6 +1,6 @@
 # ARCUS Open Research Data Policy
 
-ARCUS Open Research makes the validated scientific database useful without a mandatory account. The active release is `arcus-open-2026.12`, covers 2000-2026, and contains 261 events, 929 publishable source records, 14 source-supported shared episodes and 100 controlled taxonomy entries.
+ARCUS Open Research exposes a curated, revisable evidence base without a mandatory account. The prepared release is `arcus-open-2026.15`, covers 2000-2026, and contains 260 events, 1057 source records, 9 source-supported shared episodes (72 events) and 105 taxonomy entries. Passing automated QA does not certify every historical claim: documentary limitations remain explicit.
 
 ## Public data
 
@@ -10,7 +10,11 @@ Open includes the canonical `ITxx.xx.xx` scientific event identifier, stable slu
 
 Source links are published only when valid HTTP/HTTPS URLs. Text references are retained in `source_reference` and are never rendered as links. The release does not redistribute third-party articles or reports.
 
-The D'Angelo, Ballio and Ravazzani (2025) article is linked to all 211 Hydraulic events as `Scientific context`. Its study covers river-bridge failures and severe damage from 2000 to 2023; this link is not event-specific evidence for every ARCUS record, especially events after 2023.
+The D'Angelo, Ballio and Ravazzani (2025) article is retained for all 210 Hydraulic events, distinguishing scientific context from reviewed dataset provenance. The additional Lenzino citation is retained after its cause reclassification. Its 2000-2023 study scope is not event-specific evidence for every linked record, especially later events. Author-dataset length/process values may be accepted where crossing identity is matched, even if news sources omit those fields.
+
+`collapse_scope` separates bridge structures, multiple components, approach embankments, temporary works and unspecified scope. Approach collapses remain in the overall total; the operational extension is not literal NYSDOT span-collapse compliance. Unknown casualty counts are not rendered as zero. Italian summaries preserve access to original documentary notes.
+
+Earlier ARCUS releases are superseded for current consultation. They remain recoverable in the private archive; no external DOI dataset is modified by this release.
 
 ## Access and license
 

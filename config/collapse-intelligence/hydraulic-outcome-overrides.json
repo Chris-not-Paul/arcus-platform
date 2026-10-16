@@ -1,8 +1,11 @@
 {
   "caveat": "Professional-only outcome corrections backed by curated evidence. These overrides do not alter official hazard exposure, the source workbook or the Open release.",
-  "overrides": [
+  "overrides": [],
+  "archived_overrides": [
     {
       "event_id": "B13.02.01",
+      "retired_at": "2026-10-16",
+      "retirement_reason": "Superseded by curator-reviewed canonical Master values in arcus-open-2026.15. Preserved for provenance only; must not overwrite current source data.",
       "hydraulic_intelligence": {
         "component_involved": "pier_foundation",
         "evidence_level": "probable",

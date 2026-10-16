@@ -527,6 +527,19 @@ check("hydraulic-intelligence-non-hydraulic-null", () => {
     true
   );
 });
+check("hydraulic-intelligence-generic-fields-are-not-hydraulic-only", () => {
+  const result = normalizeHydraulicIntelligence({
+    event_id: "TEST-NON-HYD-GENERIC",
+    specific_cause: "Impact",
+    failure_trigger: "Vehicle impact",
+    failure_process: "Knocked down by external action",
+    component_involved: "Deck / superstructure",
+    failure_cause_evidence: "Documented",
+  });
+
+  assert.equal(result.hydraulic_intelligence, null);
+  assert.equal(result.warnings.length, 0);
+});
 check("hydraulic-intelligence-professional-present", () => {
   const professional = readJson("private-data/professional/professional-events.json");
   const rows = Array.isArray(professional) ? professional : professional.events;

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const base = process.env.ARCUS_OPEN_PREVIEW_URL || "http://127.0.0.1:4175";
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, channel: process.env.ARCUS_TEST_BROWSER_CHANNEL || undefined });
 const checks = [];
 
 async function noHorizontalOverflow(page) {
@@ -29,9 +29,7 @@ try {
   assert.match(typography.body, /IBM Plex Sans/);
   assert.match(typography.heading, /IBM Plex Serif/);
   assert.equal(await page.getByRole("link", { name: "Professional", exact: true }).count(), 0);
-  assert.equal(await page.locator(".navbar-link.coming-soon").count(), 1);
-  assert.match(await page.locator(".navbar-link.coming-soon").innerText(), /professional/i);
-  assert.match(await page.locator(".navbar-link.coming-soon").innerText(), /prossimamente|coming soon/i);
+  assert.equal(await page.locator(".navbar-link.coming-soon").count(), 0);
   assert.equal(await page.getByRole("button", { name: /Accedi|Sign in/ }).count(), 0);
   assert.equal(await page.locator('a[href="mailto:info@arcusbridges.org"]').count() > 0, true);
   assert.equal(await page.getByText("Christian Paolini", { exact: true }).count(), 1);
@@ -240,10 +238,10 @@ try {
   await page.goto(`${base}/atlas`);
   await page.waitForFunction(() => {
     const value = document.querySelector(".atlas-command-grid strong")?.textContent?.trim();
-    return value === "261";
+    return value === "260";
   });
-  assert.equal(await page.locator("body").innerText().then((text) => text.includes("261")), true);
-  checks.push("Atlas reads the static 261-event release without an API");
+  assert.equal(await page.locator("body").innerText().then((text) => text.includes("260")), true);
+  checks.push("Atlas reads the static 260-event release without an API");
 
   const mobile = await context.newPage();
   await mobile.setViewportSize({ width: 390, height: 844 });
@@ -257,8 +255,8 @@ try {
   await mobile.goto(`${base}/data-access`);
   await mobile.locator(".data-access-release-summary").waitFor();
   await noHorizontalOverflow(mobile);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /261/);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /929/);
+  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /260/);
+  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /1[.,\s]?057/);
   assert.equal(await mobile.locator(".data-access-resource-card").count(), 10);
 
   await mobile.goto(`${base}/about`);
@@ -300,7 +298,7 @@ try {
 
   await mobile.goto(`${base}/analytics`);
   await mobile.locator(".analytics-workspace-index").waitFor();
-  await mobile.locator(".analytics-cohort-summary strong").first().getByText("261", { exact: true }).waitFor();
+  await mobile.locator(".analytics-cohort-summary strong").first().getByText("260", { exact: true }).waitFor();
   await noHorizontalOverflow(mobile);
   assert.equal(await mobile.locator(".analytics-workspace-index button").count(), 3);
   assert.equal(await mobile.locator(".analytics-mobile-step-nav").count(), 1);

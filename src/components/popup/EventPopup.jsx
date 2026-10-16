@@ -7,8 +7,10 @@ import {
   localizedBridgeDisplayName,
   localizedCrossingName,
   localizedEventDescription,
+  publicRecordDescription,
 } from "../../utils/eventDisplayLabels";
 import taxonomyLabel from "../../utils/taxonomyLabels";
+import { collapseScope, collapseScopeLabel, collapseScopeNote } from "../../utils/approachCollapsePolicy";
 import {
   buildOpenEventCitation,
   buildOpenEventDossier,
@@ -421,6 +423,9 @@ function EventPopup({
 
   const isTotalCollapse =
     event.collapse_severity === "TC";
+  const eventScope = collapseScope(event);
+  const eventScopeLabel = collapseScopeLabel(eventScope, language);
+  const eventScopeNote = collapseScopeNote(event, language);
 
   const material = taxonomyLabel(
     "material",
@@ -478,7 +483,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.12";
+  const releaseVersion = openRelease?.version || "arcus-open-2026.15";
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,
@@ -524,6 +529,9 @@ function EventPopup({
   const territorialContext = territorialResource.data;
   const title = eventTitle(event, language);
   const descriptionText = localizedEventDescription(event, language);
+  const originalDocumentaryNotes = it && !event.description_it
+    ? publicRecordDescription(event.description)
+    : "";
   const descriptionLimit = 230;
   const hasLongDescription =
     descriptionText.length > descriptionLimit;
@@ -981,6 +989,12 @@ function EventPopup({
 
         <h2>{title}</h2>
 
+        <p className="arcus-event-collapse-scope" data-collapse-scope={eventScope}>
+          <span>{it ? "Ambito del cedimento" : "Failure scope"}</span>
+          <strong>{eventScopeLabel}</strong>
+        </p>
+        {eventScopeNote && <p className="arcus-event-scope-note">{eventScopeNote}</p>}
+
         <p className="arcus-event-date">
           {formatDate(event.date, language) || text.na}
         </p>
@@ -1007,11 +1021,11 @@ function EventPopup({
         </div>
         <div>
           <span>{text.fatalities}</span>
-          <strong>{event.victims ?? 0}</strong>
+          <strong>{event.victims ?? text.na}</strong>
         </div>
         <div>
           <span>{text.injuries}</span>
-          <strong>{event.injuries ?? 0}</strong>
+          <strong>{event.injuries ?? text.na}</strong>
         </div>
       </section>
 
@@ -1097,6 +1111,11 @@ function EventPopup({
                   </span>
                 </div>
                 <h2 id={dossierTitleId}>{title}</h2>
+                <p className="arcus-event-collapse-scope" data-collapse-scope={eventScope}>
+                  <span>{it ? "Ambito del cedimento" : "Failure scope"}</span>
+                  <strong>{eventScopeLabel}</strong>
+                </p>
+                {eventScopeNote && <p className="arcus-event-scope-note">{eventScopeNote}</p>}
                 <p>
                   {formatDate(event.date, language) || text.na} · {event.municipality || text.na}
                   {event.province ? `, ${event.province}` : ""}
@@ -1226,13 +1245,19 @@ function EventPopup({
                         </div>
                         <div>
                           <span>{text.fatalities}</span>
-                          <strong>{event.victims ?? 0}</strong>
+                          <strong>{event.victims ?? text.na}</strong>
                         </div>
                         <div>
                           <span>{text.injuries}</span>
-                          <strong>{event.injuries ?? 0}</strong>
+                          <strong>{event.injuries ?? text.na}</strong>
                         </div>
                       </div>
+                      {originalDocumentaryNotes && (
+                        <section className="arcus-event-description">
+                          <span>Note documentali e limiti · testo originale</span>
+                          <p>{originalDocumentaryNotes}</p>
+                        </section>
+                      )}
                     </div>
                   </div>
 

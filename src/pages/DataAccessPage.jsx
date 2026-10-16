@@ -119,7 +119,7 @@ function DataAccessPage() {
   const pageText = copy.text;
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.12";
+    manifest?.version || "arcus-open-2026.15";
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -128,8 +128,8 @@ function DataAccessPage() {
       ? `Richiesta scientifica ARCUS Open - ${releaseVersion}`
       : `ARCUS Open research enquiry - ${releaseVersion}`
   );
-  const releaseEventCount = manifest?.event_count ?? 261;
-  const releaseSourceCount = manifest?.source_count ?? 929;
+  const releaseEventCount = manifest?.event_count ?? 260;
+  const releaseSourceCount = manifest?.source_count ?? 1057;
   const releasePublicText = copy.publicText;
   const releasePublicItems = copy.publicItems.map((item, index) =>
     index === 0
