@@ -12,6 +12,7 @@ import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
 import { contactAddresses } from "../config/site";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
+import { researchLineage } from "../config/researchLineage";
 import { openManifest } from "../utils/apiClient";
 import {
   arcusDataset,
@@ -127,6 +128,7 @@ function PublicationsPage() {
   };
 
   const content = copy[language] || copy.en;
+  const lineage = researchLineage[language] || researchLineage.en;
   const releaseVersion =
     manifest?.version || "arcus-open-2026.17";
   const releaseCitation =
@@ -211,6 +213,8 @@ function PublicationsPage() {
             <article>
               <h3>{content.provenancePlatform}</h3>
               <p>{content.provenancePlatformText}</p>
+              <p>{lineage.overview}</p>
+              <Link to="/methodology/#dataset-lineage">{lineage.title} →</Link>
             </article>
           </div>
         </div>

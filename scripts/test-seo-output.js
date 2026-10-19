@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { canonicalPagePath, canonicalPageUrl } from "../src/utils/publicPageUrl.js";
+import { researchLineage } from "../src/config/researchLineage.js";
 
 assert.equal(canonicalPagePath('/'), '/');
 assert.equal(canonicalPagePath('/atlas'), '/atlas/');
@@ -71,6 +72,12 @@ for (const author of ["Marco Civera", "Manuel D’Angelo", "Pier Francesco Giord
 }
 assert.ok(publicationsHtml.includes('id="scientific-provenance"'), "missing crawlable provenance section");
 assert.ok(publicationsHtml.includes("10.1016/j.ijdrr.2025.105607"), "missing hydraulic research DOI");
+const methodologyHtml = fs.readFileSync(path.join(outputRoot, 'methodology', 'index.html'), 'utf8');
+for (const text of [researchLineage.en.title, researchLineage.en.overview, researchLineage.en.limit, researchLineage.en.hydraulic, ...researchLineage.en.steps.map((step) => step.text)]) {
+  assert.ok(methodologyHtml.includes(text), `missing crawlable lineage explanation: ${text}`);
+}
+assert.ok(methodologyHtml.includes('id="dataset-lineage"'), 'missing stable methodology lineage anchor');
+assert.ok(publicationsHtml.includes('/methodology/#dataset-lineage'), 'publications must link to the record-review methodology');
 assert.equal(datasetMetadata["@type"], "Dataset");
 assert.equal(datasetMetadata.version, manifest.version);
 assert.ok(fs.existsSync(path.join(outputRoot, "llms.txt")), "llms.txt must be deployed");

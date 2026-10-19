@@ -1522,6 +1522,28 @@
 
 }
 
+#dataset-lineage {
+  scroll-margin-top: 110px;
+}
+
+.methodology-lineage-notes {
+  margin-top: 32px;
+  border-top: 1px solid var(--arcus-border-soft, #d6d8cf);
+  padding-top: 24px;
+}
+
+.methodology-lineage-notes nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 24px;
+}
+
+.methodology-lineage-notes a {
+  color: inherit;
+  text-underline-offset: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .methodology-hero-grid {
     animation: none;

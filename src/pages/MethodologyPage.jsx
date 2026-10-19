@@ -8,6 +8,7 @@ import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
+import { researchLineage } from "../config/researchLineage";
 import { openManifest } from "../utils/apiClient";
 
 import "../styles/methodology/methodologypage.css";
@@ -536,7 +537,7 @@ function MethodologyPage() {
         contextTitle: "Dai documenti dispersi a record verificabili",
         contextParagraphs: [
           "Le informazioni sui crolli dei ponti sono distribuite tra atti istituzionali, relazioni tecniche, pubblicazioni scientifiche, archivi di stampa e fonti locali.",
-          "ARCUS non tratta tutte le fonti come equivalenti e non confonde la presenza di un evento con la certezza della sua causa. Ogni affermazione viene collegata alla fonte che la sostiene e al relativo livello di evidenza.",
+          "ARCUS distingue la documentazione dell’evento dal supporto disponibile per ciascuna informazione. La presenza di una fonte in una scheda non conferma automaticamente tutti i suoi campi né rende certa l’attribuzione causale.",
           "Il risultato è una release di ricerca interrogabile: i record possono essere corretti, riclassificati e confrontati senza perdere la provenienza dell’informazione.",
         ],
         scopeTitle:
@@ -546,7 +547,7 @@ function MethodologyPage() {
         scopeCards: [
           {
             title: "Identità dell’evento",
-            text: "Data, luogo, ponte e natura del cedimento vengono risolti prima di aggregare fonti o varianti dello stesso episodio.",
+            text: "Data, luogo, ponte e natura del cedimento vengono confrontati prima di aggregare fonti o varianti dello stesso episodio. I conflitti non risolti restano segnalati.",
           },
           {
             title: "Fatto e interpretazione",
@@ -568,7 +569,7 @@ function MethodologyPage() {
           ["01", "Individuazione", "Ricerca mirata in fonti istituzionali, tecniche, scientifiche, giornalistiche e locali."],
           ["02", "Ammissibilità", "Esclusione di demolizioni controllate, soli danneggiamenti e casi privi di riscontro sufficiente. Il crollo fisico del rilevato d’accesso direttamente connesso al ponte può rientrare nella distinta estensione operativa ARCUS."],
           ["03", "Risoluzione dell’identità", "Allineamento di data, ponte, località e fonti per evitare duplicazioni dello stesso episodio."],
-          ["04", "Verifica documentale", "Confronto tra fonti indipendenti e attribuzione del ruolo svolto da ciascuna evidenza."],
+          ["04", "Verifica documentale", "Confronto tra le fonti disponibili, valutandone ruolo e indipendenza. Più URL non equivalgono necessariamente a più conferme indipendenti."],
           ["05", "Georeferenziazione e classi", "Coordinate WGS84, severità, causa, trigger, processo ed evidenza sono registrati in campi distinti."],
           ["06", "QA e versionamento", "Controlli automatici e revisione editoriale precedono ogni rilascio; correzioni e limiti restano tracciabili."],
         ],
@@ -578,7 +579,7 @@ function MethodologyPage() {
           { code: "TC", text: "Tutti gli elementi portanti principali di una o più campate sono gravemente deformati e nessuna corsia è transitabile." },
           { code: "PC", text: "Alcuni o tutti gli elementi portanti principali sono gravemente deformati e mettono in pericolo chi transita sopra o sotto il ponte, senza soddisfare il criterio TC." },
         ],
-        severityClarification: "TC non significa necessariamente che sia crollato l'intero ponte. TC/PC è una classificazione editoriale: le decisioni del curatore non sostituiscono la prova tecnica e gli eventuali conflitti restano nelle note. Per intervalli documentati si registra il primo giorno e si conserva il range nella descrizione; mese e anno da soli non giustificano un giorno inventato.",
+        severityClarification: "TC non significa necessariamente che sia crollato l'intero ponte. TC/PC è una classificazione editoriale: le decisioni del curatore non sostituiscono la prova tecnica e gli eventuali conflitti restano nelle note. Per intervalli documentati si registra il primo giorno e si conserva il range nelle note documentali; mese e anno da soli non giustificano un giorno inventato.",
         approachExtensionTitle: "Estensione operativa ARCUS: crollo del rilevato d’accesso",
         approachExtensionDefinitions: [
           "I crolli dei rilevati d’accesso sono inclusi nel totale ARCUS. L’ambito del cedimento li distingue dalla struttura del ponte nelle schede, nei raggruppamenti di Analytics e nei dati esportati, senza modificare il codice TC/PC.",
@@ -603,7 +604,7 @@ function MethodologyPage() {
         ],
         sourceTitle: "Ruoli delle fonti e tracciabilità",
         sourceText:
-          "Le categorie non sono una graduatoria automatica di verità: una fonte è valutata rispetto all’affermazione che deve sostenere. Contano prossimità all’evento, competenza, indipendenza, specificità e possibilità di verifica. Titolo, URL o riferimento, data, lingua e ruolo sono conservati nella release.",
+          "Le categorie non sono una graduatoria automatica di verità: una fonte è valutata rispetto all’affermazione che deve sostenere. Contano prossimità all’evento, competenza, indipendenza, specificità e possibilità di verifica. Titolo, URL o riferimento, data, lingua e ruolo sono conservati nella release. Il conteggio dei record di fonte comprende collegamenti riutilizzati per più eventi e citazioni di contesto: non è il numero di documenti unici né di conferme indipendenti.",
         sourceTiers: [
           ["RUOLO 01", "Atti e comunicazioni istituzionali"],
           ["RUOLO 02", "Relazioni tecniche e giudiziarie"],
@@ -655,7 +656,7 @@ function MethodologyPage() {
         contextTitle: "From fragmented documents to verifiable records",
         contextParagraphs: [
           "Bridge-collapse information is distributed across institutional records, technical reports, scientific publications, news archives and local sources.",
-          "ARCUS does not treat every source as equivalent and does not confuse the occurrence of an event with certainty about its cause. Each claim remains linked to the evidence that supports it.",
+          "ARCUS distinguishes event documentation from the support available for each item of information. A source listed in a dossier does not automatically confirm every field or establish certainty about the cause.",
           "The result is an inspectable research release: records can be corrected, reclassified and compared without losing provenance.",
         ],
         scopeTitle:
@@ -663,7 +664,7 @@ function MethodologyPage() {
         scopeText:
           "This separation prevents missing information from becoming zero and technical hypotheses from being presented as established conclusions.",
         scopeCards: [
-          { title: "Event identity", text: "Date, location, bridge and failure type are resolved before sources or variants of the same episode are combined." },
+          { title: "Event identity", text: "Date, location, bridge and failure type are compared before sources or variants of the same episode are combined. Unresolved conflicts remain flagged." },
           { title: "Fact and interpretation", text: "Observed values remain distinct from ARCUS classes derived through the editorial process." },
           { title: "Explicit uncertainty", text: "Documented, Probable, Needs review and Unspecified describe support without artificially filling gaps." },
           { title: "Proper use", text: "Records support comparative research and learning from failures; they do not estimate collapse probability or certify safety." },
@@ -674,7 +675,7 @@ function MethodologyPage() {
           ["01", "Discovery", "Targeted searches across institutional, technical, scientific, journalistic and local sources."],
           ["02", "Eligibility", "Controlled demolitions, damage-only cases and events without sufficient corroboration are excluded. Physical collapse of a directly connected bridge approach embankment may qualify under the separately identified ARCUS operational extension."],
           ["03", "Identity resolution", "Date, bridge, place and sources are aligned to prevent duplicate records for the same episode."],
-          ["04", "Evidence review", "Independent sources are compared and the role of each item of evidence is recorded."],
+          ["04", "Evidence review", "Available sources are compared for role and independence. Multiple URLs do not necessarily provide independent corroboration."],
           ["05", "Geolocation and classes", "WGS84 coordinates, severity, cause, trigger, process and evidence are stored in separate fields."],
           ["06", "QA and versioning", "Automated checks and editorial review precede release; corrections and limitations remain traceable."],
         ],
@@ -684,7 +685,7 @@ function MethodologyPage() {
           { code: "TC", text: "All primary load-bearing members of one or more affected spans are severely deformed, leaving no travel lane passable." },
           { code: "PC", text: "All or some primary members are severely deformed, endangering people on or beneath the bridge, without meeting the TC criterion." },
         ],
-        severityClarification: "TC does not require the entire bridge to collapse. TC/PC is an editorial classification: curator decisions do not replace technical evidence, and conflicts remain in the notes. For documented date ranges, the first day is stored and the range retained in the description; a month and year alone do not justify inventing a day.",
+        severityClarification: "TC does not require the entire bridge to collapse. TC/PC is an editorial classification: curator decisions do not replace technical evidence, and conflicts remain in the notes. For documented date ranges, the first day is stored and the range retained in the documentary notes; a month and year alone do not justify inventing a day.",
         approachExtensionTitle: "ARCUS operational extension: approach-embankment collapse",
         approachExtensionDefinitions: [
           "Approach-embankment collapses are included in the ARCUS total. Failure scope distinguishes them from bridge-structure records in dossiers, Analytics groupings and exported data without changing TC/PC.",
@@ -706,7 +707,7 @@ function MethodologyPage() {
           { code: "DB.05", title: "Evidence", text: "Source role, independence, confidence and documentary level remain available for review and reuse." },
         ],
         sourceTitle: "Source roles and traceability",
-        sourceText: "The categories are not an automatic hierarchy of truth: a source is assessed against the claim it must support. Proximity, expertise, independence, specificity and verifiability matter. Title, URL or reference, date, language and role are retained in the release.",
+        sourceText: "The categories are not an automatic hierarchy of truth: a source is assessed against the claim it must support. Proximity, expertise, independence, specificity and verifiability matter. Title, URL or reference, date, language and role are retained in the release. Source-record counts include links reused across events and contextual citations: they are not counts of unique documents or independent confirmations.",
         sourceTiers: [
           ["ROLE 01", "Institutional records and notices"],
           ["ROLE 02", "Technical and forensic reports"],
@@ -741,6 +742,7 @@ function MethodologyPage() {
       };
 
   const content = { ...baseContent, ...openContent };
+  const lineage = researchLineage[language] || researchLineage.en;
 
   return (
     <main
@@ -813,7 +815,7 @@ function MethodologyPage() {
             >
               <div className="methodology-paper-label">{content.relatedPublication}</div>
               <div className="methodology-paper-title">
-                Dataset of bridge collapses in Italy from 2000 to 2025
+                {originalDatasetCredits.title}
               </div>
               <div className="methodology-paper-meta">Data in Brief · Elsevier</div>
               <div className="methodology-paper-authors">Paolini et al.</div>
@@ -897,6 +899,25 @@ function MethodologyPage() {
       </section>
 
       {/* METHOD SCOPE */}
+
+      <section className="methodology-section methodology-light" id="dataset-lineage" aria-labelledby="dataset-lineage-heading">
+        <div className="methodology-container">
+          <div className="methodology-section-header">
+            <div className="methodology-section-label">{lineage.label}</div>
+            <h2 className="methodology-section-title" id="dataset-lineage-heading">{lineage.title}</h2>
+            <p className="methodology-section-description light">{lineage.overview}</p>
+          </div>
+          <MethodologyScopeGrid items={lineage.steps} />
+          <div className="methodology-lineage-notes">
+            <p className="methodology-body-text">{lineage.limit}</p>
+            <p className="methodology-body-text">{lineage.hydraulic}</p>
+            <nav aria-label={lineage.label}>
+              <Link to="/publications/#scientific-provenance">{lineage.provenanceLink} →</Link>
+              <Link to="/data-access/">{lineage.releaseLink} →</Link>
+            </nav>
+          </div>
+        </div>
+      </section>
 
       <section className="methodology-section methodology-light">
 
