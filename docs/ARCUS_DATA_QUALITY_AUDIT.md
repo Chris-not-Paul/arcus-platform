@@ -1,5 +1,15 @@
 # ARCUS Data Quality Audit
 
+## Current release — arcus-open-2026.18, 19 October 2026
+
+The 27 previously unspecified cause-evidence values were reviewed individually: 4 Documented, 11 Probable, 12 Needs review. Current totals are **177 Documented, 39 Probable, 44 Needs review, 0 Unspecified**. The increase in Needs review exposes unresolved record-to-source matches or causal attribution; it is not evidence that every retained event has been independently validated.
+
+All 260 events, 1057 source rows, TC/PC codes, coordinates, dates, causal categories, detailed processes and components are unchanged from 2026.17. Reasons and existing source IDs are recorded in the private Master curation log and `config/curation/evidence-review-2026-10-19.json`. Broad flood attribution is distinguished from a detailed hydraulic mechanism. The hydraulic analytical projection deliberately keeps an unspecified mechanism-evidence level where the process is unknown; it must not be upgraded merely to eliminate an empty analytical field.
+
+Automated structural QA: **0 errors, 72 warnings** (30 hydraulic evidence reviews, 17 territorial warnings, 11 process/evidence warnings, 7 component/process warnings, 3 unrecognized triggers, 3 unrecognized processes, 1 text reference). `scripts/test-evidence-review.js` verifies the exact scope of the public-data change. The canonical Master fingerprint is `c63f4b22d998682df2e7f994d6b5ebf1d09ff6b700980123a72c489303fb21e7`.
+
+The entries below describe earlier release states, not current counts.
+
 ## Editorial correction — arcus-open-2026.17
 
 The scientific data and source registry are unchanged from 2026.15 (260 events, 1057 sources, zero blocking errors and 64 retained warnings). Only the four public prose fields change. `test:public-event-copy` verifies exact equality of all remaining attributes, source rows and event membership. Bilingual documentary notes replace working-log language; this edit does not resolve the retained scientific uncertainties or upgrade evidence classes.

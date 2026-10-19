@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.17",
+  "release": "arcus-open-2026.18",
   "sample_size": 260,
   "source_count": 1057,
   "interpretation": "Counts and percentages are observed frequencies in the ARCUS Open Research database, not collapse probabilities or causal estimates.",
@@ -221,10 +221,9 @@
     "Plain concrete": 1
   },
   "evidence_level": {
-    "Documented": 150,
-    "Unspecified": 23,
-    "Needs review": 22,
-    "Probable": 15
+    "Documented": 154,
+    "Needs review": 30,
+    "Probable": 26
   },
   "source_coverage": {
     "1": 2,

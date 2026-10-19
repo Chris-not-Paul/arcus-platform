@@ -21,7 +21,7 @@ import { readXlsxSheet } from "./xlsx-reader.js";
 import { APPROACH_EXTENSION_STATUSES, collapseScope } from "../../src/utils/approachCollapsePolicy.js";
 import { buildPublicEventCopy } from "../../src/utils/publicEventCopy.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.17";
+export const OPEN_RELEASE_VERSION = "arcus-open-2026.18";
 
 const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   source_role: "Scientific context",
@@ -904,10 +904,9 @@ export function buildOpenResearchRelease({
     version,
     generated_at: generatedAt,
     changes: [
-      "Editorial correction only: replaced mixed-language working-log descriptions with concise public summaries of recorded attributes and separate Italian/English documentary notes for all 260 records.",
-      "Removed personal review instructions, internal acceptance dates, question-mark placeholders and transcription history from public event text; original working descriptions remain unchanged in the private Master and archived release snapshots.",
-      "Retained documentary uncertainty about dates, crossing identity, damage extent, competing accounts and source-attributed hydraulic classifications in declarative public notes; unknown overtopping is stated as not specified, not silently converted to absence.",
-      "No event membership, identifiers, dates, coordinates, casualties, TC/PC codes, scientific classifications or source records changed from arcus-open-2026.15. Automated field-by-field comparison verifies this boundary.",
+      "Reviewed the 27 previously unspecified cause-evidence levels: 4 Documented, 11 Probable and 12 Needs review, with source-specific reasons preserved in the private Master curation log.",
+      "A documented broad flood attribution does not establish a detailed hydraulic mechanism. Unknown causes, processes and components remain unknown; unresolved event-to-source matches and causal attributions are explicitly marked Needs review.",
+      "No event membership, identifiers, dates, coordinates, casualties, TC/PC codes, causal categories, detailed processes, components or source records changed from arcus-open-2026.17. Automated field-by-field comparison verifies this boundary.",
     ],
     delta,
   };

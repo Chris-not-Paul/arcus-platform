@@ -627,7 +627,7 @@ function MethodologyPage() {
         scoringText:
           "ARCUS rende visibili supporto e limiti di ogni record. La completezza di un campo non equivale alla sicurezza di un ponte né alla probabilità di un evento futuro.",
         scoringModels: [
-          ["Supporto documentale", "Documented e Probable distinguono una conclusione esplicita da un’attribuzione fortemente sostenuta ma non definitiva."],
+          ["Supporto documentale", "Documented e Probable distinguono un supporto esplicito da un’attribuzione fortemente sostenuta ma non definitiva. Il livello riguarda la causa o il processo riportato: il legame documentato con una piena non accerta automaticamente scalzamento, erosione o sormonto, né tutti gli altri attributi della scheda."],
           ["Vuoto informativo", "Unspecified è un valore intenzionale: indica che il dettaglio non è ricostruibile dalle fonti disponibili."],
           ["Revisione aperta", "Needs review conserva conflitti o anomalie senza nasconderli e senza forzare una classificazione."],
           ["Comparabilità", "Le analisi devono dichiarare filtri, periodo, variabili disponibili e denominatore; frequenza osservata non significa rischio."],
@@ -722,7 +722,7 @@ function MethodologyPage() {
         scoringTitle: "Evidence is described, not converted into certainty",
         scoringText: "ARCUS exposes the support and limitations of each record. Field completeness is neither bridge safety nor the probability of a future event.",
         scoringModels: [
-          ["Documentary support", "Documented and Probable separate an explicit conclusion from a strongly supported but non-final attribution."],
+          ["Documentary support", "Documented and Probable distinguish explicit support from a strongly supported but non-final attribution. The level concerns the recorded cause or process: a documented link to a flood does not automatically establish scour, erosion or overtopping, or every other record attribute."],
           ["Information gap", "Unspecified is intentional: the detail cannot be reconstructed from the available sources."],
           ["Open review", "Needs review retains conflicts or anomalies without hiding them or forcing a classification."],
           ["Comparability", "Analyses must declare filters, period, available variables and denominator; observed frequency is not risk."],

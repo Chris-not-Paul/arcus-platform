@@ -182,7 +182,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.17");
+  assert.equal(manifest.version, "arcus-open-2026.18");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v4");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
@@ -251,7 +251,8 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 
 await check("taxonomy-and-evidence-classes", () => {
   assert.equal(taxonomy.taxonomy.length, 105);
-  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 32);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 44);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Unspecified").length, 0);
   assert.equal(events.filter((event) => event.failure_process).length, 207);
   assert.equal(events.filter((event) => event.component_involved).length, 216);
   assert.equal(
@@ -457,7 +458,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.17/);
+  assert.match(citation, /arcus-open-2026\.18/);
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);

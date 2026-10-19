@@ -1,6 +1,6 @@
 {
-  "version": "arcus-open-2026.17",
-  "generated_at": "2026-10-16T14:03:36.712Z",
+  "version": "arcus-open-2026.18",
+  "generated_at": "2026-10-19T13:02:54.671Z",
   "data_cutoff": "2026-04-02",
   "event_count": 260,
   "source_count": 1057,
@@ -12,7 +12,7 @@
     "scope": "ARCUS-authored event metadata and taxonomy definitions. Linked third-party sources remain subject to their original rights and terms.",
     "url": "https://creativecommons.org/licenses/by-nc/4.0/"
   },
-  "citation": "ARCUS Open Research (arcus-open-2026.17). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.17.",
+  "citation": "ARCUS Open Research (arcus-open-2026.18). Bridge collapse events in Italy, 2000-2026. Version arcus-open-2026.18.",
   "changelog": "changelog.json",
   "known_limitations": [
     "The database describes documented historical events and cannot estimate the probability of future collapse.",
@@ -24,7 +24,7 @@
     "Province mismatches are flagged and never silently corrected.",
     "Published shared episodes control record clustering; they do not establish an identical structural failure mechanism across bridges."
   ],
-  "source_workbook_fingerprint": "sha256:6123cdd7e3500cd04efc1f72f6f86190dbc276cf8f56ed84c9d2a0a85cb43cb8",
+  "source_workbook_fingerprint": "sha256:c63f4b22d998682df2e7f994d6b5ebf1d09ff6b700980123a72c489303fb21e7",
   "access": "public_read_only_no_account_required",
   "resources": {
     "events": "events.json",
