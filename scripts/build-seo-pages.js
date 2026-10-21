@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../src/config/researchCredits.js";
 import { canonicalPagePath, canonicalPageUrl } from "../src/utils/publicPageUrl.js";
 import { researchLineage } from "../src/config/researchLineage.js";
+import { formatPageTitle, getPublicPageMetadata, publicPageMetadataUpdatedAt } from "../src/config/publicPageMetadata.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFile), "..");
@@ -94,7 +95,7 @@ const website = {
   name: "ARCUS — Bridge Failure Research",
   alternateName: "ARCUS",
   url: siteOrigin,
-  inLanguage: ["en", "it"],
+  inLanguage: ["it", "en"],
   publisher: { "@id": `${siteOrigin}/#organization` },
 };
 
@@ -175,25 +176,27 @@ const fallbackStyle = `
   .arcus-static-grid li{list-style:none;border-top:1px solid #cfc9bc;padding-top:.55rem}.arcus-static-document footer{border-top:1px solid #cfc9bc;padding-top:1rem;color:#526463;font-size:.9rem}
 </style>`;
 
-function navigation() {
-  return `<nav aria-label="Primary">
-    <a href="/atlas/">Atlas</a><a href="/analytics/">Analytics</a><a href="/methodology/">Methodology</a>
-    <a href="/publications/">Publications</a><a href="/data-access/">Data</a><a href="/contribute/">Contribute</a><a href="/about/">About</a>
+function navigation(language) {
+  const labels = language === "it"
+    ? ["Atlante", "Analisi", "Metodologia", "Pubblicazioni", "Dati", "Contribuisci", "Il progetto"]
+    : ["Atlas", "Analytics", "Methodology", "Publications", "Data", "Contribute", "About"];
+  return `<nav aria-label="${language === "it" ? "Navigazione principale" : "Primary"}">
+    ${["atlas", "analytics", "methodology", "publications", "data-access", "contribute", "about"].map((route, index) => `<a href="/${route}/">${labels[index]}</a>`).join("")}
   </nav>`;
 }
 
-function staticShell(content) {
+function staticShell(content, language) {
   return `<main class="arcus-static-document" id="main-content" data-arcus-prerendered="true">
-    <header><a href="/" aria-label="ARCUS home"><strong>ARCUS — Bridge Failure Research</strong></a>${navigation()}</header>
+    <header><a href="/" aria-label="ARCUS home"><strong>ARCUS — Bridge Failure Research</strong></a>${navigation(language)}</header>
     <article>${content}</article>
     <footer>ARCUS Open Research · ${escapeHtml(manifest.version)} · ${escapeHtml(manifest.license.name)}</footer>
   </main>`;
 }
 
-function pageDocument({ canonicalPath, description, graph = [], content, title, type = "website" }) {
+function pageDocument({ canonicalPath, description, graph = [], content, title, type = "website", language = "it" }) {
   const canonicalUrl = canonicalPageUrl(siteOrigin, canonicalPath);
-  const fullTitle = title === "ARCUS" ? title : `${title} | ARCUS`;
-  let html = template.replace(/<html\s+lang=["'][^"']+["']/, '<html lang="en"');
+  const fullTitle = formatPageTitle(title);
+  let html = template.replace(/<html\s+lang=["'][^"']+["']/, `<html lang="${language}"`);
 
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(fullTitle)}</title>`);
   html = replaceCanonical(html, canonicalUrl);
@@ -205,6 +208,7 @@ function pageDocument({ canonicalPath, description, graph = [], content, title, 
   html = replaceMeta(html, "property", "og:description", description);
   html = replaceMeta(html, "property", "og:type", type);
   html = replaceMeta(html, "property", "og:url", canonicalUrl);
+  html = replaceMeta(html, "property", "og:locale", language === "it" ? "it_IT" : "en_GB");
   html = html.replace(
     "</head>",
     `    ${fallbackStyle}\n    <script id="arcus-static-structured-data" type="application/ld+json">${safeJsonLd({
@@ -212,7 +216,7 @@ function pageDocument({ canonicalPath, description, graph = [], content, title, 
       "@graph": [website, organization, ...graph],
     })}</script>\n  </head>`,
   );
-  html = html.replace('<div id="root"></div>', `<div id="root">${staticShell(content)}</div>`);
+  html = html.replace('<div id="root"></div>', `<div id="root">${staticShell(content, language)}</div>`);
   return html;
 }
 
@@ -232,6 +236,7 @@ function webPage(pathname, name, description) {
     "@id": `${siteOrigin}${pathname}#webpage`,
     name,
     description,
+    inLanguage: "it",
     url: canonicalPageUrl(siteOrigin, pathname),
     isPartOf: { "@id": `${siteOrigin}/#website` },
     publisher: { "@id": `${siteOrigin}/#organization` },
@@ -239,26 +244,22 @@ function webPage(pathname, name, description) {
 }
 
 function lineageContent() {
-  const text = researchLineage.en;
+  const text = researchLineage.it;
   return `<section id="dataset-lineage"><h2>${escapeHtml(text.title)}</h2><p>${escapeHtml(text.overview)}</p><ol>${text.steps.map((step) => `<li><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.text)}</p></li>`).join("")}</ol><p>${escapeHtml(text.limit)}</p><p>${escapeHtml(text.hydraulic)}</p><p><a href="/publications/#scientific-provenance">${escapeHtml(text.provenanceLink)}</a> · <a href="/data-access/">${escapeHtml(text.releaseLink)}</a></p></section>`;
 }
 
 const corePages = [
   {
     path: "/",
-    title: "ARCUS",
-    description: "ARCUS is an open research infrastructure for documented bridge-collapse events, sources, classifications and reproducible analysis in Italy.",
     graph: [],
-    content: `<p>Italian Bridge Collapse Database</p><h1>Bridge-collapse evidence, open to research.</h1><p>Explore ${manifest.event_count} georeferenced events, ${manifest.source_count} documentary sources and explicit classifications through a public Atlas and a complete, citable research release.</p><p><a href="/atlas">Open the Atlas</a> · <a href="/data-access">Access the data</a></p>`,
+    content: `<p>Database dei crolli dei ponti in Italia</p><h1>Evidenze sui crolli dei ponti, aperte alla ricerca.</h1><p>Esplora ${manifest.event_count} eventi georeferenziati, ${manifest.source_count} record di fonte e classificazioni esplicite attraverso un atlante pubblico e una release di ricerca consultabile e citabile.</p><p><a href="/atlas/">Apri l’Atlante</a> · <a href="/data-access/">Accedi ai dati</a></p>`,
   },
   {
     path: "/atlas",
-    title: "Bridge Collapse Atlas",
-    description: "ARCUS geospatial atlas of documented bridge collapses, with taxonomies, timeline and inspectable documentary sources.",
-    graph: [webPage("/atlas", "ARCUS Bridge Collapse Atlas", "Geospatial atlas of documented bridge-collapse events in Italy."), {
+    graph: [webPage("/atlas", getPublicPageMetadata("/atlas").title, getPublicPageMetadata("/atlas").description), {
       "@type": "ItemList",
       "@id": `${siteOrigin}/atlas#events`,
-      name: "ARCUS documented bridge-collapse events",
+      name: "ARCUS: eventi documentati di crollo di ponti",
       numberOfItems: events.length,
       itemListElement: events.map((event, index) => ({
         "@type": "ListItem",
@@ -267,60 +268,44 @@ const corePages = [
         name: eventName(event),
       })),
     }],
-    content: `<p>ARCUS Atlas</p><h1>Documented bridge-collapse events in Italy</h1><p>Browse ${events.length} event records. Each dossier preserves its ARCUS identifier, source links, classifications and declared limits.</p><ul class="arcus-static-grid">${events.map((event) => `<li><a href="${escapeHtml(canonicalPagePath(`/atlas/events/${event.event_slug}`))}">${escapeHtml(eventName(event))}</a><br><small>${escapeHtml([event.date, event.municipality, event.province].filter(Boolean).join(" · "))}</small></li>`).join("")}</ul>`,
+    content: `<p>Atlante ARCUS</p><h1>Eventi documentati di crollo di ponti in Italia</h1><p>Consulta ${events.length} schede di evento. Ogni scheda conserva l’identificativo ARCUS, i collegamenti alle fonti, le classificazioni e i limiti dichiarati.</p><ul class="arcus-static-grid">${events.map((event) => `<li><a href="${escapeHtml(canonicalPagePath(`/atlas/events/${event.event_slug}`))}">${escapeHtml(eventName(event))}</a><br><small>${escapeHtml([event.date, event.municipality, event.province].filter(Boolean).join(" · "))}</small></li>`).join("")}</ul>`,
   },
   {
     path: "/analytics",
-    title: "ARCUS Analytics",
-    description: "Descriptive analysis of documented bridge-collapse events with declared filters, evidence limits and reproducible outputs.",
-    content: "<p>ARCUS Analytics</p><h1>Read patterns without losing the evidence.</h1><p>Explore descriptive distributions and declared filters across the current public release. ARCUS Analytics does not predict future failures or replace engineering assessment.</p>",
+    content: "<p>Analisi ARCUS</p><h1>Leggere le ricorrenze senza perdere le evidenze.</h1><p>Esplora distribuzioni descrittive e filtri dichiarati nella release pubblica corrente. Le analisi ARCUS non prevedono crolli futuri e non sostituiscono la valutazione ingegneristica.</p>",
   },
   {
     path: "/methodology",
-    title: "ARCUS Methodology",
-    description: "ARCUS methodology for record review, data provenance, geolocation, classification, uncertainty and versioned research releases.",
-    content: `<p>Scientific method</p><h1>How ARCUS builds evidence</h1><p>ARCUS distinguishes event documentation, editorial classifications and unresolved information. Listed sources do not automatically confirm every field, and multiple URLs do not necessarily provide independent corroboration. Source-record counts include cross-event reuse and scientific-context citations, not just unique documents.</p>${lineageContent()}<p>Records support comparative research, not structural safety certification or collapse-probability estimates. NYSDOT structural TC/PC definitions remain distinct from the separately identified ARCUS operational extension for physical approach-embankment collapse. Unresolved evidence and editorial decisions remain visible in dossier notes.</p>`,
+    content: `<p>Metodo scientifico</p><h1>Come ARCUS organizza le evidenze</h1><p>ARCUS distingue documentazione degli eventi, classificazioni editoriali e informazioni non risolte. Le fonti elencate non confermano automaticamente ogni campo; più URL non costituiscono necessariamente conferme indipendenti. Il conteggio dei record di fonte include riutilizzi tra eventi e citazioni di contesto scientifico, non solo documenti unici.</p>${lineageContent()}<p>Le schede supportano la ricerca comparativa, non certificano la sicurezza strutturale né stimano probabilità di crollo. Le definizioni strutturali TC/PC di NYSDOT restano distinte dall’estensione operativa ARCUS, identificata separatamente, per il collasso fisico del rilevato di accesso. Evidenze non risolte e decisioni editoriali restano distinguibili nelle note delle schede.</p>`,
   },
   {
     path: "/data-access",
-    title: "ARCUS Data Access",
-    description: `Access the ${manifest.version} public research release: ${manifest.event_count} documented events, ${manifest.source_count} sources, schema, taxonomy and quality audit.`,
     graph: [dataset],
-    content: `<p>ARCUS Open Research</p><h1>Access the versioned research release.</h1><p>${escapeHtml(manifest.citation)}</p><dl><dt>Version</dt><dd>${escapeHtml(manifest.version)}</dd><dt>Events</dt><dd>${manifest.event_count}</dd><dt>Sources</dt><dd>${manifest.source_count}</dd><dt>Licence</dt><dd><a href="${escapeHtml(manifest.license.url)}">${escapeHtml(manifest.license.name)}</a></dd></dl><p><a href="/data/open-release/events.csv">Events CSV</a> · <a href="/data/open-release/events.geojson">Events GeoJSON</a> · <a href="/data/open-release/manifest.json">Manifest JSON</a> · <a href="/dataset.json">Dataset metadata</a></p>`,
+    content: `<p>ARCUS Open Research</p><h1>Accedi alla release di ricerca versionata.</h1><p>${escapeHtml(manifest.citation)}</p><dl><dt>Versione</dt><dd>${escapeHtml(manifest.version)}</dd><dt>Eventi</dt><dd>${manifest.event_count}</dd><dt>Record di fonte</dt><dd>${manifest.source_count}</dd><dt>Licenza</dt><dd><a href="${escapeHtml(manifest.license.url)}">${escapeHtml(manifest.license.name)}</a></dd></dl><p><a href="/data/open-release/events.csv">Eventi CSV</a> · <a href="/data/open-release/events.geojson">Eventi GeoJSON</a> · <a href="/data/open-release/manifest.json">Manifest JSON</a> · <a href="/dataset.json">Metadati del dataset</a></p>`,
   },
   {
     path: "/publications",
-    title: "Publications and Scientific Basis",
-    description: "Peer-reviewed publication, current ARCUS release and citation guidance for the ARCUS bridge-collapse research infrastructure.",
     graph: [article, dataset],
-    content: `<p>ARCUS Research</p><h1>Publications and scientific basis</h1><h2>${escapeHtml(article.headline)}</h2><p>${escapeHtml(originalDatasetCredits.authors.join(", "))} · Data in Brief 64 (2026)</p><p><a href="${paperDoi}">DOI 10.1016/j.dib.2025.112375</a></p><section id="scientific-provenance"><h2>Data provenance and scientific contributions</h2><p>The original dataset and the earlier research incorporated into it are collective contributions, not the exclusive work of the ARCUS curator.</p><h3>${escapeHtml(hydraulicResearchCredits.title)}</h3><p>${escapeHtml(hydraulicResearchCredits.authors.join(", "))} (2025). <a href="${hydraulicResearchCredits.doi}">Article and supplementary dataset S3</a>.</p><p>For matched records, reused lengths and hydraulic classifications are attributed to this work. Scientific-context citations alone do not confirm every event detail.</p><p>Christian Paolini conceived and developed ARCUS and curates its releases. Subsequent ARCUS changes remain distinct from the source works and do not imply their authors’ approval.</p><p>${escapeHtml(researchLineage.en.overview)}</p><p>${escapeHtml(researchLineage.en.limit)}</p><a href="/methodology/#dataset-lineage">${escapeHtml(researchLineage.en.title)}</a></section><h2>Current Open release</h2><p>${escapeHtml(manifest.citation)}</p>`,
+    content: `<p>Ricerca ARCUS</p><h1>Pubblicazioni e basi scientifiche</h1><h2>${escapeHtml(article.headline)}</h2><p>${escapeHtml(originalDatasetCredits.authors.join(", "))} · Data in Brief 64 (2026)</p><p><a href="${paperDoi}">DOI 10.1016/j.dib.2025.112375</a></p><section id="scientific-provenance"><h2>Provenienza e contributi scientifici</h2><p>Il dataset originario e le ricerche pregresse in esso confluite sono contributi collettivi, non il lavoro esclusivo del curatore ARCUS.</p><h3>${escapeHtml(hydraulicResearchCredits.title)}</h3><p>${escapeHtml(hydraulicResearchCredits.authors.join(", "))} (2025). <a href="${hydraulicResearchCredits.doi}">Articolo e dataset supplementare S3</a>.</p><p>Nei record corrispondenti, lunghezze e classificazioni idrauliche riutilizzate sono attribuite a questo lavoro. Le sole citazioni di contesto scientifico non confermano ogni dettaglio dell’evento.</p><p>Christian Paolini ha ideato e sviluppato ARCUS e ne cura le release. Le successive modifiche ARCUS restano distinte dai lavori di origine e non implicano l’approvazione dei loro autori.</p><p>${escapeHtml(researchLineage.it.overview)}</p><p>${escapeHtml(researchLineage.it.limit)}</p><a href="/methodology/#dataset-lineage">${escapeHtml(researchLineage.it.title)}</a></section><h2>Release Open corrente</h2><p>${escapeHtml(manifest.citation)}</p>`,
   },
   {
     path: "/contribute",
-    title: "Contribute Evidence",
-    description: "Submit a documented event, source, correction, coordinate or classification for ARCUS editorial review.",
-    content: "<p>Contribute to ARCUS</p><h1>Improve the evidence base.</h1><p>Researchers, practitioners and informed contributors can propose documented events, sources, corrections, coordinates and classifications. Every submission enters editorial review before publication.</p><p><a href=\"mailto:contribute@arcusbridges.org\">contribute@arcusbridges.org</a></p>",
+    content: "<p>Contribuisci ad ARCUS</p><h1>Migliora la base documentale.</h1><p>Ricercatori, professionisti e contributori informati possono proporre eventi documentati, fonti, correzioni, coordinate e classificazioni. Ogni segnalazione è sottoposta a revisione editoriale prima della pubblicazione.</p><p><a href=\"mailto:contribute@arcusbridges.org\">contribute@arcusbridges.org</a></p>",
   },
   {
     path: "/about",
-    title: "About ARCUS",
-    description: "Identity, scientific stewardship and principles of ARCUS, an independent open research infrastructure for documented bridge collapses.",
     graph: [person],
-    content: "<p>ARCUS identity</p><h1>An open research infrastructure for bridge-collapse evidence.</h1><p>ARCUS curates documented bridge-collapse events as a versioned, inspectable evidence base. Christian Paolini is the scientific curator and ARCUS project lead.</p>",
+    content: "<p>Identità ARCUS</p><h1>Un’infrastruttura di ricerca aperta sulle evidenze dei crolli dei ponti.</h1><p>ARCUS cura eventi documentati di crollo di ponti in una base di evidenze versionata e consultabile. Christian Paolini è il curatore scientifico e responsabile del progetto ARCUS.</p>",
   },
   {
     path: "/privacy",
-    title: "Privacy",
-    description: "ARCUS privacy information for website visitors and evidence contributors.",
-    content: "<p>ARCUS governance</p><h1>Privacy</h1><p>Read how ARCUS handles website access data and information submitted through the contribution process.</p>",
+    content: "<p>Governance ARCUS</p><h1>Privacy</h1><p>Consulta le informazioni sul trattamento dei dati di accesso al sito e delle informazioni inviate attraverso il processo di contribuzione.</p>",
   },
   {
     path: "/rights",
-    title: "Rights and Reuse",
-    description: "ARCUS rights, CC BY-NC 4.0 data licence, third-party source boundaries and attribution requirements.",
-    content: `<p>Rights and reuse</p><h1>Clear rights for a traceable evidence base.</h1><p>ARCUS-authored event metadata and taxonomy definitions in the public release are licensed under <a href="${escapeHtml(manifest.license.url)}">CC BY-NC 4.0</a>. Linked third-party sources retain their original rights.</p>`,
+    content: `<p>Diritti e riutilizzo</p><h1>Diritti chiari per una base documentale tracciabile.</h1><p>I metadati degli eventi e le definizioni delle tassonomie prodotti da ARCUS nella release pubblica sono disponibili con licenza <a href="${escapeHtml(manifest.license.url)}">CC BY-NC 4.0</a>. Le fonti di terzi collegate conservano i rispettivi diritti.</p>`,
   },
-];
+].map((page) => ({ ...page, ...getPublicPageMetadata(page.path) }));
 
 function eventName(event) {
   return event.bridge_name
@@ -440,17 +425,21 @@ for (const event of events) {
     content: eventContent(event, eventSources),
     title: name,
     type: "article",
+    // Dossier fallback prose is still English; do not mislabel it as Italian.
+    language: "en",
   }));
 }
 
 const lastModified = String(manifest.generated_at || new Date().toISOString()).slice(0, 10);
+const coreLastModified = [lastModified, publicPageMetadataUpdatedAt].sort().at(-1);
 const sitemapRoutes = [
   ...corePages.map((page) => page.path),
   ...events.map((event) => `/atlas/events/${event.event_slug}`),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes.map((route) => {
   const location = canonicalPageUrl(siteOrigin, route);
-  return `  <url><loc>${escapeXml(location)}</loc><lastmod>${lastModified}</lastmod></url>`;
+  const modified = corePages.some((page) => page.path === route) ? coreLastModified : lastModified;
+  return `  <url><loc>${escapeXml(location)}</loc><lastmod>${modified}</lastmod></url>`;
 }).join("\n")}\n</urlset>\n`;
 
 fs.writeFileSync(path.join(outputRoot, "sitemap.xml"), sitemap);

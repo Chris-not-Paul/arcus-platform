@@ -4,11 +4,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { canonicalPagePath, canonicalPageUrl } from "../src/utils/publicPageUrl.js";
 import { researchLineage } from "../src/config/researchLineage.js";
+import { formatPageTitle, getPublicPageMetadata, publicPageMetadata, publicPageMetadataUpdatedAt } from "../src/config/publicPageMetadata.js";
 
 assert.equal(canonicalPagePath('/'), '/');
 assert.equal(canonicalPagePath('/atlas'), '/atlas/');
 assert.equal(canonicalPagePath('/atlas/'), '/atlas/');
 assert.equal(canonicalPageUrl('https://www.arcusbridges.org/', '/atlas'), 'https://www.arcusbridges.org/atlas/');
+assert.equal(getPublicPageMetadata('/atlas'), getPublicPageMetadata('/atlas/'));
+assert.equal(getPublicPageMetadata('/atlas/events/example'), null, 'core metadata must not overwrite event dossiers');
+assert.equal(getPublicPageMetadata('/admin'), null, 'core metadata must not overwrite private pages');
+assert.equal(formatPageTitle('ARCUS'), 'ARCUS');
+assert.equal(formatPageTitle('Event record'), 'Event record | ARCUS');
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputRoot = path.join(repositoryRoot, "dist");
@@ -34,12 +40,35 @@ for (const { event, path: eventPath } of eventPages) {
   assert.ok(html.includes(`<link rel="canonical" href="https://www.arcusbridges.org/atlas/events/${event.event_slug}/"`), `canonical must match the served directory URL for ${event.event_slug}`);
   assert.ok(html.includes('id="arcus-static-structured-data"'), `missing JSON-LD for ${event.event_slug}`);
   assert.ok(html.includes('data-arcus-prerendered="true"'), `missing static research content for ${event.event_slug}`);
+  assert.ok(html.includes('<html lang="en"'), 'English dossier fallback must retain its correct language');
+  assert.ok(html.includes('property="og:locale" content="en_GB"'), 'dossier locale must match its fallback prose');
 }
+
+for (const [route, translations] of Object.entries(publicPageMetadata)) {
+  const html = fs.readFileSync(path.join(outputRoot, route, 'index.html'), 'utf8');
+  const { title, description } = translations.it;
+  assert.ok(html.includes('<html lang="it"'), `Italian default language missing: ${route}`);
+  assert.ok(html.includes(`<title>${title}</title>`), `descriptive Italian title missing: ${route}`);
+  assert.ok(html.includes(`name="description" content="${description}"`), `Italian description missing: ${route}`);
+  assert.ok(html.includes(`property="og:title" content="${title}"`), `social title must agree: ${route}`);
+  assert.ok(html.includes(`name="twitter:description" content="${description}"`), `social description must agree: ${route}`);
+  assert.ok(html.includes('property="og:locale" content="it_IT"'), `Italian social locale missing: ${route}`);
+  assert.ok(html.includes('aria-label="Navigazione principale"'), `Italian fallback navigation missing: ${route}`);
+  assert.ok(translations.en.title && translations.en.description, `English metadata must remain available: ${route}`);
+  assert.equal(formatPageTitle(title), title, `brand must not be duplicated: ${route}`);
+}
+const shell = fs.readFileSync(path.join(repositoryRoot, 'index.html'), 'utf8');
+assert.ok(shell.includes(`<title>${publicPageMetadata['/'].it.title}</title>`), 'development shell and public build must agree');
+assert.ok(shell.includes(publicPageMetadata['/'].it.description), 'shell description must agree with shared metadata');
 
 const sitemap = fs.readFileSync(path.join(outputRoot, "sitemap.xml"), "utf8");
 const sitemapUrlCount = (sitemap.match(/<url>/g) || []).length;
 assert.equal(sitemapUrlCount, manifest.event_count + 10, "sitemap must include core pages and every event dossier");
 const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+for (const [route] of Object.entries(publicPageMetadata)) {
+  const modified = [String(manifest.generated_at).slice(0, 10), publicPageMetadataUpdatedAt].sort().at(-1);
+  assert.ok(sitemap.includes(`<loc>https://www.arcusbridges.org${route}</loc><lastmod>${modified}</lastmod>`), `main page lastmod must reflect the latest data or copy update: ${route}`);
+}
 const atlasHtml = fs.readFileSync(path.join(outputRoot, 'atlas', 'index.html'), 'utf8');
 for (const location of sitemapLocations) {
   const route = new URL(location).pathname;
@@ -73,7 +102,7 @@ for (const author of ["Marco Civera", "Manuel D’Angelo", "Pier Francesco Giord
 assert.ok(publicationsHtml.includes('id="scientific-provenance"'), "missing crawlable provenance section");
 assert.ok(publicationsHtml.includes("10.1016/j.ijdrr.2025.105607"), "missing hydraulic research DOI");
 const methodologyHtml = fs.readFileSync(path.join(outputRoot, 'methodology', 'index.html'), 'utf8');
-for (const text of [researchLineage.en.title, researchLineage.en.overview, researchLineage.en.limit, researchLineage.en.hydraulic, ...researchLineage.en.steps.map((step) => step.text)]) {
+for (const text of [researchLineage.it.title, researchLineage.it.overview, researchLineage.it.limit, researchLineage.it.hydraulic, ...researchLineage.it.steps.map((step) => step.text)]) {
   assert.ok(methodologyHtml.includes(text), `missing crawlable lineage explanation: ${text}`);
 }
 assert.ok(methodologyHtml.includes('id="dataset-lineage"'), 'missing stable methodology lineage anchor');

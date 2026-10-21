@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { getPublicPageMetadata } from '../src/config/publicPageMetadata.js';
 
 // Read-only checks of the public HTML served to crawlers; no indexing guarantees.
 const origin = 'https://www.arcusbridges.org';
@@ -18,11 +19,20 @@ for (const route of paths) {
   htmlByPath.set(route, html);
   const canonical = html.match(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*\bhref=["']([^"']+)["'][^>]*>/i)?.[1];
   const robots = html.match(/<meta\b(?=[^>]*\bname=["']robots["'])[^>]*\bcontent=["']([^"']*)["'][^>]*>/i)?.[1] || '';
+  const title = html.match(/<title>([^<]*)<\/title>/i)?.[1];
+  const language = html.match(/<html\b[^>]*\blang=["']([^"']+)["']/i)?.[1];
+  const metadata = getPublicPageMetadata(route);
+  if (metadata) {
+    assert.equal(title, metadata.title, `${route}: deployed title must match the current Italian metadata`);
+    assert.equal(language, 'it', `${route}: initial main-page language`);
+    assert.ok(html.includes(`name="description" content="${metadata.description}"`), `${route}: deployed description`);
+    assert.ok(html.includes('property="og:locale" content="it_IT"'), `${route}: deployed social locale`);
+  }
   const internalLinks = [...html.matchAll(/<a\b[^>]*\bhref=["']([^"'#]+)["'][^>]*>/gi)]
     .map((match) => new URL(match[1].replaceAll('&amp;', '&'), url))
     .filter((link) => link.origin === origin)
     .map((link) => link.pathname);
-  const report = { route, status: response.status, finalUrl: response.url, canonical, robots, xRobots: response.headers.get('x-robots-tag'), inSitemap: sitemapSet.has(response.url), internalLinkCount: new Set(internalLinks).size, hasStaticContent: html.includes('data-arcus-prerendered="true"') };
+  const report = { route, title, language, status: response.status, finalUrl: response.url, canonical, robots, xRobots: response.headers.get('x-robots-tag'), inSitemap: sitemapSet.has(response.url), internalLinkCount: new Set(internalLinks).size, hasStaticContent: html.includes('data-arcus-prerendered="true"') };
   reports.push(report);
   assert.equal(response.status, 200, `${route}: HTTP status`);
   assert.equal(canonical, response.url, `${route}: canonical must match the final HTTP target`);

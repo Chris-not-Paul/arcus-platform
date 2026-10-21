@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { siteOrigin } from "../../config/site";
+import { isOpenRelease, siteOrigin } from "../../config/site";
+import { formatPageTitle, getPublicPageMetadata } from "../../config/publicPageMetadata";
 import useLanguage from "../../context/useLanguage";
 import { canonicalPageUrl } from "../../utils/publicPageUrl";
 
@@ -61,25 +62,26 @@ export default function PageMeta({
     : "";
 
   useEffect(() => {
-    const fullTitle =
-      title === "ARCUS"
-        ? "ARCUS"
-        : `${title} | ARCUS`;
+    const metadata = isOpenRelease && !noIndex
+      ? getPublicPageMetadata(location.pathname, language)
+      : null;
+    const fullTitle = formatPageTitle(metadata?.title || title);
+    const activeDescription = metadata?.description || description;
 
     document.title = fullTitle;
 
-    setMeta("description", description);
+    setMeta("description", activeDescription);
     const canonicalUrl = canonicalPageUrl(siteOrigin, location.pathname);
 
     setMeta("theme-color", "#f3f0e8");
     setMeta("robots", noIndex ? "noindex, nofollow" : "index, follow");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", fullTitle);
-    setMeta("twitter:description", description);
+    setMeta("twitter:description", activeDescription);
     setMeta("twitter:image", socialImageUrl);
     setMeta("twitter:image:alt", socialImageAlt);
     setProperty("og:title", fullTitle);
-    setProperty("og:description", description);
+    setProperty("og:description", activeDescription);
     setProperty("og:type", "website");
     setProperty("og:site_name", "ARCUS");
     setProperty("og:url", canonicalUrl);
