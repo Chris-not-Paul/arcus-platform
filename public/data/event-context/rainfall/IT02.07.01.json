@@ -4,24 +4,24 @@
   "event_date": "2002-07-15",
   "status": "context_available",
   "requested_location": {
-    "latitude": 44.2338709247872,
-    "longitude": 7.3977410888111
+    "latitude": 44.23384482091903,
+    "longitude": 7.397763122773526
   },
   "grid_location": {
-    "elevation_m": 869,
     "latitude": 44.269997,
     "longitude": 7.381302,
+    "elevation_m": 869,
     "distance_from_event_km": 4.2
   },
   "period": {
-    "end_date": "2002-07-15",
     "start_date": "2002-07-02",
+    "end_date": "2002-07-15",
     "timezone": "Europe/Rome"
   },
   "daily": [
     {
       "date": "2002-07-02",
-      "precipitation_mm": 13.6
+      "precipitation_mm": 13.4
     },
     {
       "date": "2002-07-03",
@@ -65,50 +65,50 @@
     },
     {
       "date": "2002-07-13",
-      "precipitation_mm": 40.7
+      "precipitation_mm": 42.1
     },
     {
       "date": "2002-07-14",
-      "precipitation_mm": 45.3
+      "precipitation_mm": 47.4
     },
     {
       "date": "2002-07-15",
-      "precipitation_mm": 126.2
+      "precipitation_mm": 122.7
     }
   ],
   "aggregates": {
-    "event_calendar_day_mm": 126.2,
+    "event_calendar_day_mm": 122.7,
     "event_and_previous_2_days_mm": 212.2,
     "event_and_previous_6_days_mm": 224.7,
-    "full_period_mm": 252.8
+    "full_period_mm": 252.6
   },
   "source": {
     "attribution_url": "https://open-meteo.com/",
+    "provider": "Open-Meteo",
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/",
     "coverage": "1985-01-01/2021-06-30",
     "dataset": "CERRA",
-    "licence": "CC BY 4.0",
     "model_key": "cerra",
-    "product_type": "reanalysis",
-    "provider": "Open-Meteo",
     "resolution_km": 5.5,
-    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
-    "upstream_url": "https://cds.climate.copernicus.eu/"
+    "product_type": "reanalysis",
+    "licence": "CC BY 4.0"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:09:53.638Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2002-07-15&latitude=44.2338709247872&longitude=7.3977410888111&models=cerra&start_date=2002-07-02&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "reanalysis_context_only",
     "severity": "context",
     "assessment_method": "dataset_role_rule",
     "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
     "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
-  }
+  },
+  "provenance": {
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?latitude=44.23384482091903&longitude=7.397763122773526&start_date=2002-07-02&end_date=2002-07-15&daily=precipitation_sum&models=cerra&timezone=Europe%2FRome",
+    "retrieved_at": "2026-11-09T14:32:19.465Z",
+    "transformation": "Daily values retained; 1/3/7-day aggregates end on the recorded reference date. The full-period aggregate includes all plotted dates."
+  },
+  "caveats": [
+    "Reanalysis grid-cell estimate, not an observation at the bridge or a catchment average.",
+    "Calendar days are used; the collapse time is not known.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }

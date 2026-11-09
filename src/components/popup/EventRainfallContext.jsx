@@ -1,5 +1,6 @@
-import { useMemo } from "react";
 import useLanguage from "../../context/useLanguage";
+import { rainfallChronology } from "../../utils/rainfallChronology";
+import "./EventRainfallChart.css";
 
 function formatDay(value, language) {
   const date = new Date(`${value}T00:00:00.000Z`);
@@ -25,16 +26,86 @@ function Metric({ label, language, value }) {
   );
 }
 
-function EventRainfallContext({ context }) {
+function RainfallChart({ daily, chronology, language }) {
+  const it = language === "it";
+  const locale = it ? "it-IT" : "en-GB";
+  const format = (value) => value.toLocaleString(locale, { maximumFractionDigits: 1 });
+  const peak = daily.reduce((largest, item) =>
+    item.precipitation_mm > largest.precipitation_mm ? item : largest);
+  const roughStep = Math.max(peak.precipitation_mm / 4, 1);
+  const magnitude = 10 ** Math.floor(Math.log10(roughStep));
+  const step = [1, 2, 2.5, 5, 10].find((value) => value * magnitude >= roughStep) * magnitude;
+  const axisMax = step * 4;
+  const inWindow = (date) => chronology.kind !== "reference" && date >= chronology.start && date <= chronology.end;
+  const windowStart = daily.findIndex(({ date }) => inWindow(date));
+  const windowDays = daily.filter(({ date }) => inWindow(date)).length;
+  const showTick = (index, date) => index === 0 || index === daily.length - 1 ||
+    date === chronology.start || date === chronology.end || index % Math.ceil(daily.length / 4) === 0;
+
+  return (
+    <figure className="arcus-rainfall-figure">
+      <figcaption>
+        <div>
+          <span>{it ? "Serie giornaliera · rianalisi" : "Daily series · reanalysis"}</span>
+          <strong>{formatDay(daily[0].date, language)} – {formatDay(daily.at(-1).date, language)}</strong>
+        </div>
+        <div className="arcus-rainfall-peak">
+          <span>{it ? "Massimo giornaliero stimato" : "Estimated daily maximum"}</span>
+          <strong>{format(peak.precipitation_mm)} <small>mm</small></strong>
+          {peak.precipitation_mm > 0 && <small>{formatDay(peak.date, language)}</small>}
+        </div>
+      </figcaption>
+      <div className="arcus-rainfall-plot" role="img"
+        aria-label={it ? "Precipitazioni giornaliere stimate in millimetri. I valori sono disponibili nella tabella sotto il grafico." : "Estimated daily precipitation in millimetres. Values are available in the table below the chart."}>
+        <div className="arcus-rainfall-scale" aria-hidden="true">
+          {[4, 3, 2, 1, 0].map((tick) => <span key={tick} style={{ top: `${(4 - tick) * 25}%` }}>{format(step * tick)}</span>)}
+        </div>
+        <div className="arcus-rainfall-grid" aria-hidden="true">
+          {windowDays > 0 && (
+            <div className="arcus-rainfall-window"
+              style={{ insetInlineStart: `${100 * windowStart / daily.length}%`, width: `${100 * windowDays / daily.length}%` }} />
+          )}
+          {[0, 25, 50, 75, 100].map((position) => <i key={position} style={{ top: `${position}%` }} />)}
+          <div className="arcus-event-rainfall-chart"
+            style={{ gridTemplateColumns: `repeat(${daily.length}, minmax(0, 1fr))` }}>
+            {daily.map((item, index) => (
+              <div className={inWindow(item.date) ? "is-event-day" : ""} data-date={item.date}
+                key={item.date} title={`${formatDay(item.date, language)}: ${format(item.precipitation_mm)} mm`}>
+                <span className="arcus-event-rainfall-bar"
+                  style={{ height: `${100 * item.precipitation_mm / axisMax}%` }} />
+                {showTick(index, item.date) && <small>{item.date.slice(-2)}</small>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="arcus-rainfall-legend">
+        <span><i />{it ? "Precipitazione stimata (mm)" : "Estimated precipitation (mm)"}</span>
+        {windowDays > 0 && <span><i className="is-window" />{chronology.kind === "interval"
+          ? (it ? "Intervallo del cedimento" : "Failure interval")
+          : (it ? "Data riportata" : "Recorded date")}</span>}
+      </div>
+      <details className="arcus-rainfall-values">
+        <summary>{it ? "Valori giornalieri" : "Daily values"}</summary>
+        <table>
+          <thead><tr><th scope="col">{it ? "Data" : "Date"}</th><th scope="col">{it ? "Stima (mm)" : "Estimate (mm)"}</th></tr></thead>
+          <tbody>
+            {daily.map((item) => <tr key={item.date}><th scope="row"><time dateTime={item.date}>{formatDay(item.date, language)}</time></th><td>{format(item.precipitation_mm)}</td></tr>)}
+          </tbody>
+        </table>
+      </details>
+    </figure>
+  );
+}
+
+function EventRainfallContext({ context, event }) {
   const { language } = useLanguage();
   const it = language === "it";
 
-  const maximum = useMemo(
-    () => Math.max(...(context?.daily || []).map((item) => item.precipitation_mm), 1),
-    [context]
-  );
-
-  const eventDate = context.event_date;
+  const chronology = rainfallChronology(event);
+  const interval = chronology.kind === "interval";
+  const dated = chronology.kind === "day";
+  const incompleteInterval = interval && context.daily.at(-1).date < chronology.end;
   const aggregates = context.aggregates;
   const source = context.source;
   const coarseGrid = source.resolution_km >= 20;
@@ -43,6 +114,7 @@ function EventRainfallContext({ context }) {
     "reanalysis_not_representative",
     "event_chronology_review_required",
     "lagged_catchment_response_supported",
+    "regional_report_available",
   ].includes(quality?.status);
   const quantitativeContextAvailable =
     quality?.status !== "reanalysis_not_representative";
@@ -60,6 +132,7 @@ function EventRainfallContext({ context }) {
     lagged_catchment_response_supported: it
       ? "Risposta idraulica ritardata plausibile"
       : "Plausible delayed hydraulic response",
+    regional_report_available: it ? "Riscontro sul contesto regionale" : "Regional event documentation",
   }[quality?.status];
 
   return (
@@ -67,16 +140,21 @@ function EventRainfallContext({ context }) {
       <header>
         <div>
           <span>{it ? "Contesto meteorologico ricostruito" : "Reconstructed meteorological context"}</span>
-          <h3>{it ? "Precipitazione antecedente" : "Antecedent precipitation"}</h3>
+          <h3>{it ? "Precipitazioni intorno al cedimento" : "Precipitation around the failure"}</h3>
         </div>
         <strong>{source.dataset} · ~{source.resolution_km} km</strong>
       </header>
 
       <p className="arcus-event-rainfall-intro">
         {it
-          ? "Stima da rianalisi nella cella di modello più vicina. Le cumulate usano giorni di calendario locali: non sono misure al ponte e non dimostrano il nesso causale."
-          : "Reanalysis estimate at the nearest model grid cell. Accumulations use local calendar days: they are not bridge rain-gauge measurements and do not prove causation."}
+          ? "Stima da rianalisi nella cella di modello associata al sito. Le cumulate usano giorni di calendario locali: non sono misure al ponte e non dimostrano il nesso causale."
+          : "Reanalysis estimate at the model grid cell associated with the site. Accumulations use local calendar days: they are not bridge rain-gauge measurements and do not prove causation."}
       </p>
+      {event.exact_location !== true && (
+        <p className="arcus-event-rainfall-intro">
+          {it ? "Posizione approssimativa: la cella rappresenta l’intorno del sito." : "Approximate location: the grid cell represents the vicinity of the site."}
+        </p>
+      )}
 
       {qualityNeedsAttention && (
         <p className={`arcus-event-rainfall-quality is-${quality.severity}`}>
@@ -90,7 +168,7 @@ function EventRainfallContext({ context }) {
         </p>
       )}
 
-      {coarseGrid && quality?.status !== "lagged_catchment_response_supported" && (
+      {coarseGrid && (
         <p className="arcus-event-rainfall-resolution-warning">
           <strong>{it ? "Contesto a bassa risoluzione" : "Coarse-resolution context"}</strong>
           {it
@@ -101,7 +179,16 @@ function EventRainfallContext({ context }) {
 
       {quantitativeContextAvailable && (
         <>
-          {eventDayIsDry && (
+          <p className="arcus-event-rainfall-chronology">
+            {interval
+              ? `${it ? "Intervallo documentato del cedimento" : "Documented failure interval"}: ${formatDay(chronology.start, language)} – ${formatDay(chronology.end, language)}`
+              : dated
+                ? `${it ? "Data riportata nella scheda" : "Date recorded in the dossier"}: ${formatDay(chronology.start, language)}`
+                : `${it ? "Data di riferimento, non giorno accertato del cedimento" : "Reference date, not an established failure day"}: ${formatDay(chronology.start, language)}`}
+            {incompleteInterval && (it ? " · serie parziale rispetto all’intervallo" : " · series does not cover the full interval")}
+          </p>
+          <RainfallChart daily={context.daily} chronology={chronology} language={language} />
+          {dated && eventDayIsDry && (
             <p className="arcus-event-rainfall-zero-note">
               <strong>
                 {it
@@ -114,61 +201,31 @@ function EventRainfallContext({ context }) {
             </p>
           )}
 
-          <div className="arcus-event-rainfall-metrics">
+          <div className={`arcus-event-rainfall-metrics${dated ? "" : " is-three"}`}>
+            {dated && (
+              <Metric
+                label={it ? "Cella ponte · data registrata" : "Bridge cell · recorded date"}
+                language={language}
+                value={aggregates.event_calendar_day_mm}
+              />
+            )}
             <Metric
-              label={it ? "Cella ponte · giorno civile" : "Bridge cell · calendar day"}
-              language={language}
-              value={aggregates.event_calendar_day_mm}
-            />
-            <Metric
-              label={it ? "3 giorni, incluso evento" : "3 days, incl. event"}
+              label={it ? "3 giorni fino alla data di riferimento" : "3 days through the reference date"}
               language={language}
               value={aggregates.event_and_previous_2_days_mm}
             />
             <Metric
-              label={it ? "7 giorni, incluso evento" : "7 days, incl. event"}
+              label={it ? "7 giorni fino alla data di riferimento" : "7 days through the reference date"}
               language={language}
               value={aggregates.event_and_previous_6_days_mm}
             />
             <Metric
-              label={it ? "14 giorni, incluso evento" : "14 days, incl. event"}
+              label={it ? "Totale della serie mostrata" : "Total for the series shown"}
               language={language}
               value={aggregates.full_period_mm}
             />
           </div>
 
-          <div
-            aria-label={it ? "Grafico delle precipitazioni giornaliere" : "Daily precipitation chart"}
-            className="arcus-event-rainfall-chart"
-            role="img"
-            style={{
-              gridTemplateColumns: `repeat(${context.daily.length}, minmax(0, 1fr))`,
-            }}
-          >
-            {context.daily.map((item, index) => {
-              const eventDay = item.date === eventDate;
-
-              return (
-                <div className={eventDay ? "is-event-day" : ""} key={item.date}>
-                  <span className="arcus-event-rainfall-value">
-                    {item.precipitation_mm > 0 ? item.precipitation_mm : ""}
-                  </span>
-                  <span className="arcus-event-rainfall-bar-track">
-                    <span
-                      className="arcus-event-rainfall-bar"
-                      style={{ height: `${Math.max(2, (item.precipitation_mm / maximum) * 100)}%` }}
-                      title={`${formatDay(item.date, language)}: ${item.precipitation_mm} mm`}
-                    />
-                  </span>
-                  <small>
-                    {index === 0 || eventDay || index === context.daily.length - 1
-                      ? formatDay(item.date, language)
-                      : ""}
-                  </small>
-                </div>
-              );
-            })}
-          </div>
         </>
       )}
 

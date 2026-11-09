@@ -2,7 +2,9 @@
 
 ## Decision
 
-The historical ISPRA comparison pipeline is technically viable and reproducible. The public Atlas exposes the **raw class chronology at the same documented coordinate** for all 250 events with an exact location in the current 261-event catalogue. The 11 events with an approximate coordinate are intentionally excluded from point classification.
+The historical ISPRA comparison pipeline reports the **raw class chronology at the same documented coordinate**. The Open 2.0 review covers all 257 records: all four official archived mosaics were recalculated for the 196 exact locations, and the 61 approximate locations are excluded from point classification. The review also checks current PAI v5.0 through the official WFS and resamples the local INGV MPS04 grid at all 196 points. The current hydraulic card uses the official national ISPRA v5.0 (2020) polygons, with the edition shown separately from the processing date.
+
+Run `node scripts/review-open-territorial-hazards.js` to stage a new review in `outputs/arcus-territorial-review`. Only coordinates of exact, publicly released events are queried remotely. The generator preserves the historical source versions, does not modify the event release, and does not deploy the result.
 
 The catalogue supplies observations rather than an automatic engineering conclusion. The original 17-event regression subset still shows why that separation is useful:
 
@@ -11,7 +13,7 @@ The catalogue supplies observations rather than an automatic engineering conclus
 - the 2024 landslide point results do not currently include distance from the nearest polygon boundary;
 - a difference between two official mosaics documents a cartographic comparison, not a physical change in hazard and not an effect caused by the collapse.
 
-The current official ISPRA/INGV territorial context remains available in the Atlas. A separate `Classes over time` view reports release year, complete class membership, highest class, and temporal relation to the event without publishing the derived transition interpretation. The full comparison and review status remain in the private Research dataset.
+The Atlas dossier displays the territorial layer relevant to the recorded cause. The separate historical catalogue records release year, complete class membership, highest class, and temporal relation to the event without publishing the derived transition interpretation. The full comparison and review status remain in the private Research dataset.
 
 ## Purpose and interpretation limits
 
@@ -52,7 +54,7 @@ The custom shapefile reader is independently tested with a synthetic polygon con
 
 ## Current-context summary
 
-The current ISPRA cards include a compact `Map evolution` indicator so users do not need to compare repeated release cards manually. It compares the latest official observation strictly before the collapse with the configured current release: hydraulic 2020 v5 or landslide 2024 v5.
+The historical catalogue includes a compact comparison summary. It compares the latest official observation strictly before the collapse with the configured reference release: hydraulic 2020 v5 or landslide 2024 v5.
 
 The indicator has three neutral states:
 

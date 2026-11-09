@@ -1,24 +1,32 @@
 {
   "schema_version": "arcus-event-rainfall-context-v1",
   "event_id": "IT23.11.01",
-  "event_date": "2023-11-04",
+  "event_date": "2023-11-02",
   "status": "context_available",
   "requested_location": {
-    "latitude": 43.9445,
-    "longitude": 11.1252
+    "latitude": 43.926877968779756,
+    "longitude": 11.126609148249287
   },
   "grid_location": {
-    "elevation_m": 124,
     "latitude": 44,
     "longitude": 11.25,
-    "distance_from_event_km": 11.7
+    "elevation_m": 113,
+    "distance_from_event_km": 12.8
   },
   "period": {
-    "end_date": "2023-11-04",
-    "start_date": "2023-10-22",
+    "start_date": "2023-10-20",
+    "end_date": "2023-11-06",
     "timezone": "Europe/Rome"
   },
   "daily": [
+    {
+      "date": "2023-10-20",
+      "precipitation_mm": 5.8
+    },
+    {
+      "date": "2023-10-21",
+      "precipitation_mm": 2.8
+    },
     {
       "date": "2023-10-22",
       "precipitation_mm": 0
@@ -29,19 +37,19 @@
     },
     {
       "date": "2023-10-24",
-      "precipitation_mm": 21.8
+      "precipitation_mm": 22
     },
     {
       "date": "2023-10-25",
-      "precipitation_mm": 3.5
+      "precipitation_mm": 3.4
     },
     {
       "date": "2023-10-26",
-      "precipitation_mm": 2.1
+      "precipitation_mm": 2.3
     },
     {
       "date": "2023-10-27",
-      "precipitation_mm": 10
+      "precipitation_mm": 9.7
     },
     {
       "date": "2023-10-28",
@@ -49,15 +57,15 @@
     },
     {
       "date": "2023-10-29",
-      "precipitation_mm": 2.4
+      "precipitation_mm": 3.4
     },
     {
       "date": "2023-10-30",
-      "precipitation_mm": 18
+      "precipitation_mm": 21.1
     },
     {
       "date": "2023-10-31",
-      "precipitation_mm": 6.9
+      "precipitation_mm": 2.8
     },
     {
       "date": "2023-11-01",
@@ -65,50 +73,58 @@
     },
     {
       "date": "2023-11-02",
-      "precipitation_mm": 28
+      "precipitation_mm": 35.2
     },
     {
       "date": "2023-11-03",
-      "precipitation_mm": 28.3
+      "precipitation_mm": 21.1
     },
     {
       "date": "2023-11-04",
-      "precipitation_mm": 2
+      "precipitation_mm": 4.5
+    },
+    {
+      "date": "2023-11-05",
+      "precipitation_mm": 12.5
+    },
+    {
+      "date": "2023-11-06",
+      "precipitation_mm": 0
     }
   ],
   "aggregates": {
-    "event_calendar_day_mm": 2,
-    "event_and_previous_2_days_mm": 58.3,
-    "event_and_previous_6_days_mm": 86.2,
-    "full_period_mm": 123.7
+    "event_calendar_day_mm": 35.2,
+    "event_and_previous_2_days_mm": 38.6,
+    "event_and_previous_6_days_mm": 72.8,
+    "full_period_mm": 147.3
   },
   "source": {
     "attribution_url": "https://open-meteo.com/",
+    "provider": "Open-Meteo",
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/",
     "coverage": "1940-present",
     "dataset": "ERA5",
-    "licence": "CC BY 4.0",
     "model_key": "era5",
-    "product_type": "reanalysis",
-    "provider": "Open-Meteo",
     "resolution_km": 25,
-    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
-    "upstream_url": "https://cds.climate.copernicus.eu/"
+    "product_type": "reanalysis",
+    "licence": "CC BY 4.0"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:14:34.270Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2023-11-04&latitude=43.9445&longitude=11.1252&models=era5&start_date=2023-10-22&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "coarse_reanalysis_context_only",
     "severity": "caution",
     "assessment_method": "dataset_resolution_rule",
     "rationale_it": "La rianalisi descrive la cella di modello al punto del ponte. La risoluzione non consente di rappresentare affidabilmente massimi convettivi locali o precipitazione areale a monte.",
     "rationale_en": "The reanalysis describes the model cell at the bridge point. Its resolution cannot reliably represent local convective maxima or upstream areal precipitation."
-  }
+  },
+  "provenance": {
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.926877968779756&longitude=11.126609148249287&start_date=2023-10-20&end_date=2023-11-06&daily=precipitation_sum&models=era5&timezone=Europe%2FRome",
+    "retrieved_at": "2026-11-09T14:32:23.665Z",
+    "transformation": "Daily values retained; 1/3/7-day aggregates end on the recorded reference date. The full-period aggregate includes all plotted dates."
+  },
+  "caveats": [
+    "Reanalysis grid-cell estimate, not an observation at the bridge or a catchment average.",
+    "Calendar days are used; the collapse time is not known.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }

@@ -333,9 +333,14 @@ function runReleaseWorkers(config, pilotEvents, dataDirectory) {
 }
 
 function currentLandslideObservation(event, currentContext, tolerance) {
-  const item = currentContext.events[event.event_id]?.landslide;
+  const row = currentContext.events[event.event_id];
+  const item = row?.landslide;
 
-  if (!item || !["available", "no_intersection"].includes(item.status)) return null;
+  if (!item || item.source_dataset_version !== "5.0" ||
+    !["available", "no_intersection"].includes(item.status) ||
+    !["latitude", "longitude"].every((key) =>
+      Number.isFinite(row.coordinates?.[key]) && Math.abs(row.coordinates[key] - event[key]) <= 0.000001
+    )) return null;
 
   const classes = item.matched_hazard_classes || [];
 
@@ -366,6 +371,7 @@ function currentLandslideObservation(event, currentContext, tolerance) {
 export async function buildEventHazardHistoryPilot({
   configPath = CONFIG_PATH,
   dataDirectory = process.env.ARCUS_ISPRA_HISTORY_DIR || DEFAULT_DATA_DIRECTORY,
+  currentContext = readJson(CURRENT_CONTEXT_PATH),
   outputPath = OUTPUT_PATH,
   publicOutputPath = PUBLIC_OUTPUT_PATH,
 } = {}) {
@@ -373,7 +379,6 @@ export async function buildEventHazardHistoryPilot({
   const current = readJson(CURRENT_RELEASE_PATH);
   const releaseDirectory = path.join(ROOT, "private-data", "open", "releases", current.version);
   const events = readJson(path.join(releaseDirectory, "events.json")).events;
-  const currentContext = readJson(CURRENT_CONTEXT_PATH);
   const eventById = new Map(events.map((event) => [event.event_id, event]));
   const pilotEvents =
     config.scope?.event_selection === "all_exact_location_events"
@@ -398,7 +403,9 @@ export async function buildEventHazardHistoryPilot({
     pilotEvents.map((event) => [event.event_id, { hydraulic: [], landslide: [] }])
   );
 
-  const releasePayloads = await runReleaseWorkers(config, pilotEvents, dataDirectory);
+  const [releasePayloads, territorialContext] = await Promise.all([
+    runReleaseWorkers(config, pilotEvents, dataDirectory), currentContext,
+  ]);
 
   for (const payload of releasePayloads) {
     const release = config.releases.find((item) => item.id === payload.release_id);
@@ -420,7 +427,7 @@ export async function buildEventHazardHistoryPilot({
     const eventId = event.event_id;
     const currentObservation = currentLandslideObservation(
       event,
-      currentContext,
+      territorialContext,
       config.boundary_tolerance_m
     );
 
@@ -500,8 +507,8 @@ export async function buildEventHazardHistoryPilot({
       precision: "year",
       label: "2024",
     },
-    source_url: currentContext.sources?.landslide?.source_url,
-    title: currentContext.sources?.landslide?.source_name,
+    source_url: territorialContext.sources?.landslide?.source_url,
+    title: territorialContext.sources?.landslide?.source_name,
     version: "v5.0",
   };
   const publicOutput = {

@@ -1408,7 +1408,7 @@ function EventPopup({
                   )}
                   <EventResourceState resource={selectedContext.resource} language={language} absentMessage={selectedContext.absentMessage} />
                   {visibleContextTab === "rainfall" && rainfallContext && (
-                    <EventRainfallContext context={rainfallContext} />
+                    <EventRainfallContext context={rainfallContext} event={event} />
                   )}
                   {visibleContextTab === "hydraulic" && hydraulicContext && (
                     <EventHydraulicContext context={hydraulicContext} />

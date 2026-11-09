@@ -2132,73 +2132,11 @@
   font-size: 9px;
 }
 
-.arcus-event-rainfall-chart {
-  display: grid;
-  grid-template-columns: repeat(14, minmax(0, 1fr));
-  gap: 4px;
-
-  height: 178px;
-  margin-top: 18px;
-  padding: 8px 0 0;
-
-  border-bottom: 1px solid rgba(32,40,38,0.18);
-}
-
-.arcus-event-rainfall-chart > div {
-  position: relative;
-
-  display: grid;
-  grid-template-rows: 18px 1fr 25px;
-  min-width: 0;
-}
-
-.arcus-event-rainfall-value {
-  color: var(--arcus-ink-muted);
-
-  font-family: var(--arcus-font-mono);
-  font-size: 8px;
-  text-align: center;
-}
-
-.arcus-event-rainfall-bar-track {
-  position: relative;
-
-  display: block;
-  min-height: 100px;
-}
-
-.arcus-event-rainfall-bar {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  display: block;
-
-  background: var(--arcus-steel);
-  opacity: 0.68;
-}
-
-.arcus-event-rainfall-chart small {
-  padding-top: 6px;
-
-  color: var(--arcus-ink-muted);
-
-  font-family: var(--arcus-font-mono);
-  font-size: 7px;
-  line-height: 1.15;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.arcus-event-rainfall-chart .is-event-day {
-  background: rgba(167,101,50,0.07);
-  box-shadow: inset 0 -2px 0 var(--arcus-bronze);
-}
-
-.arcus-event-rainfall-chart .is-event-day .arcus-event-rainfall-bar {
-  background: var(--arcus-bronze);
-  opacity: 0.95;
+.arcus-event-rainfall-chronology {
+  margin: 12px 0 0;
+  color: var(--arcus-ink);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .arcus-event-rainfall footer {

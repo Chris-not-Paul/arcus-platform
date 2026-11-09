@@ -4,32 +4,32 @@
   "event_date": "2000-10-13",
   "status": "context_available",
   "requested_location": {
-    "latitude": 45.3626772288527,
-    "longitude": 7.34517738330256
+    "latitude": 45.385695980428345,
+    "longitude": 7.344748922551992
   },
   "grid_location": {
-    "elevation_m": 867,
-    "latitude": 45.30488,
-    "longitude": 7.4392242,
-    "distance_from_event_km": 9.8
+    "latitude": 45.403084,
+    "longitude": 7.3679504,
+    "elevation_m": 1646,
+    "distance_from_event_km": 2.6
   },
   "period": {
-    "end_date": "2000-10-13",
     "start_date": "2000-09-30",
+    "end_date": "2000-10-13",
     "timezone": "Europe/Rome"
   },
   "daily": [
     {
       "date": "2000-09-30",
-      "precipitation_mm": 162.4
+      "precipitation_mm": 183.4
     },
     {
       "date": "2000-10-01",
-      "precipitation_mm": 32.2
+      "precipitation_mm": 62
     },
     {
       "date": "2000-10-02",
-      "precipitation_mm": 2.8
+      "precipitation_mm": 9.6
     },
     {
       "date": "2000-10-03",
@@ -37,15 +37,15 @@
     },
     {
       "date": "2000-10-04",
-      "precipitation_mm": 0.3
-    },
-    {
-      "date": "2000-10-05",
       "precipitation_mm": 0
     },
     {
+      "date": "2000-10-05",
+      "precipitation_mm": 1.4
+    },
+    {
       "date": "2000-10-06",
-      "precipitation_mm": 7.4
+      "precipitation_mm": 11.6
     },
     {
       "date": "2000-10-07",
@@ -61,54 +61,54 @@
     },
     {
       "date": "2000-10-10",
-      "precipitation_mm": 1.5
+      "precipitation_mm": 9.7
     },
     {
       "date": "2000-10-11",
-      "precipitation_mm": 10.6
+      "precipitation_mm": 31.4
     },
     {
       "date": "2000-10-12",
-      "precipitation_mm": 7
+      "precipitation_mm": 42.1
     },
     {
       "date": "2000-10-13",
-      "precipitation_mm": 31.5
+      "precipitation_mm": 127.1
     }
   ],
   "aggregates": {
-    "event_calendar_day_mm": 31.5,
-    "event_and_previous_2_days_mm": 49.1,
-    "event_and_previous_6_days_mm": 50.6,
-    "full_period_mm": 255.7
+    "event_calendar_day_mm": 127.1,
+    "event_and_previous_2_days_mm": 200.6,
+    "event_and_previous_6_days_mm": 210.3,
+    "full_period_mm": 478.3
   },
   "source": {
     "attribution_url": "https://open-meteo.com/",
+    "provider": "Open-Meteo",
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/",
     "coverage": "1985-01-01/2021-06-30",
     "dataset": "CERRA",
-    "licence": "CC BY 4.0",
     "model_key": "cerra",
-    "product_type": "reanalysis",
-    "provider": "Open-Meteo",
     "resolution_km": 5.5,
-    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
-    "upstream_url": "https://cds.climate.copernicus.eu/"
+    "product_type": "reanalysis",
+    "licence": "CC BY 4.0"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:10:03.147Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2000-10-13&latitude=45.3626772288527&longitude=7.34517738330256&models=cerra&start_date=2000-09-30&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "reanalysis_context_only",
     "severity": "context",
     "assessment_method": "dataset_role_rule",
     "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
     "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
-  }
+  },
+  "provenance": {
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.385695980428345&longitude=7.344748922551992&start_date=2000-09-30&end_date=2000-10-13&daily=precipitation_sum&models=cerra&timezone=Europe%2FRome",
+    "retrieved_at": "2026-11-09T14:32:18.962Z",
+    "transformation": "Daily values retained; 1/3/7-day aggregates end on the recorded reference date. The full-period aggregate includes all plotted dates."
+  },
+  "caveats": [
+    "Reanalysis grid-cell estimate, not an observation at the bridge or a catchment average.",
+    "Calendar days are used; the collapse time is not known.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }

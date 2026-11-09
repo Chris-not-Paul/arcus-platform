@@ -6,7 +6,7 @@ The rainfall module adds reproducible meteorological context to a documented col
 
 The first production-shaped prototype was `IT08.10.03`, Rio Corongiu, using the CERRA reanalysis. The source is explicitly shown in the UI and remains separate from the curated historical failure evidence.
 
-The current population contains 199 hydraulic-collapse records: 164 CERRA records and 35 ERA5 records. Together they cover every hydraulic event in the professional dataset that has an exact coordinate and a complete date. CERRA is used first for its 1985-01-01 to 2021-06-30 coverage; ERA5 fills only the otherwise missing events from 1940 onwards. Events without those location/date gates remain unpublished rather than receiving an approximate location.
+The original catalogue contained 199 reconstructions. The Open 2.0 review checks the 207 events classified as Hydraulic against the released date and coordinates. The updated catalogue contains 183 aligned contexts, including 47 new extractions and 136 retained series. The 24 remaining records lack the location precision required for a new point extraction. Previously aligned series at approximate sites remain explicitly labelled as vicinity context. These counts describe catalogue coverage, not validation against rain gauges.
 
 ## Display contract
 
@@ -14,14 +14,13 @@ The event dossier may show the module only when a versioned context record exist
 
 The module reports:
 
-- the event calendar-day precipitation;
-- the event day plus the two preceding calendar days;
-- the event day plus the six preceding calendar days;
+- precipitation on the recorded civil day, only when the dossier does not qualify that day as uncertain;
+- three- and seven-day sums ending on the dossier's reference date;
 - the daily series used by those sums;
 - dataset, nominal spatial resolution and model-grid distance;
 - provider attribution and an explicit non-causation warning.
 
-The event-day metric is labelled as precipitation in the bridge grid cell during the civil calendar day. It is not labelled as the rainfall that caused the collapse.
+An explicit documented collapse interval is highlighted across every covered day, with the daily metric suppressed; an uncertain reference date without bounds is not highlighted as a collapse day. A chart with incomplete interval coverage is labelled as partial. Zero precipitation is not drawn as a positive bar. No result is labelled as the rainfall that caused the collapse.
 
 Because the time of collapse is not available in the master event dataset, the current accumulations use local calendar days. They must not be described as rolling 24-hour, 72-hour or 7-day windows.
 
@@ -48,7 +47,7 @@ Rain-gauge or hydrometric observations may later be added as a higher evidence t
 
 Every rainfall record carries a quality assessment. Most records remain descriptive reanalysis context only; ERA5 records receive an additional coarse-grid limitation. Event-specific overrides are allowed only when the chronology has been checked against attributable sources.
 
-The current assessment contains:
+The original catalogue assessment contained:
 
 - 161 CERRA records classified as reanalysis context only;
 - 33 ERA5 records classified as coarse reanalysis context only;
@@ -58,13 +57,22 @@ The current assessment contains:
 
 Raw values are retained for reproducibility. A warning in the event dossier prevents a non-representative zero from being read as absence of rainfall or absence of hydraulic forcing.
 
-Refresh quality assessments after rainfall generation:
+The updated Gambellara and Prada series link the Arpae report as independent documentation of the **regional episode**. The report is not presented as an observation at either bridge cell; ARCUS does not superimpose an unverified gauge series. Numerical rationales from an older weather extraction are not carried across to a changed grid/window. The historical quality-reassessment command below is for the original catalogue, not for regenerating the reviewed Open catalogue:
 
 ```text
 npm run assess:event-rainfall-quality
 ```
 
 ## Build and validation
+
+Use the reviewed Open workflow for the public catalogue. Both retrieval commands stage output separately and do not change public files:
+
+```text
+node scripts/refresh-open-rainfall-context.js --pilot
+node scripts/refresh-open-rainfall-context.js
+```
+
+The second command reuses the two tested pilot files, checks the entire Open hydraulic population, and writes an index and report to `outputs/arcus-rainfall-review`. Review failures and excluded cases before promoting the refreshed files and index. The commands below describe the older single-event/professional-catalogue workflow.
 
 Generate one reviewed context record explicitly:
 

@@ -4,13 +4,13 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CONFIG_PATH = path.join(ROOT, "config", "event-hazard-history-pilot.json");
-const OUTPUT_PATH = path.join(
+const OUTPUT_PATH = process.env.ARCUS_HISTORY_RESEARCH_TEST_PATH || path.join(
   ROOT,
   "private-data",
   "research",
   "event-hazard-history-pilot.json"
 );
-const CURRENT_CONTEXT_PATH = path.join(
+const CURRENT_CONTEXT_PATH = process.env.ARCUS_TERRITORIAL_TEST_PATH || path.join(
   ROOT,
   "public",
   "data",
@@ -25,7 +25,7 @@ const CURRENT_RELEASE_POINTER_PATH = path.join(
   "releases",
   "current.json"
 );
-const PUBLIC_OUTPUT_PATH = path.join(
+const PUBLIC_OUTPUT_PATH = process.env.ARCUS_HISTORY_PUBLIC_TEST_PATH || path.join(
   ROOT,
   "public",
   "data",
@@ -80,6 +80,15 @@ assert.equal(
   "official_class_membership_at_documented_event_coordinate"
 );
 assert.equal(Object.keys(publicOutput.events).length, output.coverage.events);
+assert.equal(publicOutput.open_release, currentReleasePointer.version);
+for (const event of currentEvents.filter((row) => row.exact_location)) {
+  const history = publicOutput.events[event.event_id];
+  assert.equal(history.event_date, event.date);
+  assert.deepEqual(history.coordinates, { latitude: event.latitude, longitude: event.longitude });
+  const observed = history.hazards.hydraulic.observations.find((row) => row.release_id === "ispra-hydraulic-2020-v5");
+  assert.deepEqual(observed.classes, currentContext.events[event.event_id].hydraulic.matched_classes);
+  assert.equal(observed.highest_class, currentContext.events[event.event_id].hydraulic.highest_class);
+}
 assert.equal(Object.hasOwn(publicOutput.events["IT18.10.03"].hazards.hydraulic, "transitions"), false);
 assert.equal(Object.hasOwn(publicOutput.sources, "ispra-landslide-2024-v5"), true);
 assert.equal(
@@ -181,6 +190,10 @@ for (const event of currentEvents.filter((item) => !item.exact_location)) {
 }
 
 for (const eventId of config.regression_cases.hydraulic_event_ids) {
+  if (!currentEvents.some((event) => event.event_id === eventId && event.exact_location)) {
+    assert.equal(Object.hasOwn(output.events, eventId), false);
+    continue;
+  }
   assert.equal(output.events[eventId].hazards.hydraulic.observations.length, 2);
   const archiveObservation = output.events[eventId].hazards.hydraulic.observations.find(
     (item) => item.release_id === "ispra-hydraulic-2020-v5"
@@ -193,6 +206,10 @@ for (const eventId of config.regression_cases.hydraulic_event_ids) {
 }
 
 for (const eventId of config.regression_cases.landslide_event_ids) {
+  if (!currentEvents.some((event) => event.event_id === eventId && event.exact_location)) {
+    assert.equal(Object.hasOwn(output.events, eventId), false);
+    continue;
+  }
   assert.equal(output.events[eventId].hazards.landslide.observations.length >= 2, true);
 }
 

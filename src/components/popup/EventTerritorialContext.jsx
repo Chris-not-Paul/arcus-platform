@@ -20,6 +20,12 @@ function dateLabel(value, language) {
 
 function statusCopy(result, language) {
   const it = language === "it";
+  if (result?.status === "location_not_precise") {
+    return {
+      label: it ? "Posizione approssimativa" : "Approximate location",
+      tone: "unresolved",
+    };
+  }
 
   if (result?.status === "available") {
     return {
@@ -108,6 +114,11 @@ function seismicValue(result, language) {
 
 function detailCopy(key, result, language) {
   const it = language === "it";
+  if (result.status === "location_not_precise") {
+    return it
+      ? "Le coordinate indicano l’intorno del sito. ARCUS non assegna un esito puntuale senza una posizione sufficientemente precisa."
+      : "The coordinates indicate the vicinity of the site. ARCUS does not assign a point result without a sufficiently precise location.";
+  }
 
   if (key === "hydraulic") {
     if (result.status === "available") {
@@ -180,7 +191,7 @@ function EventTerritorialContext({ cause, context }) {
     {
       key: "hydraulic",
       label: it ? "Pericolosità idraulica" : "Hydraulic hazard",
-      provider: "ISPRA · mosaico nazionale",
+      provider: ["ISPRA · mosaico nazionale", context.hydraulic.source_dataset_version].filter(Boolean).join(" · "),
       result: context.hydraulic,
       value: hydraulicValue(context.hydraulic, language),
     },
@@ -220,8 +231,8 @@ function EventTerritorialContext({ cause, context }) {
 
       <p className="arcus-event-territorial-intro">
         {it
-          ? "La scheda mostra soltanto il contesto ufficiale pertinente alla causa documentata. Il dato è corrente: non ricostruisce la pericolosità alla data dell’evento e non prova il nesso causale."
-          : "The dossier shows only the official context relevant to the documented cause. The value is current: it does not reconstruct hazard at the event date or prove causation."}
+          ? "La scheda mostra soltanto il contesto ufficiale pertinente alla causa documentata. Il risultato si riferisce all’edizione indicata: non ricostruisce la pericolosità alla data dell’evento e non prova il nesso causale."
+          : "The dossier shows only the official context relevant to the documented cause. The result refers to the edition shown: it does not reconstruct hazard at the event date or prove causation."}
       </p>
 
       <div className="arcus-event-causal-separation" role="note">
@@ -252,6 +263,16 @@ function EventTerritorialContext({ cause, context }) {
               </div>
               <strong>{card.value}</strong>
               <p>{detailCopy(card.key, card.result, language)}</p>
+              {card.key === "hydraulic" && ["boundary_sensitive_intersection", "boundary_adjacent_no_intersection"].includes(card.result.positional_assessment) && (
+                <p role="note">{it
+                  ? "Il punto è entro 50 m da un limite cartografico. L’esito è sensibile alla posizione e va verificato sulla mappa."
+                  : "The point is within 50 m of a map boundary. The result is sensitive to location and should be checked on the map."}</p>
+              )}
+              {card.result.verification === "retained_snapshot" && (
+                <p role="note">{it
+                  ? "Ultimo esito disponibile alle stesse coordinate; il servizio non lo ha riconfermato in questa verifica."
+                  : "Last available result at the same coordinates; the service did not reconfirm it during this review."}</p>
+              )}
               <footer>
                 <span>{status.label}</span>
                 {queriedAt ? <time dateTime={card.result.queried_at}>{queriedAt}</time> : null}

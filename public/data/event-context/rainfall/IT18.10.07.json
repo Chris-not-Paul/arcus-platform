@@ -1,24 +1,28 @@
 {
   "schema_version": "arcus-event-rainfall-context-v1",
   "event_id": "IT18.10.07",
-  "event_date": "2018-10-30",
+  "event_date": "2018-10-29",
   "status": "context_available",
   "requested_location": {
     "latitude": 46.2802,
     "longitude": 11.4522
   },
   "grid_location": {
-    "elevation_m": 871,
     "latitude": 46.288002,
     "longitude": 11.429779,
+    "elevation_m": 871,
     "distance_from_event_km": 1.9
   },
   "period": {
+    "start_date": "2018-10-16",
     "end_date": "2018-10-30",
-    "start_date": "2018-10-17",
     "timezone": "Europe/Rome"
   },
   "daily": [
+    {
+      "date": "2018-10-16",
+      "precipitation_mm": 0
+    },
     {
       "date": "2018-10-17",
       "precipitation_mm": 0
@@ -61,54 +65,54 @@
     },
     {
       "date": "2018-10-27",
-      "precipitation_mm": 22.7
+      "precipitation_mm": 27.1
     },
     {
       "date": "2018-10-28",
-      "precipitation_mm": 70.3
+      "precipitation_mm": 65.9
     },
     {
       "date": "2018-10-29",
-      "precipitation_mm": 44.3
+      "precipitation_mm": 44.4
     },
     {
       "date": "2018-10-30",
-      "precipitation_mm": 10.2
+      "precipitation_mm": 10.1
     }
   ],
   "aggregates": {
-    "event_calendar_day_mm": 10.2,
-    "event_and_previous_2_days_mm": 124.8,
-    "event_and_previous_6_days_mm": 147.5,
+    "event_calendar_day_mm": 44.4,
+    "event_and_previous_2_days_mm": 137.4,
+    "event_and_previous_6_days_mm": 137.4,
     "full_period_mm": 147.5
   },
   "source": {
     "attribution_url": "https://open-meteo.com/",
+    "provider": "Open-Meteo",
+    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
+    "upstream_url": "https://cds.climate.copernicus.eu/",
     "coverage": "1985-01-01/2021-06-30",
     "dataset": "CERRA",
-    "licence": "CC BY 4.0",
     "model_key": "cerra",
-    "product_type": "reanalysis",
-    "provider": "Open-Meteo",
     "resolution_km": 5.5,
-    "upstream_provider": "Copernicus Climate Change Service / ECMWF",
-    "upstream_url": "https://cds.climate.copernicus.eu/"
+    "product_type": "reanalysis",
+    "licence": "CC BY 4.0"
   },
-  "provenance": {
-    "retrieved_at": "2026-09-02T06:09:20.316Z",
-    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?daily=precipitation_sum&end_date=2018-10-30&latitude=46.2802&longitude=11.4522&models=cerra&start_date=2018-10-17&timezone=Europe%2FRome",
-    "transformation": "Daily values retained; ARCUS sums include the event calendar day."
-  },
-  "caveats": [
-    "Reanalysis estimate at the nearest model grid cell; not a rain-gauge observation at the bridge.",
-    "The collapse time is unavailable, therefore accumulations use calendar days rather than rolling event-time windows.",
-    "Meteorological context does not prove collapse causation."
-  ],
   "quality_assessment": {
     "status": "reanalysis_context_only",
     "severity": "context",
     "assessment_method": "dataset_role_rule",
     "rationale_it": "Dato descrittivo di rianalisi alla cella del ponte; non è una misura pluviometrica né una ricostruzione della precipitazione media sul bacino.",
     "rationale_en": "Descriptive reanalysis value at the bridge grid cell; it is neither a rain-gauge observation nor a reconstruction of catchment-average precipitation."
-  }
+  },
+  "provenance": {
+    "retrieval_url": "https://archive-api.open-meteo.com/v1/archive?latitude=46.2802&longitude=11.4522&start_date=2018-10-16&end_date=2018-10-30&daily=precipitation_sum&models=cerra&timezone=Europe%2FRome",
+    "retrieved_at": "2026-11-09T14:32:21.589Z",
+    "transformation": "Daily values retained; 1/3/7-day aggregates end on the recorded reference date. The full-period aggregate includes all plotted dates."
+  },
+  "caveats": [
+    "Reanalysis grid-cell estimate, not an observation at the bridge or a catchment average.",
+    "Calendar days are used; the collapse time is not known.",
+    "Meteorological context does not prove collapse causation."
+  ]
 }
