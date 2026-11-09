@@ -12,6 +12,12 @@ export const siteOrigin = String(
   import.meta.env.VITE_ARCUS_SITE_ORIGIN || "https://www.arcusbridges.org"
 ).replace(/\/$/, "");
 
+export const bundledOpenReleaseVersion = import.meta.env.VITE_ARCUS_OPEN_RELEASE_VERSION;
+export const bundledOpenReleaseName = import.meta.env.VITE_ARCUS_OPEN_RELEASE_NAME;
+export const bundledOpenEventCount = Number(import.meta.env.VITE_ARCUS_OPEN_EVENT_COUNT);
+export const bundledOpenSourceCount = Number(import.meta.env.VITE_ARCUS_OPEN_SOURCE_COUNT);
+export const bundledOpenDataCutoff = import.meta.env.VITE_ARCUS_OPEN_DATA_CUTOFF;
+
 export const isOpenRelease =
   import.meta.env.MODE === "open" || releaseChannel === "open";
 export const accountsEnabled =

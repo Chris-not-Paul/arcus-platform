@@ -32,7 +32,9 @@ The Professional gate additionally requires Open ID subset integrity and equalit
 
 Release `arcus-open-2026.15` is the current publication candidate (260 events, 1057 sources, schema v3). It supersedes earlier ARCUS versions for consultation; only the current static package is included in `dist`. Historical private snapshots and the pre-publication backup remain recoverable. Old hosted previews/deploys must be retired separately, and their retirement must be verified on Netlify. External DOI datasets are outside this process and remain untouched.
 
-Release names use `arcus-open-YYYY.N`. A new release must receive a new directory and changelog entry. Do not overwrite a cited release. Delta audit lists new, updated and removed events/sources when a preceding release exists.
+Historical releases retain their `arcus-open-YYYY.N` names. ARCUS Open 2.0 uses `arcus-open-2.0` and explicitly identifies `arcus-open-2026.18` as its predecessor. A new release must receive a new directory and changelog entry. Do not overwrite a cited release. Delta audit lists new, updated and removed events/sources when a preceding release exists.
+
+The normal hosting build (`npm run build:open`) reads the release identity, cutoff and counts from the tracked public manifest. After promotion, verify that the public snapshot matches the selected immutable private archive byte for byte. Keep the previous deployment and archive available for rollback; changing the local pointer does not publish a deployment.
 
 ## Curator decisions — 15 October 2026
 

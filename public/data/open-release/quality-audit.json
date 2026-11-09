@@ -1,85 +1,29 @@
 {
-  "release": "arcus-open-2026.18",
-  "generated_at": "2026-10-19T13:02:54.671Z",
+  "release": "arcus-open-2.0",
+  "generated_at": "2026-11-09T10:23:46.817Z",
   "status": "passed",
   "counts": {
-    "events": 260,
-    "sources": 1057,
-    "taxonomy_entries": 105,
-    "warnings": 72,
+    "events": 257,
+    "sources": 1177,
+    "taxonomy_entries": 106,
+    "warnings": 44,
     "errors": 0,
-    "needs_review": 44,
-    "process_available": 207,
-    "component_available": 216,
-    "evidence_available": 260
+    "needs_review": 0,
+    "process_available": 220,
+    "component_available": 224,
+    "evidence_available": 257
   },
   "errors": [],
   "warnings": [
     {
-      "code": "hydraulic_evidence_level_needs_review",
+      "code": "hydraulic_trigger_unrecognized",
       "event_id": "IT00.01.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
+      "field": "hydraulic_trigger",
+      "source_value": "Unspecified"
     },
     {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.03",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.04",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.07",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.08",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.09",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.10",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT00.10.16",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "province_validation_warning",
-      "event_id": "IT00.10.19",
-      "municipality": "Settimo Vittone",
-      "province_raw": "Ivrea",
-      "declared_official": null,
-      "coordinate_province": "Torino",
-      "coordinate_error": null,
-      "status": "name_mismatch_coordinates_resolved"
+      "code": "component_specific_but_process_unspecified",
+      "event_id": "IT00.01.01"
     },
     {
       "code": "province_validation_warning",
@@ -92,160 +36,8 @@
       "status": "coordinate_mismatch"
     },
     {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.05.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT02.05.01",
-      "failure_process": "scour"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.06.04",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT02.06.04",
-      "failure_process": "overtopping_or_hydrodynamic_action"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.06.06",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT02.06.06",
-      "failure_process": "overtopping_or_hydrodynamic_action"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.07.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.07.02",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT02.07.02",
-      "failure_process": "bank_erosion_or_embankment_failure"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT02.07.03",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
       "code": "component_specific_but_process_unspecified",
-      "event_id": "IT02.07.03"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT03.08.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT03.08.01",
-      "failure_process": "overtopping_or_hydrodynamic_action"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT03.09.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT04.12.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT05.10.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT05.10.02",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT05.10.02",
-      "failure_process": "overtopping_or_hydrodynamic_action"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT05.10.03",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT05.10.03",
-      "failure_process": "bank_erosion_or_embankment_failure"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT06.09.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT08.10.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT08.10.01",
-      "failure_process": "other_documented_hydraulic_process"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT08.10.02",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT08.10.03",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
+      "event_id": "IT02.07.02"
     },
     {
       "code": "province_validation_warning",
@@ -268,18 +60,6 @@
       "status": "coordinate_mismatch"
     },
     {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT13.02.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT13.02.01",
-      "failure_process": "scour"
-    },
-    {
       "code": "province_validation_warning",
       "event_id": "IT13.11.06",
       "municipality": "Olbia",
@@ -298,13 +78,6 @@
       "coordinate_province": "Ascoli Piceno",
       "coordinate_error": null,
       "status": "name_mismatch_coordinates_resolved"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT15.03.03",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
     },
     {
       "code": "province_validation_warning",
@@ -359,16 +132,8 @@
       "source_value": "Water leakage / local washout"
     },
     {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT20.10.06",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT20.10.06",
-      "failure_process": "other_documented_hydraulic_process"
+      "code": "component_specific_but_process_unspecified",
+      "event_id": "IT19.12.01"
     },
     {
       "code": "province_validation_warning",
@@ -397,25 +162,6 @@
       "coordinate_province": "Verbano-Cusio-Ossola",
       "coordinate_error": null,
       "status": "name_mismatch_coordinates_resolved"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT20.11.02",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
-    },
-    {
-      "code": "specific_process_with_unspecified_evidence",
-      "event_id": "IT20.11.02",
-      "failure_process": "scour"
-    },
-    {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT20.11.04",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
     },
     {
       "code": "hydraulic_trigger_unrecognized",
@@ -464,11 +210,14 @@
       "status": "coordinate_mismatch"
     },
     {
-      "code": "hydraulic_evidence_level_needs_review",
-      "event_id": "IT23.11.01",
-      "field": "hydraulic_evidence_level",
-      "normalized_as": "needs_review",
-      "source_value": "Needs review"
+      "code": "province_validation_warning",
+      "event_id": "IT22.12.03",
+      "municipality": "Chiusa Sclafani",
+      "province_raw": "Palermo",
+      "declared_official": "Palermo",
+      "coordinate_province": "Agrigento",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
     },
     {
       "code": "hydraulic_failure_process_unrecognized",
@@ -515,46 +264,405 @@
       "status": "coordinate_mismatch"
     },
     {
-      "code": "invalid_source_url_preserved_as_reference",
-      "source_id": "SRC0958",
-      "source_reference": "Rio Corongiu — scheda fotografica tecnica fornita dal curatore, p. 1"
+      "code": "unrecognized_language",
+      "source_id": "SRC1188",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1189",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1190",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1191",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1192",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1193",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1194",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1195",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1196",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1197",
+      "source_value": "IT/EN"
+    },
+    {
+      "code": "unrecognized_language",
+      "source_id": "SRC1198",
+      "source_value": "IT/EN"
     }
   ],
   "delta": {
-    "previous_release": "arcus-open-2026.17",
+    "previous_release": "arcus-open-2026.18",
     "new_events": [],
     "updated_events": [
+      "IT00.01.01",
+      "IT00.10.01",
+      "IT00.10.02",
       "IT00.10.03",
       "IT00.10.04",
+      "IT00.10.05",
+      "IT00.10.06",
       "IT00.10.07",
       "IT00.10.08",
-      "IT00.10.09",
       "IT00.10.10",
+      "IT00.10.11",
+      "IT00.10.12",
+      "IT00.10.14",
       "IT00.10.16",
+      "IT00.10.17",
+      "IT00.10.18",
+      "IT00.10.19",
+      "IT00.10.20",
+      "IT00.10.21",
+      "IT00.10.22",
+      "IT00.10.23",
+      "IT00.10.24",
+      "IT00.10.25",
+      "IT00.10.26",
+      "IT00.10.27",
+      "IT00.10.28",
+      "IT00.10.29",
+      "IT00.10.30",
+      "IT00.10.31",
+      "IT00.10.32",
+      "IT00.10.33",
+      "IT00.10.34",
+      "IT00.10.35",
+      "IT00.10.36",
+      "IT00.10.37",
+      "IT00.10.38",
+      "IT00.10.39",
+      "IT00.10.40",
+      "IT00.10.41",
+      "IT00.10.42",
+      "IT00.10.43",
       "IT00.11.01",
+      "IT00.12.01",
+      "IT01.03.01",
+      "IT02.05.01",
+      "IT02.06.01",
+      "IT02.06.02",
+      "IT02.06.03",
+      "IT02.06.04",
+      "IT02.06.05",
+      "IT02.06.06",
+      "IT02.07.01",
+      "IT02.07.02",
+      "IT02.07.03",
+      "IT02.11.01",
+      "IT03.01.01",
+      "IT03.08.01",
+      "IT03.09.01",
+      "IT04.12.01",
+      "IT04.12.02",
+      "IT05.06.01",
+      "IT05.10.01",
+      "IT05.10.02",
+      "IT05.10.03",
+      "IT05.11.01",
+      "IT06.06.01",
+      "IT06.09.01",
+      "IT08.10.01",
+      "IT08.10.02",
+      "IT08.10.03",
+      "IT08.11.01",
+      "IT08.12.01",
+      "IT09.01.01",
       "IT09.02.01",
+      "IT09.04.02",
+      "IT09.04.04",
+      "IT09.05.01",
+      "IT10.03.01",
+      "IT11.03.02",
+      "IT11.03.03",
+      "IT11.03.04",
       "IT11.05.01",
-      "IT13.11.06",
+      "IT11.10.03",
+      "IT11.10.04",
+      "IT11.10.05",
+      "IT11.10.07",
+      "IT11.10.08",
+      "IT11.11.01",
+      "IT11.11.02",
+      "IT12.11.02",
+      "IT13.02.01",
+      "IT13.03.01",
+      "IT13.09.01",
+      "IT13.10.02",
+      "IT13.11.01",
+      "IT13.11.03",
+      "IT13.12.03",
+      "IT14.05.01",
+      "IT14.09.01",
+      "IT14.11.01",
+      "IT14.11.02",
+      "IT14.12.01",
       "IT15.03.02",
       "IT15.03.03",
-      "IT15.10.03",
-      "IT20.10.18",
-      "IT20.10.20",
+      "IT15.10.01",
+      "IT15.10.02",
+      "IT15.10.04",
+      "IT15.10.05",
+      "IT16.03.01",
+      "IT16.09.01",
+      "IT16.11.01",
+      "IT16.11.03",
+      "IT16.11.04",
+      "IT16.11.05",
+      "IT16.11.06",
+      "IT17.01.01",
+      "IT17.06.01",
+      "IT17.09.01",
+      "IT17.09.02",
+      "IT17.12.01",
+      "IT18.10.08",
+      "IT18.02.02",
+      "IT18.10.01",
+      "IT18.10.02",
+      "IT18.10.03",
+      "IT18.10.04",
+      "IT18.10.05",
+      "IT18.10.06",
+      "IT18.10.07",
+      "IT19.03.01",
+      "IT19.10.01",
+      "IT19.12.01",
+      "IT20.10.06",
+      "IT20.11.01",
+      "IT20.11.02",
+      "IT20.11.04",
+      "IT20.12.02",
       "IT20.12.03",
-      "IT22.11.01",
-      "IT22.12.02",
+      "IT21.05.01",
+      "IT21.08.01",
+      "IT22.08.01",
+      "IT22.09.01",
+      "IT22.09.02",
+      "IT22.09.03",
+      "IT22.09.04",
+      "IT22.09.05",
+      "IT22.09.06",
+      "IT22.09.07",
+      "IT22.09.08",
+      "IT22.09.09",
+      "IT22.09.10",
+      "IT22.11.02",
+      "IT22.12.01",
       "IT22.12.03",
-      "IT23.10.01",
+      "IT23.07.01",
+      "IT23.11.01",
       "IT23.11.02",
+      "IT24.05.01",
       "IT24.05.02",
       "IT24.05.03",
+      "IT24.06.01",
+      "IT24.09.01",
       "IT24.10.01",
-      "IT25.04.01",
-      "IT25.07.01"
+      "IT09.04.05"
     ],
-    "removed_events": [],
-    "new_sources": [],
-    "removed_sources": []
+    "removed_events": [
+      "IT00.10.09",
+      "IT00.10.13",
+      "IT00.10.15"
+    ],
+    "new_sources": [
+      "SRC1099",
+      "SRC1100",
+      "SRC1101",
+      "SRC1102",
+      "SRC1103",
+      "SRC1104",
+      "SRC1105",
+      "SRC1106",
+      "SRC1107",
+      "SRC1108",
+      "SRC1109",
+      "SRC1110",
+      "SRC1111",
+      "SRC1112",
+      "SRC1113",
+      "SRC1114",
+      "SRC1115",
+      "SRC1116",
+      "SRC1117",
+      "SRC1118",
+      "SRC1119",
+      "SRC1120",
+      "SRC1121",
+      "SRC1122",
+      "SRC1123",
+      "SRC1124",
+      "SRC1125",
+      "SRC1126",
+      "SRC1127",
+      "SRC1128",
+      "SRC1129",
+      "SRC1130",
+      "SRC1131",
+      "SRC1133",
+      "SRC1134",
+      "SRC1135",
+      "SRC1136",
+      "SRC1137",
+      "SRC1138",
+      "SRC1139",
+      "SRC1140",
+      "SRC1141",
+      "SRC1142",
+      "SRC1143",
+      "SRC1144",
+      "SRC1145",
+      "SRC1146",
+      "SRC1147",
+      "SRC1148",
+      "SRC1149",
+      "SRC1150",
+      "SRC1151",
+      "SRC1152",
+      "SRC1153",
+      "SRC1154",
+      "SRC1155",
+      "SRC1157",
+      "SRC1158",
+      "SRC1159",
+      "SRC1160",
+      "SRC1161",
+      "SRC1162",
+      "SRC1163",
+      "SRC1164",
+      "SRC1165",
+      "SRC1166",
+      "SRC1167",
+      "SRC1168",
+      "SRC1170",
+      "SRC1171",
+      "SRC1172",
+      "SRC1173",
+      "SRC1174",
+      "SRC1175",
+      "SRC1176",
+      "SRC1177",
+      "SRC1178",
+      "SRC1179",
+      "SRC1180",
+      "SRC1181",
+      "SRC1182",
+      "SRC1183",
+      "SRC1184",
+      "SRC1185",
+      "SRC1186",
+      "SRC1187",
+      "SRC1188",
+      "SRC1189",
+      "SRC1190",
+      "SRC1191",
+      "SRC1192",
+      "SRC1193",
+      "SRC1194",
+      "SRC1195",
+      "SRC1196",
+      "SRC1197",
+      "SRC1198",
+      "SRC1199",
+      "SRC1200",
+      "SRC1201",
+      "SRC1202",
+      "SRC1203",
+      "SRC1204",
+      "SRC1205",
+      "SRC1206",
+      "SRC1207",
+      "SRC1208",
+      "SRC1209",
+      "SRC1210",
+      "SRC1211",
+      "SRC1212",
+      "SRC1213",
+      "SRC1214",
+      "SRC1215",
+      "SRC1216",
+      "SRC1217",
+      "SRC1218",
+      "SRC1219",
+      "SRC1220",
+      "SRC1221",
+      "SRC1222",
+      "SRC1223",
+      "SRC1224",
+      "SRC1225",
+      "SRC1226",
+      "SRC1227",
+      "SRC1228",
+      "SRC1229",
+      "SRC1230",
+      "SRC1231",
+      "SRC1232",
+      "SRC1233",
+      "SRC1234",
+      "SRC1235",
+      "SRC1236",
+      "SRC1237",
+      "SRC1238",
+      "SRC1239",
+      "SRC1240",
+      "SRC1241",
+      "SRC1242",
+      "SRC1243",
+      "CTX-HYD-IT20.11.01"
+    ],
+    "removed_sources": [
+      "SRC0311",
+      "SRC0496",
+      "SRC0575",
+      "SRC0576",
+      "SRC0577",
+      "SRC0587",
+      "SRC0588",
+      "SRC0589",
+      "SRC0593",
+      "SRC0594",
+      "SRC0595",
+      "SRC0901",
+      "SRC0931",
+      "CTX-HYD-IT00.10.04",
+      "CTX-HYD-IT00.10.07",
+      "CTX-HYD-IT00.10.08",
+      "CTX-HYD-IT00.10.09",
+      "CTX-HYD-IT00.10.10",
+      "CTX-HYD-IT00.10.11",
+      "CTX-HYD-IT00.10.13",
+      "CTX-HYD-IT00.10.15",
+      "CTX-HYD-IT00.10.16",
+      "CTX-HYD-IT15.03.03"
+    ]
   },
   "id_mapping": [
     {
@@ -621,13 +729,6 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT00.10.09",
-      "legacy_event_id": "B00.10.09",
-      "event_slug": "chialamberto-2000-1",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
       "event_id": "IT00.10.10",
       "legacy_event_id": "B00.10.10",
       "event_slug": "chialamberto-2000-2",
@@ -649,23 +750,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT00.10.13",
-      "legacy_event_id": "B00.10.13",
-      "event_slug": "pinerolo-2000-3",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
       "event_id": "IT00.10.14",
       "legacy_event_id": "B00.10.14",
       "event_slug": "giaveno-2000",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
-      "event_id": "IT00.10.15",
-      "legacy_event_id": "B00.10.15",
-      "event_slug": "castellamonte-2000",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
@@ -2378,24 +2465,8 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     }
   ],
-  "invalid_urls": [
-    {
-      "code": "invalid_source_url_preserved_as_reference",
-      "source_id": "SRC0958",
-      "source_reference": "Rio Corongiu — scheda fotografica tecnica fornita dal curatore, p. 1"
-    }
-  ],
+  "invalid_urls": [],
   "territorial_warnings": [
-    {
-      "code": "province_validation_warning",
-      "event_id": "IT00.10.19",
-      "municipality": "Settimo Vittone",
-      "province_raw": "Ivrea",
-      "declared_official": null,
-      "coordinate_province": "Torino",
-      "coordinate_error": null,
-      "status": "name_mismatch_coordinates_resolved"
-    },
     {
       "code": "province_validation_warning",
       "event_id": "IT00.10.41",
@@ -2548,6 +2619,16 @@
     },
     {
       "code": "province_validation_warning",
+      "event_id": "IT22.12.03",
+      "municipality": "Chiusa Sclafani",
+      "province_raw": "Palermo",
+      "declared_official": "Palermo",
+      "coordinate_province": "Agrigento",
+      "coordinate_error": null,
+      "status": "coordinate_mismatch"
+    },
+    {
+      "code": "province_validation_warning",
       "event_id": "IT26.03.01",
       "municipality": "Pisa",
       "province_raw": "Pisa",
@@ -2557,50 +2638,5 @@
       "status": "coordinate_mismatch"
     }
   ],
-  "needs_review_records": [
-    "IT00.01.01",
-    "IT00.10.03",
-    "IT00.10.04",
-    "IT00.10.07",
-    "IT00.10.08",
-    "IT00.10.09",
-    "IT00.10.10",
-    "IT00.10.16",
-    "IT00.12.01",
-    "IT02.05.01",
-    "IT02.06.04",
-    "IT02.06.06",
-    "IT02.07.01",
-    "IT02.07.02",
-    "IT02.07.03",
-    "IT03.08.01",
-    "IT03.09.01",
-    "IT04.12.01",
-    "IT05.06.01",
-    "IT05.10.01",
-    "IT05.10.02",
-    "IT05.10.03",
-    "IT06.06.01",
-    "IT06.09.01",
-    "IT08.10.01",
-    "IT08.10.02",
-    "IT08.10.03",
-    "IT09.02.01",
-    "IT09.05.01",
-    "IT11.05.01",
-    "IT13.02.01",
-    "IT15.03.02",
-    "IT15.03.03",
-    "IT20.10.06",
-    "IT20.11.01",
-    "IT20.11.02",
-    "IT20.11.04",
-    "IT21.05.01",
-    "IT21.08.01",
-    "IT22.12.01",
-    "IT22.12.03",
-    "IT23.11.01",
-    "IT24.05.01",
-    "IT09.04.05"
-  ]
+  "needs_review_records": []
 }

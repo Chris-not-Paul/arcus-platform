@@ -153,8 +153,10 @@ function derivedDimension(event, dimension, language) {
     return { key: String(start), label: `${start}–${start + 9}`, order: start };
   }
   if (dimension === "bridge_age") {
-    const constructionYear = Number(event.construction_year_numeric);
-    if (!year || !Number.isFinite(constructionYear) || constructionYear > year) return null;
+    const rawConstructionYear = String(event.construction_year_numeric ?? "");
+    if (!year || !/^[1-9]\d{3}$/.test(rawConstructionYear)) return null;
+    const constructionYear = Number(rawConstructionYear);
+    if (constructionYear > year) return null;
     const age = year - constructionYear;
     if (age < 25) return { key: "0-24", label: "0–24", order: 1 };
     if (age < 50) return { key: "25-49", label: "25–49", order: 2 };
@@ -180,7 +182,7 @@ function derivedDimension(event, dimension, language) {
 
 function dimensionValue(event, dimension, missingLabel, language) {
   const derived = derivedDimension(event, dimension, language);
-  const rawValue = derived?.label ?? event[dimension];
+  const rawValue = derived?.label ?? (dimension === "bridge_age" ? null : event[dimension]);
   const missing = !hasAnalyticalValue(rawValue);
 
   return {
@@ -1316,6 +1318,15 @@ function AnalyticsPage() {
       completeness: {
         dimension_available: chartAvailable,
         dimension_missing: chartMissing,
+        ...(analysisMode === "comparison" ? {
+          comparison_dimension_available: comparisonEvents.length - comparisonChartMissing,
+          comparison_dimension_missing: comparisonChartMissing,
+        } : {}),
+        ...(analysisMode === "crosstab" ? {
+          column_available: analytics.totalEvents - crossTabColumnMissing,
+          column_missing: crossTabColumnMissing,
+          both_dimensions_available: crossStats.effectiveRecords,
+        } : {}),
       },
       advanced_diagnostics: {
         scope: "descriptive_only",
@@ -2243,18 +2254,37 @@ function AnalyticsPage() {
                   <span>{language === "it" ? "Figura corrente" : "Current figure"}</span>
                   <h4>{analysisMode === "crosstab" ? crossTabTitle : analysisMode === "comparison" ? comparisonTitle : chartTitle}</h4>
                 </div>
-                <div className="analytics-chart-denominator">
-                  <span>{analysisMode === "comparison" ? `nA=${formatValue(filteredEvents.length)} · nB=${formatValue(comparisonEvents.length)}` : `n=${formatValue(analytics.totalEvents)}`}</span>
-                  <small>
-                    {analysisMode === "comparison"
-                      ? (language === "it" ? "Quote calcolate separatamente nelle due coorti" : "Shares calculated separately within each cohort")
-                      : analysisMode === "crosstab"
+              </div>
+              <div className="analytics-chart-denominator" aria-label={language === "it" ? "Copertura e denominatori" : "Coverage and denominators"}>
+                <span>
+                  {analysisMode === "comparison"
+                    ? (language === "it" ? "Eventi selezionati per coorte" : "Selected events by cohort")
+                    : (language === "it" ? "Eventi selezionati" : "Selected events")}:{" "}
+                  {analysisMode === "comparison"
+                    ? `A ${formatValue(filteredEvents.length)} · B ${formatValue(comparisonEvents.length)}`
+                    : formatValue(analytics.totalEvents)}
+                </span>
+                {analysisMode === "comparison" ? (
+                  <>
+                    <small data-chart-coverage="a">A: {formatValue(chartAvailable)} {language === "it" ? "disponibili" : "available"} · {formatValue(chartMissing)} {language === "it" ? "mancanti" : "missing"}</small>
+                    <small data-chart-coverage="b">B: {formatValue(comparisonEvents.length - comparisonChartMissing)} {language === "it" ? "disponibili" : "available"} · {formatValue(comparisonChartMissing)} {language === "it" ? "mancanti" : "missing"}</small>
+                  </>
+                ) : (
+                  <small data-chart-coverage="a">
+                    {analysisMode === "crosstab"
                       ? (language === "it"
-                          ? `Mancanti: riga ${formatValue(chartMissing)} · colonna ${formatValue(crossTabColumnMissing)}`
-                          : `Missing: row ${formatValue(chartMissing)} · column ${formatValue(crossTabColumnMissing)}`)
-                      : <>{formatValue(chartAvailable)} {language === "it" ? "disponibili" : "available"}{" · "}{formatValue(chartMissing)} {language === "it" ? "mancanti" : "missing"}</>}
+                          ? `Entrambe le variabili disponibili: ${formatValue(crossStats.effectiveRecords)} · almeno una mancante: ${formatValue(analytics.totalEvents - crossStats.effectiveRecords)}`
+                          : `Both variables available: ${formatValue(crossStats.effectiveRecords)} · at least one missing: ${formatValue(analytics.totalEvents - crossStats.effectiveRecords)}`)
+                      : <>{formatValue(chartAvailable)} {language === "it" ? "disponibili" : "available"} · {formatValue(chartMissing)} {language === "it" ? "mancanti" : "missing"}</>}
                   </small>
-                </div>
+                )}
+                <small data-chart-share-basis>
+                  {analysisMode === "crosstab"
+                    ? (language === "it" ? "Percentuali sul totale della rispettiva riga, inclusi i dati mancanti." : "Percentages use each row total, including missing data.")
+                    : analysisMode === "comparison"
+                      ? (language === "it" ? "Percentuali sul totale di ciascuna coorte, inclusi i dati mancanti." : "Percentages use each cohort total, including missing data.")
+                      : (language === "it" ? "Percentuali sul totale degli eventi selezionati, inclusi i dati mancanti." : "Percentages use all selected events, including missing data.")}
+                </small>
               </div>
 
               {(selectedChartDimension.definition || (analysisMode === "crosstab" && selectedColumnDimension.definition)) && (

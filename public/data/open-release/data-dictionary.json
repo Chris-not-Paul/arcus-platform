@@ -3,395 +3,395 @@
   "datasets": [
     {
       "name": "events",
-      "record_count": 260,
+      "record_count": 257,
       "fields": [
         {
           "field": "approach_extension_status",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "bridge_crossing_name",
           "type": "string",
-          "populated": 258,
-          "missing": 2,
-          "coverage": 0.9923
+          "populated": 247,
+          "missing": 10,
+          "coverage": 0.9611
         },
         {
           "field": "bridge_crossing_type",
           "type": "string",
-          "populated": 260,
-          "missing": 0,
-          "coverage": 1
+          "populated": 256,
+          "missing": 1,
+          "coverage": 0.9961
         },
         {
           "field": "bridge_name",
           "type": "string",
-          "populated": 163,
-          "missing": 97,
-          "coverage": 0.6269
+          "populated": 204,
+          "missing": 53,
+          "coverage": 0.7938
         },
         {
           "field": "cause_category",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "collapse_scope",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "collapse_severity",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "component_involved",
           "type": "string",
-          "populated": 216,
-          "missing": 44,
-          "coverage": 0.8308
+          "populated": 224,
+          "missing": 33,
+          "coverage": 0.8716
         },
         {
           "field": "construction_year",
           "type": "string",
-          "populated": 38,
-          "missing": 222,
-          "coverage": 0.1462
+          "populated": 43,
+          "missing": 214,
+          "coverage": 0.1673
         },
         {
           "field": "construction_year_numeric",
           "type": "number",
-          "populated": 34,
-          "missing": 226,
-          "coverage": 0.1308
+          "populated": 36,
+          "missing": 221,
+          "coverage": 0.1401
         },
         {
           "field": "construction_year_raw",
           "type": "string",
-          "populated": 38,
-          "missing": 222,
-          "coverage": 0.1462
+          "populated": 43,
+          "missing": 214,
+          "coverage": 0.1673
         },
         {
           "field": "curation_level",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "date",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "description",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "description_it",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "destination_use",
           "type": "string",
-          "populated": 257,
-          "missing": 3,
-          "coverage": 0.9885
+          "populated": 245,
+          "missing": 12,
+          "coverage": 0.9533
         },
         {
           "field": "documentary_notes_en",
           "type": "string",
-          "populated": 251,
-          "missing": 9,
-          "coverage": 0.9654
+          "populated": 247,
+          "missing": 10,
+          "coverage": 0.9611
         },
         {
           "field": "documentary_notes_it",
           "type": "string",
-          "populated": 251,
-          "missing": 9,
-          "coverage": 0.9654
+          "populated": 247,
+          "missing": 10,
+          "coverage": 0.9611
         },
         {
           "field": "event_id",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "event_slug",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "exact_location",
           "type": "boolean",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "failure_cause_evidence",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "failure_process",
           "type": "string",
-          "populated": 207,
-          "missing": 53,
-          "coverage": 0.7962
+          "populated": 220,
+          "missing": 37,
+          "coverage": 0.856
         },
         {
           "field": "failure_trigger",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "hydraulic_intelligence",
           "type": "object",
-          "populated": 210,
+          "populated": 207,
           "missing": 50,
-          "coverage": 0.8077
+          "coverage": 0.8054
         },
         {
           "field": "injuries",
           "type": "number",
-          "populated": 252,
-          "missing": 8,
-          "coverage": 0.9692
+          "populated": 251,
+          "missing": 6,
+          "coverage": 0.9767
         },
         {
           "field": "latitude",
           "type": "number",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "longitude",
           "type": "number",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "material_type",
           "type": "string",
-          "populated": 232,
-          "missing": 28,
-          "coverage": 0.8923
+          "populated": 177,
+          "missing": 80,
+          "coverage": 0.6887
         },
         {
           "field": "municipality",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "province",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "province_code",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "province_key",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "province_raw",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "province_validation_status",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "region",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_confidence",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "specific_cause",
           "type": "string",
-          "populated": 260,
+          "populated": 257,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "structural_type",
           "type": "string",
-          "populated": 226,
-          "missing": 34,
-          "coverage": 0.8692
+          "populated": 183,
+          "missing": 74,
+          "coverage": 0.7121
         },
         {
           "field": "triggered",
           "type": "boolean",
-          "populated": 259,
-          "missing": 1,
-          "coverage": 0.9962
+          "populated": 255,
+          "missing": 2,
+          "coverage": 0.9922
         },
         {
           "field": "victims",
           "type": "number",
-          "populated": 254,
-          "missing": 6,
-          "coverage": 0.9769
+          "populated": 253,
+          "missing": 4,
+          "coverage": 0.9844
         }
       ]
     },
     {
       "name": "sources",
-      "record_count": 1057,
+      "record_count": 1177,
       "fields": [
         {
           "field": "access_date",
           "type": "string",
-          "populated": 914,
-          "missing": 143,
-          "coverage": 0.8647
+          "populated": 1083,
+          "missing": 94,
+          "coverage": 0.9201
         },
         {
           "field": "event_id",
           "type": "string",
-          "populated": 1057,
+          "populated": 1177,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "language",
           "type": "string",
-          "populated": 1057,
-          "missing": 0,
-          "coverage": 1
+          "populated": 1165,
+          "missing": 12,
+          "coverage": 0.9898
         },
         {
           "field": "publication_date",
           "type": "string",
-          "populated": 780,
-          "missing": 277,
-          "coverage": 0.7379
+          "populated": 805,
+          "missing": 372,
+          "coverage": 0.6839
         },
         {
           "field": "source_id",
           "type": "string",
-          "populated": 1057,
+          "populated": 1177,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_reference",
-          "type": "string",
-          "populated": 1,
-          "missing": 1056,
-          "coverage": 0.0009
+          "type": "null",
+          "populated": 0,
+          "missing": 1177,
+          "coverage": 0
         },
         {
           "field": "source_role",
           "type": "string",
-          "populated": 1057,
+          "populated": 1177,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_title",
           "type": "string",
-          "populated": 1057,
+          "populated": 1177,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_type",
           "type": "string",
-          "populated": 1057,
+          "populated": 1177,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "source_url",
           "type": "string",
-          "populated": 1055,
-          "missing": 2,
-          "coverage": 0.9981
+          "populated": 1176,
+          "missing": 1,
+          "coverage": 0.9992
         }
       ]
     },
     {
       "name": "taxonomy",
-      "record_count": 105,
+      "record_count": 106,
       "fields": [
         {
           "field": "definition_it",
           "type": "string",
-          "populated": 105,
+          "populated": 106,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "field",
           "type": "string",
-          "populated": 105,
+          "populated": 106,
           "missing": 0,
           "coverage": 1
         },
         {
           "field": "value",
           "type": "string",
-          "populated": 105,
+          "populated": 106,
           "missing": 0,
           "coverage": 1
         }

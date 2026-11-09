@@ -4,7 +4,7 @@ import fs from "node:fs";
 const read = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 const plan = read("config/curation/evidence-review-2026-10-19.json");
 const oldRoot = "private-data/open/releases/arcus-open-2026.17";
-const root = "public/data/open-release";
+const root = "private-data/open/releases/arcus-open-2026.18";
 const oldEvents = read(`${oldRoot}/events.json`).events;
 const events = read(`${root}/events.json`).events;
 const decisions = new Map(plan.decisions.map((d) => [d.id, d]));

@@ -43,6 +43,10 @@ const episodes = await getOpenResource("episodes");
 const taxonomy = await getOpenResource("taxonomy");
 const audit = await getOpenResource("quality-audit");
 const idMapping = await getOpenResource("id-mapping");
+const archivedPublic = "private-data/open/releases/arcus-open-2026.18";
+const readArchive = (name) => JSON.parse(fs.readFileSync(`${archivedPublic}/${name}.json`, "utf8"));
+const historicalEvents = readArchive("events").events;
+const historicalSources = readArchive("sources").sources;
 const professionalEvents = await getProfessionalResource("professional-events");
 const professionalSources = await getProfessionalResource("professional-sources");
 const professionalEventRows = Array.isArray(professionalEvents)
@@ -53,10 +57,10 @@ const professionalSourceRows = Array.isArray(professionalSources)
   : professionalSources.sources || [];
 
 await check("open-counts", () => {
-  assert.equal(events.length, 260);
-  assert.equal(sources.length, 1057);
-  assert.equal(manifest.event_count, 260);
-  assert.equal(manifest.source_count, 1057);
+  assert.equal(events.length, 257);
+  assert.equal(sources.length, 1177);
+  assert.equal(manifest.event_count, events.length);
+  assert.equal(manifest.source_count, sources.length);
 });
 
 await check("disputed-event-records-are-not-public", () => {
@@ -126,12 +130,12 @@ await check("shared-episodes-are-source-supported-and-public-safe", () => {
   const memberships = episodes.episodes.flatMap((episode) => episode.event_ids);
 
   assert.equal(episodes.release, manifest.version);
-  assert.equal(episodes.summary.episode_count, 9);
+  assert.equal(episodes.summary.episode_count, 10);
   assert.equal(episodes.summary.grouped_event_count, 72);
-  assert.equal(episodes.summary.by_type.flood, 8);
+  assert.equal(episodes.summary.by_type.flood, 9);
   assert.equal(episodes.summary.by_type.earthquake, 1);
   assert.equal(manifest.resources.episodes, "episodes.json");
-  assert.equal(manifest.shared_episode_count, 9);
+  assert.equal(manifest.shared_episode_count, 10);
   assert.equal(manifest.shared_episode_event_count, 72);
   assert.equal(new Set(memberships).size, memberships.length);
   assert.equal(memberships.every((eventId) => eventIds.has(eventId)), true);
@@ -182,7 +186,7 @@ await check("professional-hydraulic-geometry-is-source-backed-and-private", () =
 });
 
 await check("versioned-release-and-fingerprint", () => {
-  assert.equal(manifest.version, "arcus-open-2026.18");
+  assert.equal(manifest.version, "arcus-open-2.0");
   assert.match(manifest.source_workbook_fingerprint, /^sha256:[a-f0-9]{64}$/);
   assert.equal(manifest.schema_version, "arcus-open-schema-v4");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
@@ -250,11 +254,11 @@ await check("canonical-it-identifiers-and-legacy-mapping", () => {
 });
 
 await check("taxonomy-and-evidence-classes", () => {
-  assert.equal(taxonomy.taxonomy.length, 105);
-  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 44);
+  assert.equal(taxonomy.taxonomy.length, 106);
+  assert.equal(events.filter((event) => event.failure_cause_evidence === "Needs review").length, 0);
   assert.equal(events.filter((event) => event.failure_cause_evidence === "Unspecified").length, 0);
-  assert.equal(events.filter((event) => event.failure_process).length, 207);
-  assert.equal(events.filter((event) => event.component_involved).length, 216);
+  assert.equal(events.filter((event) => event.failure_process).length, 220);
+  assert.equal(events.filter((event) => event.component_involved).length, 224);
   assert.equal(
     events.filter((event) => event.failure_process === null)
       .every((event) => event.hydraulic_intelligence?.failure_process === null || !event.hydraulic_intelligence),
@@ -275,9 +279,9 @@ await check("structural-types-use-resistant-systems-only", () => {
     [...publishedValues].every((value) => STRUCTURAL_TYPE_VALUES.includes(value)),
     true
   );
-  assert.equal(events.filter((event) => event.structural_type === null).length, 34);
-  assert.equal(events.filter((event) => event.structural_type === "Beam bridge").length, 184);
-  assert.equal(events.filter((event) => event.structural_type === "Arch bridge").length, 33);
+  assert.equal(events.filter((event) => event.structural_type === null).length, 74);
+  assert.equal(events.filter((event) => event.structural_type === "Beam bridge").length, 140);
+  assert.equal(events.filter((event) => event.structural_type === "Arch bridge").length, 37);
   assert.equal(publishedValues.has("Viaduct"), false);
   assert.equal(publishedValues.has("Overpass"), false);
   assert.equal(publishedValues.has("Masonry"), false);
@@ -285,7 +289,7 @@ await check("structural-types-use-resistant-systems-only", () => {
 
 await check("url-reference-separation", () => {
   assert.equal(sources.every((source) => !source.source_url || /^https?:\/\//.test(source.source_url)), true);
-  assert.equal(sources.filter((source) => source.source_reference).length, 1);
+  assert.equal(sources.filter((source) => source.source_reference).length, 0);
 });
 
 await check("year-only-publication-does-not-invent-date", () => {
@@ -298,7 +302,7 @@ await check("year-only-publication-does-not-invent-date", () => {
 await check("territorial-audit", () => {
   assert.equal(audit.status, "passed");
   assert.equal(audit.errors.length, 0);
-  assert.equal(audit.territorial_warnings.some((item) => item.province_raw === "Ivrea"), true);
+  assert.equal(audit.territorial_warnings.some((item) => item.municipality === "Rondissone" && item.status === "coordinate_mismatch"), true);
   assert.equal(audit.territorial_warnings.some((item) => item.province_raw === "Caltanisetta"), false);
 });
 
@@ -315,19 +319,20 @@ await check("professional-is-decoupled-live-resource", () => {
   assert.equal(manifest.access, "public_read_only_no_account_required");
 });
 
-await check("open-is-subset-of-professional", () => {
+// The independent Open 2.0 publication does not regenerate Professional.
+await check("historical-open-is-subset-of-professional", () => {
   const professionalEventIds = new Set(professionalEventRows.map((event) => event.event_id));
   const professionalSourceIds = new Set(professionalSourceRows.map((source) => source.source_id));
 
-  assert.equal(events.every((event) => professionalEventIds.has(`B${event.event_id.slice(2)}`)), true);
-  assert.equal(sources.every((source) => professionalSourceIds.has(source.source_id)), true);
+  assert.equal(historicalEvents.every((event) => professionalEventIds.has(`B${event.event_id.slice(2)}`)), true);
+  assert.equal(historicalSources.every((source) => professionalSourceIds.has(source.source_id)), true);
 });
 
-await check("shared-public-fields-match", () => {
+await check("historical-shared-public-fields-match", () => {
   const professionalByEvent = new Map(professionalEventRows.map((event) => [event.event_id, event]));
   const professionalBySource = new Map(professionalSourceRows.map((source) => [source.source_id, source]));
 
-  events.forEach((event) => {
+  historicalEvents.forEach((event) => {
     const professional = professionalByEvent.get(`B${event.event_id.slice(2)}`);
     Object.keys(event).forEach((field) => {
       if (field === "event_id") {
@@ -343,7 +348,7 @@ await check("shared-public-fields-match", () => {
       assert.deepEqual(professional[field], event[field]);
     });
   });
-  sources.forEach((source) => {
+  historicalSources.forEach((source) => {
     const professional = professionalBySource.get(source.source_id);
     Object.keys(source).forEach((field) => {
       if (field !== "event_id") {
@@ -458,7 +463,7 @@ await check("single-event-dossier-respects-open-boundary", () => {
   });
 
   assert.match(citation, new RegExp(event.event_id.replaceAll(".", "\\.")));
-  assert.match(citation, /arcus-open-2026\.18/);
+  assert.ok(citation.includes(manifest.version));
   assert.equal(dossier.release, manifest.version);
   assert.equal(dossier.schema_version, "arcus-open-event-dossier-v3");
   assert.equal(dossier.shared_episode, null);
@@ -564,7 +569,7 @@ await check("downloads", async () => {
   assert.match(csv.content.toString("utf8").split("\n")[1], /"IT\d{2}\.\d{2}\.\d{2}"/);
   const parsed = JSON.parse(geojson.content.toString("utf8"));
   assert.equal(parsed.type, "FeatureCollection");
-  assert.equal(parsed.features.length, 260);
+  assert.equal(parsed.features.length, events.length);
   assert.equal(parsed.features.every((feature) => /^IT\d{2}\.\d{2}\.\d{2}$/.test(feature.id)), true);
 });
 

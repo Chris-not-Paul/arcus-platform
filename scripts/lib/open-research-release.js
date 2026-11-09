@@ -21,7 +21,7 @@ import { readXlsxSheet } from "./xlsx-reader.js";
 import { APPROACH_EXTENSION_STATUSES, collapseScope } from "../../src/utils/approachCollapsePolicy.js";
 import { buildPublicEventCopy } from "../../src/utils/publicEventCopy.js";
 
-export const OPEN_RELEASE_VERSION = "arcus-open-2026.18";
+export const OPEN_RELEASE_VERSION = "arcus-open-2.0";
 
 const HYDRAULIC_CONTEXT_ARTICLE = Object.freeze({
   source_role: "Scientific context",
@@ -489,12 +489,12 @@ function normalizeSource(row, mapping) {
   };
 }
 
-function readPreviousRelease(openRoot, version) {
-  if (!fs.existsSync(openRoot)) {
+function readPreviousRelease(openRoot, version, explicitPreviousVersion) {
+  if (!explicitPreviousVersion && !fs.existsSync(openRoot)) {
     return null;
   }
 
-  const versions = fs.readdirSync(openRoot, { withFileTypes: true })
+  const versions = explicitPreviousVersion ? [explicitPreviousVersion] : fs.readdirSync(openRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name !== version)
     .map((entry) => entry.name)
     .sort(new Intl.Collator("en", { numeric: true, sensitivity: "base" }).compare)
@@ -503,6 +503,9 @@ function readPreviousRelease(openRoot, version) {
     fs.existsSync(path.join(openRoot, item, "events.json"))
   );
 
+  if (explicitPreviousVersion && (!previousVersion || previousVersion === version)) {
+    throw new Error(`Invalid or missing predecessor release: ${explicitPreviousVersion}`);
+  }
   if (!previousVersion) {
     return null;
   }
@@ -728,6 +731,10 @@ export function buildOpenResearchRelease({
   provinceGeoJsonPath,
   legacyEventsPath,
   normalizedData = null,
+  previousReleaseRoot = outputRoot,
+  previousReleaseVersion = null,
+  releaseName = null,
+  releaseChanges = null,
   generatedAt = new Date().toISOString(),
   version = OPEN_RELEASE_VERSION,
 } = {}) {
@@ -774,7 +781,7 @@ export function buildOpenResearchRelease({
   const errors = [];
 
   const dataCutoff = events.map((event) => event.date).filter(Boolean).sort().at(-1) || null;
-  const previous = readPreviousRelease(outputRoot, version);
+  const previous = readPreviousRelease(previousReleaseRoot, version, previousReleaseVersion);
   const delta = deltaAudit(events, sources, previous);
   const statistics = {
     release: version,
@@ -841,9 +848,10 @@ export function buildOpenResearchRelease({
     throw error;
   }
 
-  const citation = `ARCUS Open Research (${version}). Bridge collapse events in Italy, ${events[0]?.date?.slice(0, 4) || "2000"}-${dataCutoff?.slice(0, 4) || "2026"}. Version ${version}.`;
+  const citation = `${releaseName || "ARCUS Open Research"} (${version}). Bridge collapse events in Italy, ${events[0]?.date?.slice(0, 4) || "2000"}-${dataCutoff?.slice(0, 4) || "2026"}. Version ${version}.`;
   const manifest = {
     version,
+    ...(releaseName ? { release_name: releaseName } : {}),
     generated_at: generatedAt,
     data_cutoff: dataCutoff,
     event_count: events.length,
@@ -902,8 +910,9 @@ export function buildOpenResearchRelease({
   const dictionary = buildDictionary({ events, sources, taxonomy });
   const changelog = {
     version,
+    ...(releaseName ? { release_name: releaseName } : {}),
     generated_at: generatedAt,
-    changes: [
+    changes: releaseChanges ?? [
       "Reviewed the 27 previously unspecified cause-evidence levels: 4 Documented, 11 Probable and 12 Needs review, with source-specific reasons preserved in the private Master curation log.",
       "A documented broad flood attribution does not establish a detailed hydraulic mechanism. Unknown causes, processes and components remain unknown; unresolved event-to-source matches and causal attributions are explicitly marked Needs review.",
       "No event membership, identifiers, dates, coordinates, casualties, TC/PC codes, causal categories, detailed processes, components or source records changed from arcus-open-2026.17. Automated field-by-field comparison verifies this boundary.",

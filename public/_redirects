@@ -1,3 +1,8 @@
+# Reconciled duplicate event records (ARCUS Open 2.0).
+/atlas/events/chialamberto-2000-1 /atlas/events/chialamberto-2000-3/ 301
+/atlas/events/pinerolo-2000-3 /atlas/events/san-germano-chisone-2000-1/ 301
+/atlas/events/castellamonte-2000 /atlas/events/salassa-2000/ 301
+
 # Serve the pre-rendered public research pages before the SPA fallback.
 /atlas/events/:eventSlug /atlas/events/:eventSlug/index.html 200
 /atlas /atlas/index.html 200

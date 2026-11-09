@@ -58,6 +58,7 @@ const italianDescriptionLabels = {
     "Excavation / construction works": "scavi o lavori di costruzione",
     "Fire / explosion": "un incendio o un’esplosione",
     Flood: "una piena",
+    "Intense rainfall": "precipitazioni intense",
     flood: "una piena",
     "Landslide / slope failure": "una frana o un’instabilità di versante",
     "Lifting / construction operation": "un’operazione di sollevamento o costruzione",

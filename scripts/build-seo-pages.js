@@ -8,15 +8,18 @@ import { formatPageTitle, getPublicPageMetadata, publicPageMetadataUpdatedAt } f
 
 const currentFile = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFile), "..");
-const publicRoot = path.join(repositoryRoot, "public");
-const outputRoot = path.join(repositoryRoot, "dist");
+const outputRoot = path.resolve(repositoryRoot, process.env.ARCUS_OPEN_SITE_DIR || "dist");
+const releaseRoot = path.join(outputRoot, "data", "open-release");
 const siteOrigin = "https://www.arcusbridges.org";
 const paperDoi = "https://doi.org/10.1016/j.dib.2025.112375";
 
 const readJson = (filePath) => JSON.parse(fs.readFileSync(filePath, "utf8"));
-const manifest = readJson(path.join(publicRoot, "data", "open-release", "manifest.json"));
-const { events } = readJson(path.join(publicRoot, "data", "open-release", "events.json"));
-const { sources } = readJson(path.join(publicRoot, "data", "open-release", "sources.json"));
+const manifest = readJson(path.join(releaseRoot, "manifest.json"));
+const { events } = readJson(path.join(releaseRoot, "events.json"));
+const { sources } = readJson(path.join(releaseRoot, "sources.json"));
+const cutoffText = manifest.data_cutoff ? new Intl.DateTimeFormat("it-IT", {
+  dateStyle: "long", timeZone: "UTC",
+}).format(new Date(manifest.data_cutoff)) : null;
 const templatePath = path.join(outputRoot, "index.html");
 
 if (!fs.existsSync(templatePath)) {
@@ -113,11 +116,11 @@ const dataset = {
   "@id": `${siteOrigin}/data-access#dataset`,
   name: "ARCUS Open Research — Bridge collapse events in Italy, 2000–2026",
   alternateName: manifest.version,
-  description: `Versioned research dataset of ${manifest.event_count} documented bridge-collapse events in Italy, connected to ${manifest.source_count} documentary sources, explicit classifications and geospatial records.`,
+  description: `Versioned research dataset of ${manifest.event_count} documented bridge-collapse events in Italy, connected to ${manifest.source_count} documentary and scientific-context source records, explicit classifications and geospatial records.`,
   url: canonicalPageUrl(siteOrigin, "/data-access"),
   version: manifest.version,
   dateModified: manifest.generated_at,
-  temporalCoverage: "2000/2026",
+  temporalCoverage: `2000/${manifest.data_cutoff || "2026"}`,
   spatialCoverage: { "@type": "Place", name: "Italy" },
   creator: person,
   publisher: organization,
@@ -144,6 +147,21 @@ const dataset = {
     encodingFormat,
   })),
 };
+
+fs.writeFileSync(path.join(outputRoot, "dataset.json"), `${JSON.stringify({ "@context": "https://schema.org", ...dataset }, null, 2)}\n`);
+for (const [name, update] of [
+  ["llms.txt", (value) => value
+    .replace(/^- Release: .+$/m, `- Release: ${manifest.version}`)
+    .replace(/^- Coverage: \d+ documented events/m, `- Coverage: ${manifest.event_count} documented events`)
+    .replace(/^- Documentary and scientific-context source records: \d+/m, `- Documentary and scientific-context source records: ${manifest.source_count}`)],
+  ["CITATION.cff", (value) => value
+    .replace(/^version: .+$/m, `version: "${manifest.version}"`)
+    .replace(/^date-released: .+$/m, `date-released: ${manifest.generated_at.slice(0, 10)}`)
+    .replace(/Machine-readable manifest for release arcus-open-[\d.]+/, `Machine-readable manifest for release ${manifest.version}`)],
+]) {
+  const file = path.join(outputRoot, name);
+  fs.writeFileSync(file, update(fs.readFileSync(file, "utf8")));
+}
 
 const article = {
   "@type": "ScholarlyArticle",
@@ -281,7 +299,7 @@ const corePages = [
   {
     path: "/data-access",
     graph: [dataset],
-    content: `<p>ARCUS Open Research</p><h1>Accedi alla release di ricerca versionata.</h1><p>${escapeHtml(manifest.citation)}</p><dl><dt>Versione</dt><dd>${escapeHtml(manifest.version)}</dd><dt>Eventi</dt><dd>${manifest.event_count}</dd><dt>Record di fonte</dt><dd>${manifest.source_count}</dd><dt>Licenza</dt><dd><a href="${escapeHtml(manifest.license.url)}">${escapeHtml(manifest.license.name)}</a></dd></dl><p><a href="/data/open-release/events.csv">Eventi CSV</a> · <a href="/data/open-release/events.geojson">Eventi GeoJSON</a> · <a href="/data/open-release/manifest.json">Manifest JSON</a> · <a href="/dataset.json">Metadati del dataset</a></p>`,
+    content: `<p>ARCUS Open Research</p><h1>Accedi alla release di ricerca versionata.</h1><p>${escapeHtml(manifest.citation)}</p><dl><dt>Versione</dt><dd>${escapeHtml(manifest.release_name || manifest.version)}</dd><dt>Eventi</dt><dd>${manifest.event_count}</dd><dt>Record di fonte</dt><dd>${manifest.source_count}</dd><dt>Licenza</dt><dd><a href="${escapeHtml(manifest.license.url)}">${escapeHtml(manifest.license.name)}</a></dd></dl>${cutoffText ? `<p>Ultimo evento incluso: <time datetime="${escapeHtml(manifest.data_cutoff)}">${escapeHtml(cutoffText)}</time>. La data non indica una copertura completa del periodo.</p>` : ""}<p><a href="/data/open-release/events.csv">Eventi CSV</a> · <a href="/data/open-release/events.geojson">Eventi GeoJSON</a> · <a href="/data/open-release/manifest.json">Manifest JSON</a> · <a href="/dataset.json">Metadati del dataset</a></p>`,
   },
   {
     path: "/publications",

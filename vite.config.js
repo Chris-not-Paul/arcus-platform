@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { startArcusApiServer } from './server/server.js'
 import {
@@ -8,6 +9,16 @@ import {
 } from './server/apiContract.js'
 
 const arcusApiOrigin = 'http://127.0.0.1:4174'
+const openRelease = JSON.parse(readFileSync(
+  new URL('./public/data/open-release/manifest.json', import.meta.url), 'utf8',
+))
+const releaseEnv = {
+  VITE_ARCUS_OPEN_RELEASE_VERSION: openRelease.version,
+  VITE_ARCUS_OPEN_RELEASE_NAME: openRelease.release_name || openRelease.version,
+  VITE_ARCUS_OPEN_EVENT_COUNT: String(openRelease.event_count),
+  VITE_ARCUS_OPEN_SOURCE_COUNT: String(openRelease.source_count),
+  VITE_ARCUS_OPEN_DATA_CUTOFF: openRelease.data_cutoff || '',
+}
 
 async function fetchWithTimeout(url, timeoutMs = 1600) {
   const controller = new AbortController()
@@ -80,6 +91,9 @@ const arcusApiPlugin = {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
+  define: Object.fromEntries(Object.entries(releaseEnv).map(([key, value]) => [
+    `import.meta.env.${key}`, JSON.stringify(process.env[key] ?? value),
+  ])),
   plugins: [react(), arcusApiPlugin],
   resolve: {
     alias: {

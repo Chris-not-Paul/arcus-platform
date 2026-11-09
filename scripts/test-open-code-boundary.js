@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const dist = path.join(root, "dist");
+const dist = path.resolve(root, process.env.ARCUS_OPEN_SITE_DIR || "dist");
 
 assert.equal(fs.existsSync(dist), true, "dist must exist before boundary validation");
 

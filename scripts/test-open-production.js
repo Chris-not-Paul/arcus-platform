@@ -170,7 +170,8 @@ check("portable hosting controls", () => {
 });
 
 check("public release integrity", () => {
-  assert.equal(manifest.version, "arcus-open-2026.18");
+  assert.equal(manifest.version, "arcus-open-2.0");
+  assert.equal(manifest.data_cutoff, "2026-04-02");
   assert.equal(manifest.license.id, "CC-BY-NC-4.0");
   assert.equal(manifest.license.url, "https://creativecommons.org/licenses/by-nc/4.0/");
   assert.equal(events.events.length, manifest.event_count);
@@ -180,9 +181,9 @@ check("public release integrity", () => {
     (manifest.known_limitations || []).length,
     "Manifest limitations must not contain duplicate statements"
   );
-  assert.equal(events.events.length, 260);
-  assert.equal(sources.sources.length, 1057);
-  assert.equal(episodes.summary.episode_count, 9);
+  assert.equal(events.events.length, 257);
+  assert.equal(sources.sources.length, 1177);
+  assert.equal(episodes.summary.episode_count, 10);
   assert.equal(episodes.summary.grouped_event_count, 72);
   assert.equal(manifest.resources.episodes, "episodes.json");
   const morandi = events.events.find((event) => event.event_id === "IT18.08.01");

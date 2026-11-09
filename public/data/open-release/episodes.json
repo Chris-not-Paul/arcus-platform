@@ -1,54 +1,54 @@
 {
   "event_to_episode": {
-    "IT00.10.01": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.02": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.03": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.04": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.05": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.06": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.07": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.08": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.09": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.10": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.11": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.12": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.13": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.14": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.15": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.16": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.17": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.18": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.19": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.20": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.21": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.22": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.23": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.24": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.25": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.26": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.27": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.28": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.29": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.30": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.31": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.32": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.33": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.34": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.35": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.36": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.37": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.38": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.39": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.40": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.41": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.42": "OEP-FLOOD-20001013-ef0f7b19",
-    "IT00.10.43": "OEP-FLOOD-20001013-ef0f7b19",
+    "IT00.10.01": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.02": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.03": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.04": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.05": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.06": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.07": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.08": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.10": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.11": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.12": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.17": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.20": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.21": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.22": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.23": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.24": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.25": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.26": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.27": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.28": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.29": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.30": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.31": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.32": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.33": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.34": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.35": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.36": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.37": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.38": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.39": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.40": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.41": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.42": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.43": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.14": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.18": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.19": "OEP-FLOOD-20001013-18656dc6",
+    "IT00.10.16": "OEP-FLOOD-20001013-18656dc6",
     "IT02.06.01": "OEP-FLOOD-20020605-fdc9f67e",
     "IT02.06.02": "OEP-FLOOD-20020605-fdc9f67e",
     "IT02.06.03": "OEP-FLOOD-20020605-fdc9f67e",
     "IT02.06.04": "OEP-FLOOD-20020605-fdc9f67e",
     "IT02.06.05": "OEP-FLOOD-20020623-5124dcd8",
     "IT02.06.06": "OEP-FLOOD-20020623-5124dcd8",
+    "IT02.07.03": "OEP-FLOOD-20020714-bb502b54",
+    "IT02.07.01": "OEP-FLOOD-20020714-bb502b54",
+    "IT02.07.02": "OEP-FLOOD-20020714-bb502b54",
     "IT05.10.02": "OEP-FLOOD-20051022-f9f39e15",
     "IT05.10.03": "OEP-FLOOD-20051022-f9f39e15",
     "IT08.05.01": "OEP-FLOOD-20080529-1a15c824",
@@ -76,11 +76,11 @@
   "episodes": [
     {
       "assignment_status": "supported_by_shared_sources",
-      "date_end": "2000-10-13",
+      "date_end": "2000-10-17",
       "date_start": "2000-10-13",
-      "episode_id": "OEP-FLOOD-20001013-ef0f7b19",
+      "episode_id": "OEP-FLOOD-20001013-18656dc6",
       "episode_type": "flood",
-      "event_count": 43,
+      "event_count": 40,
       "event_ids": [
         "IT00.10.01",
         "IT00.10.02",
@@ -90,17 +90,10 @@
         "IT00.10.06",
         "IT00.10.07",
         "IT00.10.08",
-        "IT00.10.09",
         "IT00.10.10",
         "IT00.10.11",
         "IT00.10.12",
-        "IT00.10.13",
-        "IT00.10.14",
-        "IT00.10.15",
-        "IT00.10.16",
         "IT00.10.17",
-        "IT00.10.18",
-        "IT00.10.19",
         "IT00.10.20",
         "IT00.10.21",
         "IT00.10.22",
@@ -124,7 +117,11 @@
         "IT00.10.40",
         "IT00.10.41",
         "IT00.10.42",
-        "IT00.10.43"
+        "IT00.10.43",
+        "IT00.10.14",
+        "IT00.10.18",
+        "IT00.10.19",
+        "IT00.10.16"
       ],
       "grouping_basis": [
         "documented_date_proximity",
@@ -133,7 +130,6 @@
       "provinces": [
         "Aosta",
         "Cuneo",
-        "Ivrea",
         "Torino",
         "Vercelli"
       ],
@@ -142,8 +138,8 @@
         "Valle d'Aosta (Valle d'Aoste)"
       ],
       "source_linkage": {
-        "linked_event_count": 43,
-        "shared_reference_count": 6
+        "linked_event_count": 40,
+        "shared_reference_count": 11
       }
     },
     {
@@ -198,6 +194,33 @@
       "source_linkage": {
         "linked_event_count": 2,
         "shared_reference_count": 2
+      }
+    },
+    {
+      "assignment_status": "supported_by_shared_sources",
+      "date_end": "2002-07-15",
+      "date_start": "2002-07-14",
+      "episode_id": "OEP-FLOOD-20020714-bb502b54",
+      "episode_type": "flood",
+      "event_count": 3,
+      "event_ids": [
+        "IT02.07.03",
+        "IT02.07.01",
+        "IT02.07.02"
+      ],
+      "grouping_basis": [
+        "documented_date_proximity",
+        "shared_documentary_sources"
+      ],
+      "provinces": [
+        "Cuneo"
+      ],
+      "regions": [
+        "Piemonte"
+      ],
+      "source_linkage": {
+        "linked_event_count": 3,
+        "shared_reference_count": 3
       }
     },
     {
@@ -277,7 +300,7 @@
       ],
       "source_linkage": {
         "linked_event_count": 3,
-        "shared_reference_count": 4
+        "shared_reference_count": 3
       }
     },
     {
@@ -327,7 +350,7 @@
       ],
       "source_linkage": {
         "linked_event_count": 4,
-        "shared_reference_count": 3
+        "shared_reference_count": 4
       }
     },
     {
@@ -380,13 +403,13 @@
     "unit": "published_shared_hazard_episode",
     "version": "arcus-open-shared-episodes-v1"
   },
-  "release": "arcus-open-2026.18",
+  "release": "arcus-open-2.0",
   "summary": {
-    "episode_count": 9,
+    "episode_count": 10,
     "grouped_event_count": 72,
-    "largest_episode_event_count": 43,
+    "largest_episode_event_count": 40,
     "by_type": {
-      "flood": 8,
+      "flood": 9,
       "earthquake": 1
     }
   }

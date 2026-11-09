@@ -1,0 +1,9 @@
+const reviewMarker = "ARCUS Cerretino map confirmation 2026-11-09";
+
+export const cerretinoMapConfirmationNotes = {
+  "IT14.05.01": {
+    reviewMarker,
+    it: "Durante l’alluvione del maggio 2014 crollò il ponte sull’Ete Morto collegato a via Cerretino, a Sant’Elpidio a Mare. La cronaca locale riporta la dichiarazione del sindaco e la rivista del CONAF identifica Cerretino e il fiume Ete. La figura 101 del rapporto della Regione Marche documenta il crollo sull’Ete Morto senza indicare il nome della strada. Il punto del supplemento S3 P077 coincide con l’attraversamento collegato a via Cerretino e già mappato il 3 dicembre 2013. È un riferimento per il sito storico, non un rilievo di precisione. Il 3 maggio, i 37 m e i codici di erosione verticale e laterale sono attribuiti al supplemento S3 di D’Angelo, Ballio e Ravazzani (2025), senza stabilire un processo dominante. Il nome Ponte Zallocco non è confermato come sinonimo. Schema e materiale originari restano non specificati.",
+    en: "During the May 2014 flood, the bridge over the Ete Morto connected to Via Cerretino in Sant’Elpidio a Mare collapsed. Local reporting quotes the mayor, and the CONAF magazine identifies Cerretino and the Ete river. Figure 101 in the Marche regional report documents a collapse on the Ete Morto without naming the road. The S3 P077 point aligns with the crossing connected to Via Cerretino, already mapped on 3 December 2013. This is a reference for the historical site, not a surveyed location. The 3 May date, 37 m length and vertical and lateral erosion codes are attributed to D’Angelo, Ballio and Ravazzani (2025), supplement S3, without establishing a dominant process. Ponte Zallocco is not verified as an alternative name. The original structural system and material remain unspecified.",
+  },
+};

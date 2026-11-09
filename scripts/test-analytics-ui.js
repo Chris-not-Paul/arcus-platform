@@ -1,16 +1,29 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import AdmZip from "adm-zip";
 import { chromium } from "playwright";
 
 const base = process.env.ARCUS_TEST_BASE_URL || "http://127.0.0.1:5173";
-const events = (await (await fetch(`${base}/api/open/events`)).json()).events;
-const sources = (await (await fetch(`${base}/api/open/sources`)).json()).sources;
-const episodesResponse = await fetch(`${base}/api/open/episodes`);
-const episodesPayload = episodesResponse.ok
-  ? episodesResponse
-  : await fetch(`${base}/data/open-release/episodes.json`);
-const episodes = await episodesPayload.json();
+const releaseDirectory = process.env.ARCUS_ANALYTICS_RELEASE_DIR;
+const resources = ["events", "sources", "manifest", "episodes"];
+async function readRelease(resource) {
+  if (releaseDirectory) {
+    return JSON.parse(await readFile(path.join(releaseDirectory, `${resource}.json`), "utf8"));
+  }
+  const apiResponse = await fetch(`${base}/api/open/${resource}`);
+  const response = apiResponse.ok && apiResponse.headers.get("content-type")?.includes("application/json")
+    ? apiResponse
+    : await fetch(`${base}/data/open-release/${resource}.json`);
+  assert.ok(response.ok, `Unable to load ${resource}: ${response.status}`);
+  return response.json();
+}
+const [eventPayload, sourcePayload, manifest, episodes] = await Promise.all(resources.map(readRelease));
+const { events } = eventPayload;
+const { sources } = sourcePayload;
+assert.equal(manifest.event_count, events.length);
+assert.equal(manifest.source_count, sources.length);
+const formatCount = (count) => new Intl.NumberFormat("en-US").format(count);
 const commonHydraulic = events.filter((event) => {
   const year = Number(String(event.date || "").slice(0, 4));
   return year >= 2000 && year <= 2022 && event.specific_cause === "Hydraulic";
@@ -29,6 +42,10 @@ const commonHydraulicRoleCounts = commonHydraulicSources.reduce((counts, source)
   return counts;
 }, { news: 0, official: 0, other: 0, scientific: 0 });
 const hydraulicEvents = events.filter((event) => event.specific_cause === "Hydraulic");
+const hydraulicIds = new Set(hydraulicEvents.map((event) => event.event_id));
+const hydraulicSharedEpisodes = episodes.episodes.filter((episode) => (
+  episode.event_ids.filter((id) => hydraulicIds.has(id)).length > 1
+));
 const hydraulicSeasonCounts = hydraulicEvents.reduce((counts, event) => {
   const month = Number(String(event.date || "").slice(5, 7));
   const season = [12, 1, 2].includes(month) ? "Inverno"
@@ -71,6 +88,13 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  if (releaseDirectory) {
+    // Exercise the production static fallback with the isolated candidate, never the active snapshot.
+    await page.route(/\/api\/open\//, (route) => route.fulfill({ status: 404 }));
+    await page.route(/\/data\/open-release\/(events|sources|manifest|episodes)\.json$/, (route) => (
+      route.fulfill({ path: path.join(releaseDirectory, new URL(route.request().url()).pathname.split("/").at(-1)) })
+    ));
+  }
   await page.addInitScript(() => localStorage.setItem("arcus-language", "it"));
   await page.goto(`${base}/analytics`);
 
@@ -82,9 +106,11 @@ try {
   };
 
   await page.locator(".analytics-filter-grid select").first().waitFor();
-  await page.locator(".analytics-hero-pro-preview").getByText(new RegExp(`${events.length} eventi e ${sources.length} fonti`)).waitFor();
+  const releaseTotalsText = `${formatCount(events.length)} eventi e ${formatCount(sources.length)} fonti`;
+  await page.locator(".analytics-hero-pro-preview").getByText(releaseTotalsText, { exact: false }).waitFor();
   const releaseCardText = await page.locator(".analytics-hero-pro-preview").innerText();
-  assert.match(releaseCardText, new RegExp(`${events.length} eventi e ${sources.length} fonti`));
+  assert.ok(releaseCardText.includes(releaseTotalsText));
+  assert.ok(releaseCardText.includes(manifest.version));
   const selects = page.locator(".analytics-filter-grid select");
   await selects.nth(0).selectOption("common");
   await selects.nth(1).selectOption("Hydraulic");
@@ -92,7 +118,7 @@ try {
   await page.waitForURL(/period=common.*cause=Hydraulic/);
   const cohortStats = page.locator(".analytics-cohort-summary > div");
   assert.equal(await cohortStats.nth(0).locator("strong").innerText(), String(commonHydraulic.length));
-  assert.equal(await cohortStats.nth(1).locator("strong").innerText(), String(commonHydraulicSources.length));
+  assert.equal(await cohortStats.nth(1).locator("strong").innerText(), formatCount(commonHydraulicSources.length));
   assert.equal(await cohortStats.nth(2).locator("strong").innerText(), "2000-2022");
   const preservedUrl = page.url();
   await page.reload();
@@ -146,7 +172,7 @@ try {
   assert.equal(Number(await autumnSensitivity.locator("td").nth(0).innerText()), hydraulicSeasonCounts.get("Autunno"));
   assert.equal(Number(await autumnSensitivity.locator("td").nth(2).innerText()), hydraulicSeasonDates.get("autumn").size);
   assert.match(await chartBuilder.locator("[data-temporal-total-dates]").innerText(), new RegExp(`^${hydraulicDistinctDates.size} date`, "i"));
-  assert.equal(Number(await chartBuilder.locator("[data-shared-episode-count]").innerText().then((value) => value.split(" ")[0])), episodes.summary.episode_count - 1);
+  assert.equal(Number(await chartBuilder.locator("[data-shared-episode-count]").innerText().then((value) => value.split(" ")[0])), hydraulicSharedEpisodes.length);
   assert.match(await chartBuilder.locator(".analytics-shared-episodes > p").innerText(), /non dimostra uno stesso meccanismo strutturale/i);
   assert.match(await chartBuilder.locator("[data-figure-caption]").innerText(), new RegExp(`${hydraulicSeasonDates.get("autumn").size}/${hydraulicDistinctDates.size} date`));
 
@@ -328,6 +354,44 @@ try {
   assert.equal(await comparisonSelects.nth(1).inputValue(), "Hydraulic");
   assert.equal(await chartBuilder.getByRole("button", { name: /Confronto A\/B/, includeHidden: true }).getAttribute("aria-pressed"), "true");
 
+  await page.goto(`${base}/analytics?path=custom&group=bridge_age&view=table&step=3`);
+  await page.locator(".analytics-hero-pro-preview").getByText(releaseTotalsText, { exact: false }).waitFor();
+  const ageRows = chartBuilder.locator(".analytics-chart-table tbody tr");
+  const expectedAges = new Map();
+  for (const event of events) {
+    const eventYear = Number(String(event.date).slice(0, 4));
+    const year = event.construction_year_numeric;
+    const age = year != null && Number(year) >= 1000 && Number(year) <= eventYear ? eventYear - Number(year) : null;
+    const label = age == null ? "Non documentato" : age >= 100 ? "≥100" : ["0–24", "25–49", "50–74", "75–99"][Math.floor(age / 25)];
+    expectedAges.set(label, (expectedAges.get(label) || 0) + 1);
+  }
+  const ageCounts = await ageRows.evaluateAll((rows) => Object.fromEntries(rows.map((row) => [
+    row.querySelector("th").textContent, Number(row.dataset.chartValue),
+  ])));
+  assert.deepEqual(ageCounts, Object.fromEntries(expectedAges));
+  const unknownAge = expectedAges.get("Non documentato") || 0;
+  assert.match(await chartBuilder.locator("[data-chart-coverage=a]").innerText(), new RegExp(`${events.length - unknownAge} disponibili.*${unknownAge} mancanti`));
+  assert.match(await chartBuilder.locator("[data-chart-share-basis]").innerText(), /totale degli eventi selezionati/);
+  const ageExport = page.waitForEvent("download");
+  await chartBuilder.getByRole("button", { name: "Scarica dati CSV" }).click();
+  const ageCsv = await readFile(await (await ageExport).path(), "utf8");
+  if (unknownAge) assert.ok(ageCsv.includes(`"Non documentato","${unknownAge}","${Math.round(100 * unknownAge / events.length)}","true"`));
+
+  await page.goto(`${base}/analytics?path=custom&group=specific_cause&column=collapse_severity&analysis=crosstab&step=3`);
+  await page.locator(".analytics-hero-pro-preview").getByText(releaseTotalsText, { exact: false }).waitFor();
+  const hydraulicRow = chartBuilder.locator('[data-crosstab-row="Hydraulic"]');
+  const hydraulicCells = hydraulicRow.locator("[data-chart-value]");
+  const hydraulicCounts = await hydraulicCells.evaluateAll((cells) => cells.map((cell) => Number(cell.dataset.chartValue)));
+  assert.equal(hydraulicCounts.reduce((sum, count) => sum + count, 0), hydraulicEvents.length);
+  await hydraulicCells.first().click();
+  assert.equal(Number(await page.locator("[data-record-total]").innerText()), hydraulicCounts[0]);
+  const causeExport = page.waitForEvent("download");
+  await chartBuilder.getByRole("button", { name: "Scarica dati CSV" }).click();
+  const causeCsv = await readFile(await (await causeExport).path(), "utf8");
+  const hydraulicLabel = await hydraulicRow.locator("th").innerText();
+  assert.ok(causeCsv.split(/\r?\n/).includes([hydraulicLabel, ...hydraulicCounts, hydraulicEvents.length].map((value) => `"${value}"`).join(",")));
+  assert.match(await chartBuilder.locator("[data-chart-share-basis]").innerText(), /totale della rispettiva riga/);
+
   await page.setViewportSize({ width: 390, height: 844 });
   const dimensions = await page.evaluate(() => ({
     document: document.documentElement.scrollWidth,
@@ -368,6 +432,8 @@ try {
       "empty cohort is not presented as zero risk",
       "filter reset",
       "mobile horizontal overflow",
+      "unknown construction year stays out of age buckets and survives CSV export",
+      "hydraulic cause × severity reconciles selected records and CSV",
       "progressive three-step workspace and URL persistence",
     ],
     commonHydraulicEvents: commonHydraulic.length,

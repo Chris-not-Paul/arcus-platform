@@ -41,7 +41,7 @@ try {
   );
   assert.equal(
     await page.locator('link[rel="canonical"]').getAttribute("href"),
-    "https://www.arcusbridges.org/about"
+    "https://www.arcusbridges.org/about/"
   );
   assert.equal(
     await page.locator('meta[property="og:image"]').getAttribute("content"),
@@ -62,7 +62,7 @@ try {
   assert.equal(await page.locator('a[href="mailto:info@arcusbridges.org"]').count() > 0, true);
   assert.equal(
     await page.locator('link[rel="canonical"]').getAttribute("href"),
-    "https://www.arcusbridges.org/privacy"
+    "https://www.arcusbridges.org/privacy/"
   );
   checks.push("public privacy notice and controller identity");
 
@@ -236,12 +236,14 @@ try {
   checks.push("private route unavailable and non-indexable");
 
   await page.goto(`${base}/atlas`);
-  await page.waitForFunction(() => {
+  const manifestResponse = await page.request.get(`${base}/data/open-release/manifest.json`);
+  assert.ok(manifestResponse.ok());
+  const release = await manifestResponse.json();
+  await page.waitForFunction((eventCount) => {
     const value = document.querySelector(".atlas-command-grid strong")?.textContent?.trim();
-    return value === "260";
-  });
-  assert.equal(await page.locator("body").innerText().then((text) => text.includes("260")), true);
-  checks.push("Atlas reads the static 260-event release without an API");
+    return value === String(eventCount);
+  }, release.event_count);
+  checks.push(`Atlas reads the static ${release.event_count}-event release without an API`);
 
   const mobile = await context.newPage();
   await mobile.setViewportSize({ width: 390, height: 844 });
@@ -255,8 +257,11 @@ try {
   await mobile.goto(`${base}/data-access`);
   await mobile.locator(".data-access-release-summary").waitFor();
   await noHorizontalOverflow(mobile);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /260/);
-  assert.match(await mobile.locator(".data-access-release-summary").innerText(), /1[.,\s]?057/);
+  const releaseSummary = await mobile.locator(".data-access-release-summary dd").allTextContents();
+  assert.deepEqual(releaseSummary, [
+    release.release_name || release.version, String(release.event_count), String(release.source_count),
+  ]);
+  assert.equal(await mobile.locator(".data-access-section time").getAttribute("datetime"), release.data_cutoff);
   assert.equal(await mobile.locator(".data-access-resource-card").count(), 10);
 
   await mobile.goto(`${base}/about`);
@@ -298,7 +303,7 @@ try {
 
   await mobile.goto(`${base}/analytics`);
   await mobile.locator(".analytics-workspace-index").waitFor();
-  await mobile.locator(".analytics-cohort-summary strong").first().getByText("260", { exact: true }).waitFor();
+  await mobile.locator(".analytics-cohort-summary strong").first().getByText(String(release.event_count), { exact: true }).waitFor();
   await noHorizontalOverflow(mobile);
   assert.equal(await mobile.locator(".analytics-workspace-index button").count(), 3);
   assert.equal(await mobile.locator(".analytics-mobile-step-nav").count(), 1);

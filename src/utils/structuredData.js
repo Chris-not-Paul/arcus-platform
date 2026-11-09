@@ -1,4 +1,4 @@
-import { siteOrigin } from "../config/site";
+import { bundledOpenDataCutoff, bundledOpenEventCount, bundledOpenReleaseVersion, bundledOpenSourceCount, siteOrigin } from "../config/site";
 import { canonicalPageUrl } from "./publicPageUrl";
 
 const paperDoi = "https://doi.org/10.1016/j.dib.2025.112375";
@@ -43,10 +43,10 @@ export const christianPaolini = Object.freeze({
 });
 
 export function arcusDataset(manifest = {}) {
-  const version = manifest.version || "arcus-open-2026.18";
+  const version = manifest.version || bundledOpenReleaseVersion;
   const generatedAt = manifest.generated_at || "2026-10-16";
-  const eventCount = manifest.event_count || 260;
-  const sourceCount = manifest.source_count || 1057;
+  const eventCount = manifest.event_count ?? bundledOpenEventCount;
+  const sourceCount = manifest.source_count ?? bundledOpenSourceCount;
 
   return {
     "@type": "Dataset",
@@ -57,7 +57,7 @@ export function arcusDataset(manifest = {}) {
     url: canonicalPageUrl(siteOrigin, "/data-access"),
     version,
     dateModified: generatedAt,
-    temporalCoverage: "2000/2026",
+    temporalCoverage: `2000/${manifest.data_cutoff || bundledOpenDataCutoff || "2026"}`,
     spatialCoverage: {
       "@type": "Place",
       name: "Italy",

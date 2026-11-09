@@ -27,7 +27,7 @@ import {
   openSources,
 } from "../utils/apiClient";
 import { professionalResource } from "#arcus-professional-client";
-import { isOpenRelease } from "../config/site";
+import { bundledOpenReleaseVersion, isOpenRelease } from "../config/site";
 
 /* LAYOUT */
 
@@ -924,11 +924,11 @@ function AtlasPage() {
       injuries: event.injuries ?? null,
       source_count:
         sourcesByEvent[event.event_id]?.length || 0,
-      release: openRelease?.version || "arcus-open-2026.18",
+      release: openRelease?.version || bundledOpenReleaseVersion,
     }));
 
     downloadCsv(
-      `${openRelease?.version || "arcus-open-2026.18"}-filtered-${activeYearFilter}.csv`,
+      `${openRelease?.version || bundledOpenReleaseVersion}-filtered-${activeYearFilter}.csv`,
       headers,
       rows
     );

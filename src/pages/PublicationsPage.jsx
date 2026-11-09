@@ -10,7 +10,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import { contactAddresses } from "../config/site";
+import { bundledOpenReleaseVersion, contactAddresses } from "../config/site";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
 import { researchLineage } from "../config/researchLineage";
 import { openManifest } from "../utils/apiClient";
@@ -130,7 +130,7 @@ function PublicationsPage() {
   const content = copy[language] || copy.en;
   const lineage = researchLineage[language] || researchLineage.en;
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.18";
+    manifest?.version || bundledOpenReleaseVersion;
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;

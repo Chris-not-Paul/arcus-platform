@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.18",
+  "release": "arcus-open-2.0",
   "sources": [
     {
       "source_id": "SRC0001",
@@ -454,7 +454,7 @@
       "source_url": "https://www.rainews.it/tgr/emiliaromagna/articoli/2024/05/appennino-forlivese-crolla-ponte-gia-danneggiato-dallalluvione-3e984f0a-a3a1-4f3f-b4a2-d48a43f76fd3.html",
       "source_reference": null,
       "publication_date": "2024-05-02",
-      "access_date": "2026-05-18",
+      "access_date": "2026-10-23",
       "language": "IT"
     },
     {
@@ -466,7 +466,7 @@
       "source_url": "https://www.corriereromagna.it/santa-sofia/santa-sofia-crolla-il-ponte-sul-bidente-a-poggiolo-AL728174",
       "source_reference": null,
       "publication_date": "2024-05-02",
-      "access_date": "2026-05-18",
+      "access_date": "2026-10-23",
       "language": "IT"
     },
     {
@@ -538,7 +538,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -1042,7 +1042,7 @@
       "source_url": "https://www.lasicilia.it/gallery/cronaca/1689287/ponte-tredici-luci-nella-notte-sono-crollate-due-arcate.html",
       "source_reference": null,
       "publication_date": "2022-12-16",
-      "access_date": "2026-05-19",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -1065,8 +1065,8 @@
       "source_title": "Crollo ponte sul Sosio, sopralluogo del Genio Civile per valutare i danni",
       "source_url": "https://www.regione.sicilia.it/la-regione-informa/crollo-ponte-sosio-domani-sopralluogo-genio-civile-valutare-danni",
       "source_reference": null,
-      "publication_date": "2022-12-16",
-      "access_date": "2026-05-19",
+      "publication_date": "2022-12-19",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -2350,7 +2350,7 @@
       "source_url": "https://www.lastampa.it/topnews/edizioni-locali/verbano-cusio-ossola/2020/11/07/news/ponte-crollato-a-pallanzeno-potrebbe-essere-stato-danneggiato-dall-alluvione-1.39511682/",
       "source_reference": null,
       "publication_date": "2020-11-07",
-      "access_date": "2026-10-13",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -2482,7 +2482,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-05/Rapporto%20evento%2019-24%20ottobre%202019%20parteII.pdf",
       "source_reference": null,
       "publication_date": "2019-10-23",
-      "access_date": "2026-05-20",
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -2501,12 +2501,12 @@
       "source_id": "SRC0232",
       "event_id": "IT19.10.01",
       "source_role": "News",
-      "source_type": "Il Piccolo / Giornale7",
-      "source_title": "È crollato il ponte sull'Albedosa SP155 tra Pratalborato e Capriata d'Orba",
+      "source_type": "Giornale7",
+      "source_title": "Capriata d’Orba: riaprirà a febbraio la provinciale 155 Novi-Ovada",
       "source_url": "https://www.giornale7.it/capriata-dorba-riaperta-a-febbraio-la-provinciale-155-novi-ovada/",
       "source_reference": null,
-      "publication_date": "2019-10-22",
-      "access_date": "2026-05-20",
+      "publication_date": "2019-12-26",
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -2551,10 +2551,10 @@
       "source_role": "News",
       "source_type": "Cronache della Campania",
       "source_title": "Castellammare, paura sul lungo Sarno: crolla ponte pedonale, nessun ferito",
-      "source_url": "https://www.cronachedellacampania.it/2019/12/castellammare-paura-sul-lungo-sarno-crolla-ponte-pedonale-nessun-ferito/amp/",
+      "source_url": "https://www.cronachedellacampania.it/2019/12/castellammare-paura-sul-lungo-sarno-crolla-ponte-pedonale-nessun-ferito/",
       "source_reference": null,
       "publication_date": "2019-12-21",
-      "access_date": null,
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -2693,12 +2693,12 @@
       "source_id": "SRC0887",
       "event_id": "IT04.12.01",
       "source_role": "Official/Technical",
-      "source_type": "ISPRA",
-      "source_title": "IdeAmbiente, gennaio 2005: alluvione in Sardegna e SS129",
+      "source_type": "APAT — IdeAmbiente,archivioISPRA",
+      "source_title": "L’alluvione sarda del 6–9 dicembre 2004: un profilo idrologico e meteorologico",
       "source_url": "https://www.isprambiente.gov.it/files/ideambiente/IdeAmbiente_01_2005.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -2770,7 +2770,7 @@
       "source_url": "https://www.ufficiostampa.provincia.tn.it/layout/set/print/Comunicati/Maltempo-la-situazione-della-viabilita-alle-ore-06.00",
       "source_reference": null,
       "publication_date": "2018-10-30",
-      "access_date": null,
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -2806,7 +2806,7 @@
       "source_url": "https://www.regione.fvg.it/rafvg/comunicati/comunicato.act?dir=%2Frafvg%2Fcms%2FRAFVG%2Fnotiziedallagiunta%2F&nm=20181118131353003",
       "source_reference": null,
       "publication_date": "2018-11-18",
-      "access_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -3117,8 +3117,8 @@
       "source_title": "Riapre il viadotto della Saurina",
       "source_url": "https://www.sassiland.com/notizie_matera/notizia.asp?id=39993&t=riapre_il_viadotto_della_saurina",
       "source_reference": null,
-      "publication_date": "2016-04-06",
-      "access_date": "2026-05-20",
+      "publication_date": "2016-04-05",
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -3292,14 +3292,14 @@
     {
       "source_id": "SRC0300",
       "event_id": "IT15.03.02",
-      "source_role": "News",
+      "source_role": "Scientific",
       "source_type": "Journal Paper",
       "source_title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
       "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
       "source_reference": null,
-      "publication_date": "2015-03-14",
+      "publication_date": null,
       "access_date": "2026-05-20",
-      "language": "IT"
+      "language": "EN"
     },
     {
       "source_id": "SRC0301",
@@ -3309,8 +3309,8 @@
       "source_title": "L'antico Ponte di Cerami a rischio crollo: incuria delle istituzioni",
       "source_url": "https://ilmegafono.org/2017/09/23/ponte-di-cerami-a-rischio-crollo/",
       "source_reference": null,
-      "publication_date": "2017-10-08",
-      "access_date": "2026-05-20",
+      "publication_date": "2017-09-23",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -3422,27 +3422,15 @@
       "language": "EN"
     },
     {
-      "source_id": "SRC0311",
-      "event_id": "IT15.10.01",
-      "source_role": "Official/Technical",
-      "source_type": "Provincia di Benevento",
-      "source_title": "Alluvione ottobre 2015: ricognizione danni e interventi su ponti provinciali",
-      "source_url": "https://www.ottopagine.it/bn/attualita/69335/ripristino-strade-provinciali-tre-proposte-di-intervento.shtml",
-      "source_reference": null,
-      "publication_date": "2016-03-20",
-      "access_date": "2026-05-20",
-      "language": "IT"
-    },
-    {
       "source_id": "SRC0312",
-      "event_id": "IT15.10.01",
+      "event_id": "IT15.10.02",
       "source_role": "Official/Technical",
       "source_type": "provincia.benevento.it",
-      "source_title": "Event documentation: Ponte Tammarecchia",
+      "source_title": "Ad un anno dall'alluvione: il Presidente Ricci scrive ai Sindaci",
       "source_url": "https://www.provincia.benevento.it/node/3901",
       "source_reference": null,
-      "publication_date": "2015-10-15",
-      "access_date": "2026-10-14",
+      "publication_date": "2016-10-13",
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -3460,9 +3448,9 @@
     {
       "source_id": "SRC0314",
       "event_id": "IT15.10.02",
-      "source_role": "Official/Technical",
-      "source_type": "Provincia di Benevento",
-      "source_title": "Alluvione ottobre 2015: ricognizione danni e interventi su ponti provinciali",
+      "source_role": "News",
+      "source_type": "Ottopagine",
+      "source_title": "Ripristino strade provinciali: tre proposte di intervento",
       "source_url": "https://www.ottopagine.it/bn/attualita/69335/ripristino-strade-provinciali-tre-proposte-di-intervento.shtml",
       "source_reference": null,
       "publication_date": "2016-03-20",
@@ -3532,9 +3520,9 @@
     {
       "source_id": "SRC0320",
       "event_id": "IT15.10.04",
-      "source_role": "Official/Technical",
-      "source_type": "Provincia di Benevento",
-      "source_title": "Alluvione ottobre 2015: ricognizione danni e interventi su ponti provinciali",
+      "source_role": "News",
+      "source_type": "Ottopagine",
+      "source_title": "Ripristino strade provinciali: tre proposte di intervento",
       "source_url": "https://www.ottopagine.it/bn/attualita/69335/ripristino-strade-provinciali-tre-proposte-di-intervento.shtml",
       "source_reference": null,
       "publication_date": "2016-03-20",
@@ -3545,24 +3533,24 @@
       "source_id": "SRC0321",
       "event_id": "IT15.10.04",
       "source_role": "Official/Technical",
-      "source_type": "provincia.benevento.it",
-      "source_title": "Event documentation: Ponte Malepara",
+      "source_type": "Provincia di Benevento",
+      "source_title": "Al via i lavori per il Ponte Malepara",
       "source_url": "https://www.provincia.benevento.it/node/3896",
       "source_reference": null,
-      "publication_date": "2015-10-15",
-      "access_date": "2026-10-14",
+      "publication_date": "2016-11-16",
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
       "source_id": "SRC0827",
       "event_id": "IT11.11.01",
-      "source_role": "News",
-      "source_type": "servizi.piemonte.it",
-      "source_title": "Event documentation: Ponte Bertenga",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte",
+      "source_title": "Rapporto di evento alluvionale del novembre 2011 – Ponte Bertenga",
       "source_url": "https://www.servizi.piemonte.it/rsr/servizi-sp/dwd/EventiAlluvionali/alluvioneNovembre2011/2011_11_rapporto_evento.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-14",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -3573,8 +3561,8 @@
       "source_title": "Event documentation: bridge event in Baselice (2015)",
       "source_url": "https://burc.regione.campania.it/eBurcWeb/directServlet?ATTACH_ID=142460&DOCUMENT_ID=00097429",
       "source_reference": null,
-      "publication_date": "2015-10-23",
-      "access_date": "2026-10-14",
+      "publication_date": "2016-08-16",
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -3677,24 +3665,24 @@
       "source_id": "SRC0332",
       "event_id": "IT14.05.01",
       "source_role": "News",
-      "source_type": "anbi.it",
-      "source_title": "Event documentation: Ponte di via Cerretino",
+      "source_type": "Il Messaggero Marche / rassegna ANBI",
+      "source_title": "Maltempo, danni per oltre un milione",
       "source_url": "https://www.anbi.it/public/sezioni/140508164357.pdf",
       "source_reference": null,
-      "publication_date": "2023-03-09",
-      "access_date": "2026-10-14",
+      "publication_date": "2014-05-06",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
       "source_id": "SRC0333",
       "event_id": "IT14.05.01",
       "source_role": "Official/Technical",
-      "source_type": "senato.it",
-      "source_title": "Event documentation: Ponte di via Cerretino",
-      "source_url": "https://www.senato.it/show-doc?id=765417&idoggetto=0&leg=17&part=doc_dc-allegatob_ab-sezionetit_m&tipodoc=resaula",
+      "source_type": "Senato della Repubblica",
+      "source_title": "Mozione 1-00253 – Alluvione del 3 maggio 2014 nelle Marche",
+      "source_url": "https://www.senato.it/show-doc?id=765438&leg=17&tipodoc=Sindisp",
       "source_reference": null,
-      "publication_date": "2023-11-19",
-      "access_date": "2026-10-14",
+      "publication_date": "2014-05-08",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4278,11 +4266,11 @@
       "event_id": "IT13.10.02",
       "source_role": "News",
       "source_type": "ilfilo.net",
-      "source_title": "Event documentation: bridge event in Firenzuola (2013)",
+      "source_title": "Si sta ricostruendo il ponte sul Diaterna, spazzato via nel 2013 da una bomba d’acqua",
       "source_url": "https://www.ilfilo.net/si-sta-ricostruendo-il-ponte-sul-diaterna-spazzato-via-nel-2013-da-una-bomba-dacqua/",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": "2026-10-14",
+      "publication_date": "2016-10-13",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4542,11 +4530,11 @@
       "event_id": "IT11.03.02",
       "source_role": "News",
       "source_type": "ilcentro.it",
-      "source_title": "Event documentation: Ponte sul Vibrata, via Vomano",
+      "source_title": "Vibrata, rinasce il ponte devastato dall’alluvione",
       "source_url": "https://www.ilcentro.it/teramo/vibrata-rinasce-il-ponte-devastato-dall-alluvione-1.1598744",
       "source_reference": null,
       "publication_date": "2013-07-25",
-      "access_date": "2026-10-14",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4554,11 +4542,11 @@
       "event_id": "IT11.03.03",
       "source_role": "News",
       "source_type": "giulianovanews.it",
-      "source_title": "Event documentation: Ponte SP17 Floriano–Villa Ricci sul Salinello",
+      "source_title": "Teramo. Alluvione: la situazione di tutte le strade della provincia di Teramo",
       "source_url": "https://www.giulianovanews.it/2011/03/teramo-alluvione-la-situazione-di-tutte-le-strade-della-provincia-di-teramo/",
       "source_reference": null,
-      "publication_date": "2013-07-25",
-      "access_date": "2026-10-14",
+      "publication_date": "2011-03-08",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4605,8 +4593,8 @@
       "source_title": "Demolizione totale del ponte ferroviario Caltagirone-Gela in provincia di Catania",
       "source_url": "https://www.interno.gov.it/it/notizie/demolizione-totale-ponte-ferroviario-caltagirone-gela-provincia-catania",
       "source_reference": null,
-      "publication_date": "2021-03-18",
-      "access_date": "2026-05-20",
+      "publication_date": "2014-10-07",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -4722,11 +4710,11 @@
       "event_id": "IT11.10.05",
       "source_role": "News",
       "source_type": "visitpignone.it",
-      "source_title": "Event documentation: Ponte Vecchio di Pignone",
+      "source_title": "Storia di Pignone",
       "source_url": "https://visitpignone.it/scopri-pignone/storia/",
       "source_reference": null,
-      "publication_date": "2011-10-25",
-      "access_date": "2026-10-14",
+      "publication_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4794,11 +4782,11 @@
       "event_id": "IT11.10.08",
       "source_role": "Official/Technical",
       "source_type": "provincia.ms.it",
-      "source_title": "Event documentation: Ponte di Santa Giustina",
+      "source_title": "Pontremoli: riapre il ponte Santa Giustina",
       "source_url": "https://www.provincia.ms.it/comunicato/pontremoli-riapre-il-ponte-santa-giustina-martedi-21-maggio-il-taglio-del-nastro/",
       "source_reference": null,
-      "publication_date": "2011-10-25",
-      "access_date": "2026-10-14",
+      "publication_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4842,11 +4830,11 @@
       "event_id": "IT11.11.02",
       "source_role": "Official/Technical",
       "source_type": "digifema.mit.gov.it",
-      "source_title": "Event documentation: Ponte Cancello",
+      "source_title": "Relazione della commissione ministeriale sullo svio del treno 3793, PM Feroleto–Marcellinara",
       "source_url": "https://digifema.mit.gov.it/wp-content/uploads/2019/12/111122_Relazione-svio-PM-Feroleto-Marcellinara.pdf",
       "source_reference": null,
       "publication_date": "2012-02-06",
-      "access_date": "2026-10-14",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -4914,12 +4902,12 @@
       "event_id": "IT10.03.01",
       "source_role": "News",
       "source_type": "cn24tv.it",
-      "source_title": "Event documentation: bridge event in Simeri Crichi (2010)",
+      "source_title": "Cede il ponte sul fiume Simeri a causa del maltempo",
       "source_url": "https://cn24tv.it/news/cede-il-ponte-sul-fiume-simeri-a-causa-del-maltempo/",
       "source_reference": null,
-      "publication_date": "2025-01-01",
-      "access_date": "2026-10-14",
-      "language": "EN"
+      "publication_date": "2010-03-10",
+      "access_date": "2026-11-06",
+      "language": "IT"
     },
     {
       "source_id": "SRC0436",
@@ -5073,8 +5061,8 @@
       "source_title": "Enna: Crollano 2 arcate Sp 28 – Panoramica",
       "source_url": "https://www.vivienna.it/2009/02/10/enna-crollano-2-arcate-sp-28-panoramica/",
       "source_reference": null,
-      "publication_date": "2009-01-31",
-      "access_date": "2026-10-14",
+      "publication_date": "2009-02-10",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5338,7 +5326,7 @@
       "source_url": "https://www.lanuovasardegna.it/nuoro/cronaca/2008/11/29/news/sciroccate-e-temporali-devastano-l-ogliastra-1.3309415",
       "source_reference": null,
       "publication_date": "2008-11-29",
-      "access_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -5346,11 +5334,11 @@
       "event_id": "IT08.10.02",
       "source_role": "Official/Technical",
       "source_type": "Regione Sardegna",
-      "source_title": "Documentazione sugli interventi dopo l’alluvione del novembre 2008",
+      "source_title": "BURASn7,28feb2009 — ordinanze sull'emergenza4 e27–28nov2008,Triei fra comuni colpiti",
       "source_url": "https://www.regione.sardegna.it/documenti/1_22_20090324134951.pdf",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
+      "publication_date": "2009-02-28",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5374,7 +5362,7 @@
       "source_url": "https://www.lanuovasardegna.it/nuoro/cronaca/2008/11/29/news/sciroccate-e-temporali-devastano-l-ogliastra-1.3309415",
       "source_reference": null,
       "publication_date": "2008-11-29",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5382,11 +5370,11 @@
       "event_id": "IT08.10.03",
       "source_role": "Official/Technical",
       "source_type": "Regione Sardegna",
-      "source_title": "Documentazione sugli interventi dopo l’alluvione del novembre 2008",
+      "source_title": "BURAS n7,28febbraio2009 — ordinanze emergenza alluvione4 e27–28novembre2008",
       "source_url": "https://www.regione.sardegna.it/documenti/1_22_20090324134951.pdf",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
+      "publication_date": "2009-02-28",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5482,7 +5470,7 @@
       "source_url": "https://www.lastampa.it/cronaca/2006/09/15/news/nubifragi-e-fango-la-liguria-si-piega-1.37147807/",
       "source_reference": null,
       "publication_date": "2006-09-15",
-      "access_date": "2026-05-21",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5542,7 +5530,7 @@
       "source_url": "https://www.ecodibergamo.it/stories/Cronaca/crolla-ponte-durante-collaudo-muore-camionista-di-c-volpino_45981_11/",
       "source_reference": null,
       "publication_date": "2005-06-27",
-      "access_date": "2026-05-21",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5554,7 +5542,7 @@
       "source_url": "https://www.senato.it/service/PDF/PDFServer/DF/160328.pdf",
       "source_reference": null,
       "publication_date": "2005-11-16",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5602,7 +5590,7 @@
       "source_url": "https://archiviocassano.lavocedelpaese.info/index.php/2015/10/19/dieci-anni-fa-lalluvione-che-sconvolse-cassano-e-voi-dove-eravate/",
       "source_reference": null,
       "publication_date": "2015-10-19",
-      "access_date": "2026-05-21",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5628,18 +5616,6 @@
       "publication_date": "2025-01-01",
       "access_date": "2026-05-21",
       "language": "EN"
-    },
-    {
-      "source_id": "SRC0496",
-      "event_id": "IT05.10.03",
-      "source_role": "News",
-      "source_type": "Università di Bari / JHR",
-      "source_title": "Le alluvioni di Bari – ottobre 2005: crollato ponte Cassano Murge e Adelfia",
-      "source_url": "https://www.michelemossa.it/allegato/JHR-P2990_ita.pdf",
-      "source_reference": null,
-      "publication_date": "2012-04-01",
-      "access_date": "2026-05-21",
-      "language": "IT"
     },
     {
       "source_id": "SRC0497",
@@ -5734,7 +5710,7 @@
       "source_url": "https://www.corriere.it/Primo_Piano/Cronache/2004/12_Dicembre/07/meteo.shtml",
       "source_reference": null,
       "publication_date": "2004-12-08",
-      "access_date": "2026-05-21",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -5829,7 +5805,7 @@
       "source_title": "Cerimonia 10 anni alluvione Valcanale-Canal del Ferro 29 agosto 2003",
       "source_url": "https://www.protezionecivile.fvg.it/it/la-protezione-civile/eventi/cerimonia-ricordare-i-dieci-anni-dallalluvione-della-valcanale-canal",
       "source_reference": null,
-      "publication_date": "2014-08-29",
+      "publication_date": null,
       "access_date": "2026-05-21",
       "language": "IT"
     },
@@ -5866,7 +5842,7 @@
       "source_url": "https://www.viviwebtv.it/articolo/quindici-anni-fa-lalluvione-che-mise-in-ginocchio-massafra-palagiano-e-i-paesi-limitrofi_76513",
       "source_reference": null,
       "publication_date": "2018-09-08",
-      "access_date": "2026-05-21",
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -5902,7 +5878,7 @@
       "source_url": "https://bussola.s3.eu-west-1.amazonaws.com/1785049/Piano-di-Emergenza-Intercomunale-di-protezione-civile.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -5914,7 +5890,7 @@
       "source_url": "https://www.regione.piemonte.it/web/temi/protezione-civile-difesa-suolo-opere-pubbliche/calamita-naturali/cnr-irpi-torino-eventi-piena-frana-italia-settentrionale-nel-periodo-2002-2004",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -5926,7 +5902,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Q19.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -5974,7 +5950,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-30",
       "language": "IT"
     },
     {
@@ -6010,7 +5986,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -6034,7 +6010,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Q19.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-30",
       "language": "IT"
     },
     {
@@ -6042,11 +6018,11 @@
       "event_id": "IT00.10.05",
       "source_role": "Official/Technical",
       "source_type": "Regione Piemonte – Direzione Servizi Tecnici di Prevenzione",
-      "source_title": "Rapporto sull’evento alluvionale del 13–16 ottobre 2000",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Ala di Stura — S3 P017 / Ponte delle Scale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -6081,8 +6057,8 @@
       "source_title": "Storia degli eventi idrogeologici in Valle d'Aosta dall'800 al 2002",
       "source_url": "https://www.regione.vda.it/allegato.aspx?pk=55612",
       "source_reference": null,
-      "publication_date": "2002-06-18",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6105,8 +6081,8 @@
       "source_title": "Storia degli eventi idrogeologici in Valle d'Aosta dall'800 al 2002",
       "source_url": "https://www.regione.vda.it/allegato.aspx?pk=55612",
       "source_reference": null,
-      "publication_date": "2002-06-18",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -6118,19 +6094,19 @@
       "source_url": "https://www.nimbus.it/eventi/2002/020717alpimarittime_entracque.htm",
       "source_reference": null,
       "publication_date": "2002-07-29",
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
       "source_id": "SRC0539",
       "event_id": "IT02.07.01",
       "source_role": "Official/Technical",
-      "source_type": "Regione Piemonte / ARPA",
+      "source_type": "Regione Piemonte – Direzione Regionale Servizi Tecnici di Prevenzione",
       "source_title": "Rapporto sull’evento meteorologico del 13–15 luglio 2002",
-      "source_url": "https://www.regione.piemonte.it/web/temi/protezione-civile-difesa-suolo-opere-pubbliche/calamita-naturali/rapporto-sullevento-meteorologico-13-15-luglio-2002",
+      "source_url": "https://www.regione.piemonte.it/web/sites/default/files/media/documenti/2023-08/rapporto_luglio_02.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -6161,12 +6137,12 @@
       "source_id": "SRC0542",
       "event_id": "IT02.07.02",
       "source_role": "Official/Technical",
-      "source_type": "Regione Piemonte / ARPA",
+      "source_type": "Regione Piemonte – Direzione Servizi Tecnici di Prevenzione",
       "source_title": "Rapporto sull’evento meteorologico del 13–15 luglio 2002",
-      "source_url": "https://www.regione.piemonte.it/web/temi/protezione-civile-difesa-suolo-opere-pubbliche/calamita-naturali/rapporto-sullevento-meteorologico-13-15-luglio-2002",
+      "source_url": "https://www.regione.piemonte.it/web/sites/default/files/media/documenti/2023-08/rapporto_luglio_02.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6189,8 +6165,8 @@
       "source_title": "Guado tra il Santuario degli Angeli e la Mellana: ricostruzione storica",
       "source_url": "https://www.parcofluvialegessostura.it/guado-tra-il-santuario-degli-angeli-e-la-mellana-si-lavora-a-una-soluzione-definitiva/",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
+      "publication_date": "2024-08-23",
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -6202,7 +6178,7 @@
       "source_url": "https://www.targatocn.it/2010/07/26/leggi-notizia/argomenti/attualita/articolo/cuneo-demolita-la-pedancola-sul-gesso.html",
       "source_reference": null,
       "publication_date": "2010-07-26",
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -6273,8 +6249,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -6298,7 +6274,7 @@
       "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
       "source_reference": null,
       "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -6309,8 +6285,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -6334,7 +6310,7 @@
       "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
       "source_reference": null,
       "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -6345,8 +6321,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-10-30",
       "language": "IT"
     },
     {
@@ -6381,8 +6357,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6417,8 +6393,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -6442,7 +6418,7 @@
       "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
       "source_reference": null,
       "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -6489,8 +6465,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-10-30",
       "language": "IT"
     },
     {
@@ -6525,8 +6501,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6554,42 +6530,6 @@
       "language": "EN"
     },
     {
-      "source_id": "SRC0575",
-      "event_id": "IT00.10.09",
-      "source_role": "Official/Technical",
-      "source_type": "ARPA Piemonte",
-      "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
-      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
-      "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0576",
-      "event_id": "IT00.10.09",
-      "source_role": "News",
-      "source_type": "ANSA",
-      "source_title": "10 anni fa alluvione Nord-Ovest, fu inferno d'acqua – Piemonte e Valle d'Aosta",
-      "source_url": "https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html",
-      "source_reference": null,
-      "publication_date": "2010-10-13",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0577",
-      "event_id": "IT00.10.09",
-      "source_role": "Scientific",
-      "source_type": "Journal Paper",
-      "source_title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
-      "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
-      "source_reference": null,
-      "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
-      "language": "EN"
-    },
-    {
       "source_id": "SRC0578",
       "event_id": "IT00.10.10",
       "source_role": "Official/Technical",
@@ -6597,8 +6537,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6633,8 +6573,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6669,8 +6609,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6698,42 +6638,6 @@
       "language": "EN"
     },
     {
-      "source_id": "SRC0587",
-      "event_id": "IT00.10.13",
-      "source_role": "Official/Technical",
-      "source_type": "ARPA Piemonte",
-      "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
-      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
-      "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0588",
-      "event_id": "IT00.10.13",
-      "source_role": "News",
-      "source_type": "ANSA",
-      "source_title": "10 anni fa alluvione Nord-Ovest, fu inferno d'acqua – Piemonte e Valle d'Aosta",
-      "source_url": "https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html",
-      "source_reference": null,
-      "publication_date": "2010-10-13",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0589",
-      "event_id": "IT00.10.13",
-      "source_role": "Scientific",
-      "source_type": "Journal Paper",
-      "source_title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
-      "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
-      "source_reference": null,
-      "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
-      "language": "EN"
-    },
-    {
       "source_id": "SRC0590",
       "event_id": "IT00.10.14",
       "source_role": "Official/Technical",
@@ -6741,8 +6645,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6770,42 +6674,6 @@
       "language": "EN"
     },
     {
-      "source_id": "SRC0593",
-      "event_id": "IT00.10.15",
-      "source_role": "Official/Technical",
-      "source_type": "ARPA Piemonte",
-      "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
-      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
-      "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0594",
-      "event_id": "IT00.10.15",
-      "source_role": "News",
-      "source_type": "ANSA",
-      "source_title": "10 anni fa alluvione Nord-Ovest, fu inferno d'acqua – Piemonte e Valle d'Aosta",
-      "source_url": "https://www.ansa.it/web/notizie/photostory/primopiano/2010/10/13/visualizza_new.html_1733456299.html",
-      "source_reference": null,
-      "publication_date": "2010-10-13",
-      "access_date": "2026-05-22",
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0595",
-      "event_id": "IT00.10.15",
-      "source_role": "Scientific",
-      "source_type": "Journal Paper",
-      "source_title": "Bridge collapses in Italy across the 21st century: survey and statistical analysis",
-      "source_url": "https://doi.org/10.1080/15732479.2025.2483500",
-      "source_reference": null,
-      "publication_date": "2025-01-01",
-      "access_date": "2026-05-22",
-      "language": "EN"
-    },
-    {
       "source_id": "SRC0596",
       "event_id": "IT00.10.16",
       "source_role": "Official/Technical",
@@ -6813,8 +6681,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6885,8 +6753,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6918,11 +6786,11 @@
       "event_id": "IT00.10.19",
       "source_role": "Official/Technical",
       "source_type": "ARPA Piemonte",
-      "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
+      "source_title": "Eventi alluvionali in Piemonte – Effetti dell’alluvione dell’ottobre 2000 sulla Dora Baltea",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -6957,8 +6825,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -6993,8 +6861,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -7029,8 +6897,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7101,8 +6969,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -7137,8 +7005,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7209,8 +7077,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -7281,8 +7149,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -7353,8 +7221,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -7425,8 +7293,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7461,8 +7329,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -7497,8 +7365,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -7533,8 +7401,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7569,8 +7437,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7605,8 +7473,8 @@
       "source_title": "Evento alluvionale regionale 13-16 ottobre 2000 – monografia ufficiale",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7642,7 +7510,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2023-10/Ev2000-2002tot.pdf",
       "source_reference": null,
       "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -7722,11 +7590,11 @@
       "event_id": "IT00.10.42",
       "source_role": "Official/Technical",
       "source_type": "Regione Valle d'Aosta",
-      "source_title": "Issime – Casa e pericoli: crollo ponte del Giubileo durante alluvione 2000",
+      "source_title": "Issime — registro storico regionale: danni a Vareilles e distinto ponte del Giubileo",
       "source_url": "https://casaepericoli.regione.vda.it/eventi-storici/issime/",
       "source_reference": null,
-      "publication_date": "2002-10-16",
-      "access_date": "2026-05-22",
+      "publication_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -7762,7 +7630,7 @@
       "source_url": "http://www.sudnews.it/risorsa/5533_Molise__maltempo__crolla_un_ponte_sulla_statale_per_Campobasso.html",
       "source_reference": null,
       "publication_date": "2001-01-25",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -7786,7 +7654,7 @@
       "source_url": "https://www.iltirreno.it/massa/cronaca/2011/11/11/news/mori-nell-alluvione-processo-dopo-11-anni-1.2793437",
       "source_reference": null,
       "publication_date": "2011-11-11",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -7798,7 +7666,7 @@
       "source_url": "https://ricerca.repubblica.it/repubblica/archivio/repubblica/2000/12/16/a13-tir-abbatte-cavalcavia.html?ref=search",
       "source_reference": null,
       "publication_date": "2000-12-16",
-      "access_date": "2026-05-22",
+      "access_date": "2026-10-30",
       "language": "IT"
     },
     {
@@ -7834,7 +7702,7 @@
       "source_url": "https://www.ansa.it/emiliaromagna/notizie/2024/11/30/alluvione-esercito-realizza-by-pass-stradale-nel-bolognese_53350d11-b88f-4def-886a-a96f61a7204a.html",
       "source_reference": null,
       "publication_date": "2024-11-30",
-      "access_date": "2026-05-22",
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -7870,7 +7738,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": "2025-01-01",
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -7918,7 +7786,7 @@
       "source_url": "https://www.rainews.it/tgr/liguria/articoli/2023/06/udienza-con-periti-per-il-crollo-di-ponte-pagliari-a-spezia-al--museo-camec-5e64302e-9fcc-4d3b-93ee-ccbb8a13557e.html",
       "source_reference": null,
       "publication_date": "2023-06-19",
-      "access_date": "2026-10-13",
+      "access_date": "2026-10-23",
       "language": "IT"
     },
     {
@@ -8002,7 +7870,7 @@
       "source_url": "https://www.regione.sardegna.it/documenti/1_50_20140123192927.pdf",
       "source_reference": null,
       "publication_date": "2014-01-23",
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -8134,7 +8002,7 @@
       "source_url": "https://www.isprambiente.gov.it/contentfiles/00003800/3862-rapporti-01-07.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-09-08",
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -8142,11 +8010,11 @@
       "event_id": "IT00.10.01",
       "source_role": "Official/Technical",
       "source_type": "ARPA Piemonte event report",
-      "source_title": "Rapporto sull'evento alluvionale del 13–16 ottobre 2000",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — ponte provvisorio di Crissolo",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-09-08",
+      "access_date": "2026-11-04",
       "language": "IT"
     },
     {
@@ -8265,8 +8133,8 @@
       "source_title": "Crollo del viadotto a Capo di Ponte durante il collaudo",
       "source_url": "https://www.corriere.it/Primo_Piano/Cronache/2005/06_Giugno/27/ponte.html",
       "source_reference": null,
-      "publication_date": "2005-06-27",
-      "access_date": null,
+      "publication_date": "2005-06-28",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -8275,10 +8143,10 @@
       "source_role": "Official/Technical",
       "source_type": "Camera dei deputati",
       "source_title": "Alluvione del 22–23 ottobre 2005: danni alle infrastrutture",
-      "source_url": "https://documenti.camera.it/_dati/leg14/lavori/stenografici/sed695/pdfbt33.pdf",
+      "source_url": "https://documenti.camera.it/_dati/leg14/lavori/stenografici/sed695/bintero.pdf",
       "source_reference": null,
       "publication_date": "2005-10-25",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -8446,7 +8314,7 @@
       "source_url": "https://www.regione.liguria.it/components/com_publiccompetitions/includes/download.php?id=68092%3Adcd-710-2-2020-stralcio-interventi.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-12",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -8590,7 +8458,7 @@
       "source_url": "https://www.ansa.it/toscana/notizie/2022/12/02/crolla-un-ponte-nel-pisano-nessun-ferito-_ba76dadd-ef22-48ff-a684-80c2b554ccfb.html",
       "source_reference": null,
       "publication_date": "2022-12-02",
-      "access_date": "2026-10-13",
+      "access_date": "2026-10-23",
       "language": "IT"
     },
     {
@@ -8841,8 +8709,8 @@
       "source_title": "Event documentation: Ponte di Carseggio",
       "source_url": "https://www.comune.casalfiumanese.bo.it/novita/comunicati/casalfiumanese-inaugura-il-nuovo-ponte-di-carseggio",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": "2026-10-14",
+      "publication_date": "2025-02-22",
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -8850,11 +8718,11 @@
       "event_id": "IT11.05.01",
       "source_role": "Official/Technical",
       "source_type": "Ministero delle Infrastrutture e dei Trasporti",
-      "source_title": "Indagine treno 3793 — precedent Piano Carbone railway collapse",
+      "source_title": "Relazione d'indagine treno3793 Feroleto–Marcellinara — §3.7 precedente Piano Carbone8/5/2011",
       "source_url": "https://digifema.mit.gov.it/wp-content/uploads/2019/12/111122_Relazione-svio-PM-Feroleto-Marcellinara.pdf",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": "2026-10-14",
+      "publication_date": "2012-10-22",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -8902,7 +8770,7 @@
       "source_url": "https://enna.iswebcloud.it/index.php?id_sezione=133972",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-14",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -8922,11 +8790,11 @@
       "event_id": "IT15.10.01",
       "source_role": "Official/Technical",
       "source_type": "provincia.benevento.it",
-      "source_title": "Event documentation: Ponte Tammarecchia",
+      "source_title": "EVENTI ALLUVIONALI dei giorni15e19ottobre2015 — indice documenti",
       "source_url": "https://www.provincia.benevento.it/eventi-alluvionali-dei-giorni-15-e-19-ottobre-2015",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-14",
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -9142,7 +9010,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -9234,11 +9102,11 @@
       "event_id": "IT15.10.05",
       "source_role": "Official/Technical",
       "source_type": "trasparenza.regione.campania.it",
-      "source_title": "Event documentation: bridge event in Baselice (2015)",
+      "source_title": "Regione Campania — ricostruzione ponte Sausicchia sul Cervaro, intervento 09/U/01",
       "source_url": "https://trasparenza.regione.campania.it/TRASP_DEdipart50dg09uod13_20170000107ver02.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-14",
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -9586,7 +9454,7 @@
       "source_url": "https://old.comune.capoterra.ca.it/comunicazione/archivio-notizie/802-2018-1/ottobre-2018/3699-anas-riaperta-al-traffico-la-statale-195-sulcitana",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -9658,7 +9526,7 @@
       "source_url": "https://napoli.repubblica.it/cronaca/2020/01/20/news/ponte_crollato_nel_fiume_sarno_un_mese_dopo_il_genio_civile_provvede_alla_rimozione-246225199/",
       "source_reference": null,
       "publication_date": "2020-01-20",
-      "access_date": null,
+      "access_date": "2026-11-09",
       "language": "IT"
     },
     {
@@ -9679,10 +9547,10 @@
       "source_role": "Official/Technical",
       "source_type": "Camera dei deputati",
       "source_title": "Alluvione del 22–23 ottobre 2005: danni alle infrastrutture",
-      "source_url": "https://documenti.camera.it/_dati/leg14/lavori/stenografici/sed695/pdfbt33.pdf",
+      "source_url": "https://documenti.camera.it/_dati/leg14/lavori/stenografici/sed695/bintero.pdf",
       "source_reference": null,
       "publication_date": "2005-10-25",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9691,10 +9559,10 @@
       "source_role": "News",
       "source_type": "Corriere della Sera",
       "source_title": "Maltempo in Puglia, 23 ottobre 2005",
-      "source_url": "https://www.corriere.it/Primo_Piano/Cronache/2005/10_Ottobre/23/maltempo.shtml",
+      "source_url": "https://www.corriere.it/Primo_Piano/Cronache/2005/10_Ottobre/23/maltempo.html",
       "source_reference": null,
-      "publication_date": "2005-10-23",
-      "access_date": null,
+      "publication_date": "2005-10-24",
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -9705,8 +9573,8 @@
       "source_title": "Crollo nel cantiere Catania–Siracusa",
       "source_url": "https://www.corriere.it/Primo_Piano/Cronache/2006/06_Giugno/24/catania.html",
       "source_reference": null,
-      "publication_date": "2006-06-24",
-      "access_date": null,
+      "publication_date": "2006-06-25",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9718,7 +9586,7 @@
       "source_url": "https://w3.ars.sicilia.it/DocumentiEsterni/ResSteno/14/14_2006_12_05_031_D.pdf",
       "source_reference": null,
       "publication_date": "2006-12-05",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9730,7 +9598,7 @@
       "source_url": "https://www.riviera24.it/2006/10/alluvione-a-vallecrosia-e-stato-definitivamente-demolito-il-ponte-di-via-angeli-custodi-16785/",
       "source_reference": null,
       "publication_date": "2006-10-02",
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -9742,7 +9610,7 @@
       "source_url": "https://www.ligurianotizie.it/stanziati-800mila-euro-per-mettere-in-sicurezza-vallecrosia/2007/10/24/1042594/",
       "source_reference": null,
       "publication_date": "2007-10-24",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9764,18 +9632,6 @@
       "source_type": "ARPA Piemonte",
       "source_title": "Evento 28–30 maggio 2008: rapporto preliminare",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-10/2008.05.28_Rapporto_preliminare.pdf",
-      "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0901",
-      "event_id": "IT08.10.01",
-      "source_role": "Official/Technical",
-      "source_type": "Manelli Group",
-      "source_title": "Demolizione e ricostruzione dei ponti sul Rio San Girolamo e Rio Masone Ollastu",
-      "source_url": "https://manelligroup.com/progetti/lavori-di-demolizione-e-ricostruzione-dei-ponti-in-corrispondenza-del-riosan-girolamo-e-del-rio-masone-ollastu-della-sulcitana/",
       "source_reference": null,
       "publication_date": null,
       "access_date": null,
@@ -9862,7 +9718,7 @@
       "source_url": "https://www.senato.it/show-doc?id=00424664&leg=16&length=4084&liv=69&offset=94057&parse=no&part=doc_dc-ressten_rs-gentit_300765cdupllss626cg-intervento_mantovanisottosegretario&tipodoc=Resaula",
       "source_reference": null,
       "publication_date": "2009-06-17",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9874,7 +9730,7 @@
       "source_url": "https://documenti.camera.it/leg17/resoconti/commissioni/bollettini/xhtml/2015/07/29/0809/leg.17.bol0492.data20150729.com0809.html",
       "source_reference": null,
       "publication_date": "2015-07-29",
-      "access_date": null,
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -9922,7 +9778,7 @@
       "source_url": "https://www.regione.vda.it/territorio/ambiente/valutazioniambientali/via/progetti/via_detprog_i.asp?a=2003&n=67&pk=315",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -9934,7 +9790,7 @@
       "source_url": "https://www.regione.piemonte.it/web/temi/protezione-civile-difesa-suolo-opere-pubbliche/calamita-naturali/cnr-irpi-torino-eventi-piena-frana-italia-settentrionale-nel-periodo-2002-2004",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -9946,7 +9802,7 @@
       "source_url": "https://www.cuneocronaca.it/da-cuneo-a-boves-attraverso-il-guado-sul-gesso-sognando-un-ponte-ciclopedonale-come-era-anni-fa",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -9970,7 +9826,7 @@
       "source_url": "https://www.studionord.news/25459/",
       "source_reference": null,
       "publication_date": "2006-12-28",
-      "access_date": null,
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -9981,8 +9837,8 @@
       "source_title": "Dichiarazione del sindaco del 19 settembre 2003",
       "source_url": "https://www.natisone.it/appunti/appunti36.htm",
       "source_reference": null,
-      "publication_date": "2003-09-19",
-      "access_date": null,
+      "publication_date": "2004-08-29",
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -9994,7 +9850,7 @@
       "source_url": "https://burp.regione.puglia.it/documents/20135/311701/AMMINISTRAZIONE%2BPROVINCIALE%2BTARANTO%2B%28id%2B5186737%29.pdf/13b13bb8-1d49-34c2-c205-3e38cb21704a?t=1622711438405",
       "source_reference": null,
       "publication_date": "2007-06-21",
-      "access_date": "2026-10-16",
+      "access_date": "2026-10-28",
       "language": "IT"
     },
     {
@@ -10042,7 +9898,7 @@
       "source_url": "https://www.gazzettaufficiale.it/atto/contratti/caricaDettaglioAtto/originario?atto.codiceRedazionale=T10BFF17011&atto.dataPubblicazioneGazzetta=2010-08-09",
       "source_reference": null,
       "publication_date": "2010-08-09",
-      "access_date": "2026-10-16",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -10054,7 +9910,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -10066,7 +9922,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -10078,19 +9934,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
-      "language": "IT"
-    },
-    {
-      "source_id": "SRC0931",
-      "event_id": "IT00.10.13",
-      "source_role": "Official/Technical",
-      "source_type": "Regione Piemonte – Direzione Servizi Tecnici di Prevenzione",
-      "source_title": "Rapporto sull’evento alluvionale del 13–16 ottobre 2000",
-      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
-      "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -10102,7 +9946,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -10126,7 +9970,7 @@
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-03",
       "language": "IT"
     },
     {
@@ -10146,11 +9990,11 @@
       "event_id": "IT00.10.29",
       "source_role": "Official/Technical",
       "source_type": "Regione Piemonte – Direzione Servizi Tecnici di Prevenzione",
-      "source_title": "Rapporto sull’evento alluvionale del 13–16 ottobre 2000",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Noasca — secondo attraversamento, S3 P027",
       "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
       "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
@@ -10198,7 +10042,7 @@
       "source_url": "https://www.ilrestodelcarlino.it/forli/cronaca/crollo-ponte-fiume-bidente-ridracoli-poggiolo-vtzof7lj",
       "source_reference": null,
       "publication_date": "2024-05-02",
-      "access_date": null,
+      "access_date": "2026-10-23",
       "language": "IT"
     },
     {
@@ -10362,11 +10206,11 @@
       "event_id": "IT02.07.02",
       "source_role": "Scientific",
       "source_type": "D’Angelo, Ballio & Ravazzani",
-      "source_title": "Geomorphologic risk factors for river bridges (2025), S3 P111",
+      "source_title": "D'Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10402,19 +10246,19 @@
       "source_url": "https://fiumepramaera.blogspot.com/2010/06/lalluvione-28-nov-2008.html",
       "source_reference": null,
       "publication_date": "2010-06-20",
-      "access_date": null,
+      "access_date": "2026-11-05",
       "language": "IT"
     },
     {
       "source_id": "SRC0958",
       "event_id": "IT08.10.03",
       "source_role": "Official/Technical",
-      "source_type": "Documento tecnico fornito dal curatore; autore non identificato",
-      "source_title": "Rio Corongiu: documentazione fotografica degli interventi post-alluvione 2008",
-      "source_url": null,
-      "source_reference": "Rio Corongiu — scheda fotografica tecnica fornita dal curatore, p. 1",
+      "source_type": "SardegnaAmbiente — scheda tecnica fotografica, autore e progetto completo non indicati",
+      "source_title": "Rio Corongiu — scheda fotografica con spalla sinistra demolita dall'alluvione del novembre2008",
+      "source_url": "https://www.sardegnaambiente.it/documenti/18_357_20121115134833.pdf",
+      "source_reference": null,
       "publication_date": null,
-      "access_date": null,
+      "access_date": "2026-11-06",
       "language": "IT"
     },
     {
@@ -10449,8 +10293,8 @@
       "source_title": "Risposta del sottosegretario Mantovani sul Viadotto Geremia 2",
       "source_url": "https://www.senato.it/service/PDF/PDFServer/BGT/424664.pdf",
       "source_reference": null,
-      "publication_date": null,
-      "access_date": null,
+      "publication_date": "2009-06-17",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -10546,7 +10390,7 @@
       "source_url": "https://www.integer.it/198_ponte-belvedere-aquila.html",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -10570,7 +10414,7 @@
       "source_url": "https://www.ilcapoluogo.it/2021/07/16/ponte-belvedere-storia-di-una-grande-incompiuta-verso-la-rinascita/",
       "source_reference": null,
       "publication_date": "2021-07-16",
-      "access_date": "2026-10-16",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -10582,7 +10426,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10594,7 +10438,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10606,7 +10450,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10666,7 +10510,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10690,7 +10534,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10702,7 +10546,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10714,7 +10558,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10738,7 +10582,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10750,7 +10594,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10774,7 +10618,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -10798,7 +10642,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10822,7 +10666,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10846,7 +10690,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10858,7 +10702,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-04",
       "language": "EN"
     },
     {
@@ -10870,7 +10714,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -10882,7 +10726,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10894,7 +10738,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10906,7 +10750,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -10918,7 +10762,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -10942,7 +10786,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-30",
       "language": "EN"
     },
     {
@@ -10990,7 +10834,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-30",
       "language": "EN"
     },
     {
@@ -11014,7 +10858,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-28",
       "language": "EN"
     },
     {
@@ -11026,7 +10870,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-28",
       "language": "EN"
     },
     {
@@ -11050,7 +10894,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "EN"
     },
     {
@@ -11062,7 +10906,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "EN"
     },
     {
@@ -11122,7 +10966,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "EN"
     },
     {
@@ -11290,7 +11134,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-03",
       "language": "EN"
     },
     {
@@ -11410,7 +11254,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -11434,7 +11278,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -11554,7 +11398,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-06",
       "language": "EN"
     },
     {
@@ -11590,7 +11434,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-11-05",
       "language": "EN"
     },
     {
@@ -11710,7 +11554,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-26",
       "language": "EN"
     },
     {
@@ -11782,7 +11626,7 @@
       "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
       "source_reference": null,
       "publication_date": null,
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-26",
       "language": "EN"
     },
     {
@@ -11974,7 +11818,7 @@
       "source_url": "https://vaiano.trasparenza-valutazione-merito.it/web/trasparenza/papca-g?p_p_id=jcitygovalbopubblicazioni_WAR_jcitygovalbiportlet&p_p_lifecycle=2&p_p_state=pop_up&p_p_mode=view&p_p_resource_id=downloadAllegato&p_p_cacheability=cacheLevelPage&_jcitygovalbopubblicazioni_WAR_jcitygovalbiportlet_downloadSigned=true&_jcitygovalbopubblicazioni_WAR_jcitygovalbiportlet_id=22169302&_jcitygovalbopubblicazioni_WAR_jcitygovalbiportlet_action=mostraDettaglio&_jcitygovalbopubblicazioni_WAR_jcitygovalbiportlet_fromAction=recuperaDettaglio",
       "source_reference": null,
       "publication_date": "2024-11-20",
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-26",
       "language": "IT"
     },
     {
@@ -11986,7 +11830,7 @@
       "source_url": "https://www.corrieredisciacca.it/crollo-ponte-verdura-chieste-condanne-per-tumminello-e-calvaruso/",
       "source_reference": null,
       "publication_date": "2016-02-06",
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -11998,7 +11842,7 @@
       "source_url": "https://www.camera.it/leg17/410?idSeduta=54&tipo=atti_indirizzo_controllo",
       "source_reference": null,
       "publication_date": "2013-07-16",
-      "access_date": "2026-10-15",
+      "access_date": "2026-10-27",
       "language": "IT"
     },
     {
@@ -12026,6 +11870,1710 @@
       "language": "IT"
     },
     {
+      "source_id": "SRC1099",
+      "event_id": "IT22.12.01",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia di Pisa",
+      "source_title": "Il nuovo ponte sulla SP 329 a Monteverdi Marittimo",
+      "source_url": "https://www.provincia.pisa.it/novita/notizie/il-nuovo-ponte-sulla-sp-329-a-monteverdi-marittimo",
+      "source_reference": null,
+      "publication_date": "2025-05-27",
+      "access_date": "2026-10-23",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1100",
+      "event_id": "IT21.05.01",
+      "source_role": "News",
+      "source_type": "La Nazione",
+      "source_title": "Crollo ponte di Pagliari. Bulloni non ’scagionati’",
+      "source_url": "https://www.lanazione.it/la-spezia/cronaca/crollo-ponte-di-pagliari-bulloni-non-scagionati-e36a548d",
+      "source_reference": null,
+      "publication_date": "2023-09-17",
+      "access_date": "2026-10-23",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1101",
+      "event_id": "IT21.05.01",
+      "source_role": "Official/Technical",
+      "source_type": "Autorità di Sistema Portuale del Mar Ligure Orientale / Assoporti",
+      "source_title": "Ponte mobile a Pagliari. Avviata la progettazione della nuova struttura",
+      "source_url": "https://www.assoporti.it/media/16267/adsp-marligure-orientale-cs-27102025.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-23",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1102",
+      "event_id": "IT21.05.01",
+      "source_role": "News",
+      "source_type": "La Nazione",
+      "source_title": "Il dibattimento si apre a ottobre. Già prosciolto. Walter Malvolti",
+      "source_url": "https://www.lanazione.it/la-spezia/cronaca/il-dibattimento-si-apre-a-f397e3d9",
+      "source_reference": null,
+      "publication_date": "2026-06-10",
+      "access_date": "2026-10-23",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1103",
+      "event_id": "IT21.08.01",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Comacchio / ing. Bruno Rossatti / SATER",
+      "source_title": "Ponte della Salina — Progetto esecutivo, RE.01 Relazione generale (12/09/2022)",
+      "source_url": "https://intercenter.regione.emilia-romagna.it/bandi-e-strumenti-di-acquisto/bandi-altri-enti/altri-enti-bandi-e-procedure-di-gara/bandi-altri-enti-chiusi/BANDO_GARA_PORTALE@6883315",
+      "source_reference": null,
+      "publication_date": "2022-11-10",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1104",
+      "event_id": "IT21.08.01",
+      "source_role": "News",
+      "source_type": "Il Resto del Carlino",
+      "source_title": "Ponte crollato in via della Salina, affidata la perizia sulle cause",
+      "source_url": "https://www.ilrestodelcarlino.it/ferrara/cronaca/ponte-crollato-in-via-della-salina-affidata-la-perizia-sulle-cause-0dd6c927",
+      "source_reference": null,
+      "publication_date": "2021-12-21",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1105",
+      "event_id": "IT23.11.01",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Vaiano",
+      "source_title": "Emergenza Alluvione Regione Toscana — OCDPC 1037/2023, elenco interventi finanziati",
+      "source_url": "https://www.comune.vaiano.po.it/servizi/appalti-pubblici/alluvione",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1106",
+      "event_id": "IT23.11.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Consiglio regionale",
+      "source_title": "Quadro interventi novembre 2023 — somme urgenze, ponte La Cartaia",
+      "source_url": "https://www.consiglio.regione.toscana.it/upload/11/CM85/documenti/quadro_interventi_nov2023.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1107",
+      "event_id": "IT22.12.03",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Siciliana",
+      "source_title": "Crollo ponte sul Sosio, Aricò: Valutiamo interventi urgenti",
+      "source_url": "https://www.regione.sicilia.it/la-regione-informa/crollo-ponte-sosio-arico-valutiamo-interventi-urgenti",
+      "source_reference": null,
+      "publication_date": "2022-12-16",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1108",
+      "event_id": "IT22.12.03",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Siciliana — Autorità di Bacino",
+      "source_title": "Autorizzazione 24445 del 23/12/2022 — accesso in alveo, ponte 13 Archi sul Sosio",
+      "source_url": "https://www.regione.sicilia.it/istituzioni/servizi-informativi/decreti-e-direttive/autorizzazione-all-accesso-alveo-favore-ufficio-genio-civile-palermo-lavori-nei-comuni-chiusa-sclafani-pa-burgio-ag",
+      "source_reference": null,
+      "publication_date": "2022-12-23",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1109",
+      "event_id": "IT22.12.03",
+      "source_role": "News",
+      "source_type": "ANSA",
+      "source_title": "Crollano arcate ponte Tredici Luci su fiume Sosio in Sicilia",
+      "source_url": "https://www.ansa.it/sito/notizie/cronaca/2022/12/16/crollano-arcate-ponte-tredici-luci-su-fiume-sosio-in-sicilia_2d18fa8a-3e59-4351-8bff-6d32583ee3ed.html",
+      "source_reference": null,
+      "publication_date": "2022-12-16",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1110",
+      "event_id": "IT23.11.01",
+      "source_role": "News",
+      "source_type": "TV Prato",
+      "source_title": "Alluvione, il video di un container nella furia del Bisenzio a La Cartaia dove adesso fa paura il Rio Castagnolo",
+      "source_url": "https://www.tvprato.it/archivio/2024/01/alluvione-il-video-di-un-container-nella-furia-del-bisenzio-a-la-cartaia-dove-adesso-fa-paura-il-rio-castagnolo/",
+      "source_reference": null,
+      "publication_date": "2024-01-11",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1111",
+      "event_id": "IT22.12.03",
+      "source_role": "News",
+      "source_type": "Tele Radio Monte Kronio RMK-TV — intervista originale",
+      "source_title": "Ponte Tredici Luci, per il Genio Civile di Palermo è crollato perché vetusto",
+      "source_url": "https://www.youtube.com/watch?v=Gu4wWNrHvqM",
+      "source_reference": null,
+      "publication_date": "2022-12-20",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1112",
+      "event_id": "IT21.08.01",
+      "source_role": "News",
+      "source_type": "Il Resto del Carlino",
+      "source_title": "Ponte di via Salina crollato per errori passati",
+      "source_url": "https://www.ilrestodelcarlino.it/ferrara/cronaca/ponte-di-via-salina-crollato-per-errori-passati-ec990b65",
+      "source_reference": null,
+      "publication_date": "2021-09-03",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1113",
+      "event_id": "IT20.11.04",
+      "source_role": "News",
+      "source_type": "Rai News",
+      "source_title": "Maltempo. Frane e allagamenti in Sardegna: 3 morti, è stato di calamità",
+      "source_url": "https://www.rainews.it/archivio-rainews/media/maltempo-allagamenti-e-frane-nel-nuorese-strade-chiuse-disagi-anche-nel-sud-della-sardegna-1f8b6b69-ad67-44ba-885e-e2bb9c2caec9.html",
+      "source_reference": null,
+      "publication_date": "2020-11-28",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1114",
+      "event_id": "IT20.11.02",
+      "source_role": "Official/Technical",
+      "source_type": "ANAS — comunicato riprodotto da Il Lametino",
+      "source_title": "Maltempo, concluse verifiche Anas su ponte Neto: no anomalie",
+      "source_url": "https://www.lametino.it/ultimora/maltempo-concluse-verifiche-anas-su-ponte-neto-no-anomalie.html",
+      "source_reference": null,
+      "publication_date": "2020-11-22",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1115",
+      "event_id": "IT20.10.06",
+      "source_role": "Official/Technical",
+      "source_type": "ARPAL — Centro Funzionale Meteoidrologico di Protezione Civile",
+      "source_title": "Rapporto di evento meteoidrologico dell’1–3/10/2020 — versione 18/11/2020",
+      "source_url": "https://www.arpal.liguria.it/contenuti_statici/pubblicazioni/rapporti_eventi/2020/REM_20201001-03_arancione-rossa_vers20201112.pdf",
+      "source_reference": null,
+      "publication_date": "2020-11-18",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1116",
+      "event_id": "IT20.10.06",
+      "source_role": "News",
+      "source_type": "ImperiaPost — intervista originale a residente",
+      "source_title": "Maltempo: disastro a Vessalico. Vivi per miracolo. Un rumore forte, poi siamo scappati da casa",
+      "source_url": "https://imperiapost.it/468831/maltempo-disastro-a-vessalico-vivi-per-miracolo-un-rumore-forte-poi-siamo-scappati-da-casa-foto-e-video",
+      "source_reference": null,
+      "publication_date": "2020-10-03",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1117",
+      "event_id": "IT15.03.03",
+      "source_role": "Official/Technical",
+      "source_type": "Libero Consorzio Comunale di Enna — progetto SP28, relazione geologica Angelo Caliri",
+      "source_title": "SP28 Panoramica — relazione descrittiva e relazione geologica integrativa 19/02/2016, aggiornamento dopo il crollo 2015",
+      "source_url": "https://enna.iswebcloud.it/output_allegato.php?id=351996",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1118",
+      "event_id": "IT15.03.03",
+      "source_role": "News",
+      "source_type": "ViviEnna",
+      "source_title": "Enna, crolla il secondo ponte della Panoramica. Telefoni in tilt ad Enna, Calascibetta e Villarosa",
+      "source_url": "https://www.vivienna.it/2015/03/28/enna-crolla-il-secondo-ponte-della-panoramica/",
+      "source_reference": null,
+      "publication_date": "2015-03-28",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1119",
+      "event_id": "IT15.03.03",
+      "source_role": "News",
+      "source_type": "ViviEnna — intervista ripresa da La Sicilia",
+      "source_title": "Enna: sulla Panoramica uno strano silenzio",
+      "source_url": "https://www.vivienna.it/2015/06/09/enna-sulla-panoramica-uno-strano-silenzio/",
+      "source_reference": null,
+      "publication_date": "2015-06-09",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1120",
+      "event_id": "IT15.03.02",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Siciliana — Dipartimento Beni Culturali, Servizio3 Patrimonio",
+      "source_title": "DDS1198 del25/03/2019 — lavori di somma urgenza, porzione di spalla crollata del Ponte Vecchio Cerami–Nicosia",
+      "source_url": "https://www2.regione.sicilia.it/beniculturali/decreti_2019/marzo/DD%201198%20-%2025-03-2019%20DDS%20Missioni%20CERAMI%20Ponte%20Vecchio.pdf",
+      "source_reference": null,
+      "publication_date": "2019-03-25",
+      "access_date": "2026-10-26",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1121",
+      "event_id": "IT15.03.02",
+      "source_role": "News",
+      "source_type": "La Repubblica — Isabella Di Bartolo",
+      "source_title": "Enna, studenti a guardia del ponte normanno abbandonato",
+      "source_url": "https://palermo.repubblica.it/cronaca/2018/03/09/foto/enna_studenti_a_guardia_del_ponte_normanno_abbandonato-190888411/amp/",
+      "source_reference": null,
+      "publication_date": "2018-03-09",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1122",
+      "event_id": "IT13.02.01",
+      "source_role": "Official/Technical",
+      "source_type": "ANAS — comunicato ripreso da Strade & Autostrade",
+      "source_title": "ANAS, Sicilia: ricostruzione del ponte sul Fiume Verdura, sulla SS115",
+      "source_url": "https://www.stradeeautostrade.it/notizie/2015/anas-sicilia-ricostruzione-del-ponte-sul-fiume-verdura-sulla-ss115/",
+      "source_reference": null,
+      "publication_date": "2015-07-30",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1123",
+      "event_id": "IT09.05.01",
+      "source_role": "Official/Technical",
+      "source_type": "ANAS — comunicato ripreso da Marketpress",
+      "source_title": "Caltanissetta–Gela, ANAS: i lavori del viadotto furono ultimati nel1990; primi rilievi e ipotesi di movimento franoso sotterraneo",
+      "source_url": "https://www.marketpress.info/notiziario_det.php?art=98480",
+      "source_reference": null,
+      "publication_date": "2009-05-25",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1124",
+      "event_id": "IT09.05.01",
+      "source_role": "News",
+      "source_type": "Quotidiano di Gela — Rosario Cauchi, cronaca giudiziaria originale",
+      "source_title": "Il crollo del viadotto sulla Gela-Caltanissetta, condannato l'ex direttore dei lavori: assolto imprenditore",
+      "source_url": "https://quotidianodigela.it/il-crollo-del-viadotto-sulla-gela-caltanissetta-condannato-lex-direttore-dei-lavori-assolto-imprenditore/",
+      "source_reference": null,
+      "publication_date": "2019-04-15",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1125",
+      "event_id": "IT11.05.01",
+      "source_role": "Official/Technical",
+      "source_type": "Camera dei deputati — interrogazione Rizzo e altri, risposta del viceministro Riccardo Nencini",
+      "source_title": "Interrogazione 4-01224 e risposta scritta — ponte ferroviario di Piano Carbone e ripristino della tratta Gela–Caltagirone",
+      "source_url": "https://documenti.camera.it/leg17/resoconti/assemblea/html/sed0894/leg.17.sed0894.allegato_b.pdf",
+      "source_reference": null,
+      "publication_date": "2017-11-30",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1126",
+      "event_id": "IT09.04.05",
+      "source_role": "Official/Technical",
+      "source_type": "Ordine degli Ingegneri della Provincia dell'Aquila — periodico LEONARDO, articolo Vito Di Taranto",
+      "source_title": "LEONARDO n46,giugno2021 — Demolizione Ponte Belvedere L'Aquila e relativo editoriale",
+      "source_url": "https://laquila.ordingegneri.it/wp-content/uploads/sites/79/2022/07/46-2021-.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1127",
+      "event_id": "IT09.02.01",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia Regionale di Enna — progetto SP28, relazione descrittiva e relazione geologica integrativaCaliri2016",
+      "source_title": "SP28 Panoramica — identificazione del viadotto3 crollato nel febbraio2009, distinto dal viadotto2 del2015",
+      "source_url": "https://enna.iswebcloud.it/output_allegato.php?id=351996",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1128",
+      "event_id": "IT09.02.01",
+      "source_role": "News",
+      "source_type": "ViviEnna — cronaca originale dei sopralluoghi e dichiarazioni tecnici",
+      "source_title": "Enna: Spontanee dichiarazioni dei tecnici sul crollo della Panoramica in Procura",
+      "source_url": "https://www.vivienna.it/2009/03/07/enna-spontanee-dichiarazioni-dei-tecnici-sul-crollo-della-panoramica-in-procura/",
+      "source_reference": null,
+      "publication_date": "2009-03-07",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1129",
+      "event_id": "IT09.02.01",
+      "source_role": "Official/Technical",
+      "source_type": "Enna Magazine — Ufficio Stampa Libero Consorzio Comunale di Enna, Rossella Inveninato",
+      "source_title": "Sp28 Panoramica. Completata la perizia di variante",
+      "source_url": "https://www.ennamagazine.it/Viabilit%C3%A0/TabId/147/ArtMID/746/ArticleID/5819/Sp-28-Panoramica-Completata-la-perizia-di-variante.aspx",
+      "source_reference": null,
+      "publication_date": "2023-08-09",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1130",
+      "event_id": "IT08.10.03",
+      "source_role": "Other",
+      "source_type": "Facebook — video segnalato dal curatore, autore non verificato",
+      "source_title": "Video di ponte segnalato dal curatore per il caso Rio Corongiu",
+      "source_url": "https://www.facebook.com/watch/?v=427474184826506",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": null,
+      "language": null
+    },
+    {
+      "source_id": "SRC1131",
+      "event_id": "IT08.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Sardegna,Provincia diCagliari,Comune diCapoterra — studio ricognitivo evento2008",
+      "source_title": "Studio ricognitivo dell'evento alluvione del22.10.2008 nel Comune diCapoterra — aprile2009,allegatoDGR21/19del5maggio2009",
+      "source_url": "https://www.regione.sardegna.it/documenti/1_73_20100118182821.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1133",
+      "event_id": "IT06.09.01",
+      "source_role": "News",
+      "source_type": "SanremoNews — resoconto consiglio comunale, dichiarazione diretta vicesindaco",
+      "source_title": "Vallecrosia alMare, acquisizione area di proprietà privata: approvata all'unanimità in consiglio comunale",
+      "source_url": "https://www.sanremonews.it/2026/09/25/sommario/target/leggi-notizia/argomenti/politica-1/articolo/vallecrosia-al-mare-acquisizione-area-di-proprieta-privata-approvata-allunanimita-in-consiglio.html",
+      "source_reference": null,
+      "publication_date": "2026-09-25",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1134",
+      "event_id": "IT08.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Autonoma della Sardegna — Servizio Difesa del Suolo, settore idrografico",
+      "source_title": "Relazione sulle precipitazioni del giorno22ottobre2008 nella Sardegna centro-meridionale",
+      "source_url": "https://www.regione.sardegna.it/documenti/1_19_20090206125712.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1135",
+      "event_id": "IT06.06.01",
+      "source_role": "Official/Technical",
+      "source_type": "Camera dei deputati — interpellanzaRotondo e risposta viceministroCapodicasa",
+      "source_title": "Seduta29giugno2006,n16 — incidente sul lavoro nel cantiereAugusta,interpellanza2-00031",
+      "source_url": "https://leg15.camera.it/_dati/leg15/lavori/stenografici/sed016/SINTERO.pdf",
+      "source_reference": null,
+      "publication_date": "2006-06-29",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1136",
+      "event_id": "IT06.06.01",
+      "source_role": "Official/Technical",
+      "source_type": "AVCP — Autorità per la vigilanza sui contratti pubblici,archivioANAC",
+      "source_title": "Segnalazione al Governo ed al Parlamento — sicurezza nei cantieri e strutture provvisionali",
+      "source_url": "https://www.anticorruzione.it/documents/91439/7ecba9b8-bccb-eea9-0d0e-c66eeda5a4d5",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1137",
+      "event_id": "IT06.06.01",
+      "source_role": "News",
+      "source_type": "Tgcom24 — dichiarazione diretta comandanteprovincialeVVFSalvatoreRizzo",
+      "source_title": "Crollo cantiere: al via le indagini",
+      "source_url": "https://www.tgcom24.mediaset.it/cronaca/articoli/315862/crollo-cantiere-al-via-le-indagini.shtml",
+      "source_reference": null,
+      "publication_date": "2006-06-25",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1138",
+      "event_id": "IT05.10.02",
+      "source_role": "Scientific",
+      "source_type": "LuisaTateo — studio originale,OrdineRegionaleGeologiPuglia,GeologieTerritorio",
+      "source_title": "Analisi dell'evento alluvionale del22–23ottobre2005 nel bacino del torrentePicone",
+      "source_url": "https://www.geologipuglia.it/wp-content/uploads/doc/downloads/877-analisi-dell-evento-alluvionale-del-22-23-ottobre-2005-nel-bacino-del-torrente-picone-geologi-e-territorio-n34-2008.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1139",
+      "event_id": "IT05.10.02",
+      "source_role": "News",
+      "source_type": "Tgcom24 — cronaca contemporanea",
+      "source_title": "Puglia, crolla ponte: cinque morti",
+      "source_url": "https://www.tgcom24.mediaset.it/cronaca/articoli/280624/puglia-crolla-ponte-cinque-morti.shtml",
+      "source_reference": null,
+      "publication_date": "2005-10-23",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1140",
+      "event_id": "IT05.10.03",
+      "source_role": "News",
+      "source_type": "Tgcom24 — cronaca contemporanea",
+      "source_title": "Puglia, crolla ponte: cinque morti — distinto attraversamentoAdelfia–Bitritto",
+      "source_url": "https://www.tgcom24.mediaset.it/cronaca/articoli/280624/puglia-crolla-ponte-cinque-morti.shtml",
+      "source_reference": null,
+      "publication_date": "2005-10-23",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1141",
+      "event_id": "IT05.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "RegionePuglia — DGR1200del25maggio2010,BURP99del4giugno2010,copiadelbollettino",
+      "source_title": "Ricostruzione del ponteCernera,exSP41,Massafra,crollato negli eventi alluvionali2005 — attestazione paesaggistica",
+      "source_url": "https://fimmg.bari.it/documenti/6SC7T_1.pdf",
+      "source_reference": null,
+      "publication_date": "2010-06-04",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1142",
+      "event_id": "IT05.06.01",
+      "source_role": "News",
+      "source_type": "L'EcodiBergamo — cronaca originale del processo di primo grado",
+      "source_title": "Morì nel crollo del cavalcavia: due condanne,quattro assoluzioni",
+      "source_url": "https://www.ecodibergamo.it/stories/cronaca/200424_mor_nel_crollo_del_cavalcavia_due_condanne_quattro_assoluzioni/",
+      "source_reference": null,
+      "publication_date": "2011-04-22",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1143",
+      "event_id": "IT05.06.01",
+      "source_role": "News",
+      "source_type": "L'EcodiBergamo — cronaca contemporanea successiva",
+      "source_title": "La procura bresciana apre un fascicolo sulla tragedia diCapodiPonte",
+      "source_url": "https://www.ecodibergamo.it/stories/cronaca/la-procura-bresciana-apre-un-fascicolo-sulla-tragedia-di-capo-di-ponte_45994_11/",
+      "source_reference": null,
+      "publication_date": "2005-06-28",
+      "access_date": "2026-10-27",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1144",
+      "event_id": "IT03.09.01",
+      "source_role": "News",
+      "source_type": "ViviWebTv",
+      "source_title": "Venti anni fa l’alluvione che mise in ginocchio Massafra, Palagiano e i paesi limitrofi",
+      "source_url": "https://www.viviwebtv.it/articolo/venti-anni-fa-lalluvione-che-mise-in-ginocchio-massafra-palagiano-e-i-paesi-limitrofi_97543",
+      "source_reference": null,
+      "publication_date": "2023-09-08",
+      "access_date": "2026-10-28",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1145",
+      "event_id": "IT02.07.01",
+      "source_role": "News",
+      "source_type": "MeteoLive / ripresa La Stampa",
+      "source_title": "Cronache del maltempo: la grave situazione nel cuneese — Entracque, ponte del Mulino",
+      "source_url": "https://www.meteolive.it/news/cronaca-meteo/cronache-del-maltempo-la-grave-situazione-nel-cuneese/",
+      "source_reference": null,
+      "publication_date": "2002-07-16",
+      "access_date": "2026-10-28",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1146",
+      "event_id": "IT00.10.03",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia di Torino – Servizio Difesa del Suolo",
+      "source_title": "Studio dei rii minori in sinistra orografica della Val d’Ala di Stura (2004)",
+      "source_url": "https://www.cittametropolitana.torino.it/sites/default/files/pagina/risorse/sit-cartografico/dwd/geoportale/dati_scaricabili/difesa_del_suolo/studi_idrogeologici/sturadilanzo/Relazione_studio_103c.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-30",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1147",
+      "event_id": "IT00.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia di Torino – Servizio Difesa del Suolo",
+      "source_title": "Studio dei rii minori in sinistra orografica della Val d’Ala di Stura (2004)",
+      "source_url": "https://www.cittametropolitana.torino.it/sites/default/files/pagina/risorse/sit-cartografico/dwd/geoportale/dati_scaricabili/difesa_del_suolo/studi_idrogeologici/sturadilanzo/Relazione_studio_103c.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1148",
+      "event_id": "IT00.10.07",
+      "source_role": "News",
+      "source_type": "Ricerca originale di storia locale – Gianni Castagneri e Giorgio Inaudi",
+      "source_title": "I ponti di Balme — ponte in pietra di Bogone",
+      "source_url": "https://barmesnews.wordpress.com/2026/06/17/i-ponti-di-balme/",
+      "source_reference": null,
+      "publication_date": "2026-06-17",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1149",
+      "event_id": "IT00.10.04",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D’Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1150",
+      "event_id": "IT00.10.07",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D’Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-10-30",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1151",
+      "event_id": "IT00.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte – Bollettino Ufficiale",
+      "source_title": "D.D. 26 settembre 2014, n.2649 — Consolidamento e ripristino ponte Stura, La Fabbrica, Ala di Stura",
+      "source_url": "https://www.regione.piemonte.it/governo/bollettino/abbonati/2014/50/attach/dddb140002649_660.pdf",
+      "source_reference": null,
+      "publication_date": "2014-12-11",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1152",
+      "event_id": "IT00.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "CAI Lanzo – descrizione originale di itinerario",
+      "source_title": "Ala di Stura – Mondrone: attraversamento della Stura verso La Fabbrica",
+      "source_url": "https://www.cailanzo.it/index.php/mountain-bike?catid=145%3Amountain-byke&id=406%3Aala-di-stura-mondrone&view=article",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1153",
+      "event_id": "IT00.10.08",
+      "source_role": "Official/Technical",
+      "source_type": "Ricerca storica locale originale",
+      "source_title": "Castagneri e Inaudi — I ponti di Balme: Lou pount d Sigismondi",
+      "source_url": "https://barmesnews.wordpress.com/2026/06/17/i-ponti-di-balme/",
+      "source_reference": null,
+      "publication_date": "2026-06-17",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1154",
+      "event_id": "IT00.10.08",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D'Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1155",
+      "event_id": "IT00.10.24",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte — Direzione Pianificazione risorse idriche",
+      "source_title": "Ricognizione21ottobre2000 — Acquedotto generale Valli di Lanzo, ponte frazione Inverso",
+      "source_url": "https://www.regione.piemonte.it/web/sites/default/files/media/documenti/2023-08/alluvione_2000_ris_idriche_danni_2.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1157",
+      "event_id": "IT00.10.10",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D'Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1158",
+      "event_id": "IT00.10.10",
+      "source_role": "Official/Technical",
+      "source_type": "Federcaccia — resoconto originale dei ricostruttori",
+      "source_title": "Le sezioni Alta Val Grande e Cantoira ricostruiscono il ponte sul Rio Vassola",
+      "source_url": "https://www.federcaccia.org/federcaccia-le-sezioni-comunali-alta-val-grande-e-cantoira-ricostruiscono-il-ponte-sul-rio-vassola/",
+      "source_reference": null,
+      "publication_date": "2024-05-29",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1159",
+      "event_id": "IT00.10.10",
+      "source_role": "Official/Technical",
+      "source_type": "Descrizione escursionistica con aggiornamento editoriale",
+      "source_title": "Nel Vallone di Vassola — primo ponte crollato nell’ottobre 2000",
+      "source_url": "https://camoscibianchi.wordpress.com/2009/01/21/nel-vallone-di-vassola-2/",
+      "source_reference": null,
+      "publication_date": "2009-01-21",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1160",
+      "event_id": "IT00.01.01",
+      "source_role": "News",
+      "source_type": "l’Unità — archivio del quotidiano",
+      "source_title": "26 gennaio 2000, Le Cronache: crollo di un ponte sulla SS647 del Biferno",
+      "source_url": "https://archivio.unita.news/assets/main/2000/01/26/page_026.pdf",
+      "source_reference": null,
+      "publication_date": "2000-01-26",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1161",
+      "event_id": "IT00.01.01",
+      "source_role": "Official/Technical",
+      "source_type": "Senato della Repubblica — risposta governativa scritta",
+      "source_title": "Interrogazione Valletta4-17934, risposta Barberi26marzo2000 — crollo campataSS647",
+      "source_url": "https://www.parlamento.it/service/PDF/PDFServer/DF/17870.pdf",
+      "source_reference": null,
+      "publication_date": "2000-03-29",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1162",
+      "event_id": "IT00.10.16",
+      "source_role": "Official/Technical",
+      "source_type": "Società Meteorologica Subalpina — Nimbus, cronaca contemporanea",
+      "source_title": "Alluvione13–16ottobre2000: cronaca SMS/Nimbus, ponti di Noasca distinti",
+      "source_url": "https://www.nimbus.it/meteonews/alluvionenordovest.htm",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1163",
+      "event_id": "IT00.10.16",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D'Angelo, Ballio & Ravazzani (2025) — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1164",
+      "event_id": "IT02.07.02",
+      "source_role": "Official/Technical",
+      "source_type": "CNR IRPI / SIGEA — Geologia dell’Ambiente, supplemento4/2021",
+      "source_title": "L’evento alluvionale2–3ottobre2020inPiemonte — retrospettiva luglio2002, figura143",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/gda-supplemento-4-2021.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1165",
+      "event_id": "IT15.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "District event report",
+      "source_title": "DAM — Rapporto di evento 14–15 e 19 ottobre 2015: Circello",
+      "source_url": "https://www.distrettoappenninomeridionale.it/oldsite/images/_PGRA/II%20ciclo%202019/PIANO%20VIGENTE/VALUTAZIONE%20PRELIMINARE%20II%20CICLO/Relazione%20metodologica/cartella_Reference/Flood_Cat/Volturno/RAPPORTO%20EVENTO%20OTTOBRE%202015.pdf",
+      "source_reference": null,
+      "publication_date": "2015-11-06",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1166",
+      "event_id": "IT15.10.02",
+      "source_role": "Official/Technical",
+      "source_type": "District event report",
+      "source_title": "DAM — Rapporto di evento 14–15 e 19 ottobre 2015: ponte SP625 Morcone–Circello",
+      "source_url": "https://www.distrettoappenninomeridionale.it/oldsite/images/_PGRA/II%20ciclo%202019/PIANO%20VIGENTE/VALUTAZIONE%20PRELIMINARE%20II%20CICLO/Relazione%20metodologica/cartella_Reference/Flood_Cat/Volturno/RAPPORTO%20EVENTO%20OTTOBRE%202015.pdf",
+      "source_reference": null,
+      "publication_date": "2015-11-06",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1167",
+      "event_id": "IT00.10.11",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte event report",
+      "source_title": "Rapporto sull'evento alluvionale13–16ottobre2000 — Pinerolo, viaSaluzzo",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1168",
+      "event_id": "IT00.10.11",
+      "source_role": "Scientific",
+      "source_type": "Journal Paper",
+      "source_title": "D'Angelo,Ballio&Ravazzani2025 — Geomorphologic risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "EN"
+    },
+    {
+      "source_id": "SRC1170",
+      "event_id": "IT00.10.02",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte event report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Crissolo — S3 P008",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1171",
+      "event_id": "IT00.10.18",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte event report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — ponte SS565 Salassa–Castellamonte",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1172",
+      "event_id": "IT00.10.18",
+      "source_role": "Official/Technical",
+      "source_type": "Corpo Nazionale dei Vigili del Fuoco — direct institutional account",
+      "source_title": "Torino, commemorazione del Capo Squadra Bartolomeo Califano",
+      "source_url": "https://www.vigilfuoco.it/media/notizie/torino-commemorazione-del-capo-squadra-bartolomeo-califano",
+      "source_reference": null,
+      "publication_date": "2020-10-15",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1173",
+      "event_id": "IT00.10.20",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte event report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — ponte di Erasca, Paesana",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1174",
+      "event_id": "IT00.10.21",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto alluvione13–16ottobre2000 — Ponte per Millaures sul Rochemolles",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1175",
+      "event_id": "IT00.10.26",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto alluvione13–16ottobre2000 — Ponte del campeggio sul Chisone a Fenestrelle",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1176",
+      "event_id": "IT00.10.27",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Bonzo — Groscavallo",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1177",
+      "event_id": "IT00.10.31",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto alluvione13–16ottobre2000 — Ponte ferroviario sul Chisone presso via Saluzzo",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1178",
+      "event_id": "IT00.10.33",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto alluvione13–16ottobre2000 — Ponte sull’Orco per Boetti",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1179",
+      "event_id": "IT00.10.36",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto alluvione13–16ottobre2000 — Ponte sul Chisone per Souchères Basses",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1180",
+      "event_id": "IT00.10.37",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Quincinetto — S3 P038",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-05",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1181",
+      "event_id": "IT00.10.38",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — San Germano Chisone — SP166 per Villar Perosa",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1182",
+      "event_id": "IT00.10.39",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Pianetto — Valprato Soana",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1183",
+      "event_id": "IT00.10.40",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Rapporto sull’evento alluvionale 13–16 ottobre 2000 — Alagna Valsesia — Otro, località Resiga",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1184",
+      "event_id": "IT00.10.21",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Comune di Bardonecchia — censimento opere idrauliche EGE6-PD",
+      "source_url": "https://comune.bardonecchia.to.it/wp-content/uploads/sites/35/2026/02/EGE6-PD.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1185",
+      "event_id": "IT00.10.38",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "Provincia di Torino — Alluvione 2000, la ricostruzione, ottobre 2003",
+      "source_url": "https://www.cittametropolitana.torino.it/sites/default/files/comunicazione/Cronache/2003/dwd/inserto_alluvioni.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1186",
+      "event_id": "IT14.09.01",
+      "source_role": "Official/Technical",
+      "source_type": "Official report",
+      "source_title": "ARPAE DET-AMB-2022-2 — nuovo attraversamento del Santerno a Carseggio",
+      "source_url": "https://apps.arpae.it/documento/DAMB20222",
+      "source_reference": null,
+      "publication_date": "2022-01-03",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1187",
+      "event_id": "IT14.09.01",
+      "source_role": "News",
+      "source_type": "News report",
+      "source_title": "Via libera al nuovo ponte di Carseggio",
+      "source_url": "https://www.ilrestodelcarlino.it/bologna/cronaca/via-libera-al-nuovo-ponte-di-carseggio-e78587ef",
+      "source_reference": null,
+      "publication_date": "2022-06-14",
+      "access_date": "2026-11-03",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1188",
+      "event_id": "IT00.10.21",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/168355490",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1189",
+      "event_id": "IT00.10.26",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/286153050",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1190",
+      "event_id": "IT00.10.27",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/142960045",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1191",
+      "event_id": "IT00.10.31",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/33094223",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1192",
+      "event_id": "IT00.10.33",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/167453356",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1193",
+      "event_id": "IT00.10.35",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/87062523",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1194",
+      "event_id": "IT00.10.36",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/1018353785",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1195",
+      "event_id": "IT00.10.38",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/37886776",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1196",
+      "event_id": "IT00.10.39",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/92725209",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1197",
+      "event_id": "IT00.10.40",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/208545118",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1198",
+      "event_id": "IT14.09.01",
+      "source_role": "Other",
+      "source_type": "Current cartography",
+      "source_title": "OpenStreetMap — riscontro cartografico attuale del sito (non prova del crollo)",
+      "source_url": "https://www.openstreetmap.org/way/1361963378",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": null
+    },
+    {
+      "source_id": "SRC1199",
+      "event_id": "IT00.10.05",
+      "source_role": "Official/Technical",
+      "source_type": "Provincial historical/geological study",
+      "source_title": "Provincia di Torino — Studio dei rii minori in sinistra orografica della Val d’Ala di Stura (2004)",
+      "source_url": "https://www.cittametropolitana.torino.it/sites/default/files/pagina/risorse/sit-cartografico/dwd/geoportale/dati_scaricabili/difesa_del_suolo/studi_idrogeologici/sturadilanzo/Relazione_studio_103c.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1200",
+      "event_id": "IT00.10.05",
+      "source_role": "Official/Technical",
+      "source_type": "Municipal historical route description",
+      "source_title": "Comune di Mezzenile — Sull’antica mulattiera della valle (2)",
+      "source_url": "https://www.comune.mezzenile.to.it/Guidaalpaese?IDDettaglio=62179",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-04",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1201",
+      "event_id": "IT15.10.05",
+      "source_role": "Official/Technical",
+      "source_type": "Regional works location list",
+      "source_title": "Regione Campania — FSUE 2019, interventi ammessi a finanziamento (2021)",
+      "source_url": "https://casadivetro.regione.campania.it/PD20210018475_008198688.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-05",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1202",
+      "event_id": "IT00.10.41",
+      "source_role": "Official/Technical",
+      "source_type": "Regional event report",
+      "source_title": "Rapporto evento alluvionale 13–16 ottobre 2000 — Rondissone e ponte A4",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-09/rapporto_ottobre_00.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-05",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1203",
+      "event_id": "IT11.10.07",
+      "source_role": "Official/Technical",
+      "source_type": "Commissioner damage inventory",
+      "source_title": "Liguria — decreto commissariale n.6 del 23 dicembre 2011, allegato B, ponti sul Gravegnola",
+      "source_url": "https://www.regione.liguria.it/components/com_publiccompetitions/includes/download.php?id=5716%3Adcd-3973-6-2011-all-b.pdf",
+      "source_reference": null,
+      "publication_date": "2011-12-23",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1204",
+      "event_id": "IT18.10.05",
+      "source_role": "Official/Technical",
+      "source_type": "Regional press release",
+      "source_title": "Regione FVG — Viabilità: Riccardi-Pizzimenti, ponte su Degano decisivo per Carnia",
+      "source_url": "https://www.regione.fvg.it/rafvg/comunicati/comunicato.act?dir=&nm=20210731145119003",
+      "source_reference": null,
+      "publication_date": "2021-07-31",
+      "access_date": "2026-11-05",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1205",
+      "event_id": "IT18.10.02",
+      "source_role": "News",
+      "source_type": "ANSA",
+      "source_title": "Maltempo Sardegna: riaperta statale 195",
+      "source_url": "https://www.ansa.it/sardegna/notizie/2018/10/16/maltempo-sardegna-riaperta-statale-195_389d90b2-e5a6-435c-aef8-9513c9ce7b0b.html",
+      "source_reference": null,
+      "publication_date": "2018-10-16",
+      "access_date": "2026-11-05",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1206",
+      "event_id": "IT16.09.01",
+      "source_role": "News",
+      "source_type": "L’Eco — ANSA dispatch reproduction",
+      "source_title": "Un ponte crollato, strade interrotte: il maltempo mette in ginocchio Trivento",
+      "source_url": "https://ecoaltomolise.net/un-ponte-crollato-strade-interrotte-maltempo-mette-ginocchio-trivento/",
+      "source_reference": null,
+      "publication_date": "2016-09-10",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1207",
+      "event_id": "IT08.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "Port master plan environmental report",
+      "source_title": "Piano regolatore portuale — Rapporto ambientale: effetti dell’alluvione a Maramura",
+      "source_url": "https://www.regione.sardegna.it/documenti/1_73_20100916130141.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1208",
+      "event_id": "IT08.10.01",
+      "source_role": "News",
+      "source_type": "La Nuova Sardegna",
+      "source_title": "Nubifragio, ritrovato uno dei dispersi. Oltre duemila senza casa a Capoterra",
+      "source_url": "https://www.lanuovasardegna.it/cagliari/cronaca/2008/10/23/news/nubifragio-ritrovato-uno-dei-dispersioltre-duemila-senza-casa-a-capoterra-1.3307995",
+      "source_reference": null,
+      "publication_date": "2008-10-23",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1209",
+      "event_id": "IT08.10.01",
+      "source_role": "News",
+      "source_type": "Television footage",
+      "source_title": "Tg Videolina — alluvione a Capoterra, 22 ottobre 2008",
+      "source_url": "https://www.youtube.com/watch?v=srvneeqpn-g",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1210",
+      "event_id": "IT18.10.02",
+      "source_role": "Official/Technical",
+      "source_type": "Emergency intervention plan",
+      "source_title": "Sardegna — interventi maggiormente urgenti, allegato A: SS195",
+      "source_url": "https://www.regione.sardegna.it/documenti/1_38_20190208111224.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1211",
+      "event_id": "IT13.10.02",
+      "source_role": "News",
+      "source_type": "Il Filo",
+      "source_title": "Sarà ricostruito il ponte di Molino della Badia a Firenzuola",
+      "source_url": "https://www.ilfilo.net/sara-ricostruito-il-ponte-di-molino-della-badia-a-firenzuola/",
+      "source_reference": null,
+      "publication_date": "2016-04-13",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1212",
+      "event_id": "IT13.10.02",
+      "source_role": "Official/Technical",
+      "source_type": "Centro Funzionale Regione Toscana",
+      "source_title": "Report di evento del 23–24 ottobre 2013",
+      "source_url": "https://www.cfr.toscana.it/supports/download/eventi/report_evento_23-24_ottobre_2013.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1213",
+      "event_id": "IT10.03.01",
+      "source_role": "News",
+      "source_type": "CN24TV",
+      "source_title": "Catanzaro: importanti opere di viabilità",
+      "source_url": "https://cn24tv.it/news/catanzaro-importanti-opere-di-viabilita/",
+      "source_reference": null,
+      "publication_date": "2012-02-14",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1214",
+      "event_id": "IT03.08.01",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Pontebba",
+      "source_title": "PRGC di Pontebba – Norme di attuazione, art. 45",
+      "source_url": "https://comune.pontebba.ud.it/media/files/030076/attachment/normativa__pontebba.var_61.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1215",
+      "event_id": "IT03.08.01",
+      "source_role": "Official/Technical",
+      "source_type": "Protezione Civile FVG",
+      "source_title": "29 agosto 2003 – 29 agosto 2013: memoria dell’alluvione della Val Canale",
+      "source_url": "https://www.protezionecivile.fvg.it/sites/default/files/old-files/gallery/2_berlasso__-_val_canale_2013_201392115415.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1216",
+      "event_id": "IT11.11.01",
+      "source_role": "Official/Technical",
+      "source_type": "ARPA Piemonte",
+      "source_title": "Rapporto preliminare sull’evento alluvionale del 28–30 maggio 2008",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-10/2008.05.28_Rapporto_preliminare.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1217",
+      "event_id": "IT11.11.01",
+      "source_role": "Official/Technical",
+      "source_type": "Città metropolitana di Torino",
+      "source_title": "Cronache da Palazzo Cisterna – Ricostruzione del ponte della Bertenga",
+      "source_url": "https://www.cittametropolitana.torino.it/cms/risorse/ambiente/dwd/green-economy/app-ver/cronache/cronache-2017/num30-01-09-2017.pdf",
+      "source_reference": null,
+      "publication_date": "2017-09-01",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1218",
+      "event_id": "IT11.03.03",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Sant’Omero",
+      "source_title": "La Provincia inizierà il ripristino del ponte sul Salinello tra Sant’Omero e Campli",
+      "source_url": "https://comune.santomero.te.it/notizie/la-provincia-iniziera-il-ripristino-del-ponte-sul-salinello-tra-santomero-e-campli/",
+      "source_reference": null,
+      "publication_date": "2011-10-09",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1219",
+      "event_id": "IT00.10.19",
+      "source_role": "News",
+      "source_type": "Società Meteorologica Italiana / Nimbus",
+      "source_title": "Alluvione nel Nord-Ovest 13–16 ottobre 2000: diario della redazione",
+      "source_url": "https://www.nimbus.it/meteonews/alluvionenordovest.htm",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1220",
+      "event_id": "IT02.06.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte",
+      "source_title": "Rapporto alluvione giugno 2002 – seconda parte, Netro",
+      "source_url": "https://www.regione.piemonte.it/web/sites/default/files/media/documenti/2023-08/rapporto_giugno_02_seconda_parte.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1221",
+      "event_id": "IT02.06.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Piemonte",
+      "source_title": "DPGR 52/2012, rendiconto interventi alluvione 2002 – Frazione Colla, Rio Ara",
+      "source_url": "https://www.regione.piemonte.it/governo/bollettino/abbonati/2012/30/attach/dpgr_00052_660_12072012.pdf",
+      "source_reference": null,
+      "publication_date": "2012-07-12",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1222",
+      "event_id": "IT02.07.03",
+      "source_role": "Official/Technical",
+      "source_type": "Geologia dell’Ambiente / ARPA Piemonte",
+      "source_title": "Geologia dell’Ambiente, supplemento n. 4/2021 – Piene del Gesso, luglio 2002",
+      "source_url": "https://www.arpa.piemonte.it/sites/default/files/media/2024-07/gda-supplemento-4-2021.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1223",
+      "event_id": "IT04.12.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Sardegna",
+      "source_title": "Bollettino regionale – opere sul Rio Taddore e sulla piana di Galtellì",
+      "source_url": "https://www.regione.sardegna.it/documenti/1_22_20090416113444.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1224",
+      "event_id": "IT04.12.01",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Galtellì",
+      "source_title": "Documento preliminare – sistemazione idraulica del Cedrino e ponte di accesso al paese",
+      "source_url": "https://www.sardegnaambiente.it/allegati_bandi/Documento_preliminare_alla_progettazione__00000003__5eaad2dd8c2e1.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1225",
+      "event_id": "IT11.03.02",
+      "source_role": "Official/Technical",
+      "source_type": "Comune di Corropoli / copia d’archivio",
+      "source_title": "Determina area tecnica – Rifacimento ponte Via Vomano",
+      "source_url": "https://expydoc.com/doc/7020514/c-o-m-u-n-e----d-i----c-o-r-r-o-p-o-l-i-a-r-e-a-tecnica",
+      "source_reference": null,
+      "publication_date": "2014-09-19",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1226",
+      "event_id": "IT11.10.03",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Gazzetta Ufficiale",
+      "source_title": "Bando: costruzione del nuovo Ponte di Mulazzo sul Torrente Mangiola",
+      "source_url": "https://www.gazzettaufficiale.it/eli/gu/2015/05/25/60/s5/pdf",
+      "source_reference": null,
+      "publication_date": "2015-05-25",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1227",
+      "event_id": "IT11.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Gazzetta Ufficiale",
+      "source_title": "Bando: costruzione del Ponte di Castagnetoli sul Torrente Teglia",
+      "source_url": "https://www.gazzettaufficiale.it/eli/gu/2014/12/29/148/s5/pdf",
+      "source_reference": null,
+      "publication_date": "2014-12-29",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1228",
+      "event_id": "IT11.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / BURT",
+      "source_title": "Concessione demaniale sul Teglia nella frazione di Castagnetoli (TN5309)",
+      "source_url": "https://www-staging.regione.toscana.it/documents/10180/228848594/SUPP%2Bn.%2B295%2Bal%2BBU%2Bdel%2B04.12.2024%2BpIV.pdf/a54b53c4-3b17-ee60-36b8-613b405b789d?t=1733294294793",
+      "source_reference": null,
+      "publication_date": "2024-12-04",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1229",
+      "event_id": "IT11.10.03",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Toscana Notizie",
+      "source_title": "Inaugurati i ponti di Mulazzo e Castagnetoli",
+      "source_url": "https://www.toscana-notizie.it/-/inaugurati-oggi-i-ponti-di-mulazzo-e-castagnetoli-ceccarelli-una-bella-gior",
+      "source_reference": null,
+      "publication_date": "2017-10-26",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1230",
+      "event_id": "IT11.10.05",
+      "source_role": "News",
+      "source_type": "Visit Pignone",
+      "source_title": "Visita il borgo – Il Ponte Vecchio e Palazzo De Lucchini",
+      "source_url": "https://visitpignone.it/scopri-pignone/visita-il-borgo/",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1231",
+      "event_id": "IT11.10.05",
+      "source_role": "Official/Technical",
+      "source_type": "Consiglio regionale della Liguria",
+      "source_title": "Seduta del 15 dicembre 2015 – Ponte antico di Pignone",
+      "source_url": "https://www.regione.liguria.it/components/com_publiccompetitions/includes/download.php?id=8309%3Aseduta-del-15-dicembre-2015.pdf",
+      "source_reference": null,
+      "publication_date": "2015-12-15",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1232",
+      "event_id": "IT11.10.08",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Toscana Notizie",
+      "source_title": "Visita ai lavori di ricostruzione in Lunigiana – Santa Giustina",
+      "source_url": "https://www.toscana-notizie.it/-/visita-di-rossi-ai-lavori-per-l-argine-entro-fine-settembre-l-abitato-di-aulla-sara-al-sicuro",
+      "source_reference": null,
+      "publication_date": "2012-07-07",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1233",
+      "event_id": "IT11.10.08",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Toscana / Toscana Notizie",
+      "source_title": "Pontremoli, inaugurato ponte di Santa Giustina ripristinato dopo l’alluvione",
+      "source_url": "https://www.toscana-notizie.it/-/pontremoli-inaugurato-ponte-di-santa-giustina-ripristinato-dopo-l-alluvione",
+      "source_reference": null,
+      "publication_date": "2019-05-21",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1234",
+      "event_id": "IT14.05.01",
+      "source_role": "News",
+      "source_type": "ANSA Marche",
+      "source_title": "Alluvione: frane, crolli e danni",
+      "source_url": "https://www.ansa.it/marche/notizie/2014/05/04/alluvione-frane-crolli-e-danni_be5ca61f-da8e-4089-b393-2c76e6d3fa4b.html",
+      "source_reference": null,
+      "publication_date": "2014-05-04",
+      "access_date": "2026-11-06",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1235",
+      "event_id": "IT15.10.04",
+      "source_role": "News",
+      "source_type": "NTR24",
+      "source_title": "Post alluvione, ok della Rocca all’utilizzo delle aree demaniali per la ricostruzione di ponti e strade",
+      "source_url": "https://www.ntr24.tv/2016/12/01/post-alluvione-ok-della-rocca-allutilizzo-delle-aree-demaniali-per-la-ricostruzione-di-ponti-e-strade/",
+      "source_reference": null,
+      "publication_date": "2016-12-01",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1236",
+      "event_id": "IT18.10.03",
+      "source_role": "News",
+      "source_type": "Trentino",
+      "source_title": "Crolla il ponte a Fierozzo, esondazione a Levico",
+      "source_url": "https://www.giornaletrentino.it/cronaca/trento/crolla-il-ponte-a-fierozzo-esondazione-a-levico-1.1794350",
+      "source_reference": null,
+      "publication_date": "2018-10-29",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1237",
+      "event_id": "IT18.10.03",
+      "source_role": "News",
+      "source_type": "il Dolomiti",
+      "source_title": "Crolla il ponte a Fierozzo. Il video",
+      "source_url": "https://www.ildolomiti.it/video/cronaca/2018/crolla-il-ponte-a-fierozzo-il-video",
+      "source_reference": null,
+      "publication_date": "2018-10-29",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1238",
+      "event_id": "IT18.10.04",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia Autonoma di Trento / Bacini montani",
+      "source_title": "Ricostruito e aperto al transito il ponte sul Rio Piazzina",
+      "source_url": "https://bacinimontani.provincia.tn.it/Comunicazione/Avvisi-e-news/News/Ricostruito-e-aperto-al-transito-il-ponte-sul-Rio-Piazzina",
+      "source_reference": null,
+      "publication_date": "2020-11-17",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1239",
+      "event_id": "IT19.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "Provincia di Alessandria / Gazzetta Ufficiale",
+      "source_title": "Bando: ricostruzione del ponte sul torrente Albedosa al km 12+900 della SP155",
+      "source_url": "https://www.gazzettaufficiale.it/eli/id/2021/04/14/TX21BFE8285/s5",
+      "source_reference": null,
+      "publication_date": "2021-04-14",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1240",
+      "event_id": "IT24.10.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Emilia-Romagna",
+      "source_title": "Maltempo. Il punto sugli interventi di messa in sicurezza",
+      "source_url": "https://ambiente.regione.emilia-romagna.it/it/notizie/attualita/2024/novembre/maltempo-il-punto-sugli-interventi-di-messa-in-sicurezza",
+      "source_reference": null,
+      "publication_date": "2024-11-29",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1241",
+      "event_id": "IT14.05.01",
+      "source_role": "News",
+      "source_type": "AF / CONAF",
+      "source_title": "Alluvione Marche",
+      "source_url": "https://www.conaf.it/sites/default/files/AF2_014%20WEB_0_0.PDF",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1242",
+      "event_id": "IT14.05.01",
+      "source_role": "Official/Technical",
+      "source_type": "Regione Marche – Centro Funzionale Regionale (copia d’archivio)",
+      "source_title": "Rapporto di evento: 2–4 maggio 2014",
+      "source_url": "https://scaloni.it/popinga/wp-content/uploads/2014/06/Rapporto_Evento_20140502.pdf",
+      "source_reference": null,
+      "publication_date": null,
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
+      "source_id": "SRC1243",
+      "event_id": "IT14.05.01",
+      "source_role": "Reference",
+      "source_type": "OpenStreetMap / cronologia",
+      "source_title": "Attraversamento storico dell’Ete Morto collegato a via Cerretino",
+      "source_url": "https://www.openstreetmap.org/way/249808589/history/1",
+      "source_reference": null,
+      "publication_date": "2013-12-03",
+      "access_date": "2026-11-09",
+      "language": "IT"
+    },
+    {
       "source_id": "CTX-HYD-IT00.01.01",
       "event_id": "IT00.01.01",
       "source_role": "Scientific context",
@@ -12040,114 +13588,6 @@
     {
       "source_id": "CTX-HYD-IT00.10.01",
       "event_id": "IT00.10.01",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.04",
-      "event_id": "IT00.10.04",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.07",
-      "event_id": "IT00.10.07",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.08",
-      "event_id": "IT00.10.08",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.09",
-      "event_id": "IT00.10.09",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.10",
-      "event_id": "IT00.10.10",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.11",
-      "event_id": "IT00.10.11",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.13",
-      "event_id": "IT00.10.13",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.15",
-      "event_id": "IT00.10.15",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
-      "source_id": "CTX-HYD-IT00.10.16",
-      "event_id": "IT00.10.16",
       "source_role": "Scientific context",
       "source_type": "Journal Paper",
       "source_title": "Geomorphological risk factors for river bridges",
@@ -12350,18 +13790,6 @@
       "language": "EN"
     },
     {
-      "source_id": "CTX-HYD-IT15.03.03",
-      "event_id": "IT15.03.03",
-      "source_role": "Scientific context",
-      "source_type": "Journal Paper",
-      "source_title": "Geomorphological risk factors for river bridges",
-      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
-      "source_reference": null,
-      "publication_date": "2025-05-27",
-      "access_date": "2026-10-12",
-      "language": "EN"
-    },
-    {
       "source_id": "CTX-HYD-IT17.01.01",
       "event_id": "IT17.01.01",
       "source_role": "Scientific context",
@@ -12484,6 +13912,18 @@
     {
       "source_id": "CTX-HYD-IT20.10.20",
       "event_id": "IT20.10.20",
+      "source_role": "Scientific context",
+      "source_type": "Journal Paper",
+      "source_title": "Geomorphological risk factors for river bridges",
+      "source_url": "https://doi.org/10.1016/j.ijdrr.2025.105607",
+      "source_reference": null,
+      "publication_date": "2025-05-27",
+      "access_date": "2026-10-12",
+      "language": "EN"
+    },
+    {
+      "source_id": "CTX-HYD-IT20.11.01",
+      "event_id": "IT20.11.01",
       "source_role": "Scientific context",
       "source_type": "Journal Paper",
       "source_title": "Geomorphological risk factors for river bridges",

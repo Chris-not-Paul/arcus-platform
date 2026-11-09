@@ -11,7 +11,7 @@ import PageMeta from "../components/layout/PageMeta";
 import ArcusPageMark from "../components/brand/ArcusPageMark";
 
 import useLanguage from "../context/useLanguage";
-import { contactAddresses } from "../config/site";
+import { bundledOpenDataCutoff, bundledOpenEventCount, bundledOpenReleaseName, bundledOpenReleaseVersion, bundledOpenSourceCount, contactAddresses } from "../config/site";
 import {
   openDownloadUrls,
   openManifest,
@@ -119,7 +119,12 @@ function DataAccessPage() {
   const pageText = copy.text;
 
   const releaseVersion =
-    manifest?.version || "arcus-open-2026.18";
+    manifest?.version || bundledOpenReleaseVersion;
+  const releaseName = manifest ? (manifest.release_name || releaseVersion) : bundledOpenReleaseName;
+  const cutoff = manifest ? manifest.data_cutoff : bundledOpenDataCutoff;
+  const cutoffDate = cutoff ? new Intl.DateTimeFormat(language === "it" ? "it-IT" : "en-GB", {
+    dateStyle: "long", timeZone: "UTC",
+  }).format(new Date(cutoff)) : null;
   const releaseCitation =
     manifest?.citation ||
     `ARCUS Open Research (${releaseVersion}). Bridge collapse events in Italy, 2000-2026.`;
@@ -128,8 +133,8 @@ function DataAccessPage() {
       ? `Richiesta scientifica ARCUS Open - ${releaseVersion}`
       : `ARCUS Open research enquiry - ${releaseVersion}`
   );
-  const releaseEventCount = manifest?.event_count ?? 260;
-  const releaseSourceCount = manifest?.source_count ?? 1057;
+  const releaseEventCount = manifest?.event_count ?? bundledOpenEventCount;
+  const releaseSourceCount = manifest?.source_count ?? bundledOpenSourceCount;
   const releasePublicText = copy.publicText;
   const releasePublicItems = copy.publicItems.map((item, index) =>
     index === 0
@@ -209,7 +214,7 @@ function DataAccessPage() {
             <dl className="data-access-release-summary" aria-label={language === "it" ? "Riepilogo release" : "Release summary"}>
               <div>
                 <dt>{language === "it" ? "Release" : "Release"}</dt>
-                <dd>{releaseVersion}</dd>
+                <dd>{releaseName}</dd>
               </div>
               <div>
                 <dt>{language === "it" ? "Eventi" : "Events"}</dt>
@@ -220,6 +225,13 @@ function DataAccessPage() {
                 <dd>{releaseSourceCount}</dd>
               </div>
             </dl>
+            {cutoffDate && (
+              <p className="data-access-intro">
+                {language === "it" ? "Ultimo evento incluso: " : "Latest event included: "}
+                <time dateTime={cutoff}>{cutoffDate}</time>
+                {language === "it" ? ". La data non indica una copertura completa del periodo." : ". This date does not imply complete coverage of the period."}
+              </p>
+            )}
           </div>
 
           <div className="data-access-card-list">
@@ -239,7 +251,7 @@ function DataAccessPage() {
           <div className="data-access-section-header">
             <div>
               <div className="data-access-label">
-                {releaseVersion}
+                {releaseName}
               </div>
               <h2>{copy.resourcesTitle}</h2>
               <p className="data-access-intro">
@@ -262,7 +274,7 @@ function DataAccessPage() {
           <div className="data-access-grid data-access-release-grid">
             <article className="data-access-release">
               <span>{copy.citationTitle}</span>
-              <strong>{releaseVersion}</strong>
+              <strong>{releaseName}</strong>
               <p className="data-access-citation">
                 {releaseCitation}
               </p>

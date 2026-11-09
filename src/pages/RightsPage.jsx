@@ -3,7 +3,7 @@ import Navbar from "../components/layout/Navbar";
 import PageMeta from "../components/layout/PageMeta";
 
 import useLanguage from "../context/useLanguage";
-import { contactAddresses } from "../config/site";
+import { bundledOpenReleaseVersion, contactAddresses } from "../config/site";
 
 import "../styles/privacy-page.css";
 
@@ -24,7 +24,7 @@ function RightsPage() {
         owner: "Christian Paolini — Italia",
         contactLabel: "Contatto per licenze e riuso",
         releaseLabel: "Release Open corrente",
-        release: "arcus-open-2026.18 · CC BY-NC 4.0",
+        release: `${bundledOpenReleaseVersion} · CC BY-NC 4.0`,
         sections: [
           {
             title: "1. Software della piattaforma",
@@ -74,7 +74,7 @@ function RightsPage() {
         owner: "Christian Paolini — Italy",
         contactLabel: "Licensing and reuse contact",
         releaseLabel: "Current Open release",
-        release: "arcus-open-2026.18 · CC BY-NC 4.0",
+        release: `${bundledOpenReleaseVersion} · CC BY-NC 4.0`,
         sections: [
           {
             title: "1. Platform software",

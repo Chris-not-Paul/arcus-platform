@@ -3,19 +3,19 @@ export const researchLineage = {
   it: {
     label: "DAL DATASET ALLA RELEASE ARCUS",
     title: "Continuità scientifica, revisione e aggiornamento",
-    overview: "ARCUS sviluppa il dataset italiano pubblicato su Data in Brief attraverso una successiva curatela dei record. La release conserva la provenienza della raccolta collettiva e distingue le revisioni ARCUS dalle informazioni riprese dai lavori citati.",
+    overview: "ARCUS parte dal dataset collettivo pubblicato con l’articolo su Data in Brief. Il primo intervento sostanziale è stato aggiungere riferimenti alle fonti per ciascun evento, assenti nel dataset pubblicato di partenza, e usarli per riesaminare i crolli caso per caso.",
     steps: [
       {
         title: "Base scientifica originaria",
-        text: "Il dataset dell’articolo costituisce il punto di partenza. Il contributo degli autori e delle ricerche pregresse resta riconosciuto anche quando un record viene successivamente corretto o integrato.",
+        text: "La raccolta originaria documenta il lavoro degli autori e delle ricerche pregresse. L’articolo descrive come sono stati raccolti i dati; il file pubblicato non associava le fonti alle singole schede.",
       },
       {
-        title: "Revisione dei record",
-        text: "La curatela riguarda anche informazioni già presenti nell’originale: identità dell’evento, date, localizzazione, attraversamento, uso, TC/PC, attribuzione causale e persone coinvolte. I campi vengono mantenuti, precisati, corretti o resi non specificati in funzione del supporto disponibile. Vengono inoltre riesaminate inclusioni, esclusioni e possibili duplicazioni.",
+        title: "Fonti per evento e verifica caso per caso",
+        text: "ARCUS collega i riferimenti alle singole schede e confronta le fonti per verificare a quale ponte e a quale evento si riferiscono. La revisione distingue ciò che le fonti documentano da ciò che sostengono solo in parte o non permettono di stabilire, anche per data, localizzazione, gravità e causa del crollo.",
       },
       {
-        title: "Integrazioni con provenienza esplicita",
-        text: "Fonti ulteriori, nuovi eventi e campi strutturati ampliano la raccolta. Le informazioni riprese da studi o dataset esterni restano attribuite ai rispettivi autori. La revisione dei campi originari e l’integrazione di nuove informazioni sono attività distinte.",
+        title: "Correzioni, duplicati e integrazioni",
+        text: "Il confronto ha permesso di correggere attribuzioni e riconoscere duplicati già presenti nella release originaria. Quando più schede descrivono lo stesso crollo, ARCUS le riconcilia per non contarlo due volte, conservando traccia della revisione. I dettagli non accertabili restano non specificati; nuovi eventi e dati derivati da altri studi conservano la loro provenienza.",
       },
       {
         title: "Release e responsabilità editoriale",
@@ -30,19 +30,19 @@ export const researchLineage = {
   en: {
     label: "FROM THE DATASET TO THE ARCUS RELEASE",
     title: "Scientific continuity, review and updates",
-    overview: "ARCUS develops the Italian dataset published in Data in Brief through subsequent record curation. The release preserves the provenance of the collective collection and distinguishes ARCUS revisions from information reused from cited works.",
+    overview: "ARCUS builds on the collective dataset published with the Data in Brief article. Its first major addition was to supply event-level source references, which were absent from the published starting dataset, and use them to review collapses case by case.",
     steps: [
       {
         title: "Original scientific foundation",
-        text: "The article’s dataset is the starting point. Contributions by its authors and the earlier research remain acknowledged when a record is subsequently corrected or enriched.",
+        text: "The original collection reflects the work of its authors and earlier research. The article describes how the data were gathered; the published data file did not link sources to individual records.",
       },
       {
-        title: "Review of existing records",
-        text: "Curation also covers information already present in the original: event identity, dates, location, crossing, use, TC/PC, causal attribution and casualties. Fields are retained, clarified, corrected or left unspecified according to available support. Inclusions, exclusions and possible duplicates are also reassessed.",
+        title: "Event-level sources and case-by-case review",
+        text: "ARCUS links references to individual records and compares sources to check which bridge and event they describe. The review distinguishes what sources document from what they support only in part or do not establish, including the date, location, severity and cause of collapse.",
       },
       {
-        title: "Additions with explicit provenance",
-        text: "Further sources, additional events and structured fields expand the collection. Information reused from external studies or datasets remains attributed to its authors. Reviewing original fields and adding new information are distinct activities.",
+        title: "Corrections, duplicates and additions",
+        text: "Comparing sources has helped correct attributions and identify duplicates already present in the original release. When multiple records describe the same collapse, ARCUS reconciles them to avoid double counting and retains a record of the revision. Details that cannot be established remain unspecified; new events and data reused from other studies retain their provenance.",
       },
       {
         title: "Releases and editorial responsibility",

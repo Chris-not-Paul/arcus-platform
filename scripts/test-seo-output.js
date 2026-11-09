@@ -17,12 +17,12 @@ assert.equal(formatPageTitle('ARCUS'), 'ARCUS');
 assert.equal(formatPageTitle('Event record'), 'Event record | ARCUS');
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const outputRoot = path.join(repositoryRoot, "dist");
+const outputRoot = path.resolve(repositoryRoot, process.env.ARCUS_OPEN_SITE_DIR || "dist");
 const eventsPayload = JSON.parse(
-  fs.readFileSync(path.join(repositoryRoot, "public", "data", "open-release", "events.json"), "utf8"),
+  fs.readFileSync(path.join(outputRoot, "data", "open-release", "events.json"), "utf8"),
 );
 const manifest = JSON.parse(
-  fs.readFileSync(path.join(repositoryRoot, "public", "data", "open-release", "manifest.json"), "utf8"),
+  fs.readFileSync(path.join(outputRoot, "data", "open-release", "manifest.json"), "utf8"),
 );
 
 const eventPages = eventsPayload.events.map((event) => ({
@@ -31,6 +31,8 @@ const eventPages = eventsPayload.events.map((event) => ({
 }));
 
 assert.equal(eventPages.length, manifest.event_count, "event count must match the release manifest");
+const dataAccessHtml = fs.readFileSync(path.join(outputRoot, "data-access", "index.html"), "utf8");
+assert.ok(dataAccessHtml.includes(`<time datetime="${manifest.data_cutoff}">`), "data cutoff must be present without JavaScript");
 
 for (const { event, path: eventPath } of eventPages) {
   assert.ok(fs.existsSync(eventPath), `missing pre-rendered page for ${event.event_slug}`);
@@ -109,8 +111,13 @@ assert.ok(methodologyHtml.includes('id="dataset-lineage"'), 'missing stable meth
 assert.ok(publicationsHtml.includes('/methodology/#dataset-lineage'), 'publications must link to the record-review methodology');
 assert.equal(datasetMetadata["@type"], "Dataset");
 assert.equal(datasetMetadata.version, manifest.version);
-assert.ok(fs.existsSync(path.join(outputRoot, "llms.txt")), "llms.txt must be deployed");
-assert.ok(fs.existsSync(path.join(outputRoot, "CITATION.cff")), "CITATION.cff must be deployed");
+assert.equal(datasetMetadata.temporalCoverage, `2000/${manifest.data_cutoff}`);
+const llms = fs.readFileSync(path.join(outputRoot, "llms.txt"), "utf8");
+assert.ok(llms.includes(`- Release: ${manifest.version}`));
+assert.ok(llms.includes(`- Coverage: ${manifest.event_count} documented events`));
+assert.ok(llms.includes(`- Documentary and scientific-context source records: ${manifest.source_count}`));
+const citation = fs.readFileSync(path.join(outputRoot, "CITATION.cff"), "utf8");
+assert.ok(citation.includes(`version: "${manifest.version}"`));
 
 console.log(JSON.stringify({
   eventPages: eventPages.length,

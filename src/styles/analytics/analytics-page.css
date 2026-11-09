@@ -1247,20 +1247,27 @@
 
 .analytics-chart-denominator {
   display: grid;
-  justify-items: end;
-  gap: 5px;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--arcus-bronze-soft);
+  background: rgba(118,145,139,0.07);
   color: var(--arcus-text-on-dark-soft);
+}
+
+.analytics-chart-denominator + .analytics-chart-dimension-definition {
+  margin-top: 0;
 }
 
 .analytics-chart-denominator span {
   color: var(--arcus-bronze-soft);
-  font-family: var(--arcus-font-mono);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .analytics-chart-denominator small {
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .analytics-chart-scroll,
@@ -3804,15 +3811,10 @@
     grid-column: auto;
   }
 
-  .analytics-chart-output-meta,
   .analytics-chart-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
-  }
-
-  .analytics-chart-denominator {
-    justify-items: start;
   }
 
   .analytics-chart-actions p {

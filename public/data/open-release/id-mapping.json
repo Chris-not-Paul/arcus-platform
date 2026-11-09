@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.18",
+  "release": "arcus-open-2.0",
   "mappings": [
     {
       "event_id": "IT00.01.01",
@@ -65,13 +65,6 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT00.10.09",
-      "legacy_event_id": "B00.10.09",
-      "event_slug": "chialamberto-2000-1",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
       "event_id": "IT00.10.10",
       "legacy_event_id": "B00.10.10",
       "event_slug": "chialamberto-2000-2",
@@ -93,23 +86,9 @@
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },
     {
-      "event_id": "IT00.10.13",
-      "legacy_event_id": "B00.10.13",
-      "event_slug": "pinerolo-2000-3",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
       "event_id": "IT00.10.14",
       "legacy_event_id": "B00.10.14",
       "event_slug": "giaveno-2000",
-      "legacy_compatible": true,
-      "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
-    },
-    {
-      "event_id": "IT00.10.15",
-      "legacy_event_id": "B00.10.15",
-      "event_slug": "castellamonte-2000",
       "legacy_compatible": true,
       "mapping_rule": "legacy B identifier retained for migration only; canonical public identifier uses the IT prefix"
     },

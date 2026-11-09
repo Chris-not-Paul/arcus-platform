@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
+import { bundledOpenReleaseVersion } from "../../config/site";
 import { causeColors } from "../../utils/colors";
 import useLanguage from "../../context/useLanguage";
 import {
@@ -482,7 +483,7 @@ function EventPopup({
       sourceCategoryPriority(left) - sourceCategoryPriority(right)
   );
   const recordId = researchEventId(event);
-  const releaseVersion = openRelease?.version || "arcus-open-2026.18";
+  const releaseVersion = openRelease?.version || bundledOpenReleaseVersion;
   const researchSummary = buildOpenEventResearchSummary({
     event,
     sources: orderedSources,

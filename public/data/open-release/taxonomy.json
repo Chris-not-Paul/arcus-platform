@@ -1,5 +1,5 @@
 {
-  "release": "arcus-open-2026.18",
+  "release": "arcus-open-2.0",
   "taxonomy": [
     {
       "field": "NOTE",
@@ -525,6 +525,11 @@
       "field": "NOTE",
       "value": "Restricted ARCUS approach extension",
       "definition_it": "Estensione ARCUS, distinta dal NYSDOT, esclusivamente per crollo fisico del rilevato d’accesso direttamente connesso al ponte. TC operativo: perdita totale del rilevato con interruzione fisica di tutte le corsie/intero passaggio, oppure immediato scalzamento e crollo distruttivo della spalla adiacente causato dal crollo del rilevato. PC operativo: crollo parziale, accessibilità fisica residua e pericolo evidente e immediato. Esclusi chiusure precauzionali, allagamenti, erosione senza crollo, danni a strade vicine e cedimento del solo muro di contenimento senza crollo del rilevato. Nessuna deduzione automatica del codice in assenza di prove su danno e transitabilità."
+    },
+    {
+      "field": "failure_trigger",
+      "value": "Intense rainfall",
+      "definition_it": "Precipitazioni intense indicate come evento innescante, con livello di evidenza esplicitato nella scheda. Non implica automaticamente piena, frana, scalzamento o altro specifico processo idraulico."
     }
   ]
 }

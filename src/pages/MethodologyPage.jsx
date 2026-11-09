@@ -9,6 +9,7 @@ import PageMeta from "../components/layout/PageMeta";
 import useLanguage from "../context/useLanguage";
 import { originalDatasetCredits, hydraulicResearchCredits } from "../config/researchCredits";
 import { researchLineage } from "../config/researchLineage";
+import { bundledOpenEventCount, bundledOpenSourceCount } from "../config/site";
 import { openManifest } from "../utils/apiClient";
 
 import "../styles/methodology/methodologypage.css";
@@ -60,8 +61,8 @@ function MethodologyPage() {
   const releasePeriod =
     manifest?.citation?.match(/\b\d{4}-\d{4}\b/)?.[0] ||
     "2000-2026";
-  const releaseEventCount = manifest?.event_count ?? 260;
-  const releaseSourceCount = manifest?.source_count ?? 1057;
+  const releaseEventCount = manifest?.event_count ?? bundledOpenEventCount;
+  const releaseSourceCount = manifest?.source_count ?? bundledOpenSourceCount;
 
   const copy = {
     en: {

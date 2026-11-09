@@ -1,4 +1,5 @@
 import { localizedBridgeDisplayName, localizedEventDescription } from "./eventDisplayLabels.js";
+import { reviewedEventNotes } from "../config/reviewedEventNotes.js";
 
 // Public prose is distinct from the original working description in the private Master.
 // These notes restate existing limitations; they never change an event's scientific fields.
@@ -85,7 +86,10 @@ export function buildPublicEventCopy(event, rawDescription = event.description |
   if (event.curation_level === "Needs review") keys.add("review");
 
   const notes = { it: [], en: [] };
-  const specific = specificNotes[event.event_id];
+  const reviewed = reviewedEventNotes[event.event_id];
+  const specific = reviewed && text.includes(reviewed.reviewMarker)
+    ? [reviewed.it, reviewed.en]
+    : specificNotes[event.event_id];
   if (specific) { notes.it.push(specific[0]); notes.en.push(specific[1]); }
   // A specifically written case note takes precedence over generic cautions;
   // this avoids duplicating caveats or attributing a clause to the wrong subject.
